@@ -1,0 +1,10 @@
+<div class="form-group">
+  <label ng-show="form.title">
+    {{form.title}}
+  </label>
+  <select ng-model="$$value$$" class="form-control" schema-validate="form.schema">
+    <option ng-repeat="(val,name) in form.titleMap" value="{{val}}">{{name}}</option>
+  </select>
+  <span class="help-block" ng-show="form.description && !ngModel.$invalid">{{form.description}}</span>
+  <span class="help-block" ng-show="ngModel.$invalid">{{schemaError}}</span>
+</div>

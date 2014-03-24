@@ -1,0 +1,22 @@
+{
+  "name": "schema",
+  "version": "0.0.0",
+  "authors": [
+    "David Jensen <david.lgj@gmail.com>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "tv4": "~1.0.15"
+  }
+}
