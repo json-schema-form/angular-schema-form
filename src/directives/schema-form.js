@@ -18,7 +18,11 @@ function($compile,  schemaForm){
     replace: false,
     restrict: "A",
     transclude: true,
-    link: function(scope,element,attrs,_,transclude) {
+    require: '?form',
+    link: function(scope,element,attrs,formCtrl,transclude) {
+
+      //expose form controller on scope so that we don't force authors to use name on form
+      scope.formCtrl = formCtrl;
 
       //We'd like to handle existing markup,
       //besides using it in our template we also

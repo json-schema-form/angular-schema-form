@@ -205,6 +205,102 @@ describe('Schema form',function(){
 
     });
 
+    it('should use disable readonly input fields, v3 style',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "readonly": true },
+            "nick": { "type": "string" }
+          }
+        };
+
+        scope.form = ["*"];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
+        tmpl.children().eq(1).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children('input').attr('disabled')).to.be.undefined;
+      });
+    });
+
+    it('should use disable readonly input fields, v4 style',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "readOnly": true },
+            "nick": { "type": "string" }
+          }
+        };
+
+        scope.form = ["*"];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
+        tmpl.children().eq(1).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children('input').attr('disabled')).to.be.undefined;
+      });
+    });
+
+    it('should use disable readonly input fields, form override',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "nick": { "type": "string", "readOnly": true }
+          }
+        };
+
+        scope.form = [
+          { key: 'name', readonly: true },
+          { key: 'nick', readonly: false },
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
+        tmpl.children().eq(1).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children('input').attr('disabled')).to.be.undefined;
+      });
+    });
+
 
     it('should use ng-required on required fields',function(){
 
@@ -281,13 +377,13 @@ describe('Schema form',function(){
           "type": "object",
           "properties": {
             "name": { "type": "string" },
-            "nick": { "type": "string" }
+            "nick": { "type": "string", "required": true }
           }
         };
 
         scope.form = [
           { key: 'name', required: true },
-          'nick'
+          { key: 'nick', required: false },
         ];
 
         var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');

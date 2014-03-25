@@ -2,22 +2,30 @@ angular.module('schemaForm').directive('bootstrapDecorator',
        ['$parse','$compile','$http','$templateCache',
 function($parse,  $compile,  $http,  $templateCache){
 
-  var templateUrl = function(type) {
-      if (type  === 'fieldset') {
+  var templateUrl = function(form) {
+      //readonly is a special case
+      if (form.readonly && form.key && form.type !== 'fieldset') {
+        return 'directives/decorators/bootstrap/readonly.html';
+      }
+      if (form.type  === 'textarea') {
+        return 'directives/decorators/bootstrap/textarea.html';
+      }
+      if (form.type  === 'fieldset') {
         return 'directives/decorators/bootstrap/fieldset.html';
       }
-      if (type  === 'select') {
+      if (form.type  === 'select') {
         return 'directives/decorators/bootstrap/select.html';
       }
-      if (type  === 'checkbox') {
+      if (form.type  === 'checkbox') {
         return 'directives/decorators/bootstrap/checkbox.html';
       }
-      if (type  === 'number') {
+      if (form.type  === 'number') {
         return 'directives/decorators/bootstrap/default.html';
       }
-      if (type  === 'submit') {
+      if (form.type  === 'submit') {
         return 'directives/decorators/bootstrap/submit.html';
       }
+
       return 'directives/decorators/bootstrap/default.html';
   };
 
@@ -37,7 +45,7 @@ function($parse,  $compile,  $http,  $templateCache){
         //ok let's replace that template!
         //We do this manually since we need to bind ng-model properly and also
         //for fieldsets to recurse properly.
-        $http.get(templateUrl(form.type),{ cache: $templateCache }).then(function(res){
+        $http.get(templateUrl(form),{ cache: $templateCache }).then(function(res){
           var template = res.data.replace('$$value$$','model.'+form.key);
           $compile(template)(scope,function(clone){
             element.replaceWith(clone);

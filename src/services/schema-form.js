@@ -48,7 +48,7 @@ angular.module('schemaForm').factory('schemaForm',[function(){
     if (schema.default) f.default = schema.default;
     if (schema.maxLength) f.maxlength = schema.maxLength;
     if (schema.minLength) f.minlength = schema.maxLength;
-    if (schema.readOnly)  f.readonly  = schema.readOnly;
+    if (schema.readOnly || schema.readonly)  f.readonly  = schema.readOnly || schema.readonly;
     if (schema.minimum) f.minimum = schema.minimum + (schema.exclusiveMinimum?1:0);
     if (schema.maximum) f.maximum = schema.maximum - (schema.exclusiveMaximum?1:0);
     f.schema = schema;
