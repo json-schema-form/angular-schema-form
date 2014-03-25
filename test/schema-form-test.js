@@ -205,7 +205,111 @@ describe('Schema form',function(){
 
     });
 
+
+    it('should use ng-required on required fields',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": { "type": "string" },
+            "nick": { "type": "string" }
+          }
+        };
+
+        scope.form = ["*"];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).find('input').attr('required').should.be.equal('required');
+        tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model.name');
+        tmpl.children().eq(1).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children('input').attr('required')).to.be.undefined;
+      });
+    });
+
+    it('should use ng-required on required fields, json schema v3',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string", "required": true },
+            "nick": { "type": "string" }
+          }
+        };
+
+        scope.form = ["*"];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).find('input').attr('required').should.be.equal('required');
+        tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model.name');
+        tmpl.children().eq(1).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children('input').attr('required')).to.be.undefined;
+      });
+    });
+
+    it('should use ng-required on required fields, form override',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "nick": { "type": "string" }
+          }
+        };
+
+        scope.form = [
+          { key: 'name', required: true },
+          'nick'
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).find('input').attr('required').should.be.equal('required');
+        tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model.name');
+        tmpl.children().eq(1).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children('input').attr('required')).to.be.undefined;
+      });
+    });
+
+
+
   });
+
 
   describe('decorator directive',function(){
     it('should decorate',function(){

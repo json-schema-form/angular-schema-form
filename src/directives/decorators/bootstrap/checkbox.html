@@ -1,8 +1,8 @@
-<div class="checkbox">
+<div class="checkbox" ng-class="{'has-error': hasError()}">
   <label ng-show="form.title">
-    <input type="checkbox" ng-model="$$value$$" schema-validate="form.schema">
+    <input type="checkbox" ng-model="$$value$$" schema-validate="form.schema" ng-required="form.required">
     {{form.title}}
   </label>
 
-  <span class="help-block" ng-show="form.description" >{{form.description}}</span>
+  <span class="help-block" ng-show="form.description">{{form.description}}</span>
 </div>

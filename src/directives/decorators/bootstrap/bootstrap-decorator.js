@@ -13,7 +13,7 @@ function($parse,  $compile,  $http,  $templateCache){
         return 'directives/decorators/bootstrap/checkbox.html';
       }
       if (type  === 'number') {
-        return 'directives/decorators/bootstrap/number.html';
+        return 'directives/decorators/bootstrap/default.html';
       }
       if (type  === 'submit') {
         return 'directives/decorators/bootstrap/submit.html';
@@ -28,7 +28,6 @@ function($parse,  $compile,  $http,  $templateCache){
     replace: true,
     transclude: false,
     scope: true,
-
     link: function(scope,element,attrs) {
 
       //rebind our part of the form to the scope.
