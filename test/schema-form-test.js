@@ -402,6 +402,45 @@ describe('Schema form',function(){
       });
     });
 
+    it('should honor defaults in schema',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {
+          name: 'Foobar'
+        };
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "default": "Bar"
+            },
+            "nick": {
+              "type": "string",
+              "default": "Zeb"
+            },
+            "alias": {
+              "type": "string"
+            },
+          }
+        };
+
+        scope.form = ["*"];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        scope.person.name.should.be.equal('Foobar');
+        scope.person.nick.should.be.equal('Zeb');
+        expect(scope.person.alias).to.be.undefined;
+
+      });
+    });
+
 
 
   });
