@@ -18,8 +18,7 @@
   <div class="row">
     <div class="col-sm-6">
       <h3>The Generated Form</h3>
-      <form sf-model="person" sf-form="form" sf-schema="schema" sf-decorator="{{decorator}}">
-
+      <form name="ngform" sf-model="person" sf-form="form" sf-schema="schema" sf-decorator="{{decorator}}">
       </form>
     </div>
     <div class="col-sm-6">
@@ -51,11 +50,13 @@ function TestCtrl($scope){
 
   $scope.schema =  {
     "type": "object",
+    "required": ['name','shoesize'],
     "properties": {
       "name": {
         "title": "Name",
         "description": "Gimme yea name lad",
         "type": "string",
+        "pattern": "^[^/]*$",
         "minLength": 2
       },
       "favorite": {
@@ -69,7 +70,8 @@ function TestCtrl($scope){
       },
       "shoesize": {
         "title": "Shoe size",
-        "type": "number"
+        "default": 42,
+        "type": "number",
       },
       "attributes": {
         "type": "object",
@@ -88,6 +90,16 @@ function TestCtrl($scope){
           }
         }
       },
+      "things": {
+        "type": "array",
+        "title": "I like...",
+        "items": {
+          "type": "string",
+          "enum": [
+            "clowns","compiling","sleeping"
+          ]
+        }
+      },
       "soul": {
         "title": "Terms Of Service",
         "description": "I agree to sell my undying soul",
@@ -99,7 +111,13 @@ function TestCtrl($scope){
 
   $scope.form = [
     '*',
-    { type: 'submit', title: 'Do It!'}
+    {
+      type: 'actions',
+      items: [
+        { type: 'submit', title: 'Do It!'},
+        { type: 'button', title: 'Noooooooooooo'}
+      ]
+    }
   ];
 
   $scope.decorator = 'bootstrap-decorator';

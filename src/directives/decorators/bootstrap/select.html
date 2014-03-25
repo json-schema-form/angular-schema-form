@@ -1,10 +1,13 @@
-<div class="form-group">
-  <label ng-show="form.title">
+<div class="form-group" ng-class="{'has-error': hasError()}">
+  <label ng-show="showTitle()">
     {{form.title}}
   </label>
-  <select ng-model="$$value$$" class="form-control" schema-validate="form.schema">
-    <option ng-repeat="(val,name) in form.titleMap" value="{{val}}">{{name}}</option>
+  <select ng-model="$$value$$"
+          class="form-control"
+          schema-validate="form.schema"
+          ng-required="form.required"
+          ng-options="val as name for (val,name) in form.titleMap">
   </select>
-  <span class="help-block" ng-show="form.description && !ngModel.$invalid">{{form.description}}</span>
-  <span class="help-block" ng-show="ngModel.$invalid">{{schemaError}}</span>
+  <span class="help-block" ng-show="form.description && !hasError()">{{form.description}}</span>
+  <span class="help-block" ng-show="hasError()">{{schemaError}}</span>
 </div>

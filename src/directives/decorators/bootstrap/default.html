@@ -1,6 +1,13 @@
-<div class="form-group" ng-class="{'has-error':ngModel.$invalid}">
-  <label ng-show="form.title">{{form.title}}</label>
-  <input type="text" class="form-control" name="" ng-model="$$value$$" schema-validate="form.schema">
-  <span class="help-block" ng-show="form.description && !ngModel.$invalid">{{form.description}} </span>
-  <span class="help-block" ng-show="ngModel.$invalid">{{schemaError}}</span>
+<div class="form-group" ng-class="{'has-error': hasError()}">
+  <label ng-show="showTitle()">{{form.title}}</label>
+
+  <input type="{{form.type}}"
+         placeholder="{{form.placeholder}}"
+         class="form-control"
+         ng-required="form.required"
+         ng-model="$$value$$"
+         schema-validate="form.schema">
+
+  <span class="help-block" ng-show="form.description && !hasError()">{{form.description}} </span>
+  <span class="help-block" ng-show="hasError()">{{schemaError}}</span>
 </div>

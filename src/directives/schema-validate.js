@@ -13,6 +13,11 @@ angular.module('schemaForm').directive('schemaValidate',function(){
           schema = scope.$eval(attrs.schemaValidate);
         }
 
+        //required is handled by ng-required
+        if (angular.isUndefined(viewValue)) {
+          return undefined;
+        }
+
         //Type cast and validate against schema.
         //Basic types of json schema sans array and object
         var value = viewValue;
@@ -41,6 +46,12 @@ angular.module('schemaForm').directive('schemaValidate',function(){
           return undefined;
         }
       });
+
+      //This works since we now we're inside a decorator and that this is the decorators scope.
+      scope.hasError = function(){
+        return scope.ngModel.$invalid && !scope.ngModel.$pristine;
+      };
+
     }
   };
 });
