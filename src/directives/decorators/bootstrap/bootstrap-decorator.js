@@ -53,8 +53,12 @@ function($parse,  $compile,  $http,  $templateCache){
         });
         once();
       });
-    }
 
+      //Keep error prone logic from the template
+      scope.showTitle = function() {
+        return scope.form && scope.form.notitle !== true && scope.form.title;
+      };
+    }
   };
 }]);
 

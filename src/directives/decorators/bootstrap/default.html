@@ -1,5 +1,5 @@
 <div class="form-group" ng-class="{'has-error': hasError()}">
-  <label ng-show="form.title">{{form.title}}</label>
+  <label ng-show="showTitle()">{{form.title}}</label>
 
   <input type="{{form.type}}"
          placeholder="{{form.placeholder}}"

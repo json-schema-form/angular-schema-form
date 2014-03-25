@@ -441,6 +441,32 @@ describe('Schema form',function(){
       });
     });
 
+    it('should skip title if form says "notitle"',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = exampleSchema;
+
+        scope.form = [{
+          key: 'name',
+          notitle: true
+        },{
+          key: 'gender',
+          notitle: true
+        }];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).find('label').hasClass('ng-hide').should.be.true;
+        tmpl.children().eq(1).find('label').hasClass('ng-hide').should.be.true;
+      });
+    });
 
 
   });
