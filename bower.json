@@ -1,7 +1,8 @@
 {
-  "name": "schema",
-  "version": "0.0.0",
+  "name": "angular-schema-form",
+  "version": "0.0.1",
   "authors": [
+    "Textalk",
     "David Jensen <david.lgj@gmail.com>"
   ],
   "moduleType": [
@@ -14,7 +15,7 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "coverage"
   ],
   "dependencies": {
     "tv4": "~1.0.15"
