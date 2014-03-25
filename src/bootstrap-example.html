@@ -111,7 +111,13 @@ function TestCtrl($scope){
 
   $scope.form = [
     '*',
-    { type: 'submit', title: 'Do It!'}
+    {
+      type: 'actions',
+      items: [
+        { type: 'submit', title: 'Do It!'},
+        { type: 'button', title: 'Noooooooooooo'}
+      ]
+    }
   ];
 
   $scope.decorator = 'bootstrap-decorator';
