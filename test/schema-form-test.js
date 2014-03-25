@@ -507,6 +507,41 @@ describe('Schema form',function(){
         tmpl.children().eq(1).find('input[type=checkbox]').length.should.be.eq(2);
       });
     });
+
+    it('should handle a simple div when type "section" is specified',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = exampleSchema;
+
+        scope.form = [{
+          type: "section",
+          items: [
+            {
+              key: 'name',
+              notitle: true
+            },
+            {
+              key: 'gender',
+              notitle: true
+            }
+          ]
+        }];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).is('div').should.be.true;
+        tmpl.children().eq(0).children().length.should.be.eq(2);
+      });
+    });
+
+
   });
 
 
