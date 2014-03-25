@@ -56,6 +56,7 @@ function TestCtrl($scope){
         "title": "Name",
         "description": "Gimme yea name lad",
         "type": "string",
+        "pattern": "^[^/]*$",
         "minLength": 2
       },
       "favorite": {
@@ -69,7 +70,8 @@ function TestCtrl($scope){
       },
       "shoesize": {
         "title": "Shoe size",
-        "type": "number"
+        "default": 42,
+        "type": "number",
       },
       "attributes": {
         "type": "object",
@@ -86,6 +88,16 @@ function TestCtrl($scope){
               "right": { "type": "string", "title": "Right" },
             }
           }
+        }
+      },
+      "things": {
+        "type": "array",
+        "title": "I like...",
+        "items": {
+          "type": "string",
+          "enum": [
+            "clowns","compiling","sleeping"
+          ]
         }
       },
       "soul": {

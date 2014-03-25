@@ -1,7 +1,12 @@
 <div class="form-group" ng-class="{'has-error': hasError()}">
-  <label ng-show="form.title">{{form.title}}</label>
+  <label ng-show="showTitle()">{{form.title}}</label>
 
-  <input type="{{form.type}}" class="form-control" ng-required="form.required" ng-model="$$value$$" schema-validate="form.schema">
+  <input type="{{form.type}}"
+         placeholder="{{form.placeholder}}"
+         class="form-control"
+         ng-required="form.required"
+         ng-model="$$value$$"
+         schema-validate="form.schema">
 
   <span class="help-block" ng-show="form.description && !hasError()">{{form.description}} </span>
   <span class="help-block" ng-show="hasError()">{{schemaError}} {{ngModel.$error}}</span>

@@ -113,6 +113,20 @@ angular.module('schemaForm').factory('schemaForm',[function(){
     }
   };
 
+  var checkboxes = function(name,schema,options) {
+    if (schema.type === 'array' && schema.items && schema.items.enum) {
+      var f = stdFormObj(schema,options);
+      f.key  = options.path;
+      f.type = 'checkboxes';
+      f.titleMap = {};
+      schema.items.enum.forEach(function(name){
+        f.titleMap[name] = name;
+      });
+      options.lookup[options.path] = f;
+      return f;
+    }
+  };
+
   var fieldset = function(name,schema,options){
 
     if (schema.type === "object") {
@@ -152,7 +166,8 @@ angular.module('schemaForm').factory('schemaForm',[function(){
     fieldset,
     number,
     integer,
-    bool
+    bool,
+    checkboxes
   ];
 
 

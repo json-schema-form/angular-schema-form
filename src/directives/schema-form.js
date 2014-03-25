@@ -8,6 +8,17 @@ angular.module('schemaForm')
        ['$compile','schemaForm',
 function($compile,  schemaForm){
 
+  //recurse through the entire schema.
+  //FIXME: no support for arrays
+  var traverse = function(schema,fn,path) {
+    path = path || "";
+    fn(schema,path);
+    angular.forEach(schema.properties,function(prop,name){
+      traverse(prop,fn,path===""?name:path+'.'+name);
+    });
+  };
+
+
 
   return {
     scope: {
@@ -45,6 +56,7 @@ function($compile,  schemaForm){
       var lastDigest = {};
 
       scope.$watch(function(){
+
         var schema = scope.schema;
         var form   = scope.initialForm || ['*'];
 
@@ -79,7 +91,18 @@ function($compile,  schemaForm){
           element[0].appendChild(frag);
 
           //compile only children
+
           $compile(element.children())(scope);
+
+
+          //ok, now that that is done let's set any defaults
+          traverse(schema,function(prop,path){
+            //This is probably not so fast, but a simple solution.
+            if (angular.isDefined(prop['default'])) {
+              scope.$eval('model.'+path+' = model.'+path+' || defaltValue',{ defaltValue: prop['default']});
+            }
+          });
+
         }
       });
     }
