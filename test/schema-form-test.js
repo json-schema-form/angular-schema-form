@@ -537,7 +537,44 @@ describe('Schema form',function(){
 
         tmpl.children().length.should.be.equal(1);
         tmpl.children().eq(0).is('div').should.be.true;
+        tmpl.children().eq(0).hasClass('btn-group').should.be.false;
         tmpl.children().eq(0).children().length.should.be.eq(2);
+      });
+    });
+
+    it('should handle "action" groups, same as "section" but with a bootstrap class "btn-group"',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = exampleSchema;
+
+        scope.form = [{
+          type: "actions",
+          items: [
+            {
+              type: 'submit',
+              title: 'yes'
+            },
+            {
+              type: 'button',
+              title: 'no'
+            }
+          ]
+        }];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).is('div').should.be.true;
+        tmpl.children().eq(0).hasClass('btn-group').should.be.true;
+        tmpl.children().eq(0).children().length.should.be.eq(2);
+        tmpl.children().eq(0).children().eq(0).is('input').should.be.true;
+        tmpl.children().eq(0).children().eq(1).is('button').should.be.true;
       });
     });
 

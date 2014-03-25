@@ -16,6 +16,9 @@ function($parse,  $compile,  $http,  $templateCache){
       if (form.type  === 'section') {
         return 'directives/decorators/bootstrap/section.html';
       }
+      if (form.type  === 'actions') {
+        return 'directives/decorators/bootstrap/actions.html';
+      }
       if (form.type  === 'select') {
         return 'directives/decorators/bootstrap/select.html';
       }
