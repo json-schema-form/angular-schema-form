@@ -19,6 +19,9 @@ function($parse,  $compile,  $http,  $templateCache){
       if (form.type  === 'checkbox') {
         return 'directives/decorators/bootstrap/checkbox.html';
       }
+      if (form.type  === 'checkboxes') {
+        return 'directives/decorators/bootstrap/checkboxes.html';
+      }
       if (form.type  === 'number') {
         return 'directives/decorators/bootstrap/default.html';
       }
@@ -46,7 +49,7 @@ function($parse,  $compile,  $http,  $templateCache){
         //We do this manually since we need to bind ng-model properly and also
         //for fieldsets to recurse properly.
         $http.get(templateUrl(form),{ cache: $templateCache }).then(function(res){
-          var template = res.data.replace('$$value$$','model.'+form.key);
+          var template = res.data.replace(/\$\$value\$\$/g,'model.'+form.key);
           $compile(template)(scope,function(clone){
             element.replaceWith(clone);
           });
@@ -57,6 +60,16 @@ function($parse,  $compile,  $http,  $templateCache){
       //Keep error prone logic from the template
       scope.showTitle = function() {
         return scope.form && scope.form.notitle !== true && scope.form.title;
+      };
+
+      scope.checkboxValuesToList = function(values){
+        var lst = [];
+        angular.forEach(values,function(v,k){
+          if (v) {
+            lst.push(k);
+          }
+        });
+        return lst;
       };
     }
   };

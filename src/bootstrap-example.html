@@ -90,6 +90,16 @@ function TestCtrl($scope){
           }
         }
       },
+      "things": {
+        "type": "array",
+        "title": "I like...",
+        "items": {
+          "type": "string",
+          "enum": [
+            "clowns","compiling","sleeping"
+          ]
+        }
+      },
       "soul": {
         "title": "Terms Of Service",
         "description": "I agree to sell my undying soul",

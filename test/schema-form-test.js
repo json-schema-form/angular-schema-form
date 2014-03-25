@@ -469,6 +469,44 @@ describe('Schema form',function(){
     });
 
 
+    it('should generate checkboxes for arrays with enums',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["foo","bar"]
+              }
+            },
+            "foobars": {
+              "type": "array"
+            }
+          }
+        };
+
+        scope.form = [
+          "names",
+          { key: "foobars", type: "checkboxes", titleMap:{ 'foo':'Foo','bar':'Bar'}}
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        //TODO: more asserts
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).find('input[type=checkbox]').length.should.be.eq(2);
+        tmpl.children().eq(1).find('input[type=checkbox]').length.should.be.eq(2);
+      });
+    });
   });
 
 
