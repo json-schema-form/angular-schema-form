@@ -1,13 +1,12 @@
 {
-  "name": "schema",
-  "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "angular-schema-form",
+  "version": "0.0.1",
+  "description": "Create forms from a JSON schema",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Textalk",
+  "license": "MIT",
   "devDependencies": {
     "karma": "^0.12.0",
     "mocha": "^1.18.0",

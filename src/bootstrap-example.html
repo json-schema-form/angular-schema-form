@@ -56,10 +56,10 @@ function TestCtrl($scope){
         "title": "Name",
         "description": "Gimme yea name lad",
         "type": "string",
-        "maxLength": 3
+        "minLength": 2
       },
-      "gender": {
-        "title": "Choose",
+      "favorite": {
+        "title": "Favorite",
         "type": "string",
         "enum": [
           "undefined",
@@ -97,7 +97,10 @@ function TestCtrl($scope){
     }
   };
 
-  $scope.form = ['*'];
+  $scope.form = [
+    '*',
+    { type: 'submit', title: 'Do It!'}
+  ];
 
   $scope.decorator = 'bootstrap-decorator';
 
