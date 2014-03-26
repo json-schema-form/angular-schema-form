@@ -1,7 +1,6 @@
 angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider',function($compileProvider){
-
+  var defaultDecorator = 'bootstrapDecorator';
   var directives = {};
-
 
   var templateUrl = function(name,form) {
     var directive = directives[name];
@@ -38,6 +37,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
       mappings: mappings || {},
       rules:    rules    || []
     };
+
+    if (!directives[defaultDecorator]) {
+      defaultDecorator = name;
+    }
 
     $compileProvider.directive(name,['$parse','$compile','$http','$templateCache',
       function($parse,  $compile,  $http,  $templateCache){
@@ -97,8 +100,11 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
 
   //Service is just a getter for directive mappings and rules
   this.$get = function(){
-    return function(name) {
-      return directives[name];
+    return {
+      directive: function(name) {
+        return directives[name];
+      },
+      defaultDecorator: defaultDecorator
     };
   };
 

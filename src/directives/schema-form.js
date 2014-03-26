@@ -5,8 +5,8 @@ FIXME: real documentation
 
 angular.module('schemaForm')
        .directive('sfSchema',
-       ['$compile','schemaForm',
-function($compile,  schemaForm){
+       ['$compile','schemaForm','schemaFormDecorators',
+function($compile,  schemaForm,  schemaFormDecorators){
 
   //recurse through the entire schema.
   //FIXME: no support for arrays
@@ -18,7 +18,13 @@ function($compile,  schemaForm){
     });
   };
 
-
+  var SNAKE_CASE_REGEXP = /[A-Z]/g;
+  function snake_case(name, separator){
+    separator = separator || '_';
+    return name.replace(SNAKE_CASE_REGEXP, function(letter, pos) {
+      return (pos ? separator : '') + letter.toLowerCase();
+    });
+  }
 
   return {
     scope: {
@@ -74,11 +80,10 @@ function($compile,  schemaForm){
 
           //Create directives from the form definition
           angular.forEach(merged,function(obj,i){
-            var n = document.createElement(attrs.sfDecorator || 'bootstrap-decorator');
+            var n = document.createElement(attrs.sfDecorator || snake_case(schemaFormDecorators.defaultDecorator,'-'));
             n.setAttribute('type',obj.type);
             n.setAttribute('form','schemaForm.form['+i+']');
             frag.appendChild(n);
-
           });
 
           //clean all but pre existing html.
@@ -87,9 +92,7 @@ function($compile,  schemaForm){
           element[0].appendChild(frag);
 
           //compile only children
-
           $compile(element.children())(scope);
-
 
           //ok, now that that is done let's set any defaults
           traverse(schema,function(prop,path){
