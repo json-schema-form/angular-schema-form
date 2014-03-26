@@ -90,10 +90,11 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
   /**
    * Getter for directive mappings
    * Can be used to override a mapping or add a rule
-   * @param {string} name
+   * @param {string} name (optional) defaults to defaultDecorator
    * @return {Object} rules and mappings { rules: [],mappings: {}}
    */
   this.directive = function(name) {
+    name = name || defaultDecorator;
     return directives[name];
   };
 
