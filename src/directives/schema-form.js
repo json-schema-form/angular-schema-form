@@ -77,10 +77,6 @@ function($compile,  schemaForm){
             var n = document.createElement(attrs.sfDecorator || 'bootstrap-decorator');
             n.setAttribute('type',obj.type);
             n.setAttribute('form','schemaForm.form['+i+']');
-            //n.setAttribute('schema','schemaForm.schema');
-            //if (obj.key) {
-            //  n.setAttribute('value','model.'+obj.key);
-            //}
             frag.appendChild(n);
 
           });

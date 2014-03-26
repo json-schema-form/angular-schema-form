@@ -225,7 +225,6 @@ describe('Schema form',function(){
 
         $compile(tmpl)(scope);
         $rootScope.$apply();
-
         tmpl.children().length.should.be.equal(2);
         tmpl.children().eq(0).is('div.form-group').should.be.true;
         tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
@@ -582,39 +581,6 @@ describe('Schema form',function(){
   });
 
 
-  describe('decorator directive',function(){
-    it('should decorate',function(){
-
-      inject(function($compile,$rootScope){
-        var scope = $rootScope.$new();
-        scope.obj = {};
-
-        var tmpl = angular.element('<schema-form-decorator title="foobar"><input type="text"></schema-form-decorator>');
-
-        $compile(tmpl)(scope);
-        $rootScope.$apply();
-
-        tmpl.is('div.decorator').should.be.true;
-        tmpl.children().length.should.be.eq(3);
-        tmpl.find('input').length.should.be.eq(1);
-        tmpl.find('.description').hasClass('ng-hide').should.be.true;
-
-        tmpl = angular.element('<schema-form-decorator description="Hell yea!"><input type="text"></schema-form-decorator>');
-
-        $compile(tmpl)(scope);
-        $rootScope.$apply();
-
-        tmpl.is('div.decorator').should.be.true;
-        tmpl.children().length.should.be.eq(3);
-        tmpl.find('input').length.should.be.eq(1);
-        tmpl.find('.description').hasClass('ng-hide').should.be.false;
-        tmpl.find('.description').text().should.be.equal('Hell yea!');
-
-      });
-    });
-
-  });
-
   describe('service',function(){
     it('should generate default form def from a schema',function(){
       inject(function(schemaForm){
@@ -802,21 +768,6 @@ describe('Schema form',function(){
         f.title = 'Foobar';
         f.type  = 'password';
         schemaForm.merge(schema,[{ key: 'name',title: 'Foobar',type: 'password'}]).should.be.deep.equal([f]);
-
-
-        var form = [
-          "name",
-          {
-            title: 'Choose',
-            key: "gender",
-            type: "select",
-            titleMap: {
-              "undefined": "undefined",
-              "null": "null",
-              "NaN": "NaN"
-            }
-          }
-        ];
 
       });
     });

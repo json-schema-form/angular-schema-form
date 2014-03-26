@@ -2,7 +2,7 @@
   <input ng-repeat-start="item in form.items"
          type="submit"
          class="btn btn-primary"
-         value="item.title"
+         value="{{item.title}}"
          ng-if="item.type === 'submit'">
   <button ng-repeat-end class="btn btn-default" ng-if="item.type !== 'submit'">{{item.title}}</button>
 </div>
