@@ -1,8 +1,13 @@
 angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider',function($compileProvider){
-  var defaultDecorator = 'bootstrapDecorator';
+  var defaultDecorator = '';
   var directives = {};
 
   var templateUrl = function(name,form) {
+    //schemaDecorator is alias for whatever is set as default
+    if (name === 'sfDecorator') {
+      name = defaultDecorator;
+    }
+
     var directive = directives[name];
 
     //rules first
@@ -24,24 +29,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
   };
 
 
-  /**
-   * Create a decorator directive
-   * @param {string} name directive name (CamelCased)
-   * @param {Object} mappings, an object that maps "type" => "templateUrl"
-   * @param {Array}  rules (optional) a list of functions, function(form){}, that are each tried in turn,
-   *                 if they return a string then that is used as the templateUrl. Rules come before
-   *                 mappings.
-   */
-  this.create = function(name,mappings,rules){
-    directives[name] = {
-      mappings: mappings || {},
-      rules:    rules    || []
-    };
-
-    if (!directives[defaultDecorator]) {
-      defaultDecorator = name;
-    }
-
+  var createDirective = function(name){
     $compileProvider.directive(name,['$parse','$compile','$http','$templateCache',
       function($parse,  $compile,  $http,  $templateCache){
 
@@ -53,19 +41,23 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
           link: function(scope,element,attrs) {
             //rebind our part of the form to the scope.
             var once = scope.$watch(attrs.form,function(form){
-              scope.form  = form;
 
-              //ok let's replace that template!
-              //We do this manually since we need to bind ng-model properly and also
-              //for fieldsets to recurse properly.
-              var url = templateUrl(name,form);
-              $http.get(url,{ cache: $templateCache }).then(function(res){
-                var template = res.data.replace(/\$\$value\$\$/g,'model.'+form.key);
-                $compile(template)(scope,function(clone){
-                  element.replaceWith(clone);
+
+              if (form) {
+                scope.form  = form;
+
+                //ok let's replace that template!
+                //We do this manually since we need to bind ng-model properly and also
+                //for fieldsets to recurse properly.
+                var url = templateUrl(name,form);
+                $http.get(url,{ cache: $templateCache }).then(function(res){
+                  var template = res.data.replace(/\$\$value\$\$/g,'model.'+form.key);
+                  $compile(template)(scope,function(clone){
+                    element.replaceWith(clone);
+                  });
                 });
-              });
-              once();
+                once();
+              }
             });
 
             //Keep error prone logic from the template
@@ -88,6 +80,36 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
   };
 
   /**
+   * Create a decorator directive
+   * The directive can be used to create form fields or other form entities.
+   * It can be used in conjunction with <schema-form> directive in which case the decorator is
+   * given it's configuration via a the "form" attribute.
+   *
+   * ex. Basic usage with form and schema
+   *   <sf-decorator form="myform" schema="myschema"></sf-decorator>
+   *
+   * ex. "Manual" usage
+   *   <sf-decorator sf-type="" sf-title=""
+   * @param {string} name directive name (CamelCased)
+   * @param {Object} mappings, an object that maps "type" => "templateUrl"
+   * @param {Array}  rules (optional) a list of functions, function(form){}, that are each tried in turn,
+   *                 if they return a string then that is used as the templateUrl. Rules come before
+   *                 mappings.
+   */
+  this.create = function(name,mappings,rules){
+    directives[name] = {
+      mappings: mappings || {},
+      rules:    rules    || []
+    };
+
+    if (!directives[defaultDecorator]) {
+      defaultDecorator = name;
+    }
+    createDirective(name);
+  };
+
+
+  /**
    * Getter for directive mappings
    * Can be used to override a mapping or add a rule
    * @param {string} name (optional) defaults to defaultDecorator
@@ -108,5 +130,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
       defaultDecorator: defaultDecorator
     };
   };
+
+
+  //Create a default directive
+  createDirective('sfDecorator');
 
 }]);

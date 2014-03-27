@@ -19,5 +19,8 @@
   ],
   "dependencies": {
     "tv4": "~1.0.15"
+  },
+  "devDependencies": {
+    "angular-ui-ace": "bower"
   }
 }

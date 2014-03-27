@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="schemaForm">
+<html ng-app="test">
 <head>
   <title>Boostrap Schema Form example</title>
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -9,6 +9,8 @@
     border: 1px solid red;
     background: #fee;
   }
+
+  .ace_editor { height: 600px; font-size: 20px !important;}
   </style>
 </head>
 <body ng-controller="TestCtrl">
@@ -16,20 +18,19 @@
 <div class="col-md-12">
   <h1>Schema Form Example</h1>
   <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-4">
       <h3>The Generated Form</h3>
+      <sf-decorator form="{ type:'text',title:'foobar' }"></sf-decorator>
       <form name="ngform" sf-model="person" sf-form="form" sf-schema="schema" sf-decorator="{{decorator}}">
       </form>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-8">
       <h3>Schema</h3>
-      <form>
-        <textarea ng-class="{red: !itParses}" rows="15" ng-model="schemaJson" class="form-control"></textarea>
-      </form>
+      <div ui-ace="{ theme: 'monokai',mode:'json'}"
+           ng-class="{red: !itParses}" rows="15" ng-model="schemaJson" class="form-control"></div>
       <h3>Form</h3>
-      <form>
-        <textarea ng-class="{red: !itParsesForm}" rows="15" ng-model="formJson" class="form-control"></textarea>
-      </form>
+      <div ui-ace="{ theme: 'monokai',mode:'json'}"
+           ng-class="{red: !itParsesForm}" rows="15" ng-model="formJson" class="form-control"></div>
       <h3>Model</h3>
       <pre>{{pretty()}}</pre>
     </div>
@@ -37,10 +38,18 @@
 </div>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
+<script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
-<script type="text/javascript" src="../dist/schema-form.min.js"></script>
-<script type="text/javascript" src="../dist/bootstrap-decorator.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-ui-ace/ui-ace.js"></script>
+<script type="text/javascript" src="module.js"></script>
+<script type="text/javascript" src="services/schema-form.js"></script>
+<script type="text/javascript" src="services/decorators.js"></script>
+<script type="text/javascript" src="directives/decorators/bootstrap/bootstrap-decorator.js"></script>
+<script type="text/javascript" src="directives/schema-form.js"></script>
+<script type="text/javascript" src="directives/schema-validate.js"></script>
 <script type="text/javascript">
+
+angular.module('test',['schemaForm','ui.ace']);
 
 function TestCtrl($scope){
   $scope.person = { gender: 'null' };
@@ -150,6 +159,9 @@ function TestCtrl($scope){
   $scope.pretty = function(){
     return JSON.stringify($scope.person,undefined,2,2);
   };
+
+
+
 }
 
 </script>
