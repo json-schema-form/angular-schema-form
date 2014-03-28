@@ -56,8 +56,9 @@ function FormController($scope) {
 Form types
 ----------
 Schema Form currently supports the following form field types:
+
 | Type          |  Becomes                |
-|:--------------|:-----------------------:|
+|:--------------|:------------------------|
 | fieldset      |  a fieldset with legend |
 | section       |  just a div             |
 | actions       |  horizontal button list, can only submit buttons as items |
@@ -73,6 +74,7 @@ Schema Form currently supports the following form field types:
 
 Default form types
 ------------------
+
 | Schema             |   Form type  |
 |:-------------------|:------------:|
 | "type": "string"   |   text       |
