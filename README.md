@@ -151,7 +151,7 @@ var schema = {
   {
     key: "surname",
     type: "select",
-    itemNames: {
+    titleMap: {
       "Andersson": "Andersson",
       "Johansson": "Johansson",
       "other": "Something else..."
@@ -191,12 +191,12 @@ They do need a list of ```items``` to have as children.
 ```
 
 
-*select* and *checkboxes* can take an object, ```itemNames```, where key is the value to be saved on the model
+*select* and *checkboxes* can take an object, ```titleMap```, where key is the value to be saved on the model
 and the value is the title of the option.
 ```javascript
 {
   type: "select",
-  itemNames: {
+  titleMap: {
     "yes": "Yes I do",
     "no": "Hell no"
   }
