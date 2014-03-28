@@ -19,7 +19,8 @@ module.exports = function(config) {
       'http://code.angularjs.org/1.2.14/angular-mocks.js',
       'bower_components/tv4/tv4.js',
       'src/module.js',
-      'src/**/*.js',
+      'src/services/*.js',
+      'src/directives/**/*.js',
       'src/**/*.html',
       'test/*.js'
     ],

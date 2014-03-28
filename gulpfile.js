@@ -1,0 +1,47 @@
+/* global require */
+
+var gulp = require('gulp');
+
+var ngHtml2Js = require("gulp-ng-html2js");
+var minifyHtml = require("gulp-minify-html");
+var concat = require("gulp-concat");
+var uglify = require("gulp-uglify");
+var streamqueue = require('streamqueue');
+
+
+gulp.task('bootstrap', function() {
+  var stream = streamqueue({ objectMode: true });
+  stream.queue(
+              gulp.src("./src/directives/decorators/bootstrap/*.html")
+                  .pipe(minifyHtml({
+                      empty: true,
+                      spare: true,
+                      quotes: true
+                  }))
+                  .pipe(ngHtml2Js({
+                      moduleName: "schemaForm",
+                      prefix: "directives/decorators/bootstrap/"
+                  }))
+    );
+    stream.queue(gulp.src('./src/directives/decorators/bootstrap/*.js'));
+
+    stream.done()
+          .pipe(concat('bootstrap-decorator.min.js'))
+          .pipe(uglify())
+          .pipe(gulp.dest("./dist/"));
+
+});
+
+gulp.task('minify',function(){
+  gulp.src([
+    './src/module.js',
+    './src/services/*.js',
+    './src/directives/*.js'
+  ])
+  .pipe(concat('schema-form.min.js'))
+  .pipe(uglify())
+  .pipe(gulp.dest('./dist/'));
+});
+
+
+gulp.task('default',['minify','bootstrap']);

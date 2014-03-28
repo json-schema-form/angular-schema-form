@@ -1,0 +1,19 @@
+{
+  "name": "angular-ui-ace",
+  "main": "./ui-ace.js",
+  "dependencies": {
+    "angular": "~1.x",
+    "ace-builds": "~1.1.1"
+  },
+  "homepage": "https://github.com/angular-ui/ui-ace",
+  "_release": "c7528c8cda",
+  "_resolution": {
+    "type": "branch",
+    "branch": "bower",
+    "commit": "c7528c8cdad84ab1e9e31fa2bf87c52e8579964e"
+  },
+  "_source": "git://github.com/angular-ui/ui-ace.git",
+  "_target": "bower",
+  "_originalSource": "angular-ui-ace",
+  "_direct": true
+}

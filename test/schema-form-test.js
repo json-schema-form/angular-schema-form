@@ -225,7 +225,6 @@ describe('Schema form',function(){
 
         $compile(tmpl)(scope);
         $rootScope.$apply();
-
         tmpl.children().length.should.be.equal(2);
         tmpl.children().eq(0).is('div.form-group').should.be.true;
         tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
@@ -582,39 +581,6 @@ describe('Schema form',function(){
   });
 
 
-  describe('decorator directive',function(){
-    it('should decorate',function(){
-
-      inject(function($compile,$rootScope){
-        var scope = $rootScope.$new();
-        scope.obj = {};
-
-        var tmpl = angular.element('<schema-form-decorator title="foobar"><input type="text"></schema-form-decorator>');
-
-        $compile(tmpl)(scope);
-        $rootScope.$apply();
-
-        tmpl.is('div.decorator').should.be.true;
-        tmpl.children().length.should.be.eq(3);
-        tmpl.find('input').length.should.be.eq(1);
-        tmpl.find('.description').hasClass('ng-hide').should.be.true;
-
-        tmpl = angular.element('<schema-form-decorator description="Hell yea!"><input type="text"></schema-form-decorator>');
-
-        $compile(tmpl)(scope);
-        $rootScope.$apply();
-
-        tmpl.is('div.decorator').should.be.true;
-        tmpl.children().length.should.be.eq(3);
-        tmpl.find('input').length.should.be.eq(1);
-        tmpl.find('.description').hasClass('ng-hide').should.be.false;
-        tmpl.find('.description').text().should.be.equal('Hell yea!');
-
-      });
-    });
-
-  });
-
   describe('service',function(){
     it('should generate default form def from a schema',function(){
       inject(function(schemaForm){
@@ -803,25 +769,35 @@ describe('Schema form',function(){
         f.type  = 'password';
         schemaForm.merge(schema,[{ key: 'name',title: 'Foobar',type: 'password'}]).should.be.deep.equal([f]);
 
-
-        var form = [
-          "name",
-          {
-            title: 'Choose',
-            key: "gender",
-            type: "select",
-            titleMap: {
-              "undefined": "undefined",
-              "null": "null",
-              "NaN": "NaN"
-            }
-          }
-        ];
-
       });
     });
 
   });
+
+  describe('decorator factory service',function(){
+    it.only('should enable you to create new decorator directives',function(){
+      module(function(schemaFormDecoratorsProvider){
+        schemaFormDecoratorsProvider.create('foobar',{ 'foo':'/bar.html' },[angular.noop]);
+      });
+
+      inject(function($rootScope,$compile,$templateCache){
+        $templateCache.put('/bar.html','<div class="yes">YES</div>');
+
+        //Since our directive does a replace we need a wrapper to actually check the content.
+        var templateWithWrap = angular.element('<div id="wrap"><foobar form="{ type: \'foo\'}"></foobar></div>');
+        var template         = templateWithWrap.children().eq(0);
+
+        $compile(template)($rootScope);
+        $rootScope.$apply();
+        templateWithWrap.children().length.should.equal(1);
+        templateWithWrap.children().is('div').should.be.true;
+        templateWithWrap.children().hasClass('yes').should.be.true;
+
+      });
+    });
+  });
+
+
 });
 
 
