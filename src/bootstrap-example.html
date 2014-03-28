@@ -5,12 +5,19 @@
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
   <style type="text/css">
+
+  body,html {
+    min-height: 1400px;
+  }
+
   .red {
     border: 1px solid red;
     background: #fee;
   }
 
-  .ace_editor { height: 600px; font-size: 20px !important;}
+  .ace_editor { font-size: 20px !important;}
+  .form {  height: 400px;  }
+  .schema {  height: 800px;  }
   </style>
 </head>
 <body ng-controller="TestCtrl">
@@ -22,16 +29,16 @@
       <h3>The Generated Form</h3>
       <form name="ngform" sf-model="person" sf-form="form" sf-schema="schema" sf-decorator="{{decorator}}">
       </form>
-    </div>
-    <div class="col-sm-8">
-      <h3>Schema</h3>
-      <div ui-ace="{ theme: 'monokai',mode:'json'}"
-           ng-class="{red: !itParses}" rows="15" ng-model="schemaJson" class="form-control"></div>
-      <h3>Form</h3>
-      <div ui-ace="{ theme: 'monokai',mode:'json'}"
-           ng-class="{red: !itParsesForm}" rows="15" ng-model="formJson" class="form-control"></div>
       <h3>Model</h3>
       <pre>{{pretty()}}</pre>
+    </div>
+    <div class="col-sm-8">
+      <h3>Form</h3>
+      <div ui-ace="{ theme: 'monokai',mode:'json'}"
+           ng-class="{red: !itParsesForm}" ng-model="formJson" class="form-control form"></div>
+      <h3>Schema</h3>
+      <div ui-ace="{ theme: 'monokai',mode:'json'}"
+           ng-class="{red: !itParses}" ng-model="schemaJson" class="form-control schema"></div>
     </div>
   </div>
 </div>
