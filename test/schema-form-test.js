@@ -773,6 +773,31 @@ describe('Schema form',function(){
     });
 
   });
+
+  describe('decorator factory service',function(){
+    it.only('should enable you to create new decorator directives',function(){
+      module(function(schemaFormDecoratorsProvider){
+        schemaFormDecoratorsProvider.create('foobar',{ 'foo':'/bar.html' },[angular.noop]);
+      });
+
+      inject(function($rootScope,$compile,$templateCache){
+        $templateCache.put('/bar.html','<div class="yes">YES</div>');
+
+        //Since our directive does a replace we need a wrapper to actually check the content.
+        var templateWithWrap = angular.element('<div id="wrap"><foobar form="{ type: \'foo\'}"></foobar></div>');
+        var template         = templateWithWrap.children().eq(0);
+
+        $compile(template)($rootScope);
+        $rootScope.$apply();
+        templateWithWrap.children().length.should.equal(1);
+        templateWithWrap.children().is('div').should.be.true;
+        templateWithWrap.children().hasClass('yes').should.be.true;
+
+      });
+    });
+  });
+
+
 });
 
 
