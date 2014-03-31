@@ -10,6 +10,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
     checkboxes: 'directives/decorators/bootstrap/checkboxes.html',
     number: 'directives/decorators/bootstrap/default.html',
     submit: 'directives/decorators/bootstrap/submit.html',
+    button: 'directives/decorators/bootstrap/submit.html',
     'default': 'directives/decorators/bootstrap/default.html'
   },[
     function(form){

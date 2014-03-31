@@ -200,7 +200,35 @@ describe('Schema form',function(){
         tmpl.children().eq(1).children('select').length.should.equal(1);
         tmpl.children().eq(2).find('input').is('input[type=submit]').should.be.true;
         tmpl.children().eq(2).find('input').val().should.be.equal('Okidoki');
+      });
+    });
 
+    it('should handle buttons',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.obj = {};
+
+        scope.schema = exampleSchema;
+
+        scope.form = ["*",{ type: 'button',title: 'Okidoki', onClick: sinon.spy()}];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(3);
+        tmpl.children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(1).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children('select').length.should.equal(1);
+        tmpl.children().eq(2).find('button').length.should.be.equal(1);
+        tmpl.children().eq(2).find('button').text().should.be.equal('Okidoki');
+
+        scope.form[1].onClick.should.not.have.beenCalled;
+        tmpl.children().eq(2).find('button').click();
+        scope.form[1].onClick.should.have.beenCalledOnce;
       });
 
     });
@@ -775,7 +803,7 @@ describe('Schema form',function(){
   });
 
   describe('decorator factory service',function(){
-    it.only('should enable you to create new decorator directives',function(){
+    it('should enable you to create new decorator directives',function(){
       module(function(schemaFormDecoratorsProvider){
         schemaFormDecoratorsProvider.create('foobar',{ 'foo':'/bar.html' },[angular.noop]);
       });

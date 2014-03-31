@@ -74,6 +74,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
               });
               return lst;
             };
+
+            scope.clickButton = function($event,form) {
+              if (angular.isFunction(form.onClick)) {
+                form.onClick($event,form);
+              } else if (angular.isString(form.onClick)) {
+                scope.$eval(form.onClick,{'$event':$event,form:form});
+              }
+            };
           }
         };
       }]);
