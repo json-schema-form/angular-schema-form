@@ -1,7 +1,8 @@
 <div class="form-group" ng-class="{'has-error': hasError()}">
   <label ng-show="showTitle()">{{form.title}}</label>
 
-  <input type="{{form.type}}"
+  <input ng-show="form.key"
+         type="{{form.type}}"
          placeholder="{{form.placeholder}}"
          class="form-control"
          ng-required="form.required"

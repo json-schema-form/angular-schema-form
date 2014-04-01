@@ -805,7 +805,7 @@ describe('Schema form',function(){
   describe('decorator factory service',function(){
     it('should enable you to create new decorator directives',function(){
       module(function(schemaFormDecoratorsProvider){
-        schemaFormDecoratorsProvider.create('foobar',{ 'foo':'/bar.html' },[angular.noop]);
+        schemaFormDecoratorsProvider.createDecorator('foobar',{ 'foo':'/bar.html' },[angular.noop]);
       });
 
       inject(function($rootScope,$compile,$templateCache){

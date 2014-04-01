@@ -1,26 +1,51 @@
 angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(decoratorsProvider){
+  var base = 'directives/decorators/bootstrap/';
 
-  decoratorsProvider.create('bootstrapDecorator',{
-    textarea: 'directives/decorators/bootstrap/textarea.html',
-    fieldset: 'directives/decorators/bootstrap/fieldset.html',
-    section: 'directives/decorators/bootstrap/section.html',
-    actions: 'directives/decorators/bootstrap/actions.html',
-    select: 'directives/decorators/bootstrap/select.html',
-    checkbox: 'directives/decorators/bootstrap/checkbox.html',
-    checkboxes: 'directives/decorators/bootstrap/checkboxes.html',
-    number: 'directives/decorators/bootstrap/default.html',
-    submit: 'directives/decorators/bootstrap/submit.html',
-    button: 'directives/decorators/bootstrap/submit.html',
-    'default': 'directives/decorators/bootstrap/default.html'
+  decoratorsProvider.createDecorator('bootstrapDecorator',{
+    textarea: base+'textarea.html',
+    fieldset: base+'fieldset.html',
+    section: base+'section.html',
+    actions: base+'actions.html',
+    select: base+'select.html',
+    checkbox: base+'checkbox.html',
+    checkboxes: base+'checkboxes.html',
+    number: base+'default.html',
+    submit: base+'submit.html',
+    button: base+'submit.html',
+    'default': base+'default.html'
   },[
     function(form){
       if (form.readonly && form.key && form.type !== 'fieldset') {
-        return 'directives/decorators/bootstrap/readonly.html';
+        return base+'readonly.html';
       }
     }
   ]);
 
-}]);
+  //manual use directives
+  decoratorsProvider.createDirectives({
+    textarea: base+'textarea.html',
+    select: base+'select.html',
+    checkbox: base+'checkbox.html',
+    checkboxes: base+'checkboxes.html',
+    number: base+'default.html',
+    submit: base+'submit.html',
+    button: base+'submit.html',
+    text: base+'default.html',
+    date: base+'default.html',
+    password: base+'default.html',
+    input: base+'default.html'
+  });
+
+}]).directive('sfFieldset',function(){
+  return {
+    transclude: true,
+    scope: true,
+    templateUrl: 'directives/decorators/bootstrap/fieldset-trcl.html',
+    link: function(scope,element,attrs) {
+      scope.title = scope.$eval(attrs.title);
+    }
+  };
+});
 
 
 

@@ -13,6 +13,11 @@ angular.module('schemaForm').directive('schemaValidate',function(){
           schema = scope.$eval(attrs.schemaValidate);
         }
 
+        //Still might be undefined, especially if form has no schema...
+        if (!schema) {
+          return viewValue;
+        }
+
         //required is handled by ng-required
         if (angular.isUndefined(viewValue)) {
           return undefined;
