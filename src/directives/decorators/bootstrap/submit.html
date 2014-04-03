@@ -2,9 +2,9 @@
   <input type="submit"
          class="btn btn-primary"
          value="{{form.title}}"
-         ng-click="buttonClick($event,form)"
          ng-if="form.type === 'submit'">
   <button class="btn btn-default"
+          type="button"
           ng-click="buttonClick($event,form)"
           ng-if="form.type !== 'submit'">{{form.title}}</button>
 </div>

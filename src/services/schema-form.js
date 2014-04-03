@@ -5,7 +5,7 @@
  */
 angular.module('schemaForm').factory('schemaForm',[function(){
   var service = {};
-
+  
   service.merge = function(schema,form,ignore) {
     form  = form || ["*"];
 
@@ -24,7 +24,7 @@ angular.module('schemaForm').factory('schemaForm',[function(){
     //We look at the supplied form and extend it with schema standards
     var lookup = stdForm.lookup;
     return form.map(function(obj){
-
+        
       //handle the shortcut with just a name
       if (typeof obj === 'string') {
         obj = { key: obj };

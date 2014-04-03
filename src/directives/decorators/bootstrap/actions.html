@@ -3,9 +3,9 @@
          type="submit"
          class="btn btn-primary"
          value="{{item.title}}"
-         ng-click="buttonClick($event,form)"
          ng-if="item.type === 'submit'">
   <button ng-repeat-end class="btn btn-default"
+          type="button"
           ng-if="item.type !== 'submit'"
-          ng-click="buttonClick($event,form)">{{item.title}}</button>
+          ng-click="buttonClick($event,item)">{{item.title}}</button>
 </div>

@@ -38,7 +38,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
           replace: true,
           transclude: false,
           scope: true,
-          link: function(scope,element,attrs) {
+          require: '?^sfSchema',
+          link: function(scope,element,attrs,sfSchema) {
             //rebind our part of the form to the scope.
             var once = scope.$watch(attrs.form,function(form){
 
@@ -74,11 +75,16 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
               return lst;
             };
 
-            scope.clickButton = function($event,form) {
+            scope.buttonClick = function($event,form) {
               if (angular.isFunction(form.onClick)) {
                 form.onClick($event,form);
               } else if (angular.isString(form.onClick)) {
-                scope.$eval(form.onClick,{'$event':$event,form:form});
+                if (sfSchema) {
+                  //evaluating in scope outside of sfSchemas isolated scope
+                  sfSchema.evalInParentScope(form.onClick,{'$event':$event,form:form});
+                } else {
+                  scope.$eval(form.onClick,{'$event':$event,form:form});
+                }
               }
             };
           }

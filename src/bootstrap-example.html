@@ -127,7 +127,7 @@ function TestCtrl($scope){
       type: 'actions',
       items: [
         { type: 'submit', title: 'Do It!'},
-        { type: 'button', title: 'Noooooooooooo'}
+        { type: 'button', title: 'Noooooooooooo', onClick: 'sayNo()'}
       ]
     }
   ];
@@ -167,6 +167,9 @@ function TestCtrl($scope){
   };
 
 
+  $scope.sayNo = function() {
+    alert('Noooooooo')
+  }
 
 }
 
