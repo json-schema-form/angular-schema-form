@@ -6,6 +6,7 @@ angular.module('schemaForm').directive('schemaValidate',function(){
     require: 'ngModel',
     link: function(scope,element,attrs,ngModel) {
       scope.ngModel = ngModel;
+      var error = null;
       var schema  = scope.$eval(attrs.schemaValidate);
 
       ngModel.$parsers.unshift(function(viewValue) {
@@ -43,11 +44,12 @@ angular.module('schemaForm').directive('schemaValidate',function(){
         if (result.valid) {
           // it is valid
           ngModel.$setValidity('schema', true);
+          error = null;
           return viewValue;
         } else {
           // it is invalid, return undefined (no model update)
           ngModel.$setValidity('schema', false);
-          scope.schemaError = result.error.message;
+          error = result.error;
           return undefined;
         }
       });
@@ -55,6 +57,10 @@ angular.module('schemaForm').directive('schemaValidate',function(){
       //This works since we now we're inside a decorator and that this is the decorators scope.
       scope.hasError = function(){
         return scope.ngModel.$invalid && !scope.ngModel.$pristine;
+      };
+
+      scope.schemaError = function() {
+        return error;
       };
 
     }

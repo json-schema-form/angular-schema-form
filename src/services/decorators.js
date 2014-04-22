@@ -87,6 +87,35 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                 }
               }
             };
+
+            /**
+             * Error message handler
+             * An error can either be a schema validation message or a angular js validtion
+             * error (i.e. required)
+             */
+            scope.errorMessage = function(schemaError,$error) {
+              //User has supplied validation messages
+              if (scope.form.validationMessage) {
+                if (schemaError) {
+                  if (angular.isString(scope.form.validationMessage)) {
+                    return scope.form.validationMessage;
+                  }
+
+                  return scope.form.validationMessage[schemaError.code] || scope.form.validationMessage.default;
+                } else {
+                  return scope.form.validationMessage.required || scope.form.validationMessage;
+                }
+              }
+
+              //No user supplied validation message.
+              if (schemaError) {
+                return schemaError.message; //use tv4.js validation message
+              }
+
+              //Otherwise we only use required so it must be it.
+              return "Required";
+
+            };
           }
         };
       }]);

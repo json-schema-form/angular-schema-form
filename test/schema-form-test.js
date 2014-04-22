@@ -328,6 +328,56 @@ describe('Schema form',function(){
       });
     });
 
+    it('should display custom validationMessages when specified',function(done){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "pattern": "^[a-z]+",
+              "validationMessage": "You are only allowed lower case letters in name."
+            },
+            "nick": {
+              "type": "string",
+              "pattern": "^[a-z]+",
+            },
+          }
+        };
+
+        scope.form = [
+          "name",
+          {
+            key: 'nick',
+            validationMessage: 'Foobar'
+          }
+        ];
+
+        var tmpl = angular.element('<form name="theform" sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+        tmpl.find('input').each(function(){
+          $(this).scope().ngModel.$setViewValue('AÖ');
+        });
+
+        var errors = tmpl.find('.help-block');
+
+        //timeout so we can do a second $apply
+        setTimeout(function(){
+          $rootScope.$apply(); //this actually updates the view with error messages
+          errors.eq(0).text().should.be.equal("You are only allowed lower case letters in name.");
+          errors.eq(1).text().should.be.equal("Foobar");
+          done();
+        },0);
+
+      });
+    });
+
 
     it('should use ng-required on required fields',function(){
 
