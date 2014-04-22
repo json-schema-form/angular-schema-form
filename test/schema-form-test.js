@@ -468,6 +468,65 @@ describe('Schema form',function(){
       });
     });
 
+    it('should handle schema form defaults in deep structure',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {
+          name: 'Foobar'
+        };
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "props" : {
+              "type": "object",
+              "title": "Person",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name"
+                },
+                "nick": {
+                  "type": "string",
+                  "title": "Nick"
+                },
+                "alias": {
+                  "type": "string",
+                  "title": "Alias"
+                }
+              }
+            }
+          }
+        };
+
+        //The form defines a fieldset for person, and changes the order of fields
+        //but titles should come from the schema
+        scope.form = [{
+          type: 'fieldset',
+          key:  'props',
+          items: [
+            'props.nick',
+            'props.name',
+            'props.alias'
+          ]
+        }];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.eq(1);
+        var labels = tmpl.children().children().find('label');
+        labels.eq(0).text().should.equal('Nick');
+        labels.eq(1).text().should.equal('Name');
+        labels.eq(2).text().should.equal('Alias');
+
+      });
+    });
+
+
     it('should skip title if form says "notitle"',function(){
 
       inject(function($compile,$rootScope){

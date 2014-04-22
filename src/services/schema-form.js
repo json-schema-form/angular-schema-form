@@ -5,7 +5,7 @@
  */
 angular.module('schemaForm').factory('schemaForm',[function(){
   var service = {};
-  
+
   service.merge = function(schema,form,ignore) {
     form  = form || ["*"];
 
@@ -24,11 +24,17 @@ angular.module('schemaForm').factory('schemaForm',[function(){
     //We look at the supplied form and extend it with schema standards
     var lookup = stdForm.lookup;
     return form.map(function(obj){
-        
+
       //handle the shortcut with just a name
       if (typeof obj === 'string') {
         obj = { key: obj };
       }
+
+      //if it's a type with items, merge 'em!
+      if (obj.items) {
+        obj.items = service.merge(schema,obj.items,ignore);
+      }
+
 
       //extend with std form from schema.
       if (obj.key && lookup[obj.key]) {
@@ -133,6 +139,7 @@ angular.module('schemaForm').factory('schemaForm',[function(){
       var f   = stdFormObj(schema,options);
       f.type  = 'fieldset';
       f.items = [];
+      options.lookup[options.path] = f;
 
       //recurse down into properties
       angular.forEach(schema.properties,function(v,k){
