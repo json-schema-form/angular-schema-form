@@ -243,6 +243,7 @@ and the value is the title of the option.
 
 *button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
 string with an angular expression, as with ng-click.
+```javascript
 [
   { type: 'button', title: 'Ok', onClick: function(){ ...  } }
   { type: 'button', title: 'Cancel', onClick: "cancel()" }
