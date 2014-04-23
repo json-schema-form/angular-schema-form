@@ -61,7 +61,7 @@ Schema Form currently supports the following form field types:
 |:--------------|:------------------------|
 | fieldset      |  a fieldset with legend |
 | section       |  just a div             |
-| actions       |  horizontal button list, can only submit buttons as items |
+| actions       |  horizontal button list, can only submit and buttons as items |
 | text          |  input with type text   |
 | textarea      |  a textarea             |
 | number        |  input type number      |
@@ -69,6 +69,7 @@ Schema Form currently supports the following form field types:
 | checkboxes    |  list of checkboxes     |
 | select        |  a select (single value)|
 | submit        |  a submit button        |
+| button        |  a button               |
 
 
 
@@ -232,7 +233,16 @@ and the value is the title of the option.
   type: "actions",
   items: [
     { type: 'submit', title: 'Ok' }
+    { type: 'button', title: 'Cancel', onClick: "cancel()" }
   ]
 }
+```
+
+*button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
+string with an angular expression, as with ng-click.
+[
+  { type: 'button', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'button', title: 'Cancel', onClick: "cancel()" }
+[
 ```
 
