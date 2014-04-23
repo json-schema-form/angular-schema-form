@@ -1,0 +1,6 @@
+v0.0.4
+------
+* Fieldsets now properly merge schema defaults.
+* Directives for "manual" decorator usage.
+* Basic support for buttons.
+* Basic support for custom validation error messages.
