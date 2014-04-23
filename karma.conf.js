@@ -15,8 +15,8 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'http://code.jquery.com/jquery-2.1.0.min.js',
-      'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js',
-      'http://code.angularjs.org/1.2.14/angular-mocks.js',
+      'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js',
+      'https://code.angularjs.org/1.2.16/angular-mocks.js',
       'bower_components/tv4/tv4.js',
       'src/module.js',
       'src/services/*.js',
@@ -81,7 +81,7 @@ module.exports = function(config) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['PhantomJS'],
+    browsers: [],
 
 
     // If browser does not capture in given timeout [ms], kill it

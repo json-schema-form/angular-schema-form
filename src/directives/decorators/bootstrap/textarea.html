@@ -5,6 +5,5 @@
             ng-model="$$value$$"
             schema-validate="form.schema"></textarea>
 
-  <span class="help-block" ng-show="form.description && !hasError()">{{form.description}} </span>
-  <span class="help-block" ng-show="hasError()">{{schemaError}} {{ngModel.$error}}</span>
+  <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}} </span>
 </div>

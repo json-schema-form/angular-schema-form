@@ -32,6 +32,11 @@ function($compile,  schemaForm,  schemaFormDecorators){
       initialForm: '=sfForm',
       model: '=sfModel'
     },
+    controller: ['$scope',function($scope){
+      this.evalInParentScope = function(expr,locals){
+        $scope.$parent.$eval(expr,locals);
+      };
+    }],
     replace: false,
     restrict: "A",
     transclude: true,

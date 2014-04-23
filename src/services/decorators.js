@@ -38,10 +38,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
           replace: true,
           transclude: false,
           scope: true,
-          link: function(scope,element,attrs) {
+          require: '?^sfSchema',
+          link: function(scope,element,attrs,sfSchema) {
             //rebind our part of the form to the scope.
             var once = scope.$watch(attrs.form,function(form){
-
 
               if (form) {
                 scope.form  = form;
@@ -51,7 +51,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                 //for fieldsets to recurse properly.
                 var url = templateUrl(name,form);
                 $http.get(url,{ cache: $templateCache }).then(function(res){
-                  var template = res.data.replace(/\$\$value\$\$/g,'model.'+form.key);
+                  var template = res.data.replace(/\$\$value\$\$/g,'model.'+(form.key || ""));
                   $compile(template)(scope,function(clone){
                     element.replaceWith(clone);
                   });
@@ -74,29 +74,125 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
               });
               return lst;
             };
+
+            scope.buttonClick = function($event,form) {
+              if (angular.isFunction(form.onClick)) {
+                form.onClick($event,form);
+              } else if (angular.isString(form.onClick)) {
+                if (sfSchema) {
+                  //evaluating in scope outside of sfSchemas isolated scope
+                  sfSchema.evalInParentScope(form.onClick,{'$event':$event,form:form});
+                } else {
+                  scope.$eval(form.onClick,{'$event':$event,form:form});
+                }
+              }
+            };
+
+            /**
+             * Error message handler
+             * An error can either be a schema validation message or a angular js validtion
+             * error (i.e. required)
+             */
+            scope.errorMessage = function(schemaError) {
+              //User has supplied validation messages
+              if (scope.form.validationMessage) {
+                if (schemaError) {
+                  if (angular.isString(scope.form.validationMessage)) {
+                    return scope.form.validationMessage;
+                  }
+
+                  return scope.form.validationMessage[schemaError.code] || scope.form.validationMessage['default'];
+                } else {
+                  return scope.form.validationMessage.required || scope.form.validationMessage['default'] || scope.form.validationMessage;
+                }
+              }
+
+              //No user supplied validation message.
+              if (schemaError) {
+                return schemaError.message; //use tv4.js validation message
+              }
+
+              //Otherwise we only use required so it must be it.
+              return "Required";
+
+            };
           }
         };
       }]);
   };
 
+  var createManualDirective = function(type,templateUrl,transclude) {
+    transclude = angular.isDefined(transclude)? transclude : false;
+    $compileProvider.directive('sf'+angular.uppercase(type[0])+type.substr(1), function(){
+      return {
+        restrict: "EAC",
+        scope: true,
+        replace: true,
+        transclude: transclude,
+        template: '<sf-decorator form="form"></sf-decorator>',
+        link: function(scope,element,attrs) {
+          var watchThis = {
+            'items': 'c',
+            'titleMap': 'c',
+            'schema': 'c'
+          };
+          var form = { type: type };
+          var once = true;
+          angular.forEach(attrs,function(value,name){
+            if (name[0] !== '$' && name.indexOf('ng') !== 0 && name !== 'sfField') {
+
+              var updateForm = function(val){
+                if (angular.isDefined(val) && val !== form[name]) {
+                  form[name] = val;
+
+                  //when we have type, and if specified key we apply it on scope.
+                  if (once && form.type && (form.key || angular.isUndefined(attrs.key))) {
+                    scope.form = form;
+                    once = false;
+                  }
+                }
+              };
+
+              if (name === 'model') {
+                //"model" is bound to scope under the name "model" since this is what the decorators
+                //know and love.
+                scope.$watch(value,function(val){
+                  if (val && scope.model !== val) {
+                    scope.model = val;
+                  }
+                });
+              } else if (watchThis[name] === 'c') {
+                //watch collection
+                scope.$watchCollection(value,updateForm);
+              } else {
+                //$observe
+                attrs.$observe(name,updateForm);
+              }
+            }
+          });
+        }
+      };
+    });
+  };
+
+
+
   /**
-   * Create a decorator directive
+   * Create a decorator directive and its sibling "manual" use directives.
    * The directive can be used to create form fields or other form entities.
    * It can be used in conjunction with <schema-form> directive in which case the decorator is
    * given it's configuration via a the "form" attribute.
    *
-   * ex. Basic usage with form and schema
-   *   <sf-decorator form="myform" schema="myschema"></sf-decorator>
-   *
-   * ex. "Manual" usage
-   *   <sf-decorator sf-type="" sf-title=""
+   * ex. Basic usage
+   *   <sf-decorator form="myform"></sf-decorator>
+   **
    * @param {string} name directive name (CamelCased)
    * @param {Object} mappings, an object that maps "type" => "templateUrl"
    * @param {Array}  rules (optional) a list of functions, function(form){}, that are each tried in turn,
    *                 if they return a string then that is used as the templateUrl. Rules come before
    *                 mappings.
    */
-  this.create = function(name,mappings,rules){
+  this.createDecorator = function(name,mappings,rules){
     directives[name] = {
       mappings: mappings || {},
       rules:    rules    || []
@@ -108,6 +204,30 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
     createDirective(name);
   };
 
+  /**
+   * Creates a directive of a decorator
+   * Usable when you want to use the decorators without using <schema-form> directive.
+   * Specifically when you need to reuse styling.
+   *
+   * ex. createDirective('text','...')
+   *  <sf-text title="foobar" model="person" key="name" schema="schema"></sf-text>
+   *
+   * @param {string}  type The type of the directive, resulting directive will have sf- prefixed
+   * @param {string}  templateUrl
+   * @param {boolean} transclude (optional) sets transclude option of directive, defaults to false.
+   */
+  this.createDirective = createManualDirective;
+
+  /**
+   * Same as createDirective, but takes an object where key is 'type' and value is 'templateUrl'
+   * Useful for batching.
+   * @param {Object} mappings
+   */
+  this.createDirectives = function(mappings) {
+    angular.forEach(mappings,function(url,type){
+      createManualDirective(type,url);
+    });
+  };
 
   /**
    * Getter for directive mappings

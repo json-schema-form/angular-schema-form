@@ -61,7 +61,7 @@ Schema Form currently supports the following form field types:
 |:--------------|:------------------------|
 | fieldset      |  a fieldset with legend |
 | section       |  just a div             |
-| actions       |  horizontal button list, can only submit buttons as items |
+| actions       |  horizontal button list, can only submit and buttons as items |
 | text          |  input with type text   |
 | textarea      |  a textarea             |
 | number        |  input type number      |
@@ -69,6 +69,7 @@ Schema Form currently supports the following form field types:
 | checkboxes    |  list of checkboxes     |
 | select        |  a select (single value)|
 | submit        |  a submit button        |
+| button        |  a button               |
 
 
 
@@ -171,6 +172,29 @@ General options most field types can handle:
   title: "Street",            //Title of field, taken from schema if available
   notitle: false,             //Set to true to hide title
   description: "Street name", //A description, taken from schema if available
+  validationMessage: "Oh noes, please write a proper address"  //A custom validation error message
+}
+```
+
+Validation Messages
+-------------------
+Per default all error messages but "Required" comes from the schema validator
+[tv4](https://github.com/geraintluff/tv4), this might or might not work for you.
+If you supply a ´´´validationMessage´´´ proṕerty in the form definition, and if its value is a
+string that will be used instead on any validation error.
+
+If you need more fine grained control you can supply an object instead with keys matching the error
+codes of [tv4](https://github.com/geraintluff/tv4). See ```tv4.errorCodes```
+
+Ex.
+```javascript
+{
+  key: "address.street",
+  validationMessage: {
+    tv4.errorCodes.STRING_LENGTH_SHORT: "Address is too short, man.",
+    "default": "Just write a proper address, will you?",   //Special catch all error message
+    "required": "I needz an address plz"                   //Used for required if specified
+  }
 }
 ```
 
@@ -209,7 +233,16 @@ and the value is the title of the option.
   type: "actions",
   items: [
     { type: 'submit', title: 'Ok' }
+    { type: 'button', title: 'Cancel', onClick: "cancel()" }
   ]
 }
+```
+
+*button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
+string with an angular expression, as with ng-click.
+[
+  { type: 'button', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'button', title: 'Cancel', onClick: "cancel()" }
+[
 ```
 

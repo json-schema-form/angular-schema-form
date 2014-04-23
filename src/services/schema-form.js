@@ -30,6 +30,12 @@ angular.module('schemaForm').factory('schemaForm',[function(){
         obj = { key: obj };
       }
 
+      //if it's a type with items, merge 'em!
+      if (obj.items) {
+        obj.items = service.merge(schema,obj.items,ignore);
+      }
+
+
       //extend with std form from schema.
       if (obj.key && lookup[obj.key]) {
         return angular.extend(lookup[obj.key],obj);
@@ -51,6 +57,10 @@ angular.module('schemaForm').factory('schemaForm',[function(){
     if (schema.readOnly || schema.readonly)  f.readonly  = schema.readOnly || schema.readonly;
     if (schema.minimum) f.minimum = schema.minimum + (schema.exclusiveMinimum?1:0);
     if (schema.maximum) f.maximum = schema.maximum - (schema.exclusiveMaximum?1:0);
+
+    //Non standard attributes
+    if (schema.validationMessage) f.validationMessage = schema.validationMessage;
+    if (schema.enumNames) f.titleMap = schema.enumNames;
     f.schema = schema;
     return f;
   };
@@ -104,10 +114,12 @@ angular.module('schemaForm').factory('schemaForm',[function(){
       var f = stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'select';
-      f.titleMap = {};
-      schema.enum.forEach(function(name){
-        f.titleMap[name] = name;
-      });
+      if (!f.titleMap) {
+        f.titleMap = {};
+        schema.enum.forEach(function(name){
+          f.titleMap[name] = name;
+        });
+      }
       options.lookup[options.path] = f;
       return f;
     }
@@ -118,10 +130,12 @@ angular.module('schemaForm').factory('schemaForm',[function(){
       var f = stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'checkboxes';
-      f.titleMap = {};
-      schema.items.enum.forEach(function(name){
-        f.titleMap[name] = name;
-      });
+      if (!f.titleMap) {
+        f.titleMap = {};
+        schema.items.enum.forEach(function(name){
+          f.titleMap[name] = name;
+        });
+      }
       options.lookup[options.path] = f;
       return f;
     }
@@ -133,6 +147,7 @@ angular.module('schemaForm').factory('schemaForm',[function(){
       var f   = stdFormObj(schema,options);
       f.type  = 'fieldset';
       f.items = [];
+      options.lookup[options.path] = f;
 
       //recurse down into properties
       angular.forEach(schema.properties,function(v,k){

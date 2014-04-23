@@ -2,7 +2,7 @@
 
 var gulp = require('gulp');
 
-var ngHtml2Js = require("gulp-ng-html2js");
+var templateCache = require('gulp-angular-templatecache');
 var minifyHtml = require("gulp-minify-html");
 var concat = require("gulp-concat");
 var uglify = require("gulp-uglify");
@@ -18,9 +18,9 @@ gulp.task('bootstrap', function() {
                       spare: true,
                       quotes: true
                   }))
-                  .pipe(ngHtml2Js({
-                      moduleName: "schemaForm",
-                      prefix: "directives/decorators/bootstrap/"
+                  .pipe(templateCache({
+                      module: "schemaForm",
+                      root: "directives/decorators/bootstrap/"
                   }))
     );
     stream.queue(gulp.src('./src/directives/decorators/bootstrap/*.js'));
@@ -31,6 +31,7 @@ gulp.task('bootstrap', function() {
           .pipe(gulp.dest("./dist/"));
 
 });
+
 
 gulp.task('minify',function(){
   gulp.src([

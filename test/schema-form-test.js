@@ -200,7 +200,35 @@ describe('Schema form',function(){
         tmpl.children().eq(1).children('select').length.should.equal(1);
         tmpl.children().eq(2).find('input').is('input[type=submit]').should.be.true;
         tmpl.children().eq(2).find('input').val().should.be.equal('Okidoki');
+      });
+    });
 
+    it('should handle buttons',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.obj = {};
+
+        scope.schema = exampleSchema;
+
+        scope.form = ["*",{ type: 'button',title: 'Okidoki', onClick: sinon.spy()}];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(3);
+        tmpl.children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(1).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children('select').length.should.equal(1);
+        tmpl.children().eq(2).find('button').length.should.be.equal(1);
+        tmpl.children().eq(2).find('button').text().should.be.equal('Okidoki');
+
+        scope.form[1].onClick.should.not.have.beenCalled;
+        tmpl.children().eq(2).find('button').click();
+        scope.form[1].onClick.should.have.beenCalledOnce;
       });
 
     });
@@ -297,6 +325,56 @@ describe('Schema form',function(){
         tmpl.children().eq(1).is('div.form-group').should.be.true;
         tmpl.children().eq(1).children('input').length.should.equal(1);
         expect(tmpl.children().eq(1).children('input').attr('disabled')).to.be.undefined;
+      });
+    });
+
+    it('should display custom validationMessages when specified',function(done){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "pattern": "^[a-z]+",
+              "validationMessage": "You are only allowed lower case letters in name."
+            },
+            "nick": {
+              "type": "string",
+              "pattern": "^[a-z]+",
+            },
+          }
+        };
+
+        scope.form = [
+          "name",
+          {
+            key: 'nick',
+            validationMessage: 'Foobar'
+          }
+        ];
+
+        var tmpl = angular.element('<form name="theform" sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+        tmpl.find('input').each(function(){
+          $(this).scope().ngModel.$setViewValue('AÖ');
+        });
+
+        var errors = tmpl.find('.help-block');
+
+        //timeout so we can do a second $apply
+        setTimeout(function(){
+          $rootScope.$apply(); //this actually updates the view with error messages
+          errors.eq(0).text().should.be.equal("You are only allowed lower case letters in name.");
+          errors.eq(1).text().should.be.equal("Foobar");
+          done();
+        },0);
+
       });
     });
 
@@ -439,6 +517,65 @@ describe('Schema form',function(){
 
       });
     });
+
+    it('should handle schema form defaults in deep structure',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {
+          name: 'Foobar'
+        };
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "props" : {
+              "type": "object",
+              "title": "Person",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Name"
+                },
+                "nick": {
+                  "type": "string",
+                  "title": "Nick"
+                },
+                "alias": {
+                  "type": "string",
+                  "title": "Alias"
+                }
+              }
+            }
+          }
+        };
+
+        //The form defines a fieldset for person, and changes the order of fields
+        //but titles should come from the schema
+        scope.form = [{
+          type: 'fieldset',
+          key:  'props',
+          items: [
+            'props.nick',
+            'props.name',
+            'props.alias'
+          ]
+        }];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.eq(1);
+        var labels = tmpl.children().children().find('label');
+        labels.eq(0).text().should.equal('Nick');
+        labels.eq(1).text().should.equal('Name');
+        labels.eq(2).text().should.equal('Alias');
+
+      });
+    });
+
 
     it('should skip title if form says "notitle"',function(){
 
@@ -775,9 +912,9 @@ describe('Schema form',function(){
   });
 
   describe('decorator factory service',function(){
-    it.only('should enable you to create new decorator directives',function(){
+    it('should enable you to create new decorator directives',function(){
       module(function(schemaFormDecoratorsProvider){
-        schemaFormDecoratorsProvider.create('foobar',{ 'foo':'/bar.html' },[angular.noop]);
+        schemaFormDecoratorsProvider.createDecorator('foobar',{ 'foo':'/bar.html' },[angular.noop]);
       });
 
       inject(function($rootScope,$compile,$templateCache){
