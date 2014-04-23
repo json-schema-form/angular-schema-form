@@ -3,6 +3,13 @@ Angular Schema Form
 
 Generate forms from a JSON schema, with AngularJS!
 
+### [Try out the example page](http://textalk.github.io/angular-schema-form/src/bootstrap-example.html) 
+...where you can edit the schema or the form definition and see what comes out!
+
+
+What is it?
+----------
+
 Schema Form is a set of AngularJS directives (and a service..) that can create a form directly from a json schema
 definition and also validate against that schema. The defaults may be fine for a lot cases, but you can also
 customize it, changing order and type of fields.
@@ -16,10 +23,6 @@ standard. Schema Form, as a default, generates bootstrap 3 friendly HTML.
 
 Another thing that sets Schema Form apart is that it, at the moment, doesn't implement half of what JSON Form
 does, nor have any documentation! Which of course we hope to remedy soon.
-
-
-Try out the [example](http://textalk.github.io/angular-schema-form/src/bootstrap-example.html) where you can edit
-the schema or the form definition and see what comes out!
 
 
 Basic Usage
