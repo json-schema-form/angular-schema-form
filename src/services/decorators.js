@@ -93,7 +93,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
              * An error can either be a schema validation message or a angular js validtion
              * error (i.e. required)
              */
-            scope.errorMessage = function(schemaError,$error) {
+            scope.errorMessage = function(schemaError) {
               //User has supplied validation messages
               if (scope.form.validationMessage) {
                 if (schemaError) {
@@ -101,9 +101,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                     return scope.form.validationMessage;
                   }
 
-                  return scope.form.validationMessage[schemaError.code] || scope.form.validationMessage.default;
+                  return scope.form.validationMessage[schemaError.code] || scope.form.validationMessage['default'];
                 } else {
-                  return scope.form.validationMessage.required || scope.form.validationMessage;
+                  return scope.form.validationMessage.required || scope.form.validationMessage['default'] || scope.form.validationMessage;
                 }
               }
 

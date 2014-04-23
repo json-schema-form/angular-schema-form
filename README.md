@@ -171,6 +171,29 @@ General options most field types can handle:
   title: "Street",            //Title of field, taken from schema if available
   notitle: false,             //Set to true to hide title
   description: "Street name", //A description, taken from schema if available
+  validationMessage: "Oh noes, please write a proper address"  //A custom validation error message
+}
+```
+
+Validation Messages
+-------------------
+Per default all error messages but "Required" comes from the schema validator
+[tv4](https://github.com/geraintluff/tv4), this might or might not work for you.
+If you supply a ´´´validationMessage´´´ proṕerty in the form definition, and if its value is a
+string that will be used instead on any validation error.
+
+If you need more fine grained control you can supply an object instead with keys matching the error
+codes of [tv4](https://github.com/geraintluff/tv4). See ```tv4.errorCodes```
+
+Ex.
+```javascript
+{
+  key: "address.street",
+  validationMessage: {
+    tv4.errorCodes.STRING_LENGTH_SHORT: "Address is too short, man.",
+    "default": "Just write a proper address, will you?",   //Special catch all error message
+    "required": "I needz an address plz"                   //Used for required if specified
+  }
 }
 ```
 
