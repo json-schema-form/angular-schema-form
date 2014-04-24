@@ -2,10 +2,12 @@
 chai.should();
 
 describe('Schema form',function(){
-  beforeEach(module('templates'));
-  beforeEach(module('schemaForm'));
 
   describe('directive',function(){
+    beforeEach(module('templates'));
+    beforeEach(module('schemaForm'));
+
+
 
     var exampleSchema = {
       "type": "object",
@@ -719,6 +721,9 @@ describe('Schema form',function(){
 
 
   describe('service',function(){
+    beforeEach(module('templates'));
+    beforeEach(module('schemaForm'));
+
     it('should generate default form def from a schema',function(){
       inject(function(schemaForm){
 
@@ -836,6 +841,57 @@ describe('Schema form',function(){
       });
     });
 
+    it('should be extendable with new defaults',function(){
+      module(function(schemaFormProvider){
+        schemaFormProvider.prependRule('string',function(name,schema,options){
+          if (schema.format === 'foobar') {
+            var f = schemaFormProvider.createStandardForm(schema,options);
+            f.type = 'foobar';
+            return f;
+          }
+        });
+
+        schemaFormProvider.appendRule('string',function(name,schema,options){
+          var f = schemaFormProvider.createStandardForm(schema,options);
+          f.type = 'notused';
+          return f;
+        });
+      });
+
+      inject(function(schemaForm){
+
+        var schema = {
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "format": "foobar",
+              "description": "Gimme yea name lad",
+              "type": "string"
+            },
+            "gender": {
+              "title": "Choose",
+              "type": "string",
+              "enum": [
+                "undefined",
+                "null",
+                "NaN",
+              ]
+            }
+          }
+        };
+
+        //no form is implicitly ['*']
+        var defaults = schemaForm.defaults(schema).form;
+        defaults[0].type.should.be.equal('foobar');
+        defaults[0].title.should.be.equal('Name');
+        defaults[1].type.should.be.equal('select');
+        defaults[1].title.should.be.equal('Choose');
+
+      });
+    });
+
+
 
     it('should ignore parts of schema in ignore list',function(){
       inject(function(schemaForm){
@@ -912,6 +968,9 @@ describe('Schema form',function(){
   });
 
   describe('decorator factory service',function(){
+    beforeEach(module('templates'));
+    beforeEach(module('schemaForm'));
+
     it('should enable you to create new decorator directives',function(){
       module(function(schemaFormDecoratorsProvider){
         schemaFormDecoratorsProvider.createDecorator('foobar',{ 'foo':'/bar.html' },[angular.noop]);

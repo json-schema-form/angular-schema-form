@@ -5,6 +5,19 @@
  */
 angular.module('schemaForm').provider('schemaForm',[function(){
 
+  var defaultFormDefinition = function(name,schema,options){
+    var rules = defaults[schema.type];
+    if (rules) {
+      var def;
+      for (var i=0;i<rules.length; i++) {
+        def = rules[i](name,schema,options);
+        //first handler in list that actually returns something is our handler!
+        if (def) {
+          return def;
+        }
+      }
+    }
+  };
 
   //Creates a form object with all common properties
   var stdFormObj = function(schema,options) {
@@ -146,16 +159,49 @@ angular.module('schemaForm').provider('schemaForm',[function(){
 
 
 
+  /**
+   * Provider API
+   */
+  this.defaults   = defaults;
 
+  /**
+   * Append default form rule
+   * @param {string}   type json schema type
+   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form definition or undefined
+   */
+  this.appendRule = function(type,rule) {
+    if (!defaults[type]) {
+      defaults[type] = [];
+    }
+    defaults[type].push(rule);
+  };
 
+  /**
+   * Prepend default form rule
+   * @param {string}   type json schema type
+   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form definition or undefined
+   */
+  this.prependRule = function(type,rule) {
+    if (!defaults[type]) {
+      defaults[type] = [];
+    }
+    defaults[type].unshift(rule);
+  };
 
+  /**
+   * Utility function to create a standard form object.
+   * This does *not* set the type of the form but rather all shared attributes.
+   * You probably want to start your rule with creating the form with this method
+   * then setting type and any other values you need.
+   * @param {Object} schema
+   * @param {Object} options
+   * @return {Object} a form field defintion
+   */
+  this.createStandardForm = stdFormObj;
+  /* End Provider API */
 
-
-  
 
   this.$get = function(){
-
-
 
     var service = {};
 
@@ -198,18 +244,6 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       });
     };
 
-  
-    var defaultFormDefinition = function(name,schema,options){
-      var def;
-      for (var i=0;i<defaults.length; i++) {
-
-        def = defaults[i](name,schema,options);
-        //first handler in list that actually returns something is our handler!
-        if (def) {
-          return def;
-        }
-      }
-    };
 
 
     /**
@@ -237,7 +271,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
         });
 
       } else {
-        throw new Exception('Not implemented. Only type "object" allowed at root level of schema.');
+        throw new Error('Not implemented. Only type "object" allowed at root level of schema.');
       }
 
       return { form: form, lookup: lookup };
