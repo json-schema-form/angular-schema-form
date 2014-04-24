@@ -203,6 +203,8 @@ Ex.
 Specific options per type
 -------------------------
 
+### fieldset and section
+
 *fieldset* and *section* doesn't need a key. You can create generic groups with them.
 They do need a list of ```items``` to have as children.
 ```javascript
@@ -215,8 +217,10 @@ They do need a list of ```items``` to have as children.
 }
 ```
 
+### conditional
+
 A *conditional* is exactly the same as a *section*, i.e. a ```<div>``` with other form elements in
-it, hence they *section* needs an ```items``` property. They also need a ```condition``` which is
+it, hence they need an ```items``` property. They also need a ```condition``` which is
 a string with an angular expression. If that expression evaluates as thruthy the *conditional*
 will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
 the ```sf-schema``` directive (the same as onClick on buttons). This is useful for hiding/showing
@@ -264,7 +268,7 @@ event handlers and such. The condition need not reference a model value it could
 scope.
 
 
-
+### select and checkboxes
 
 *select* and *checkboxes* can take an object, ```titleMap```, where key is the value to be saved on the model
 and the value is the title of the option.
@@ -278,6 +282,8 @@ and the value is the title of the option.
 }
 ```
 
+### actions
+
 *actions* behaves the same as fieldset, but can only handle buttons as chidren.
 ```javascript
 {
@@ -289,8 +295,13 @@ and the value is the title of the option.
 }
 ```
 
+### button
+
 *button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
-string with an angular expression, as with ng-click.
+string with an angular expression, as with ng-click. The expression is evaluated in the parent scope of
+the ```sf-schema``` directive. 
+
+```javascript
 [
   { type: 'button', title: 'Ok', onClick: function(){ ...  } }
   { type: 'button', title: 'Cancel', onClick: "cancel()" }
