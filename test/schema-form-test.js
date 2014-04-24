@@ -680,6 +680,53 @@ describe('Schema form',function(){
       });
     });
 
+    it('should handle a simple div with a condition if "conditional" is specified',function(done){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = { show: false };
+
+        scope.schema = exampleSchema;
+
+        scope.form = [{
+          type: "conditional",
+          condition: "person.show",
+          items: [
+            {
+              key: 'name',
+              notitle: true
+            },
+            {
+              key: 'gender',
+              notitle: true
+            }
+          ]
+        }];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(0);
+
+        //Do a setTimeout so we kan do another $apply
+        setTimeout(function(){
+          scope.person.show = true;
+          scope.$apply();
+          tmpl.children().length.should.be.equal(1);
+          tmpl.children().eq(0).is('div').should.be.true;
+          tmpl.children().eq(0).hasClass('btn-group').should.be.false;
+          tmpl.children().eq(0).children().length.should.be.eq(2);
+          done();
+        },10);
+
+      });
+    });
+
+
+
+
     it('should handle "action" groups, same as "section" but with a bootstrap class "btn-group"',function(){
 
       inject(function($compile,$rootScope){

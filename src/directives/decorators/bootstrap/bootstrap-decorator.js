@@ -5,6 +5,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
     textarea: base+'textarea.html',
     fieldset: base+'fieldset.html',
     section: base+'section.html',
+    conditional: base+'section.html',
     actions: base+'actions.html',
     select: base+'select.html',
     checkbox: base+'checkbox.html',
