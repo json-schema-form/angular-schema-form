@@ -115,6 +115,16 @@ angular.module('schemaForm').provider('schemaForm',[function(){
     }
   };
 
+  var datepicker = function(name,schema,options) {
+    if (schema.type === 'string' && schema.format == "date") {
+      var f = stdFormObj(schema,options);
+      f.key  = options.path;
+      f.type = 'datepicker';
+      options.lookup[options.path] = f;
+      return f;
+    }
+  };
+
   var fieldset = function(name,schema,options){
 
     if (schema.type === "object") {
@@ -149,7 +159,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
   //First sorted by schema type then a list.
   //Order has importance. First handler returning an form snippet will be used.
   var defaults = {
-    string:  [ select, text ],
+    string:  [ select, datepicker, text ],
     object:  [ fieldset],
     number:  [ number ],
     integer: [ integer ],

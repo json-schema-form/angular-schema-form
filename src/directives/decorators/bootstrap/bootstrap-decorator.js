@@ -13,6 +13,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
     number: base+'default.html',
     submit: base+'submit.html',
     button: base+'submit.html',
+    datepicker: base+'datepicker.html',
     'default': base+'default.html'
   },[
     function(form){
@@ -34,6 +35,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
     text: base+'default.html',
     date: base+'default.html',
     password: base+'default.html',
+    datepicker: base+'datepicker.html',
     input: base+'default.html'
   });
 
@@ -47,6 +49,5 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
     }
   };
 });
-
 
 

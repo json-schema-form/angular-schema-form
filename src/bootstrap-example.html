@@ -4,6 +4,8 @@
   <title>Boostrap Schema Form example</title>
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="pickadate/themes/classic.css">
+  <link rel="stylesheet" href="pickadate/themes/classic.date.css">
   <style type="text/css">
 
   body,html {
@@ -53,6 +55,10 @@
 <script type="text/javascript" src="directives/decorators/bootstrap/bootstrap-decorator.js"></script>
 <script type="text/javascript" src="directives/schema-form.js"></script>
 <script type="text/javascript" src="directives/schema-validate.js"></script>
+<script type="text/javascript" src="pickadate/picker.js"></script>
+<script type="text/javascript" src="pickadate/picker.date.js"></script>
+<script type="text/javascript" src="directives/decorators/bootstrap/angular-pickdate.js"></script>
+<script type="text/javascript" src="pickadate/translations/sv_SE.js"></script>
 <script type="text/javascript">
 
 angular.module('test',['schemaForm','ui.ace']);
@@ -121,6 +127,11 @@ function TestCtrl($scope){
       "soulserial": {
         "title": "Soul Serial No",
         "type": "string"
+      },
+      "date": {
+        "title": "Date of party",
+        "type": "string",
+        "format": "date"
       }
     }
   };
@@ -139,6 +150,7 @@ function TestCtrl($scope){
         { key: "soulserial", placeholder: "ex. 666" }
       ]
     },
+    "date",
     {
       type: 'actions',
       items: [
