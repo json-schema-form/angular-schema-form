@@ -55,12 +55,15 @@ function($compile,  schemaForm,  schemaFormDecorators){
       transclude(scope,function(clone){
         clone.addClass('schema-form-ignore');
         element.prepend(clone);
-        element.find('[ng-model]').each(function(){
-          var key = this.getAttribute('ng-model');
-          //skip first part before .
-          ignore[key.substring(key.indexOf('.')+1)] = true;
-        });
-
+        var models = element[0].querySelector('[ng-model]')
+        if (models){
+          for (var i=0; i < models.length; i++){
+            console.log(i, el);
+            var key = this.getAttribute('ng-model');
+            //skip first part before .
+            ignore[key.substring(key.indexOf('.')+1)] = true;
+          }
+        }
       });
       //Since we are dependant on up to three
       //attributes we'll do a common watch
