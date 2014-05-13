@@ -224,7 +224,8 @@ A *conditional* is exactly the same as a *section*, i.e. a ```<div>``` with othe
 it, hence they need an ```items``` property. They also need a ```condition``` which is
 a string with an angular expression. If that expression evaluates as thruthy the *conditional*
 will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
-the ```sf-schema``` directive (the same as onClick on buttons). This is useful for hiding/showing
+the ```sf-schema``` directive (the same as onClick on buttons) but with access to the current model
+under the name ```model```. This is useful for hiding/showing
 parts of a form depending on another form control.
 
 ex. A checkbox that shows an input field for a code when checked
@@ -256,7 +257,7 @@ function FormCtrl($scope) {
     "eligible",
     {
         type: "conditional",
-        condition: "person.eligible",
+        condition: "person.eligible", //or "model.eligable"
         items: [
           "code"
         ]
