@@ -121,6 +121,14 @@ function TestCtrl($scope){
       "soulserial": {
         "title": "Soul Serial No",
         "type": "string"
+      },
+      "radio": {
+        "type":"string",
+        "enum": ["Transistor","Tube"]
+      },
+      "radiobuttons": {
+        "type":"string",
+        "enum": ["Select me!","No me!"]
       }
     }
   };
@@ -139,6 +147,8 @@ function TestCtrl($scope){
         { key: "soulserial", placeholder: "ex. 666" }
       ]
     },
+    { key: "radio", type: "radios" },
+    { key: "radiobuttons", type: "radiobuttons" },
     {
       type: 'actions',
       items: [

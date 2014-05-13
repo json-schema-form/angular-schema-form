@@ -71,7 +71,8 @@ Schema Form currently supports the following form field types:
 | select        |  a select (single value)|
 | submit        |  a submit button        |
 | button        |  a button               |
-
+| radios        |  radio buttons          |
+| radiobuttons  |  radio buttons with bootstrap buttons |
 
 
 Default form types
@@ -299,7 +300,7 @@ and the value is the title of the option.
 
 *button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
 string with an angular expression, as with ng-click. The expression is evaluated in the parent scope of
-the ```sf-schema``` directive. 
+the ```sf-schema``` directive.
 
 ```javascript
 [
@@ -308,3 +309,33 @@ the ```sf-schema``` directive.
 [
 ```
 
+### radios and radiobuttons
+Both type *radios* and *radiobuttons* work the same way, they take a titleMap
+and renderes ordinary radio buttons or bootstrap 3 buttons inline. It's a
+cosmetic choice.
+
+Ex.
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      choice: {
+        type: "string",
+        enum: ["one","two"]
+      }
+    }
+  };
+
+  $scope.form = [
+    {
+      key: "choice",
+      type: "radiobuttons",
+      titleMap: {
+        one: "One",
+        two: "More..."
+      }
+    }
+  ];
+}
+```

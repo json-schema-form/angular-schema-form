@@ -1,0 +1,15 @@
+<div class="form-group" ng-class="{'has-error': hasError()}">
+  <label ng-show="showTitle()">{{form.title}}</label>
+  <div class="btn-group">
+    <label class="btn btn-primary"
+           ng-class="{ active: value === $$value$$ }"
+           ng-repeat="(value,name) in form.titleMap">
+      <input type="radio"
+             style="display: none;"
+             ng-model="$$value$$"
+             ng-value="value">
+      {{name}}
+    </label>
+  </div>
+  <span class="help-block" ng-show="form.description">{{form.description}}</span>
+</div>
