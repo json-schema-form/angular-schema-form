@@ -58,8 +58,7 @@ function($compile,  schemaForm,  schemaFormDecorators){
         var models = element[0].querySelector('[ng-model]')
         if (models){
           for (var i=0; i < models.length; i++){
-            console.log(i, el);
-            var key = this.getAttribute('ng-model');
+            var key = models[i].getAttribute('ng-model');
             //skip first part before .
             ignore[key.substring(key.indexOf('.')+1)] = true;
           }
