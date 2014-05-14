@@ -29,7 +29,7 @@ Basic Usage
 -----------
 
 ```html
-<form sf-schema="schema" sf-form="form" sf-model="data"></form>
+<form sf-schema="schema" sf-form="form" sf-model="data" sf-decorator="bootstrap-decorator"></form>
 ```
 
 ```javascript
