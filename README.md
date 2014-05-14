@@ -178,15 +178,39 @@ General options most field types can handle:
   title: "Street",            //Title of field, taken from schema if available
   notitle: false,             //Set to true to hide title
   description: "Street name", //A description, taken from schema if available
-  validationMessage: "Oh noes, please write a proper address"  //A custom validation error message
+  validationMessage: "Oh noes, please write a proper address",  //A custom validation error message
+  onChange: "valueChanged(form.key,modelValue)" //onChange event handler, expression or function
 }
 ```
 
-Validation Messages
--------------------
+### onChange
+The ```onChange``` option can be used with most fields and its value should be
+either an angular expression, as a string, or a function. If its an expression  
+it will be evaluated in the parent scope of the ```sf-schema``` directive with
+the special locals ```modelValue``` and ```form```. If its a function that will
+be called with  ```modelValue``` and ```form``` as first and second arguments.
+
+ex.
+```javascript
+$scope.form = [
+  {
+    key: "name",
+    onChange: "updated(modelValue,form)"
+  },
+  {
+    key: "password",
+    onChange: function(modelValue,form) {
+      console.log("Password is",modelValue);
+    }
+  }
+];
+```
+
+### Validation Messages
+
 Per default all error messages but "Required" comes from the schema validator
 [tv4](https://github.com/geraintluff/tv4), this might or might not work for you.
-If you supply a ´´´validationMessage´´´ proṕerty in the form definition, and if its value is a
+If you supply a ```validationMessage``` property in the form definition, and if its value is a
 string that will be used instead on any validation error.
 
 If you need more fine grained control you can supply an object instead with keys matching the error

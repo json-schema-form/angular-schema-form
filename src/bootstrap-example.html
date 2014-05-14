@@ -52,6 +52,7 @@
 <script type="text/javascript" src="directives/decorators/bootstrap/bootstrap-decorator.js"></script>
 <script type="text/javascript" src="directives/schema-form.js"></script>
 <script type="text/javascript" src="directives/schema-validate.js"></script>
+<script type="text/javascript" src="directives/changed.js"></script>
 <script type="text/javascript">
 
 angular.module('test',['schemaForm','ui.ace']);
@@ -133,7 +134,11 @@ function TestCtrl($scope){
   };
 
   $scope.form = [
-    "name",
+    {
+      key: "name",
+      placeholder: "Check the console",
+      onChange: "log(modelValue)"
+    },
     { key: "favorite"},
     "attributes",
     "shoesize",
@@ -191,10 +196,13 @@ function TestCtrl($scope){
     return JSON.stringify($scope.person,undefined,2,2);
   };
 
+  $scope.log = function(msg){
+    console.log("Simon says",msg);
+  };
 
   $scope.sayNo = function() {
     alert('Noooooooo');
-  }
+  };
 
 }
 

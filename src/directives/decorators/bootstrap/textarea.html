@@ -1,6 +1,7 @@
 <div class="form-group" ng-class="{'has-error': hasError()}">
   <label ng-show="showTitle()">{{form.title}}</label>
   <textarea class="form-control"
+            sf-changed="form"
             ng-required="form.required"
             ng-model="$$value$$"
             schema-validate="form.schema"></textarea>

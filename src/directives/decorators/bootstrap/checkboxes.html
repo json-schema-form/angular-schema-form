@@ -2,7 +2,10 @@
   <label ng-show="showTitle()">{{form.title}}</label>
   <div class="checkbox" ng-repeat="(value,name) in form.titleMap" >
     <label>
-      <input type="checkbox" ng-model="checkboxValues[value]" ng-change="$$value$$ = checkboxValuesToList(checkboxValues)" >
+      <input type="checkbox"
+             sf-changed="form"
+             ng-model="checkboxValues[value]"
+             ng-change="$$value$$ = checkboxValuesToList(checkboxValues)" >
       {{name}}
     </label>
   </div>
