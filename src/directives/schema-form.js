@@ -55,13 +55,15 @@ function($compile,  schemaForm,  schemaFormDecorators){
       transclude(scope,function(clone){
         clone.addClass('schema-form-ignore');
         element.prepend(clone);
-        var models = element[0].querySelector('[ng-model]')
-        if (models){
-          for (var i=0; i < models.length; i++){
-            console.log(i, el);
-            var key = this.getAttribute('ng-model');
-            //skip first part before .
-            ignore[key.substring(key.indexOf('.')+1)] = true;
+
+        if (element[0].querySelectorAll) {
+          var models = element[0].querySelectorAll('[ng-model]')
+          if (models){
+            for (var i=0; i < models.length; i++){
+              var key = models[i].getAttribute('ng-model');
+              //skip first part before .
+              ignore[key.substring(key.indexOf('.')+1)] = true;
+            }
           }
         }
       });
@@ -115,10 +117,3 @@ function($compile,  schemaForm,  schemaFormDecorators){
     }
   };
 }]);
-
-
-
-
-
-
-
