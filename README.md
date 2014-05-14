@@ -344,3 +344,10 @@ function FormCtrl($scope) {
   ];
 }
 ```
+
+
+Contributing
+------------
+
+All contributions are welcome! We're trying to use [git flow](http://danielkummer.github.io/git-flow-cheatsheet/)
+so please base any merge request on the **development** branch instead of **master**.
