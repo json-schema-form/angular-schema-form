@@ -3,46 +3,20 @@
  * This service is not that useful outside of schema form directive
  * but makes the code more testable.
  */
-angular.module('schemaForm').factory('schemaForm',[function(){
-  var service = {};
+angular.module('schemaForm').provider('schemaForm',[function(){
 
-  service.merge = function(schema,form,ignore) {
-    form  = form || ["*"];
-
-    var stdForm = service.defaults(schema,ignore);
-
-    //simple case, we have a "*", just put the stdForm there
-    var idx = form.indexOf("*");
-    if (idx !== -1) {
-      form  = form.slice(0,idx)
-                  .concat(stdForm.form)
-                  .concat(form.slice(idx+1));
-      return form;
+  var defaultFormDefinition = function(name,schema,options){
+    var rules = defaults[schema.type];
+    if (rules) {
+      var def;
+      for (var i=0;i<rules.length; i++) {
+        def = rules[i](name,schema,options);
+        //first handler in list that actually returns something is our handler!
+        if (def) {
+          return def;
+        }
+      }
     }
-
-    //ok let's merge!
-    //We look at the supplied form and extend it with schema standards
-    var lookup = stdForm.lookup;
-    return form.map(function(obj){
-
-      //handle the shortcut with just a name
-      if (typeof obj === 'string') {
-        obj = { key: obj };
-      }
-
-      //if it's a type with items, merge 'em!
-      if (obj.items) {
-        obj.items = service.merge(schema,obj.items,ignore);
-      }
-
-
-      //extend with std form from schema.
-      if (obj.key && lookup[obj.key]) {
-        return angular.extend(lookup[obj.key],obj);
-      }
-
-      return obj;
-    });
   };
 
   //Creates a form object with all common properties
@@ -98,7 +72,7 @@ angular.module('schemaForm').factory('schemaForm',[function(){
     }
   };
 
-  var bool = function(name,schema,options) {
+  var checkbox = function(name,schema,options) {
     if (schema.type === 'boolean') {
       var f = stdFormObj(schema,options);
       f.key  = options.path;
@@ -172,64 +146,139 @@ angular.module('schemaForm').factory('schemaForm',[function(){
 
   };
 
-  //TODO: make it pluginable, i.e. others can register handlers
-  //TODO: maybe make first selection of handlers by type to optmize
-  //Order has importance. First handler returning an form snippet will be used
-  var defaults = [
-    text,
-    select,
-    fieldset,
-    number,
-    integer,
-    bool,
-    checkboxes
-  ];
-
-
-  var defaultFormDefinition = function(name,schema,options){
-    var def;
-    for (var i=0;i<defaults.length; i++) {
-
-      def = defaults[i](name,schema,options);
-      //first handler in list that actually returns something is our handler!
-      if (def) {
-        return def;
-      }
-    }
+  //First sorted by schema type then a list.
+  //Order has importance. First handler returning an form snippet will be used.
+  var defaults = {
+    string:  [ select, text ],
+    object:  [ fieldset],
+    number:  [ number ],
+    integer: [ integer ],
+    boolean: [ checkbox ],
+    array:   [ checkboxes ]
   };
+
 
 
   /**
-   * Create form defaults from schema
+   * Provider API
    */
-  service.defaults = function(schema,ignore) {
-    var form   = [];
-    var lookup = {}; //Map path => form obj for fast lookup in merging
-    ignore = ignore || {};
+  this.defaults   = defaults;
 
-    if (schema.type === "object") {
-      angular.forEach(schema.properties,function(v,k){
-          if (ignore[k] !== true) {
-            var required = schema.required && schema.required.indexOf(k) !== -1;
-            var def = defaultFormDefinition(k,v,{
-              path: k,        //path to this property in dot notation. Root object has no name
-              lookup: lookup,    //extra map to register with. Optimization for merger.
-              ignore: ignore,    //The ignore list of paths (sans root level name)
-              required: required //Is it required? (v4 json schema style)
-            });
-            if (def) {
-              form.push(def);
-            }
-          }
-      });
-
-    } else {
-      throw new Exception('Not implemented. Only type "object" allowed at root level of schema.');
+  /**
+   * Append default form rule
+   * @param {string}   type json schema type
+   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form definition or undefined
+   */
+  this.appendRule = function(type,rule) {
+    if (!defaults[type]) {
+      defaults[type] = [];
     }
-
-    return { form: form, lookup: lookup };
+    defaults[type].push(rule);
   };
 
+  /**
+   * Prepend default form rule
+   * @param {string}   type json schema type
+   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form definition or undefined
+   */
+  this.prependRule = function(type,rule) {
+    if (!defaults[type]) {
+      defaults[type] = [];
+    }
+    defaults[type].unshift(rule);
+  };
 
-  return service;
+  /**
+   * Utility function to create a standard form object.
+   * This does *not* set the type of the form but rather all shared attributes.
+   * You probably want to start your rule with creating the form with this method
+   * then setting type and any other values you need.
+   * @param {Object} schema
+   * @param {Object} options
+   * @return {Object} a form field defintion
+   */
+  this.createStandardForm = stdFormObj;
+  /* End Provider API */
+
+
+  this.$get = function(){
+
+    var service = {};
+
+    service.merge = function(schema,form,ignore) {
+      form  = form || ["*"];
+
+      var stdForm = service.defaults(schema,ignore);
+
+      //simple case, we have a "*", just put the stdForm there
+      var idx = form.indexOf("*");
+      if (idx !== -1) {
+        form  = form.slice(0,idx)
+                    .concat(stdForm.form)
+                    .concat(form.slice(idx+1));
+        return form;
+      }
+
+      //ok let's merge!
+      //We look at the supplied form and extend it with schema standards
+      var lookup = stdForm.lookup;
+      return form.map(function(obj){
+
+        //handle the shortcut with just a name
+        if (typeof obj === 'string') {
+          obj = { key: obj };
+        }
+
+        //if it's a type with items, merge 'em!
+        if (obj.items) {
+          obj.items = service.merge(schema,obj.items,ignore);
+        }
+
+
+        //extend with std form from schema.
+        if (obj.key && lookup[obj.key]) {
+          return angular.extend(lookup[obj.key],obj);
+        }
+
+        return obj;
+      });
+    };
+
+
+
+    /**
+     * Create form defaults from schema
+     */
+    service.defaults = function(schema,ignore) {
+      var form   = [];
+      var lookup = {}; //Map path => form obj for fast lookup in merging
+      ignore = ignore || {};
+
+      if (schema.type === "object") {
+        angular.forEach(schema.properties,function(v,k){
+            if (ignore[k] !== true) {
+              var required = schema.required && schema.required.indexOf(k) !== -1;
+              var def = defaultFormDefinition(k,v,{
+                path: k,        //path to this property in dot notation. Root object has no name
+                lookup: lookup,    //extra map to register with. Optimization for merger.
+                ignore: ignore,    //The ignore list of paths (sans root level name)
+                required: required //Is it required? (v4 json schema style)
+              });
+              if (def) {
+                form.push(def);
+              }
+            }
+        });
+
+      } else {
+        throw new Error('Not implemented. Only type "object" allowed at root level of schema.');
+      }
+
+      return { form: form, lookup: lookup };
+    };
+
+
+    return service;
+  };
+
 }]);

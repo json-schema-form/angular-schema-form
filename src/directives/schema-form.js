@@ -34,7 +34,7 @@ function($compile,  schemaForm,  schemaFormDecorators){
     },
     controller: ['$scope',function($scope){
       this.evalInParentScope = function(expr,locals){
-        $scope.$parent.$eval(expr,locals);
+        return $scope.$parent.$eval(expr,locals);
       };
     }],
     replace: false,

@@ -64,6 +64,7 @@ Schema Form currently supports the following form field types:
 |:--------------|:------------------------|
 | fieldset      |  a fieldset with legend |
 | section       |  just a div             |
+| conditional   |  a section with a ```ng-if``` |
 | actions       |  horizontal button list, can only submit and buttons as items |
 | text          |  input with type text   |
 | textarea      |  a textarea             |
@@ -205,6 +206,8 @@ Ex.
 Specific options per type
 -------------------------
 
+### fieldset and section
+
 *fieldset* and *section* doesn't need a key. You can create generic groups with them.
 They do need a list of ```items``` to have as children.
 ```javascript
@@ -217,6 +220,58 @@ They do need a list of ```items``` to have as children.
 }
 ```
 
+### conditional
+
+A *conditional* is exactly the same as a *section*, i.e. a ```<div>``` with other form elements in
+it, hence they need an ```items``` property. They also need a ```condition``` which is
+a string with an angular expression. If that expression evaluates as thruthy the *conditional*
+will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
+the ```sf-schema``` directive (the same as onClick on buttons). This is useful for hiding/showing
+parts of a form depending on another form control.
+
+ex. A checkbox that shows an input field for a code when checked
+
+```javascript
+function FormCtrl($scope) {
+  $scope.person = {}
+
+  $scope.schema = {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "title": "Name"
+      },
+      "eligible": {
+        "type": "boolean",
+        "title": "Eligible for awesome things"
+      },
+      "code": {
+        "type":"string"
+        "title": "The Code"
+      }
+    }
+  }
+
+  $scope.form = [
+    "name",
+    "eligible",
+    {
+        type: "conditional",
+        condition: "person.eligible",
+        items: [
+          "code"
+        ]
+    }
+  ]
+}
+```
+Note that angulars two-way binding automatically will update the conditional block, no need for
+event handlers and such. The condition need not reference a model value it could be anything in
+scope.
+
+
+### select and checkboxes
 
 *select* and *checkboxes* can take an object, ```titleMap```, where key is the value to be saved on the model
 and the value is the title of the option.
@@ -230,6 +285,8 @@ and the value is the title of the option.
 }
 ```
 
+### actions
+
 *actions* behaves the same as fieldset, but can only handle buttons as chidren.
 ```javascript
 {
@@ -241,8 +298,12 @@ and the value is the title of the option.
 }
 ```
 
+### button
+
 *button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
-string with an angular expression, as with ng-click.
+string with an angular expression, as with ng-click. The expression is evaluated in the parent scope of
+the ```sf-schema``` directive. 
+
 ```javascript
 [
   { type: 'button', title: 'Ok', onClick: function(){ ...  } }

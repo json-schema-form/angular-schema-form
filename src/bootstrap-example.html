@@ -117,12 +117,28 @@ function TestCtrl($scope){
         "description": "I agree to sell my undying soul",
         "type": "boolean",
         "default": true,
+      },
+      "soulserial": {
+        "title": "Soul Serial No",
+        "type": "string"
       }
     }
   };
 
   $scope.form = [
-    '*',
+    "name",
+    { key: "favorite"},
+    "attributes",
+    "shoesize",
+    "things",
+    "soul",
+    {
+      type: "conditional",
+      condition: "person.soul",
+      items: [
+        { key: "soulserial", placeholder: "ex. 666" }
+      ]
+    },
     {
       type: 'actions',
       items: [
@@ -168,7 +184,7 @@ function TestCtrl($scope){
 
 
   $scope.sayNo = function() {
-    alert('Noooooooo')
+    alert('Noooooooo');
   }
 
 }
