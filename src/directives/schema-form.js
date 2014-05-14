@@ -55,8 +55,8 @@ function($compile,  schemaForm,  schemaFormDecorators){
       transclude(scope,function(clone){
         clone.addClass('schema-form-ignore');
         element.prepend(clone);
-        element.find('[ng-model]').each(function(){
-          var key = this.getAttribute('ng-model');
+        angular.forEach(element.find('[ng-model]'), function(el) {
+          var key = angular.element(el).attr('ng-model');
           //skip first part before .
           ignore[key.substring(key.indexOf('.')+1)] = true;
         });
