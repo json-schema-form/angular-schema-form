@@ -41,6 +41,7 @@ function FormController($scope) {
       title: {
         type: "string",
         enum: ['dr','jr','sir','mrs','mr','NaN','dj']
+      }
     }
   };
 
@@ -48,7 +49,7 @@ function FormController($scope) {
     "*",
     {
       type: "submit",
-      title: "Save",
+      title: "Save"
     }
   ];
 
