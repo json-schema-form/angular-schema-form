@@ -89,6 +89,22 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
             };
 
             /**
+             * Evaluate an expression, i.e. scope.$eval
+             * but do it in sfSchemas parent scope sf-schema directive is used
+             * @param {string} expression
+             * @param {Object} locals (optional)
+             * @return {Any} the result of the expression
+             */
+            scope.evalExpr = function(expression,locals) {
+              if (sfSchema) {
+                //evaluating in scope outside of sfSchemas isolated scope
+                return sfSchema.evalInParentScope(expression,locals);
+              }
+
+              return scope.$eval(expression,locals);
+            };
+
+            /**
              * Error message handler
              * An error can either be a schema validation message or a angular js validtion
              * error (i.e. required)

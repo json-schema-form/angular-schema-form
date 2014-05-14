@@ -1,3 +1,11 @@
+v0.1.0
+------
+We're celebrating actual useful functionality by bumping minor version, yay!
+ * ```radios``` and ```radiobuttons``` supports, works the same but looks different.
+ * Added ```conditional``` type to hide/show parts of a form.
+ * Bugfixes 
+
+
 v0.0.4
 ------
 * Fieldsets now properly merge schema defaults.

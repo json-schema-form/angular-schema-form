@@ -3,7 +3,7 @@ Angular Schema Form
 
 Generate forms from a JSON schema, with AngularJS!
 
-### [Try out the example page](http://textalk.github.io/angular-schema-form/src/bootstrap-example.html) 
+### [Try out the example page](http://textalk.github.io/angular-schema-form/src/bootstrap-example.html)
 ...where you can edit the schema or the form definition and see what comes out!
 
 
@@ -41,6 +41,7 @@ function FormController($scope) {
       title: {
         type: "string",
         enum: ['dr','jr','sir','mrs','mr','NaN','dj']
+      }
     }
   };
 
@@ -48,7 +49,7 @@ function FormController($scope) {
     "*",
     {
       type: "submit",
-      title: "Save",
+      title: "Save"
     }
   ];
 
@@ -64,6 +65,7 @@ Schema Form currently supports the following form field types:
 |:--------------|:------------------------|
 | fieldset      |  a fieldset with legend |
 | section       |  just a div             |
+| conditional   |  a section with a ```ng-if``` |
 | actions       |  horizontal button list, can only submit and buttons as items |
 | text          |  input with type text   |
 | textarea      |  a textarea             |
@@ -73,7 +75,8 @@ Schema Form currently supports the following form field types:
 | select        |  a select (single value)|
 | submit        |  a submit button        |
 | button        |  a button               |
-
+| radios        |  radio buttons          |
+| radiobuttons  |  radio buttons with bootstrap buttons |
 
 
 Default form types
@@ -205,6 +208,8 @@ Ex.
 Specific options per type
 -------------------------
 
+### fieldset and section
+
 *fieldset* and *section* doesn't need a key. You can create generic groups with them.
 They do need a list of ```items``` to have as children.
 ```javascript
@@ -217,6 +222,59 @@ They do need a list of ```items``` to have as children.
 }
 ```
 
+### conditional
+
+A *conditional* is exactly the same as a *section*, i.e. a ```<div>``` with other form elements in
+it, hence they need an ```items``` property. They also need a ```condition``` which is
+a string with an angular expression. If that expression evaluates as thruthy the *conditional*
+will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
+the ```sf-schema``` directive (the same as onClick on buttons) but with access to the current model
+under the name ```model```. This is useful for hiding/showing
+parts of a form depending on another form control.
+
+ex. A checkbox that shows an input field for a code when checked
+
+```javascript
+function FormCtrl($scope) {
+  $scope.person = {}
+
+  $scope.schema = {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "title": "Name"
+      },
+      "eligible": {
+        "type": "boolean",
+        "title": "Eligible for awesome things"
+      },
+      "code": {
+        "type":"string"
+        "title": "The Code"
+      }
+    }
+  }
+
+  $scope.form = [
+    "name",
+    "eligible",
+    {
+        type: "conditional",
+        condition: "person.eligible", //or "model.eligable"
+        items: [
+          "code"
+        ]
+    }
+  ]
+}
+```
+Note that angulars two-way binding automatically will update the conditional block, no need for
+event handlers and such. The condition need not reference a model value it could be anything in
+scope.
+
+
+### select and checkboxes
 
 *select* and *checkboxes* can take an object, ```titleMap```, where key is the value to be saved on the model
 and the value is the title of the option.
@@ -230,6 +288,8 @@ and the value is the title of the option.
 }
 ```
 
+### actions
+
 *actions* behaves the same as fieldset, but can only handle buttons as chidren.
 ```javascript
 {
@@ -241,8 +301,12 @@ and the value is the title of the option.
 }
 ```
 
+### button
+
 *button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
-string with an angular expression, as with ng-click.
+string with an angular expression, as with ng-click. The expression is evaluated in the parent scope of
+the ```sf-schema``` directive.
+
 ```javascript
 [
   { type: 'button', title: 'Ok', onClick: function(){ ...  } }
@@ -250,3 +314,40 @@ string with an angular expression, as with ng-click.
 [
 ```
 
+### radios and radiobuttons
+Both type *radios* and *radiobuttons* work the same way, they take a titleMap
+and renders ordinary radio buttons or bootstrap 3 buttons inline. It's a
+cosmetic choice.
+
+Ex.
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      choice: {
+        type: "string",
+        enum: ["one","two"]
+      }
+    }
+  };
+
+  $scope.form = [
+    {
+      key: "choice",
+      type: "radiobuttons",
+      titleMap: {
+        one: "One",
+        two: "More..."
+      }
+    }
+  ];
+}
+```
+
+
+Contributing
+------------
+
+All contributions are welcome! We're trying to use [git flow](http://danielkummer.github.io/git-flow-cheatsheet/)
+so please base any merge request on the **development** branch instead of **master**.

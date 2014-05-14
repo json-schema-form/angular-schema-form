@@ -37,8 +37,8 @@ module.exports = function(config) {
     reporters: ['progress','coverage','growler'],
 
     preprocessors: {
-      'src/*.js': 'coverage',
-      'src/**/*.html': 'ng-html2js'
+      'src/**/*.js': ['coverage'],
+      'src/**/*.html': ['ng-html2js']
     },
 
     // optionally, configure the reporter

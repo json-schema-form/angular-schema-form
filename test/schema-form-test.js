@@ -2,10 +2,12 @@
 chai.should();
 
 describe('Schema form',function(){
-  beforeEach(module('templates'));
-  beforeEach(module('schemaForm'));
 
   describe('directive',function(){
+    beforeEach(module('templates'));
+    beforeEach(module('schemaForm'));
+
+
 
     var exampleSchema = {
       "type": "object",
@@ -644,6 +646,47 @@ describe('Schema form',function(){
       });
     });
 
+    it('should use radio buttons when they are wanted',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "string",
+              "enum": ["one","two"]
+            },
+            "opts": {
+              "type": "string",
+              "enum": ["one","two"]
+            },
+          }
+        };
+
+        scope.form = [
+          { key: "names", type: "radios",titleMap: { one: "One", two: "The rest" }},
+          { key: "opts", type: "radiobuttons",titleMap: { one: "One", two: "The rest" }}
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+        //TODO: more asserts
+        
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).find('input[type=radio]').length.should.be.eq(2);
+        tmpl.children().eq(0).find('.radio').length.should.be.eq(2);
+        tmpl.children().eq(1).find('input[type=radio]').length.should.be.eq(2);
+        tmpl.children().eq(1).find('.btn').length.should.be.eq(2);
+
+      });
+    });
+
+
     it('should handle a simple div when type "section" is specified',function(){
 
       inject(function($compile,$rootScope){
@@ -677,6 +720,53 @@ describe('Schema form',function(){
         tmpl.children().eq(0).children().length.should.be.eq(2);
       });
     });
+
+    it('should handle a simple div with a condition if "conditional" is specified',function(done){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = { show: false };
+
+        scope.schema = exampleSchema;
+
+        scope.form = [{
+          type: "conditional",
+          condition: "person.show",
+          items: [
+            {
+              key: 'name',
+              notitle: true
+            },
+            {
+              key: 'gender',
+              notitle: true
+            }
+          ]
+        }];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(0);
+
+        //Do a setTimeout so we kan do another $apply
+        setTimeout(function(){
+          scope.person.show = true;
+          scope.$apply();
+          tmpl.children().length.should.be.equal(1);
+          tmpl.children().eq(0).is('div').should.be.true;
+          tmpl.children().eq(0).hasClass('btn-group').should.be.false;
+          tmpl.children().eq(0).children().length.should.be.eq(2);
+          done();
+        },10);
+
+      });
+    });
+
+
+
 
     it('should handle "action" groups, same as "section" but with a bootstrap class "btn-group"',function(){
 
@@ -719,6 +809,9 @@ describe('Schema form',function(){
 
 
   describe('service',function(){
+    beforeEach(module('templates'));
+    beforeEach(module('schemaForm'));
+
     it('should generate default form def from a schema',function(){
       inject(function(schemaForm){
 
@@ -836,6 +929,57 @@ describe('Schema form',function(){
       });
     });
 
+    it('should be extendable with new defaults',function(){
+      module(function(schemaFormProvider){
+        schemaFormProvider.prependRule('string',function(name,schema,options){
+          if (schema.format === 'foobar') {
+            var f = schemaFormProvider.createStandardForm(schema,options);
+            f.type = 'foobar';
+            return f;
+          }
+        });
+
+        schemaFormProvider.appendRule('string',function(name,schema,options){
+          var f = schemaFormProvider.createStandardForm(schema,options);
+          f.type = 'notused';
+          return f;
+        });
+      });
+
+      inject(function(schemaForm){
+
+        var schema = {
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "format": "foobar",
+              "description": "Gimme yea name lad",
+              "type": "string"
+            },
+            "gender": {
+              "title": "Choose",
+              "type": "string",
+              "enum": [
+                "undefined",
+                "null",
+                "NaN",
+              ]
+            }
+          }
+        };
+
+        //no form is implicitly ['*']
+        var defaults = schemaForm.defaults(schema).form;
+        defaults[0].type.should.be.equal('foobar');
+        defaults[0].title.should.be.equal('Name');
+        defaults[1].type.should.be.equal('select');
+        defaults[1].title.should.be.equal('Choose');
+
+      });
+    });
+
+
 
     it('should ignore parts of schema in ignore list',function(){
       inject(function(schemaForm){
@@ -912,6 +1056,9 @@ describe('Schema form',function(){
   });
 
   describe('decorator factory service',function(){
+    beforeEach(module('templates'));
+    beforeEach(module('schemaForm'));
+
     it('should enable you to create new decorator directives',function(){
       module(function(schemaFormDecoratorsProvider){
         schemaFormDecoratorsProvider.createDecorator('foobar',{ 'foo':'/bar.html' },[angular.noop]);
@@ -936,6 +1083,3 @@ describe('Schema form',function(){
 
 
 });
-
-
-

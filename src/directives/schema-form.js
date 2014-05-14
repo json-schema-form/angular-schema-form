@@ -34,7 +34,7 @@ function($compile,  schemaForm,  schemaFormDecorators){
     },
     controller: ['$scope',function($scope){
       this.evalInParentScope = function(expr,locals){
-        $scope.$parent.$eval(expr,locals);
+        return $scope.$parent.$eval(expr,locals);
       };
     }],
     replace: false,
@@ -71,7 +71,8 @@ function($compile,  schemaForm,  schemaFormDecorators){
         var schema = scope.schema;
         var form   = scope.initialForm || ['*'];
 
-        if (form && schema && (lastDigest.form !== form || lastDigest.schema !== schema)) {
+        //The check for schema.type is to ensure that schema is not {}
+        if (form && schema && schema.type && (lastDigest.form !== form || lastDigest.schema !== schema)) {
           lastDigest.schema = schema;
           lastDigest.form = form;
 
