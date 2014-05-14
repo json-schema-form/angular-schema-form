@@ -1,6 +1,6 @@
 {
   "name": "angular-schema-form",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Create forms from a JSON schema",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
