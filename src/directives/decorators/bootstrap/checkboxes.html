@@ -1,4 +1,4 @@
-<div class="form-group" ng-class="{'has-error': hasError()}" ng-init="checkboxValues = {}">
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}" ng-init="checkboxValues = {}">
   <label ng-show="showTitle()">{{form.title}}</label>
   <div class="checkbox" ng-repeat="(value,name) in form.titleMap" >
     <label>
@@ -8,6 +8,7 @@
              ng-change="$$value$$ = checkboxValuesToList(checkboxValues)" >
       {{name}}
     </label>
+
   </div>
   <span class="help-block" ng-show="form.description">{{form.description}}</span>
 </div>

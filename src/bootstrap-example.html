@@ -137,11 +137,18 @@ function TestCtrl($scope){
     {
       key: "name",
       placeholder: "Check the console",
-      onChange: "log(modelValue)"
+      onChange: "log(modelValue)",
+      feedback: "{'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-star': !hasSuccess() }"
     },
-    { key: "favorite"},
+    {
+      key: "favorite",
+      feedback: false
+    },
     "attributes",
-    "shoesize",
+    {
+      key: "shoesize",
+      feedback: false
+    },
     "things",
     "soul",
     {

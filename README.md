@@ -179,7 +179,8 @@ General options most field types can handle:
   notitle: false,             //Set to true to hide title
   description: "Street name", //A description, taken from schema if available
   validationMessage: "Oh noes, please write a proper address",  //A custom validation error message
-  onChange: "valueChanged(form.key,modelValue)" //onChange event handler, expression or function
+  onChange: "valueChanged(form.key,modelValue)", //onChange event handler, expression or function
+  feedback: false             //inline feedback icons
 }
 ```
 
@@ -227,6 +228,34 @@ Ex.
   }
 }
 ```
+
+### Inline feedback icons
+*input* and *textarea* based fields get inline status icons by default. A check
+when everything is valid and a cross when there are validation errors.
+
+This can be turned off or configured to other icons. To turn off just
+set ```feedback``` to false. If set to a string that string is evaluated by
+a ```ngClass``` in the decorators scope. If not set att all the default value
+is ```{ 'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }```
+
+ex. displaying an asterisk on required fields
+```javascript
+  $sope.form = [
+    {
+      key: "name",
+      feedback: "{ 'glyphicon': true, 'glyphicon-asterisk': form.requires && !hasSuccess && !hassError() ,'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"
+    }
+```
+
+Useful things in the decorators scope are
+
+| Name           | Description|
+|:---------------|:----------:|
+| hasSuccess()   | *true* if field is valid and not pristine |
+| hasError()     | *true* if field is invalid and not pristine |
+| ngModel        | The controller of the ngModel directive, ex. ngModel.$valid |
+| form           | The form definition for this field |
+
 
 
 Specific options per type

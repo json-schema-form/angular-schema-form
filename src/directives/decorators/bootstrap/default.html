@@ -1,14 +1,16 @@
-<div class="form-group" ng-class="{'has-error': hasError()}">
-  <label ng-show="showTitle()">{{form.title}}</label>
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
+  <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
 
   <input ng-show="form.key"
          type="{{form.type}}"
          sf-changed="form"
          placeholder="{{form.placeholder}}"
-         class="form-control"
+         class="form-control",
          ng-required="form.required"
          ng-model="$$value$$"
          schema-validate="form.schema">
-
+  <span ng-if="form.feedback !== false"
+        class="form-control-feedback"
+        ng-class="evalInScope(form.feedback) || {'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"></span>
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
 </div>
