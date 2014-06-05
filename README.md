@@ -57,6 +57,15 @@ function FormController($scope) {
 }
 ```
 
+
+Contributing
+------------
+
+All contributions are welcome! We're trying to use [git flow](http://danielkummer.github.io/git-flow-cheatsheet/)
+so please base any merge request on the **development** branch instead of **master**.
+
+
+
 Form types
 ----------
 Schema Form currently supports the following form field types:
@@ -399,8 +408,23 @@ function FormCtrl($scope) {
 ```
 
 
-Contributing
-------------
+Post process function
+---------------------
 
-All contributions are welcome! We're trying to use [git flow](http://danielkummer.github.io/git-flow-cheatsheet/)
-so please base any merge request on the **development** branch instead of **master**.
+If you like to use ```["*"]``` as a form, or aren't in control of the form definitions
+but really need to change or add something you can register a *post process*
+function with the ```schemaForm``` service provider. The post process function
+gets one argument, the final form merged with the defaults from the schema just
+before it's rendered, and should return a form.
+
+Ex. Reverse all forms
+```javascript
+angular.module('myModule').config(function(schemaFormProvider){
+
+  schemaForm.postProcess(function(form){
+    form.reverse();
+    return form;
+  })
+
+});
+```
