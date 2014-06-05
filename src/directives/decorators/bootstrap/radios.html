@@ -1,8 +1,9 @@
-<div class="form-group" ng-class="{'has-error': hasError()}">
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
   <label ng-show="showTitle()">{{form.title}}</label>
   <div class="radio" ng-repeat="(value,name) in form.titleMap" >
     <label>
       <input type="radio"
+             sf-changed="form"
              ng-model="$$value$$"
              ng-value="value">
       {{name}}

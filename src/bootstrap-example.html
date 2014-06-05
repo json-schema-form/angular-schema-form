@@ -30,7 +30,7 @@
       <form name="ngform" sf-model="person" sf-form="form" sf-schema="schema" sf-decorator="{{decorator}}">
       </form>
       <h3>Model</h3>
-      <pre>{{pretty()}}</pre>
+      <pre ng-cloak>{{pretty()}}</pre>
     </div>
     <div class="col-sm-8">
       <h3>Form</h3>
@@ -42,7 +42,6 @@
     </div>
   </div>
 </div>
-<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
 <script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
@@ -53,6 +52,7 @@
 <script type="text/javascript" src="directives/decorators/bootstrap/bootstrap-decorator.js"></script>
 <script type="text/javascript" src="directives/schema-form.js"></script>
 <script type="text/javascript" src="directives/schema-validate.js"></script>
+<script type="text/javascript" src="directives/changed.js"></script>
 <script type="text/javascript">
 
 angular.module('test',['schemaForm','ui.ace']);
@@ -134,10 +134,21 @@ function TestCtrl($scope){
   };
 
   $scope.form = [
-    "name",
-    { key: "favorite"},
+    {
+      key: "name",
+      placeholder: "Check the console",
+      onChange: "log(modelValue)",
+      feedback: "{'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-star': !hasSuccess() }"
+    },
+    {
+      key: "favorite",
+      feedback: false
+    },
     "attributes",
-    "shoesize",
+    {
+      key: "shoesize",
+      feedback: false
+    },
     "things",
     "soul",
     {
@@ -192,10 +203,13 @@ function TestCtrl($scope){
     return JSON.stringify($scope.person,undefined,2,2);
   };
 
+  $scope.log = function(msg){
+    console.log("Simon says",msg);
+  };
 
   $scope.sayNo = function() {
     alert('Noooooooo');
-  }
+  };
 
 }
 

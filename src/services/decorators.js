@@ -105,6 +105,19 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
             };
 
             /**
+             * Evaluate an expression, i.e. scope.$eval
+             * in this decorators scope
+             * @param {string} expression
+             * @param {Object} locals (optional)
+             * @return {Any} the result of the expression
+             */
+            scope.evalInScope = function(expression,locals) {
+                if (expression) {
+                  return scope.$eval(expression,locals);
+                }
+            };
+
+            /**
              * Error message handler
              * An error can either be a schema validation message or a angular js validtion
              * error (i.e. required)

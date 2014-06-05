@@ -1,10 +1,11 @@
-<div class="form-group" ng-class="{'has-error': hasError()}">
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
   <label ng-show="showTitle()">{{form.title}}</label>
   <div class="btn-group">
     <label class="btn btn-primary"
            ng-class="{ active: value === $$value$$ }"
            ng-repeat="(value,name) in form.titleMap">
       <input type="radio"
+             sf-changed="form"
              style="display: none;"
              ng-model="$$value$$"
              ng-value="value">

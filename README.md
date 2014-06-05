@@ -57,6 +57,15 @@ function FormController($scope) {
 }
 ```
 
+
+Contributing
+------------
+
+All contributions are welcome! We're trying to use [git flow](http://danielkummer.github.io/git-flow-cheatsheet/)
+so please base any merge request on the **development** branch instead of **master**.
+
+
+
 Form types
 ----------
 Schema Form currently supports the following form field types:
@@ -178,15 +187,40 @@ General options most field types can handle:
   title: "Street",            //Title of field, taken from schema if available
   notitle: false,             //Set to true to hide title
   description: "Street name", //A description, taken from schema if available
-  validationMessage: "Oh noes, please write a proper address"  //A custom validation error message
+  validationMessage: "Oh noes, please write a proper address",  //A custom validation error message
+  onChange: "valueChanged(form.key,modelValue)", //onChange event handler, expression or function
+  feedback: false             //inline feedback icons
 }
 ```
 
-Validation Messages
--------------------
+### onChange
+The ```onChange``` option can be used with most fields and its value should be
+either an angular expression, as a string, or a function. If its an expression  
+it will be evaluated in the parent scope of the ```sf-schema``` directive with
+the special locals ```modelValue``` and ```form```. If its a function that will
+be called with  ```modelValue``` and ```form``` as first and second arguments.
+
+ex.
+```javascript
+$scope.form = [
+  {
+    key: "name",
+    onChange: "updated(modelValue,form)"
+  },
+  {
+    key: "password",
+    onChange: function(modelValue,form) {
+      console.log("Password is",modelValue);
+    }
+  }
+];
+```
+
+### Validation Messages
+
 Per default all error messages but "Required" comes from the schema validator
 [tv4](https://github.com/geraintluff/tv4), this might or might not work for you.
-If you supply a ´´´validationMessage´´´ proṕerty in the form definition, and if its value is a
+If you supply a ```validationMessage``` property in the form definition, and if its value is a
 string that will be used instead on any validation error.
 
 If you need more fine grained control you can supply an object instead with keys matching the error
@@ -203,6 +237,34 @@ Ex.
   }
 }
 ```
+
+### Inline feedback icons
+*input* and *textarea* based fields get inline status icons by default. A check
+when everything is valid and a cross when there are validation errors.
+
+This can be turned off or configured to other icons. To turn off just
+set ```feedback``` to false. If set to a string that string is evaluated by
+a ```ngClass``` in the decorators scope. If not set att all the default value
+is ```{ 'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }```
+
+ex. displaying an asterisk on required fields
+```javascript
+  $sope.form = [
+    {
+      key: "name",
+      feedback: "{ 'glyphicon': true, 'glyphicon-asterisk': form.requires && !hasSuccess && !hassError() ,'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"
+    }
+```
+
+Useful things in the decorators scope are
+
+| Name           | Description|
+|:---------------|:----------:|
+| hasSuccess()   | *true* if field is valid and not pristine |
+| hasError()     | *true* if field is invalid and not pristine |
+| ngModel        | The controller of the ngModel directive, ex. ngModel.$valid |
+| form           | The form definition for this field |
+
 
 
 Specific options per type
@@ -346,8 +408,23 @@ function FormCtrl($scope) {
 ```
 
 
-Contributing
-------------
+Post process function
+---------------------
 
-All contributions are welcome! We're trying to use [git flow](http://danielkummer.github.io/git-flow-cheatsheet/)
-so please base any merge request on the **development** branch instead of **master**.
+If you like to use ```["*"]``` as a form, or aren't in control of the form definitions
+but really need to change or add something you can register a *post process*
+function with the ```schemaForm``` service provider. The post process function
+gets one argument, the final form merged with the defaults from the schema just
+before it's rendered, and should return a form.
+
+Ex. Reverse all forms
+```javascript
+angular.module('myModule').config(function(schemaFormProvider){
+
+  schemaForm.postProcess(function(form){
+    form.reverse();
+    return form;
+  })
+
+});
+```

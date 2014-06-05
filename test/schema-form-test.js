@@ -676,7 +676,7 @@ describe('Schema form',function(){
         $compile(tmpl)(scope);
         $rootScope.$apply();
         //TODO: more asserts
-        
+
         tmpl.children().length.should.be.equal(2);
         tmpl.children().eq(0).find('input[type=radio]').length.should.be.eq(2);
         tmpl.children().eq(0).find('.radio').length.should.be.eq(2);
@@ -979,6 +979,36 @@ describe('Schema form',function(){
       });
     });
 
+    it('should be enable post-processing of forms',function(){
+      module(function(schemaFormProvider){
+        schemaFormProvider.postProcess(function(form){
+          form.postProcess = true;
+          form.length.should.be.eq(1);
+          form[0].title.should.be.eq('Name');
+          return form;
+        });
+
+      });
+
+      inject(function(schemaForm){
+
+        var schema = {
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "format": "foobar",
+              "description": "Gimme yea name lad",
+              "type": "string"
+            }
+          }
+        };
+
+        var form = schemaForm.merge(schema,["name"]);
+        form.postProcess.should.be.true;
+
+      });
+    });
 
 
     it('should ignore parts of schema in ignore list',function(){

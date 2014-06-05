@@ -5,7 +5,10 @@ angular.module('schemaForm').directive('schemaValidate',function(){
     scope: false,
     require: 'ngModel',
     link: function(scope,element,attrs,ngModel) {
+      //Since we have scope false this is the same scope
+      //as the decorator
       scope.ngModel = ngModel;
+
       var error = null;
       var schema  = scope.$eval(attrs.schemaValidate);
 
@@ -55,8 +58,13 @@ angular.module('schemaForm').directive('schemaValidate',function(){
       });
 
       //This works since we now we're inside a decorator and that this is the decorators scope.
+      //If $pristine and empty don't show success (even if it's valid)
+      scope.hasSuccess = function(){
+        return ngModel.$valid && (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue));
+      };
+
       scope.hasError = function(){
-        return scope.ngModel.$invalid && !scope.ngModel.$pristine;
+        return ngModel.$invalid && !ngModel.$pristine;
       };
 
       scope.schemaError = function() {
