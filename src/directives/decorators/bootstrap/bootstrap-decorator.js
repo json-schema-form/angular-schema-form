@@ -11,9 +11,12 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
     checkbox: base+'checkbox.html',
     checkboxes: base+'checkboxes.html',
     number: base+'default.html',
+    password: base+'default.html',
     submit: base+'submit.html',
     button: base+'submit.html',
     datepicker: base+'datepicker.html',
+    radios: base+'radios.html',
+    radiobuttons: base+'radio-buttons.html',
     'default': base+'default.html'
   },[
     function(form){
@@ -36,7 +39,9 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
     date: base+'default.html',
     password: base+'default.html',
     datepicker: base+'datepicker.html',
-    input: base+'default.html'
+    input: base+'default.html',
+    radios: base+'radios.html',
+    radiobuttons: base+'radio-buttons.html',
   });
 
 }]).directive('sfFieldset',function(){
@@ -49,5 +54,3 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
     }
   };
 });
-
-

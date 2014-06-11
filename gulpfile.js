@@ -46,3 +46,8 @@ gulp.task('minify',function(){
 
 
 gulp.task('default',['minify','bootstrap']);
+
+
+gulp.task('watch', function() {
+  gulp.watch('./src/**/*', ['default']);
+});

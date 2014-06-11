@@ -1,6 +1,10 @@
 {
   "name": "angular-schema-form",
-  "version": "0.0.4",
+  "main": [
+    "dist/schema-form.min.js",
+    "dist/bootstrap-decorator.min.js"
+  ],
+  "version": "0.2.0",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>"

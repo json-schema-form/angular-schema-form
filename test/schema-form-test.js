@@ -646,6 +646,47 @@ describe('Schema form',function(){
       });
     });
 
+    it('should use radio buttons when they are wanted',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "string",
+              "enum": ["one","two"]
+            },
+            "opts": {
+              "type": "string",
+              "enum": ["one","two"]
+            },
+          }
+        };
+
+        scope.form = [
+          { key: "names", type: "radios",titleMap: { one: "One", two: "The rest" }},
+          { key: "opts", type: "radiobuttons",titleMap: { one: "One", two: "The rest" }}
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+        //TODO: more asserts
+
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).find('input[type=radio]').length.should.be.eq(2);
+        tmpl.children().eq(0).find('.radio').length.should.be.eq(2);
+        tmpl.children().eq(1).find('input[type=radio]').length.should.be.eq(2);
+        tmpl.children().eq(1).find('.btn').length.should.be.eq(2);
+
+      });
+    });
+
+
     it('should handle a simple div when type "section" is specified',function(){
 
       inject(function($compile,$rootScope){
@@ -938,6 +979,36 @@ describe('Schema form',function(){
       });
     });
 
+    it('should be enable post-processing of forms',function(){
+      module(function(schemaFormProvider){
+        schemaFormProvider.postProcess(function(form){
+          form.postProcess = true;
+          form.length.should.be.eq(1);
+          form[0].title.should.be.eq('Name');
+          return form;
+        });
+
+      });
+
+      inject(function(schemaForm){
+
+        var schema = {
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "format": "foobar",
+              "description": "Gimme yea name lad",
+              "type": "string"
+            }
+          }
+        };
+
+        var form = schemaForm.merge(schema,["name"]);
+        form.postProcess.should.be.true;
+
+      });
+    });
 
 
     it('should ignore parts of schema in ignore list',function(){
@@ -1042,6 +1113,3 @@ describe('Schema form',function(){
 
 
 });
-
-
-

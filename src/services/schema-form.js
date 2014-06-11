@@ -167,12 +167,23 @@ angular.module('schemaForm').provider('schemaForm',[function(){
     array:   [ checkboxes ]
   };
 
+  var postProcessFn = function(form) { return form; };
 
 
   /**
    * Provider API
    */
-  this.defaults   = defaults;
+  this.defaults    = defaults;
+
+  /**
+   * Register a post process function.
+   * This function is called with the fully merged
+   * form definition (i.e. after merging with schema)
+   * and whatever it returns is used as form.
+   */
+  this.postProcess = function(fn) {
+    postProcessFn = fn;
+  };
 
   /**
    * Append default form rule
@@ -232,7 +243,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       //ok let's merge!
       //We look at the supplied form and extend it with schema standards
       var lookup = stdForm.lookup;
-      return form.map(function(obj){
+      return postProcessFn(form.map(function(obj){
 
         //handle the shortcut with just a name
         if (typeof obj === 'string') {
@@ -251,7 +262,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
         }
 
         return obj;
-      });
+      }));
     };
 
 

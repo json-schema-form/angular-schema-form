@@ -3,6 +3,13 @@ Angular Schema Form
 
 Generate forms from a JSON schema, with AngularJS!
 
+### [Try out the example page](http://textalk.github.io/angular-schema-form/src/bootstrap-example.html)
+...where you can edit the schema or the form definition and see what comes out!
+
+
+What is it?
+----------
+
 Schema Form is a set of AngularJS directives (and a service..) that can create a form directly from a json schema
 definition and also validate against that schema. The defaults may be fine for a lot cases, but you can also
 customize it, changing order and type of fields.
@@ -16,10 +23,6 @@ standard. Schema Form, as a default, generates bootstrap 3 friendly HTML.
 
 Another thing that sets Schema Form apart is that it, at the moment, doesn't implement half of what JSON Form
 does, nor have any documentation! Which of course we hope to remedy soon.
-
-
-Try out the [example](http://textalk.github.io/angular-schema-form/src/bootstrap-example.html) where you can edit
-the schema or the form definition and see what comes out!
 
 
 Basic Usage
@@ -38,6 +41,7 @@ function FormController($scope) {
       title: {
         type: "string",
         enum: ['dr','jr','sir','mrs','mr','NaN','dj']
+      }
     }
   };
 
@@ -45,13 +49,22 @@ function FormController($scope) {
     "*",
     {
       type: "submit",
-      title: "Save",
+      title: "Save"
     }
   ];
 
   $scope.data = {};
 }
 ```
+
+
+Contributing
+------------
+
+All contributions are welcome! We're trying to use [git flow](http://danielkummer.github.io/git-flow-cheatsheet/)
+so please base any merge request on the **development** branch instead of **master**.
+
+
 
 Form types
 ----------
@@ -71,7 +84,8 @@ Schema Form currently supports the following form field types:
 | select        |  a select (single value)|
 | submit        |  a submit button        |
 | button        |  a button               |
-
+| radios        |  radio buttons          |
+| radiobuttons  |  radio buttons with bootstrap buttons |
 
 
 Default form types
@@ -173,15 +187,40 @@ General options most field types can handle:
   title: "Street",            //Title of field, taken from schema if available
   notitle: false,             //Set to true to hide title
   description: "Street name", //A description, taken from schema if available
-  validationMessage: "Oh noes, please write a proper address"  //A custom validation error message
+  validationMessage: "Oh noes, please write a proper address",  //A custom validation error message
+  onChange: "valueChanged(form.key,modelValue)", //onChange event handler, expression or function
+  feedback: false             //inline feedback icons
 }
 ```
 
-Validation Messages
--------------------
+### onChange
+The ```onChange``` option can be used with most fields and its value should be
+either an angular expression, as a string, or a function. If its an expression  
+it will be evaluated in the parent scope of the ```sf-schema``` directive with
+the special locals ```modelValue``` and ```form```. If its a function that will
+be called with  ```modelValue``` and ```form``` as first and second arguments.
+
+ex.
+```javascript
+$scope.form = [
+  {
+    key: "name",
+    onChange: "updated(modelValue,form)"
+  },
+  {
+    key: "password",
+    onChange: function(modelValue,form) {
+      console.log("Password is",modelValue);
+    }
+  }
+];
+```
+
+### Validation Messages
+
 Per default all error messages but "Required" comes from the schema validator
 [tv4](https://github.com/geraintluff/tv4), this might or might not work for you.
-If you supply a ´´´validationMessage´´´ proṕerty in the form definition, and if its value is a
+If you supply a ```validationMessage``` property in the form definition, and if its value is a
 string that will be used instead on any validation error.
 
 If you need more fine grained control you can supply an object instead with keys matching the error
@@ -198,6 +237,34 @@ Ex.
   }
 }
 ```
+
+### Inline feedback icons
+*input* and *textarea* based fields get inline status icons by default. A check
+when everything is valid and a cross when there are validation errors.
+
+This can be turned off or configured to other icons. To turn off just
+set ```feedback``` to false. If set to a string that string is evaluated by
+a ```ngClass``` in the decorators scope. If not set att all the default value
+is ```{ 'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }```
+
+ex. displaying an asterisk on required fields
+```javascript
+  $sope.form = [
+    {
+      key: "name",
+      feedback: "{ 'glyphicon': true, 'glyphicon-asterisk': form.requires && !hasSuccess && !hassError() ,'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"
+    }
+```
+
+Useful things in the decorators scope are
+
+| Name           | Description|
+|:---------------|:----------:|
+| hasSuccess()   | *true* if field is valid and not pristine |
+| hasError()     | *true* if field is invalid and not pristine |
+| ngModel        | The controller of the ngModel directive, ex. ngModel.$valid |
+| form           | The form definition for this field |
+
 
 
 Specific options per type
@@ -223,7 +290,8 @@ A *conditional* is exactly the same as a *section*, i.e. a ```<div>``` with othe
 it, hence they need an ```items``` property. They also need a ```condition``` which is
 a string with an angular expression. If that expression evaluates as thruthy the *conditional*
 will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
-the ```sf-schema``` directive (the same as onClick on buttons). This is useful for hiding/showing
+the ```sf-schema``` directive (the same as onClick on buttons) but with access to the current model
+under the name ```model```. This is useful for hiding/showing
 parts of a form depending on another form control.
 
 ex. A checkbox that shows an input field for a code when checked
@@ -255,7 +323,7 @@ function FormCtrl($scope) {
     "eligible",
     {
         type: "conditional",
-        condition: "person.eligible",
+        condition: "person.eligible", //or "model.eligable"
         items: [
           "code"
         ]
@@ -299,7 +367,7 @@ and the value is the title of the option.
 
 *button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
 string with an angular expression, as with ng-click. The expression is evaluated in the parent scope of
-the ```sf-schema``` directive. 
+the ```sf-schema``` directive.
 
 ```javascript
 [
@@ -308,3 +376,55 @@ the ```sf-schema``` directive.
 [
 ```
 
+### radios and radiobuttons
+Both type *radios* and *radiobuttons* work the same way, they take a titleMap
+and renders ordinary radio buttons or bootstrap 3 buttons inline. It's a
+cosmetic choice.
+
+Ex.
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      choice: {
+        type: "string",
+        enum: ["one","two"]
+      }
+    }
+  };
+
+  $scope.form = [
+    {
+      key: "choice",
+      type: "radiobuttons",
+      titleMap: {
+        one: "One",
+        two: "More..."
+      }
+    }
+  ];
+}
+```
+
+
+Post process function
+---------------------
+
+If you like to use ```["*"]``` as a form, or aren't in control of the form definitions
+but really need to change or add something you can register a *post process*
+function with the ```schemaForm``` service provider. The post process function
+gets one argument, the final form merged with the defaults from the schema just
+before it's rendered, and should return a form.
+
+Ex. Reverse all forms
+```javascript
+angular.module('myModule').config(function(schemaFormProvider){
+
+  schemaForm.postProcess(function(form){
+    form.reverse();
+    return form;
+  })
+
+});
+```
