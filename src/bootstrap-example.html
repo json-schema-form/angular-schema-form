@@ -4,8 +4,8 @@
   <title>Boostrap Schema Form example</title>
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-  <link rel="stylesheet" href="pickadate/themes/classic.css">
-  <link rel="stylesheet" href="pickadate/themes/classic.date.css">
+  <link rel="stylesheet" href="../lib/pickadate/themes/classic.css">
+  <link rel="stylesheet" href="../lib/pickadate/themes/classic.date.css">
   <style type="text/css">
 
   body,html {
@@ -44,27 +44,28 @@
     </div>
   </div>
 </div>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
 <script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.14/angular.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-ui-ace/ui-ace.js"></script>
-<script type="text/javascript" src="pickadate/picker.js"></script>
-<script type="text/javascript" src="pickadate/picker.date.js"></script>
+<script type="text/javascript" src="../lib/pickadate/picker.js"></script>
+<script type="text/javascript" src="../lib/pickadate/picker.date.js"></script>
+<script type="text/javascript" src="../lib/pickadate/translations/sv_SE.js"></script>
 <script type="text/javascript" src="module.js"></script>
 <script type="text/javascript" src="services/schema-form.js"></script>
 <script type="text/javascript" src="services/decorators.js"></script>
 <script type="text/javascript" src="directives/decorators/bootstrap/bootstrap-decorator.js"></script>
 <script type="text/javascript" src="directives/schema-form.js"></script>
 <script type="text/javascript" src="directives/schema-validate.js"></script>
-<script type="text/javascript" src="directives/decorators/bootstrap/angular-pickdate.js"></script>
-<script type="text/javascript" src="pickadate/translations/sv_SE.js"></script>
+<script type="text/javascript" src="directives/angular-pickdate.js"></script>
 <script type="text/javascript" src="directives/changed.js"></script>
 <script type="text/javascript">
 
 angular.module('test',['schemaForm','ui.ace']);
 
 function TestCtrl($scope){
-  $scope.person = { favorite: 'NaN' };
+  $scope.person = { favorite: 'NaN', date: '2014-06-03' };
 
   $scope.schema =  {
     "type": "object",

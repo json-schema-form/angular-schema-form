@@ -3,7 +3,7 @@
 
   <input ng-show="form.key"
          style="background-color: white"
-         type="{{form.type}}"
+         type="date"
          class="form-control"
          ng-required="form.required"
          schema-validate="form.schema"
@@ -12,4 +12,3 @@
 
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
 </div>
-

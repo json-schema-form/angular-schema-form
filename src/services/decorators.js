@@ -50,7 +50,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                 //We do this manually since we need to bind ng-model properly and also
                 //for fieldsets to recurse properly.
                 var url = templateUrl(name,form);
-                console.log(form, url);
                 $http.get(url,{ cache: $templateCache }).then(function(res){
                   var template = res.data.replace(/\$\$value\$\$/g,'model.'+(form.key || ""));
                   $compile(template)(scope,function(clone){
