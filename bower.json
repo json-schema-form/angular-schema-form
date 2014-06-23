@@ -21,7 +21,8 @@
     "coverage"
   ],
   "dependencies": {
-    "tv4": "~1.0.15"
+    "tv4":       "^1.0.15",
+    "pickadate": "^3.5.2"
   },
   "devDependencies": {
     "angular-ui-ace": "bower"

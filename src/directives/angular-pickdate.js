@@ -9,9 +9,7 @@ angular.module('ng').directive('pickADate', function () {
       return new Date(value);
     }
     return value; //We hope it's a date object
-  }
-
-
+  };
 
   return {
     restrict: "A",
