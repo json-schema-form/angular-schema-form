@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="test">
 <head>
+  <meta charset="utf-8">
   <title>Boostrap Schema Form example</title>
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
@@ -65,7 +66,7 @@
 angular.module('test',['schemaForm','ui.ace']);
 
 function TestCtrl($scope){
-  $scope.person = { favorite: 'NaN', date: '2014-06-03' };
+  $scope.person = { favorite: 'NaN' };
 
   $scope.schema =  {
     "type": "object",
@@ -170,7 +171,7 @@ function TestCtrl($scope){
         { key: "soulserial", placeholder: "ex. 666" }
       ]
     },
-    "date",
+    { key: "date", minDate: "2014-06-20" },
     { key: "radio", type: "radios" },
     { key: "radiobuttons", type: "radiobuttons" },
     {

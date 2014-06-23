@@ -8,7 +8,9 @@
          ng-required="form.required"
          schema-validate="form.schema"
          ng-model="$$value$$"
-         pick-a-date />
+         pick-a-date
+         min-date="form.minDate"
+         max-date="form.maxDate" />
 
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
 </div>

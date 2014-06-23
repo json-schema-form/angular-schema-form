@@ -1,4 +1,18 @@
 angular.module('ng').directive('pickADate', function () {
+
+  //String dates for min and max is not supported
+  //https://github.com/amsul/pickadate.js/issues/439
+  //So strings we create dates from
+  var formatDate = function(value) {
+    //Strings or timestamps we make a date of
+    if (angular.isString(value) || angular.isNumber(value)) {
+      return new Date(value);
+    }
+    return value; //We hope it's a date object
+  }
+
+
+
   return {
     restrict: "A",
     require: 'ngModel',
@@ -51,14 +65,11 @@ angular.module('ng').directive('pickADate', function () {
         return picker.get('select',attrs.format || defaultFormat);
       });
 
-      picker.set('min', scope.minDate ? scope.minDate : false);
-      picker.set('max', scope.maxDate ? scope.maxDate : false);
-
       //bind once.
       if (angular.isDefined(attrs.minDate)) {
         var onceMin = scope.$watch('minDate', function (value) {
           if (value) {
-            picker.set('min', value);
+            picker.set('min', formatDate(value));
             onceMin();
           }
         }, true);
@@ -67,7 +78,7 @@ angular.module('ng').directive('pickADate', function () {
       if (angular.isDefined(attrs.maxDate)) {
         var onceMax = scope.$watch('maxDate', function (value) {
           if (value) {
-            picker.set('max', value);
+            picker.set('max', formatDate(value));
             onceMax();
           }
         }, true);
