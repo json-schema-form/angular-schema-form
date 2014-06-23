@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html ng-app="test">
+<head>
+  <meta charset="utf-8">
+  <title>Boostrap Schema Form example</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.css">
+  <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.date.css">
+  <style type="text/css">
+
+  body,html {
+    min-height: 1400px;
+  }
+
+  .red {
+    border: 1px solid red;
+    background: #fee;
+  }
+
+  .ace_editor { font-size: 20px !important;}
+  .form {  height: 400px;  }
+  .schema {  height: 800px;  }
+  </style>
+</head>
+<body ng-controller="TestCtrl">
+
+<div class="col-md-12">
+  <h1>Schema Form Example</h1>
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>The Generated Form</h3>
+      <form name="ngform" sf-model="person" sf-form="form" sf-schema="schema" sf-decorator="{{decorator}}">
+      </form>
+      <h3>Model</h3>
+      <pre ng-cloak>{{pretty()}}</pre>
+    </div>
+    <div class="col-sm-8">
+      <h3>Form</h3>
+      <div ui-ace="{ theme: 'monokai',mode:'json'}"
+           ng-class="{red: !itParsesForm}" ng-model="formJson" class="form-control form"></div>
+      <h3>Schema</h3>
+      <div ui-ace="{ theme: 'monokai',mode:'json'}"
+           ng-class="{red: !itParses}" ng-model="schemaJson" class="form-control schema"></div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
+<script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+<script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-ui-ace/ui-ace.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/picker.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/picker.date.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/translations/sv_SE.js"></script>
+<script type="text/javascript" src="../dist/schema-form.min.js"></script>
+<script type="text/javascript" src="../dist/bootstrap-decorator.min.js"></script>
+<script type="text/javascript">
+
+angular.module('test',['schemaForm','ui.ace']);
+
+function TestCtrl($scope){
+  $scope.person = { favorite: 'NaN' };
+
+  $scope.schema =  {
+    "type": "object",
+    "required": ['name','shoesize'],
+    "properties": {
+      "name": {
+        "title": "Name",
+        "description": "Gimme yea name lad",
+        "type": "string",
+        "pattern": "^[^/]*$",
+        "minLength": 2
+      },
+      "favorite": {
+        "title": "Favorite",
+        "type": "string",
+        "enum": [
+          "undefined",
+          "null",
+          "NaN",
+        ]
+      },
+      "shoesize": {
+        "title": "Shoe size",
+        "default": 42,
+        "type": "number",
+      },
+      "attributes": {
+        "type": "object",
+        "title": "Attributes",
+        "required": ['eyecolor'],
+        "properties": {
+          "eyecolor": { "type": "string", "title": "Eye color" },
+          "haircolor": { "type": "string", "title": "Hair color" },
+          "shoulders": {
+            "type": "object",
+            "title": "Shoulders",
+            "properties": {
+              "left": { "type": "string", "title": "Left" },
+              "right": { "type": "string", "title": "Right" },
+            }
+          }
+        }
+      },
+      "things": {
+        "type": "array",
+        "title": "I like...",
+        "items": {
+          "type": "string",
+          "enum": [
+            "clowns","compiling","sleeping"
+          ]
+        }
+      },
+      "soul": {
+        "title": "Terms Of Service",
+        "description": "I agree to sell my undying soul",
+        "type": "boolean",
+        "default": true,
+      },
+      "soulserial": {
+        "title": "Soul Serial No",
+        "type": "string"
+      },
+      "date": {
+        "title": "Date of party",
+        "type": "string",
+        "format": "date"
+      },
+      "radio": {
+        "type":"string",
+        "enum": ["Transistor","Tube"]
+      },
+      "radiobuttons": {
+        "type":"string",
+        "enum": ["Select me!","No me!"]
+      }
+    }
+  };
+
+  $scope.form = [
+    {
+      key: "name",
+      placeholder: "Check the console",
+      onChange: "log(modelValue)",
+      feedback: "{'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-star': !hasSuccess() }"
+    },
+    {
+      key: "favorite",
+      feedback: false
+    },
+    "attributes",
+    {
+      key: "shoesize",
+      feedback: false
+    },
+    "things",
+    "soul",
+    {
+      type: "conditional",
+      condition: "person.soul",
+      items: [
+        { key: "soulserial", placeholder: "ex. 666" }
+      ]
+    },
+    { key: "date", minDate: "2014-06-20" },
+    { key: "radio", type: "radios" },
+    { key: "radiobuttons", type: "radiobuttons" },
+    {
+      type: 'actions',
+      items: [
+        { type: 'submit', title: 'Do It!'},
+        { type: 'button', title: 'Noooooooooooo', onClick: 'sayNo()'}
+      ]
+    }
+  ];
+
+  $scope.decorator = 'bootstrap-decorator';
+
+  $scope.itParses     = true;
+  $scope.itParsesForm = true;
+  $scope.schemaJson = JSON.stringify($scope.schema,undefined,2);
+  $scope.formJson   = JSON.stringify($scope.form,undefined,2);
+
+  $scope.$watch('schemaJson',function(val,old){
+    if (val && val !== old) {
+      try {
+        $scope.schema = JSON.parse($scope.schemaJson);
+        $scope.itParses = true;
+      } catch (e){
+        $scope.itParses = false;
+      }
+    }
+  });
+
+  $scope.$watch('formJson',function(val,old){
+    if (val && val !== old) {
+      try {
+        $scope.form = JSON.parse($scope.formJson);
+        $scope.itParsesForm = true;
+      } catch (e){
+        $scope.itParsesForm = false;
+      }
+    }
+  });
+
+
+  $scope.pretty = function(){
+    return JSON.stringify($scope.person,undefined,2,2);
+  };
+
+  $scope.log = function(msg){
+    console.log("Simon says",msg);
+  };
+
+  $scope.sayNo = function() {
+    alert('Noooooooo');
+  };
+
+}
+
+</script>
+</body>
+</html>
