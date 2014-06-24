@@ -115,6 +115,8 @@ angular.module('schemaForm').provider('schemaForm',[function(){
     }
   };
 
+
+
   var fieldset = function(name,schema,options){
 
     if (schema.type === "object") {
@@ -164,6 +166,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
    * Provider API
    */
   this.defaults    = defaults;
+  this.stdFormObj  = stdFormObj;
 
   /**
    * Register a post process function.
@@ -284,7 +287,6 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       } else {
         throw new Error('Not implemented. Only type "object" allowed at root level of schema.');
       }
-
       return { form: form, lookup: lookup };
     };
 

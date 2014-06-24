@@ -1,9 +1,22 @@
+v0.3.0
+------
+ * A shiny new datepicker using pickadate.js
+ * Cleaned up documentation and added small installation instructions.
+
+v0.2.0
+------
+ * postProcess function in schemaForm provider
+ * New form option: Inline feedback icons in fields.
+ * New form option: onChange a function or expression that triggers in the same
+   way as ng-change.
+ * Removed dependencies on jQuery (thanks @zackbloom and @tsing!)
+
 v0.1.0
 ------
 We're celebrating actual useful functionality by bumping minor version, yay!
  * ```radios``` and ```radiobuttons``` supports, works the same but looks different.
  * Added ```conditional``` type to hide/show parts of a form.
- * Bugfixes 
+ * Bugfixes
 
 
 v0.0.4

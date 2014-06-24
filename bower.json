@@ -2,9 +2,10 @@
   "name": "angular-schema-form",
   "main": [
     "dist/schema-form.min.js",
-    "dist/bootstrap-decorator.min.js"
+    "dist/bootstrap-decorator.min.js",
+    "dist/bootstrap-datepicker.min.js"
   ],
-  "version": "0.1.0",
+  "version": "0.3.0",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>"
@@ -21,7 +22,9 @@
     "coverage"
   ],
   "dependencies": {
-    "tv4": "~1.0.15"
+    "angular": "~1.2.18",
+    "tv4": "~1.0.15",
+    "pickadate": "~3.5.2"
   },
   "devDependencies": {
     "angular-ui-ace": "bower"
