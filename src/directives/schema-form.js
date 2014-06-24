@@ -57,7 +57,7 @@ function($compile,  schemaForm,  schemaFormDecorators){
         element.prepend(clone);
 
         if (element[0].querySelectorAll) {
-          var models = element[0].querySelectorAll('[ng-model]')
+          var models = element[0].querySelectorAll('[ng-model]');
           if (models){
             for (var i=0; i < models.length; i++){
               var key = models[i].getAttribute('ng-model');
