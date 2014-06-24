@@ -20,7 +20,9 @@ module.exports = function(config) {
       'bower_components/tv4/tv4.js',
       'src/module.js',
       'src/services/*.js',
-      'src/directives/**/*.js',
+      'src/directives/*.js',
+      'src/directives/decorators/bootstrap/*.js',
+      'src/directives/decorators/bootstrap/datepicker/*.js',
       'src/**/*.html',
       'test/*.js'
     ],
