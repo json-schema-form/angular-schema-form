@@ -1,3 +1,8 @@
+v0.3.0
+------
+ * A shiny new datepicker using pickadate.js
+ * Cleaned up documentation and added small installation instructions.
+
 v0.2.0
 ------
  * postProcess function in schemaForm provider
