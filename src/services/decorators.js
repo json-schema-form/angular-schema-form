@@ -269,6 +269,18 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
     return directives[name];
   };
 
+  /**
+   * Adds a mapping to an existing decorator.
+   * @param {String} name Decorator name
+   * @param {String} type Form type for the mapping
+   * @param {String} url  The template url
+   */
+  this.addMapping = function(name,type,url) {
+    if (directives[name]) {
+      directives[name].mappings[type] = url;
+    }
+  };
+
 
   //Service is just a getter for directive mappings and rules
   this.$get = function(){
