@@ -2,10 +2,21 @@ Documentation
 =============
 
 1. [Form types](#form-types)  
-
-
-
-
+1. [Default form types](#default-form-types)
+1. [Form definitions](#form-definitions)
+1. [Overriding field types and order](#overriding-field-types-and-order)
+1. [Standard Options](#standard-options)
+    1. [onChange](#onchange)
+    1. [Validation Messages](#validation-messages)
+    1. [Inline feedback icons](#inline-feedback-icons)
+1. [Specific options per type](#specific-options-per-type)
+    1. [fieldset and section](#fieldset-and-section)
+    1. [conditional](#conditional)
+    1. [select and checkboxes](#select-and-checkboxes)
+    1. [actions](#actions)
+    1. [button](#button)
+    1. [radios and radiobuttons](#radios-and-radiobuttons)
+1. [Post process function](#post-process-function)
 
 Form types
 ----------
@@ -49,8 +60,8 @@ a property.
 | "type": "array" and a "enum" in array type | checkboxes |
 
 
-Form definition and "*"
-----------------------
+Form definitions
+----------------
 If you don't supply a form definition, it will default to rendering the after the defaults taken
 from the schema.
 
@@ -122,8 +133,8 @@ var schema = {
 ]
 ```
 
-Options
--------
+Standard Options
+----------------
 
 General options most field types can handle:
 ```javascript
