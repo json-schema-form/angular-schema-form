@@ -851,6 +851,47 @@ describe('Schema form',function(){
       });
     });
 
+    it('should render custom html when type "help" is specified',function(){
+
+      //We don't need no sanitation. We don't need no though control.
+      module(function($sceProvider){
+        $sceProvider.enabled(false);
+      });
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = { partee: '2014-01-01'};
+
+        scope.schema = {
+          type: "object",
+          properties: {
+            name: {
+              type: "string",
+            }
+          }
+        };
+
+
+        scope.form = [
+          {
+            type:      "help",
+            helpvalue: "<h1>Yo Ninja!</h1>"
+          },
+          "name"
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.eq(2);
+        tmpl.children().eq(0).is('div').should.be.true;
+        tmpl.children().eq(0).children().length.should.eq(1);
+        tmpl.children().eq(0).children().html().should.be.eq("Yo Ninja!");
+
+      });
+    });
 
   });
 

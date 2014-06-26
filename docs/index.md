@@ -16,6 +16,7 @@ Documentation
     1. [actions](#actions)
     1. [button](#button)
     1. [radios and radiobuttons](#radios-and-radiobuttons)
+    1. [help](#help)
 1. [Post process function](#post-process-function)
 
 Form types
@@ -38,6 +39,7 @@ Schema Form currently supports the following form field types out of the box:
 | button        |  a button               |
 | radios        |  radio buttons          |
 | radiobuttons  |  radio buttons with bootstrap buttons |
+| help          |  insert arbitrary html |
 
 More field types can be added, for instance a "datepicker" type can be added by
 including the [datepicker addon](datepicker.md)
@@ -364,6 +366,42 @@ function FormCtrl($scope) {
 }
 ```
 
+### help
+Help fields is not really a field, but instead let's you inser arbitrary HTML
+into a form, suitable for help texts with links etc.
+
+It uses ```ng-bind-html``` so you need to include the
+[ngSanitize](https://docs.angularjs.org/api/ngSanitize) module for it to work,
+or expicitly turning of strict contextual escaping with
+```$sceProvider.enabled(false)```  (not recomended). It's enough to include
+```angular-sanitize.min.js``` before ```angular-schema.min.js``` and Schema Form
+will pick up that it's there and include it as a module dependency.
+
+The get a help field you need to specify the type ```help``` and have a html
+snippet as a string in the option ```helpvalue```
+
+Ex.
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      name: {
+        title: "Name",
+        type: "string"
+      }
+    }
+  };
+
+  $scope.form = [
+    {
+      type: "help",
+      helpvalue: "<h1>Yo Ninja!</h1>"
+    },
+    "name"
+  ];
+}
+```
 
 Post process function
 ---------------------
