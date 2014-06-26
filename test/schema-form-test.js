@@ -860,7 +860,7 @@ describe('Schema form',function(){
 
       inject(function($compile,$rootScope){
         var scope = $rootScope.$new();
-        scope.person = { partee: '2014-01-01'};
+        scope.person = { };
 
         scope.schema = {
           type: "object",
@@ -892,6 +892,74 @@ describe('Schema form',function(){
 
       });
     });
+
+    it.only('should render tabs with items in them when specified',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = { };
+
+        scope.schema = {
+          type: "object",
+          properties: {
+            name: { type: "string", title: "Name" },
+            alias: { type: "string", title: "Alias" },
+            nick: { type: "string", title: "Nickname" },
+            tag: { type: "string", title: "Tag" },
+          }
+        };
+
+        scope.form = [
+          {
+            type:      "tabs",
+            tabs: [
+              {
+                title: "Tab 1",
+                items: [
+                  "name",
+                  "tag"
+                ]
+              },
+              {
+                title: "Tab 2",
+                items: [
+                  "alias",
+                  "nick"
+                ]
+              }
+            ]
+          },
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.eq(1);
+        var tabs  = tmpl.children().children().eq(0);
+        var panes = tmpl.children().children().eq(1);
+
+        tabs.is('ul').should.be.true;
+        tabs.children().length.should.be.eq(2);
+        tabs.children().eq(0).children().html().should.equal('Tab 1');
+        tabs.children().eq(1).children().html().should.equal('Tab 2');
+
+        panes.is('div').should.be.true;
+
+        panes.children().length.should.be.eq(2);
+        panes.children().eq(0).children().length.should.be.eq(2);
+        panes.children().eq(0).children().eq(0).find('label').html().should.eq('Name');
+        panes.children().eq(0).children().eq(1).find('label').html().should.eq('Tag');
+
+        panes.children().eq(1).children().length.should.be.eq(2);
+        panes.children().eq(1).children().eq(0).find('label').html().should.eq('Alias');
+        panes.children().eq(1).children().eq(1).find('label').html().should.eq('Nickname');
+
+      });
+    });
+
+
 
   });
 

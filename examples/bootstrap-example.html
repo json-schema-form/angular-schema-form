@@ -49,6 +49,7 @@
 <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
 <script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
 <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-ui-ace/ui-ace.js"></script>
 <script type="text/javascript" src="../bower_components/pickadate/lib/picker.js"></script>
 <script type="text/javascript" src="../bower_components/pickadate/lib/picker.date.js"></script>
@@ -143,50 +144,56 @@ function TestCtrl($scope){
 
   $scope.form = [
     {
-      type: "help",
-      helpvalue: "<h1>Yo ninja!</h1>"
-    },
-    {
-      type: "tabs",
-      tabs: [
-      {
-        name: "Simple stuff",
-        items: [
+      type: "fieldset",
+      title: "Stuff",
+      items: [
+        {
+          type: "tabs",
+          tabs: [
           {
-            key: "name",
-            placeholder: "Check the console",
-            onChange: "log(modelValue)",
-            feedback: "{'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-star': !hasSuccess() }"
-          },
-          {
-            key: "favorite",
-            feedback: false
-          }
-        ]
-      },
-      {
-        name: "More stuff",
-        items: [
-          "attributes",
-          {
-            key: "shoesize",
-            feedback: false
-          },
-          "things",
-          "soul",
-          {
-            type: "conditional",
-            condition: "person.soul",
+            title: "Simple stuff",
             items: [
-              { key: "soulserial", placeholder: "ex. 666" }
+              {
+                key: "name",
+                placeholder: "Check the console",
+                onChange: "log(modelValue)",
+                feedback: "{'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-star': !hasSuccess() }"
+              },
+              {
+                key: "favorite",
+                feedback: false
+              }
             ]
           },
-          { key: "date", minDate: "2014-06-20" },
-          { key: "radio", type: "radios" },
-          { key: "radiobuttons", type: "radiobuttons" }
-        ]
-      }]
+          {
+            title: "More stuff",
+            items: [
+              "attributes",
+              {
+                key: "shoesize",
+                feedback: false
+              },
+              "things"
+            ]
+          }]
+        },
+      ]
     },
+    {
+      type: "help",
+      helpvalue: "<hr>"
+    },
+    "soul",
+    {
+      type: "conditional",
+      condition: "person.soul",
+      items: [
+        { key: "soulserial", placeholder: "ex. 666" }
+      ]
+    },
+    { key: "date", minDate: "2014-06-20" },
+    { key: "radio", type: "radios" },
+    { key: "radiobuttons", type: "radiobuttons" },
     {
       type: 'actions',
       items: [
