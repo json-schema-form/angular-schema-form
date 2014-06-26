@@ -17,6 +17,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
     button: base+'submit.html',
     radios: base+'radios.html',
     radiobuttons: base+'radio-buttons.html',
+    help: base+'help.html',
     'default': base+'default.html'
   },[
     function(form){
