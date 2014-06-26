@@ -248,6 +248,12 @@ angular.module('schemaForm').provider('schemaForm',[function(){
           obj.items = service.merge(schema,obj.items,ignore);
         }
 
+        //if its has tabs, merge them also!
+        if (obj.tabs) {
+          angular.forEach(obj.tabs,function(tab){
+            tab.items = service.merge(schema,tab.items,ignore);
+          });
+        }
 
         //extend with std form from schema.
         if (obj.key && lookup[obj.key]) {

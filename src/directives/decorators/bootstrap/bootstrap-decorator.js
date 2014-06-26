@@ -4,6 +4,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
   decoratorsProvider.createDecorator('bootstrapDecorator',{
     textarea: base+'textarea.html',
     fieldset: base+'fieldset.html',
+    tabs: base+'tabs.html',
     section: base+'section.html',
     conditional: base+'section.html',
     actions: base+'actions.html',
