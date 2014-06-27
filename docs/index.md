@@ -9,7 +9,7 @@ Documentation
     1. [onChange](#onchange)
     1. [Validation Messages](#validation-messages)
     1. [Inline feedback icons](#inline-feedback-icons)
-1. [Specific options per type](#specific-options-per-type)
+1. [Specific options and types](#specific-options-and-types)
     1. [fieldset and section](#fieldset-and-section)
     1. [conditional](#conditional)
     1. [select and checkboxes](#select-and-checkboxes)
@@ -17,6 +17,7 @@ Documentation
     1. [button](#button)
     1. [radios and radiobuttons](#radios-and-radiobuttons)
     1. [help](#help)
+    1. [tabs](#tabs)
 1. [Post process function](#post-process-function)
 
 Form types
@@ -40,6 +41,7 @@ Schema Form currently supports the following form field types out of the box:
 | radios        |  radio buttons          |
 | radiobuttons  |  radio buttons with bootstrap buttons |
 | help          |  insert arbitrary html |
+| tab           |  tabs with content     |
 
 More field types can be added, for instance a "datepicker" type can be added by
 including the [datepicker addon](datepicker.md)
@@ -226,8 +228,8 @@ Useful things in the decorators scope are
 
 
 
-Specific options per type
--------------------------
+Specific options and types
+--------------------------
 
 ### fieldset and section
 
@@ -402,6 +404,64 @@ function FormCtrl($scope) {
   ];
 }
 ```
+
+### tabs
+The ```tabs``` form type lets you split your form into tabs. It is similar to
+```fieldset``` in that it just changes the presentation of the form. ```tabs```
+takes a option, also called ```tabs```, that is a list of tab objects. Each tab
+object consist of a *title* and a *items* list of form objects.
+
+Ex.
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      name: {
+        title: "Name",
+        type: "string"
+      },
+      nick: {
+        title: "Nick",
+        type: "string"
+      }
+      alias: {
+        title: "Alias",
+        type: "string"
+      }
+      tag: {
+        title: "Tag",
+        type: "string"
+      }
+    }
+  };
+
+  $scope.form = [
+    "name",
+    {
+      type: "tabs",
+      tabs: [
+        {
+          title: "Tab 1",
+          items: [
+            "nick",
+            "alias"
+          ]
+        },
+        {
+          title: "Tab 2",
+          items: [
+            "tag"
+          ]
+        }
+      ]
+    }
+  ];
+}
+```
+
+
+
 
 Post process function
 ---------------------
