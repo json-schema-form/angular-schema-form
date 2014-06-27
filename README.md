@@ -73,9 +73,11 @@ manually)
 
 It depends on AngularJS (duh!), [tv4](https://github.com/geraintluff/tv4), and
 if you like to use the date picker you also need jQuery and
-[pickadate.js](http://amsul.ca/pickadate.js/)
+[pickadate.js](http://amsul.ca/pickadate.js/). Also if you use the ```help```
+type to inject HTML you'll want to use ngSanitize as well.
 
 The minified files also includes all templates so they are all you need.
+
 
 Addons
 ------
@@ -84,6 +86,41 @@ the excellent [pickadate.js](http://amsul.ca/pickadate.js/).
 
 See the [docs](docs/datepicker.md) for usage.
 
+
+Building
+--------
+The files in the ```dist``` plus dependencies are all you need to use Schema
+Form, but if you like to build it yourself we use [gulp](http://gulpjs.com/).
+
+First off you need to have nodejs installed. Then install all dev dependencies
+of the project with npm, install gulp and run the default task.
+
+```bash
+$ npm install
+$ sudo npm install -g gulp
+$ gulp
+```
+
+The default task uses [gulp-angular-templatecache](https://github.com/miickel/gulp-angular-templatecache)
+to compile all html templates to js and then concatenates and minifies them with
+the rest of the sources.
+
+You can also run ```gulp watch``` to have it rebuild on change.
+
+Tests
+-----
+Unit tests are run with [karma](http://karma-runner.github.io) and written using
+[mocha](http://visionmedia.github.io/mocha/), [chai](http://chaijs.com/)
+and [sinon](http://sinonjs.org/)
+
+To run the tests first install all dependencies with npm (if you haven't done it
+already) and install the karma cli to run the test.
+
+```bash
+$ npm install
+$ sudo npm install -g karma-cli
+$ karma start karma.conf.js
+```
 
 Contributing
 ------------

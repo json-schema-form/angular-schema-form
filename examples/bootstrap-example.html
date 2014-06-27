@@ -49,6 +49,7 @@
 <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
 <script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
 <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-ui-ace/ui-ace.js"></script>
 <script type="text/javascript" src="../bower_components/pickadate/lib/picker.js"></script>
 <script type="text/javascript" src="../bower_components/pickadate/lib/picker.date.js"></script>
@@ -143,21 +144,45 @@ function TestCtrl($scope){
 
   $scope.form = [
     {
-      key: "name",
-      placeholder: "Check the console",
-      onChange: "log(modelValue)",
-      feedback: "{'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-star': !hasSuccess() }"
+      type: "fieldset",
+      title: "Stuff",
+      items: [
+        {
+          type: "tabs",
+          tabs: [
+          {
+            title: "Simple stuff",
+            items: [
+              {
+                key: "name",
+                placeholder: "Check the console",
+                onChange: "log(modelValue)",
+                feedback: "{'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-star': !hasSuccess() }"
+              },
+              {
+                key: "favorite",
+                feedback: false
+              }
+            ]
+          },
+          {
+            title: "More stuff",
+            items: [
+              "attributes",
+              {
+                key: "shoesize",
+                feedback: false
+              },
+              "things"
+            ]
+          }]
+        },
+      ]
     },
     {
-      key: "favorite",
-      feedback: false
+      type: "help",
+      helpvalue: "<hr>"
     },
-    "attributes",
-    {
-      key: "shoesize",
-      feedback: false
-    },
-    "things",
     "soul",
     {
       type: "conditional",
