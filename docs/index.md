@@ -474,9 +474,9 @@ before it's rendered, and should return a form.
 
 Ex. Reverse all forms
 ```javascript
-angular.module('myModule').config(function(schemaFormProvider){
+angular.module('myModule', ['schemaForm']).config(function(schemaFormProvider){
 
-  schemaForm.postProcess(function(form){
+  schemaFormProvider.postProcess(function(form){
     form.reverse();
     return form;
   })
