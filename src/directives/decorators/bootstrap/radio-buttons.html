@@ -9,8 +9,8 @@
              style="display: none;"
              ng-model="$$value$$"
              ng-value="value">
-      {{name}}
+      <div ng-bind-html="name"></div>
     </label>
   </div>
-  <span class="help-block" ng-show="form.description">{{form.description}}</span>
+  <span class="help-block" ng-show="form.description" ng-bind-html="form.description"></span>
 </div>

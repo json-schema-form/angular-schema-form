@@ -6,6 +6,12 @@ describe('Schema form',function(){
   describe('directive',function(){
     beforeEach(module('templates'));
     beforeEach(module('schemaForm'));
+    beforeEach(
+      //We don't need no sanitation. We don't need no though control.
+      module(function($sceProvider){
+        $sceProvider.enabled(false);
+      })
+    );
 
 
 
@@ -686,6 +692,53 @@ describe('Schema form',function(){
       });
     });
 
+    it.only('should use radio buttons with HTML',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "string",
+              "enum": ["one","two"],
+              "description": "Cats are <a id='gh' href='http://github.com'>so</a> cool.",
+              "title": "<span id='dontyouknowimloko'>testlokol</span>"
+            },
+            "opts": {
+              "type": "string",
+              "enum": ["one","two"]
+            },
+            "boxe": {
+              "type": "boolean",
+              "title": "<span id='bawkses'>whavre</span>",
+              "description": "Cats are <a id='gh' href='http://github.com'>so</a> cool."
+            },
+          }
+        };
+
+        scope.form = [
+          { key: "names", type: "radios",titleMap: { one: "one<br\>direction", two: "<div class='spicegirls'>Baby spice</div>" }},
+          { key: "opts", type: "radiobuttons",titleMap: { one: "One", two: "The <span id='testerish'>rest</span>" }},
+          "boxe"
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.find('.spicegirls').length.should.be.equal(1);
+        tmpl.find('#testerish').length.should.be.equal(1);
+        tmpl.find('#bawkses').length.should.be.equal(1);
+        tmpl.find('#gh').length.should.be.equal(2);
+
+      });
+    });
+
+
 
     it('should handle a simple div when type "section" is specified',function(){
 
@@ -893,7 +946,7 @@ describe('Schema form',function(){
       });
     });
 
-    it.only('should render tabs with items in them when specified',function(){
+    it('should render tabs with items in them when specified',function(){
 
       inject(function($compile,$rootScope){
         var scope = $rootScope.$new();
