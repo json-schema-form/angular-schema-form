@@ -6,9 +6,9 @@
              sf-changed="form"
              ng-model="checkboxValues[value]"
              ng-change="$$value$$ = checkboxValuesToList(checkboxValues)" >
-      <div ng-bind-html="form.name"></div>
+      <span ng-bind-html="form.name"></span>
     </label>
 
   </div>
-  <span class="help-block" ng-show="form.description" ng-bind-html="form.description"></span>
+  <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
 </div>

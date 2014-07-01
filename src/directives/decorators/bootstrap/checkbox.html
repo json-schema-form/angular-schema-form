@@ -5,8 +5,8 @@
            ng-model="$$value$$"
            schema-validate="form.schema"
            ng-required="form.required">
-    <div ng-bind-html="form.title"></div>
+    <span ng-bind-html="form.title"></span>
   </label>
 
-  <span class="help-block" ng-show="form.description" ng-bind-html="form.description"></span>
+  <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
 </div>

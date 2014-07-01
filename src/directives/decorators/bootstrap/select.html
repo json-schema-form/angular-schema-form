@@ -9,5 +9,5 @@
           ng-required="form.required"
           ng-options="val as name for (val,name) in form.titleMap">
   </select>
-  <span class="help-block" ng-show="form.description" ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></span>
+  <div class="help-block" ng-show="form.description" ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
 </div>
