@@ -60,6 +60,30 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
               }
             });
 
+            // Repeater stuff
+            scope.repeaterNoEmpties = function(itemsEnum) {
+              var noEmpties = true;
+              angular.forEach(itemsEnum, function(item){
+                if (item === '')
+                  noEmpties = false;
+              });
+              return noEmpties;
+            };
+
+            scope.addToRepeater = function(itemsEnum) {
+              if (scope.repeaterNoEmpties(itemsEnum))
+                itemsEnum.push('');
+            };
+
+            scope.removeFromRepeater = function(itemsEnum, index) {
+              itemsEnum.splice(index, 1);
+            };
+
+            scope.repeaterValues = function(values) {
+              return angular.copy(values);
+            };
+            // End repeater stuff
+
             //Keep error prone logic from the template
             scope.showTitle = function() {
               return scope.form && scope.form.notitle !== true && scope.form.title;
