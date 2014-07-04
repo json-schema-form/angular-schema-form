@@ -118,7 +118,7 @@ function TestCtrl($scope){
       },
       "soul": {
         "title": "Terms Of Service",
-        "description": "I agree to sell my undying soul",
+        "description": "I agree to sell my undying <a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'>soul</a>",
         "type": "boolean",
         "default": true,
       },
@@ -192,7 +192,13 @@ function TestCtrl($scope){
       ]
     },
     { key: "date", minDate: "2014-06-20" },
-    { key: "radio", type: "radios" },
+    { key: "radio",
+      type: "radios",
+      titleMap: {
+        "Transistor": "Transistor <br> Not the tube kind.",
+        "Tube": "Tube <br> The tube kind."
+      }
+    },
     { key: "radiobuttons", type: "radiobuttons" },
     {
       type: 'actions',
