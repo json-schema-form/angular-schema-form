@@ -1,3 +1,10 @@
+v0.5.0
+------
+ * Travis and Coveralls integration
+ * Support for HTML in descriptons and some titles, (checkbox(es), radios).
+ * ngSanitize is now a dependency.
+ * Enum order is now maintained in selects (thanks @adamschwartz) 
+
 v0.4.0
 ------
  * Create tabs with the 'tab' type, just for show!

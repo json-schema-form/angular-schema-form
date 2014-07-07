@@ -1,6 +1,10 @@
 Angular Schema Form
 ===================
 
+[![Build Status](https://travis-ci.org/Textalk/angular-schema-form.svg?branch=master)](https://travis-ci.org/Textalk/angular-schema-form)
+[![Coverage Status](https://coveralls.io/repos/Textalk/angular-schema-form/badge.png?branch=master)](https://coveralls.io/r/Textalk/angular-schema-form?branch=development)
+[![Bower version](https://badge.fury.io/bo/angular-schema-form.svg)](http://badge.fury.io/bo/angular-schema-form)
+
 Generate forms from a JSON schema, with AngularJS!
 
 ### [Try out the example page](http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html)
@@ -71,13 +75,14 @@ bower install angular-schema-form
 (or just download the contents of the ```dist/``` folder and add dependencies
 manually)
 
-It depends on AngularJS (duh!), [tv4](https://github.com/geraintluff/tv4), and
+It depends on [AngularJS](https://angularjs.org/) (duh!),
+[angular-sanitize](https://docs.angularjs.org/api/ngSanitize),
+[tv4](https://github.com/geraintluff/tv4), and
 if you like to use the date picker you also need jQuery and
 [pickadate.js](http://amsul.ca/pickadate.js/). Also if you use the ```help```
 type to inject HTML you'll want to use ngSanitize as well.
 
 The minified files also includes all templates so they are all you need.
-
 
 Addons
 ------

@@ -14,17 +14,17 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'http://code.jquery.com/jquery-2.1.0.min.js',
-      'https://ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.min.js',
-      'https://code.angularjs.org/1.2.16/angular-mocks.js',
-      'bower_components/tv4/tv4.js',
+      'test/lib/jquery.js',
+      'test/lib/angular.js',
+      'test/lib/angular-mocks.js',
+      'test/lib/tv4.js',
       'src/module.js',
       'src/services/*.js',
       'src/directives/*.js',
       'src/directives/decorators/bootstrap/*.js',
       'src/directives/decorators/bootstrap/datepicker/*.js',
       'src/**/*.html',
-      'test/*.js'
+      'test/schema-form-test.js'
     ],
 
 
@@ -45,7 +45,7 @@ module.exports = function(config) {
 
     // optionally, configure the reporter
     coverageReporter: {
-      type : 'html',
+      type : 'lcov',
       dir : 'coverage/'
     },
 
@@ -83,7 +83,7 @@ module.exports = function(config) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: [],
+    browsers: ['PhantomJS'],
 
 
     // If browser does not capture in given timeout [ms], kill it

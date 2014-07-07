@@ -1,7 +1,7 @@
 <div ng-init="selected = { tab: 0 }">
   <ul class="nav nav-tabs" style="margin-bottom: 15px">
     <li ng-repeat="tab in form.tabs"
-        ng-click="selected.tab = $index"
+        ng-click="$event.preventDefault() || (selected.tab = $index)"
         ng-class="{active: selected.tab === $index}">
         <a href="#">{{ tab.title }}</a>
     </li>
