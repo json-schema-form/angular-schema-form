@@ -1,6 +1,9 @@
 Angular Schema Form
 ===================
 
+[![Build Status](https://travis-ci.org/Textalk/angular-schema-form.svg?branch=master)](https://travis-ci.org/Textalk/angular-schema-form)
+[![Coverage Status](https://coveralls.io/repos/Textalk/angular-schema-form/badge.png?branch=master)](https://coveralls.io/r/Textalk/angular-schema-form?branch=development)
+
 Generate forms from a JSON schema, with AngularJS!
 
 ### [Try out the example page](http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html)
