@@ -75,13 +75,14 @@ bower install angular-schema-form
 (or just download the contents of the ```dist/``` folder and add dependencies
 manually)
 
-It depends on AngularJS (duh!), [tv4](https://github.com/geraintluff/tv4), and
+It depends on [AngularJS](https://angularjs.org/) (duh!),
+[angular-sanitize](https://docs.angularjs.org/api/ngSanitize),
+[tv4](https://github.com/geraintluff/tv4), and
 if you like to use the date picker you also need jQuery and
 [pickadate.js](http://amsul.ca/pickadate.js/). Also if you use the ```help```
 type to inject HTML you'll want to use ngSanitize as well.
 
 The minified files also includes all templates so they are all you need.
-
 
 Addons
 ------

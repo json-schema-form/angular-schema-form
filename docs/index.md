@@ -147,7 +147,7 @@ General options most field types can handle:
   type: "text",               //Type of field
   title: "Street",            //Title of field, taken from schema if available
   notitle: false,             //Set to true to hide title
-  description: "Street name", //A description, taken from schema if available
+  description: "Street name", //A description, taken from schema if available, can be HTML
   validationMessage: "Oh noes, please write a proper address",  //A custom validation error message
   onChange: "valueChanged(form.key,modelValue)", //onChange event handler, expression or function
   feedback: false             //inline feedback icons
@@ -300,7 +300,9 @@ scope.
 ### select and checkboxes
 
 *select* and *checkboxes* can take an object, ```titleMap```, where key is the value to be saved on the model
-and the value is the title of the option.
+and the value is the title of the option. In the case of *checkboxes* the values
+of the titleMap can be HTML.
+
 ```javascript
 {
   type: "select",
@@ -340,7 +342,7 @@ the ```sf-schema``` directive.
 ### radios and radiobuttons
 Both type *radios* and *radiobuttons* work the same way, they take a titleMap
 and renders ordinary radio buttons or bootstrap 3 buttons inline. It's a
-cosmetic choice.
+cosmetic choice. The value in the titleMap can be HTML.
 
 Ex.
 ```javascript
@@ -369,15 +371,8 @@ function FormCtrl($scope) {
 ```
 
 ### help
-Help fields is not really a field, but instead let's you inser arbitrary HTML
+Help fields is not really a field, but instead let's you insert arbitrary HTML
 into a form, suitable for help texts with links etc.
-
-It uses ```ng-bind-html``` so you need to include the
-[ngSanitize](https://docs.angularjs.org/api/ngSanitize) module for it to work,
-or expicitly turning of strict contextual escaping with
-```$sceProvider.enabled(false)```  (not recomended). It's enough to include
-```angular-sanitize.min.js``` before ```angular-schema.min.js``` and Schema Form
-will pick up that it's there and include it as a module dependency.
 
 The get a help field you need to specify the type ```help``` and have a html
 snippet as a string in the option ```helpvalue```
