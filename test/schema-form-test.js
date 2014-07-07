@@ -692,7 +692,7 @@ describe('Schema form',function(){
       });
     });
 
-    it.only('should use radio buttons with HTML',function(){
+    it('should use radio buttons with HTML',function(){
 
       inject(function($compile,$rootScope){
         var scope = $rootScope.$new();
