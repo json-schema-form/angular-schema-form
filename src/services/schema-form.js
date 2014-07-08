@@ -158,7 +158,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
 
       var required = schema.required && schema.required.indexOf(options.path) !== -1;
 
-      f.item = defaultFormDefinition(options.path,schema.items,{
+      f.items = defaultFormDefinition(options.path,schema.items,{
         path: options.path,
         required: required || false,
         lookup: options.lookup,
@@ -178,7 +178,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
     number:  [ number ],
     integer: [ integer ],
     boolean: [ checkbox ],
-    array:   [ list, checkboxes ]
+    array:   [ checkboxes, list ]
   };
 
   var postProcessFn = function(form) { return form; };

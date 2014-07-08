@@ -60,8 +60,11 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
     templateUrl: 'directives/decorators/bootstrap/list-body.html',
 
     link: function(scope,element,attrs) {
-      scope.model[scope.form.item.key] = scope.model[scope.form.item.key] || [];
-      scope.value = scope.model[scope.form.item.key];
+      var key = scope.form.items.key;
+      var value = getNested(scope.model, key) || [];
+      setNested(scope.model, key, value);
+
+      scope.value = value;
       scope.renderedValue = angular.copy(scope.value);
 
       var storedValue = null;
@@ -73,20 +76,25 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
           storedValue = val.value;
         } else {
           scope.value[index] = val.value;
+          setNested(scope.model, key, scope.value);
         }
       });
 
       scope.$on('remove', function(evt, val){
         var index = findElement(element[0], val.element[0]);
 
-        scope.value.splice(index, 1);
         scope.renderedValue.splice(index, 1);
+
+        scope.value.splice(index, 1);
+        setNested(scope.model, key, scope.value);
         val.element[0].parentNode.removeChild(val.element[0]);
       });
 
       scope.add = function(){ 
         scope.renderedValue.push(storedValue);
+
         scope.value.push(storedValue);
+        setNested(scope.model, key, scope.value);
       };
     }
   }
@@ -100,7 +108,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
     templateUrl: 'directives/decorators/bootstrap/list-item.html',
 
     link: function(scope,element,attrs) {
-      scope.form.item.key = 'value';
+      scope.form.items.key = 'value';
       scope.model = {
         value: scope.value
       };
@@ -132,4 +140,28 @@ function findElement(parentEl, element){
       }
     }
   }
+}
+
+function setNested(obj, key, value){
+  var bits = key.split('.');
+  for (var i=0; i < bits.length - 1; i++){
+    if (!obj[bits[i]])
+      obj[bits[i]] = {};
+
+    obj = obj[bits[i]];
+  }
+
+  obj[bits[bits.length - 1]] = value;
+}
+
+function getNested(obj, key){
+  var bits = key.split('.');
+  for (var i=0; i < bits.length; i++){
+    obj = obj[bits[i]];
+
+    if (!obj){
+      return undefined;
+    }
+  }
+  return obj;
 }
