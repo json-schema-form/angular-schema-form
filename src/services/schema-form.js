@@ -148,15 +148,37 @@ angular.module('schemaForm').provider('schemaForm',[function(){
 
   };
 
+  var list = function(name,schema,options){
+
+    if (schema.type === "array") {
+      var f   = stdFormObj(schema,options);
+      f.type  = 'list';
+      f.key   = options.path;
+      options.lookup[options.path] = f;
+
+      var required = schema.required && schema.required.indexOf(options.path) !== -1;
+
+      f.item = defaultFormDefinition(options.path,schema.items,{
+        path: options.path,
+        required: required || false,
+        lookup: options.lookup,
+        ignore: options.ignore
+      });
+
+      return f
+    }
+
+  };
+
   //First sorted by schema type then a list.
   //Order has importance. First handler returning an form snippet will be used.
   var defaults = {
     string:  [ select, text ],
-    object:  [ fieldset],
+    object:  [ fieldset ],
     number:  [ number ],
     integer: [ integer ],
     boolean: [ checkbox ],
-    array:   [ checkboxes ]
+    array:   [ list, checkboxes ]
   };
 
   var postProcessFn = function(form) { return form; };
