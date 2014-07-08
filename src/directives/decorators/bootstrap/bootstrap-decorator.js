@@ -95,6 +95,8 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
 
         scope.value.push(storedValue);
         setNested(scope.model, key, scope.value);
+
+        scope.$broadcast('add');
       };
     }
   }
@@ -102,12 +104,15 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
   return {
     scope: {
       'form': '=',
-      'value': '='
+      'value': '=',
+      'newEntry': '@'
     },
 
     templateUrl: 'directives/decorators/bootstrap/list-item.html',
 
     link: function(scope,element,attrs) {
+      var initialValue = angular.copy(scope.value);
+
       scope.form.items.key = 'value';
       scope.model = {
         value: scope.value
@@ -119,6 +124,13 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
           element: element
         });
       }, true);
+
+
+      scope.$on('add', function(){
+        if (scope.newEntry){
+          scope.model.value = initialValue;
+        }
+      });
 
       scope.remove = function() {
         scope.$emit('remove', {
