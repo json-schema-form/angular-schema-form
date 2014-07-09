@@ -108,7 +108,7 @@ function($compile,  schemaForm,  schemaFormDecorators){
           traverse(schema,function(prop,path){
             //This is probably not so fast, but a simple solution.
             if (angular.isDefined(prop['default'])) {
-              scope.$eval('model.'+path+' = model.'+path+' || defaltValue',{ defaltValue: prop['default']});
+              scope.$eval('model.'+path+' = model.'+path+' || defaultValue',{ defaultValue: prop['default']});
             }
           });
 
