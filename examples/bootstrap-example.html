@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
   <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.css">
   <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.date.css">
+  <link rel="stylesheet" href="../bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css">
   <style type="text/css">
 
   body,html {
@@ -185,6 +186,7 @@ function TestCtrl($scope){
 
   $scope.form = [
     {
+      title: "value.name || 'Tab '+$index",
       key: "arraytest",
       type: "tabarray",
       items: [
