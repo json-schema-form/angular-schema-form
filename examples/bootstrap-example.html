@@ -62,12 +62,53 @@
 angular.module('test',['schemaForm','ui.ace']);
 
 function TestCtrl($scope){
-  $scope.person = { favorite: 'NaN' };
+  $scope.person = {
+    favorite: 'NaN',
+    arraytest2: ["foo","bar","foo"] 
+  };
 
   $scope.schema =  {
     "type": "object",
     "required": ['name','shoesize'],
     "properties": {
+      "arraytest": {
+        "title": "arraytest",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "title": "Names",
+          "properties": {
+            "name": { "type": "string", "title": "Your name" },
+            "nick": { "type": "string", "title": "Your nick", "default": "Yo!" },
+          }
+        }
+      },
+      "arraytest2": {
+        "title": "arraytest 2",
+        "type": "array",
+        "items": {
+          "type": "string",
+          "title": "Name"
+        }
+      },
+      "arraytest3": {
+        "title": "arraytest 3",
+        "type": "array",
+        "items": {
+          "type": "object",
+          "title": "Cool list",
+          "properties": {
+            "name": { "title": "sublist name", "type": "string" },
+            "sublist": {
+              "type": "array",
+              "items": {
+                "title": "sublist value", "type": "string"
+              }
+            }
+          }
+        }
+      },
+
       "name": {
         "title": "Name",
         "description": "Gimme yea name lad",
@@ -143,6 +184,16 @@ function TestCtrl($scope){
   };
 
   $scope.form = [
+    {
+      key: "arraytest",
+      type: "array",
+      items: [
+        "arraytest[].nick",
+        "arraytest[].name"
+      ]
+    },
+    "arraytest2",
+    "arraytest3",
     {
       type: "fieldset",
       title: "Stuff",

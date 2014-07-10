@@ -1,0 +1,10 @@
+<div sf-array="form">
+  <h3 ng-show="form.title && form.notitle !== true">{{ form.title }}</h3>
+  <ul>
+    <li ng-repeat="item in modelArray track by $index">
+      <sf-decorator form="copyWithIndex($index)"></sf-decorator>
+      <button ng-click="deleteFromArray($index)" type="button" class="btn btn-default">-</button>
+    </li>
+  </ol>
+  <button ng-click="appendToArray()" type="button" class="btn btn-default">+</button>
+</div>
