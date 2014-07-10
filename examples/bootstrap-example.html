@@ -64,7 +64,7 @@ angular.module('test',['schemaForm','ui.ace']);
 function TestCtrl($scope){
   $scope.person = {
     favorite: 'NaN',
-    arraytest2: ["foo","bar","foo"] 
+    arraytest2: ["foo","bar","foo"]
   };
 
   $scope.schema =  {
@@ -186,7 +186,7 @@ function TestCtrl($scope){
   $scope.form = [
     {
       key: "arraytest",
-      type: "array",
+      type: "tabarray",
       items: [
         "arraytest[].nick",
         "arraytest[].name"
