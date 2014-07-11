@@ -13,6 +13,7 @@
   "moduleType": [
     "globals"
   ],
+  "keywords": ["angular","angularjs","form","json","json-schema","schema"],
   "license": "MIT",
   "ignore": [
     "**/.*",
