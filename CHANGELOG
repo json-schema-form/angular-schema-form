@@ -1,9 +1,16 @@
+v0.6.0
+------
+ * array and tabarray support, with help from @zackbloom (thanks!).
+   Schema type array now translates to a list of objects, adding, removing
+   and reordering supported. Form  type "tabarray" does the same but renders
+   it as tabs instead (configurable to left, right or top)
+
 v0.5.0
 ------
  * Travis and Coveralls integration
  * Support for HTML in descriptons and some titles, (checkbox(es), radios).
  * ngSanitize is now a dependency.
- * Enum order is now maintained in selects (thanks @adamschwartz) 
+ * Enum order is now maintained in selects (thanks @adamschwartz)
 
 v0.4.0
 ------
