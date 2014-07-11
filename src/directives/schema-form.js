@@ -74,7 +74,6 @@ function($compile,  schemaForm,  schemaFormDecorators, sfSelect){
           //FIXME: traverse schema and model and set default values.
 
           var merged = schemaForm.merge(schema,form,ignore);
-          console.log('merged',merged)
           var frag = document.createDocumentFragment();
 
           //make the form available to decorators

@@ -246,11 +246,9 @@ angular.module('schemaForm').provider('schemaForm',[function(){
     var service = {};
 
     service.merge = function(schema,form,ignore) {
-      console.log('to merge',schema,form,ignore);
       form  = form || ["*"];
 
       var stdForm = service.defaults(schema,ignore);
-      console.log('standardform',stdForm);
 
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf("*");

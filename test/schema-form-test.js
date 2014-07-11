@@ -628,11 +628,7 @@ describe('Schema form',function(){
                 "type": "string",
                 "enum": ["foo","bar"]
               }
-            },
-            "foobars": {
-              "type": "array"
-            }
-          }
+            }          }
         };
 
         scope.form = [
@@ -648,7 +644,6 @@ describe('Schema form',function(){
         //TODO: more asserts
         tmpl.children().length.should.be.equal(2);
         tmpl.children().eq(0).find('input[type=checkbox]').length.should.be.eq(2);
-        tmpl.children().eq(1).find('input[type=checkbox]').length.should.be.eq(2);
       });
     });
 
@@ -1012,6 +1007,159 @@ describe('Schema form',function(){
       });
     });
 
+
+    it('should render a list of subforms when schema type is array',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "Name"
+              }
+            },
+            "subforms": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "title": "subform",
+                "properties": {
+                  "one": { "type": "string" },
+                  "two": { "type": "number", "title": "Two" }
+                }
+              }
+            },
+            "subsubforms": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "title": "subform",
+                "properties": {
+                  "one": { "type": "string" },
+                  "list": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "title": "sublist numbers"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        scope.form = [
+          "names",
+          {
+            key: "subforms",
+            type: "array",
+            items: [
+              "subforms[].one"
+            ]
+          },
+          "subsubforms"
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        //TODO: more asserts
+        tmpl.children().length.should.be.equal(3);
+        tmpl.children().eq(0).find('input').length.should.be.eq(1);
+        tmpl.children().eq(0).find('button').length.should.be.eq(2);
+        tmpl.children().eq(0).find('button').eq(1).text().trim().should.be.eq('Add');
+
+        tmpl.children().eq(1).find('input').length.should.be.eq(1);
+        tmpl.children().eq(1).find('fieldset').length.should.be.eq(0);
+        tmpl.children().eq(1).find('button').length.should.be.eq(2);
+        tmpl.children().eq(1).find('button').eq(1).text().trim().should.be.eq('Add');
+
+        tmpl.children().eq(2).find('input').length.should.be.eq(2);
+        tmpl.children().eq(2).find('fieldset').length.should.be.eq(1);
+        tmpl.children().eq(2).find('button').length.should.be.eq(4);
+        tmpl.children().eq(2).find('button').eq(3).text().trim().should.be.eq('Add');
+
+
+      });
+    });
+
+    it('should render a tabarray of subforms when asked',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {
+          names: ['me','you','another']
+        };
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "Name"
+              }
+            },
+            "subforms": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "title": "subform",
+                "properties": {
+                  "one": { "type": "string" },
+                  "two": { "type": "number", "title": "Two" }
+                }
+              }
+            }
+          }
+        };
+
+        scope.form = [
+          { key: "names", type: "tabarray" },
+          {
+            key: "subforms",
+            type: "tabarray",
+            tabType: "right",
+            items: [
+              "subforms[].one"
+            ]
+          }
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        //TODO: more asserts
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).find('input').length.should.be.eq(3);
+        tmpl.children().eq(0).find('button').length.should.be.eq(3);
+        tmpl.children().eq(0).find('button').eq(0).text().trim().should.be.eq('Remove');
+        tmpl.children().eq(0).is('div').should.be.true;
+        tmpl.children().eq(0).attr('sf-array').should.be.thruthy;
+        tmpl.children().eq(0).find('.tabs-left').length.should.be.eq(1);
+
+        tmpl.children().eq(1).find('input').length.should.be.eq(1);
+        tmpl.children().eq(1).find('fieldset').length.should.be.eq(0);
+        tmpl.children().eq(1).find('button').length.should.be.eq(1);
+        tmpl.children().eq(1).find('button').text().trim().should.be.eq('Remove');
+        tmpl.children().eq(1).attr('sf-array').should.be.thruthy;
+        tmpl.children().eq(1).find('.tabs-left').length.should.be.eq(0);
+        tmpl.children().eq(1).find('.tabs-right').length.should.be.eq(1);
+
+      });
+    });
 
 
   });
