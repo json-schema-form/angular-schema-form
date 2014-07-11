@@ -1,9 +1,14 @@
-//Its up to the user to use form type help or not.
+var deps = [];
 try {
   //This throws an expection if module does not exist.
   angular.module('ngSanitize');
+  deps.push('ngSanitize');
+} catch (e) {}
 
-  angular.module('schemaForm',['ngSanitize']);
-} catch (e) {
-  angular.module('schemaForm',[]);
-}
+try {
+  //This throws an expection if module does not exist.
+  angular.module('ui.sortable');
+  deps.push('ui.sortable');
+} catch (e) {}
+
+angular.module('schemaForm',deps);

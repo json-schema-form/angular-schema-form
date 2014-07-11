@@ -1,0 +1,202 @@
+{
+    "schema": {
+        "type": "object",
+        "required": [
+            "name",
+            "shoesize"
+        ],
+        "properties": {
+            "name": {
+                "title": "Name",
+                "description": "Gimme yea name lad",
+                "type": "string",
+                "pattern": "^[^/]*$",
+                "minLength": 2
+            },
+            "favorite": {
+                "title": "Favorite",
+                "type": "string",
+                "enum": [
+                    "undefined",
+                    "null",
+                    "NaN"
+                ]
+            },
+            "shoesize": {
+                "title": "Shoe size",
+                "default": 42,
+                "type": "number"
+            },
+            "attributes": {
+                "type": "object",
+                "title": "Attributes",
+                "required": [
+                    "eyecolor"
+                ],
+                "properties": {
+                    "eyecolor": {
+                        "type": "string",
+                        "title": "Eye color"
+                    },
+                    "haircolor": {
+                        "type": "string",
+                        "title": "Hair color"
+                    },
+                    "shoulders": {
+                        "type": "object",
+                        "title": "Shoulders",
+                        "properties": {
+                            "left": {
+                                "type": "string",
+                                "title": "Left"
+                            },
+                            "right": {
+                                "type": "string",
+                                "title": "Right"
+                            }
+                        }
+                    }
+                }
+            },
+            "things": {
+                "type": "array",
+                "title": "I like...",
+                "items": {
+                    "type": "string",
+                    "enum": [
+                        "clowns",
+                        "compiling",
+                        "sleeping"
+                    ]
+                }
+            },
+            "dislike": {
+                "type": "array",
+                "title": "I dislike...",
+                "items": {
+                    "type": "string",
+                    "title": "I hate"
+                }
+            },
+            "soul": {
+                "title": "Terms Of Service",
+                "description": "I agree to sell my undying <a href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'>soul</a>",
+                "type": "boolean",
+                "default": true
+            },
+            "soulserial": {
+                "title": "Soul Serial No",
+                "type": "string"
+            },
+            "date": {
+                "title": "Date of party",
+                "type": "string",
+                "format": "date"
+            },
+            "radio": {
+                "type": "string",
+                "enum": [
+                    "Transistor",
+                    "Tube"
+                ]
+            },
+            "radiobuttons": {
+                "type": "string",
+                "enum": [
+                    "Select me!",
+                    "No me!"
+                ]
+            }
+        }
+    },
+
+
+
+
+
+    "form": [
+        {
+            "type": "fieldset",
+            "title": "Stuff",
+            "items": [
+                {
+                    "type": "tabs",
+                    "tabs": [
+                        {
+                            "title": "Simple stuff",
+                            "items": [
+                                {
+                                    "key": "name",
+                                    "placeholder": "Check the console",
+                                    "onChange": "log(modelValue)",
+                                    "feedback": "{'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-star': !hasSuccess() }"
+                                },
+                                {
+                                    "key": "favorite",
+                                    "feedback": false
+                                }
+                            ]
+                        },
+                        {
+                            "title": "More stuff",
+                            "items": [
+                                "attributes",
+                                {
+                                    "key": "shoesize",
+                                    "feedback": false
+                                },
+                                "things",
+                                "dislike"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "help",
+            "helpvalue": "<hr>"
+        },
+        "soul",
+        {
+            "type": "conditional",
+            "condition": "modelData.soul",
+            "items": [
+                {
+                    "key": "soulserial",
+                    "placeholder": "ex. 666"
+                }
+            ]
+        },
+        {
+            "key": "date",
+            "minDate": "2014-06-20"
+        },
+        {
+            "key": "radio",
+            "type": "radios",
+            "titleMap": {
+                "Transistor": "Transistor <br> Not the tube kind.",
+                "Tube": "Tube <br> The tube kind."
+            }
+        },
+        {
+            "key": "radiobuttons",
+            "type": "radiobuttons"
+        },
+        {
+            "type": "actions",
+            "items": [
+                {
+                    "type": "submit",
+                    "title": "Do It!"
+                },
+                {
+                    "type": "button",
+                    "title": "Noooooooooooo",
+                    "onClick": "sayNo()"
+                }
+            ]
+        }
+    ]
+}

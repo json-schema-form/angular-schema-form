@@ -43,7 +43,6 @@ angular.module('schemaForm').directive('schemaValidate',function(){
         }
 
         var result = tv4.validateResult(value,schema);
-
         if (result.valid) {
           // it is valid
           ngModel.$setValidity('schema', true);
