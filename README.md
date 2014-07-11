@@ -14,7 +14,7 @@ Generate forms from a JSON schema, with AngularJS!
 What is it?
 ----------
 
-Schema Form is a set of AngularJS directives (and a service..) that can create a form directly from a json schema
+Schema Form is a set of AngularJS directives (and a couple of services..) that can create a form directly from a json schema
 definition and also validate against that schema. The defaults may be fine for a lot cases, but you can also
 customize it, changing order and type of fields.
 
@@ -77,10 +77,22 @@ manually)
 
 It depends on [AngularJS](https://angularjs.org/) (duh!),
 [angular-sanitize](https://docs.angularjs.org/api/ngSanitize),
+[bootstrap 3](http://getbootstrap.com/),
 [tv4](https://github.com/geraintluff/tv4), and
 if you like to use the date picker you also need jQuery and
 [pickadate.js](http://amsul.ca/pickadate.js/). Also if you use the ```help```
 type to inject HTML you'll want to use ngSanitize as well.
+
+If you like to have drag and drop reordering of arrays you also need
+[ui-sortable](https://github.com/angular-ui/ui-sortable) and its dependencies
+[jQueryUI](http://jqueryui.com/), see *ui-sortable* documentation for details of
+what parts of jQueryUI that is needed. You can safely ignore these if you don't
+need the reordering.
+
+Tabbed arrays, form type ```tabarray```, defaults to tabs on the left side. For
+these to work you also need to include the css from
+[bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs).
+It is not needed for tabs on top, the  ```tabType: "top"``` option.
 
 The minified files also includes all templates so they are all you need.
 

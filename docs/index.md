@@ -18,6 +18,8 @@ Documentation
     1. [radios and radiobuttons](#radios-and-radiobuttons)
     1. [help](#help)
     1. [tabs](#tabs)
+    1. [array](#array)
+    1. [tabarray](#tabarray)
 1. [Post process function](#post-process-function)
 
 Form types
@@ -42,6 +44,8 @@ Schema Form currently supports the following form field types out of the box:
 | radiobuttons  |  radio buttons with bootstrap buttons |
 | help          |  insert arbitrary html |
 | tab           |  tabs with content     |
+| array         |  a list you can add, remove and reorder |
+| tabarray      |  a tabbed version of array |
 
 More field types can be added, for instance a "datepicker" type can be added by
 including the [datepicker addon](datepicker.md)
@@ -62,6 +66,8 @@ a property.
 | "type": "object"   |   fieldset   |
 | "type": "string" and a "enum" | select |
 | "type": "array" and a "enum" in array type | checkboxes |
+| "type": "array" | array |
+
 
 
 Form definitions
@@ -454,6 +460,187 @@ function FormCtrl($scope) {
   ];
 }
 ```
+
+### array
+The ```array``` form type is the default for the schema type ```array```.
+The schema for an array has the property ```"items"``` which in the JSON Schema
+specification can be either another schema (i.e. and object), or a list of
+schemas. Only a schema is supported by Schema Form, and not the list of schemas.
+
+The *form* definition has the option ```ìtems``` that should be a list
+of form objects.
+
+The rendered list of subforms each have a remove button and at the bottom there
+is an add button. The text of the add button can be changed by the option
+ ```add``` , see example below.
+
+If you like to have drag and drop reordering of arrays you also need
+[ui-sortable](https://github.com/angular-ui/ui-sortable) and its dependencies
+[jQueryUI](http://jqueryui.com/), see *ui-sortable* documentation for details of
+what parts of jQueryUI that is needed. You can safely ignore these if you don't
+need the reordering.
+
+In the form definition you can refer to properties of an array item by the empty
+bracket notation. In the ```key``` simply end the name of the array with ```[]```
+
+Given the schema:
+```json
+{
+  "type": "object",
+  "properties": {
+    "subforms": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "nick": { "type": "string" },
+          "emails": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+Then ```subforms[].name``` refers to the property name of any subform item,
+```subforms[].emails[]``` refers to the subform of emails. See example below for
+usage.
+
+
+Single list of inputs example:
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      names: {
+        type: "array",
+        items: {
+          title: "Name",
+          type: "string"
+        }
+      }
+    }
+  };
+
+  $scope.form = ['*'];
+}
+```
+
+
+Example with sub form, note that you can get rid of the form field the object wrapping the
+subform fields gives you per default by using the ```items``` option in the
+form definition.
+
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    "type": "object",
+    "properties": {
+      "subforms": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "nick": { "type": "string" },
+            "emails": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+
+
+  $scope.form = [
+    {
+      key: "subforms",
+      add: "Add person",
+      items: [
+        "subforms[].nick",
+        "subforms[].name",
+        "subforms[].emails",
+      ]
+    }
+  ];
+}
+```
+
+
+### tabarray
+The ```tabarray``` form type behaves the same way and has the same options as
+```array``` but instead of rendering a list it renders a tab per item in list.
+
+By default the tabs are on the left side (follows the default in JSON Form),
+but with the option ```tabType``` you can change that to eiter *"top"* or *"right"*
+as well.
+
+Every tab page has a *"Remove"* button, you can change the text on that with
+the ```remove``` option.
+
+Bootstrap 3 doesn't have side tabs so to get proper styling you need to add the
+dependency [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs).
+It is not needed for tabs on top.
+
+The ```title``` option is a bit special in ```tabarray```, it defines the title
+of the tab and is considered a angular expression. The expression is evaluated
+with two extra variables in context: **value** and **$index**, where **value**
+is the value in the array (i.e. that tab) and **$index** the index.  
+
+Example with tabs on the top:
+
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    "type": "object",
+    "properties": {
+      "subforms": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": { "type": "string" },
+            "nick": { "type": "string" },
+            "emails": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+
+
+  $scope.form = [
+    {
+      type: "tabarray",
+      tabType: "top",
+      title: "value.nick || ('Tab '+$index)"
+      key: "subforms",
+      add: "Add person",
+      items: [
+        "subforms[].nick",
+        "subforms[].name",
+        "subforms[].emails",
+      ]
+    }
+  ];
+}
+```
+
 
 
 
