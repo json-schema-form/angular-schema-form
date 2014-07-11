@@ -84,7 +84,6 @@ function(sfSelect, schemaForm) {
         };
 
         scope.deleteFromArray = function(index) {
-          console.log('delete from array',index,list)
           list.splice(index,1);
         };
 
