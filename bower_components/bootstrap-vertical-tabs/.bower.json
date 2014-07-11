@@ -1,0 +1,41 @@
+{
+  "name": "bootstrap-vertical-tabs",
+  "version": "1.1.0",
+  "homepage": "https://github.com/dbtek/bootstrap-vertical-tabs",
+  "authors": [
+    "İsmail Demirbilek <ce.demirbilek@gmail.com>"
+  ],
+  "description": "Missing vertical tabs component for Bootstrap 3",
+  "main": "bootstrap.vertical-tabs.css",
+  "keywords": [
+    "bootstrap",
+    "vertical",
+    "tabs"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "Gruntfile.js",
+    "package.json",
+    "*.png",
+    "demo.html",
+    "src"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.0.3"
+  },
+  "_release": "1.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.1.0",
+    "commit": "dd20d6e88534af0806c49c0ed332c3205a86ab26"
+  },
+  "_source": "git://github.com/dbtek/bootstrap-vertical-tabs.git",
+  "_target": "~1.1.0",
+  "_originalSource": "bootstrap-vertical-tabs",
+  "_direct": true
+}
