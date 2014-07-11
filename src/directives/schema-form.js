@@ -5,18 +5,8 @@ FIXME: real documentation
 
 angular.module('schemaForm')
        .directive('sfSchema',
-       ['$compile','schemaForm','schemaFormDecorators',
-function($compile,  schemaForm,  schemaFormDecorators){
-
-  //recurse through the entire schema.
-  //FIXME: no support for arrays
-  var traverse = function(schema,fn,path) {
-    path = path || "";
-    fn(schema,path);
-    angular.forEach(schema.properties,function(prop,name){
-      traverse(prop,fn,path===""?name:path+'.'+name);
-    });
-  };
+       ['$compile','schemaForm','schemaFormDecorators','sfSelect',
+function($compile,  schemaForm,  schemaFormDecorators, sfSelect){
 
   var SNAKE_CASE_REGEXP = /[A-Z]/g;
   function snake_case(name, separator){
@@ -105,10 +95,13 @@ function($compile,  schemaForm,  schemaFormDecorators){
           $compile(element.children())(scope);
 
           //ok, now that that is done let's set any defaults
-          traverse(schema,function(prop,path){
-            //This is probably not so fast, but a simple solution.
+          schemaForm.traverseSchema(schema,function(prop,path){
+
             if (angular.isDefined(prop['default'])) {
-              scope.$eval('model.'+path+' = model.'+path+' || defaltValue',{ defaltValue: prop['default']});
+              var val = sfSelect(path, scope.model);
+              if (angular.isUndefined(val)) {
+                sfSelect(path, scope.model, prop['default']);
+              }
             }
           });
 

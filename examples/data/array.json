@@ -1,0 +1,54 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Comment",
+    "properties": {
+      "comments": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name":  {
+              "title": "Name",
+              "type": "string"
+            },
+            "email":  {
+              "title": "Email",
+              "type": "string",
+              "pattern": "^\\S+@\\S+$",
+              "description": "Email will be used for evil."
+            },
+            "comment": {
+              "title": "Comment",
+              "type": "string",
+              "maxLength": 20,
+              "validationMessage": "Don't be greedy!"
+            }
+          },
+          "required": ["name","email","comment"]
+        }
+      }
+    }
+  },
+  "form": [
+    {
+      "type": "help",
+      "helpvalue": "<h4>Array Example</h4><p>Try adding a couple of forms, reorder by drag'n'drop.</p>" 
+    },
+    {
+      "key": "comments",
+      "items": [
+        "comments[].name",
+        "comments[].email",
+        {
+          "key": "comments[].comment",
+          "type": "textarea"
+        }
+      ]
+    },
+    {
+      "type": "submit",
+      "title": "OK"
+    }
+  ]
+}

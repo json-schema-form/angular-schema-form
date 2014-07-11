@@ -148,15 +148,41 @@ angular.module('schemaForm').provider('schemaForm',[function(){
 
   };
 
+  var array = function(name,schema,options){
+
+    if (schema.type === 'array') {
+      var f   = stdFormObj(schema,options);
+      f.type  = 'array';
+      f.key   = options.path;
+      options.lookup[options.path] = f;
+
+      var required = schema.required && schema.required.indexOf(options.path) !== -1;
+
+      // The default is to always just create one child. This works since if the
+      // schemas items declaration is of type: "object" then we get a fieldset.
+      // We also follow json form notatation, adding empty brackets "[]" to
+      // signify arrays.
+      f.items = [defaultFormDefinition(options.path,schema.items,{
+        path: options.path+'[]',
+        required: required || false,
+        lookup: options.lookup,
+        ignore: options.ignore
+      })];
+
+      return f;
+    }
+
+  };
+
   //First sorted by schema type then a list.
   //Order has importance. First handler returning an form snippet will be used.
   var defaults = {
     string:  [ select, text ],
-    object:  [ fieldset],
+    object:  [ fieldset ],
     number:  [ number ],
     integer: [ integer ],
     boolean: [ checkbox ],
-    array:   [ checkboxes ]
+    array:   [ checkboxes, array ]
   };
 
   var postProcessFn = function(form) { return form; };
@@ -294,6 +320,45 @@ angular.module('schemaForm').provider('schemaForm',[function(){
         throw new Error('Not implemented. Only type "object" allowed at root level of schema.');
       }
       return { form: form, lookup: lookup };
+    };
+
+
+    //Utility functions
+    /**
+     * Traverse a schema, applying a function(schema,path) on every sub schema
+     * i.e. every property of an object.
+     */
+    service.traverseSchema = function(schema,fn,path,ignoreArrays) {
+      ignoreArrays = angular.isDefined(ignoreArrays) ? ignoreArrays : true;
+
+      var traverse = function(schema,fn,path) {
+        fn(schema,path);
+        angular.forEach(schema.properties,function(prop,name){
+          traverse(prop,fn,path===""?name:path+'.'+name);
+        });
+
+        //Only support type "array" which have a schema as "items".
+        if (!ignoreArrays && schema.items) {
+          traverse(schema.items,fn,path+'[]');
+        }
+      };
+
+      traverse(schema,fn,path || "");
+    };
+
+    service.traverseForm = function(form, fn) {
+      fn(form);
+      angular.forEach(form.items, function(f) {
+        service.traverseForm(f, fn);
+      });
+
+      if (form.tabs) {
+        angular.forEach(form.tabs, function(tab) {
+          angular.forEach(tab.items, function(f) {
+            service.traverseForm(f, fn);
+          });
+        });
+      }
     };
 
 
