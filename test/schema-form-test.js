@@ -647,7 +647,7 @@ describe('Schema form',function(){
       });
     });
 
-    it('should bind checkboxes to the model',function(){
+    it('should initialize checkboxes to the model values',function(){
 
       inject(function($compile,$rootScope){
         var scope = $rootScope.$new();
