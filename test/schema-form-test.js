@@ -647,6 +647,40 @@ describe('Schema form',function(){
       });
     });
 
+    it('should initialize checkboxes to the model values',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {
+          "names": ["foo"]
+        };
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["foo"]
+              }
+            }          }
+        };
+
+        scope.form = [
+          "names",
+          { key: "foobars", type: "checkboxes", titleMap:{ 'foo':'Foo'}}
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().eq(0).find('input[type=checkbox]').prop('checked').should.be.true;
+      });
+    });
+
     it('should use radio buttons when they are wanted',function(){
 
       inject(function($compile,$rootScope){
