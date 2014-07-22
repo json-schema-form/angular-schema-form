@@ -1,10 +1,10 @@
 <div class="btn-group">
   <input ng-repeat-start="item in form.items"
          type="submit"
-         class="btn btn-primary"
+         class="btn {{ item.style || 'btn-primary' }}"
          value="{{item.title}}"
          ng-if="item.type === 'submit'">
-  <button ng-repeat-end class="btn btn-default"
+  <button ng-repeat-end class="btn {{ item.style || 'btn-default' }}"
           type="button"
           ng-if="item.type !== 'submit'"
           ng-click="buttonClick($event,item)">{{item.title}}</button>
