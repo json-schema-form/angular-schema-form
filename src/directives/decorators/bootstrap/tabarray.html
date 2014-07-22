@@ -30,7 +30,7 @@
 
            <button ng-click="deleteFromArray($index)"
                    type="button"
-                   class="btn btn-default pull-right">
+                   class="btn {{ form.style.remove || 'btn-default' }} pull-right">
              <i class="glyphicon glyphicon-trash"></i>
              {{ form.remove || 'Remove'}}
            </button>

@@ -1,7 +1,7 @@
 <div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
   <label ng-show="showTitle()">{{form.title}}</label>
   <div class="btn-group">
-    <label class="btn btn-primary"
+    <label class="btn {{ (value === $$value$$) ? form.style.selected || 'btn-primary' : form.style.unselected || 'btn-primary'; }}"
            ng-class="{ active: value === $$value$$ }"
            ng-repeat="(value,name) in form.titleMap">
       <input type="radio"
