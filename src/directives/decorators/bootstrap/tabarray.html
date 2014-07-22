@@ -21,7 +21,7 @@
 
   <div ng-class="{'col-xs-9': !form.tabsType || form.tabsType === 'left' || form.tabsType === 'right'}">
     <div class="tab-content">
-      <div class="tab-pane claerfix"
+      <div class="tab-pane clearfix"
            ng-repeat="item in modelArray track by $index"
            ng-show="selected.tab === $index"
            ng-class="{active: selected.tab === $index}">
