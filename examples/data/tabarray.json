@@ -38,6 +38,11 @@
     {
       "key": "comments",
       "type": "tabarray",
+	  "add": "New",
+	  "remove": "Delete",
+	  "style": {
+		"remove": "btn-danger"
+	  },
       "title": "value.name || 'Tab '+$index",
       "items": [
         "comments[].name",
@@ -50,6 +55,7 @@
     },
     {
       "type": "submit",
+      "style": "btn-default",
       "title": "OK"
     }
   ]

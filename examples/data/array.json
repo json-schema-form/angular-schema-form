@@ -37,6 +37,10 @@
     },
     {
       "key": "comments",
+	  "add": "New",
+	  "style": {
+		"add": "btn-success"
+	  },
       "items": [
         "comments[].name",
         "comments[].email",
@@ -48,6 +52,7 @@
     },
     {
       "type": "submit",
+      "style": "btn-info",
       "title": "OK"
     }
   ]
