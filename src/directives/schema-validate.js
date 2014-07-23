@@ -43,6 +43,19 @@ angular.module('schemaForm').directive('schemaValidate',function(){
         }
 
         var result = tv4.validateResult(value,schema);
+
+        if (result.valid) {
+          // check for validation callbacks
+          var form = scope.$eval(attrs.sfChanged);
+          if (form && form.validationCallback) {
+            if (angular.isFunction(form.validationCallback)) {
+              result = form.validationCallback(value, form);
+            } else {
+              result = scope.evalExpr(form.validationCallback, {'modelValue': value, form: form});
+            }
+          }
+        }
+
         if (result.valid) {
           // it is valid
           ngModel.$setValidity('schema', true);
