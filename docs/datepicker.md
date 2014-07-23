@@ -13,8 +13,7 @@ supports date, not time.
 Installation
 ------------
 The date picker is an addon to the bootstrap decorator. To use it you just
-include ```dist/bootstrap-datepicker.min.js``` *after*  
-```dist/bootstrap-decorator.min.js```
+include ```dist/bootstrap-datepicker.min.js``` *after*  ```dist/bootstrap-decorator.min.js```
 
 You'll also need the files neccessary for pickadate, see the pickadate.js  
 [github page](https://github.com/amsul/pickadate.js) or documentation.
