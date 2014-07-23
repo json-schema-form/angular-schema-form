@@ -69,7 +69,18 @@ gulp.task('minify',function(){
 });
 
 
-gulp.task('default',['minify','bootstrap','bootstrap-datepicker']);
+gulp.task('non-minified-dist',function(){
+  gulp.src([
+    './src/module.js',
+    './src/services/*.js',
+    './src/directives/*.js'
+  ])
+  .pipe(concat('schema-form.js'))
+  .pipe(gulp.dest('./dist/'));
+});
+
+
+gulp.task('default',['minify','bootstrap','bootstrap-datepicker','non-minified-dist']);
 
 
 gulp.task('watch', function() {
