@@ -5,7 +5,7 @@
  *
  * @description
  * Utility method to access deep properties without
- * trhowing errors when things are not defined.
+ * throwing errors when things are not defined.
  * Can also set a value in a deep structure, creating objects when missing
  * ex.
  * var foo = Select('address.contact.name',obj)
