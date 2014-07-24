@@ -1634,6 +1634,11 @@ describe('Schema form',function(){
                 "NaN",
               ]
             },
+            "overEighteen": {
+              "title": "Are you over 18 years old?",
+              "type": "boolean",
+              "default": false
+            },
             "attributes": {
               "type": "object",
               "required": ['eyecolor'],
@@ -1682,6 +1687,17 @@ describe('Schema form',function(){
                 "null",
                 "NaN",
               ]
+            }
+          },
+          {
+            title: 'Are you over 18 years old?',
+            key: 'overEighteen',
+            type: 'checkbox',
+            default: false,
+            schema: {
+              "title": "Are you over 18 years old?",
+              "type": "boolean",
+              "default": false
             }
           },
           {
