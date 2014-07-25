@@ -30,8 +30,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
 
 
   var createDirective = function(name){
-    $compileProvider.directive(name,['$parse','$compile','$http','$templateCache',
-      function($parse,  $compile,  $http,  $templateCache){
+    $compileProvider.directive(name,['$parse','$compile','$http','$templateCache', '$window', 'sfSelect',
+      function($parse,  $compile,  $http,  $templateCache, $window, sfSelect){
 
         return {
           restrict: 'AE',
@@ -45,6 +45,31 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
 
               if (form) {
                 scope.form  = form;
+				
+				//Watchers for calculated fields
+				if (form.calculated) {
+					//Attaching window.Math to scope for using Math functions
+					if (!scope.Math && form.expression.indexOf('Math.') !== -1) {
+						scope.Math = $window.Math;
+					}
+					//Sum all the elements array
+					scope.arraySum = function(array){
+						var sum = 0;
+						angular.forEach(array, function(value, key) {
+							if (value) {
+								sum += 1*value;
+							}
+						});
+						return sum;
+					};
+					var key = form.key;
+					//Lets watch the expression for update the model accordingly
+					scope.$watch(function() { 
+						return scope.$eval(form.expression);
+					}, function(values) {
+						sfSelect(key, scope.model, values);
+					}); 
+				}
 
                 //ok let's replace that template!
                 //We do this manually since we need to bind ng-model properly and also
