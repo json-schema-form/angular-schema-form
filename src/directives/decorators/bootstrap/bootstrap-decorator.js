@@ -26,6 +26,9 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider',function(dec
       if (form.readonly && form.key && form.type !== 'fieldset') {
         return base+'readonly.html';
       }
+	  if (form.calculated && form.key) {
+        return base+'calculated.html';
+      }
     }
   ]);
 
