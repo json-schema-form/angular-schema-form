@@ -1,0 +1,146 @@
+﻿{
+  "schema": {
+    "type": "object",
+    "title": "Calculated",
+	"properties": {
+      "example1": {
+	    "type": "object",
+		"title": "Example 1",
+		"required": ["name", "ageInMonths"],
+		"properties": {
+		  "name":  {
+			"type": "object",
+			"title": "Name",
+			"required": ["first", "last"],
+			"properties": {
+				"first": {
+					"title": "First",
+					"type": "string"
+				},
+				"last": {
+					"title": "Last",
+					"type": "string"
+				}
+			}
+		  },
+		  "ageInMonths":  {
+			"title": "Age in months",
+			"type": "integer",
+			"description": "We then calculate your age in years"
+		  },
+		  "introduction": {
+			"title": "Introduction",
+			"type": "string",
+			"description": "Here we compose an introduction message"
+		  }
+		}
+	  },
+	  "example2": {
+	    "type": "object",
+		"title": "Example 2",
+		"required": ["numbers"],
+		"properties": {
+		  "option1": {
+		    "title": "Option 1",
+		    "type": "boolean",
+		    "default": false
+		  },
+		  "option2": {
+		    "title": "Option 2",
+		    "type": "boolean",
+		    "default": false
+		  },
+		  "index1": {
+		    "title": "Sum options",
+		    "type": "string"
+		  },
+		  "numbers": {
+		    "type": "array",
+		    "title": "Numbers",
+		    "items": {
+			  "type": "string",
+			  "enum": [
+			    "2",
+			    "3",
+			    "4"
+			  ]
+		    }
+		  },
+		  "index2": {
+		    "title": "Sum numbers",
+		    "type": "string"
+	 	  }
+		}
+	  }
+	}
+  },
+  "form": [
+	{
+      "type": "fieldset",
+      "title": "Calculated",
+      "items": [
+        {
+          "type": "tabs",
+          "tabs": [
+            {
+              "title": "Example 1",
+              "items": [
+				"example1.name",
+				{
+                  "type": "help",
+                  "helpvalue": "<h3>More</h3>"
+                },
+                "example1.ageInMonths",
+				{
+				  "key": "example1.introduction",
+				  "calculated": true,
+				  "expression": "'I´m ' + model.example1.name.first + ' ' + model.example1.name.last + ', and i´m ' + Math.floor(model.example1.ageInMonths/12) + ' years old'",
+				  "type": "string"
+				}
+			  ]
+			},
+			{
+              "title": "Example 2",
+              "items": [
+				{
+                  "type": "help",
+                  "helpvalue": "<label>Options</label>"
+                },
+                {
+				  "key": "example2.option1"
+				},
+				{
+				  "key": "example2.option2"
+				},
+			    {
+				  "key": "example2.index1",
+				  "type": "string",
+				  "calculated": true,
+				  "expression": "2*(model.example2.option1) + 3*(model.example2.option2)"
+				},
+				{
+				  "key": "example2.numbers",
+				  "titleMap": {
+					"2": "Two",
+					"3": "Three",
+					"4": "Four"
+				  }
+				},
+				{
+				  "key": "example2.index2",
+				  "type": "string",
+				  "calculated": true,
+				  "expression": "arraySum(model.example2.numbers)"
+				}
+			  ]
+			}
+		  ]
+		}
+	  ]
+	},
+	{
+	  "type": "submit",
+	  "title": "OK"
+	}
+  ]
+}
