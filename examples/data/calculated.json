@@ -86,7 +86,11 @@
               "title": "Example 1",
               "items": [
 				"example1.name",
-				"example1.ageInMonths",
+				{
+                  "type": "help",
+                  "helpvalue": "<h3>More</h3>"
+                },
+                "example1.ageInMonths",
 				{
 				  "key": "example1.introduction",
 				  "calculated": true,
@@ -99,6 +103,10 @@
               "title": "Example 2",
               "items": [
 				{
+                  "type": "help",
+                  "helpvalue": "<label>Options</label>"
+                },
+                {
 				  "key": "example2.option1"
 				},
 				{
