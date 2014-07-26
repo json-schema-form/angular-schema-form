@@ -386,6 +386,50 @@ describe('Schema form',function(){
         expect(tmpl.children().eq(1).children('input').attr('disabled')).to.be.undefined;
       });
     });
+	
+	it('should use disabled readonly input fields, with the evaluated expression in the value',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {
+			"name": {
+				"first": "José",
+				"last": "Sánchez"
+			},
+			"ageInMonths": 42*12
+		};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "introduction": { 
+				"type": "string"
+			},
+            "nick": { "type": "string" }
+          }
+        };
+
+        scope.form = [
+		  "name",
+		  "ageInMonths",
+		  {
+			"key": "introduction",
+			"calculated": true,
+			"expression": "'I´m ' + model.name.first + ' ' + model.name.last + ', and i´m ' + (model.ageInMonths / 12) + ' years old.'"
+		  }
+		];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+		tmpl.children().length.should.be.equal(3);
+		tmpl.children().eq(2).find('input').attr('disabled').should.be.equal('disabled');
+        tmpl.children().eq(2).find('input').attr('ng-model').should.be.equal('model.introduction');
+		tmpl.children().eq(2).find('input').scope().model.introduction.should.be.equal('I´m José Sánchez, and i´m 42 years old.');
+		
+      });
+    });
 
     it('should display custom validationMessages when specified',function(done){
 
