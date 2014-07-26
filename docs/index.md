@@ -20,6 +20,7 @@ Documentation
     1. [tabs](#tabs)
     1. [array](#array)
     1. [tabarray](#tabarray)
+	1. [calculated](#calculated)
 1. [Post process function](#post-process-function)
 
 Form types
@@ -46,6 +47,7 @@ Schema Form currently supports the following form field types out of the box:
 | tab           |  tabs with content     |
 | array         |  a list you can add, remove and reorder |
 | tabarray      |  a tabbed version of array |
+| calculated	|  a disabled input with calculated value |
 
 More field types can be added, for instance a "datepicker" type can be added by
 including the [datepicker addon](datepicker.md)
@@ -704,7 +706,68 @@ function FormCtrl($scope) {
 ```
 
 
+### calculated
+The ```calculated``` form type is a disabled input which value is calculated from 
+the provided expression.
 
+The expression is an AngularJS expression, with some *extras*. You can use the methods 
+of the Javascript window object ```Math```, and functions (e.g. arraySum for summing 
+array elements, like the ```array``` form type values)
+
+Example:
+
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    "type": "object",
+    "title": "Comment",
+    "properties": {
+      "name":  {
+        "type": "object",
+		"title": "Name",
+		"required": ["first", "last"],
+		"properties": {
+		  "first": {
+			"title": "First",
+			"type": "string"
+		  },
+		  "last": {
+			"title": "Last",
+			"type": "string"
+		  }
+		}
+      },
+      "ageInMonths":  {
+        "title": "Age in months",
+        "type": "integer",
+        "description": "We then calculate your age in years"
+      },
+      "introduction": {
+        "title": "Introduction",
+        "type": "string",
+        "description": "Here we compose an introduction message"
+      }
+    }
+
+
+  $scope.form = [
+    {
+      "name",
+	  "ageInMonths",
+	  {
+		"key": "introduction",
+		"calculated": true,
+        "expression": "'I´m ' + model.name.first + ' ' + model.name.last + ', and i´m ' + Math.floor(model.ageInMonths/12) + ' years old'",
+		"type": "string"
+	  },
+	  {
+		"type": "submit",
+		"title": "OK"
+	  }
+    }
+  ];
+}
+```
 
 
 Post process function
