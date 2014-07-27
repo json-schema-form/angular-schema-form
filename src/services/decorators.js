@@ -51,7 +51,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                 //for fieldsets to recurse properly.
                 var url = templateUrl(name,form);
                 $http.get(url,{ cache: $templateCache }).then(function(res){
-                  var template = res.data.replace(/\$\$value\$\$/g,'model.'+(form.key || ""));
+                  var key = form.key ? ObjectPath.stringify(form.key).replace(/"/g, '&quot;') : '';
+                  var template = res.data.replace(/\$\$value\$\$/g,'model'+key);
                   $compile(template)(scope,function(clone){
                     element.replaceWith(clone);
                   });

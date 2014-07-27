@@ -7,7 +7,7 @@ function(schemaFormProvider,  schemaFormDecoratorsProvider){
       var f = schemaFormProvider.stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'datepicker';
-      options.lookup[options.path] = f;
+      options.lookup[ObjectPath.stringify(options.path)] = f;
       return f;
     }
   };

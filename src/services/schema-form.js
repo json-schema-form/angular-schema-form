@@ -45,7 +45,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f = stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'text';
-      options.lookup[options.path] = f;
+      options.lookup[ObjectPath.stringify(options.path)] = f;
       return f;
     }
   };
@@ -57,7 +57,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f = stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'number';
-      options.lookup[options.path] = f;
+      options.lookup[ObjectPath.stringify(options.path)] = f;
       return f;
     }
   };
@@ -67,7 +67,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f = stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'number';
-      options.lookup[options.path] = f;
+      options.lookup[ObjectPath.stringify(options.path)] = f;
       return f;
     }
   };
@@ -77,7 +77,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f = stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'checkbox';
-      options.lookup[options.path] = f;
+      options.lookup[ObjectPath.stringify(options.path)] = f;
       return f;
     }
   };
@@ -94,7 +94,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
           f.titleMap[name] = name;
         });
       }
-      options.lookup[options.path] = f;
+      options.lookup[ObjectPath.stringify(options.path)] = f;
       return f;
     }
   };
@@ -110,7 +110,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
           f.titleMap[name] = name;
         });
       }
-      options.lookup[options.path] = f;
+      options.lookup[ObjectPath.stringify(options.path)] = f;
       return f;
     }
   };
@@ -123,11 +123,12 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f   = stdFormObj(schema,options);
       f.type  = 'fieldset';
       f.items = [];
-      options.lookup[options.path] = f;
+      options.lookup[ObjectPath.stringify(options.path)] = f;
 
       //recurse down into properties
       angular.forEach(schema.properties,function(v,k){
-        var path = options.path+'.'+k;
+        var path = options.path.slice();
+        path.push(k);
         if (options.ignore[path] !== true) {
           var required = schema.required && schema.required.indexOf(k) !== -1;
 
@@ -154,16 +155,20 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f   = stdFormObj(schema,options);
       f.type  = 'array';
       f.key   = options.path;
-      options.lookup[options.path] = f;
+      options.lookup[ObjectPath.stringify(options.path)] = f;
 
-      var required = schema.required && schema.required.indexOf(options.path) !== -1;
+      var required = schema.required && schema.required.indexOf(options.path(options.path.length - 1)) !== -1;
 
       // The default is to always just create one child. This works since if the
       // schemas items declaration is of type: "object" then we get a fieldset.
       // We also follow json form notatation, adding empty brackets "[]" to
       // signify arrays.
+
+      var arrPath = options.path.slice();
+      arrPath.push('');
+
       f.items = [defaultFormDefinition(options.path,schema.items,{
-        path: options.path+'[]',
+        path: arrPath,
         required: required || false,
         lookup: options.lookup,
         ignore: options.ignore
@@ -261,8 +266,12 @@ angular.module('schemaForm').provider('schemaForm',[function(){
 
       //ok let's merge!
       //We look at the supplied form and extend it with schema standards
+
+
       var lookup = stdForm.lookup;
       return postProcessFn(form.map(function(obj){
+
+        // console.log(obj)
 
         //handle the shortcut with just a name
         if (typeof obj === 'string') {
@@ -282,8 +291,14 @@ angular.module('schemaForm').provider('schemaForm',[function(){
         }
 
         //extend with std form from schema.
-        if (obj.key && lookup[obj.key]) {
-          return angular.extend(lookup[obj.key],obj);
+        if (obj.key) {
+          if(typeof obj.key == 'string') {
+            obj.key = ObjectPath.parse(obj.key);
+          }
+          var str = ObjectPath.stringify(obj.key);
+          if(lookup[str]){
+            return angular.extend(lookup[str],obj);
+          }
         }
 
         return obj;
@@ -302,8 +317,9 @@ angular.module('schemaForm').provider('schemaForm',[function(){
 
       if (schema.type === "object") {
         angular.forEach(schema.properties,function(v,k){
+            k = [k];
             if (ignore[k] !== true) {
-              var required = schema.required && schema.required.indexOf(k) !== -1;
+              var required = schema.required && schema.required.indexOf(k[k.length - 1]) !== -1;
               var def = defaultFormDefinition(k,v,{
                 path: k,        //path to this property in dot notation. Root object has no name
                 lookup: lookup,    //extra map to register with. Optimization for merger.
@@ -331,19 +347,24 @@ angular.module('schemaForm').provider('schemaForm',[function(){
     service.traverseSchema = function(schema,fn,path,ignoreArrays) {
       ignoreArrays = angular.isDefined(ignoreArrays) ? ignoreArrays : true;
 
+      path = path || [];
+
       var traverse = function(schema,fn,path) {
         fn(schema,path);
         angular.forEach(schema.properties,function(prop,name){
-          traverse(prop,fn,path===""?name:path+'.'+name);
+          var currentPath = path.slice();
+          currentPath.push(name);
+          traverse(prop,fn,currentPath);
         });
 
         //Only support type "array" which have a schema as "items".
         if (!ignoreArrays && schema.items) {
-          traverse(schema.items,fn,path+'[]');
+          var arrPath = path.slice(); arrPath.push('');
+          traverse(schema.items,fn,arrPath);
         }
       };
 
-      traverse(schema,fn,path || "");
+      traverse(schema,fn,path || []);
     };
 
     service.traverseForm = function(form, fn) {

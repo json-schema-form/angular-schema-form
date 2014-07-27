@@ -19,7 +19,6 @@
  *                          or undefined if there is none.
  */
 angular.module('schemaForm').factory('sfSelect', [function () {
-  var re    = /\[(\d+)\]/g;
   var numRe = /^\d+$/;
 
   return function(projection, obj, valueToSet) {
@@ -27,7 +26,7 @@ angular.module('schemaForm').factory('sfSelect', [function () {
       obj = this;
     }
     //Support [] array syntax
-    var parts = projection.replace(re, '.$1').split('.');
+    var parts = typeof projection === 'string' ? ObjectPath.parse(projection) : projection;
 
     if (typeof valueToSet !== 'undefined' && parts.length === 1) {
       //special case, just setting one variable
@@ -45,7 +44,7 @@ angular.module('schemaForm').factory('sfSelect', [function () {
     for (var i = 1; i < parts.length; i++) {
       // Special case: We allow JSON Form syntax for arrays using empty brackets
       // These will of course not work here so we exit if they are found.
-      if (parts[i] === '[]') {
+      if (parts[i] === '') {
         return undefined;
       }
       if (typeof valueToSet !== 'undefined') {

@@ -61,7 +61,7 @@
 <script type="text/javascript" src="http://cdn.jsdelivr.net/g/jquery.ui@1.10"></script>
 <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
 <script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
-<script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular/angular.js"></script>
 <script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-ui-sortable/sortable.js"></script>
 <script type="text/javascript" src="../bower_components/angular-ui-ace/ui-ace.js"></script>
@@ -78,6 +78,7 @@ angular.module('test',['schemaForm','ui.ace']);
 function TestCtrl($scope,$http){
 
   $scope.tests = [
+    { name: "Complex Key Support", data: 'data/keys.json' },
     { name: "Simple", data: 'data/simple.json' },
     { name: "Array", data: 'data/array.json' },
     { name: "Tab Array", data: 'data/tabarray.json' },

@@ -7,7 +7,7 @@ function(sfSelect, schemaForm) {
   var setIndex = function(index) {
     return function(form) {
       if (form.key) {
-        form.key = form.key.replace('[]','['+index+']');
+        form.key[form.key.indexOf('')] = index;
       }
     };
   };

@@ -64,7 +64,7 @@ gulp.task('minify',function(){
     './src/directives/*.js'
   ])
   .pipe(concat('schema-form.min.js'))
-  .pipe(uglify())
+  // .pipe(uglify())
   .pipe(gulp.dest('./dist/'));
 });
 

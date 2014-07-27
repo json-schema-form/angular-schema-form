@@ -1,0 +1,60 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Complex Key Support",
+    "properties": {
+      "a[\"b\"].c": {
+        "type": "text",
+        "title": "Paths do not overflow their keys."
+      },
+      "simple": {
+        "type": "object",
+        "properties": {
+          "prøp": {
+            "title": "Property",
+            "type": "string"
+          }
+        }
+      },
+      "array-key": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "a'rr[\"l":  {
+              "title": "Control Characters",
+              "type": "string"
+            },
+            "˙∆∂∞˚¬":  {
+              "type": "string"
+            }
+          },
+          "required": [
+            "a'rr[\"l",
+            "˙∆∂∞˚¬"
+          ]
+        }
+      }
+    }
+  },
+  "form": ["*"],
+  "form1": [
+    "['a[\"b\"].c']",
+    {
+      "key": "array-key",
+      "items": [
+        "[array-key][]['a'rr[\"l']",
+        {
+          "key": "[array-key][][˙∆∂∞˚¬]",
+          "title": "Unicode Characters"
+        }
+      ]
+    },
+    {
+      "key": "simple",
+      "items": [
+        "simple.prøp"
+      ]
+    }
+  ]
+}
