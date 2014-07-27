@@ -21,7 +21,6 @@ angular.module('schemaForm',deps);
 	var ObjectPath = {
 		parse: function(str){
 			if(typeof str !== 'string'){
-				console.log(str)
 				throw new TypeError('ObjectPath.parse must be passed a string');
 			}
 

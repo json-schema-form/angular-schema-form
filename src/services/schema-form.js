@@ -129,7 +129,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       angular.forEach(schema.properties,function(v,k){
         var path = options.path.slice();
         path.push(k);
-        if (options.ignore[path] !== true) {
+        if (options.ignore[ObjectPath.stringify(path)] !== true) {
           var required = schema.required && schema.required.indexOf(k) !== -1;
 
           var def = defaultFormDefinition(k,v,{
@@ -270,8 +270,6 @@ angular.module('schemaForm').provider('schemaForm',[function(){
 
       var lookup = stdForm.lookup;
       return postProcessFn(form.map(function(obj){
-
-        // console.log(obj)
 
         //handle the shortcut with just a name
         if (typeof obj === 'string') {
