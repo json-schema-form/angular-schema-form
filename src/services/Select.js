@@ -18,7 +18,7 @@
  * @returns {Any|undefined} returns the value at the end of the projection path
  *                          or undefined if there is none.
  */
-angular.module('schemaForm').factory('sfSelect', [function () {
+angular.module('schemaForm').factory('sfSelect', ['ObjectPath', function (ObjectPath) {
   var numRe = /^\d+$/;
 
   return function(projection, obj, valueToSet) {

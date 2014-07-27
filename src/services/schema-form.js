@@ -3,7 +3,7 @@
  * This service is not that useful outside of schema form directive
  * but makes the code more testable.
  */
-angular.module('schemaForm').provider('schemaForm',[function(){
+angular.module('schemaForm').provider('schemaForm',['ObjectPathProvider', function(ObjectPathProvider){
 
   var defaultFormDefinition = function(name,schema,options){
     var rules = defaults[schema.type];
@@ -45,7 +45,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f = stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'text';
-      options.lookup[ObjectPath.stringify(options.path)] = f;
+      options.lookup[ObjectPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
@@ -57,7 +57,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f = stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'number';
-      options.lookup[ObjectPath.stringify(options.path)] = f;
+      options.lookup[ObjectPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
@@ -67,7 +67,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f = stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'number';
-      options.lookup[ObjectPath.stringify(options.path)] = f;
+      options.lookup[ObjectPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
@@ -77,7 +77,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f = stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'checkbox';
-      options.lookup[ObjectPath.stringify(options.path)] = f;
+      options.lookup[ObjectPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
@@ -94,7 +94,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
           f.titleMap[name] = name;
         });
       }
-      options.lookup[ObjectPath.stringify(options.path)] = f;
+      options.lookup[ObjectPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
@@ -110,7 +110,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
           f.titleMap[name] = name;
         });
       }
-      options.lookup[ObjectPath.stringify(options.path)] = f;
+      options.lookup[ObjectPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
@@ -123,13 +123,13 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f   = stdFormObj(schema,options);
       f.type  = 'fieldset';
       f.items = [];
-      options.lookup[ObjectPath.stringify(options.path)] = f;
+      options.lookup[ObjectPathProvider.stringify(options.path)] = f;
 
       //recurse down into properties
       angular.forEach(schema.properties,function(v,k){
         var path = options.path.slice();
         path.push(k);
-        if (options.ignore[ObjectPath.stringify(path)] !== true) {
+        if (options.ignore[ObjectPathProvider.stringify(path)] !== true) {
           var required = schema.required && schema.required.indexOf(k) !== -1;
 
           var def = defaultFormDefinition(k,v,{
@@ -155,7 +155,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
       var f   = stdFormObj(schema,options);
       f.type  = 'array';
       f.key   = options.path;
-      options.lookup[ObjectPath.stringify(options.path)] = f;
+      options.lookup[ObjectPathProvider.stringify(options.path)] = f;
 
       var required = schema.required && schema.required.indexOf(options.path(options.path.length - 1)) !== -1;
 
@@ -291,9 +291,9 @@ angular.module('schemaForm').provider('schemaForm',[function(){
         //extend with std form from schema.
         if (obj.key) {
           if(typeof obj.key == 'string') {
-            obj.key = ObjectPath.parse(obj.key);
+            obj.key = ObjectPathProvider.parse(obj.key);
           }
-          var str = ObjectPath.stringify(obj.key);
+          var str = ObjectPathProvider.stringify(obj.key);
           if(lookup[str]){
             return angular.extend(lookup[str],obj);
           }
