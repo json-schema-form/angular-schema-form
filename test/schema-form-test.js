@@ -52,11 +52,12 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.be.equal(2);
-        tmpl.children().eq(0).is('div.form-group').should.be.true;
-        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model.name');
-        tmpl.children().eq(1).is('div.form-group').should.be.true;
-        tmpl.children().eq(1).children('select').length.should.equal(1);
+        tmpl.children().eq(0).is('bootstrap-decorator').should.be.true;
+        tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
+        tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
 
       });
     });
@@ -119,34 +120,35 @@ describe('Schema form',function(){
 
         scope.form = ["*"];
 
-        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-decorator="bootstrap-decorator"></form>');
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-decorator-name="bootstrap-decorator"></form>');
 
         $compile(tmpl)(scope);
         $rootScope.$apply();
 
         tmpl.children().length.should.be.equal(6);
-        tmpl.children().eq(0).is('div.form-group').should.be.true;
-        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model.name');
+        tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
 
-        tmpl.children().eq(1).is('div.checkbox').should.be.true;
-        tmpl.children().eq(1).find('input[type="checkbox"]').length.should.be.eq(1);
+        tmpl.children().eq(1).children().eq(0).is('div.checkbox').should.be.true;
+        tmpl.children().eq(1).children().eq(0).find('input[type="checkbox"]').length.should.be.eq(1);
 
-        tmpl.children().eq(2).is('div.form-group').should.be.true;
-        tmpl.children().eq(2).find('input[type="number"]').length.should.be.eq(1);
+        tmpl.children().eq(2).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(2).children().eq(0).find('input[type="number"]').length.should.be.eq(1);
 
-        tmpl.children().eq(3).is('div.form-group').should.be.true;
-        tmpl.children().eq(3).find('input[type="number"]').length.should.be.eq(1);
+        tmpl.children().eq(3).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(3).children().eq(0).find('input[type="number"]').length.should.be.eq(1);
 
-        tmpl.children().eq(4).is('div.form-group').should.be.true;
-        tmpl.children().eq(4).find('select').length.should.be.eq(1);
+        tmpl.children().eq(4).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(4).children().eq(0).find('select').length.should.be.eq(1);
 
-        tmpl.children().eq(5).is('fieldset').should.be.true;
-        tmpl.children().eq(5).children().eq(0).is('legend').should.be.true;
-        tmpl.children().eq(5).children().eq(3).is('fieldset').should.be.true;
-        tmpl.children().eq(5).children().eq(3).children().length.should.be.eq(3);
-        tmpl.children().eq(5).children().eq(3).find('input[ng-model="model.attributes.shoulders.left"]').length.should.be.eq(1);
-        tmpl.children().eq(5).children().eq(3).find('input[ng-model="model.attributes.shoulders.right"]').length.should.be.eq(1);
+        tmpl.children().eq(5).children().eq(0).is('fieldset').should.be.true;
+        tmpl.children().eq(5).children().eq(0).children().eq(0).is('legend').should.be.true;
+        tmpl.children().eq(5).children().eq(0).children().eq(3).is('sf-decorator').should.be.true;
+        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).is('fieldset').should.be.true;
+        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).children().length.should.be.eq(3);
+        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'left\']"]').length.should.be.eq(1);
+        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'right\']"]').length.should.be.eq(1);
 
       });
     });
@@ -166,12 +168,12 @@ describe('Schema form',function(){
 
         $compile(tmpl)(scope);
         $rootScope.$apply();
-
         tmpl.children().length.should.be.equal(2);
         tmpl.children().eq(0).is('input[type="text"]').should.be.true;
         tmpl.children().eq(0).attr('ng-model').should.be.equal('person.name');
-        tmpl.children().eq(1).is('div.form-group').should.be.true;
-        tmpl.children().eq(1).children('select').length.should.equal(1);
+        tmpl.children().eq(1).is('bootstrap-decorator').should.be.true;
+        tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
 
       });
     });
@@ -202,12 +204,12 @@ describe('Schema form',function(){
         $compile(tmpl)(scope);
         $rootScope.$apply();
         tmpl.children().length.should.be.equal(3);
-        tmpl.children().eq(0).is('div.form-group').should.be.true;
-        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(1).is('div.form-group').should.be.true;
-        tmpl.children().eq(1).children('select').length.should.equal(1);
-        tmpl.children().eq(2).find('input').is('input[type=submit]').should.be.true;
-        tmpl.children().eq(2).find('input').val().should.be.equal('Okidoki');
+        tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
+        tmpl.children().eq(2).children().eq(0).find('input').is('input[type=submit]').should.be.true;
+        tmpl.children().eq(2).children().eq(0).find('input').val().should.be.equal('Okidoki');
       });
     });
 
@@ -227,15 +229,15 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.be.equal(3);
-        tmpl.children().eq(0).is('div.form-group').should.be.true;
-        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(1).is('div.form-group').should.be.true;
-        tmpl.children().eq(1).children('select').length.should.equal(1);
-        tmpl.children().eq(2).find('button').length.should.be.equal(1);
-        tmpl.children().eq(2).find('button').text().should.be.equal('Okidoki');
+        tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
+        tmpl.children().eq(2).children().eq(0).find('button').length.should.be.equal(1);
+        tmpl.children().eq(2).children().eq(0).find('button').text().should.be.equal('Okidoki');
 
         scope.form[1].onClick.should.not.have.beenCalled;
-        tmpl.children().eq(2).find('button').click();
+        tmpl.children().eq(2).children().eq(0).find('button').click();
         scope.form[1].onClick.should.have.beenCalledOnce;
       });
 
@@ -313,12 +315,12 @@ describe('Schema form',function(){
         $compile(tmpl)(scope);
         $rootScope.$apply();
         tmpl.children().length.should.be.equal(2);
-        tmpl.children().eq(0).is('div.form-group').should.be.true;
-        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
-        tmpl.children().eq(1).is('div.form-group').should.be.true;
-        tmpl.children().eq(1).children('input').length.should.equal(1);
-        expect(tmpl.children().eq(1).children('input').attr('disabled')).to.be.undefined;
+        tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
+        tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children().eq(0).children('input').attr('disabled')).to.be.undefined;
       });
     });
 
@@ -344,12 +346,12 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.be.equal(2);
-        tmpl.children().eq(0).is('div.form-group').should.be.true;
-        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
-        tmpl.children().eq(1).is('div.form-group').should.be.true;
-        tmpl.children().eq(1).children('input').length.should.equal(1);
-        expect(tmpl.children().eq(1).children('input').attr('disabled')).to.be.undefined;
+        tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
+        tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children().eq(0).children('input').attr('disabled')).to.be.undefined;
       });
     });
 
@@ -378,12 +380,12 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.be.equal(2);
-        tmpl.children().eq(0).is('div.form-group').should.be.true;
-        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
-        tmpl.children().eq(1).is('div.form-group').should.be.true;
-        tmpl.children().eq(1).children('input').length.should.equal(1);
-        expect(tmpl.children().eq(1).children('input').attr('disabled')).to.be.undefined;
+        tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
+        tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children().eq(0).children('input').attr('disabled')).to.be.undefined;
       });
     });
 
@@ -461,13 +463,13 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.be.equal(2);
-        tmpl.children().eq(0).is('div.form-group').should.be.true;
-        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(0).find('input').attr('required').should.be.equal('required');
-        tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model.name');
-        tmpl.children().eq(1).is('div.form-group').should.be.true;
-        tmpl.children().eq(1).children('input').length.should.equal(1);
-        expect(tmpl.children().eq(1).children('input').attr('required')).to.be.undefined;
+        tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').attr('required').should.be.equal('required');
+        tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
+        tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children().eq(0).children('input').attr('required')).to.be.undefined;
       });
     });
 
@@ -493,13 +495,13 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.be.equal(2);
-        tmpl.children().eq(0).is('div.form-group').should.be.true;
-        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(0).find('input').attr('required').should.be.equal('required');
-        tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model.name');
-        tmpl.children().eq(1).is('div.form-group').should.be.true;
-        tmpl.children().eq(1).children('input').length.should.equal(1);
-        expect(tmpl.children().eq(1).children('input').attr('required')).to.be.undefined;
+        tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').attr('required').should.be.equal('required');
+        tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
+        tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children().eq(0).children('input').attr('required')).to.be.undefined;
       });
     });
 
@@ -528,13 +530,13 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.be.equal(2);
-        tmpl.children().eq(0).is('div.form-group').should.be.true;
-        tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(0).find('input').attr('required').should.be.equal('required');
-        tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model.name');
-        tmpl.children().eq(1).is('div.form-group').should.be.true;
-        tmpl.children().eq(1).children('input').length.should.equal(1);
-        expect(tmpl.children().eq(1).children('input').attr('required')).to.be.undefined;
+        tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input').attr('required').should.be.equal('required');
+        tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
+        tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+        tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
+        expect(tmpl.children().eq(1).children().eq(0).children('input').attr('required')).to.be.undefined;
       });
     });
 
@@ -658,8 +660,8 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.be.equal(2);
-        tmpl.children().eq(0).find('label').hasClass('ng-hide').should.be.true;
-        tmpl.children().eq(1).find('label').hasClass('ng-hide').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('label').hasClass('ng-hide').should.be.true;
+        tmpl.children().eq(1).children().eq(0).find('label').hasClass('ng-hide').should.be.true;
       });
     });
 
@@ -694,7 +696,7 @@ describe('Schema form',function(){
 
         //TODO: more asserts
         tmpl.children().length.should.be.equal(2);
-        tmpl.children().eq(0).find('input[type=checkbox]').length.should.be.eq(2);
+        tmpl.children().eq(0).children().eq(0).find('input[type=checkbox]').length.should.be.eq(2);
       });
     });
 
@@ -764,10 +766,10 @@ describe('Schema form',function(){
         //TODO: more asserts
 
         tmpl.children().length.should.be.equal(2);
-        tmpl.children().eq(0).find('input[type=radio]').length.should.be.eq(2);
-        tmpl.children().eq(0).find('.radio').length.should.be.eq(2);
-        tmpl.children().eq(1).find('input[type=radio]').length.should.be.eq(2);
-        tmpl.children().eq(1).find('.btn').length.should.be.eq(2);
+        tmpl.children().eq(0).children().eq(0).find('input[type=radio]').length.should.be.eq(2);
+        tmpl.children().eq(0).children().eq(0).find('.radio').length.should.be.eq(2);
+        tmpl.children().eq(1).children().eq(0).find('input[type=radio]').length.should.be.eq(2);
+        tmpl.children().eq(1).children().eq(0).find('.btn').length.should.be.eq(2);
 
       });
     });
@@ -1003,9 +1005,9 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.be.equal(1);
-        tmpl.children().eq(0).is('div').should.be.true;
-        tmpl.children().eq(0).hasClass('btn-group').should.be.false;
-        tmpl.children().eq(0).children().length.should.be.eq(2);
+        tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
+        tmpl.children().eq(0).children().eq(0).hasClass('btn-group').should.be.false;
+        tmpl.children().eq(0).children().eq(0).children().length.should.be.eq(2);
       });
     });
 
@@ -1037,16 +1039,17 @@ describe('Schema form',function(){
         $compile(tmpl)(scope);
         $rootScope.$apply();
 
-        tmpl.children().length.should.be.equal(0);
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).children().length.should.be.equal(0);
 
         //Do a setTimeout so we kan do another $apply
         setTimeout(function(){
           scope.person.show = true;
           scope.$apply();
           tmpl.children().length.should.be.equal(1);
-          tmpl.children().eq(0).is('div').should.be.true;
-          tmpl.children().eq(0).hasClass('btn-group').should.be.false;
-          tmpl.children().eq(0).children().length.should.be.eq(2);
+          tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
+          tmpl.children().eq(0).children().eq(0).hasClass('btn-group').should.be.false;
+          tmpl.children().eq(0).children().eq(0).children().length.should.be.eq(2);
           done();
         },10);
 
@@ -1084,11 +1087,11 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.be.equal(1);
-        tmpl.children().eq(0).is('div').should.be.true;
-        tmpl.children().eq(0).hasClass('btn-group').should.be.true;
-        tmpl.children().eq(0).children().length.should.be.eq(2);
-        tmpl.children().eq(0).children().eq(0).is('input').should.be.true;
-        tmpl.children().eq(0).children().eq(1).is('button').should.be.true;
+        tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
+        tmpl.children().eq(0).children().eq(0).hasClass('btn-group').should.be.true;
+        tmpl.children().eq(0).children().eq(0).children().length.should.be.eq(2);
+        tmpl.children().eq(0).children().eq(0).children().eq(0).is('input').should.be.true;
+        tmpl.children().eq(0).children().eq(0).children().eq(1).is('button').should.be.true;
       });
     });
 	
@@ -1182,10 +1185,10 @@ describe('Schema form',function(){
         $compile(tmpl)(scope);
         $rootScope.$apply();
         tmpl.children().length.should.be.equal(1);
-        tmpl.children().eq(0).is('div').should.be.true;
-        tmpl.children().eq(0).find('input[pick-a-date]').length.should.ok;
-        tmpl.children().eq(0).find('input[pick-a-date]').attr('max-date').should.be.ok;
-        tmpl.children().eq(0).find('input[pick-a-date]').attr('min-date').should.be.ok;
+        tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('input[pick-a-date]').length.should.ok;
+        tmpl.children().eq(0).children().eq(0).find('input[pick-a-date]').attr('max-date').should.be.ok;
+        tmpl.children().eq(0).children().eq(0).find('input[pick-a-date]').attr('min-date').should.be.ok;
 
         $.fn.pickadate.should.have.beenCalled;
 
@@ -1227,9 +1230,9 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.eq(2);
-        tmpl.children().eq(0).is('div').should.be.true;
-        tmpl.children().eq(0).children().length.should.eq(1);
-        tmpl.children().eq(0).children().html().should.be.eq("Yo Ninja!");
+        tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
+        tmpl.children().eq(0).children().eq(0).children().length.should.eq(1);
+        tmpl.children().eq(0).children().eq(0).children().html().should.be.eq("Yo Ninja!");
 
       });
     });
@@ -1278,8 +1281,8 @@ describe('Schema form',function(){
         $rootScope.$apply();
 
         tmpl.children().length.should.eq(1);
-        var tabs  = tmpl.children().children().eq(0);
-        var panes = tmpl.children().children().eq(1);
+        var tabs  = tmpl.children().children().eq(0).children().eq(0);
+        var panes = tmpl.children().children().eq(0).children().eq(1);
 
         tabs.is('ul').should.be.true;
         tabs.children().length.should.be.eq(2);
@@ -1367,19 +1370,19 @@ describe('Schema form',function(){
 
         //TODO: more asserts
         tmpl.children().length.should.be.equal(3);
-        tmpl.children().eq(0).find('input').length.should.be.eq(1);
-        tmpl.children().eq(0).find('button').length.should.be.eq(2);
-        tmpl.children().eq(0).find('button').eq(1).text().trim().should.be.eq('Add');
+        tmpl.children().eq(0).children().eq(0).find('input').length.should.be.eq(1);
+        tmpl.children().eq(0).children().eq(0).find('button').length.should.be.eq(2);
+        tmpl.children().eq(0).children().eq(0).find('button').eq(1).text().trim().should.be.eq('Add');
 
-        tmpl.children().eq(1).find('input').length.should.be.eq(1);
-        tmpl.children().eq(1).find('fieldset').length.should.be.eq(0);
-        tmpl.children().eq(1).find('button').length.should.be.eq(2);
-        tmpl.children().eq(1).find('button').eq(1).text().trim().should.be.eq('Add');
+        tmpl.children().eq(1).children().eq(0).find('input').length.should.be.eq(1);
+        tmpl.children().eq(1).children().eq(0).find('fieldset').length.should.be.eq(0);
+        tmpl.children().eq(1).children().eq(0).find('button').length.should.be.eq(2);
+        tmpl.children().eq(1).children().eq(0).find('button').eq(1).text().trim().should.be.eq('Add');
 
-        tmpl.children().eq(2).find('input').length.should.be.eq(2);
-        tmpl.children().eq(2).find('fieldset').length.should.be.eq(1);
-        tmpl.children().eq(2).find('button').length.should.be.eq(4);
-        tmpl.children().eq(2).find('button').eq(3).text().trim().should.be.eq('Add');
+        tmpl.children().eq(2).children().eq(0).find('input').length.should.be.eq(2);
+        tmpl.children().eq(2).children().eq(0).find('fieldset').length.should.be.eq(1);
+        tmpl.children().eq(2).children().eq(0).find('button').length.should.be.eq(4);
+        tmpl.children().eq(2).children().eq(0).find('button').eq(3).text().trim().should.be.eq('Add');
 
 
       });
@@ -1519,20 +1522,20 @@ describe('Schema form',function(){
 
         //TODO: more asserts
         tmpl.children().length.should.be.equal(2);
-        tmpl.children().eq(0).find('input').length.should.be.eq(3);
-        tmpl.children().eq(0).find('button').length.should.be.eq(3);
-        tmpl.children().eq(0).find('button').eq(0).text().trim().should.be.eq('Remove');
-        tmpl.children().eq(0).is('div').should.be.true;
-        tmpl.children().eq(0).attr('sf-array').should.be.thruthy;
-        tmpl.children().eq(0).find('.tabs-left').length.should.be.eq(1);
+        tmpl.children().eq(0).children().eq(0).find('input').length.should.be.eq(3);
+        tmpl.children().eq(0).children().eq(0).find('button').length.should.be.eq(3);
+        tmpl.children().eq(0).children().eq(0).find('button').eq(0).text().trim().should.be.eq('Remove');
+        tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
+        tmpl.children().eq(0).children().eq(0).attr('sf-array').should.be.thruthy;
+        tmpl.children().eq(0).children().eq(0).find('.tabs-left').length.should.be.eq(1);
 
-        tmpl.children().eq(1).find('input').length.should.be.eq(1);
-        tmpl.children().eq(1).find('fieldset').length.should.be.eq(0);
-        tmpl.children().eq(1).find('button').length.should.be.eq(1);
-        tmpl.children().eq(1).find('button').text().trim().should.be.eq('Remove');
-        tmpl.children().eq(1).attr('sf-array').should.be.thruthy;
-        tmpl.children().eq(1).find('.tabs-left').length.should.be.eq(0);
-        tmpl.children().eq(1).find('.tabs-right').length.should.be.eq(1);
+        tmpl.children().eq(1).children().eq(0).find('input').length.should.be.eq(1);
+        tmpl.children().eq(1).children().eq(0).find('fieldset').length.should.be.eq(0);
+        tmpl.children().eq(1).children().eq(0).find('button').length.should.be.eq(1);
+        tmpl.children().eq(1).children().eq(0).find('button').text().trim().should.be.eq('Remove');
+        tmpl.children().eq(1).children().eq(0).attr('sf-array').should.be.thruthy;
+        tmpl.children().eq(1).children().eq(0).find('.tabs-left').length.should.be.eq(0);
+        tmpl.children().eq(1).children().eq(0).find('.tabs-right').length.should.be.eq(1);
 
       });
     });
@@ -1660,7 +1663,7 @@ describe('Schema form',function(){
 
         var form = [
           {
-            key: "name",
+            key: ["name"],
             type: "text",
             title: "Name",
             description: "Gimme yea name lad",
@@ -1672,7 +1675,7 @@ describe('Schema form',function(){
           },
           {
             title: 'Choose',
-            key: "gender",
+            key: ["gender"],
             type: "select",
             titleMap: {
               "undefined": "undefined",
@@ -1703,14 +1706,14 @@ describe('Schema form',function(){
           {
               type: "fieldset",
               items: [
-                { key: "attributes.eyecolor", required: true, type: 'text', title: "Eye color", schema: { "type": "string", "title": "Eye color" }},
-                { key: "attributes.haircolor", type: 'text', title: "Hair color", schema: { "type": "string", "title": "Hair color" } },
+                { key: ["attributes","eyecolor"], required: true, type: 'text', title: "Eye color", schema: { "type": "string", "title": "Eye color" }},
+                { key: ["attributes","haircolor"], type: 'text', title: "Hair color", schema: { "type": "string", "title": "Hair color" } },
                 {
                   type: "fieldset",
                   title: "Shoulders",
                   items: [
-                    { key: "attributes.shoulders.left",  type: 'text', schema:{ "type": "string" } },
-                    { key: "attributes.shoulders.right", type: 'text', schema: { "type": "string" }},
+                    { key: ["attributes","shoulders","left"],  type: 'text', schema:{ "type": "string" } },
+                    { key: ["attributes","shoulders","right"], type: 'text', schema: { "type": "string" }},
                   ],
                   schema: {
                     "type": "object",
@@ -1922,8 +1925,10 @@ describe('Schema form',function(){
         $compile(template)($rootScope);
         $rootScope.$apply();
         templateWithWrap.children().length.should.equal(1);
-        templateWithWrap.children().is('div').should.be.true;
-        templateWithWrap.children().hasClass('yes').should.be.true;
+        templateWithWrap.children().is('foobar').should.be.true;
+        templateWithWrap.children().eq(0).children().length.should.equal(1);
+        templateWithWrap.children().eq(0).children().is('div').should.be.true;
+        templateWithWrap.children().eq(0).children().hasClass('yes').should.be.true;
 
       });
     });

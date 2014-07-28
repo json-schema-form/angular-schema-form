@@ -35,7 +35,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
 
         return {
           restrict: 'AE',
-          replace: true,
+          replace: false,
           transclude: false,
           scope: true,
           require: '?^sfSchema',

@@ -1,4 +1,4 @@
-angular.module('ng').directive('pickADate', function () {
+angular.module('schemaForm').directive('pickADate', function () {
 
   //String dates for min and max is not supported
   //https://github.com/amsul/pickadate.js/issues/439

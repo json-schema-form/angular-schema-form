@@ -52,6 +52,7 @@ gulp.task('bootstrap-datepicker', function() {
           .pipe(concat('bootstrap-datepicker.min.js'))
           .pipe(uglify())
           .pipe(gulp.dest("./dist/"));
+          
 
 });
 
@@ -64,7 +65,7 @@ gulp.task('minify',function(){
     './src/directives/*.js'
   ])
   .pipe(concat('schema-form.min.js'))
-  // .pipe(uglify())
+  .pipe(uglify())
   .pipe(gulp.dest('./dist/'));
 });
 

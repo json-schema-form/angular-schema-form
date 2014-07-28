@@ -18,6 +18,7 @@ module.exports = function(config) {
       'test/lib/angular.js',
       'test/lib/angular-mocks.js',
       'test/lib/tv4.js',
+      'test/lib/objectpath.js',
       'src/module.js',
       'src/services/*.js',
       'src/directives/*.js',
