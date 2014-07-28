@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="test">
+<html>
 <head>
   <meta charset="utf-8">
   <title>Bootstrap Schema Form example</title>
@@ -28,14 +28,15 @@
   .schema {  height: 800px;  }
   </style>
 </head>
-<body ng-controller="TestCtrl">
+<body ng-app="test" ng-controller="TestCtrl">
 
 <div class="col-md-12">
   <h1>Schema Form Example</h1>
   <div class="row">
     <div class="col-sm-4">
       <h3>The Generated Form</h3>
-      <form name="ngform" sf-model="modelData" sf-form="form" sf-schema="schema" sf-decorator="{{decorator}}">
+      <form name="ngform" sf-model="modelData" sf-form="form" sf-schema="schema">
+      <div sf-decorator="{{decorator}}"></div>
       </form>
       <h3>Model</h3>
       <pre ng-cloak>{{pretty()}}</pre>
@@ -61,26 +62,27 @@
 <script type="text/javascript" src="http://cdn.jsdelivr.net/g/jquery.ui@1.10"></script>
 <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
 <script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+
 <script type="text/javascript" src="../bower_components/angular/angular.js"></script>
-<script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
+
 <script type="text/javascript" src="../bower_components/angular-ui-sortable/sortable.js"></script>
 <script type="text/javascript" src="../bower_components/angular-ui-ace/ui-ace.js"></script>
 <script type="text/javascript" src="../bower_components/objectpath/lib/ObjectPath.js"></script>
 <script type="text/javascript" src="../bower_components/pickadate/lib/picker.js"></script>
 <script type="text/javascript" src="../bower_components/pickadate/lib/picker.date.js"></script>
 <script type="text/javascript" src="../bower_components/pickadate/lib/translations/sv_SE.js"></script>
+
 <script type="text/javascript" src="../dist/schema-form.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap-decorator.min.js"></script>
-<script type="text/javascript" src="../dist/bootstrap-datepicker.min.js"></script>
+<!-- <script type="text/javascript" src="../dist/bootstrap-datepicker.min.js"></script> -->
 <script type="text/javascript">
 
-angular.module('test',['schemaForm','ui.ace','ObjectPath']);
-
-function TestCtrl($scope,$http){
+angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($scope,$http){
 
   $scope.tests = [
-    { name: "Complex Key Support", data: 'data/keys.json' },
     { name: "Simple", data: 'data/simple.json' },
+    { name: "Complex Key Support", data: 'data/complex-keys.json' },
     { name: "Array", data: 'data/array.json' },
     { name: "Tab Array", data: 'data/tabarray.json' },
     { name: "Kitchen Sink", data: 'data/sink.json' }
@@ -144,7 +146,7 @@ function TestCtrl($scope,$http){
     alert(msg);
   };
 
-}
+});
 
 </script>
 </body>

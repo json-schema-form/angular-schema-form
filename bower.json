@@ -30,10 +30,10 @@
     "coverage"
   ],
   "dependencies": {
-    "angular": "~1.2.18",
+    "angular": "~1.3.0",
     "tv4": "~1.0.15",
     "pickadate": "~3.5.2",
-    "angular-sanitize": "~1.2.18",
+    "angular-sanitize": "~1.3.0",
     "bootstrap-vertical-tabs": "~1.1.0",
     "objectpath": "~1.0.2"
   },

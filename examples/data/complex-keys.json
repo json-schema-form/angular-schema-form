@@ -4,14 +4,13 @@
     "title": "Complex Key Support",
     "properties": {
       "a[\"b\"].c": {
-        "type": "text",
-        "title": "Paths do not overflow their keys."
+        "type": "text"
       },
       "simple": {
         "type": "object",
         "properties": {
           "prøp": {
-            "title": "Property",
+            "title": "UTF8 in both dot and bracket notation",
             "type": "string"
           }
         }
