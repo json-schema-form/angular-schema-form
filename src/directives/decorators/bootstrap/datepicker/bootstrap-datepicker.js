@@ -1,13 +1,13 @@
 angular.module('schemaForm').config(
-       ['schemaFormProvider','schemaFormDecoratorsProvider','ObjectPathProvider',
-function(schemaFormProvider,  schemaFormDecoratorsProvider, ObjectPathProvider){
+       ['schemaFormProvider','schemaFormDecoratorsProvider','sfPathProvider',
+function(schemaFormProvider,  schemaFormDecoratorsProvider, sfPathProvider){
 
   var datepicker = function(name,schema,options) {
     if (schema.type === 'string' && schema.format == "date") {
       var f = schemaFormProvider.stdFormObj(schema,options);
       f.key  = options.path;
       f.type = 'datepicker';
-      options.lookup[ObjectPathProvider.stringify(options.path)] = f;
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
     }
   };

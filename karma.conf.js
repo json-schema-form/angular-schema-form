@@ -20,6 +20,7 @@ module.exports = function(config) {
       'test/lib/tv4.js',
       'test/lib/objectpath.js',
       'src/module.js',
+      'src/sfPath.js',
       'src/services/*.js',
       'src/directives/*.js',
       'src/directives/decorators/bootstrap/*.js',

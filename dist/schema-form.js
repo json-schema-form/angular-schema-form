@@ -1,0 +1,1123 @@
+var deps = ['ObjectPath'];
+try {
+  //This throws an expection if module does not exist.
+  angular.module('ngSanitize');
+  deps.push('ngSanitize');
+} catch (e) {}
+
+try {
+  //This throws an expection if module does not exist.
+  angular.module('ui.sortable');
+  deps.push('ui.sortable');
+} catch (e) {}
+
+angular.module('schemaForm',deps);
+
+angular.module('schemaForm').provider('sfPath',['ObjectPathProvider',function(ObjectPathProvider){
+	var ObjectPath = { parse: ObjectPathProvider.parse };
+
+	// if we're on Angular 1.2.x, we need to continue using dot notation
+	if(angular.version.major === 1 && angular.version.minor < 3) {
+		ObjectPath.stringify = function(arr) {
+			return Array.isArray(arr) ? arr.join('.') : arr.toString();
+		};
+	} else {
+		ObjectPath.stringify = ObjectPathProvider.stringify;
+	}
+
+	// we want this to use whichever stringify method is defined above, so we have to copy the code here
+	ObjectPath.normalize = function(data, quote){ return ObjectPath.stringify(Array.isArray(data) ? data : ObjectPath.parse(data), quote); }
+
+	this.parse = ObjectPath.parse;
+	this.stringify = ObjectPath.stringify;
+	this.normalize = ObjectPath.normalize;
+	this.$get = function(){
+		return ObjectPath;
+	};
+}]);
+/**
+ * @ngdoc service
+ * @name sfSelect
+ * @kind function
+ *
+ * @description
+ * Utility method to access deep properties without
+ * throwing errors when things are not defined.
+ * Can also set a value in a deep structure, creating objects when missing
+ * ex.
+ * var foo = Select('address.contact.name',obj)
+ * Select('address.contact.name',obj,'Leeroy')
+ *
+ * @param {string} projection A dot path to the property you want to get/set
+ * @param {object} obj   (optional) The object to project on, defaults to 'this'
+ * @param {Any}    value (opional)  The value to set, if parts of the path of
+ *                 the projection is missing empty objects will be created.
+ * @returns {Any|undefined} returns the value at the end of the projection path
+ *                          or undefined if there is none.
+ */
+angular.module('schemaForm').factory('sfSelect', ['sfPath', function (sfPath) {
+  var numRe = /^\d+$/;
+
+  return function(projection, obj, valueToSet) {
+    if (!obj) {
+      obj = this;
+    }
+    //Support [] array syntax
+    var parts = typeof projection === 'string' ? sfPath.parse(projection) : projection;
+
+    if (typeof valueToSet !== 'undefined' && parts.length === 1) {
+      //special case, just setting one variable
+      obj[parts[0]] = valueToSet;
+      return obj;
+    }
+
+    if (typeof valueToSet !== 'undefined' &&
+        typeof obj[parts[0]] === 'undefined') {
+       // We need to look ahead to check if array is appropriate
+      obj[parts[0]] = parts.length > 2 && numRe.test(parts[1]) ? [] : {};
+    }
+
+    var value = obj[parts[0]];
+    for (var i = 1; i < parts.length; i++) {
+      // Special case: We allow JSON Form syntax for arrays using empty brackets
+      // These will of course not work here so we exit if they are found.
+      if (parts[i] === '') {
+        return undefined;
+      }
+      if (typeof valueToSet !== 'undefined') {
+        if (i === parts.length - 1) {
+          //last step. Let's set the value
+          value[parts[i]] = valueToSet;
+          return valueToSet;
+        } else {
+          // Make sure to create new objects on the way if they are not there.
+          // We need to look ahead to check if array is appropriate
+          var tmp = value[parts[i]];
+          if (typeof tmp === 'undefined' || tmp === null) {
+            tmp = numRe.test(parts[i + 1]) ? [] : {};
+            value[parts[i]] = tmp;
+          }
+          value = tmp;
+        }
+      } else if (value) {
+        //Just get nex value.
+        value = value[parts[i]];
+      }
+    }
+    return value;
+  };
+}]);
+
+angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider','sfPathProvider',function($compileProvider, sfPathProvider){
+  var defaultDecorator = '';
+  var directives = {};
+
+  var templateUrl = function(name,form) {
+    //schemaDecorator is alias for whatever is set as default
+    if (name === 'sfDecorator') {
+      name = defaultDecorator;
+    }
+
+    var directive = directives[name];
+
+    //rules first
+    var rules = directive.rules;
+    for (var i = 0; i< rules.length; i++) {
+      var res = rules[i](form);
+      if (res) {
+        return res;
+      }
+    }
+
+    //then check mapping
+    if (directive.mappings[form.type]) {
+      return directive.mappings[form.type];
+    }
+
+    //try default
+    return directive.mappings['default'];
+  };
+
+
+  var createDirective = function(name){
+    $compileProvider.directive(name,['$parse','$compile','$http','$templateCache',
+      function($parse,  $compile,  $http,  $templateCache){
+
+        return {
+          restrict: 'AE',
+          replace: false,
+          transclude: false,
+          scope: true,
+          require: '?^sfSchema',
+          link: function(scope,element,attrs,sfSchema) {
+            //rebind our part of the form to the scope.
+            var once = scope.$watch(attrs.form,function(form){
+
+              if (form) {
+                scope.form  = form;
+
+                //ok let's replace that template!
+                //We do this manually since we need to bind ng-model properly and also
+                //for fieldsets to recurse properly.
+                var url = templateUrl(name,form);
+                $http.get(url,{ cache: $templateCache }).then(function(res){
+                  var key = form.key ? sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
+                  var template = res.data.replace(/\$\$value\$\$/g,'model'+key);
+                  element.html(template);
+                  $compile(element.contents())(scope);
+                });
+                once();
+              }
+            });
+
+            //Keep error prone logic from the template
+            scope.showTitle = function() {
+              return scope.form && scope.form.notitle !== true && scope.form.title;
+            };
+
+            scope.listToCheckboxValues = function(list){
+              var values = {};
+              angular.forEach(list,function(v){
+                values[v] = true;
+              });
+              return values;
+            };
+
+            scope.checkboxValuesToList = function(values){
+              var lst = [];
+              angular.forEach(values,function(v,k){
+                if (v) {
+                  lst.push(k);
+                }
+              });
+              return lst;
+            };
+
+            scope.buttonClick = function($event,form) {
+              if (angular.isFunction(form.onClick)) {
+                form.onClick($event,form);
+              } else if (angular.isString(form.onClick)) {
+                if (sfSchema) {
+                  //evaluating in scope outside of sfSchemas isolated scope
+                  sfSchema.evalInParentScope(form.onClick,{'$event':$event,form:form});
+                } else {
+                  scope.$eval(form.onClick,{'$event':$event,form:form});
+                }
+              }
+            };
+
+            /**
+             * Evaluate an expression, i.e. scope.$eval
+             * but do it in sfSchemas parent scope sf-schema directive is used
+             * @param {string} expression
+             * @param {Object} locals (optional)
+             * @return {Any} the result of the expression
+             */
+            scope.evalExpr = function(expression,locals) {
+              if (sfSchema) {
+                //evaluating in scope outside of sfSchemas isolated scope
+                return sfSchema.evalInParentScope(expression,locals);
+              }
+
+              return scope.$eval(expression,locals);
+            };
+
+            /**
+             * Evaluate an expression, i.e. scope.$eval
+             * in this decorators scope
+             * @param {string} expression
+             * @param {Object} locals (optional)
+             * @return {Any} the result of the expression
+             */
+            scope.evalInScope = function(expression,locals) {
+                if (expression) {
+                  return scope.$eval(expression,locals);
+                }
+            };
+
+            /**
+             * Error message handler
+             * An error can either be a schema validation message or a angular js validtion
+             * error (i.e. required)
+             */
+            scope.errorMessage = function(schemaError) {
+              //User has supplied validation messages
+              if (scope.form.validationMessage) {
+                if (schemaError) {
+                  if (angular.isString(scope.form.validationMessage)) {
+                    return scope.form.validationMessage;
+                  }
+
+                  return scope.form.validationMessage[schemaError.code] || scope.form.validationMessage['default'];
+                } else {
+                  return scope.form.validationMessage.required || scope.form.validationMessage['default'] || scope.form.validationMessage;
+                }
+              }
+
+              //No user supplied validation message.
+              if (schemaError) {
+                return schemaError.message; //use tv4.js validation message
+              }
+
+              //Otherwise we only use required so it must be it.
+              return "Required";
+
+            };
+          }
+        };
+      }]);
+  };
+
+  var createManualDirective = function(type,templateUrl,transclude) {
+    transclude = angular.isDefined(transclude)? transclude : false;
+    $compileProvider.directive('sf'+angular.uppercase(type[0])+type.substr(1), function(){
+      return {
+        restrict: "EAC",
+        scope: true,
+        replace: true,
+        transclude: transclude,
+        template: '<sf-decorator form="form"></sf-decorator>',
+        link: function(scope,element,attrs) {
+          var watchThis = {
+            'items': 'c',
+            'titleMap': 'c',
+            'schema': 'c'
+          };
+          var form = { type: type };
+          var once = true;
+          angular.forEach(attrs,function(value,name){
+            if (name[0] !== '$' && name.indexOf('ng') !== 0 && name !== 'sfField') {
+
+              var updateForm = function(val){
+                if (angular.isDefined(val) && val !== form[name]) {
+                  form[name] = val;
+
+                  //when we have type, and if specified key we apply it on scope.
+                  if (once && form.type && (form.key || angular.isUndefined(attrs.key))) {
+                    scope.form = form;
+                    once = false;
+                  }
+                }
+              };
+
+              if (name === 'model') {
+                //"model" is bound to scope under the name "model" since this is what the decorators
+                //know and love.
+                scope.$watch(value,function(val){
+                  if (val && scope.model !== val) {
+                    scope.model = val;
+                  }
+                });
+              } else if (watchThis[name] === 'c') {
+                //watch collection
+                scope.$watchCollection(value,updateForm);
+              } else {
+                //$observe
+                attrs.$observe(name,updateForm);
+              }
+            }
+          });
+        }
+      };
+    });
+  };
+
+
+
+  /**
+   * Create a decorator directive and its sibling "manual" use directives.
+   * The directive can be used to create form fields or other form entities.
+   * It can be used in conjunction with <schema-form> directive in which case the decorator is
+   * given it's configuration via a the "form" attribute.
+   *
+   * ex. Basic usage
+   *   <sf-decorator form="myform"></sf-decorator>
+   **
+   * @param {string} name directive name (CamelCased)
+   * @param {Object} mappings, an object that maps "type" => "templateUrl"
+   * @param {Array}  rules (optional) a list of functions, function(form){}, that are each tried in turn,
+   *                 if they return a string then that is used as the templateUrl. Rules come before
+   *                 mappings.
+   */
+  this.createDecorator = function(name,mappings,rules){
+    directives[name] = {
+      mappings: mappings || {},
+      rules:    rules    || []
+    };
+
+    if (!directives[defaultDecorator]) {
+      defaultDecorator = name;
+    }
+    createDirective(name);
+  };
+
+  /**
+   * Creates a directive of a decorator
+   * Usable when you want to use the decorators without using <schema-form> directive.
+   * Specifically when you need to reuse styling.
+   *
+   * ex. createDirective('text','...')
+   *  <sf-text title="foobar" model="person" key="name" schema="schema"></sf-text>
+   *
+   * @param {string}  type The type of the directive, resulting directive will have sf- prefixed
+   * @param {string}  templateUrl
+   * @param {boolean} transclude (optional) sets transclude option of directive, defaults to false.
+   */
+  this.createDirective = createManualDirective;
+
+  /**
+   * Same as createDirective, but takes an object where key is 'type' and value is 'templateUrl'
+   * Useful for batching.
+   * @param {Object} mappings
+   */
+  this.createDirectives = function(mappings) {
+    angular.forEach(mappings,function(url,type){
+      createManualDirective(type,url);
+    });
+  };
+
+  /**
+   * Getter for directive mappings
+   * Can be used to override a mapping or add a rule
+   * @param {string} name (optional) defaults to defaultDecorator
+   * @return {Object} rules and mappings { rules: [],mappings: {}}
+   */
+  this.directive = function(name) {
+    name = name || defaultDecorator;
+    return directives[name];
+  };
+
+  /**
+   * Adds a mapping to an existing decorator.
+   * @param {String} name Decorator name
+   * @param {String} type Form type for the mapping
+   * @param {String} url  The template url
+   */
+  this.addMapping = function(name,type,url) {
+    if (directives[name]) {
+      directives[name].mappings[type] = url;
+    }
+  };
+
+
+  //Service is just a getter for directive mappings and rules
+  this.$get = function(){
+    return {
+      directive: function(name) {
+        return directives[name];
+      },
+      defaultDecorator: defaultDecorator
+    };
+  };
+
+
+  //Create a default directive
+  createDirective('sfDecorator');
+
+}]);
+
+/**
+ * Schema form service.
+ * This service is not that useful outside of schema form directive
+ * but makes the code more testable.
+ */
+angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(sfPathProvider){
+
+  var defaultFormDefinition = function(name,schema,options){
+    var rules = defaults[schema.type];
+    if (rules) {
+      var def;
+      for (var i=0;i<rules.length; i++) {
+        def = rules[i](name,schema,options);
+        //first handler in list that actually returns something is our handler!
+        if (def) {
+          return def;
+        }
+      }
+    }
+  };
+
+  //Creates a form object with all common properties
+  var stdFormObj = function(schema,options) {
+    var f = {};
+    if (schema.title) f.title = schema.title;
+    if (schema.description) f.description = schema.description;
+    if (options.required === true || schema.required === true) f.required = true;
+    if (schema.default !== undefined) f.default = schema.default;
+    if (schema.maxLength) f.maxlength = schema.maxLength;
+    if (schema.minLength) f.minlength = schema.maxLength;
+    if (schema.readOnly || schema.readonly)  f.readonly  = schema.readOnly || schema.readonly;
+    if (schema.minimum) f.minimum = schema.minimum + (schema.exclusiveMinimum?1:0);
+    if (schema.maximum) f.maximum = schema.maximum - (schema.exclusiveMaximum?1:0);
+
+    //Non standard attributes
+    if (schema.validationMessage) f.validationMessage = schema.validationMessage;
+    if (schema.enumNames) f.titleMap = schema.enumNames;
+    f.schema = schema;
+    return f;
+  };
+
+
+  var text = function(name,schema,options) {
+    if (schema.type === 'string' && !schema.enum) {
+      var f = stdFormObj(schema,options);
+      f.key  = options.path;
+      f.type = 'text';
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+      return f;
+    }
+  };
+
+  //default in json form for number and integer is a text field
+  //input type="number" would be more suitable don't ya think?
+  var number = function(name,schema,options) {
+    if (schema.type === 'number') {
+      var f = stdFormObj(schema,options);
+      f.key  = options.path;
+      f.type = 'number';
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+      return f;
+    }
+  };
+
+  var integer = function(name,schema,options) {
+    if (schema.type === 'integer') {
+      var f = stdFormObj(schema,options);
+      f.key  = options.path;
+      f.type = 'number';
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+      return f;
+    }
+  };
+
+  var checkbox = function(name,schema,options) {
+    if (schema.type === 'boolean') {
+      var f = stdFormObj(schema,options);
+      f.key  = options.path;
+      f.type = 'checkbox';
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+      return f;
+    }
+  };
+
+
+  var select = function(name,schema,options) {
+    if (schema.type === 'string' && schema.enum) {
+      var f = stdFormObj(schema,options);
+      f.key  = options.path;
+      f.type = 'select';
+      if (!f.titleMap) {
+        f.titleMap = {};
+        schema.enum.forEach(function(name){
+          f.titleMap[name] = name;
+        });
+      }
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+      return f;
+    }
+  };
+
+  var checkboxes = function(name,schema,options) {
+    if (schema.type === 'array' && schema.items && schema.items.enum) {
+      var f = stdFormObj(schema,options);
+      f.key  = options.path;
+      f.type = 'checkboxes';
+      if (!f.titleMap) {
+        f.titleMap = {};
+        schema.items.enum.forEach(function(name){
+          f.titleMap[name] = name;
+        });
+      }
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+      return f;
+    }
+  };
+
+
+
+  var fieldset = function(name,schema,options){
+
+    if (schema.type === "object") {
+      var f   = stdFormObj(schema,options);
+      f.type  = 'fieldset';
+      f.items = [];
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+
+      //recurse down into properties
+      angular.forEach(schema.properties,function(v,k){
+        var path = options.path.slice();
+        path.push(k);
+        if (options.ignore[sfPathProvider.stringify(path)] !== true) {
+          var required = schema.required && schema.required.indexOf(k) !== -1;
+
+          var def = defaultFormDefinition(k,v,{
+            path: path,
+            required: required || false,
+            lookup: options.lookup,
+            ignore: options.ignore
+          });
+          if (def) {
+            f.items.push(def);
+          }
+        }
+      });
+
+      return f;
+    }
+
+  };
+
+  var array = function(name,schema,options){
+
+    if (schema.type === 'array') {
+      var f   = stdFormObj(schema,options);
+      f.type  = 'array';
+      f.key   = options.path;
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+
+      var required = schema.required && schema.required.indexOf(options.path(options.path.length - 1)) !== -1;
+
+      // The default is to always just create one child. This works since if the
+      // schemas items declaration is of type: "object" then we get a fieldset.
+      // We also follow json form notatation, adding empty brackets "[]" to
+      // signify arrays.
+
+      var arrPath = options.path.slice();
+      arrPath.push('');
+
+      f.items = [defaultFormDefinition(options.path,schema.items,{
+        path: arrPath,
+        required: required || false,
+        lookup: options.lookup,
+        ignore: options.ignore
+      })];
+
+      return f;
+    }
+
+  };
+
+  //First sorted by schema type then a list.
+  //Order has importance. First handler returning an form snippet will be used.
+  var defaults = {
+    string:  [ select, text ],
+    object:  [ fieldset ],
+    number:  [ number ],
+    integer: [ integer ],
+    boolean: [ checkbox ],
+    array:   [ checkboxes, array ]
+  };
+
+  var postProcessFn = function(form) { return form; };
+
+
+  /**
+   * Provider API
+   */
+  this.defaults    = defaults;
+  this.stdFormObj  = stdFormObj;
+
+  /**
+   * Register a post process function.
+   * This function is called with the fully merged
+   * form definition (i.e. after merging with schema)
+   * and whatever it returns is used as form.
+   */
+  this.postProcess = function(fn) {
+    postProcessFn = fn;
+  };
+
+  /**
+   * Append default form rule
+   * @param {string}   type json schema type
+   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form definition or undefined
+   */
+  this.appendRule = function(type,rule) {
+    if (!defaults[type]) {
+      defaults[type] = [];
+    }
+    defaults[type].push(rule);
+  };
+
+  /**
+   * Prepend default form rule
+   * @param {string}   type json schema type
+   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form definition or undefined
+   */
+  this.prependRule = function(type,rule) {
+    if (!defaults[type]) {
+      defaults[type] = [];
+    }
+    defaults[type].unshift(rule);
+  };
+
+  /**
+   * Utility function to create a standard form object.
+   * This does *not* set the type of the form but rather all shared attributes.
+   * You probably want to start your rule with creating the form with this method
+   * then setting type and any other values you need.
+   * @param {Object} schema
+   * @param {Object} options
+   * @return {Object} a form field defintion
+   */
+  this.createStandardForm = stdFormObj;
+  /* End Provider API */
+
+
+  this.$get = function(){
+
+    var service = {};
+
+    service.merge = function(schema,form,ignore) {
+      form  = form || ["*"];
+
+      var stdForm = service.defaults(schema,ignore);
+
+      //simple case, we have a "*", just put the stdForm there
+      var idx = form.indexOf("*");
+      if (idx !== -1) {
+        form  = form.slice(0,idx)
+                    .concat(stdForm.form)
+                    .concat(form.slice(idx+1));
+        return form;
+      }
+
+      //ok let's merge!
+      //We look at the supplied form and extend it with schema standards
+
+
+      var lookup = stdForm.lookup;
+      return postProcessFn(form.map(function(obj){
+
+        //handle the shortcut with just a name
+        if (typeof obj === 'string') {
+          obj = { key: obj };
+        }
+
+        //if it's a type with items, merge 'em!
+        if (obj.items) {
+          obj.items = service.merge(schema,obj.items,ignore);
+        }
+
+        //if its has tabs, merge them also!
+        if (obj.tabs) {
+          angular.forEach(obj.tabs,function(tab){
+            tab.items = service.merge(schema,tab.items,ignore);
+          });
+        }
+
+        //extend with std form from schema.
+        if (obj.key) {
+          if(typeof obj.key == 'string') {
+            obj.key = sfPathProvider.parse(obj.key);
+          }
+          var str = sfPathProvider.stringify(obj.key);
+          if(lookup[str]){
+            return angular.extend(lookup[str],obj);
+          }
+        }
+
+        return obj;
+      }));
+    };
+
+
+
+    /**
+     * Create form defaults from schema
+     */
+    service.defaults = function(schema,ignore) {
+      var form   = [];
+      var lookup = {}; //Map path => form obj for fast lookup in merging
+      ignore = ignore || {};
+
+      if (schema.type === "object") {
+        angular.forEach(schema.properties,function(v,k){
+            k = [k];
+            if (ignore[k] !== true) {
+              var required = schema.required && schema.required.indexOf(k[k.length - 1]) !== -1;
+              var def = defaultFormDefinition(k,v,{
+                path: k,        //path to this property in dot notation. Root object has no name
+                lookup: lookup,    //extra map to register with. Optimization for merger.
+                ignore: ignore,    //The ignore list of paths (sans root level name)
+                required: required //Is it required? (v4 json schema style)
+              });
+              if (def) {
+                form.push(def);
+              }
+            }
+        });
+
+      } else {
+        throw new Error('Not implemented. Only type "object" allowed at root level of schema.');
+      }
+      return { form: form, lookup: lookup };
+    };
+
+
+    //Utility functions
+    /**
+     * Traverse a schema, applying a function(schema,path) on every sub schema
+     * i.e. every property of an object.
+     */
+    service.traverseSchema = function(schema,fn,path,ignoreArrays) {
+      ignoreArrays = angular.isDefined(ignoreArrays) ? ignoreArrays : true;
+
+      path = path || [];
+
+      var traverse = function(schema,fn,path) {
+        fn(schema,path);
+        angular.forEach(schema.properties,function(prop,name){
+          var currentPath = path.slice();
+          currentPath.push(name);
+          traverse(prop,fn,currentPath);
+        });
+
+        //Only support type "array" which have a schema as "items".
+        if (!ignoreArrays && schema.items) {
+          var arrPath = path.slice(); arrPath.push('');
+          traverse(schema.items,fn,arrPath);
+        }
+      };
+
+      traverse(schema,fn,path || []);
+    };
+
+    service.traverseForm = function(form, fn) {
+      fn(form);
+      angular.forEach(form.items, function(f) {
+        service.traverseForm(f, fn);
+      });
+
+      if (form.tabs) {
+        angular.forEach(form.tabs, function(tab) {
+          angular.forEach(tab.items, function(f) {
+            service.traverseForm(f, fn);
+          });
+        });
+      }
+    };
+
+
+    return service;
+  };
+
+}]);
+
+/**
+ * Directive that handles the model arrays
+ */
+angular.module('schemaForm').directive('sfArray', ['sfSelect','schemaForm',
+function(sfSelect, schemaForm) {
+
+  var setIndex = function(index) {
+    return function(form) {
+      if (form.key) {
+        form.key[form.key.indexOf('')] = index;
+      }
+    };
+  };
+
+  return {
+    restrict: 'A',
+    scope: true,
+    link: function(scope, element, attrs) {
+      var formDefCache = {};
+
+      // Watch for the form definition and then rewrite it.
+      // It's the (first) array part of the key, '[]' that needs a number
+      // corresponding to an index of the form.
+      var once = scope.$watch(attrs.sfArray, function(form) {
+
+        // An array model always needs a key so we know what part of the model
+        // to look at. This makes us a bit incompatible with JSON Form, on the
+        // other hand it enables two way binding.
+        var list = sfSelect(form.key,scope.model);
+
+        // Since ng-model happily creates objects in a deep path when setting a
+        // a value but not arrays we need to create the array.
+        if (angular.isUndefined(list)) {
+          list = [];
+          sfSelect(form.key, scope.model, list);
+        }
+        scope.modelArray = list;
+
+        // To be more compatible with JSON Form we support an array of items
+        // in the form definition of "array" (the schema just a value).
+        // for the subforms code to work this means we wrap everything in a
+        // section. Unless there is just one.
+        var subForm = form.items[0];
+        if (form.items.length > 1) {
+          subForm = { type: 'section', items: form.items };
+        }
+
+        // We ceate copies of the form on demand, caching them for
+        // later requests
+        scope.copyWithIndex = function(index) {
+          if (!formDefCache[index]) {
+            if (subForm) {
+              var copy = angular.copy(subForm);
+              copy.arrayIndex= index;
+              schemaForm.traverseForm(copy, setIndex(index));
+              formDefCache[index] = copy;
+            }
+          }
+          return formDefCache[index];
+        };
+
+
+        scope.appendToArray = function() {
+          var len = list.length;
+          var copy = scope.copyWithIndex(len);
+          schemaForm.traverseForm(copy, function(part){
+            if (part.key && angular.isDefined(part.default)) {
+              sfSelect(part.key, scope.model, part.default);
+            }
+          });
+
+          // If there are no defaults nothing is added so we need to initialize
+          // the array. null for basic values, {} or [] for the others.
+          if (len === list.length) {
+            var type = sfSelect('schema.items.type',form);
+            var dflt = null;
+            if (type === 'object') {
+              dflt = {};
+            } else if (type === 'array') {
+              dflt = [];
+            }
+            list.push(dflt);
+          }
+        };
+
+        scope.deleteFromArray = function(index) {
+          list.splice(index,1);
+        };
+
+        // Always start with one empty form unless configured otherwise.
+        if (form.startEmpty !== true && list.length === 0) {
+          scope.appendToArray();
+        }
+
+        once();
+      });
+    }
+  };
+}]);
+
+/**
+ * A version of ng-changed that only listens if
+ * there is actually a onChange defined on the form
+ *
+ * Takes the form definition as argument.
+ * If the form definition has a "onChange" defined as either a function or
+ */
+angular.module('schemaForm').directive('sfChanged',function(){
+  return {
+    require: 'ngModel',
+    restrict: 'AC',
+    scope: false,
+    link: function(scope,element,attrs,ctrl) {
+      var form = scope.$eval(attrs.sfChanged);
+      //"form" is really guaranteed to be here since the decorator directive
+      //waits for it. But best be sure.
+      if (form && form.onChange) {
+        ctrl.$viewChangeListeners.push(function() {
+            if (angular.isFunction(form.onChange)) {
+              form.onChange(ctrl.$modelValue,form);
+            } else {
+              scope.evalExpr(form.onChange,{ 'modelValue': ctrl.$modelValue, form: form });
+            }
+        });
+      }
+    }
+  };
+});
+
+/*
+FIXME: real documentation
+<form sf-form="form" sf-schema="schema" sf-decorator="foobar"></form>
+*/
+
+angular.module('schemaForm')
+       .directive('sfSchema',
+       ['$compile','schemaForm','schemaFormDecorators','sfSelect',
+function($compile,  schemaForm,  schemaFormDecorators, sfSelect){
+
+  var SNAKE_CASE_REGEXP = /[A-Z]/g;
+  function snake_case(name, separator){
+    separator = separator || '_';
+    return name.replace(SNAKE_CASE_REGEXP, function(letter, pos) {
+      return (pos ? separator : '') + letter.toLowerCase();
+    });
+  }
+
+  return {
+    scope: {
+      schema: '=sfSchema',
+      initialForm: '=sfForm',
+      model: '=sfModel'
+    },
+    controller: ['$scope',function($scope){
+      this.evalInParentScope = function(expr,locals){
+        return $scope.$parent.$eval(expr,locals);
+      };
+    }],
+    replace: false,
+    restrict: "A",
+    transclude: true,
+    require: '?form',
+    link: function(scope,element,attrs,formCtrl,transclude) {
+
+      //expose form controller on scope so that we don't force authors to use name on form
+      scope.formCtrl = formCtrl;
+
+      //We'd like to handle existing markup,
+      //besides using it in our template we also
+      //check for ng-model and add that to an ignore list
+      //i.e. even if form has a definition for it or form is ["*"]
+      //we don't generate it.
+      var ignore = {};
+      transclude(scope,function(clone){
+        clone.addClass('schema-form-ignore');
+        element.prepend(clone);
+
+        if (element[0].querySelectorAll) {
+          var models = element[0].querySelectorAll('[ng-model]');
+          if (models){
+            for (var i=0; i < models.length; i++){
+              var key = models[i].getAttribute('ng-model');
+              //skip first part before .
+              ignore[key.substring(key.indexOf('.')+1)] = true;
+            }
+          }
+        }
+      });
+      //Since we are dependant on up to three
+      //attributes we'll do a common watch
+      var lastDigest = {};
+
+      scope.$watch(function(){
+
+        var schema = scope.schema;
+        var form   = scope.initialForm || ['*'];
+
+        //The check for schema.type is to ensure that schema is not {}
+        if (form && schema && schema.type && (lastDigest.form !== form || lastDigest.schema !== schema) && Object.keys(schema.properties).length > 0) {
+          lastDigest.schema = schema;
+          lastDigest.form = form;
+
+          //FIXME: traverse schema and model and set default values.
+
+          var merged = schemaForm.merge(schema,form,ignore);
+          var frag = document.createDocumentFragment();
+
+          //make the form available to decorators
+          scope.schemaForm  = { form:  merged, schema: schema };
+
+          //Create directives from the form definition
+          angular.forEach(merged,function(obj,i){
+            var n = document.createElement(attrs.sfDecoratorName || snake_case(schemaFormDecorators.defaultDecorator,'-'));
+            n.setAttribute('form','schemaForm.form['+i+']');
+            frag.appendChild(n);
+          });
+
+          //clean all but pre existing html.
+          element.children(':not(.schema-form-ignore)').remove();
+
+          element[0].appendChild(frag);
+
+          //compile only children
+          $compile(element.children())(scope);
+
+          //ok, now that that is done let's set any defaults
+          schemaForm.traverseSchema(schema,function(prop,path){
+
+            if (angular.isDefined(prop['default'])) {
+              var val = sfSelect(path, scope.model);
+              if (angular.isUndefined(val)) {
+                sfSelect(path, scope.model, prop['default']);
+              }
+            }
+          });
+
+        }
+      });
+    }
+  };
+}]);
+
+/* global tv4 */
+angular.module('schemaForm').directive('schemaValidate',function(){
+  return {
+    restrict: 'A',
+    scope: false,
+    require: 'ngModel',
+    link: function(scope,element,attrs,ngModel) {
+      //Since we have scope false this is the same scope
+      //as the decorator
+      scope.ngModel = ngModel;
+
+      var error = null;
+      var schema  = scope.$eval(attrs.schemaValidate);
+
+      ngModel.$parsers.unshift(function(viewValue) {
+        if (!schema) {
+          schema = scope.$eval(attrs.schemaValidate);
+        }
+
+        //Still might be undefined, especially if form has no schema...
+        if (!schema) {
+          return viewValue;
+        }
+
+        //required is handled by ng-required
+        if (angular.isUndefined(viewValue)) {
+          return undefined;
+        }
+
+        //Type cast and validate against schema.
+        //Basic types of json schema sans array and object
+        var value = viewValue;
+        if (schema.type === 'integer') {
+          value = parseInt(value,10);
+        } else if (schema.type === 'number') {
+          value = parseFloat(value,10);
+        } else if (schema.type === 'boolean' && typeof viewValue === 'string') {
+          if (viewValue === 'true') {
+            value = true;
+          } else if (viewValue === 'false') {
+            value = false;
+          }
+        }
+
+        var result = tv4.validateResult(value,schema);
+        if (result.valid) {
+          // it is valid
+          ngModel.$setValidity('schema', true);
+          error = null;
+          return viewValue;
+        } else {
+          // it is invalid, return undefined (no model update)
+          ngModel.$setValidity('schema', false);
+          error = result.error;
+          return undefined;
+        }
+      });
+
+      //This works since we now we're inside a decorator and that this is the decorators scope.
+      //If $pristine and empty don't show success (even if it's valid)
+      scope.hasSuccess = function(){
+        return ngModel.$valid && (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue));
+      };
+
+      scope.hasError = function(){
+        return ngModel.$invalid && !ngModel.$pristine;
+      };
+
+      scope.schemaError = function() {
+        return error;
+      };
+
+    }
+  };
+});

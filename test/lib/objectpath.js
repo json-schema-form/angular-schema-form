@@ -67,7 +67,7 @@
 		},
 
 		normalize: function(data, quote){
-			return this.stringify(Array.isArray(data) ? data : this.parse(data), quote);
+			return ObjectPath.stringify(Array.isArray(data) ? data : ObjectPath.parse(data), quote);
 		}
 	};
 

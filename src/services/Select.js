@@ -18,7 +18,7 @@
  * @returns {Any|undefined} returns the value at the end of the projection path
  *                          or undefined if there is none.
  */
-angular.module('schemaForm').factory('sfSelect', ['ObjectPath', function (ObjectPath) {
+angular.module('schemaForm').factory('sfSelect', ['sfPath', function (sfPath) {
   var numRe = /^\d+$/;
 
   return function(projection, obj, valueToSet) {
@@ -26,7 +26,7 @@ angular.module('schemaForm').factory('sfSelect', ['ObjectPath', function (Object
       obj = this;
     }
     //Support [] array syntax
-    var parts = typeof projection === 'string' ? ObjectPath.parse(projection) : projection;
+    var parts = typeof projection === 'string' ? sfPath.parse(projection) : projection;
 
     if (typeof valueToSet !== 'undefined' && parts.length === 1) {
       //special case, just setting one variable

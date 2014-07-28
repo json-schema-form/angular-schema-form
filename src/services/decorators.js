@@ -1,4 +1,4 @@
-angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider','ObjectPathProvider',function($compileProvider, ObjectPathProvider){
+angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider','sfPathProvider',function($compileProvider, sfPathProvider){
   var defaultDecorator = '';
   var directives = {};
 
@@ -51,7 +51,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                 //for fieldsets to recurse properly.
                 var url = templateUrl(name,form);
                 $http.get(url,{ cache: $templateCache }).then(function(res){
-                  var key = form.key ? ObjectPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
+                  var key = form.key ? sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
                   var template = res.data.replace(/\$\$value\$\$/g,'model'+key);
                   element.html(template);
                   $compile(element.contents())(scope);
