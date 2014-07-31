@@ -15,6 +15,7 @@ angular.module('ng').directive('pickADate', function () {
     restrict: "A",
     require: 'ngModel',
     scope: {
+        editable: '=',
         ngModel: '=',
         minDate: '=',
         maxDate: '='
@@ -29,6 +30,7 @@ angular.module('ng').directive('pickADate', function () {
       //hidden field that pickadate likes to create.
       //We use ngModel formatters instead to format the value.
       element.pickadate({
+        editable: attrs.editable ? attrs.editable : false,
         onClose: function () {
           element.blur();
         },
