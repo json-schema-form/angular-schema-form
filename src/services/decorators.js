@@ -57,9 +57,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                     // to circumvent that adding here attributes afterwards
                     // to be able to pass custom attributes to input field
                     // @todo: make it less hacky & get to know why that shizzle happens
-                    if(url.indexOf('default') !== -1 || url.indexOf('datepicker') !== -1) {
+                    var isButton = url.indexOf('submit') !== -1;
+                    if(url.indexOf('default') !== -1 || url.indexOf('datepicker') !== -1 || isButton) {
                       angular.forEach(form.attributes, function(value, name) {
-                        clone[0].children[1].setAttribute(name, value);
+                        var inputIndex = 1;
+                        if(isButton) {
+                          inputIndex = 0;
+                        }
+                        clone[0].children[inputIndex].setAttribute(name, value);
                       });
                     }
                     element.replaceWith(clone);
