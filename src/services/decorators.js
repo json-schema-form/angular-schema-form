@@ -53,6 +53,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                 $http.get(url,{ cache: $templateCache }).then(function(res){
                   var template = res.data.replace(/\$\$value\$\$/g,'model.'+(form.key || ""));
                   $compile(template)(scope,function(clone){
+                    // somehow adding html attributes like data-type gets the value binding fail.
+                    // to circumvent that adding here attributes afterwards
+                    // to be able to pass custom attributes to input field
+                    // @todo: make it less hacky & get to know why that shizzle happens
+                    if(url.indexOf('default') !== -1) {
+                      angular.forEach(form.attributes, function(value, name) {
+                        clone[0].children[1].setAttribute(name, value);
+                      });
+                    }
                     element.replaceWith(clone);
                   });
                 });
