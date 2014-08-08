@@ -240,6 +240,57 @@ describe('Schema form',function(){
       });
 
     });
+	
+	it('should style submit buttons',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.obj = {};
+
+        scope.schema = exampleSchema;
+
+        //A submit button with default style
+        scope.form = [{ type: 'submit',title: 'Okidoki'}];
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.find('input').hasClass('btn-primary').should.be.true;
+        tmpl.find('input').hasClass('btn-success').should.be.false;
+
+        //A submit button with default style
+        scope.form = [{ type: 'submit', style: 'btn-success', title: 'Okidoki'}];
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.find('input').hasClass('btn-primary').should.be.false;
+        tmpl.find('input').hasClass('btn-success').should.be.true;
+		
+		//A button with default style
+        scope.form = [{ type: 'button',title: 'Okidoki'}];
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.find('button').hasClass('btn-default').should.be.true;
+        tmpl.find('button').hasClass('btn-success').should.be.false;
+
+        //A button with default style
+        scope.form = [{ type: 'button', style: 'btn-success', title: 'Okidoki'}];
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.find('button').hasClass('btn-default').should.be.false;
+        tmpl.find('button').hasClass('btn-success').should.be.true;
+		
+      });
+    });
 
     it('should use disable readonly input fields, v3 style',function(){
 
@@ -647,6 +698,40 @@ describe('Schema form',function(){
       });
     });
 
+    it('should initialize checkboxes to the model values',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {
+          "names": ["foo"]
+        };
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["foo"]
+              }
+            }          }
+        };
+
+        scope.form = [
+          "names",
+          { key: "foobars", type: "checkboxes", titleMap:{ 'foo':'Foo'}}
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().eq(0).find('input[type=checkbox]').prop('checked').should.be.true;
+      });
+    });
+
     it('should use radio buttons when they are wanted',function(){
 
       inject(function($compile,$rootScope){
@@ -733,7 +818,162 @@ describe('Schema form',function(){
       });
     });
 
+	it('should style radio buttons',function(){
 
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "opts": {
+              "type": "string",
+              "enum": ["one","two"]
+            },
+          }
+        };
+
+        scope.form = [
+          { key: "opts", type: "radiobuttons",titleMap: { one: "One", two: "The rest" }}
+        ];
+		
+		var styles = {
+			any: {},
+			both: {
+				selected: "btn-success",
+				unselected: "btn-default"
+			},
+			onlySelected: {
+				selected: "btn-success"
+			},
+			onlyUnselected: {
+				unselected: "btn-default"
+			}
+		};
+
+        //Radiobuttons uninitialized and default styles
+		var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
+		
+		//Radiobuttons uninitialized and both styles
+		var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+		scope.form[0].style = styles.both;
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
+		
+		//Radiobuttons uninitialized and only selected style
+		var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+		scope.form[0].style = styles.onlySelected;
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
+		
+		//Radiobuttons uninitialized and only unselected style
+		var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+		scope.form[0].style = styles.onlyUnselected;
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
+		
+		//Radiobuttons initialized and default styles
+		scope.person = { opts: "one" };
+		var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+		scope.form[0].style = '';
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
+		
+		//Radiobuttons initialized and both styles
+		var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+		scope.form[0].style = styles.both;
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
+		
+		//Radiobuttons initialized and only selected style
+		var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+		scope.form[0].style = styles.onlySelected;
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
+		
+		//Radiobuttons initialized and only unselected style
+		var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+		scope.form[0].style = styles.onlyUnselected;
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
+		tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
+
+      });
+    });
 
     it('should handle a simple div when type "section" is specified',function(){
 
@@ -849,6 +1089,59 @@ describe('Schema form',function(){
         tmpl.children().eq(0).children().length.should.be.eq(2);
         tmpl.children().eq(0).children().eq(0).is('input').should.be.true;
         tmpl.children().eq(0).children().eq(1).is('button').should.be.true;
+      });
+    });
+	
+	it('should style "action" groups',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = exampleSchema;
+
+        scope.form = [{
+          type: "actions",
+          items: [
+            {
+              type: 'submit',
+			  title: 'yes1'
+            },
+            {
+              type: 'button',
+              title: 'no1'
+            },
+			{
+              type: 'submit',
+			  style: 'btn-success',
+              title: 'yes2'
+            },
+            {
+              type: 'button',
+              style: 'btn-danger',
+              title: 'no2'
+            }
+          ]
+        }];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).children().length.should.be.eq(4);
+        tmpl.children().eq(0).children().eq(0).hasClass('btn-primary').should.be.true;
+        tmpl.children().eq(0).children().eq(0).hasClass('btn-success').should.be.false;
+        tmpl.children().eq(0).children().eq(1).hasClass('btn-default').should.be.true;
+        tmpl.children().eq(0).children().eq(1).hasClass('btn-danger').should.be.false;
+		tmpl.children().eq(0).children().eq(2).hasClass('btn-primary').should.be.false;
+        tmpl.children().eq(0).children().eq(2).hasClass('btn-success').should.be.true;
+		tmpl.children().eq(0).children().eq(3).hasClass('btn-default').should.be.false;
+        tmpl.children().eq(0).children().eq(3).hasClass('btn-danger').should.be.true;
+        
+        
+        
       });
     });
 
@@ -1091,6 +1384,89 @@ describe('Schema form',function(){
 
       });
     });
+	
+	it('should style an array',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "Name"
+              }
+            },
+            "subforms": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "title": "subform",
+                "properties": {
+                  "one": { "type": "string" },
+                  "two": { "type": "number", "title": "Two" }
+                }
+              }
+            },
+            "subsubforms": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "title": "subform",
+                "properties": {
+                  "one": { "type": "string" },
+                  "list": {
+                    "type": "array",
+                    "items": {
+                      "type": "number",
+                      "title": "sublist numbers"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        scope.form = [
+          {
+			key: "names",
+			add: "New"
+		  },
+          {
+            key: "subforms",
+			add: "New",
+			style: { add: "btn-info" },
+            type: "array",
+            items: [
+              "subforms[].one"
+            ]
+          },
+          "subsubforms"
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(3);
+        tmpl.children().eq(0).find('button').eq(1).text().trim().should.be.eq('New');
+		tmpl.children().eq(0).find('button').eq(1).hasClass('btn-default').should.be.true;
+        tmpl.children().eq(0).find('button').eq(1).hasClass('btn-info').should.be.false;
+        tmpl.children().eq(1).find('button').eq(1).text().trim().should.be.eq('New');
+		tmpl.children().eq(1).find('button').eq(1).hasClass('btn-default').should.be.false;
+        tmpl.children().eq(1).find('button').eq(1).hasClass('btn-info').should.be.true;
+        tmpl.children().eq(2).find('button').eq(3).text().trim().should.be.eq('Add');
+		tmpl.children().eq(2).find('button').eq(3).hasClass('btn-default').should.be.true;
+        tmpl.children().eq(2).find('button').eq(3).hasClass('btn-info').should.be.false;
+        
+      });
+    });
 
     it('should render a tabarray of subforms when asked',function(){
 
@@ -1160,6 +1536,75 @@ describe('Schema form',function(){
 
       });
     });
+	
+	it('should style a tabarray',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {
+          names: ['me','you','another']
+        };
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "names": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "title": "Name"
+              }
+            },
+            "subforms": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "title": "subform",
+                "properties": {
+                  "one": { "type": "string" },
+                  "two": { "type": "number", "title": "Two" }
+                }
+              }
+            }
+          }
+        };
+
+        scope.form = [
+          { 
+			key: "names", 
+			type: "tabarray",
+			add: "New",
+			style: { remove: "btn-danger" },
+		  },
+          {
+            key: "subforms",
+            type: "tabarray",
+			remove: "Delete",
+            tabType: "right",
+            items: [
+              "subforms[].one"
+            ]
+          }
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().length.should.be.equal(2);
+        tmpl.children().eq(0).find('button').eq(0).text().trim().should.be.eq('Remove');
+		tmpl.children().eq(0).find('button').eq(0).hasClass('btn-default').should.be.false;
+		tmpl.children().eq(0).find('button').eq(0).hasClass('btn-danger').should.be.true;
+		tmpl.children().eq(0).find('li:not([ng-repeat]) > a').text().trim().should.be.eq('New');
+
+        tmpl.children().eq(1).find('button').text().trim().should.be.eq('Delete');
+        tmpl.children().eq(1).find('button').eq(0).hasClass('btn-default').should.be.true;
+		tmpl.children().eq(1).find('button').eq(0).hasClass('btn-danger').should.be.false;
+		tmpl.children().eq(1).find('li:not([ng-repeat]) > a').text().trim().should.be.eq('Add');
+
+      });
+    });
 
 
   });
@@ -1188,6 +1633,11 @@ describe('Schema form',function(){
                 "null",
                 "NaN",
               ]
+            },
+            "overEighteen": {
+              "title": "Are you over 18 years old?",
+              "type": "boolean",
+              "default": false
             },
             "attributes": {
               "type": "object",
@@ -1237,6 +1687,17 @@ describe('Schema form',function(){
                 "null",
                 "NaN",
               ]
+            }
+          },
+          {
+            title: 'Are you over 18 years old?',
+            key: 'overEighteen',
+            type: 'checkbox',
+            default: false,
+            schema: {
+              "title": "Are you over 18 years old?",
+              "type": "boolean",
+              "default": false
             }
           },
           {

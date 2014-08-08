@@ -182,6 +182,10 @@
         },
         {
             "key": "radiobuttons",
+			"style": {
+				"selected": "btn-success",
+				"unselected": "btn-default"
+			},
             "type": "radiobuttons"
         },
         {
@@ -189,10 +193,12 @@
             "items": [
                 {
                     "type": "submit",
+					"style": "btn-info",
                     "title": "Do It!"
                 },
                 {
                     "type": "button",
+                    "style": "btn-danger",
                     "title": "Noooooooooooo",
                     "onClick": "sayNo()"
                 }

@@ -25,7 +25,7 @@ angular.module('schemaForm').provider('schemaForm',[function(){
     if (schema.title) f.title = schema.title;
     if (schema.description) f.description = schema.description;
     if (options.required === true || schema.required === true) f.required = true;
-    if (schema.default) f.default = schema.default;
+    if (schema.default !== undefined) f.default = schema.default;
     if (schema.maxLength) f.maxlength = schema.maxLength;
     if (schema.minLength) f.minlength = schema.maxLength;
     if (schema.readOnly || schema.readonly)  f.readonly  = schema.readOnly || schema.readonly;

@@ -1,4 +1,4 @@
-<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}" ng-init="checkboxValues = {}">
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}" ng-init="checkboxValues = listToCheckboxValues($$value$$)">
   <label ng-show="showTitle()">{{form.title}}</label>
   <div class="checkbox" ng-repeat="value in form.schema.items.enum" >
     <label>

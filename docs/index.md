@@ -332,6 +332,18 @@ of the titleMap can be HTML.
 }
 ```
 
+The submit button has btn-primary as default. The button has btn-default as default. 
+We can change this with ```style``` attribute:
+```javascript
+{
+  type: "actions",
+  items: [
+    { type: 'submit', style: 'btn-success', title: 'Ok' }
+    { type: 'button', style: 'btn-info', title: 'Cancel', onClick: "cancel()" }
+  ]
+}
+``` 
+
 ### button
 
 *button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
@@ -344,6 +356,15 @@ the ```sf-schema``` directive.
   { type: 'button', title: 'Cancel', onClick: "cancel()" }
 [
 ```
+
+The submit button has btn-primary as default. The button has btn-default as default. 
+We can change this with ```style``` attribute:
+```javascript
+[
+  { type: 'button', style: 'btn-warning', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'button', style: 'btn-danger', title: 'Cancel', onClick: "cancel()" }
+[
+``` 
 
 ### radios and radiobuttons
 Both type *radios* and *radiobuttons* work the same way, they take a titleMap
@@ -368,6 +389,37 @@ function FormCtrl($scope) {
       key: "choice",
       type: "radiobuttons",
       titleMap: {
+        one: "One",
+        two: "More..."
+      }
+    }
+  ];
+}
+```
+
+With *radiobuttons*, both selected and unselected buttons have btn-primary as default. 
+We can change this with ```style``` attribute:
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      choice: {
+        type: "string",
+        enum: ["one","two"]
+      }
+    }
+  };
+
+  $scope.form = [
+    {
+      key: "choice",
+      type: "radiobuttons",
+      style: {
+		selected: "btn-success",
+		unselected: "btn-default"
+	  },
+	  titleMap: {
         one: "One",
         two: "More..."
       }
@@ -470,9 +522,9 @@ schemas. Only a schema is supported by Schema Form, and not the list of schemas.
 The *form* definition has the option ```ìtems``` that should be a list
 of form objects.
 
-The rendered list of subforms each have a remove button and at the bottom there
-is an add button. The text of the add button can be changed by the option
- ```add``` , see example below.
+The rendered list of subforms each have a *"Remove"* button and at the bottom there
+is an *"Add"* button. The default *"Add"* button has class btn-default and text Add. Both 
+could be changed using attribute ```add```, see example below.
 
 If you like to have drag and drop reordering of arrays you also need
 [ui-sortable](https://github.com/angular-ui/ui-sortable) and its dependencies
@@ -566,6 +618,9 @@ function FormCtrl($scope) {
     {
       key: "subforms",
       add: "Add person",
+      style: {
+		add: "btn-success"
+	  },
       items: [
         "subforms[].nick",
         "subforms[].name",
@@ -585,8 +640,11 @@ By default the tabs are on the left side (follows the default in JSON Form),
 but with the option ```tabType``` you can change that to eiter *"top"* or *"right"*
 as well.
 
-Every tab page has a *"Remove"* button, you can change the text on that with
-the ```remove``` option.
+Every tab page has a *"Remove"* button. The default *"Remove"* button has class btn-default 
+and text Remove. Both could be changed using attribute ```remove```, see example below. 
+
+In this case we have an *"Add"* link, not an *"Add"* button. Therefore, the attribute ```add``` 
+only changes the text of the link. See example below.
 
 Bootstrap 3 doesn't have side tabs so to get proper styling you need to add the
 dependency [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs).
@@ -630,7 +688,11 @@ function FormCtrl($scope) {
       tabType: "top",
       title: "value.nick || ('Tab '+$index)"
       key: "subforms",
-      add: "Add person",
+      remove: "Delete",
+      style: {
+		remove: "btn-danger"
+	  },
+	  add: "Add person",
       items: [
         "subforms[].nick",
         "subforms[].name",

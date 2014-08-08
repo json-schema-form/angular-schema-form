@@ -65,6 +65,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
               return scope.form && scope.form.notitle !== true && scope.form.title;
             };
 
+            scope.listToCheckboxValues = function(list){
+              var values = {};
+              angular.forEach(list,function(v){
+                values[v] = true;
+              });
+              return values;
+            };
+
             scope.checkboxValuesToList = function(values){
               var lst = [];
               angular.forEach(values,function(v,k){

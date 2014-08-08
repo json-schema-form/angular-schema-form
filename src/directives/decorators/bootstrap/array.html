@@ -13,7 +13,7 @@
   <div class="clearfix" style="padding: 15px;">
     <button ng-click="appendToArray()"
             type="button"
-            class="btn btn-default pull-right">
+            class="btn {{ form.style.add || 'btn-default' }} pull-right">
       <i class="glyphicon glyphicon-plus"></i>
       {{ form.add || 'Add'}}
     </button>
