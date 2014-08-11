@@ -81,7 +81,7 @@ function($compile,  schemaForm,  schemaFormDecorators, sfSelect){
 
           //Create directives from the form definition
           angular.forEach(merged,function(obj,i){
-            var n = document.createElement(attrs.sfDecorator || snake_case(schemaFormDecorators.defaultDecorator,'-'));
+            var n = document.createElement(attrs.sfDecoratorName || snake_case(schemaFormDecorators.defaultDecorator,'-'));
             n.setAttribute('form','schemaForm.form['+i+']');
             frag.appendChild(n);
           });

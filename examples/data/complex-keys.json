@@ -1,0 +1,58 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Complex Key Support",
+    "properties": {
+      "a[\"b\"].c": {
+        "type": "text"
+      },
+      "simple": {
+        "type": "object",
+        "properties": {
+          "prøp": {
+            "title": "UTF8 in both dot and bracket notation",
+            "type": "string"
+          }
+        }
+      },
+      "array-key": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "a'rr[\"l":  {
+              "title": "Control Characters",
+              "type": "string"
+            },
+            "˙∆∂∞˚¬":  {
+              "type": "string"
+            }
+          },
+          "required": [
+            "a'rr[\"l",
+            "˙∆∂∞˚¬"
+          ]
+        }
+      }
+    }
+  },
+  "form": [
+    "['a[\"b\"].c']",
+    {
+      "key": "array-key",
+      "items": [
+        "[array-key][]['a'rr[\"l']",
+        {
+          "key": "[array-key][][˙∆∂∞˚¬]",
+          "title": "Unicode Characters"
+        }
+      ]
+    },
+    {
+      "key": "simple",
+      "items": [
+        "simple.prøp"
+      ]
+    }
+  ]
+}
