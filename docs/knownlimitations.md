@@ -2,7 +2,7 @@ Known Limitations
 =================
 
 ### Angular Version
-Schema Form works with AngularJS version 1.2.x or above, but version 1.3.x is recomended.
+Schema Form works with AngularJS version 1.2.x or above, but version 1.3.x is recommended.
 
 This is because a bug in AngularJS 1.2 [#8039](https://github.com/angular/angular.js/issues/8039),
 which means that the ```ng-model``` directive has problem with values that uses a bracket notation instead of dot notation.
