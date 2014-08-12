@@ -5,6 +5,28 @@
  */
 angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(sfPathProvider){
 
+  //Creates an default titleMap list from an enum, i.e. a list of strings.
+  var enumToTitleMap = function(enm) {
+    var titleMap = []; //canonical titleMap format is a list.
+    enm.forEach(function(name){
+      titleMap.push({ name: name, value: name});
+    });
+    return titleMap;
+  };
+
+  // Takes a titleMap in either object or list format and returns one in
+  // in the list format.
+  var canonicalTitleMap = function(titleMap) {
+    if (!angular.isArray(titleMap)) {
+      var canonical = [];
+      angular.forEach(titleMap, function(name,value) {
+        canonical.push({ name: name, value: value });
+      });
+      return canonical;
+    }
+    return titleMap;
+  };
+
   var defaultFormDefinition = function(name,schema,options){
     var rules = defaults[schema.type];
     if (rules) {
@@ -34,7 +56,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
 
     //Non standard attributes
     if (schema.validationMessage) f.validationMessage = schema.validationMessage;
-    if (schema.enumNames) f.titleMap = schema.enumNames;
+    if (schema.enumNames) f.titleMap = canonicalTitleMap(schema.enumNames);
     f.schema = schema;
     return f;
   };
@@ -89,10 +111,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
       f.key  = options.path;
       f.type = 'select';
       if (!f.titleMap) {
-        f.titleMap = {};
-        schema.enum.forEach(function(name){
-          f.titleMap[name] = name;
-        });
+        f.titleMap = enumToTitleMap(schema.enum);
       }
       options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
@@ -105,10 +124,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
       f.key  = options.path;
       f.type = 'checkboxes';
       if (!f.titleMap) {
-        f.titleMap = {};
-        schema.items.enum.forEach(function(name){
-          f.titleMap[name] = name;
-        });
+        f.titleMap = enumToTitleMap(schema.items.enum);
       }
       options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
@@ -254,7 +270,6 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
       form  = form || ["*"];
 
       var stdForm = service.defaults(schema,ignore);
-
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf("*");
       if (idx !== -1) {
@@ -276,6 +291,11 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
           obj = { key: obj };
         }
 
+        //If it has a titleMap make sure it's a list
+        if (obj.titleMap) {
+          obj.titleMap = canonicalTitleMap(obj.titleMap);
+        }
+
         //if it's a type with items, merge 'em!
         if (obj.items) {
           obj.items = service.merge(schema,obj.items,ignore);
@@ -293,6 +313,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
           if(typeof obj.key == 'string') {
             obj.key = sfPathProvider.parse(obj.key);
           }
+
           var str = sfPathProvider.stringify(obj.key);
           if(lookup[str]){
             return angular.extend(lookup[str],obj);

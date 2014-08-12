@@ -190,11 +190,11 @@ var schema = {
   {
     key: "surname",
     type: "select",
-    titleMap: {
-      "Andersson": "Andersson",
-      "Johansson": "Johansson",
-      "other": "Something else..."
-    }
+    titleMap: [
+      { value: "Andersson", name: "Andersson" },
+      { value: "Johansson", name: "Johansson" },
+      { value: "other", name: "Something else..."}
+    ]
   }
 ]
 ```
@@ -361,10 +361,28 @@ scope.
 
 ### select and checkboxes
 
-*select* and *checkboxes* can take an object, ```titleMap```, where key is the value to be saved on the model
-and the value is the title of the option. In the case of *checkboxes* the values
-of the titleMap can be HTML.
+*select* and *checkboxes* can take an attribute, `titleMap`, wich defines a name
+and a value. The value is bound to the model while the name is used for display.
+In the case of *checkboxes* the names of the titleMap can be HTML.
 
+A `titleMap` can be specified as either an object (same as in JSON Form), where
+the propery is the value and the value of that property is the name, or as
+a list of name-value objects. The latter is used internally and is the recomended
+format to use. Note that when defining a `titleMap` as an object the value is
+restricted to strings since property names of objects always is a string.
+
+As a list:
+```javascript
+{
+  type: "select",
+  titleMap: [
+    { value: "yes", name: "Yes I do" },
+    { value: "no", name: "Hell no" }
+  ]
+}
+```
+
+As an object:
 ```javascript
 {
   type: "select",
@@ -423,9 +441,12 @@ We can change this with ```style``` attribute:
 ```
 
 ### radios and radiobuttons
-Both type *radios* and *radiobuttons* work the same way, they take a titleMap
-and renders ordinary radio buttons or bootstrap 3 buttons inline. It's a
-cosmetic choice. The value in the titleMap can be HTML.
+Both type *radios* and *radiobuttons* work the same way.
+They take a `titleMap` and renders ordinary radio buttons or bootstrap 3 buttons
+inline. It's a cosmetic choice.
+
+The `titleMap` is either a list or an object, see [select and checkboxes](#select-and-checkboxes)
+for details. The "name" part in the `titleMap` can be HTML.
 
 Ex.
 ```javascript
@@ -444,14 +465,44 @@ function FormCtrl($scope) {
     {
       key: "choice",
       type: "radiobuttons",
-      titleMap: {
-        one: "One",
-        two: "More..."
-      }
+      titleMap: [
+        { value: "one", name: "One" },
+        { value, "two", name: "More..." }
+      ]
     }
   ];
 }
 ```
+
+The actual schema property it binds doesn't need to be a string with an enum.
+Here is an example creating a yes no radio buttons that binds to a boolean.
+
+Ex.
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      confirm: {
+        type: "boolean",
+        default: false
+      }
+    }
+  };
+
+  $scope.form = [
+    {
+      key: "choice",
+      type: "radios",
+      titleMap: [
+        { value: false, name: "No I don't understand these cryptic terms" },
+        { value: true, , name: "Yes this makes perfect sense to me" }
+      ]
+    }
+  ];
+}
+```
+
 
 With *radiobuttons*, both selected and unselected buttons have btn-primary as default.
 We can change this with ```style``` attribute:
@@ -475,11 +526,10 @@ function FormCtrl($scope) {
 		selected: "btn-success",
 		unselected: "btn-default"
 	  },
-	  titleMap: {
-        one: "One",
-        two: "More..."
-      }
-    }
+	  titleMap: [
+     { value: "one", name: "One" },
+     { value, "two", name: "More..." }
+   ]
   ];
 }
 ```
@@ -515,9 +565,9 @@ function FormCtrl($scope) {
 ```
 
 ### tabs
-The ```tabs``` form type lets you split your form into tabs. It is similar to
-```fieldset``` in that it just changes the presentation of the form. ```tabs```
-takes a option, also called ```tabs```, that is a list of tab objects. Each tab
+The `tabs` form type lets you split your form into tabs. It is similar to
+`fieldset` in that it just changes the presentation of the form. `tabs`
+takes a option, also called `tabs`, that is a list of tab objects. Each tab
 object consist of a *title* and a *items* list of form objects.
 
 Ex.
@@ -570,17 +620,17 @@ function FormCtrl($scope) {
 ```
 
 ### array
-The ```array``` form type is the default for the schema type ```array```.
-The schema for an array has the property ```"items"``` which in the JSON Schema
+The `array` form type is the default for the schema type `array`.
+The schema for an array has the property `"items"` which in the JSON Schema
 specification can be either another schema (i.e. and object), or a list of
 schemas. Only a schema is supported by Schema Form, and not the list of schemas.
 
-The *form* definition has the option ```ìtems``` that should be a list
+The *form* definition has the option `items` that should be a list
 of form objects.
 
 The rendered list of subforms each have a *"Remove"* button and at the bottom there
 is an *"Add"* button. The default *"Add"* button has class btn-default and text Add. Both
-could be changed using attribute ```add```, see example below.
+could be changed using attribute `add`, see example below.
 
 If you like to have drag and drop reordering of arrays you also need
 [ui-sortable](https://github.com/angular-ui/ui-sortable) and its dependencies
@@ -589,7 +639,7 @@ what parts of jQueryUI that is needed. You can safely ignore these if you don't
 need the reordering.
 
 In the form definition you can refer to properties of an array item by the empty
-bracket notation. In the ```key``` simply end the name of the array with ```[]```
+bracket notation. In the `key` simply end the name of the array with `[]`
 
 Given the schema:
 ```json
@@ -615,8 +665,8 @@ Given the schema:
   }
 }
 ```
-Then ```subforms[].name``` refers to the property name of any subform item,
-```subforms[].emails[]``` refers to the subform of emails. See example below for
+Then `subforms[].name` refers to the property name of any subform item,
+`subforms[].emails[]` refers to the subform of emails. See example below for
 usage.
 
 
@@ -642,7 +692,7 @@ function FormCtrl($scope) {
 
 
 Example with sub form, note that you can get rid of the form field the object wrapping the
-subform fields gives you per default by using the ```items``` option in the
+subform fields gives you per default by using the `items` option in the
 form definition.
 
 ```javascript
@@ -689,24 +739,24 @@ function FormCtrl($scope) {
 
 
 ### tabarray
-The ```tabarray``` form type behaves the same way and has the same options as
-```array``` but instead of rendering a list it renders a tab per item in list.
+The `tabarray` form type behaves the same way and has the same options as
+`array` but instead of rendering a list it renders a tab per item in list.
 
 By default the tabs are on the left side (follows the default in JSON Form),
-but with the option ```tabType``` you can change that to eiter *"top"* or *"right"*
+but with the option `tabType` you can change that to eiter *"top"* or *"right"*
 as well.
 
 Every tab page has a *"Remove"* button. The default *"Remove"* button has class btn-default
-and text Remove. Both could be changed using attribute ```remove```, see example below.
+and text Remove. Both could be changed using attribute `remove`, see example below.
 
-In this case we have an *"Add"* link, not an *"Add"* button. Therefore, the attribute ```add```
+In this case we have an *"Add"* link, not an *"Add"* button. Therefore, the attribute `add`
 only changes the text of the link. See example below.
 
 Bootstrap 3 doesn't have side tabs so to get proper styling you need to add the
 dependency [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs).
 It is not needed for tabs on top.
 
-The ```title``` option is a bit special in ```tabarray```, it defines the title
+The `title` option is a bit special in `tabarray`, it defines the title
 of the tab and is considered a angular expression. The expression is evaluated
 with two extra variables in context: **value** and **$index**, where **value**
 is the value in the array (i.e. that tab) and **$index** the index.  
@@ -766,9 +816,9 @@ function FormCtrl($scope) {
 Post process function
 ---------------------
 
-If you like to use ```["*"]``` as a form, or aren't in control of the form definitions
+If you like to use `["*"]` as a form, or aren't in control of the form definitions
 but really need to change or add something you can register a *post process*
-function with the ```schemaForm``` service provider. The post process function
+function with the `schemaForm` service provider. The post process function
 gets one argument, the final form merged with the defaults from the schema just
 before it's rendered, and should return a form.
 
