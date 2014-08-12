@@ -1,4 +1,8 @@
 {
+  "model": {
+    "select": "a",
+    "array": ["b"]
+  },
   "schema": {
     "type": "object",
     "properties": {
@@ -24,6 +28,7 @@
       "array2": {
         "title": "Array with titleMap",
         "type": "array",
+        "default": ["b","c"],
         "items": {
           "type": "string",
           "enum": ["a","b","c"]
