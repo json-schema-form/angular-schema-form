@@ -175,10 +175,10 @@
         {
             "key": "radio",
             "type": "radios",
-            "titleMap": {
-                "Transistor": "Transistor <br> Not the tube kind.",
-                "Tube": "Tube <br> The tube kind."
-            }
+            "titleMap": [
+                { "value": "Transistor", "name": "Transistor <br> Not the tube kind." },
+                { "value": "Tube", "name": "Tube <br> The tube kind."}
+            ]
         },
         {
             "key": "radiobuttons",

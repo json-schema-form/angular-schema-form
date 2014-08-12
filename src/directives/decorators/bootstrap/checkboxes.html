@@ -1,12 +1,12 @@
 <div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}" ng-init="checkboxValues = listToCheckboxValues($$value$$)">
   <label ng-show="showTitle()">{{form.title}}</label>
-  <div class="checkbox" ng-repeat="value in form.schema.items.enum" >
+  <div class="checkbox" ng-repeat="item in form.titleMap" >
     <label>
       <input type="checkbox"
              sf-changed="form"
-             ng-model="checkboxValues[value]"
+             ng-model="checkboxValues[item.value]"
              ng-change="$$value$$ = checkboxValuesToList(checkboxValues)" >
-      <span ng-bind-html="form.titleMap[value] || value"></span>
+      <span ng-bind-html="item.name"></span>
     </label>
 
   </div>

@@ -1,15 +1,15 @@
 <div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
   <label ng-show="showTitle()">{{form.title}}</label>
   <div class="btn-group">
-    <label class="btn {{ (value === $$value$$) ? form.style.selected || 'btn-primary' : form.style.unselected || 'btn-primary'; }}"
-           ng-class="{ active: value === $$value$$ }"
-           ng-repeat="(value,name) in form.titleMap">
+    <label class="btn {{ (item.value === $$value$$) ? form.style.selected || 'btn-primary' : form.style.unselected || 'btn-primary'; }}"
+           ng-class="{ active: item.value === $$value$$ }"
+           ng-repeat="item in form.titleMap">
       <input type="radio"
              sf-changed="form"
              style="display: none;"
              ng-model="$$value$$"
-             ng-value="value">
-      <span ng-bind-html="name"></span>
+             ng-value="item.value">
+      <span ng-bind-html="item.name"></span>
     </label>
   </div>
   <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
