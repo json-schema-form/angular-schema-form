@@ -1,6 +1,7 @@
 Documentation
 =============
 
+1. [Basic Usage](#basic-usage)
 1. [Form types](#form-types)  
 1. [Default form types](#default-form-types)
 1. [Form definitions](#form-definitions)
@@ -21,6 +22,61 @@ Documentation
     1. [array](#array)
     1. [tabarray](#tabarray)
 1. [Post process function](#post-process-function)
+
+Basic Usage
+-----------
+
+First, expose your schema, form, and model to the $scope.
+
+```javascript
+function FormController($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      name: { type: "string", minLength: 2, title: "Name", description: "Name or alias" },
+      title: {
+        type: "string",
+        enum: ['dr','jr','sir','mrs','mr','NaN','dj']
+      }
+    }
+  };
+
+  $scope.form = [
+    "*",
+    {
+      type: "submit",
+      title: "Save"
+    }
+  ];
+
+  $scope.model = {};
+}
+```
+
+Then load them into Schema Form using the `sfSchema`, `sfForm`, and `sfModel` directives.
+
+```html
+<div ng-controller="FormController">
+    <form sf-schema="schema" sf-form="form" sf-model="model"></form>
+</div>
+```
+
+The `sfSchema` directive doesn't need to be on a form tag, in fact it can be quite useful
+to set it on a div or some such inside the form instead. Especially if you like to prefix or suffix the
+form with buttons or fields that are hard coded.
+
+Example with custom submit buttons:
+```html
+<div ng-controller="FormController">
+  <form>
+    <p>bla bla bla</p>
+    <div sf-schema="schema" sf-form="form" sf-model="model"></div>
+    <input type="submit" value="Submit">
+    <button type="button" ng-click="goBack()">Cancel</button>
+  </form>
+</div>
+```
+
 
 Form types
 ----------
@@ -332,7 +388,7 @@ of the titleMap can be HTML.
 }
 ```
 
-The submit button has btn-primary as default. The button has btn-default as default. 
+The submit button has btn-primary as default. The button has btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 {
@@ -342,7 +398,7 @@ We can change this with ```style``` attribute:
     { type: 'button', style: 'btn-info', title: 'Cancel', onClick: "cancel()" }
   ]
 }
-``` 
+```
 
 ### button
 
@@ -357,14 +413,14 @@ the ```sf-schema``` directive.
 [
 ```
 
-The submit button has btn-primary as default. The button has btn-default as default. 
+The submit button has btn-primary as default. The button has btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 [
   { type: 'button', style: 'btn-warning', title: 'Ok', onClick: function(){ ...  } }
   { type: 'button', style: 'btn-danger', title: 'Cancel', onClick: "cancel()" }
 [
-``` 
+```
 
 ### radios and radiobuttons
 Both type *radios* and *radiobuttons* work the same way, they take a titleMap
@@ -397,7 +453,7 @@ function FormCtrl($scope) {
 }
 ```
 
-With *radiobuttons*, both selected and unselected buttons have btn-primary as default. 
+With *radiobuttons*, both selected and unselected buttons have btn-primary as default.
 We can change this with ```style``` attribute:
 ```javascript
 function FormCtrl($scope) {
@@ -523,7 +579,7 @@ The *form* definition has the option ```ìtems``` that should be a list
 of form objects.
 
 The rendered list of subforms each have a *"Remove"* button and at the bottom there
-is an *"Add"* button. The default *"Add"* button has class btn-default and text Add. Both 
+is an *"Add"* button. The default *"Add"* button has class btn-default and text Add. Both
 could be changed using attribute ```add```, see example below.
 
 If you like to have drag and drop reordering of arrays you also need
@@ -640,10 +696,10 @@ By default the tabs are on the left side (follows the default in JSON Form),
 but with the option ```tabType``` you can change that to eiter *"top"* or *"right"*
 as well.
 
-Every tab page has a *"Remove"* button. The default *"Remove"* button has class btn-default 
-and text Remove. Both could be changed using attribute ```remove```, see example below. 
+Every tab page has a *"Remove"* button. The default *"Remove"* button has class btn-default
+and text Remove. Both could be changed using attribute ```remove```, see example below.
 
-In this case we have an *"Add"* link, not an *"Add"* button. Therefore, the attribute ```add``` 
+In this case we have an *"Add"* link, not an *"Add"* button. Therefore, the attribute ```add```
 only changes the text of the link. See example below.
 
 Bootstrap 3 doesn't have side tabs so to get proper styling you need to add the

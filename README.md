@@ -22,10 +22,10 @@ Schema Form uses convention over configuration, so it comes packaged with some s
 
 JSON Form
 ---------
-Schema Form is inspired by the nice [JSON Form](https://github.com/joshfire/jsonform) library and aims to be roughly compatible with it, especially its form definition. So what sets Schema Form apart from JSON Form? 
+Schema Form is inspired by the nice [JSON Form](https://github.com/joshfire/jsonform) library and aims to be roughly compatible with it, especially its form definition. So what sets Schema Form apart from JSON Form?
 
-1. Schema Form integrates deeply with AngularJS and uses AngularJS conventions to handle forms. 
-2. Schema Form uses [tv4](https://github.com/geraintluff/tv4) for validation, making it compatible with version 4 of the JSON schema standard. 
+1. Schema Form integrates deeply with AngularJS and uses AngularJS conventions to handle forms.
+2. Schema Form uses [tv4](https://github.com/geraintluff/tv4) for validation, making it compatible with version 4 of the JSON schema standard.
 3. By default, Schema Form generates Bootstrap 3-friendly HTML.
 
 
@@ -79,11 +79,14 @@ Installation
 
 ### Bower
 
-It's simplest to install Schema Form using [Bower](http://bower.io/) since it will come packaged with all of its dependencies.
+It's simplest to install Schema Form using [Bower](http://bower.io/).
 
 ```bash
 bower install angular-schema-form
 ```
+
+This will install the latest release and basic dependencies. See
+[dependecies section below](#dependencies).
 
 ### Manual
 
@@ -91,15 +94,26 @@ You can also just download the contents of the `dist/` folder and add dependenci
 
 ### Dependencies
 
+Schema form has a lot of dependencies, most of which are optional. Therefor
+
 Schema Form depends on:
 
-1. [AngularJS](https://angularjs.org/) (duh!)
+1. [AngularJS](https://angularjs.org/) version 1.3.x is recomended. Version 1.2.x
+   has some limitation. See [known limitations](docs/knownlimitations.md).
 2. [angular-sanitize](https://docs.angularjs.org/api/ngSanitize)
-3. [bootstrap 3](http://getbootstrap.com/)
-4. [tv4](https://github.com/geraintluff/tv4)
-5. If you want to use the date picker, you'll also need [jQuery](https://github.com/jquery/jquery) and [pickadate.js](http://amsul.ca/pickadate.js/)
-7. If you'd like to use drag-and-drop reordering of arrays, you'll also need [ui-sortable](https://github.com/angular-ui/ui-sortable) and its [jQueryUI](http://jqueryui.com/) dependencies. See the *ui-sortable* documentation for details about which parts of jQueryUI are needed. You can safely ignore these if you don't need reordering.
-8. Schema Form provides tabbed arrays through the form type `tabarray`. Tab arrays default to tabs on the left side. For these to work, you'll need to include the CSS from [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs). However, you won't need Bootstrap Vertical Tabs for horizontal tabs (the `tabType: "top"` option).
+3. [tv4](https://github.com/geraintluff/tv4)
+4. [objectpath](https://github.com/mike-marcacci/objectpath)
+5. [bootstrap 3](http://getbootstrap.com/)
+
+If you install via bower you get all of the above except bootstrap since we
+don't want to push a certain version or flavor on you. Also make
+sure you got the angular version you actually want.
+
+#### Additional dependecies
+
+1. If you want to use the date picker, you'll also need [jQuery](https://github.com/jquery/jquery) and [pickadate.js](http://amsul.ca/pickadate.js/)
+2. If you'd like to use drag-and-drop reordering of arrays, you'll also need [ui-sortable](https://github.com/angular-ui/ui-sortable) and its [jQueryUI](http://jqueryui.com/) dependencies. See the *ui-sortable* documentation for details about which parts of jQueryUI are needed. You can safely ignore these if you don't need reordering.
+3. Schema Form provides tabbed arrays through the form type `tabarray`. Tab arrays default to tabs on the left side. For these to work, you'll need to include the CSS from [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs). However, you won't need Bootstrap Vertical Tabs for horizontal tabs (the `tabType: "top"` option).
 
 The minified files include templates - no need to load additional HTML files.
 
