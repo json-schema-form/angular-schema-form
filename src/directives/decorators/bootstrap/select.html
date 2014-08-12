@@ -9,5 +9,7 @@
           ng-required="form.required"
           ng-options="item.value as item.name for item in form.titleMap">
   </select>
-  <div class="help-block" ng-show="form.description" ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
+  <div class="help-block"
+       ng-show="(hasError() && errorMessage(schemaError())) || form.description"
+       ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
 </div>
