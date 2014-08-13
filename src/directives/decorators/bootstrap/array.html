@@ -1,4 +1,4 @@
-<div sf-array="form">
+<div sf-array="form" ng-model="$$value$$">
   <h3 ng-show="form.title && form.notitle !== true">{{ form.title }}</h3>
   <ul class="list-group" ng-model="modelArray" ui-sortable>
     <li class="list-group-item" ng-repeat="item in modelArray track by $index">
@@ -18,4 +18,7 @@
       {{ form.add || 'Add'}}
     </button>
   </div>
+  <div class="help-block"
+       ng-show="(hasError() && errorMessage(schemaError())) || form.description"
+       ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
 </div>

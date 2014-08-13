@@ -5,8 +5,7 @@
   <select ng-model="$$value$$"
           sf-changed="form"
           class="form-control"
-          schema-validate="form.schema"
-          ng-required="form.required"
+          schema-validate="form"
           ng-options="item.value as item.name for item in form.titleMap">
   </select>
   <div class="help-block"
