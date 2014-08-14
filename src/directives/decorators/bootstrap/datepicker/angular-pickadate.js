@@ -44,28 +44,34 @@ angular.module('ng').directive('pickADate', function () {
 
       var picker = element.pickadate('picker');
 
-      var $inputText = $('#datepicker_editable_input').on({
-        change: function() {
-          var parsedDate = Date.parse( this.value );
+      if(attrs.editable ? attrs.editable : false){
+        var $inputText = $('#datepicker_editable_input').on({
+          change: function() {
+            var parsedDate = Date.parse( this.value );
 
-          if ( parsedDate ) {
-            picker.set( 'select', [parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()] )
-          }
-          else {
-            picker.set( 'select', attrs.minDate || new Date());
-          }
-        },
-        focus: function() {
+            if ( parsedDate ) {
+              picker.set( 'select', [parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()] )
+            }
+            else {
+              picker.set( 'select', attrs.minDate || new Date());
+            }
+          },
+          focus: function() {
             picker.open(false)
-        },
-        blur: function() {
+          },
+          blur: function() {
             picker.close()
-        }
-      });
+          }
+        });
 
-      picker.on('set', function() {
+        picker.on('set', function() {
           $inputText.val(this.get('value'))
-      });
+        });
+      }else{
+        // reenable default state.
+        $('#datepicker_editable_input').remove();
+        $('#datepicker_input').attr('style', 'background-color: white');
+      }
 
       //The view value
       ngModel.$formatters.push(function(value){
