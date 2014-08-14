@@ -1,46 +1,48 @@
 Date Picker Addon
 =================
 
-Everyone loves a nice date picker, and now you can have your very own date picker
-in Schema Form! The date picker addon uses the excellent jQuery based date
-picker [pickadate.js](http://amsul.ca/pickadate.js/).
+Everyone loves a nice date picker - now you can have your very own date picker in Schema Form! The date picker add-on uses the excellent jQuery-based date picker, [pickadate.js](http://amsul.ca/pickadate.js/).
 
-Note that dates in JSON Schema has the type *"string"* and follow the *RFC 3339*
-date fomat which in turn follows *ISO 8601*. So what does that really mean? Stick
-with the format ```yyyy-mm-dd``` and you'll be fine. The date picker only
-supports date, not time.
+Dates in JSON Schema are of type *"string"* and follow the *RFC 3339* date fomat, which, in turn, follows *ISO 8601*. What does that mean for you? Basically, just stick with the format `yyyy-mm-dd` and you'll be fine. 
+
+Within Schema Form, pickadate only supports dates - not times.
 
 Installation
 ------------
-The date picker is an addon to the bootstrap decorator. To use it you just
-include ```dist/bootstrap-datepicker.min.js``` *after*  
-```dist/bootstrap-decorator.min.js```
+The date picker is an add-on to the Bootstrap decorator. To use it, just include `dist/bootstrap-datepicker.min.js` *after* `dist/bootstrap-decorator.min.js`.
 
-You'll also need the files neccessary for pickadate, see the pickadate.js  
-[github page](https://github.com/amsul/pickadate.js) or documentation.
+You'll need to load a few additional files to use pickadate:
 
-Note that it depends on jQuery and that you also need CSS and translation files
-for the language you like to use. 
-
-
+1. jQuery (pickadate depends on it)
+2. The pickadate source files (see the pickadate.js [GitHub page](https://github.com/amsul/pickadate.js) for documentation)
+3. The pickadate CSS
+4. Translation files for whatever language you want to use
 
 Usage
 -----
-The datepicker addon adds a new form type ```datepicker``` and a new default
+The datepicker add-on adds a new form type, `datepicker`, and a new default
 mapping.
 
 |  Form Type     |   Becomes    |
 |:---------------|:------------:|
-|  datepicker    |  a pick a date widget |
+|  datepicker    |  a pickadate widget |
 
 
-| Schema             |   Form type  |
+| Schema             |   Default Form type  |
 |:-------------------|:------------:|
 | "type": "string" and "format": "date"   |   datepicker   |
 
 
-Options
+Form Type Options
 -------
+The `datepicker` form type takes two options: `minDate` and `maxDate`. `minDate` and `maxDate` both accept one of the following as values:
+
+1. A string in the format `yyyy-mm-dd`,
+2. A unix timestamp (as a Number), or
+3. An instance of `Date`
+
+Here's an example:
+
 ```javascript
 {
   key: "birthDate",
@@ -49,6 +51,4 @@ Options
 }
 ```
 
-The ```datepicker``` takes two options, a max and min date. Both take either
-a string in the format ```yyyy-mm-dd```, a unix timestamp (as a Number) or a
-```Date``` instance.
+

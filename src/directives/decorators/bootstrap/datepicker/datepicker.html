@@ -1,22 +1,14 @@
 <div class="form-group" ng-class="{'has-error': hasError()}">
 
-
-    <fieldset>
-        <label ng-show="showTitle()">{{form.title}}</label>
-        <input id="datepicker_editable_input"/>
-        <input id="datepicker_input"
-               ng-show="form.key"
-               style="display: none;"
-               type="date"
-               class="form-control"
-               ng-required="form.required"
-               schema-validate="form.schema"
-               ng-model="$$value$$"
-               pick-a-date
-               min-date="form.minDate"
-               max-date="form.maxDate" />
-
-    </fieldset>
+  <input ng-show="form.key"
+         style="background-color: white"
+         type="date"
+         class="form-control"
+         schema-validate="form"
+         ng-model="$$value$$"
+         pick-a-date
+         min-date="form.minDate"
+         max-date="form.maxDate" />
 
     <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
 </div>

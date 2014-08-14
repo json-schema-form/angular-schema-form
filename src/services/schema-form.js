@@ -3,7 +3,29 @@
  * This service is not that useful outside of schema form directive
  * but makes the code more testable.
  */
-angular.module('schemaForm').provider('schemaForm',[function(){
+angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(sfPathProvider){
+
+  //Creates an default titleMap list from an enum, i.e. a list of strings.
+  var enumToTitleMap = function(enm) {
+    var titleMap = []; //canonical titleMap format is a list.
+    enm.forEach(function(name){
+      titleMap.push({ name: name, value: name});
+    });
+    return titleMap;
+  };
+
+  // Takes a titleMap in either object or list format and returns one in
+  // in the list format.
+  var canonicalTitleMap = function(titleMap) {
+    if (!angular.isArray(titleMap)) {
+      var canonical = [];
+      angular.forEach(titleMap, function(name,value) {
+        canonical.push({ name: name, value: value });
+      });
+      return canonical;
+    }
+    return titleMap;
+  };
 
   var defaultFormDefinition = function(name,schema,options){
     var rules = defaults[schema.type];
@@ -20,32 +42,42 @@ angular.module('schemaForm').provider('schemaForm',[function(){
   };
 
   //Creates a form object with all common properties
-  var stdFormObj = function(schema,options) {
-    var f = {};
-    if (schema.title) f.title = schema.title;
+  var stdFormObj = function(name,schema,options) {
+    options = options || {};
+    var f = options.global && options.global.formDefaults ? angular.copy(options.global.formDefaults) : {};
+
+    if (options.global && options.global.supressPropertyTitles === true) {
+      f.title = schema.title;
+    } else {
+      f.title = schema.title || name[0];
+    }
+
     if (schema.description) f.description = schema.description;
     if (options.required === true || schema.required === true) f.required = true;
-    if (schema.default) f.default = schema.default;
     if (schema.maxLength) f.maxlength = schema.maxLength;
     if (schema.minLength) f.minlength = schema.maxLength;
-    if (schema.readOnly || schema.readonly)  f.readonly  = schema.readOnly || schema.readonly;
+    if (schema.readOnly || schema.readonly)  f.readonly  = true;
     if (schema.minimum) f.minimum = schema.minimum + (schema.exclusiveMinimum?1:0);
     if (schema.maximum) f.maximum = schema.maximum - (schema.exclusiveMaximum?1:0);
 
     //Non standard attributes
     if (schema.validationMessage) f.validationMessage = schema.validationMessage;
-    if (schema.enumNames) f.titleMap = schema.enumNames;
+    if (schema.enumNames) f.titleMap = canonicalTitleMap(schema.enumNames);
     f.schema = schema;
+
+    // Ng model options doesn't play nice with undefined, might be defined
+    // globally though
+    f.ngModelOptions = f.ngModelOptions || {};
     return f;
   };
 
 
   var text = function(name,schema,options) {
     if (schema.type === 'string' && !schema.enum) {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'text';
-      options.lookup[options.path] = f;
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
@@ -54,30 +86,30 @@ angular.module('schemaForm').provider('schemaForm',[function(){
   //input type="number" would be more suitable don't ya think?
   var number = function(name,schema,options) {
     if (schema.type === 'number') {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'number';
-      options.lookup[options.path] = f;
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
 
   var integer = function(name,schema,options) {
     if (schema.type === 'integer') {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'number';
-      options.lookup[options.path] = f;
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
 
   var checkbox = function(name,schema,options) {
     if (schema.type === 'boolean') {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'checkbox';
-      options.lookup[options.path] = f;
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
@@ -85,32 +117,26 @@ angular.module('schemaForm').provider('schemaForm',[function(){
 
   var select = function(name,schema,options) {
     if (schema.type === 'string' && schema.enum) {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'select';
       if (!f.titleMap) {
-        f.titleMap = {};
-        schema.enum.forEach(function(name){
-          f.titleMap[name] = name;
-        });
+        f.titleMap = enumToTitleMap(schema.enum);
       }
-      options.lookup[options.path] = f;
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
 
   var checkboxes = function(name,schema,options) {
     if (schema.type === 'array' && schema.items && schema.items.enum) {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'checkboxes';
       if (!f.titleMap) {
-        f.titleMap = {};
-        schema.items.enum.forEach(function(name){
-          f.titleMap[name] = name;
-        });
+        f.titleMap = enumToTitleMap(schema.items.enum);
       }
-      options.lookup[options.path] = f;
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
     }
   };
@@ -120,15 +146,16 @@ angular.module('schemaForm').provider('schemaForm',[function(){
   var fieldset = function(name,schema,options){
 
     if (schema.type === "object") {
-      var f   = stdFormObj(schema,options);
+      var f   = stdFormObj(name,schema,options);
       f.type  = 'fieldset';
       f.items = [];
-      options.lookup[options.path] = f;
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
 
       //recurse down into properties
       angular.forEach(schema.properties,function(v,k){
-        var path = options.path+'.'+k;
-        if (options.ignore[path] !== true) {
+        var path = options.path.slice();
+        path.push(k);
+        if (options.ignore[sfPathProvider.stringify(path)] !== true) {
           var required = schema.required && schema.required.indexOf(k) !== -1;
 
           var def = defaultFormDefinition(k,v,{
@@ -151,19 +178,23 @@ angular.module('schemaForm').provider('schemaForm',[function(){
   var array = function(name,schema,options){
 
     if (schema.type === 'array') {
-      var f   = stdFormObj(schema,options);
+      var f   = stdFormObj(name,schema,options);
       f.type  = 'array';
       f.key   = options.path;
-      options.lookup[options.path] = f;
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
 
-      var required = schema.required && schema.required.indexOf(options.path) !== -1;
+      var required = schema.required && schema.required.indexOf(options.path(options.path.length - 1)) !== -1;
 
       // The default is to always just create one child. This works since if the
       // schemas items declaration is of type: "object" then we get a fieldset.
       // We also follow json form notatation, adding empty brackets "[]" to
       // signify arrays.
+
+      var arrPath = options.path.slice();
+      arrPath.push('');
+
       f.items = [defaultFormDefinition(options.path,schema.items,{
-        path: options.path+'[]',
+        path: arrPath,
         required: required || false,
         lookup: options.lookup,
         ignore: options.ignore
@@ -245,10 +276,11 @@ angular.module('schemaForm').provider('schemaForm',[function(){
 
     var service = {};
 
-    service.merge = function(schema,form,ignore) {
+    service.merge = function(schema, form, ignore, options) {
       form  = form || ["*"];
+      options = options || {};
 
-      var stdForm = service.defaults(schema,ignore);
+      var stdForm = service.defaults(schema, ignore, options);
 
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf("*");
@@ -261,12 +293,19 @@ angular.module('schemaForm').provider('schemaForm',[function(){
 
       //ok let's merge!
       //We look at the supplied form and extend it with schema standards
+
+
       var lookup = stdForm.lookup;
       return postProcessFn(form.map(function(obj){
 
         //handle the shortcut with just a name
         if (typeof obj === 'string') {
           obj = { key: obj };
+        }
+
+        //If it has a titleMap make sure it's a list
+        if (obj.titleMap) {
+          obj.titleMap = canonicalTitleMap(obj.titleMap);
         }
 
         //if it's a type with items, merge 'em!
@@ -276,14 +315,27 @@ angular.module('schemaForm').provider('schemaForm',[function(){
 
         //if its has tabs, merge them also!
         if (obj.tabs) {
-          angular.forEach(obj.tabs,function(tab){
-            tab.items = service.merge(schema,tab.items,ignore);
+          angular.forEach(obj.tabs, function(tab) {
+            tab.items = service.merge(schema, tab.items, ignore);
           });
         }
 
         //extend with std form from schema.
-        if (obj.key && lookup[obj.key]) {
-          return angular.extend(lookup[obj.key],obj);
+        if (obj.key) {
+          if (typeof obj.key === 'string') {
+            obj.key = sfPathProvider.parse(obj.key);
+          }
+
+          var str = sfPathProvider.stringify(obj.key);
+          if (lookup[str]) {
+            obj = angular.extend(lookup[str], obj);
+          }
+        }
+
+        // Special case: checkbox
+        // Since have to ternary state we need a default
+        if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
+          obj.schema['default'] = false;
         }
 
         return obj;
@@ -295,20 +347,23 @@ angular.module('schemaForm').provider('schemaForm',[function(){
     /**
      * Create form defaults from schema
      */
-    service.defaults = function(schema,ignore) {
+    service.defaults = function(schema, ignore, globalOptions) {
       var form   = [];
       var lookup = {}; //Map path => form obj for fast lookup in merging
       ignore = ignore || {};
+      globalOptions = globalOptions || {};
 
       if (schema.type === "object") {
         angular.forEach(schema.properties,function(v,k){
+            k = [k];
             if (ignore[k] !== true) {
-              var required = schema.required && schema.required.indexOf(k) !== -1;
+              var required = schema.required && schema.required.indexOf(k[k.length - 1]) !== -1;
               var def = defaultFormDefinition(k,v,{
                 path: k,        //path to this property in dot notation. Root object has no name
                 lookup: lookup,    //extra map to register with. Optimization for merger.
                 ignore: ignore,    //The ignore list of paths (sans root level name)
-                required: required //Is it required? (v4 json schema style)
+                required: required, //Is it required? (v4 json schema style)
+                global: globalOptions // Global options, including form defaults
               });
               if (def) {
                 form.push(def);
@@ -331,19 +386,24 @@ angular.module('schemaForm').provider('schemaForm',[function(){
     service.traverseSchema = function(schema,fn,path,ignoreArrays) {
       ignoreArrays = angular.isDefined(ignoreArrays) ? ignoreArrays : true;
 
+      path = path || [];
+
       var traverse = function(schema,fn,path) {
         fn(schema,path);
         angular.forEach(schema.properties,function(prop,name){
-          traverse(prop,fn,path===""?name:path+'.'+name);
+          var currentPath = path.slice();
+          currentPath.push(name);
+          traverse(prop,fn,currentPath);
         });
 
         //Only support type "array" which have a schema as "items".
         if (!ignoreArrays && schema.items) {
-          traverse(schema.items,fn,path+'[]');
+          var arrPath = path.slice(); arrPath.push('');
+          traverse(schema.items,fn,arrPath);
         }
       };
 
-      traverse(schema,fn,path || "");
+      traverse(schema,fn,path || []);
     };
 
     service.traverseForm = function(form, fn) {

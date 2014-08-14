@@ -1,4 +1,4 @@
-var deps = [];
+var deps = ['ObjectPath'];
 try {
   //This throws an expection if module does not exist.
   angular.module('ngSanitize');
