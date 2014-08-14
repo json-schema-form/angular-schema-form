@@ -15,16 +15,30 @@ angular.module('ng').directive('pickADate', function () {
     restrict: "A",
     require: 'ngModel',
     scope: {
-        editable: '=',
-        ngModel: '=',
-        minDate: '=',
-        maxDate: '='
+      editable: '=',
+      ngModel: '=',
+      minDate: '=',
+      maxDate: '='
     },
     link: function (scope, element, attrs, ngModel) {
       //Bail out gracefully if pickadate is not loaded.
       if (!element.pickadate) {
+        alert('pickadate not loaded');
         return;
       }
+
+      //By setting formatSubmit to null we inhibit the
+      //hidden field that pickadate likes to create.
+      //We use ngModel formatters instead to format the value.
+      element.pickadate({
+        onClose: function () {
+          element.blur();
+        },
+        onSet: function() {
+          $inputText.val(this.get('value'))
+        },
+        formatSubmit: null
+      });
 
       var picker = element.pickadate('picker');
 
@@ -46,19 +60,6 @@ angular.module('ng').directive('pickADate', function () {
         blur: function() {
           picker.close()
         }
-      });
-
-      //By setting formatSubmit to null we inhibit the
-      //hidden field that pickadate likes to create.
-      //We use ngModel formatters instead to format the value.
-      element.pickadate({
-        onClose: function () {
-          element.blur();
-        },
-        onSet: function() {
-          $inputText.val(this.get('value'))
-        },
-        formatSubmit: null
       });
 
       //Defaultformat is for json schema date-time is ISO8601
