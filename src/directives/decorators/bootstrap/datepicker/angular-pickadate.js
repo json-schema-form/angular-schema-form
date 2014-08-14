@@ -15,15 +15,13 @@ angular.module('schemaForm').directive('pickADate', function () {
     restrict: "A",
     require: 'ngModel',
     scope: {
-      editable: '=',
-      ngModel: '=',
-      minDate: '=',
-      maxDate: '='
+        ngModel: '=',
+        minDate: '=',
+        maxDate: '='
     },
     link: function (scope, element, attrs, ngModel) {
       //Bail out gracefully if pickadate is not loaded.
       if (!element.pickadate) {
-        alert('pickadate not loaded');
         return;
       }
 
@@ -68,6 +66,31 @@ angular.module('schemaForm').directive('pickADate', function () {
 
       //View format on the other hand we get from the pickadate translation file
       var viewFormat    = $.fn.pickadate.defaults.format;
+
+      var picker = element.pickadate('picker');
+
+      var $inputText = $('#datepicker_editable_input').on({
+        change: function() {
+          var parsedDate = Date.parse( this.value );
+
+          if ( parsedDate ) {
+            picker.set( 'select', [parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()] )
+          }
+          else {
+            picker.set( 'select', attrs.minDate || new Date());
+          }
+        },
+        focus: function() {
+            picker.open(false)
+        },
+        blur: function() {
+            picker.close()
+        }
+      });
+
+      picker.on('set', function() {
+          $inputText.val(this.get('value'))
+      });
 
       //The view value
       ngModel.$formatters.push(function(value){
