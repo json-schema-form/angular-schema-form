@@ -1,4 +1,4 @@
-<div sf-array="form">
+<div sf-array="form" ng-model="$$value$$" ng-model-options="form.ngModelOptions">
   <h3 ng-show="form.title && form.notitle !== true">{{ form.title }}</h3>
   <ul class="list-group" ng-model="modelArray" ui-sortable>
     <li class="list-group-item" ng-repeat="item in modelArray track by $index">
@@ -13,9 +13,12 @@
   <div class="clearfix" style="padding: 15px;">
     <button ng-click="appendToArray()"
             type="button"
-            class="btn btn-default pull-right">
+            class="btn {{ form.style.add || 'btn-default' }} pull-right">
       <i class="glyphicon glyphicon-plus"></i>
       {{ form.add || 'Add'}}
     </button>
   </div>
+  <div class="help-block"
+       ng-show="(hasError() && errorMessage(schemaError())) || form.description"
+       ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
 </div>

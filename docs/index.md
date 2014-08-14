@@ -1,6 +1,9 @@
 Documentation
 =============
 
+1. [Basic Usage](#basic-usage)
+1. [Handling Submit](#handling-submit)
+1. [Global Options](#global-options)
 1. [Form types](#form-types)  
 1. [Default form types](#default-form-types)
 1. [Form definitions](#form-definitions)
@@ -9,6 +12,7 @@ Documentation
     1. [onChange](#onchange)
     1. [Validation Messages](#validation-messages)
     1. [Inline feedback icons](#inline-feedback-icons)
+    1. [ngModelOptions](#ngmodeloptions)
 1. [Specific options and types](#specific-options-and-types)
     1. [fieldset and section](#fieldset-and-section)
     1. [conditional](#conditional)
@@ -21,6 +25,151 @@ Documentation
     1. [array](#array)
     1. [tabarray](#tabarray)
 1. [Post process function](#post-process-function)
+
+Basic Usage
+-----------
+
+First, expose your schema, form, and model to the $scope.
+
+```javascript
+function FormController($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      name: { type: "string", minLength: 2, title: "Name", description: "Name or alias" },
+      title: {
+        type: "string",
+        enum: ['dr','jr','sir','mrs','mr','NaN','dj']
+      }
+    }
+  };
+
+  $scope.form = [
+    "*",
+    {
+      type: "submit",
+      title: "Save"
+    }
+  ];
+
+  $scope.model = {};
+}
+```
+
+Then load them into Schema Form using the `sfSchema`, `sfForm`, and `sfModel` directives.
+
+```html
+<div ng-controller="FormController">
+    <form sf-schema="schema" sf-form="form" sf-model="model"></form>
+</div>
+```
+
+The `sfSchema` directive doesn't need to be on a form tag, in fact it can be quite useful
+to set it on a div or some such inside the form instead. Especially if you like to prefix or suffix the
+form with buttons or fields that are hard coded.
+
+Example with custom submit buttons:
+```html
+<div ng-controller="FormController">
+  <form>
+    <p>bla bla bla</p>
+    <div sf-schema="schema" sf-form="form" sf-model="model"></div>
+    <input type="submit" value="Submit">
+    <button type="button" ng-click="goBack()">Cancel</button>
+  </form>
+</div>
+```
+
+Handling Submit
+---------------
+Schema Form does not care what you do with your data, to handle form submit
+the recomended way is to use the `ng-submit` directive. It's also recomended
+to use a `name` attribute on your form so you can access the
+[FormController](https://code.angularjs.org/1.3.0-beta.15/docs/api/ng/type/form.FormController)
+and check if the form is valid or not.
+
+You can force a validation by broadcasting the event `schemaFormValidate`, ex
+`$scope.$broadcast('schemaFormValidate')`, this will immediately validate the
+entire form and show any errors.
+
+Example submit:
+```javascript
+function FormController($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      name: { type: "string", minLength: 2, title: "Name", description: "Name or alias" },
+      title: {
+        type: "string",
+        enum: ['dr','jr','sir','mrs','mr','NaN','dj']
+      }
+    }
+  };
+
+  $scope.form = [
+    "*",
+    {
+      type: "submit",
+      title: "Save"
+    }
+  ];
+
+  $scope.model = {};
+
+  $scope.onSubmit = function(form) {
+    // First we broadcast an event so all fields validate themselves
+    $scope.$broadcast('schemaFormValidate');
+
+    // Then we check if the form is valid
+    if (form.$valid) {
+      // ... do whatever you need to do with your data.
+    }
+  }
+}
+
+```
+
+And the HTML would be something like this:
+```html
+<div ng-controller="FormController">
+    <form name="myForm"
+          sf-schema="schema"
+          sf-form="form"
+          sf-model="model"
+          ng-submit="onSubmit(myForm)"></form>
+</div>
+```
+
+
+Global Options
+--------------
+Schema Form also have two options you can set globally via the `sf-options`
+attribute which should be placed along side `sf-schema`.
+
+`sf-options` takes an object with the following possible attributes.
+
+
+| Attribute     |                         |
+|:--------------|:------------------------|
+| supressPropertyTitles | by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
+| formDefaults | an object that will be used as a default for all form definitions |
+
+*formDefaults* is mostly useful for setting global [ngModelOptions](#ngmodeloptions)
+i.e. changing the entire form to validate on blur. But can also be used to set
+[Validation Messages](#validation-messages) for all fields if you like a bit more
+friendlier messages.
+
+Ex.
+```html
+<div ng-controller="FormController">
+    <form sf-schema="schema"
+          sf-form="form"
+          sf-model="model"
+          sf-options="{ formDefaults: { ngModelOptions: { updateOn: 'blur' } }}"></form>
+</div>
+```
+
+
 
 Form types
 ----------
@@ -134,11 +283,11 @@ var schema = {
   {
     key: "surname",
     type: "select",
-    titleMap: {
-      "Andersson": "Andersson",
-      "Johansson": "Johansson",
-      "other": "Something else..."
-    }
+    titleMap: [
+      { value: "Andersson", name: "Andersson" },
+      { value: "Johansson", name: "Johansson" },
+      { value: "other", name: "Something else..."}
+    ]
   }
 ]
 ```
@@ -149,14 +298,15 @@ Standard Options
 General options most field types can handle:
 ```javascript
 {
-  key: "address.street",      //The dot notatin to the attribute on the model
-  type: "text",               //Type of field
-  title: "Street",            //Title of field, taken from schema if available
-  notitle: false,             //Set to true to hide title
-  description: "Street name", //A description, taken from schema if available, can be HTML
-  validationMessage: "Oh noes, please write a proper address",  //A custom validation error message
-  onChange: "valueChanged(form.key,modelValue)", //onChange event handler, expression or function
-  feedback: false             //inline feedback icons
+  key: "address.street",      // The dot notatin to the attribute on the model
+  type: "text",               // Type of field
+  title: "Street",            // Title of field, taken from schema if available
+  notitle: false,             // Set to true to hide title
+  description: "Street name", // A description, taken from schema if available, can be HTML
+  validationMessage: "Oh noes, please write a proper address",  // A custom validation error message
+  onChange: "valueChanged(form.key,modelValue)", // onChange event handler, expression or function
+  feedback: false,             // Inline feedback icons
+  ngModelOptions: { ... }      // Passed along to ng-model-options
 }
 ```
 
@@ -185,13 +335,13 @@ $scope.form = [
 
 ### Validation Messages
 
-Per default all error messages but "Required" comes from the schema validator
+Per default all error messages comes from the schema validator
 [tv4](https://github.com/geraintluff/tv4), this might or might not work for you.
-If you supply a ```validationMessage``` property in the form definition, and if its value is a
+If you supply a `validationMessage` property in the form definition, and if its value is a
 string that will be used instead on any validation error.
 
 If you need more fine grained control you can supply an object instead with keys matching the error
-codes of [tv4](https://github.com/geraintluff/tv4). See ```tv4.errorCodes```
+codes of [tv4](https://github.com/geraintluff/tv4). See `tv4.errorCodes`
 
 Ex.
 ```javascript
@@ -199,11 +349,14 @@ Ex.
   key: "address.street",
   validationMessage: {
     tv4.errorCodes.STRING_LENGTH_SHORT: "Address is too short, man.",
-    "default": "Just write a proper address, will you?",   //Special catch all error message
-    "required": "I needz an address plz"                   //Used for required if specified
+    "default": "Just write a proper address, will you?"   //Special catch all error message
   }
 }
 ```
+
+You can also set a global `validationMessage` in *formDefaults* see
+[Global Options](#global-options).
+
 
 ### Inline feedback icons
 *input* and *textarea* based fields get inline status icons by default. A check
@@ -232,6 +385,26 @@ Useful things in the decorators scope are
 | ngModel        | The controller of the ngModel directive, ex. ngModel.$valid |
 | form           | The form definition for this field |
 
+
+### ngModelOptions
+Angular 1.3 introduces a new directive, *ngModelOptions*, which let's you set
+a couple of options that change how the directive *ng-model* works. Schema Form
+uses *ng-model* to bind against fields and therefore changing theses options
+might be usefule for you.
+
+One thing you can do is to change the update behavior of *ng-model*, this is how
+you get form fields that validate on blur instead of directly on change.
+
+Ex.
+```javascript
+{
+  key: "email",
+  ngModelOptions: { updateOn: 'blur' }
+}
+```
+
+See [Global Options](#global-options) for an example how you set entire form
+to validate on blur.
 
 
 Specific options and types
@@ -305,10 +478,28 @@ scope.
 
 ### select and checkboxes
 
-*select* and *checkboxes* can take an object, ```titleMap```, where key is the value to be saved on the model
-and the value is the title of the option. In the case of *checkboxes* the values
-of the titleMap can be HTML.
+*select* and *checkboxes* can take an attribute, `titleMap`, wich defines a name
+and a value. The value is bound to the model while the name is used for display.
+In the case of *checkboxes* the names of the titleMap can be HTML.
 
+A `titleMap` can be specified as either an object (same as in JSON Form), where
+the propery is the value and the value of that property is the name, or as
+a list of name-value objects. The latter is used internally and is the recomended
+format to use. Note that when defining a `titleMap` as an object the value is
+restricted to strings since property names of objects always is a string.
+
+As a list:
+```javascript
+{
+  type: "select",
+  titleMap: [
+    { value: "yes", name: "Yes I do" },
+    { value: "no", name: "Hell no" }
+  ]
+}
+```
+
+As an object:
 ```javascript
 {
   type: "select",
@@ -332,6 +523,18 @@ of the titleMap can be HTML.
 }
 ```
 
+The submit button has btn-primary as default. The button has btn-default as default.
+We can change this with ```style``` attribute:
+```javascript
+{
+  type: "actions",
+  items: [
+    { type: 'submit', style: 'btn-success', title: 'Ok' }
+    { type: 'button', style: 'btn-info', title: 'Cancel', onClick: "cancel()" }
+  ]
+}
+```
+
 ### button
 
 *button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
@@ -345,10 +548,22 @@ the ```sf-schema``` directive.
 [
 ```
 
+The submit button has btn-primary as default. The button has btn-default as default.
+We can change this with ```style``` attribute:
+```javascript
+[
+  { type: 'button', style: 'btn-warning', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'button', style: 'btn-danger', title: 'Cancel', onClick: "cancel()" }
+[
+```
+
 ### radios and radiobuttons
-Both type *radios* and *radiobuttons* work the same way, they take a titleMap
-and renders ordinary radio buttons or bootstrap 3 buttons inline. It's a
-cosmetic choice. The value in the titleMap can be HTML.
+Both type *radios* and *radiobuttons* work the same way.
+They take a `titleMap` and renders ordinary radio buttons or bootstrap 3 buttons
+inline. It's a cosmetic choice.
+
+The `titleMap` is either a list or an object, see [select and checkboxes](#select-and-checkboxes)
+for details. The "name" part in the `titleMap` can be HTML.
 
 Ex.
 ```javascript
@@ -367,11 +582,71 @@ function FormCtrl($scope) {
     {
       key: "choice",
       type: "radiobuttons",
-      titleMap: {
-        one: "One",
-        two: "More..."
+      titleMap: [
+        { value: "one", name: "One" },
+        { value, "two", name: "More..." }
+      ]
+    }
+  ];
+}
+```
+
+The actual schema property it binds doesn't need to be a string with an enum.
+Here is an example creating a yes no radio buttons that binds to a boolean.
+
+Ex.
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      confirm: {
+        type: "boolean",
+        default: false
       }
     }
+  };
+
+  $scope.form = [
+    {
+      key: "choice",
+      type: "radios",
+      titleMap: [
+        { value: false, name: "No I don't understand these cryptic terms" },
+        { value: true, , name: "Yes this makes perfect sense to me" }
+      ]
+    }
+  ];
+}
+```
+
+
+With *radiobuttons*, both selected and unselected buttons have btn-primary as default.
+We can change this with ```style``` attribute:
+```javascript
+function FormCtrl($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      choice: {
+        type: "string",
+        enum: ["one","two"]
+      }
+    }
+  };
+
+  $scope.form = [
+    {
+      key: "choice",
+      type: "radiobuttons",
+      style: {
+		selected: "btn-success",
+		unselected: "btn-default"
+	  },
+	  titleMap: [
+     { value: "one", name: "One" },
+     { value, "two", name: "More..." }
+   ]
   ];
 }
 ```
@@ -407,9 +682,9 @@ function FormCtrl($scope) {
 ```
 
 ### tabs
-The ```tabs``` form type lets you split your form into tabs. It is similar to
-```fieldset``` in that it just changes the presentation of the form. ```tabs```
-takes a option, also called ```tabs```, that is a list of tab objects. Each tab
+The `tabs` form type lets you split your form into tabs. It is similar to
+`fieldset` in that it just changes the presentation of the form. `tabs`
+takes a option, also called `tabs`, that is a list of tab objects. Each tab
 object consist of a *title* and a *items* list of form objects.
 
 Ex.
@@ -462,17 +737,17 @@ function FormCtrl($scope) {
 ```
 
 ### array
-The ```array``` form type is the default for the schema type ```array```.
-The schema for an array has the property ```"items"``` which in the JSON Schema
+The `array` form type is the default for the schema type `array`.
+The schema for an array has the property `"items"` which in the JSON Schema
 specification can be either another schema (i.e. and object), or a list of
 schemas. Only a schema is supported by Schema Form, and not the list of schemas.
 
-The *form* definition has the option ```ìtems``` that should be a list
+The *form* definition has the option `items` that should be a list
 of form objects.
 
-The rendered list of subforms each have a remove button and at the bottom there
-is an add button. The text of the add button can be changed by the option
- ```add``` , see example below.
+The rendered list of subforms each have a *"Remove"* button and at the bottom there
+is an *"Add"* button. The default *"Add"* button has class btn-default and text Add. Both
+could be changed using attribute `add`, see example below.
 
 If you like to have drag and drop reordering of arrays you also need
 [ui-sortable](https://github.com/angular-ui/ui-sortable) and its dependencies
@@ -481,7 +756,7 @@ what parts of jQueryUI that is needed. You can safely ignore these if you don't
 need the reordering.
 
 In the form definition you can refer to properties of an array item by the empty
-bracket notation. In the ```key``` simply end the name of the array with ```[]```
+bracket notation. In the `key` simply end the name of the array with `[]`
 
 Given the schema:
 ```json
@@ -507,8 +782,8 @@ Given the schema:
   }
 }
 ```
-Then ```subforms[].name``` refers to the property name of any subform item,
-```subforms[].emails[]``` refers to the subform of emails. See example below for
+Then `subforms[].name` refers to the property name of any subform item,
+`subforms[].emails[]` refers to the subform of emails. See example below for
 usage.
 
 
@@ -534,7 +809,7 @@ function FormCtrl($scope) {
 
 
 Example with sub form, note that you can get rid of the form field the object wrapping the
-subform fields gives you per default by using the ```items``` option in the
+subform fields gives you per default by using the `items` option in the
 form definition.
 
 ```javascript
@@ -566,6 +841,9 @@ function FormCtrl($scope) {
     {
       key: "subforms",
       add: "Add person",
+      style: {
+		add: "btn-success"
+	  },
       items: [
         "subforms[].nick",
         "subforms[].name",
@@ -578,21 +856,24 @@ function FormCtrl($scope) {
 
 
 ### tabarray
-The ```tabarray``` form type behaves the same way and has the same options as
-```array``` but instead of rendering a list it renders a tab per item in list.
+The `tabarray` form type behaves the same way and has the same options as
+`array` but instead of rendering a list it renders a tab per item in list.
 
 By default the tabs are on the left side (follows the default in JSON Form),
-but with the option ```tabType``` you can change that to eiter *"top"* or *"right"*
+but with the option `tabType` you can change that to eiter *"top"* or *"right"*
 as well.
 
-Every tab page has a *"Remove"* button, you can change the text on that with
-the ```remove``` option.
+Every tab page has a *"Remove"* button. The default *"Remove"* button has class btn-default
+and text Remove. Both could be changed using attribute `remove`, see example below.
+
+In this case we have an *"Add"* link, not an *"Add"* button. Therefore, the attribute `add`
+only changes the text of the link. See example below.
 
 Bootstrap 3 doesn't have side tabs so to get proper styling you need to add the
 dependency [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs).
 It is not needed for tabs on top.
 
-The ```title``` option is a bit special in ```tabarray```, it defines the title
+The `title` option is a bit special in `tabarray`, it defines the title
 of the tab and is considered a angular expression. The expression is evaluated
 with two extra variables in context: **value** and **$index**, where **value**
 is the value in the array (i.e. that tab) and **$index** the index.  
@@ -630,7 +911,11 @@ function FormCtrl($scope) {
       tabType: "top",
       title: "value.nick || ('Tab '+$index)"
       key: "subforms",
-      add: "Add person",
+      remove: "Delete",
+      style: {
+		remove: "btn-danger"
+	  },
+	  add: "Add person",
       items: [
         "subforms[].nick",
         "subforms[].name",
@@ -648,9 +933,9 @@ function FormCtrl($scope) {
 Post process function
 ---------------------
 
-If you like to use ```["*"]``` as a form, or aren't in control of the form definitions
+If you like to use `["*"]` as a form, or aren't in control of the form definitions
 but really need to change or add something you can register a *post process*
-function with the ```schemaForm``` service provider. The post process function
+function with the `schemaForm` service provider. The post process function
 gets one argument, the final form merged with the defaults from the schema just
 before it's rendered, and should return a form.
 

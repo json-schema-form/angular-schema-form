@@ -2,9 +2,11 @@
   "schema": {
     "type": "object",
     "title": "Comment",
+    "required": ["comments"],
     "properties": {
       "comments": {
         "type": "array",
+        "maxItems": 2,
         "items": {
           "type": "object",
           "properties": {
@@ -33,10 +35,14 @@
   "form": [
     {
       "type": "help",
-      "helpvalue": "<h4>Array Example</h4><p>Try adding a couple of forms, reorder by drag'n'drop.</p>" 
+      "helpvalue": "<h4>Array Example</h4><p>Try adding a couple of forms, reorder by drag'n'drop.</p>"
     },
     {
       "key": "comments",
+	  "add": "New",
+	  "style": {
+		"add": "btn-success"
+	  },
       "items": [
         "comments[].name",
         "comments[].email",
@@ -48,6 +54,7 @@
     },
     {
       "type": "submit",
+      "style": "btn-info",
       "title": "OK"
     }
   ]
