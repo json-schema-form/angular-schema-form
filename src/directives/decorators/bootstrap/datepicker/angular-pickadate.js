@@ -26,13 +26,37 @@ angular.module('ng').directive('pickADate', function () {
         return;
       }
 
+      var picker = element.pickadate('picker');
+
+      //todo: make editable configureable
+      var $inputText = $('#datepicker_editable_input').on({
+        change: function() {
+          var parsedDate = Date.parse( this.value );
+
+          if ( parsedDate ) {
+            picker.set( 'select', [parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()] )
+          }
+          else {
+            picker.set( 'select', attrs.minDate || new Date());
+          }
+        },
+        focus: function() {
+          picker.open(false)
+        },
+        blur: function() {
+          picker.close()
+        }
+      });
+
       //By setting formatSubmit to null we inhibit the
       //hidden field that pickadate likes to create.
       //We use ngModel formatters instead to format the value.
       element.pickadate({
-        editable: attrs.editable ? attrs.editable : false,
         onClose: function () {
           element.blur();
+        },
+        onSet: function() {
+          $inputText.val(this.get('value'))
         },
         formatSubmit: null
       });
@@ -43,37 +67,6 @@ angular.module('ng').directive('pickADate', function () {
 
       //View format on the other hand we get from the pickadate translation file
       var viewFormat    = $.fn.pickadate.defaults.format;
-
-      var picker = element.pickadate('picker');
-
-      if(attrs.editable ? attrs.editable : false){
-        var $inputText = $('#datepicker_editable_input').on({
-          change: function() {
-            var parsedDate = Date.parse( this.value );
-
-            if ( parsedDate ) {
-              picker.set( 'select', [parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()] )
-            }
-            else {
-              picker.set( 'select', attrs.minDate || new Date());
-            }
-          },
-          focus: function() {
-            picker.open(false)
-          },
-          blur: function() {
-            picker.close()
-          }
-        });
-
-        picker.on('set', function() {
-          $inputText.val(this.get('value'))
-        });
-      }else{
-        // reenable default state.
-        $('#datepicker_editable_input').remove();
-        $('#datepicker_input').attr('style', 'background-color: white');
-      }
 
       //The view value
       ngModel.$formatters.push(function(value){
