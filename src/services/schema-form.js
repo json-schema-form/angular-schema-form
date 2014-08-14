@@ -42,9 +42,9 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
   };
 
   //Creates a form object with all common properties
-  var stdFormObj = function(schema,options) {
+  var stdFormObj = function(name,schema,options) {
     var f = {};
-    if (schema.title) f.title = schema.title;
+    f.title = schema.title || name[0];
     if (schema.description) f.description = schema.description;
     if (options.required === true || schema.required === true) f.required = true;
     if (schema.maxLength) f.maxlength = schema.maxLength;
@@ -57,13 +57,16 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
     if (schema.validationMessage) f.validationMessage = schema.validationMessage;
     if (schema.enumNames) f.titleMap = canonicalTitleMap(schema.enumNames);
     f.schema = schema;
+
+    // Ng model options doesn't play nice with undefined
+    f.ngModelOptions = {};
     return f;
   };
 
 
   var text = function(name,schema,options) {
     if (schema.type === 'string' && !schema.enum) {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'text';
       options.lookup[sfPathProvider.stringify(options.path)] = f;
@@ -75,7 +78,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
   //input type="number" would be more suitable don't ya think?
   var number = function(name,schema,options) {
     if (schema.type === 'number') {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'number';
       options.lookup[sfPathProvider.stringify(options.path)] = f;
@@ -85,7 +88,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
 
   var integer = function(name,schema,options) {
     if (schema.type === 'integer') {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'number';
       options.lookup[sfPathProvider.stringify(options.path)] = f;
@@ -95,7 +98,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
 
   var checkbox = function(name,schema,options) {
     if (schema.type === 'boolean') {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'checkbox';
       options.lookup[sfPathProvider.stringify(options.path)] = f;
@@ -106,7 +109,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
 
   var select = function(name,schema,options) {
     if (schema.type === 'string' && schema.enum) {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'select';
       if (!f.titleMap) {
@@ -119,7 +122,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
 
   var checkboxes = function(name,schema,options) {
     if (schema.type === 'array' && schema.items && schema.items.enum) {
-      var f = stdFormObj(schema,options);
+      var f = stdFormObj(name,schema,options);
       f.key  = options.path;
       f.type = 'checkboxes';
       if (!f.titleMap) {
@@ -135,7 +138,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
   var fieldset = function(name,schema,options){
 
     if (schema.type === "object") {
-      var f   = stdFormObj(schema,options);
+      var f   = stdFormObj(name,schema,options);
       f.type  = 'fieldset';
       f.items = [];
       options.lookup[sfPathProvider.stringify(options.path)] = f;
@@ -167,7 +170,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
   var array = function(name,schema,options){
 
     if (schema.type === 'array') {
-      var f   = stdFormObj(schema,options);
+      var f   = stdFormObj(name,schema,options);
       f.type  = 'array';
       f.key   = options.path;
       options.lookup[sfPathProvider.stringify(options.path)] = f;

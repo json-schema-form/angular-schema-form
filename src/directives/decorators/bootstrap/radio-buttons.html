@@ -1,5 +1,7 @@
 <div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
-  <label ng-show="showTitle()">{{form.title}}</label>
+  <div>
+    <label ng-show="showTitle()">{{form.title}}</label>
+  </div>
   <div class="btn-group">
     <label class="btn {{ (item.value === $$value$$) ? form.style.selected || 'btn-primary' : form.style.unselected || 'btn-primary'; }}"
            ng-class="{ active: item.value === $$value$$ }"
