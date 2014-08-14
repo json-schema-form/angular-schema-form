@@ -6,6 +6,7 @@
          sf-changed="form"
          placeholder="{{form.placeholder}}"
          class="form-control"
+         ng-model-options="form.ngModelOptions"
          ng-model="$$value$$"
          schema-validate="form">
   <span ng-if="form.feedback !== false"

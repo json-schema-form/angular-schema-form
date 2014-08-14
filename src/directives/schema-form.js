@@ -71,9 +71,10 @@ function($compile,  schemaForm,  schemaFormDecorators, sfSelect){
           lastDigest.schema = schema;
           lastDigest.form = form;
 
-          //FIXME: traverse schema and model and set default values.
+          // Check for options
+          var options = scope.$eval(attrs.sfOptions);
 
-          var merged = schemaForm.merge(schema,form,ignore);
+          var merged = schemaForm.merge(schema,form,ignore,options);
           var frag = document.createDocumentFragment();
 
           //make the form available to decorators

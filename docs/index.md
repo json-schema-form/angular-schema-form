@@ -2,6 +2,7 @@ Documentation
 =============
 
 1. [Basic Usage](#basic-usage)
+1. [Global Options](#global-options)
 1. [Form types](#form-types)  
 1. [Default form types](#default-form-types)
 1. [Form definitions](#form-definitions)
@@ -10,6 +11,7 @@ Documentation
     1. [onChange](#onchange)
     1. [Validation Messages](#validation-messages)
     1. [Inline feedback icons](#inline-feedback-icons)
+    1. [ngModelOptions](#ngmodeloptions)
 1. [Specific options and types](#specific-options-and-types)
     1. [fieldset and section](#fieldset-and-section)
     1. [conditional](#conditional)
@@ -76,6 +78,35 @@ Example with custom submit buttons:
   </form>
 </div>
 ```
+
+Global Options
+--------------
+Schema Form also have two options you can set globally via the `sf-options`
+attribute which should be placed along side `sf-schema`.
+
+`sf-options` takes an object with the following possible attributes.
+
+
+| Attribute     |                         |
+|:--------------|:------------------------|
+| supressPropertyTitles | by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
+| formDefaults | an object that will be used as a default for all form definitions |
+
+*formDefaults* is mostly useful for setting global [ngModelOptions](#ngmodeloptions)
+i.e. changing the entire form to validate on blur. But can also be used to set
+[Validation Messages](#validation-messages) for all fields if you like a bit more
+friendlier messages.
+
+Ex.
+```html
+<div ng-controller="FormController">
+    <form sf-schema="schema"
+          sf-form="form"
+          sf-model="model"
+          sf-options="{ formDefaults: { ngModelOptions: { updateOn: 'blur' } }}"></form>
+</div>
+```
+
 
 
 Form types
@@ -205,14 +236,15 @@ Standard Options
 General options most field types can handle:
 ```javascript
 {
-  key: "address.street",      //The dot notatin to the attribute on the model
-  type: "text",               //Type of field
-  title: "Street",            //Title of field, taken from schema if available
-  notitle: false,             //Set to true to hide title
-  description: "Street name", //A description, taken from schema if available, can be HTML
-  validationMessage: "Oh noes, please write a proper address",  //A custom validation error message
-  onChange: "valueChanged(form.key,modelValue)", //onChange event handler, expression or function
-  feedback: false             //inline feedback icons
+  key: "address.street",      // The dot notatin to the attribute on the model
+  type: "text",               // Type of field
+  title: "Street",            // Title of field, taken from schema if available
+  notitle: false,             // Set to true to hide title
+  description: "Street name", // A description, taken from schema if available, can be HTML
+  validationMessage: "Oh noes, please write a proper address",  // A custom validation error message
+  onChange: "valueChanged(form.key,modelValue)", // onChange event handler, expression or function
+  feedback: false,             // Inline feedback icons
+  ngModelOptions: { ... }      // Passed along to ng-model-options
 }
 ```
 
@@ -241,13 +273,13 @@ $scope.form = [
 
 ### Validation Messages
 
-Per default all error messages but "Required" comes from the schema validator
+Per default all error messages comes from the schema validator
 [tv4](https://github.com/geraintluff/tv4), this might or might not work for you.
-If you supply a ```validationMessage``` property in the form definition, and if its value is a
+If you supply a `validationMessage` property in the form definition, and if its value is a
 string that will be used instead on any validation error.
 
 If you need more fine grained control you can supply an object instead with keys matching the error
-codes of [tv4](https://github.com/geraintluff/tv4). See ```tv4.errorCodes```
+codes of [tv4](https://github.com/geraintluff/tv4). See `tv4.errorCodes`
 
 Ex.
 ```javascript
@@ -255,11 +287,14 @@ Ex.
   key: "address.street",
   validationMessage: {
     tv4.errorCodes.STRING_LENGTH_SHORT: "Address is too short, man.",
-    "default": "Just write a proper address, will you?",   //Special catch all error message
-    "required": "I needz an address plz"                   //Used for required if specified
+    "default": "Just write a proper address, will you?"   //Special catch all error message
   }
 }
 ```
+
+You can also set a global `validationMessage` in *formDefaults* see
+[Global Options](#global-options).
+
 
 ### Inline feedback icons
 *input* and *textarea* based fields get inline status icons by default. A check
@@ -288,6 +323,26 @@ Useful things in the decorators scope are
 | ngModel        | The controller of the ngModel directive, ex. ngModel.$valid |
 | form           | The form definition for this field |
 
+
+### ngModelOptions
+Angular 1.3 introduces a new directive, *ngModelOptions*, which let's you set
+a couple of options that change how the directive *ng-model* works. Schema Form
+uses *ng-model* to bind against fields and therefore changing theses options
+might be usefule for you.
+
+One thing you can do is to change the update behavior of *ng-model*, this is how
+you get form fields that validate on blur instead of directly on change.
+
+Ex.
+```javascript
+{
+  key: "email",
+  ngModelOptions: { updateOn: 'blur' }
+}
+```
+
+See [Global Options](#global-options) for an example how you set entire form
+to validate on blur. 
 
 
 Specific options and types

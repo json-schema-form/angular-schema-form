@@ -465,7 +465,7 @@ describe('Schema form',function(){
         tmpl.children().length.should.be.equal(2);
         tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
         tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(0).children().eq(0).find('input').attr('required').should.be.equal('required');
+        tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model-options').should.be.equal('form.ngModelOptions')
         tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
         tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
         tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
@@ -497,7 +497,7 @@ describe('Schema form',function(){
         tmpl.children().length.should.be.equal(2);
         tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
         tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(0).children().eq(0).find('input').attr('required').should.be.equal('required');
+        tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model-options').should.be.equal('form.ngModelOptions')
         tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
         tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
         tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
@@ -532,7 +532,7 @@ describe('Schema form',function(){
         tmpl.children().length.should.be.equal(2);
         tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
         tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-        tmpl.children().eq(0).children().eq(0).find('input').attr('required').should.be.equal('required');
+        tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model-options').should.be.equal('form.ngModelOptions');
         tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
         tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
         tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
@@ -722,7 +722,7 @@ describe('Schema form',function(){
 
         scope.form = [
           "names",
-          { key: "foobars", type: "checkboxes", titleMap:{ 'foo':'Foo'}}
+          { key: "foobars", type: "checkboxes", titleMap:{ 'foo':'Foo'} }
         ];
 
         var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1672,105 +1672,230 @@ describe('Schema form',function(){
 
         var form = [
           {
-            key: ["name"],
-            type: "text",
-            title: "Name",
-            description: "Gimme yea name lad",
-            schema: {
+            "title": "Name",
+            "description": "Gimme yea name lad",
+            "schema": {
               "title": "Name",
               "description": "Gimme yea name lad",
               "type": "string"
             },
+            "ngModelOptions": {},
+            "key": [
+              "name"
+            ],
+            "type": "text"
           },
           {
-            title: 'Choose',
-            key: ["gender"],
-            type: "select",
-            titleMap: [
-              { name: "undefined", value: "undefined" },
-              { name: "null", value: "null" },
-              { name: "NaN", value: "NaN" }
-            ],
-            schema: {
+            "title": "Choose",
+            "schema": {
               "title": "Choose",
               "type": "string",
               "enum": [
                 "undefined",
                 "null",
-                "NaN",
+                "NaN"
               ]
-            }
+            },
+            "ngModelOptions": {},
+            "key": [
+              "gender"
+            ],
+            "type": "select",
+            "titleMap": [
+              {
+                "name": "undefined",
+                "value": "undefined"
+              },
+              {
+                "name": "null",
+                "value": "null"
+              },
+              {
+                "name": "NaN",
+                "value": "NaN"
+              }
+            ]
           },
           {
-            title: 'Are you over 18 years old?',
-            key: ['overEighteen'],
-            type: 'checkbox',
-            default: false,
-            schema: {
+            "title": "Are you over 18 years old?",
+            "schema": {
               "title": "Are you over 18 years old?",
               "type": "boolean",
               "default": false
-            }
+            },
+            "ngModelOptions": {},
+            "key": [
+              "overEighteen"
+            ],
+            "type": "checkbox"
           },
           {
-              type: "fieldset",
-              items: [
-                { key: ["attributes","eyecolor"], required: true, type: 'text', title: "Eye color", schema: { "type": "string", "title": "Eye color" }},
-                { key: ["attributes","haircolor"], type: 'text', title: "Hair color", schema: { "type": "string", "title": "Hair color" } },
-                {
-                  type: "fieldset",
-                  title: "Shoulders",
-                  items: [
-                    { key: ["attributes","shoulders","left"],  type: 'text', schema:{ "type": "string" } },
-                    { key: ["attributes","shoulders","right"], type: 'text', schema: { "type": "string" }},
-                  ],
-                  schema: {
-                    "type": "object",
-                    "title": "Shoulders",
-                    "properties": {
-                      "left": { "type": "string" },
-                      "right": { "type": "string" },
-                    }
-                  }
-                }
+            "title": "attributes",
+            "schema": {
+              "type": "object",
+              "required": [
+                "eyecolor"
               ],
-              schema: {
-                "type": "object",
-                "required": ['eyecolor'],
-                "properties": {
-                  "eyecolor": { "type": "string", "title": "Eye color" },
-                  "haircolor": { "type": "string", "title": "Hair color" },
-                  "shoulders": {
-                    "type": "object",
-                    "title": "Shoulders",
-                    "properties": {
-                      "left": { "type": "string" },
-                      "right": { "type": "string" },
+              "properties": {
+                "eyecolor": {
+                  "type": "string",
+                  "title": "Eye color"
+                },
+                "haircolor": {
+                  "type": "string",
+                  "title": "Hair color"
+                },
+                "shoulders": {
+                  "type": "object",
+                  "title": "Shoulders",
+                  "properties": {
+                    "left": {
+                      "type": "string"
+                    },
+                    "right": {
+                      "type": "string"
                     }
                   }
                 }
               }
+            },
+            "ngModelOptions": {},
+            "type": "fieldset",
+            "items": [
+              {
+                "title": "Eye color",
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "title": "Eye color"
+                },
+                "ngModelOptions": {},
+                "key": [
+                  "attributes",
+                  "eyecolor"
+                ],
+                "type": "text"
+              },
+              {
+                "title": "Hair color",
+                "schema": {
+                  "type": "string",
+                  "title": "Hair color"
+                },
+                "ngModelOptions": {},
+                "key": [
+                  "attributes",
+                  "haircolor"
+                ],
+                "type": "text"
+              },
+              {
+                "title": "Shoulders",
+                "schema": {
+                  "type": "object",
+                  "title": "Shoulders",
+                  "properties": {
+                    "left": {
+                      "type": "string"
+                    },
+                    "right": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "ngModelOptions": {},
+                "type": "fieldset",
+                "items": [
+                  {
+                    "title": "l",
+                    "schema": {
+                      "type": "string"
+                    },
+                    "ngModelOptions": {},
+                    "key": [
+                      "attributes",
+                      "shoulders",
+                      "left"
+                    ],
+                    "type": "text"
+                  },
+                  {
+                    "title": "r",
+                    "schema": {
+                      "type": "string"
+                    },
+                    "ngModelOptions": {},
+                    "key": [
+                      "attributes",
+                      "shoulders",
+                      "right"
+                    ],
+                    "type": "text"
+                  }
+                ]
+              }
+            ]
           }
-
         ];
+
         var f = schemaForm.defaults(schema);
         f.form.should.be.deep.equal(form);
 
       });
     });
 
+    it('should handle global defaults',function(){
+      inject(function(schemaForm){
+
+        var schema = {
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "description": "Gimme yea name lad",
+              "type": "string"
+            }
+          }
+        };
+
+        var form = [
+          {
+            "title": "Name",
+            "description": "Gimme yea name lad",
+            "schema": {
+              "title": "Name",
+              "description": "Gimme yea name lad",
+              "type": "string"
+            },
+            "ngModelOptions": { "updateOn": "blur"},
+            "foo": "bar",
+            "key": [
+              "name"
+            ],
+            "type": "text"
+          }
+        ];
+
+        var f = schemaForm.defaults(schema,{},{ formDefaults: { foo: "bar", ngModelOptions: { updateOn: 'blur' }}});
+        f.form.should.be.deep.equal(form);
+
+      });
+    });
+
+
+
     it('should be extendable with new defaults',function(){
       module(function(schemaFormProvider){
         schemaFormProvider.prependRule('string',function(name,schema,options){
           if (schema.format === 'foobar') {
-            var f = schemaFormProvider.createStandardForm(schema,options);
+            var f = schemaFormProvider.createStandardForm(name,schema,options);
             f.type = 'foobar';
             return f;
           }
         });
 
         schemaFormProvider.appendRule('string',function(name,schema,options){
-          var f = schemaFormProvider.createStandardForm(schema,options);
+          var f = schemaFormProvider.createStandardForm(name,schema,options);
           f.type = 'notused';
           return f;
         });

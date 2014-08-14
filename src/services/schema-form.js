@@ -43,13 +43,20 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
 
   //Creates a form object with all common properties
   var stdFormObj = function(name,schema,options) {
-    var f = {};
-    f.title = schema.title || name[0];
+    options = options || {};
+    var f = options.global && options.global.formDefaults ? angular.copy(options.global.formDefaults) : {};
+
+    if (options.global && options.global.supressPropertyTitles === true) {
+      f.title = schema.title;
+    } else {
+      f.title = schema.title || name[0];
+    }
+
     if (schema.description) f.description = schema.description;
     if (options.required === true || schema.required === true) f.required = true;
     if (schema.maxLength) f.maxlength = schema.maxLength;
     if (schema.minLength) f.minlength = schema.maxLength;
-    if (schema.readOnly || schema.readonly)  f.readonly  = schema.readOnly || schema.readonly;
+    if (schema.readOnly || schema.readonly)  f.readonly  = true;
     if (schema.minimum) f.minimum = schema.minimum + (schema.exclusiveMinimum?1:0);
     if (schema.maximum) f.maximum = schema.maximum - (schema.exclusiveMaximum?1:0);
 
@@ -58,8 +65,9 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
     if (schema.enumNames) f.titleMap = canonicalTitleMap(schema.enumNames);
     f.schema = schema;
 
-    // Ng model options doesn't play nice with undefined
-    f.ngModelOptions = {};
+    // Ng model options doesn't play nice with undefined, might be defined
+    // globally though
+    f.ngModelOptions = f.ngModelOptions || {};
     return f;
   };
 
@@ -268,10 +276,12 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
 
     var service = {};
 
-    service.merge = function(schema,form,ignore) {
+    service.merge = function(schema, form, ignore, options) {
       form  = form || ["*"];
+      options = options || {};
 
-      var stdForm = service.defaults(schema,ignore);
+      var stdForm = service.defaults(schema, ignore, options);
+
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf("*");
       if (idx !== -1) {
@@ -337,10 +347,11 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
     /**
      * Create form defaults from schema
      */
-    service.defaults = function(schema,ignore) {
+    service.defaults = function(schema, ignore, globalOptions) {
       var form   = [];
       var lookup = {}; //Map path => form obj for fast lookup in merging
       ignore = ignore || {};
+      globalOptions = globalOptions || {};
 
       if (schema.type === "object") {
         angular.forEach(schema.properties,function(v,k){
@@ -351,7 +362,8 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
                 path: k,        //path to this property in dot notation. Root object has no name
                 lookup: lookup,    //extra map to register with. Optimization for merger.
                 ignore: ignore,    //The ignore list of paths (sans root level name)
-                required: required //Is it required? (v4 json schema style)
+                required: required, //Is it required? (v4 json schema style)
+                global: globalOptions // Global options, including form defaults
               });
               if (def) {
                 form.push(def);
