@@ -46,7 +46,7 @@ angular.module('ng').directive('pickADate', function () {
 
       var $inputText = $('#datepicker_editable_input').on({
         change: function() {
-          var parsedDate = Date.parse( this.value )
+          var parsedDate = Date.parse( this.value );
 
           if ( parsedDate ) {
             picker.set( 'select', [parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()] )
