@@ -5,7 +5,7 @@
     "dist/bootstrap-decorator.min.js",
     "dist/bootstrap-datepicker.min.js"
   ],
-  "version": "0.6.0",
+  "version": "0.7.0",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>"
@@ -13,7 +13,14 @@
   "moduleType": [
     "globals"
   ],
-  "keywords": ["angular","angularjs","form","json","json-schema","schema"],
+  "keywords": [
+    "angular",
+    "angularjs",
+    "form",
+    "json",
+    "json-schema",
+    "schema"
+  ],
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -23,11 +30,10 @@
     "coverage"
   ],
   "dependencies": {
-    "angular": "~1.2.18",
+    "angular": ">= 1.2",
     "tv4": "~1.0.15",
-    "pickadate": "~3.5.2",
-    "angular-sanitize": "~1.2.18",
-    "bootstrap-vertical-tabs": "~1.1.0"
+    "angular-sanitize": ">= 1.2",
+    "objectpath": "~1.0.4"
   },
   "devDependencies": {
     "angular-ui-ace": "bower"

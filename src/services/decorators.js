@@ -1,4 +1,4 @@
-angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider',function($compileProvider){
+angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider','sfPathProvider',function($compileProvider, sfPathProvider){
   var defaultDecorator = '';
   var directives = {};
 
@@ -35,7 +35,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
 
         return {
           restrict: 'AE',
-          replace: true,
+          replace: false,
           transclude: false,
           scope: true,
           require: '?^sfSchema',
@@ -51,10 +51,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                 //for fieldsets to recurse properly.
                 var url = templateUrl(name,form);
                 $http.get(url,{ cache: $templateCache }).then(function(res){
-                  var template = res.data.replace(/\$\$value\$\$/g,'model.'+(form.key || ""));
-                  $compile(template)(scope,function(clone){
-                    element.replaceWith(clone);
-                  });
+                  var key = form.key ? sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
+                  var template = res.data.replace(/\$\$value\$\$/g,'model'+(key[0] !== '['?'.':'')+key);
+                  element.html(template);
+                  $compile(element.contents())(scope);
                 });
                 once();
               }
@@ -63,6 +63,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
             //Keep error prone logic from the template
             scope.showTitle = function() {
               return scope.form && scope.form.notitle !== true && scope.form.title;
+            };
+
+            scope.listToCheckboxValues = function(list){
+              var values = {};
+              angular.forEach(list,function(v){
+                values[v] = true;
+              });
+              return values;
             };
 
             scope.checkboxValuesToList = function(values){

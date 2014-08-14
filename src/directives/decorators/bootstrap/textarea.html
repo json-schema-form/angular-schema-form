@@ -2,9 +2,9 @@
   <label ng-show="showTitle()">{{form.title}}</label>
   <textarea class="form-control"
             sf-changed="form"
-            ng-required="form.required"
             ng-model="$$value$$"
-            schema-validate="form.schema"></textarea>
+            ng-model-options="form.ngModelOptions"
+            schema-validate="form"></textarea>
   <!-- disabled until we unbreak the css
     <span ng-if="form.feedback !== false"
         class="form-control-feedback"

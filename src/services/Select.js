@@ -5,7 +5,7 @@
  *
  * @description
  * Utility method to access deep properties without
- * trhowing errors when things are not defined.
+ * throwing errors when things are not defined.
  * Can also set a value in a deep structure, creating objects when missing
  * ex.
  * var foo = Select('address.contact.name',obj)
@@ -18,8 +18,7 @@
  * @returns {Any|undefined} returns the value at the end of the projection path
  *                          or undefined if there is none.
  */
-angular.module('schemaForm').factory('sfSelect', [function () {
-  var re    = /\[(\d+)\]/g;
+angular.module('schemaForm').factory('sfSelect', ['sfPath', function (sfPath) {
   var numRe = /^\d+$/;
 
   return function(projection, obj, valueToSet) {
@@ -27,7 +26,7 @@ angular.module('schemaForm').factory('sfSelect', [function () {
       obj = this;
     }
     //Support [] array syntax
-    var parts = projection.replace(re, '.$1').split('.');
+    var parts = typeof projection === 'string' ? sfPath.parse(projection) : projection;
 
     if (typeof valueToSet !== 'undefined' && parts.length === 1) {
       //special case, just setting one variable
@@ -45,7 +44,7 @@ angular.module('schemaForm').factory('sfSelect', [function () {
     for (var i = 1; i < parts.length; i++) {
       // Special case: We allow JSON Form syntax for arrays using empty brackets
       // These will of course not work here so we exit if they are found.
-      if (parts[i] === '[]') {
+      if (parts[i] === '') {
         return undefined;
       }
       if (typeof valueToSet !== 'undefined') {

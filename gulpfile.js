@@ -52,6 +52,7 @@ gulp.task('bootstrap-datepicker', function() {
           .pipe(concat('bootstrap-datepicker.min.js'))
           .pipe(uglify())
           .pipe(gulp.dest("./dist/"));
+          
 
 });
 
@@ -60,6 +61,7 @@ gulp.task('bootstrap-datepicker', function() {
 gulp.task('minify',function(){
   gulp.src([
     './src/module.js',
+    './src/sfPath.js',
     './src/services/*.js',
     './src/directives/*.js'
   ])
@@ -69,7 +71,19 @@ gulp.task('minify',function(){
 });
 
 
-gulp.task('default',['minify','bootstrap','bootstrap-datepicker']);
+gulp.task('non-minified-dist',function(){
+  gulp.src([
+    './src/module.js',
+    './src/sfPath.js',
+    './src/services/*.js',
+    './src/directives/*.js'
+  ])
+  .pipe(concat('schema-form.js'))
+  .pipe(gulp.dest('./dist/'));
+});
+
+
+gulp.task('default',['minify','bootstrap','bootstrap-datepicker','non-minified-dist']);
 
 
 gulp.task('watch', function() {

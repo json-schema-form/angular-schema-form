@@ -1,12 +1,13 @@
 <div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
   <label ng-show="showTitle()">{{form.title}}</label>
-  <div class="radio" ng-repeat="(value,name) in form.titleMap" >
+  <div class="radio" ng-repeat="item in form.titleMap" >
     <label>
       <input type="radio"
              sf-changed="form"
              ng-model="$$value$$"
-             ng-value="value">
-      <span ng-bind-html="name"></span>
+             ng-model-options="form.ngModelOptions"
+             ng-value="item.value">
+      <span ng-bind-html="item.name"></span>
     </label>
   </div>
   <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
