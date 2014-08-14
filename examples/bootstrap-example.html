@@ -35,7 +35,7 @@
   <div class="row">
     <div class="col-sm-4">
       <h3>The Generated Form</h3>
-      <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema"></form>
+      <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" ng-submit="submitForm(ngform,modelData)"></form>
       <h3>Model</h3>
       <pre ng-cloak>{{pretty()}}</pre>
     </div>
@@ -60,10 +60,8 @@
 <script type="text/javascript" src="http://cdn.jsdelivr.net/g/jquery.ui@1.10"></script>
 <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
 <script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
-
 <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-
 <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script> -->
 <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-sanitize.min.js"></script> -->
 
@@ -74,7 +72,7 @@
 <script type="text/javascript" src="../bower_components/pickadate/lib/picker.date.js"></script>
 <script type="text/javascript" src="../bower_components/pickadate/lib/translations/sv_SE.js"></script>
 
-<script type="text/javascript" src="../dist/schema-form.min.js"></script>
+<script type="text/javascript" src="../dist/schema-form.js"></script>
 <script type="text/javascript" src="../dist/bootstrap-decorator.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript">
@@ -147,6 +145,15 @@ angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($
   $scope.say = function(msg) {
     alert(msg);
   };
+
+  $scope.submitForm = function(form, model) {
+    // First we broadcast an event so all fields validate themselves
+    $scope.$broadcast('schemaFormValidate');
+    // Then we check if the form is valid
+    if (form.$valid) {
+      alert('You did it!');
+    }
+  }
 
 });
 

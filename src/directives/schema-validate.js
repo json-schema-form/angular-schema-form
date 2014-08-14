@@ -53,7 +53,12 @@ angular.module('schemaForm').directive('schemaValidate',['sfValidator',function(
 
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate',function() {
-        ngModel.$commitViewValue(true);
+
+        if (ngModel.$commitViewValue) {
+          ngModel.$commitViewValue(true);
+        } else {
+          ngModel.$setViewValue(ngModel.$viewValue);
+        }
       });
 
       //This works since we now we're inside a decorator and that this is the decorators scope.

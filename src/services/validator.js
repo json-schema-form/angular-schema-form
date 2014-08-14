@@ -17,6 +17,11 @@ angular.module('schemaForm').factory('sfValidator',[function(){
 
     var schema = form.schema;
 
+    if (!schema) {
+      //Nothings to Validate
+      return value;
+    }
+
     //Type cast and validate against schema.
     //Basic types of json schema sans array and object
     if (schema.type === 'integer') {
