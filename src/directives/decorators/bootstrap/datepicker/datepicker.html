@@ -1,18 +1,9 @@
 <div class="form-group" ng-class="{'has-error': hasError()}">
   <label ng-show="showTitle()">{{form.title}}</label>
 
-      <input id="datepicker_editable_input" />
+      <input id="datepicker_editable_input" class="form-control"/>
       <input id="datepicker_input"
-              style="
-                position: absolute;
-                padding: 0;
-                margin: 0;
-                width: 0;
-                height: 0;
-                background: transparent;
-                border: 0;
-                cursor: pointer;
-                "
+             style="display: none;"
              name="{{ form.name }}"
              ng-show="form.key"
              type="date"
