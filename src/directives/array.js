@@ -86,10 +86,20 @@ function(sfSelect, schemaForm, sfValidator) {
             }
             list.push(dflt);
           }
+
+          // Trigger validation.
+          if (scope.validateArray) {
+            scope.validateArray();
+          }
         };
 
         scope.deleteFromArray = function(index) {
           list.splice(index,1);
+
+          // Trigger validation.
+          if (scope.validateArray) {
+            scope.validateArray();
+          }
         };
 
         // Always start with one empty form unless configured otherwise.
@@ -149,8 +159,7 @@ function(sfSelect, schemaForm, sfValidator) {
         if (ngModel) {
           var error;
 
-          // Listen to an event so we can validate the input on request
-          scope.$on('schemaFormValidate',function(payload) {
+          scope.validateArray = function() {
             // The actual content of the array is validated by each field
             // so we settle for checking validations specific to arrays
 
@@ -161,12 +170,11 @@ function(sfSelect, schemaForm, sfValidator) {
               form,
               scope.modelArray.length > 0 ? scope.modelArray : undefined
             );
-            console.log(result.error)
             if (result.valid === false &&
                 result.error &&
                 (result.error.dataPath === '' ||
                 result.error.dataPath === '/'+form.key[form.key.length - 1])) {
-            console.log('setting invlid')
+
               // Set viewValue to trigger $dirty on field. If someone knows a
               // a better way to do it please tell.
               ngModel.$setViewValue(scope.modelArray);
@@ -176,8 +184,9 @@ function(sfSelect, schemaForm, sfValidator) {
             } else {
               ngModel.$setValidity('schema', true);
             }
+          };
 
-          });
+          scope.$on('schemaFormValidate',scope.validateArray);
 
 
           scope.hasSuccess = function(){
