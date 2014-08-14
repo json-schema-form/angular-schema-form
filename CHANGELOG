@@ -1,3 +1,27 @@
+v0.7.0
+------
+ * Support for complex keys, at least when using Angular 1.3.
+   See docs/knownlimitations.md for details. Thanks @mike-marcacci for that
+   awesome PR.
+ * New format for 'titleMap', it can now also take a list.
+ * Checkboxes have proper two way binding.
+ * Validate entire form with $scope.$broadcast('schemaFormValidate')
+ * If there is no title in neither schema nor form it defaults to the property
+   name from the schema.
+ * 'sf-options' attribute for globals options, with an option for form defaults.
+ * Added 'ng-model-options' so Angular 1.3 users can validate on blur.
+ * All validation, even required is now using tv4js, change 'validationMessage'
+   accordingly. This means arrays validate.
+ * 'Checkbox' type implies a default of false if none is set.
+ * Changed tactics when it comes to bower deps, it now only depends on what you
+   cannot go without, i.e. tv4, angular, angular-sanitize and objectpath. You
+   have to add bootstrap and other dependencies manually (a lot are optional).
+ * Lots of small bugfixes.
+
+ Thanks to @mike-marcacci, @sashless, @cameronprattedwards,@ianbeeston,
+ @torstenrudolf and all of you who made a lot of issues and PR:s this summer!
+
+
 v0.6.0
 ------
  * array and tabarray support, with help from @zackbloom (thanks!).
