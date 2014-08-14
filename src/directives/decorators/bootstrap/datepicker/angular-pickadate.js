@@ -49,10 +49,10 @@ angular.module('ng').directive('pickADate', function () {
           var parsedDate = Date.parse( this.value )
 
           if ( parsedDate ) {
-              picker.set( 'select', [parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()] )
+            picker.set( 'select', [parsedDate.getFullYear(), parsedDate.getMonth(), parsedDate.getDate()] )
           }
           else {
-              alert( 'Invalid date' )
+            picker.set( 'select', attrs.minDate || new Date());
           }
         },
         focus: function() {
