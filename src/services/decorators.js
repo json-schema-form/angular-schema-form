@@ -52,7 +52,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                 var url = templateUrl(name,form);
                 $http.get(url,{ cache: $templateCache }).then(function(res){
                   var key = form.key ? sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
-                  var template = res.data.replace(/\$\$value\$\$/g,'model'+key);
+                  var template = res.data.replace(/\$\$value\$\$/g,'model'+(key[0] !== '['?'.':'')+key);
                   element.html(template);
                   $compile(element.contents())(scope);
                 });
