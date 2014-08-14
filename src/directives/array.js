@@ -1,8 +1,8 @@
 /**
  * Directive that handles the model arrays
  */
-angular.module('schemaForm').directive('sfArray', ['sfSelect','schemaForm',
-function(sfSelect, schemaForm) {
+angular.module('schemaForm').directive('sfArray', ['sfSelect','schemaForm','sfValidator',
+function(sfSelect, schemaForm, sfValidator) {
 
   var setIndex = function(index) {
     return function(form) {
@@ -15,7 +15,8 @@ function(sfSelect, schemaForm) {
   return {
     restrict: 'A',
     scope: true,
-    link: function(scope, element, attrs) {
+    require: '?ngModel',
+    link: function(scope, element, attrs, ngModel) {
       var formDefCache = {};
 
       // Watch for the form definition and then rewrite it.
@@ -74,10 +75,10 @@ function(sfSelect, schemaForm) {
           });
 
           // If there are no defaults nothing is added so we need to initialize
-          // the array. null for basic values, {} or [] for the others.
+          // the array. undefined for basic values, {} or [] for the others.
           if (len === list.length) {
             var type = sfSelect('schema.items.type',form);
-            var dflt = null;
+            var dflt;
             if (type === 'object') {
               dflt = {};
             } else if (type === 'array') {
@@ -85,10 +86,20 @@ function(sfSelect, schemaForm) {
             }
             list.push(dflt);
           }
+
+          // Trigger validation.
+          if (scope.validateArray) {
+            scope.validateArray();
+          }
         };
 
         scope.deleteFromArray = function(index) {
           list.splice(index,1);
+
+          // Trigger validation.
+          if (scope.validateArray) {
+            scope.validateArray();
+          }
         };
 
         // Always start with one empty form unless configured otherwise.
@@ -106,9 +117,6 @@ function(sfSelect, schemaForm) {
         // a list of values. This is here to fix that.
         if (form.titleMap && form.titleMap.length > 0) {
           scope.titleMapValues = [];
-
-
-
 
           // We watch the model for changes and the titleMapValues to reflect
           // the modelArray
@@ -144,6 +152,55 @@ function(sfSelect, schemaForm) {
 
             }
           });
+        }
+
+
+        // If there is a ngModel present we need to validate when asked.
+        if (ngModel) {
+          var error;
+
+          scope.validateArray = function() {
+            // The actual content of the array is validated by each field
+            // so we settle for checking validations specific to arrays
+
+            // Since we prefill with empty arrays we can get the funny situation
+            // where the array is required but empty in the gui but still validates.
+            // Thats why we check the length.
+            var result = sfValidator.validate(
+              form,
+              scope.modelArray.length > 0 ? scope.modelArray : undefined
+            );
+            if (result.valid === false &&
+                result.error &&
+                (result.error.dataPath === '' ||
+                result.error.dataPath === '/'+form.key[form.key.length - 1])) {
+
+              // Set viewValue to trigger $dirty on field. If someone knows a
+              // a better way to do it please tell.
+              ngModel.$setViewValue(scope.modelArray);
+              error = result.error;
+              ngModel.$setValidity('schema', false);
+
+            } else {
+              ngModel.$setValidity('schema', true);
+            }
+          };
+
+          scope.$on('schemaFormValidate',scope.validateArray);
+
+
+          scope.hasSuccess = function(){
+            return ngModel.$valid && !ngModel.$pristine;
+          };
+
+          scope.hasError = function(){
+            return ngModel.$invalid;
+          };
+
+          scope.schemaError = function() {
+            return error;
+          };
+
         }
 
         once();

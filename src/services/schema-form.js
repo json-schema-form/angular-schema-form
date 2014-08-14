@@ -47,7 +47,6 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
     if (schema.title) f.title = schema.title;
     if (schema.description) f.description = schema.description;
     if (options.required === true || schema.required === true) f.required = true;
-    if (schema.default !== undefined) f.default = schema.default;
     if (schema.maxLength) f.maxlength = schema.maxLength;
     if (schema.minLength) f.minlength = schema.maxLength;
     if (schema.readOnly || schema.readonly)  f.readonly  = schema.readOnly || schema.readonly;
@@ -303,21 +302,27 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
 
         //if its has tabs, merge them also!
         if (obj.tabs) {
-          angular.forEach(obj.tabs,function(tab){
-            tab.items = service.merge(schema,tab.items,ignore);
+          angular.forEach(obj.tabs, function(tab) {
+            tab.items = service.merge(schema, tab.items, ignore);
           });
         }
 
         //extend with std form from schema.
         if (obj.key) {
-          if(typeof obj.key == 'string') {
+          if (typeof obj.key === 'string') {
             obj.key = sfPathProvider.parse(obj.key);
           }
 
           var str = sfPathProvider.stringify(obj.key);
-          if(lookup[str]){
-            return angular.extend(lookup[str],obj);
+          if (lookup[str]) {
+            obj = angular.extend(lookup[str], obj);
           }
+        }
+
+        // Special case: checkbox
+        // Since have to ternary state we need a default
+        if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
+          obj.schema['default'] = false;
         }
 
         return obj;

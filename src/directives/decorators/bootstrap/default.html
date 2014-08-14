@@ -6,9 +6,8 @@
          sf-changed="form"
          placeholder="{{form.placeholder}}"
          class="form-control"
-         ng-required="form.required"
          ng-model="$$value$$"
-         schema-validate="form.schema">
+         schema-validate="form">
   <span ng-if="form.feedback !== false"
         class="form-control-feedback"
         ng-class="evalInScope(form.feedback) || {'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"></span>
