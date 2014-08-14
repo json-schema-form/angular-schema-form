@@ -1,10 +1,11 @@
-<div class="form-group" ng-class="{'has-error': hasError()}">
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
   <label ng-show="showTitle()">{{form.title}}</label>
 
-      <input id="datepicker_editable_input" class="form-control"/>
+      <input id="datepicker_editable_input"
+             class="form-control"
+             name="{{ form.name }}" />
       <input id="datepicker_input"
              style="display: none;"
-             name="{{ form.name }}"
              ng-show="form.key"
              type="date"
              class="form-control"
