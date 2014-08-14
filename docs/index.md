@@ -2,6 +2,7 @@ Documentation
 =============
 
 1. [Basic Usage](#basic-usage)
+1. [Handling Submit](#handling-submit)
 1. [Global Options](#global-options)
 1. [Form types](#form-types)  
 1. [Default form types](#default-form-types)
@@ -78,6 +79,67 @@ Example with custom submit buttons:
   </form>
 </div>
 ```
+
+Handling Submit
+---------------
+Schema Form does not care what you do with your data, to handle form submit
+the recomended way is to use the `ng-submit` directive. It's also recomended
+to use a `name` attribute on your form so you can access the
+[FormController](https://code.angularjs.org/1.3.0-beta.15/docs/api/ng/type/form.FormController)
+and check if the form is valid or not.
+
+You can force a validation by broadcasting the event `schemaFormValidate`, ex
+`$scope.$broadcast('schemaFormValidate')`, this will immediately validate the
+entire form and show any errors.
+
+Example submit:
+```javascript
+function FormController($scope) {
+  $scope.schema = {
+    type: "object",
+    properties: {
+      name: { type: "string", minLength: 2, title: "Name", description: "Name or alias" },
+      title: {
+        type: "string",
+        enum: ['dr','jr','sir','mrs','mr','NaN','dj']
+      }
+    }
+  };
+
+  $scope.form = [
+    "*",
+    {
+      type: "submit",
+      title: "Save"
+    }
+  ];
+
+  $scope.model = {};
+
+  $scope.onSubmit = function(form) {
+    // First we broadcast an event so all fields validate themselves
+    $scope.$broadcast('schemaFormValidate');
+
+    // Then we check if the form is valid
+    if (form.$valid) {
+      // ... do whatever you need to do with your data.
+    }
+  }
+}
+
+```
+
+And the HTML would be something like this:
+```html
+<div ng-controller="FormController">
+    <form name="myForm"
+          sf-schema="schema"
+          sf-form="form"
+          sf-model="model"
+          ng-submit="onSubmit(myForm)"></form>
+</div>
+```
+
 
 Global Options
 --------------
@@ -342,7 +404,7 @@ Ex.
 ```
 
 See [Global Options](#global-options) for an example how you set entire form
-to validate on blur. 
+to validate on blur.
 
 
 Specific options and types
