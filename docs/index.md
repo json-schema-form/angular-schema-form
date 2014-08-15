@@ -4,7 +4,7 @@ Documentation
 1. [Basic Usage](#basic-usage)
 1. [Handling Submit](#handling-submit)
 1. [Global Options](#global-options)
-1. [Form types](#form-types)  
+1. [Form types](#form-types)
 1. [Default form types](#default-form-types)
 1. [Form definitions](#form-definitions)
 1. [Overriding field types and order](#overriding-field-types-and-order)
@@ -190,6 +190,7 @@ Schema Form currently supports the following form field types out of the box:
 | submit        |  a submit button        |
 | button        |  a button               |
 | radios        |  radio buttons          |
+| radios-inline |  radio buttons in one line |
 | radiobuttons  |  radio buttons with bootstrap buttons |
 | help          |  insert arbitrary html |
 | tab           |  tabs with content     |
@@ -312,7 +313,7 @@ General options most field types can handle:
 
 ### onChange
 The ```onChange``` option can be used with most fields and its value should be
-either an angular expression, as a string, or a function. If its an expression  
+either an angular expression, as a string, or a function. If its an expression
 it will be evaluated in the parent scope of the ```sf-schema``` directive with
 the special locals ```modelValue``` and ```form```. If its a function that will
 be called with  ```modelValue``` and ```form``` as first and second arguments.
@@ -876,7 +877,7 @@ It is not needed for tabs on top.
 The `title` option is a bit special in `tabarray`, it defines the title
 of the tab and is considered a angular expression. The expression is evaluated
 with two extra variables in context: **value** and **$index**, where **value**
-is the value in the array (i.e. that tab) and **$index** the index.  
+is the value in the array (i.e. that tab) and **$index** the index.
 
 Example with tabs on the top:
 
