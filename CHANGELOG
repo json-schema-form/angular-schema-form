@@ -1,3 +1,10 @@
+v0.7.1
+------
+Thanks to @torstenrudolf, this release is basically his PR:s.
+ * Bugfix: Array validation for Checkboxes
+ * New radios type: 'radios-inline'
+ * Class "control-label" added to labels
+
 v0.7.0
 ------
  * Support for complex keys, at least when using Angular 1.3.
