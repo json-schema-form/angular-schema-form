@@ -101,6 +101,14 @@
           "Tube"
         ]
       },
+      "radio2": {
+        "title": "My Second Radio",
+        "type": "string",
+        "enum": [
+          "Transistor",
+          "Tube"
+        ]
+      },
       "radiobuttons": {
         "type": "string",
         "enum": [
@@ -171,6 +179,20 @@
     {
       "key": "radio",
       "type": "radios",
+      "titleMap": [
+        {
+          "value": "Transistor",
+          "name": "Transistor <br> Not the tube kind."
+        },
+        {
+          "value": "Tube",
+          "name": "Tube <br> The tube kind."
+        }
+      ]
+    },
+    {
+      "key": "radio2",
+      "type": "radios-inline",
       "titleMap": [
         {
           "value": "Transistor",
