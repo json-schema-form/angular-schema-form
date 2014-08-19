@@ -1163,7 +1163,8 @@ describe('Schema form',function(){
       //Mock pickadate
       $.fn.pickadate = sinon.stub().returns({
         set: sinon.stub(),
-        get: sinon.stub().returns('get')
+        get: sinon.stub().returns('get'),
+        on: sinon.stub()
       });
       $.fn.pickadate.defaults = { format: 'yyyy-mm-dd' };
 
