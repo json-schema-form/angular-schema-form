@@ -25,6 +25,7 @@ module.exports = function(config) {
       'src/directives/*.js',
       'src/directives/decorators/bootstrap/*.js',
       'src/directives/decorators/bootstrap/datepicker/*.js',
+      'src/directives/decorators/bootstrap/texteditor/*.js',
       'src/**/*.html',
       'test/schema-form-test.js'
     ],
