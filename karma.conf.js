@@ -9,26 +9,24 @@ module.exports = function(config) {
 
 
     // frameworks to use
-    frameworks: ['mocha','chai-sinon'],
+    frameworks: ['mocha', 'chai-sinon'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'test/lib/jquery.js',
+      'bower_components/jquery/dist/jquery.min.js',
       'test/lib/angular.js',
       'test/lib/angular-mocks.js',
-      'test/lib/tv4.js',
-      'test/lib/objectpath.js',
+      'bower_components/tv4/tv4.js',
+      'bower_components/objectpath/lib/ObjectPath.js',
       'src/module.js',
       'src/sfPath.js',
       'src/services/*.js',
       'src/directives/*.js',
       'src/directives/decorators/bootstrap/*.js',
-      'src/directives/decorators/bootstrap/datepicker/*.js',
       'src/**/*.html',
       'test/schema-form-test.js'
     ],
-
 
     // list of files to exclude
     exclude: [
