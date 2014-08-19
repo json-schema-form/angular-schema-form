@@ -3,24 +3,26 @@
  * @name sfSelect
  * @kind function
  *
- * @description
- * Utility method to access deep properties without
- * throwing errors when things are not defined.
- * Can also set a value in a deep structure, creating objects when missing
- * ex.
- * var foo = Select('address.contact.name',obj)
- * Select('address.contact.name',obj,'Leeroy')
- *
- * @param {string} projection A dot path to the property you want to get/set
- * @param {object} obj   (optional) The object to project on, defaults to 'this'
- * @param {Any}    value (opional)  The value to set, if parts of the path of
- *                 the projection is missing empty objects will be created.
- * @returns {Any|undefined} returns the value at the end of the projection path
- *                          or undefined if there is none.
  */
 angular.module('schemaForm').factory('sfSelect', ['sfPath', function (sfPath) {
   var numRe = /^\d+$/;
 
+  /**
+    * @description
+    * Utility method to access deep properties without
+    * throwing errors when things are not defined.
+    * Can also set a value in a deep structure, creating objects when missing
+    * ex.
+    * var foo = Select('address.contact.name',obj)
+    * Select('address.contact.name',obj,'Leeroy')
+    *
+    * @param {string} projection A dot path to the property you want to get/set
+    * @param {object} obj   (optional) The object to project on, defaults to 'this'
+    * @param {Any}    valueToSet (opional)  The value to set, if parts of the path of
+    *                 the projection is missing empty objects will be created.
+    * @returns {Any|undefined} returns the value at the end of the projection path
+    *                          or undefined if there is none.
+    */
   return function(projection, obj, valueToSet) {
     if (!obj) {
       obj = this;

@@ -11,4 +11,4 @@ try {
   deps.push('ui.sortable');
 } catch (e) {}
 
-angular.module('schemaForm',deps);
+angular.module('schemaForm', deps);

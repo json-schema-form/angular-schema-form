@@ -158,7 +158,10 @@ $ karma start karma.conf.js
 Contributing
 ------------
 
-**Heads up!** Sometime soon we will go over and change the code style to follow
-whatever [jscs](https://github.com/mdevils/node-jscs) says with preset set to 'google'.
+All contributions are welcome! We're trying to use
+[git flow](http://danielkummer.github.io/git-flow-cheatsheet/), so please base any merge request
+on the **development** branch instead of **master**.
 
-All contributions are welcome! We're trying to use [git flow](http://danielkummer.github.io/git-flow-cheatsheet/), so please base any merge request on the **development** branch instead of **master**.
+Also run any code through the code style checker [jscs](https://github.com/mdevils/node-jscs)
+(or even better use it in your editor) with preset set to `google`. You can also us `gulp jscs` to
+check your code.

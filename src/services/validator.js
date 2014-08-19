@@ -1,6 +1,6 @@
 /*  Common code for validating a value against its form and schema definition */
 /* global tv4 */
-angular.module('schemaForm').factory('sfValidator',[function(){
+angular.module('schemaForm').factory('sfValidator', [function() {
 
   var validator = {};
 
@@ -25,9 +25,9 @@ angular.module('schemaForm').factory('sfValidator',[function(){
     //Type cast and validate against schema.
     //Basic types of json schema sans array and object
     if (schema.type === 'integer') {
-      value = parseInt(value,10);
+      value = parseInt(value, 10);
     } else if (schema.type === 'number') {
-      value = parseFloat(value,10);
+      value = parseFloat(value, 10);
     } else if (schema.type === 'boolean' && typeof value === 'string') {
       if (value === 'true') {
         value = true;
@@ -39,7 +39,7 @@ angular.module('schemaForm').factory('sfValidator',[function(){
     // Version 4 of JSON Schema has the required property not on the
     // property itself but on the wrapping object. Since we like to test
     // only this property we wrap it in a fake object.
-    var wrap = { type: "object", "properties": { }};
+    var wrap = {type: 'object', 'properties': {}};
     var propName = form.key[form.key.length - 1];
     wrap.properties[propName] = schema;
 

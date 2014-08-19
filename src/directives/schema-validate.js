@@ -1,10 +1,9 @@
-/* global tv4 */
-angular.module('schemaForm').directive('schemaValidate',['sfValidator',function(sfValidator){
+angular.module('schemaForm').directive('schemaValidate', ['sfValidator', function(sfValidator) {
   return {
     restrict: 'A',
     scope: false,
     require: 'ngModel',
-    link: function(scope,element,attrs,ngModel) {
+    link: function(scope, element, attrs, ngModel) {
       //Since we have scope false this is the same scope
       //as the decorator
       scope.ngModel = ngModel;
@@ -30,7 +29,7 @@ angular.module('schemaForm').directive('schemaValidate',['sfValidator',function(
         // An empty field gives us the an empty string, which JSON schema
         // happily accepts as a proper defined string, but an empty field
         // for the user should trigger "required". So we set it to undefined.
-        if (viewValue === "") {
+        if (viewValue === '') {
           viewValue = undefined;
         }
 
@@ -52,7 +51,7 @@ angular.module('schemaForm').directive('schemaValidate',['sfValidator',function(
       ngModel.$parsers.unshift(validate);
 
       // Listen to an event so we can validate the input on request
-      scope.$on('schemaFormValidate',function() {
+      scope.$on('schemaFormValidate', function() {
 
         if (ngModel.$commitViewValue) {
           ngModel.$commitViewValue(true);
@@ -63,11 +62,11 @@ angular.module('schemaForm').directive('schemaValidate',['sfValidator',function(
 
       //This works since we now we're inside a decorator and that this is the decorators scope.
       //If $pristine and empty don't show success (even if it's valid)
-      scope.hasSuccess = function(){
+      scope.hasSuccess = function() {
         return ngModel.$valid && (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue));
       };
 
-      scope.hasError = function(){
+      scope.hasError = function() {
         return ngModel.$invalid && !ngModel.$pristine;
       };
 
