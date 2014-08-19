@@ -45,11 +45,10 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
   var stdFormObj = function(name,schema,options) {
     options = options || {};
     var f = options.global && options.global.formDefaults ? angular.copy(options.global.formDefaults) : {};
-
     if (options.global && options.global.supressPropertyTitles === true) {
       f.title = schema.title;
     } else {
-      f.title = schema.title || name[0];
+      f.title = schema.title || name;
     }
 
     if (schema.description) f.description = schema.description;
@@ -193,7 +192,7 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
       var arrPath = options.path.slice();
       arrPath.push('');
 
-      f.items = [defaultFormDefinition(options.path,schema.items,{
+      f.items = [defaultFormDefinition(name,schema.items,{
         path: arrPath,
         required: required || false,
         lookup: options.lookup,
@@ -355,11 +354,10 @@ angular.module('schemaForm').provider('schemaForm',['sfPathProvider', function(s
 
       if (schema.type === "object") {
         angular.forEach(schema.properties,function(v,k){
-            k = [k];
             if (ignore[k] !== true) {
               var required = schema.required && schema.required.indexOf(k[k.length - 1]) !== -1;
               var def = defaultFormDefinition(k,v,{
-                path: k,        //path to this property in dot notation. Root object has no name
+                path: [k],           //path to this property in bracket notation. Root object has no name
                 lookup: lookup,    //extra map to register with. Optimization for merger.
                 ignore: ignore,    //The ignore list of paths (sans root level name)
                 required: required, //Is it required? (v4 json schema style)

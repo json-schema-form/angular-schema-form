@@ -283,7 +283,7 @@ describe('Schema form',function(){
 
         //A button with default style
         scope.form = [{ type: 'button', style: 'btn-success', title: 'Okidoki'}];
-        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+        tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
         $compile(tmpl)(scope);
         $rootScope.$apply();
 
@@ -1807,7 +1807,7 @@ describe('Schema form',function(){
                 "type": "fieldset",
                 "items": [
                   {
-                    "title": "l",
+                    "title": "left",
                     "schema": {
                       "type": "string"
                     },
@@ -1820,7 +1820,7 @@ describe('Schema form',function(){
                     "type": "text"
                   },
                   {
-                    "title": "r",
+                    "title": "right",
                     "schema": {
                       "type": "string"
                     },
@@ -1837,6 +1837,7 @@ describe('Schema form',function(){
             ]
           }
         ];
+
 
         var f = schemaForm.defaults(schema);
         f.form.should.be.deep.equal(form);
