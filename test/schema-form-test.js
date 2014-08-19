@@ -1205,6 +1205,40 @@ describe('Schema form',function(){
       });
     });
 
+    it('should use texteditor directive when format is "editor"',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          type: "object",
+          properties: {
+            desc: {
+              title: "Description",
+              type: "string",
+              format: "editor"
+            }
+          }
+        };
+
+
+        scope.form = [{
+          key:'desc'
+        }];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+        tmpl.children().length.should.be.equal(1);
+        tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
+        tmpl.children().eq(0).children().eq(0).find('div[text-angular]').length.should.equal(1, 'is present');
+        tmpl.children().eq(0).children().eq(0).find('div[text-angular]').attr('ng-model').should.equal('model[\'desc\']');
+
+      });
+    });
+
     it('should render custom html when type "help" is specified',function(){
 
       //We don't need no sanitation. We don't need no though control.
