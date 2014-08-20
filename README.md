@@ -110,12 +110,11 @@ sure you got the angular version you actually want.
 
 #### Additional dependecies
 
-1. If you want to use the date picker, you'll also need [jQuery](https://github.com/jquery/jquery)
-   and [pickadate.js](http://amsul.ca/pickadate.js/), see [angular-schema-form-datepicker](https://github.com/Textalk/angular-schema-form-datepicker)
-2. If you'd like to use drag-and-drop reordering of arrays, you'll also need [ui-sortable](https://github.com/angular-ui/ui-sortable) and its [jQueryUI](http://jqueryui.com/) dependencies. See the *ui-sortable* documentation for details about which parts of jQueryUI are needed. You can safely ignore these if you don't need reordering.
-3. Schema Form provides tabbed arrays through the form type `tabarray`. Tab arrays default to tabs on the left side. For these to work, you'll need to include the CSS from [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs). However, you won't need Bootstrap Vertical Tabs for horizontal tabs (the `tabType: "top"` option).
+1. If you'd like to use drag-and-drop reordering of arrays, you'll also need [ui-sortable](https://github.com/angular-ui/ui-sortable) and its [jQueryUI](http://jqueryui.com/) dependencies. See the *ui-sortable* documentation for details about which parts of jQueryUI are needed. You can safely ignore these if you don't need reordering.
+2. Schema Form provides tabbed arrays through the form type `tabarray`. Tab arrays default to tabs on the left side. For these to work, you'll need to include the CSS from [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs). However, you won't need Bootstrap Vertical Tabs for horizontal tabs (the `tabType: "top"` option).
 
 The minified files include templates - no need to load additional HTML files.
+
 
 ### Script Loading
 
@@ -137,9 +136,11 @@ also needs to be loaded *before* Schema Form.
 
 Add-ons
 ------
-There is currently only one add-on, a date picker using the excellent
-[pickadate.js](http://amsul.ca/pickadate.js/). It has it's own repo and you can find it here:
-[https://github.com/Textalk/angular-schema-form-datepicker](https://github.com/Textalk/angular-schema-form-datepicker)
+There is currently two add-ons, a date picker and a colorpicker. They have their own repos and you
+can find them here with usage instructions:
+
+  * [https://github.com/Textalk/angular-schema-form-datepicker](https://github.com/Textalk/angular-schema-form-datepicker)
+  * [https://github.com/Textalk/angular-schema-form-colorpicker](https://github.com/Textalk/angular-schema-form-colorpicker)
 
 Building
 --------

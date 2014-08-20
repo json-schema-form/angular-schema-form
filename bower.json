@@ -39,6 +39,7 @@
     "angular-ui-ace": "bower",
     "angular-schema-form-datepicker": ">= 0.1.0",
     "jquery": "~2.1.1",
-    "angular-mocks": ">= 1.2"
+    "angular-mocks": ">= 1.2",
+    "angular-schema-form-colorpicker": "~0.1.0"
   }
 }
