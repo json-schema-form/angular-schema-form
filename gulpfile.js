@@ -32,6 +32,29 @@ gulp.task('bootstrap', function() {
 
 });
 
+gulp.task('stb-webmanual', function() {
+  var stream = streamqueue({ objectMode: true });
+  stream.queue(
+              gulp.src("./src/directives/decorators/stb-webmanual/*.html")
+                  .pipe(minifyHtml({
+                      empty: true,
+                      spare: true,
+                      quotes: true
+                  }))
+                  .pipe(templateCache({
+                      module: "schemaForm",
+                      root: "directives/decorators/stb-webmanual/"
+                  }))
+    );
+    stream.queue(gulp.src('./src/directives/decorators/stb-webmanual/*.js'));
+
+    stream.done()
+          .pipe(concat('stb-webmanual-decorator.min.js'))
+          .pipe(uglify())
+          .pipe(gulp.dest("./dist/"));
+
+});
+
 gulp.task('bootstrap-datepicker', function() {
   var stream = streamqueue({ objectMode: true });
   stream.queue(
@@ -52,7 +75,7 @@ gulp.task('bootstrap-datepicker', function() {
           .pipe(concat('bootstrap-datepicker.min.js'))
           .pipe(uglify())
           .pipe(gulp.dest("./dist/"));
-          
+
 
 });
 
@@ -83,7 +106,7 @@ gulp.task('non-minified-dist',function(){
 });
 
 
-gulp.task('default',['minify','bootstrap','bootstrap-datepicker','non-minified-dist']);
+gulp.task('default',['minify','bootstrap','bootstrap-datepicker','stb-webmanual','non-minified-dist']);
 
 
 gulp.task('watch', function() {
