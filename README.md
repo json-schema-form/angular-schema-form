@@ -94,9 +94,7 @@ You can also just download the contents of the `dist/` folder and add dependenci
 
 ### Dependencies
 
-Schema form has a lot of dependencies, most of which are optional. Therefor
-
-Schema Form depends on:
+Schema form has a lot of dependencies, most of which are optional. Schema Form depends on:
 
 1. [AngularJS](https://angularjs.org/) version 1.3.x is recomended. Version 1.2.x
    has some limitation. See [known limitations](docs/knownlimitations.md).
@@ -109,6 +107,7 @@ If you install via bower you get all of the above except bootstrap since we
 don't want to push a certain version or flavor on you. Also make
 sure you got the angular version you actually want.
 
+
 #### Additional dependecies
 
 1. If you want to use the date picker, you'll also need [jQuery](https://github.com/jquery/jquery)
@@ -117,6 +116,24 @@ sure you got the angular version you actually want.
 3. Schema Form provides tabbed arrays through the form type `tabarray`. Tab arrays default to tabs on the left side. For these to work, you'll need to include the CSS from [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs). However, you won't need Bootstrap Vertical Tabs for horizontal tabs (the `tabType: "top"` option).
 
 The minified files include templates - no need to load additional HTML files.
+
+### Script Loading
+
+Schema form is split into two main files, `dist/schema-form.min.js` and
+`dist/boostrap-decorator.min.js` and they need be loaded in that order. AngularJ,
+[tv4](https://github.com/geraintluff/tv4) and [objectpath](https://github.com/mike-marcacci/objectpath)
+also needs to be loaded *before* Schema Form.
+
+
+```html
+<script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="bower_components/tv4/tv4.js"></script>
+<script type="text/javascript" src="bower_components/objectpath/lib/ObjectPath.js"></script>
+<script type="text/javascript" src="bower_components/angular-schema-form/dist/schema-form.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-schema-form/dist/bootstrap-decorator.min.js"></script>
+```
+
 
 Add-ons
 ------
