@@ -1,13 +1,9 @@
-Angular Schema Form
-===================
-
-[![Build Status](https://travis-ci.org/Textalk/angular-schema-form.svg?branch=master)](https://travis-ci.org/Textalk/angular-schema-form)
-[![Coverage Status](https://coveralls.io/repos/Textalk/angular-schema-form/badge.png?branch=master)](https://coveralls.io/r/Textalk/angular-schema-form?branch=development)
-[![Bower version](https://badge.fury.io/bo/angular-schema-form.svg)](http://badge.fury.io/bo/angular-schema-form)
+Angular Schema Form - Storebrand edition
+========================================
 
 Generate forms from JSON schemas using AngularJS!
 
-### [Try out the example page](http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html)
+### [Try out the interactive form editor™](https://github.com/storebrand/angular-schema-form/examples/stb-webmanual.html)
 Try editing the schema or form definition and see what comes out!
 
 What is it?
@@ -19,6 +15,28 @@ Schema Form is a set of AngularJS directives (and a couple of services). It can 
 2. Validate form fields against that same JSON schema.
 
 Schema Form uses convention over configuration, so it comes packaged with some sensible defaults. But you can always customize it by changing the order and types of form fields.
+
+Storebrand development quickstart
+---------
+
+Prerequisites: Access to the storebrand.ny repo (https://github.com/storebrand/storebrand.ny)
+
+```bash
+$>  git clone https://github.com/storebrand/angular-schema-form.git
+$> cd angular-schema-form
+$> npm install
+$> bower install
+$> lessc bower_components/stb-webmanual/less/stb-main.less > bower_components/stb-webmanual/css/stb-main.css
+$> python -m SimpleHTTPServer 8000
+```
+
+Then head to http://localhost:8000/examples/stb-webmanual.html
+
+To recompile decorators/templates (located at /src/directives/decorators/stb-webmanual/):
+
+```bash
+$>  gulp stb-webmanual
+```
 
 JSON Form
 ---------

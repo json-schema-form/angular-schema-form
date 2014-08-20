@@ -1,0 +1,58 @@
+
+<div sf-array="form" ng-init="selected = { tab: 0 }" class="clearfix">
+  <div ng-if="!form.tabType || form.tabType !== 'right'"
+       ng-class="{'col-xs-3': !form.tabType || form.tabType === 'left'}">
+    <ul class="nav nav-tabs"
+        ng-class="{ 'tabs-left': !form.tabType || form.tabType === 'left'}"
+        style="margin-bottom: 15px">
+      <li ng-repeat="item in modelArray track by $index"
+          ng-click="$event.preventDefault() || (selected.tab = $index)"
+          ng-class="{active: selected.tab === $index}">
+          <a href="#">{{evalExpr(form.title,{'$index':$index, value: item}) || $index}}</a>
+      </li>
+      <li ng-click="$event.preventDefault() || (selected.tab = appendToArray().length - 1)">
+        <a href="#">
+          <i class="glyphicon glyphicon-plus"></i>
+          {{ form.add || 'Add'}}
+          </a>
+      </li>
+    </ul>
+  </div>
+
+  <div ng-class="{'col-xs-9': !form.tabsType || form.tabsType === 'left' || form.tabsType === 'right'}">
+    <div class="tab-content">
+      <div class="tab-pane clearfix"
+           ng-repeat="item in modelArray track by $index"
+           ng-show="selected.tab === $index"
+           ng-class="{active: selected.tab === $index}">
+           <sf-decorator form="copyWithIndex($index)"></sf-decorator>
+
+
+           <button ng-click="deleteFromArray($index)"
+                   type="button"
+                   class="btn {{ form.style.remove || 'btn-default' }} pull-right">
+             <i class="glyphicon glyphicon-trash"></i>
+             {{ form.remove || 'Remove'}}
+           </button>
+      </div>
+    </div>
+  </div>
+
+  <div ng-if="form.tabType === 'right'" class="col-xs-3">
+    <ul class="nav nav-tabs tabs-right"
+        style="margin-bottom: 15px">
+      <li ng-repeat="item in modelArray track by $index"
+          ng-click="$event.preventDefault() || (selected.tab = $index)"
+          ng-class="{active: selected.tab === $index}">
+          <a href="#">{{evalExpr(form.title,{'$index':$index, value: item}) || $index}}</a>
+      </li>
+      <li ng-click="$event.preventDefault() || appendToArray()">
+        <a href="#">
+          <i class="glyphicon glyphicon-plus"></i>
+          {{ form.add || 'Add'}}
+          </a>
+      </li>
+    </ul>
+  </div>
+
+</div>
