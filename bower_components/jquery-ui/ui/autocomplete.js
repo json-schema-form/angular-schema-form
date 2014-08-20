@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Autocomplete 1.11.0
+ * jQuery UI Autocomplete 1.11.1
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -27,7 +27,7 @@
 }(function( $ ) {
 
 $.widget( "ui.autocomplete", {
-	version: "1.11.0",
+	version: "1.11.1",
 	defaultElement: "<input>",
 	options: {
 		appendTo: null,
@@ -130,7 +130,9 @@ $.widget( "ui.autocomplete", {
 					break;
 				case keyCode.ESCAPE:
 					if ( this.menu.element.is( ":visible" ) ) {
-						this._value( this.term );
+						if ( !this.isMultiLine ) {
+							this._value( this.term );
+						}
 						this.close( event );
 						// Different browsers have different default behavior for escape
 						// Single press can mean undo or clear
@@ -266,7 +268,7 @@ $.widget( "ui.autocomplete", {
 
 				// Announce the value in the liveRegion
 				label = ui.item.attr( "aria-label" ) || item.value;
-				if ( label && jQuery.trim( label ).length ) {
+				if ( label && $.trim( label ).length ) {
 					this.liveRegion.children().hide();
 					$( "<div>" ).text( label ).appendTo( this.liveRegion );
 				}

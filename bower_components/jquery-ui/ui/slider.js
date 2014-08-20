@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Slider 1.11.0
+ * jQuery UI Slider 1.11.1
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -26,7 +26,7 @@
 }(function( $ ) {
 
 return $.widget( "ui.slider", $.ui.mouse, {
-	version: "1.11.0",
+	version: "1.11.1",
 	widgetEventPrefix: "slide",
 
 	options: {
@@ -454,6 +454,9 @@ return $.widget( "ui.slider", $.ui.mouse, {
 					.removeClass( "ui-slider-horizontal ui-slider-vertical" )
 					.addClass( "ui-slider-" + this.orientation );
 				this._refreshValue();
+
+				// Reset positioning from previous orientation
+				this.handles.css( value === "horizontal" ? "bottom" : "left", "" );
 				break;
 			case "value":
 				this._animateOff = true;

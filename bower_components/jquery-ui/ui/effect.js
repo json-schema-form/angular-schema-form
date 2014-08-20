@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects 1.11.0
+ * jQuery UI Effects 1.11.1
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -20,7 +20,11 @@
 	}
 }(function( $ ) {
 
-var dataSpace = "ui-effects-";
+var dataSpace = "ui-effects-",
+
+	// Create a local jQuery because jQuery Color relies on it and the
+	// global may not exist with AMD and a custom build (#10199)
+	jQuery = $;
 
 $.effects = {
 	effect: {}
@@ -900,7 +904,7 @@ $.fn.extend({
 (function() {
 
 $.extend( $.effects, {
-	version: "1.11.0",
+	version: "1.11.1",
 
 	// Saves a set of properties in a data storage
 	save: function( element, set ) {

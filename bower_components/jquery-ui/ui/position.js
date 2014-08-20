@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Position 1.11.0
+ * jQuery UI Position 1.11.1
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -123,8 +123,11 @@ $.position = {
 			offset: withinElement.offset() || { left: 0, top: 0 },
 			scrollLeft: withinElement.scrollLeft(),
 			scrollTop: withinElement.scrollTop(),
-			width: isWindow ? withinElement.width() : withinElement.outerWidth(),
-			height: isWindow ? withinElement.height() : withinElement.outerHeight()
+
+			// support: jQuery 1.6.x
+			// jQuery 1.6 doesn't support .outerWidth/Height() on documents or windows
+			width: isWindow || isDocument ? withinElement.width() : withinElement.outerWidth(),
+			height: isWindow || isDocument ? withinElement.height() : withinElement.outerHeight()
 		};
 	}
 };

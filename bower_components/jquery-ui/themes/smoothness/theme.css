@@ -1,5 +1,5 @@
 /*!
- * jQuery UI CSS Framework 1.11.0
+ * jQuery UI CSS Framework 1.11.1
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -139,18 +139,18 @@
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary {
 	opacity: .7;
-	filter:Alpha(Opacity=70);
+	filter:Alpha(Opacity=70); /* support: IE8 */
 	font-weight: normal;
 }
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
 	opacity: .35;
-	filter:Alpha(Opacity=35);
+	filter:Alpha(Opacity=35); /* support: IE8 */
 	background-image: none;
 }
 .ui-state-disabled .ui-icon {
-	filter:Alpha(Opacity=35); /* For IE8 - See #6059 */
+	filter:Alpha(Opacity=35); /* support: IE8 - See #6059 */
 }
 
 /* Icons
@@ -398,13 +398,13 @@
 .ui-widget-overlay {
 	background: #aaaaaa url("images/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x;
 	opacity: .3;
-	filter: Alpha(Opacity=30);
+	filter: Alpha(Opacity=30); /* support: IE8 */
 }
 .ui-widget-shadow {
 	margin: -8px 0 0 -8px;
 	padding: 8px;
 	background: #aaaaaa url("images/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x;
 	opacity: .3;
-	filter: Alpha(Opacity=30);
+	filter: Alpha(Opacity=30); /* support: IE8 */
 	border-radius: 8px;
 }

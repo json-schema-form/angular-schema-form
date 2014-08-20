@@ -1,0 +1,22 @@
+<div class="form-group" ng-class="{'has-error': hasError()}">
+  <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
+  <div>
+    <spectrum-colorpicker
+      ng-model="$$value$$"
+      format="form.colorFormat || 'rgb'"
+      style="background-color: white"
+      type="color"
+      schema-validate="form"
+      options="form.spectrumOptions || {
+        showInput: true,
+        showAlpha: true,
+        allowEmpty: true,
+        showPalette: true,
+        preferredFormat: form.colorFormat || 'rgb',
+        palette: [['#fce94f', '#fcaf3e', '#e9b96e'],
+                  ['#8ae234', '#729fcf', '#ad7fa8'],
+                  ['#ef2929', '#888a85', '#deface']]
+      }"></spectrum-colorpicker>
+</div>
+  <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
+</div>

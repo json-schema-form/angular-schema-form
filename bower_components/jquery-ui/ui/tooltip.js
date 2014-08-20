@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Tooltip 1.11.0
+ * jQuery UI Tooltip 1.11.1
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -26,7 +26,7 @@
 }(function( $ ) {
 
 return $.widget( "ui.tooltip", {
-	version: "1.11.0",
+	version: "1.11.1",
 	options: {
 		content: function() {
 			// support: IE<9, Opera in jQuery <1.7
@@ -296,6 +296,8 @@ return $.widget( "ui.tooltip", {
 			}, this.options.position ) );
 		}
 
+		this.hiding = false;
+		this.closing = false;
 		tooltip.hide();
 
 		this._show( tooltip, this.options.show );
@@ -362,9 +364,12 @@ return $.widget( "ui.tooltip", {
 
 		this._removeDescribedBy( target );
 
+		this.hiding = true;
 		tooltip.stop( true );
 		this._hide( tooltip, this.options.hide, function() {
 			that._removeTooltip( $( this ) );
+			this.hiding = false;
+			this.closing = false;
 		});
 
 		target.removeData( "ui-tooltip-open" );
@@ -385,7 +390,9 @@ return $.widget( "ui.tooltip", {
 
 		this.closing = true;
 		this._trigger( "close", event, { tooltip: tooltip } );
-		this.closing = false;
+		if ( !this.hiding ) {
+			this.closing = false;
+		}
 	},
 
 	_tooltip: function( element ) {

@@ -1,0 +1,34 @@
+{
+  "name": "spectrum",
+  "version": "1.5.0",
+  "main": [
+    "./spectrum.css",
+    "./spectrum.js"
+  ],
+  "docs": "http://bgrins.github.com/spectrum",
+  "homepage": "http://bgrins.github.com/spectrum",
+  "demo": "http://jsfiddle.net/bgrins/ctkY3/",
+  "dependencies": {
+    "jquery": ">=1.7.2"
+  },
+  "ignore": [
+    ".gitignore",
+    ".travis.yml",
+    "build/",
+    "docs/",
+    "example/",
+    "Gruntfile.js",
+    "LICENSE",
+    "README.md",
+    "test/"
+  ],
+  "_release": "1.5.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.5.0",
+    "commit": "3926bd07beb2fe0f069a43bbb44df1700d548c36"
+  },
+  "_source": "git://github.com/bgrins/spectrum.git",
+  "_target": "1.5.0",
+  "_originalSource": "spectrum"
+}

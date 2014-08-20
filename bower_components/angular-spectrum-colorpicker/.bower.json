@@ -1,0 +1,46 @@
+{
+  "name": "angular-spectrum-colorpicker",
+  "version": "1.2.0",
+  "authors": [
+    "Jimdo GmbH"
+  ],
+  "description": "Angular directive for a colorpicker, that bases on the spectrum colorpicker",
+  "main": "dist/angular-spectrum-colorpicker.js",
+  "keywords": [
+    "directive",
+    "colorpicker",
+    "angular"
+  ],
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "angular": "~1.2.21",
+    "angular-mocks": "~1.2.21",
+    "jquery": "~2.1.1"
+  },
+  "dependencies": {
+    "spectrum": "1.5.0",
+    "angular": "~1.2.8"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tasks",
+    "demo",
+    "src",
+    "Gruntfile.js",
+    "package.json"
+  ],
+  "homepage": "https://github.com/Jimdo/angular-spectrum-colorpicker",
+  "_release": "1.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.2.0",
+    "commit": "4de2ce3e97b5f8353db5272fc8dd695da74ed1c0"
+  },
+  "_source": "git://github.com/Jimdo/angular-spectrum-colorpicker.git",
+  "_target": ">= 1.2.0",
+  "_originalSource": "angular-spectrum-colorpicker"
+}

@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Puff 1.11.0
+ * jQuery UI Effects Puff 1.11.1
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors

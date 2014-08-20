@@ -1,0 +1,38 @@
+{
+  "name": "angular-schema-form-colorpicker",
+  "main": [
+    "bootstrap-colorpicker.min.js"
+  ],
+  "version": "0.1.0",
+  "authors": [
+    "Textalk",
+    "Denis Dervisevic <denis@dervisevic.se>",
+    "David Jensen <david.lgj@gmail.com>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "angular-schema-form",
+    "schema-form",
+    "form",
+    "json",
+    "json-schema",
+    "schema"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "coverage"
+  ],
+  "dependencies": {
+    "angular-spectrum-colorpicker": ">= 1.2.0"
+  },
+  "devDependencies": {
+    "angular-schema-form": ">= 0.7",
+    "angular-mocks": ">= 1.2"
+  }
+}
