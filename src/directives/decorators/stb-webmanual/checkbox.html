@@ -1,12 +1,13 @@
-<div class="checkbox" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
-  <label>
+<div class="stb-form-group al checkbox" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+
+  <div class="help-block info-message" ng-show="form.description" ng-bind-html="form.description"></div>
+
     <input type="checkbox"
            sf-changed="form"
            ng-model="$$value$$"
            ng-model-options="form.ngModelOptions"
-           schema-validate="form">
-    <span ng-bind-html="form.title"></span>
-  </label>
+           schema-validate="form"
+           class="stb-checkbox">
+    <label class="stb-custom-input" ng-bind-html="form.title"></label>
 
-  <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
 </div>

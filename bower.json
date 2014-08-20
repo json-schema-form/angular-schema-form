@@ -34,7 +34,9 @@
     "tv4": "~1.0.15",
     "angular-sanitize": ">= 1.2",
     "objectpath": "~1.0.4",
-    "stb-webmanual": "https://github.com/storebrand/storebrand.ny.git"
+    "stb-webmanual": "ssh://git@github.com/storebrand/storebrand.ny.git",
+    "angular-ui-sortable": "~0.12.10",
+    "bootstrap-vertical-tabs": "~1.2.0"
   },
   "devDependencies": {
     "angular-ui-ace": "bower",
