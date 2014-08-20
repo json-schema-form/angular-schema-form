@@ -427,12 +427,12 @@ They do need a list of ```items``` to have as children.
 
 ### conditional
 
-A *conditional* is exactly the same as a *section*, i.e. a ```<div>``` with other form elements in
-it, hence they need an ```items``` property. They also need a ```condition``` which is
+A *conditional* is exactly the same as a *section*, i.e. a `<div>` with other form elements in
+it, hence they need an `items` property. They also need a `condition` which is
 a string with an angular expression. If that expression evaluates as thruthy the *conditional*
 will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
-the ```sf-schema``` directive (the same as onClick on buttons) but with access to the current model
-under the name ```model```. This is useful for hiding/showing
+the `sf-schema` directive (the same as onClick on buttons) but with access to the current model
+and current array index under the name `model` and `arrayIndex`. This is useful for hiding/showing
 parts of a form depending on another form control.
 
 ex. A checkbox that shows an input field for a code when checked
@@ -476,6 +476,58 @@ Note that angulars two-way binding automatically will update the conditional blo
 event handlers and such. The condition need not reference a model value it could be anything in
 scope.
 
+The same example, but inside an array:
+
+```javascript
+function FormCtrl($scope) {
+  $scope.persons = []
+
+  $scope.schema = {
+    "type": "object",
+    "properties": {
+      "persons": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "Name"
+            },
+            "eligible": {
+              "type": "boolean",
+              "title": "Eligible for awesome things"
+            },
+            "code": {
+              "type":"string"
+              "title": "The Code"
+            }
+          }
+        }
+      }
+    }
+  }
+
+  $scope.form = [
+    {
+      "key": "persons",
+      "items": [
+        "persons[].name",
+        "persons[].eligible",
+        {
+          type: "conditional",
+          condition: "persons[arrayIndex].eligible", //or "model.eligable"
+          items: [
+            "persons[].code"
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+Note that arrays inside arrays won't work with conditional.
 
 ### select and checkboxes
 

@@ -36,7 +36,9 @@
         "properties": {
           "eyecolor": {
             "type": "string",
-            "title": "Eye color"
+            "format": "color",
+            "title": "Eye color",
+            "default": "pink"
           },
           "haircolor": {
             "type": "string",

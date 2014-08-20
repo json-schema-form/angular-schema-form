@@ -1,8 +1,9 @@
-angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider','sfPathProvider',function($compileProvider, sfPathProvider){
+angular.module('schemaForm').provider('schemaFormDecorators',
+['$compileProvider', 'sfPathProvider', function($compileProvider, sfPathProvider) {
   var defaultDecorator = '';
   var directives = {};
 
-  var templateUrl = function(name,form) {
+  var templateUrl = function(name, form) {
     //schemaDecorator is alias for whatever is set as default
     if (name === 'sfDecorator') {
       name = defaultDecorator;
@@ -12,7 +13,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
 
     //rules first
     var rules = directive.rules;
-    for (var i = 0; i< rules.length; i++) {
+    for (var i = 0; i < rules.length; i++) {
       var res = rules[i](form);
       if (res) {
         return res;
@@ -28,10 +29,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
     return directive.mappings['default'];
   };
 
-
-  var createDirective = function(name){
-    $compileProvider.directive(name,['$parse','$compile','$http','$templateCache',
-      function($parse,  $compile,  $http,  $templateCache){
+  var createDirective = function(name) {
+    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache',
+      function($parse,  $compile,  $http,  $templateCache) {
 
         return {
           restrict: 'AE',
@@ -39,9 +39,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
           transclude: false,
           scope: true,
           require: '?^sfSchema',
-          link: function(scope,element,attrs,sfSchema) {
+          link: function(scope, element, attrs, sfSchema) {
             //rebind our part of the form to the scope.
-            var once = scope.$watch(attrs.form,function(form){
+            var once = scope.$watch(attrs.form, function(form) {
 
               if (form) {
                 scope.form  = form;
@@ -49,10 +49,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                 //ok let's replace that template!
                 //We do this manually since we need to bind ng-model properly and also
                 //for fieldsets to recurse properly.
-                var url = templateUrl(name,form);
-                $http.get(url,{ cache: $templateCache }).then(function(res){
-                  var key = form.key ? sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
-                  var template = res.data.replace(/\$\$value\$\$/g,'model'+(key[0] !== '['?'.':'')+key);
+                var url = templateUrl(name, form);
+                $http.get(url, {cache: $templateCache}).then(function(res) {
+                  var key = form.key ?
+                            sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
+                  var template = res.data.replace(
+                    /\$\$value\$\$/g,
+                    'model' + (key[0] !== '[' ? '.' : '') + key
+                  );
                   element.html(template);
                   $compile(element.contents())(scope);
                 });
@@ -65,17 +69,17 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
               return scope.form && scope.form.notitle !== true && scope.form.title;
             };
 
-            scope.listToCheckboxValues = function(list){
+            scope.listToCheckboxValues = function(list) {
               var values = {};
-              angular.forEach(list,function(v){
+              angular.forEach(list, function(v) {
                 values[v] = true;
               });
               return values;
             };
 
-            scope.checkboxValuesToList = function(values){
+            scope.checkboxValuesToList = function(values) {
               var lst = [];
-              angular.forEach(values,function(v,k){
+              angular.forEach(values, function(v, k) {
                 if (v) {
                   lst.push(k);
                 }
@@ -83,15 +87,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
               return lst;
             };
 
-            scope.buttonClick = function($event,form) {
+            scope.buttonClick = function($event, form) {
               if (angular.isFunction(form.onClick)) {
-                form.onClick($event,form);
+                form.onClick($event, form);
               } else if (angular.isString(form.onClick)) {
                 if (sfSchema) {
                   //evaluating in scope outside of sfSchemas isolated scope
-                  sfSchema.evalInParentScope(form.onClick,{'$event':$event,form:form});
+                  sfSchema.evalInParentScope(form.onClick, {'$event': $event, form: form});
                 } else {
-                  scope.$eval(form.onClick,{'$event':$event,form:form});
+                  scope.$eval(form.onClick, {'$event': $event, form: form});
                 }
               }
             };
@@ -103,13 +107,13 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
              * @param {Object} locals (optional)
              * @return {Any} the result of the expression
              */
-            scope.evalExpr = function(expression,locals) {
+            scope.evalExpr = function(expression, locals) {
               if (sfSchema) {
                 //evaluating in scope outside of sfSchemas isolated scope
-                return sfSchema.evalInParentScope(expression,locals);
+                return sfSchema.evalInParentScope(expression, locals);
               }
 
-              return scope.$eval(expression,locals);
+              return scope.$eval(expression, locals);
             };
 
             /**
@@ -119,10 +123,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
              * @param {Object} locals (optional)
              * @return {Any} the result of the expression
              */
-            scope.evalInScope = function(expression,locals) {
-                if (expression) {
-                  return scope.$eval(expression,locals);
-                }
+            scope.evalInScope = function(expression, locals) {
+              if (expression) {
+                return scope.$eval(expression, locals);
+              }
             };
 
             /**
@@ -138,9 +142,12 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
                     return scope.form.validationMessage;
                   }
 
-                  return scope.form.validationMessage[schemaError.code] || scope.form.validationMessage['default'];
+                  return scope.form.validationMessage[schemaError.code] ||
+                         scope.form.validationMessage['default'];
                 } else {
-                  return scope.form.validationMessage.required || scope.form.validationMessage['default'] || scope.form.validationMessage;
+                  return scope.form.validationMessage.required ||
+                         scope.form.validationMessage['default'] ||
+                         scope.form.validationMessage;
                 }
               }
 
@@ -150,35 +157,36 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
               }
 
               //Otherwise we only use required so it must be it.
-              return "Required";
+              return 'Required';
 
             };
           }
         };
-      }]);
+      }
+    ]);
   };
 
-  var createManualDirective = function(type,templateUrl,transclude) {
-    transclude = angular.isDefined(transclude)? transclude : false;
-    $compileProvider.directive('sf'+angular.uppercase(type[0])+type.substr(1), function(){
+  var createManualDirective = function(type, templateUrl, transclude) {
+    transclude = angular.isDefined(transclude) ? transclude : false;
+    $compileProvider.directive('sf' + angular.uppercase(type[0]) + type.substr(1), function() {
       return {
-        restrict: "EAC",
+        restrict: 'EAC',
         scope: true,
         replace: true,
         transclude: transclude,
         template: '<sf-decorator form="form"></sf-decorator>',
-        link: function(scope,element,attrs) {
+        link: function(scope, element, attrs) {
           var watchThis = {
             'items': 'c',
             'titleMap': 'c',
             'schema': 'c'
           };
-          var form = { type: type };
+          var form = {type: type};
           var once = true;
-          angular.forEach(attrs,function(value,name){
+          angular.forEach(attrs, function(value, name) {
             if (name[0] !== '$' && name.indexOf('ng') !== 0 && name !== 'sfField') {
 
-              var updateForm = function(val){
+              var updateForm = function(val) {
                 if (angular.isDefined(val) && val !== form[name]) {
                   form[name] = val;
 
@@ -193,17 +201,17 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
               if (name === 'model') {
                 //"model" is bound to scope under the name "model" since this is what the decorators
                 //know and love.
-                scope.$watch(value,function(val){
+                scope.$watch(value, function(val) {
                   if (val && scope.model !== val) {
                     scope.model = val;
                   }
                 });
               } else if (watchThis[name] === 'c') {
                 //watch collection
-                scope.$watchCollection(value,updateForm);
+                scope.$watchCollection(value, updateForm);
               } else {
                 //$observe
-                attrs.$observe(name,updateForm);
+                attrs.$observe(name, updateForm);
               }
             }
           });
@@ -211,8 +219,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
       };
     });
   };
-
-
 
   /**
    * Create a decorator directive and its sibling "manual" use directives.
@@ -225,11 +231,12 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
    **
    * @param {string} name directive name (CamelCased)
    * @param {Object} mappings, an object that maps "type" => "templateUrl"
-   * @param {Array}  rules (optional) a list of functions, function(form){}, that are each tried in turn,
+   * @param {Array}  rules (optional) a list of functions, function(form) {}, that are each tried in
+   *                 turn,
    *                 if they return a string then that is used as the templateUrl. Rules come before
    *                 mappings.
    */
-  this.createDecorator = function(name,mappings,rules){
+  this.createDecorator = function(name, mappings, rules) {
     directives[name] = {
       mappings: mappings || {},
       rules:    rules    || []
@@ -261,8 +268,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
    * @param {Object} mappings
    */
   this.createDirectives = function(mappings) {
-    angular.forEach(mappings,function(url,type){
-      createManualDirective(type,url);
+    angular.forEach(mappings, function(url, type) {
+      createManualDirective(type, url);
     });
   };
 
@@ -283,15 +290,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
    * @param {String} type Form type for the mapping
    * @param {String} url  The template url
    */
-  this.addMapping = function(name,type,url) {
+  this.addMapping = function(name, type, url) {
     if (directives[name]) {
       directives[name].mappings[type] = url;
     }
   };
 
-
   //Service is just a getter for directive mappings and rules
-  this.$get = function(){
+  this.$get = function() {
     return {
       directive: function(name) {
         return directives[name];
@@ -299,7 +305,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',['$compileProvider'
       defaultDecorator: defaultDecorator
     };
   };
-
 
   //Create a default directive
   createDirective('sfDecorator');

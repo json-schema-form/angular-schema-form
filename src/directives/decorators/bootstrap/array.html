@@ -7,7 +7,7 @@
               type="button" class="close pull-right">
               <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
       </button>
-      <sf-decorator form="copyWithIndex($index)"></sf-decorator>
+      <sf-decorator ng-init="arrayIndex = $index" form="copyWithIndex($index)"></sf-decorator>
     </li>
   </ol>
   <div class="clearfix" style="padding: 15px;">

@@ -1,3 +1,10 @@
+v0.7.2
+------
+ * Add-ons now have their own repos, and there is a colorpicker!
+ * 'arrayIndex' is exposed as a locals in conditionals
+ * New tab in tabarrays gets focus.
+ * We now follow google javscript code guidelines, policed by jscs.
+
 v0.7.1
 ------
 Thanks to @torstenrudolf, this release is basically his PR:s.
