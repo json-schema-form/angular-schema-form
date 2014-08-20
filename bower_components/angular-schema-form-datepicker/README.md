@@ -3,6 +3,10 @@ Angular Schema Form Date Picker Add-on
 
 This is an add-on for [Angular Schema Form](https://github.com/Textalk/angular-schema-form/).
 
+[![Build Status](https://travis-ci.org/Textalk/angular-schema-form-datepicker.svg?branch=master)](https://travis-ci.org/Textalk/angular-schema-form-datepicker)
+[![Bower version](https://badge.fury.io/bo/angular-schema-form-datepicker.svg)](http://badge.fury.io/bo/angular-schema-form-datepicker)
+
+
 Everyone loves a nice date picker - now you can have your very own date picker in Schema Form!
 The date picker add-on uses the excellent jQuery-based date picker,
 [pickadate.js](http://amsul.ca/pickadate.js/).
@@ -16,7 +20,7 @@ Within Schema Form, pickadate only supports dates - not times.
 Installation
 ------------
 The date picker is an add-on to the Bootstrap decorator. To use it, just include
-`dist/bootstrap-datepicker.min.js` *after* `dist/bootstrap-decorator.min.js`.
+`bootstrap-datepicker.min.js` *after* `bootstrap-decorator.min.js`.
 
 You'll need to load a few additional files to use pickadate:
 

@@ -1,9 +1,9 @@
 {
   "name": "angular-schema-form-datepicker",
-  "version": "0.7.1",
+  "version": "0.1.1",
   "description": "Datepicker add-on for schema form",
   "scripts": {
-    "test": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js"
+    "test": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js"
   },
   "author": "Textalk",
   "license": "MIT",
