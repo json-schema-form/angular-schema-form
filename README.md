@@ -151,6 +151,7 @@ First off, you need to have nodejs installed. Then install all dev dependencies 
 ```bash
 $ npm install
 $ sudo npm install -g gulp
+$ bower install
 $ gulp
 ```
 
