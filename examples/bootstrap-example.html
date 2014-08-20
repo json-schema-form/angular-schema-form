@@ -38,6 +38,8 @@
     <div class="col-sm-4">
       <h3>The Generated Form</h3>
       <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" ng-submit="submitForm(ngform,modelData)"></form>
+      <div ng-show="ngform.$valid"><em>Form is valid</em></div>
+      <div ng-show="ngform.$invalid"><em>Form is not valid</em></div>
       <h3>Model</h3>
       <pre ng-cloak>{{pretty()}}</pre>
     </div>
@@ -82,7 +84,7 @@
 
 <script type="text/javascript" src="../dist/schema-form.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap-decorator.min.js"></script>
-<script type="text/javascript" src="../dist/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-schema-form-datepicker/bootstrap-datepicker.js"></script>
 
 <script type="text/javascript" src="../bower_components/angular-schema-form-colorpicker/bootstrap-colorpicker.min.js"></script>
 
