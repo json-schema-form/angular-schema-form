@@ -94,9 +94,7 @@ You can also just download the contents of the `dist/` folder and add dependenci
 
 ### Dependencies
 
-Schema form has a lot of dependencies, most of which are optional. Therefor
-
-Schema Form depends on:
+Schema form has a lot of dependencies, most of which are optional. Schema Form depends on:
 
 1. [AngularJS](https://angularjs.org/) version 1.3.x is recomended. Version 1.2.x
    has some limitation. See [known limitations](docs/knownlimitations.md).
@@ -109,19 +107,40 @@ If you install via bower you get all of the above except bootstrap since we
 don't want to push a certain version or flavor on you. Also make
 sure you got the angular version you actually want.
 
+
 #### Additional dependecies
 
-1. If you want to use the date picker, you'll also need [jQuery](https://github.com/jquery/jquery) and [pickadate.js](http://amsul.ca/pickadate.js/)
-2. If you'd like to use drag-and-drop reordering of arrays, you'll also need [ui-sortable](https://github.com/angular-ui/ui-sortable) and its [jQueryUI](http://jqueryui.com/) dependencies. See the *ui-sortable* documentation for details about which parts of jQueryUI are needed. You can safely ignore these if you don't need reordering.
-3. Schema Form provides tabbed arrays through the form type `tabarray`. Tab arrays default to tabs on the left side. For these to work, you'll need to include the CSS from [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs). However, you won't need Bootstrap Vertical Tabs for horizontal tabs (the `tabType: "top"` option).
+1. If you'd like to use drag-and-drop reordering of arrays, you'll also need [ui-sortable](https://github.com/angular-ui/ui-sortable) and its [jQueryUI](http://jqueryui.com/) dependencies. See the *ui-sortable* documentation for details about which parts of jQueryUI are needed. You can safely ignore these if you don't need reordering.
+2. Schema Form provides tabbed arrays through the form type `tabarray`. Tab arrays default to tabs on the left side. For these to work, you'll need to include the CSS from [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical-tabs). However, you won't need Bootstrap Vertical Tabs for horizontal tabs (the `tabType: "top"` option).
 
 The minified files include templates - no need to load additional HTML files.
 
+
+### Script Loading
+
+Schema form is split into two main files, `dist/schema-form.min.js` and
+`dist/boostrap-decorator.min.js` and they need be loaded in that order. AngularJ,
+[tv4](https://github.com/geraintluff/tv4) and [objectpath](https://github.com/mike-marcacci/objectpath)
+also needs to be loaded *before* Schema Form.
+
+
+```html
+<script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="bower_components/tv4/tv4.js"></script>
+<script type="text/javascript" src="bower_components/objectpath/lib/ObjectPath.js"></script>
+<script type="text/javascript" src="bower_components/angular-schema-form/dist/schema-form.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-schema-form/dist/bootstrap-decorator.min.js"></script>
+```
+
+
 Add-ons
 ------
-There is currently only one add-on, a date picker using the excellent [pickadate.js](http://amsul.ca/pickadate.js/).
+There is currently two add-ons, a date picker and a colorpicker. They have their own repos and you
+can find them here with usage instructions:
 
-See the [add-on docs](docs/datepicker.md) for usage.
+  * [https://github.com/Textalk/angular-schema-form-datepicker](https://github.com/Textalk/angular-schema-form-datepicker)
+  * [https://github.com/Textalk/angular-schema-form-colorpicker](https://github.com/Textalk/angular-schema-form-colorpicker)
 
 Building
 --------
@@ -147,11 +166,13 @@ Unit tests are run with [karma](http://karma-runner.github.io) and written using
 To run the tests:
 
 1. Install all dependencies via NPM
-2. Install the Karma CLI
-3. Run the tests
+2. Install dev dependencies with bower.
+3. Install the Karma CLI
+4. Run the tests
 
 ```bash
 $ npm install
+$ bower install
 $ sudo npm install -g karma-cli
 $ karma start karma.conf.js
 ```
@@ -159,7 +180,10 @@ $ karma start karma.conf.js
 Contributing
 ------------
 
-**Heads up!** Sometime soon we will go over and change the code style to follow
-whatever [jscs](https://github.com/mdevils/node-jscs) says with preset set to 'google'.
+All contributions are welcome! We're trying to use
+[git flow](http://danielkummer.github.io/git-flow-cheatsheet/), so please base any merge request
+on the **development** branch instead of **master**.
 
-All contributions are welcome! We're trying to use [git flow](http://danielkummer.github.io/git-flow-cheatsheet/), so please base any merge request on the **development** branch instead of **master**.
+Also run any code through the code style checker [jscs](https://github.com/mdevils/node-jscs)
+(or even better use it in your editor) with preset set to `google`. You can also us `gulp jscs` to
+check your code.

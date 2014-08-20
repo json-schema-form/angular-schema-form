@@ -20,6 +20,11 @@
               "pattern": "^\\S+@\\S+$",
               "description": "Email will be used for evil."
             },
+            "spam": {
+              "title": "Spam",
+              "type": "boolean",
+              "default": true
+            },
             "comment": {
               "title": "Comment",
               "type": "string",
@@ -27,7 +32,7 @@
               "validationMessage": "Don't be greedy!"
             }
           },
-          "required": ["name","email","comment"]
+          "required": ["name","comment"]
         }
       }
     }
@@ -39,13 +44,24 @@
     },
     {
       "key": "comments",
-	  "add": "New",
-	  "style": {
-		"add": "btn-success"
+  	  "add": "New",
+  	  "style": {
+  		"add": "btn-success"
 	  },
       "items": [
         "comments[].name",
         "comments[].email",
+        {
+          "type": "conditional",
+          "condition": "model.comments[arrayIndex].email",
+          "items": [
+            {
+              "key": "comments[].spam",
+              "type": "checkbox",
+              "title": "Yes I want spam."
+            }
+          ]
+        },
         {
           "key": "comments[].comment",
           "type": "textarea"

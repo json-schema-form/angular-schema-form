@@ -283,7 +283,7 @@ describe('Schema form',function(){
 
         //A button with default style
         scope.form = [{ type: 'button', style: 'btn-success', title: 'Okidoki'}];
-        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+        tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
         $compile(tmpl)(scope);
         $rootScope.$apply();
 
@@ -1157,53 +1157,6 @@ describe('Schema form',function(){
       });
     });
 
-
-    it('should use datepicker directive when format is "date"',function(){
-
-      //Mock pickadate
-      $.fn.pickadate = sinon.stub().returns({
-        set: sinon.stub(),
-        get: sinon.stub().returns('get')
-      });
-      $.fn.pickadate.defaults = { format: 'yyyy-mm-dd' };
-
-      inject(function($compile,$rootScope){
-        var scope = $rootScope.$new();
-        scope.person = { partee: '2014-01-01'};
-
-        scope.schema = {
-          type: "object",
-          properties: {
-            partee: {
-              title: "Parteeeeee",
-              type: "string",
-              format: "date"
-            }
-          }
-        };
-
-
-        scope.form = [{
-          key:'partee',
-          maxDate: new Date(),
-          minDate: '2014-02-13',
-        }];
-
-        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
-
-        $compile(tmpl)(scope);
-        $rootScope.$apply();
-        tmpl.children().length.should.be.equal(1);
-        tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
-        tmpl.children().eq(0).children().eq(0).find('input[pick-a-date]').length.should.ok;
-        tmpl.children().eq(0).children().eq(0).find('input[pick-a-date]').attr('max-date').should.be.ok;
-        tmpl.children().eq(0).children().eq(0).find('input[pick-a-date]').attr('min-date').should.be.ok;
-
-        $.fn.pickadate.should.have.beenCalled;
-
-      });
-    });
-
     it('should render custom html when type "help" is specified',function(){
 
       //We don't need no sanitation. We don't need no though control.
@@ -1807,7 +1760,7 @@ describe('Schema form',function(){
                 "type": "fieldset",
                 "items": [
                   {
-                    "title": "l",
+                    "title": "left",
                     "schema": {
                       "type": "string"
                     },
@@ -1820,7 +1773,7 @@ describe('Schema form',function(){
                     "type": "text"
                   },
                   {
-                    "title": "r",
+                    "title": "right",
                     "schema": {
                       "type": "string"
                     },
@@ -1837,6 +1790,7 @@ describe('Schema form',function(){
             ]
           }
         ];
+
 
         var f = schemaForm.defaults(schema);
         f.form.should.be.deep.equal(form);

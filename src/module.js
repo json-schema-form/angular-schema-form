@@ -1,3 +1,6 @@
+// Deps is sort of a problem for us, maybe in the future we will ask the user to depend
+// on modules for add-ons
+
 var deps = ['ObjectPath'];
 try {
   //This throws an expection if module does not exist.
@@ -11,4 +14,10 @@ try {
   deps.push('ui.sortable');
 } catch (e) {}
 
-angular.module('schemaForm',deps);
+try {
+  //This throws an expection if module does not exist.
+  angular.module('angularSpectrumColorpicker');
+  deps.push('angularSpectrumColorpicker');
+} catch (e) {}
+
+angular.module('schemaForm', deps);

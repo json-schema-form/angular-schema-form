@@ -5,7 +5,7 @@
     "dist/bootstrap-decorator.min.js",
     "dist/bootstrap-datepicker.min.js"
   ],
-  "version": "0.7.1",
+  "version": "0.7.2",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>"
@@ -36,6 +36,10 @@
     "objectpath": "~1.0.4"
   },
   "devDependencies": {
-    "angular-ui-ace": "bower"
+    "angular-ui-ace": "bower",
+    "angular-schema-form-datepicker": ">= 0.1.0",
+    "jquery": "~2.1.1",
+    "angular-mocks": ">= 1.2",
+    "angular-schema-form-colorpicker": "~0.1.0"
   }
 }
