@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Stb Webmanual Form Editor</title>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.css">
+  <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.date.css">
+  <link rel="stylesheet" href="../bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css">
+  <link rel="stylesheet" href="../bower_components/stb-webmanual/css/stb-main.css">
+  <style type="text/css">
+
+  body,html {
+    min-height: 1400px;
+  }
+
+  .alert .form-group {
+    margin-bottom: 0px;
+  }
+
+  .red {
+    border: 1px solid red;
+    background: #fee;
+  }
+
+  .ace_editor { font-size: 20px !important;}
+  .form {  height: 400px;  }
+  .schema {  height: 800px;  }
+  </style>
+</head>
+<body ng-app="test" ng-controller="TestCtrl">
+
+<div class="col-md-12">
+  <h1>Stb Webmanual Form Editor</h1>
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>The Generated Form</h3>
+      <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" sf-decorator-name="stb-webmanual-decorator" ng-submit="submitForm(ngform,modelData)"></form>
+      <h3>Model</h3>
+      <pre ng-cloak>{{pretty()}}</pre>
+    </div>
+    <div class="col-sm-8">
+      <h3>Select Example</h3>
+      <div class="form-group">
+        <select class="form-control" id="selectTest"
+                ng-model="selectedTest"
+                ng-options="obj.name for obj in tests">
+        </select>
+      </div>
+      <h3>Form</h3>
+      <div ui-ace="{ theme: 'monokai',mode:'json'}"
+           ng-class="{red: !itParsesForm}" ng-model="formJson" class="form-control form"></div>
+      <h3>Schema</h3>
+      <div ui-ace="{ theme: 'monokai',mode:'json'}"
+           ng-class="{red: !itParses}" ng-model="schemaJson" class="form-control schema"></div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="http://cdn.jsdelivr.net/g/jquery.ui@1.10"></script>
+<script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
+<script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+<script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script> -->
+<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-sanitize.min.js"></script> -->
+
+<script type="text/javascript" src="../bower_components/angular-ui-sortable/sortable.js"></script>
+<script type="text/javascript" src="../bower_components/angular-ui-ace/ui-ace.js"></script>
+<script type="text/javascript" src="../bower_components/objectpath/lib/ObjectPath.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/picker.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/picker.date.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/translations/sv_SE.js"></script>
+
+<script type="text/javascript" src="../dist/schema-form.js"></script>
+<script type="text/javascript" src="../dist/stb-webmanual-decorator.min.js"></script>
+<!-- <script type="text/javascript" src="../dist/bootstrap-decorator.min.js"></script> -->
+<script type="text/javascript" src="../dist/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript">
+
+angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($scope,$http){
+
+  $scope.tests = [
+    { name: "Simple", data: 'data/simple.json' },
+    { name: "Complex Key Support", data: 'data/complex-keys.json' },
+    { name: "Array", data: 'data/array.json' },
+    { name: "Tab Array", data: 'data/tabarray.json' },
+    { name: "TitleMap Examples", data: 'data/titlemaps.json' },
+    { name: "Kitchen Sink", data: 'data/sink.json' }
+  ];
+
+  $scope.selectedTest = $scope.tests[0];
+
+  $scope.$watch('selectedTest',function(val){
+    if (val) {
+      $http.get(val.data).then(function(res){
+        $scope.schema = res.data.schema;
+        $scope.form   = res.data.form;
+        $scope.schemaJson = JSON.stringify($scope.schema,undefined,2);
+        $scope.formJson   = JSON.stringify($scope.form,undefined,2);
+        $scope.modelData = res.data.model || {};
+      });
+    }
+  });
+
+  $scope.decorator = 'stb-webmanual-decorator';
+
+  $scope.itParses     = true;
+  $scope.itParsesForm = true;
+
+
+  $scope.$watch('schemaJson',function(val,old){
+    if (val && val !== old) {
+      try {
+        $scope.schema = JSON.parse($scope.schemaJson);
+        $scope.itParses = true;
+      } catch (e){
+        $scope.itParses = false;
+      }
+    }
+  });
+
+  $scope.$watch('formJson',function(val,old){
+    if (val && val !== old) {
+      try {
+        $scope.form = JSON.parse($scope.formJson);
+        $scope.itParsesForm = true;
+      } catch (e){
+        $scope.itParsesForm = false;
+      }
+    }
+  });
+
+  $scope.pretty = function(){
+    return JSON.stringify($scope.modelData,undefined,2,2);
+  };
+
+  $scope.log = function(msg){
+    console.log("Simon says",msg);
+  };
+
+  $scope.sayNo = function() {
+    alert('Noooooooo');
+  };
+
+  $scope.say = function(msg) {
+    alert(msg);
+  };
+
+  $scope.submitForm = function(form, model) {
+    // First we broadcast an event so all fields validate themselves
+    $scope.$broadcast('schemaFormValidate');
+    // Then we check if the form is valid
+    if (form.$valid) {
+      alert('You did it!');
+    }
+  }
+
+});
+
+</script>
+</body>
+</html>

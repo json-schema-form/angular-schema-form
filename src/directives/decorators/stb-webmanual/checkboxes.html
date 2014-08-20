@@ -1,0 +1,15 @@
+<div sf-array="form" ng-model="$$value$$" class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+  <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
+  <div class="checkbox" ng-repeat="val in titleMapValues track by $index" >
+    <label>
+      <input type="checkbox"
+             sf-changed="form"
+             ng-model="titleMapValues[$index]">
+      <span ng-bind-html="form.titleMap[$index].name"></span>
+    </label>
+
+  </div>
+  <div class="help-block"
+       ng-show="(hasError() && errorMessage(schemaError())) || form.description"
+       ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
+</div>

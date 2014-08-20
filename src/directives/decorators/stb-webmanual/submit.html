@@ -1,0 +1,10 @@
+<div class="form-group">
+  <input type="submit"
+         class="btn {{ form.style || 'btn-primary' }}"
+         value="{{form.title}}"
+         ng-if="form.type === 'submit'">
+  <button class="btn {{ form.style || 'btn-default' }}"
+          type="button"
+          ng-click="buttonClick($event,form)"
+          ng-if="form.type !== 'submit'">{{form.title}}</button>
+</div>

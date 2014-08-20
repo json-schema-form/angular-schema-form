@@ -1,0 +1,12 @@
+<div class="checkbox" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+  <label>
+    <input type="checkbox"
+           sf-changed="form"
+           ng-model="$$value$$"
+           ng-model-options="form.ngModelOptions"
+           schema-validate="form">
+    <span ng-bind-html="form.title"></span>
+  </label>
+
+  <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
+</div>

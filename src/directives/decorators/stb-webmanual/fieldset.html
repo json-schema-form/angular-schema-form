@@ -1,0 +1,4 @@
+<fieldset ng-disabled="form.readonly">
+  <legend ng-show="form.title">{{ form.title }}</legend>
+  <sf-decorator ng-repeat="item in form.items" form="item"></sf-decorator>
+</fieldset>

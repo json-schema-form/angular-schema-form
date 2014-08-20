@@ -33,7 +33,8 @@
     "angular": ">= 1.2",
     "tv4": "~1.0.15",
     "angular-sanitize": ">= 1.2",
-    "objectpath": "~1.0.4"
+    "objectpath": "~1.0.4",
+    "stb-webmanual": "https://github.com/storebrand/storebrand.ny.git"
   },
   "devDependencies": {
     "angular-ui-ace": "bower",
