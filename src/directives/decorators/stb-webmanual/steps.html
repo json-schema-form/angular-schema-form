@@ -1,0 +1,29 @@
+<div ng-init="selected = { step: 0 }" style="position: relative">
+        <div class="progressBar hidden-xs hidden-sm">
+            <div id="stepFigures" class="row">
+                <div ng-repeat="step in form.steps" class="col-md-{{12 / form.steps.length}}">
+                    <div ng-click="$event.preventDefault() || (selected.step = $index)"
+                         ng-class="{active: selected.step === $index}"
+                         class="square"></div>
+                </div>
+            </div>
+            <div id="stepNumbers" class="row">
+                <div ng-repeat="step in form.steps track by $index" class="col-md-{{12 / form.steps.length}}">
+                    <span class="number">{{$index + 1}}</span>
+                </div>
+            </div>
+            <div id="stepLabels" class="row">
+                <div ng-repeat="step in form.steps" class="col-md-{{12 / form.steps.length}}">
+                    <h4>{{ step.title }}</h4>
+                </div>
+            </div>
+        </div>
+
+  <div class="step-content">
+    <div ng-repeat="step in form.steps"
+         ng-show="selected.step === $index"
+         ng-class="{active: selected.tab === $index}">
+         <stb-webmanual-decorator ng-repeat="item in step.items" form="item"></stb-webmanual-decorator>
+    </div>
+  </div>
+</div>

@@ -23,8 +23,8 @@
             "title": "Skademelding for reisegods",
             "items": [
                 {
-                    "type": "tabs",
-                    "tabs": [
+                    "type": "steps",
+                    "steps": [
                         {
                             "title": "Om skaden",
                             "items": [
@@ -39,6 +39,26 @@
                                 {
                                     "key": "mainCause",
                                     "type": "radios",
+                                    "titleMap": {
+                                        "stolen": "Stjålet",
+                                        "broken": "Skadet"
+                                    }
+                                }
+                            ]
+                        },{
+                            "title": "Skaden smth",
+                            "items": [
+                                {
+                                    "type": "help",
+                                    "helpvalue": "<h2>Skaden smth 1</h2>"
+                                },
+                                {
+                                    "type": "help",
+                                    "helpvalue": "<h3>Skaden smth 2</h3>"
+                                },
+                                {
+                                    "key": "mainCause",
+                                    "type": "checkboxes",
                                     "titleMap": {
                                         "stolen": "Stjålet",
                                         "broken": "Skadet"

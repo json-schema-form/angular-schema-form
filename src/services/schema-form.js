@@ -21,7 +21,7 @@ angular.module('schemaForm').provider('schemaForm',
     if (!angular.isArray(titleMap)) {
       var canonical = [];
       angular.forEach(titleMap, function(name, value) {
-        canonical.push({name: name, value: value});
+        canonical.push({name: name, value: value, id: 'id_' + (Math.random() * 100)});
       });
       return canonical;
     }
@@ -316,6 +316,13 @@ angular.module('schemaForm').provider('schemaForm',
           });
         }
 
+        //if its has steps, merge them also!
+        if (obj.steps) {
+          angular.forEach(obj.steps, function(step) {
+            step.items = service.merge(schema, step.items, ignore);
+          });
+        }
+
         //extend with std form from schema.
         if (obj.key) {
           if (typeof obj.key === 'string') {
@@ -407,6 +414,14 @@ angular.module('schemaForm').provider('schemaForm',
       if (form.tabs) {
         angular.forEach(form.tabs, function(tab) {
           angular.forEach(tab.items, function(f) {
+            service.traverseForm(f, fn);
+          });
+        });
+      }
+
+      if (form.steps) {
+        angular.forEach(form.steps, function(step) {
+          angular.forEach(step.items, function(f) {
             service.traverseForm(f, fn);
           });
         });
