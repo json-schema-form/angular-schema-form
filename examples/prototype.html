@@ -9,8 +9,14 @@
     <link rel="stylesheet" href="../bower_components/stb-webmanual/css/stb-main.css">
 </head>
 <body ng-app="test" ng-controller="TestCtrl">
+<style>
+    .step-content {
+        background: #efe8df;
+        padding: 20px;
+    }
+</style>
 
-<div class="container" style="background: #efe8df">
+<div class="container">
     <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" sf-decorator-name="stb-webmanual-decorator" ng-submit="submitForm(ngform,modelData)"></form>
 </div>
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>

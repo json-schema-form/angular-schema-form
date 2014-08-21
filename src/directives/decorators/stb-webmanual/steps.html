@@ -2,13 +2,14 @@
         <div class="progressBar hidden-xs hidden-sm">
             <div id="stepFigures" class="row">
                 <div ng-repeat="step in form.steps" class="col-md-{{12 / form.steps.length}}">
-                    <div ng-click="$event.preventDefault() || (selected.step = $index)"
-                         ng-class="{active: selected.step === $index}"
+                    <div ng-class="{active: selected.step === $index}"
                          class="square"></div>
                 </div>
             </div>
             <div id="stepNumbers" class="row">
-                <div ng-repeat="step in form.steps track by $index" class="col-md-{{12 / form.steps.length}}">
+                <div ng-repeat="step in form.steps track by $index"
+                     class="col-md-{{12 / form.steps.length}}"
+                     ng-click="$event.preventDefault() || (selected.step = $index)">
                     <span class="number">{{$index + 1}}</span>
                 </div>
             </div>
