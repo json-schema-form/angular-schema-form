@@ -139,9 +139,14 @@
                   "type": "textarea"
                 },
                 {
-                  "type": "button",
-                  "style": "btn-success",
-                  "title": "Neste"
+                  "type": "actions",
+                  "items": [
+                    {
+                      "type": "button",
+                      "style": "btn-success",
+                      "title": "Neste"
+                    }
+                  ]
                 }
               ]
             }
@@ -190,10 +195,24 @@
                   }
                 },
                 {
+                  "type": "file",
+                  "title": "Kvittering",
+                  "downloadText": " Last opp",
+                  "petitText": "Har du kvittering for gjenstanden eller annet bevis på kjøpet (avbetalingskontrakt, garanti e.l.)?"
+                },
+                {
                   "type": "actions",
                   "items": [
-                    { "type": "button", "title": "Tilbake"},
-                    { "type": "button", "title": "Neste", "style": "btn-success"}
+                    {
+                      "type": "button",
+                      "title": "Tilbake",
+                      "style": "darker"
+                    },
+                    {
+                      "type": "button",
+                      "title": "Neste",
+                      "style": "btn-success"
+                    }
                   ]
                 }
               ]

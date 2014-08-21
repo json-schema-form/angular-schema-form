@@ -22,7 +22,8 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     'radios-inline': base + 'radios-inline.html',
     radiobuttons: base + 'radio-buttons.html',
     help: base + 'help.html',
-    'default': base + 'default.html'
+    'default': base + 'default.html',
+    file: base + 'file.html'
   }, [
     function(form) {
       if (form.readonly && form.key && form.type !== 'fieldset') {
@@ -48,7 +49,8 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     radios: base + 'radios.html',
     'radios-inline': base + 'radios-inline.html',
     radiobuttons: base + 'radio-buttons.html',
-    steps: base + 'steps.html'
+    steps: base + 'steps.html',
+    file: base + 'file.html'
   });
 
 }]).directive('sfFieldset', function() {
