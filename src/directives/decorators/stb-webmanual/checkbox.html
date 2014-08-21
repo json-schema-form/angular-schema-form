@@ -7,7 +7,8 @@
            ng-model="$$value$$"
            ng-model-options="form.ngModelOptions"
            schema-validate="form"
-           class="stb-checkbox">
-    <label class="stb-custom-input" ng-bind-html="form.title"></label>
+           class="stb-checkbox"
+           id="{{form.id}}">
+    <label for="{{form.id}}" class="stb-custom-input" ng-bind-html="form.title"></label>
 
 </div>

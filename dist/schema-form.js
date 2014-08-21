@@ -449,8 +449,9 @@ angular.module('schemaForm').provider('schemaForm',
   var enumToTitleMap = function(enm) {
     var titleMap = []; //canonical titleMap format is a list.
     enm.forEach(function(name) {
-      titleMap.push({name: name, value: name});
+      titleMap.push({name: name, value: name, id: 'id_' + (Math.random() * 100)});
     });
+    console.log(titleMap)
     return titleMap;
   };
 
