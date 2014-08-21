@@ -80,6 +80,7 @@
 angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($scope,$http){
 
   $scope.tests = [
+    { name: "Travel Insurance", data: 'data/claims-travel.json' },
     { name: "Simple", data: 'data/simple.json' },
     { name: "Complex Key Support", data: 'data/complex-keys.json' },
     { name: "Array", data: 'data/array.json' },

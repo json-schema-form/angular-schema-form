@@ -1,0 +1,54 @@
+{
+    "schema": {
+        "type": "object",
+        "required": [
+            "mainCause"
+        ],
+        "properties": {
+            "mainCause": {
+                "title": "Hva har skjedd med gjenstanden(e)",
+                "type": "string",
+                "enum": [
+                    "stolen",
+                    "damaged"
+                ]
+            }
+        }
+    },
+
+
+    "form": [
+        {
+            "type": "fieldset",
+            "title": "Skademelding for reisegods",
+            "items": [
+                {
+                    "type": "tabs",
+                    "tabs": [
+                        {
+                            "title": "Om skaden",
+                            "items": [
+                                {
+                                    "type": "help",
+                                    "helpvalue": "<h2>Om tapet/skaden</h2>"
+                                },
+                                {
+                                    "type": "help",
+                                    "helpvalue": "<h3>Hva har skjedd?</h3>"
+                                },
+                                {
+                                    "key": "mainCause",
+                                    "type": "radios",
+                                    "titleMap": {
+                                        "stolen": "Stjålet",
+                                        "broken": "Skadet"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
