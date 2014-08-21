@@ -23,6 +23,7 @@
     <div ng-repeat="step in form.steps"
          ng-show="selected.step === $index"
          ng-class="{active: selected.tab === $index}">
+          <h1>{{step.title}}</h1>
          <stb-webmanual-decorator ng-repeat="item in step.items" form="item"></stb-webmanual-decorator>
     </div>
   </div>

@@ -1,5 +1,5 @@
 <div class="form-group has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
-  <label ng-show="showTitle()">{{form.title}}</label>
+  <label ng-show="showTitle()">{{form.title}}</label>{{form.subtitle}}
   <div class="stb-form-group al text-area">
       <span class="help-block  info-message">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
       <textarea class="form-control"

@@ -1,74 +1,226 @@
 {
-    "schema": {
-        "type": "object",
-        "required": [
-            "mainCause"
-        ],
-        "properties": {
-            "mainCause": {
-                "title": "Hva har skjedd med gjenstanden(e)",
-                "type": "string",
-                "enum": [
-                    "stolen",
-                    "damaged"
-                ]
-            }
-        }
-    },
+  "schema": {
+    "type": "object",
+    "required": [
+      "mainCause",
+      "dateQuestion"
+    ],
+    "properties": {
+      "mainCause": {
+        "title": "Hva har skjedd med gjenstanden(e)?",
+        "type": "string"
+      },
+      "dateQuestion": {
+        "type": "string",
+        "format": "date",
+        "title": "Nar ble gjenstanden(e) skadet?"
+      },
+      "thirdQuestion": {
+        "title": "I hvilket land skjadde skaden?",
+        "type": "string"
+      },
+      "fourthQuestion": {
+        "title": "Pa hvilket sted skjedde skaden?",
+        "type": "string"
+      },
+      "question21": {
+        "title": "Pa hvilken mote tror du skaden kan ha skjedd?",
+        "type": "string"
+      },
+      "question22": {
+        "title": "Hvor oppholdt du deg nar skaden skjedde? Og hvilke aktiviteter ble utfort?",
+        "type": "string"
+      },
+      "question23": {
+        "title": "La du merke til en speciell hendelse som kan ha med skaden a gjore?",
+        "type": "string"
+      },
+      "question24": {
+        "title": "Var det utenforstaende vitne(r) til hendelsen?",
+        "type": "string"
+      },
+      "question31": {
+        "title": "Hvor og hvordan var gjenstanden(e) oppbevart?",
+        "type": "string"
+      },
+      "question32": {
+        "title": "Andre opplysninger om skaden?",
+        "type": "string"
+      },
+      "question41": {
+        "title": "Type gjenstand",
+        "subtitle": "(Merke og modell)",
+        "type": "string"
+      },
+      "question42": {
+        "title": "Hvor gammel er gjenstanden",
+        "type": "string"
+      },
+      "question43": {
+        "title": "Hvor ble gjenstanden kjopt?",
+        "subtitle": "(Butikk eller annet)",
+        "type": "string"
+      },
+      "question44": {
+        "title": "Var gjenstanden ny ved anskaffelse?",
+        "type": "string"
+      },
+      "question45": {
+        "title": "Kan gjenstanden repareres?",
+        "type": "string"
+      }
+    }
+  },
 
 
-    "form": [
+  "form": [
+    {
+      "type": "steps",
+      "steps": [
         {
-            "type": "fieldset",
-            "title": "Skademelding for reisegods",
-            "items": [
+          "title": "Om skaden",
+          "items": [
+            {
+              "type": "fieldset",
+              "title": "Hva har skjedd?",
+              "items": [
                 {
-                    "type": "steps",
-                    "steps": [
-                        {
-                            "title": "Om skaden",
-                            "items": [
-                                {
-                                    "type": "help",
-                                    "helpvalue": "<h2>Om tapet/skaden</h2>"
-                                },
-                                {
-                                    "type": "help",
-                                    "helpvalue": "<h3>Hva har skjedd?</h3>"
-                                },
-                                {
-                                    "key": "mainCause",
-                                    "type": "radios",
-                                    "titleMap": {
-                                        "stolen": "Stjålet",
-                                        "broken": "Skadet"
-                                    }
-                                }
-                            ]
-                        },{
-                            "title": "Skaden smth",
-                            "items": [
-                                {
-                                    "type": "help",
-                                    "helpvalue": "<h2>Skaden smth 1</h2>"
-                                },
-                                {
-                                    "type": "help",
-                                    "helpvalue": "<h3>Skaden smth 2</h3>"
-                                },
-                                {
-                                    "key": "mainCause",
-                                    "type": "checkboxes",
-                                    "titleMap": {
-                                        "stolen": "Stjålet",
-                                        "broken": "Skadet"
-                                    }
-                                }
-                            ]
-                        }
-                    ]
+                  "key": "mainCause",
+                  "type": "radios-inline",
+                  "titleMap": {
+                    "stolen": "Stjålet",
+                    "broken": "Skadet"
+                  }
+                },
+                {
+                  "key": "dateQuestion",
+                  "minDate": "1900-01-01"
+                },
+                "thirdQuestion",
+                "fourthQuestion"
+              ]
+            },
+            {
+              "type": "fieldset",
+              "title": "Hvordan skjedde det?",
+              "items": [
+                {
+                  "key": "question21",
+                  "type": "textarea"
+                },
+                {
+                  "key": "question22",
+                  "type": "textarea"
+                },
+                {
+                  "key": "question23",
+                  "type": "textarea"
+                },
+                {
+                  "key": "question24",
+                  "type": "radios-inline",
+                  "titleMap": {
+                    "true": "Ja",
+                    "false": "Nei"
+                  }
                 }
-            ]
+              ]
+            },
+            {
+              "type": "fieldset",
+              "title": "Annet",
+              "items": [
+                {
+                  "key": "question31",
+                  "type": "textarea"
+                },
+                {
+                  "key": "question32",
+                  "type": "textarea"
+                },
+                {
+                  "type": "button",
+                  "style": "btn-success",
+                  "title": "Neste"
+                }
+              ]
+            }
+
+          ]
+        },
+        {
+          "title": "Skadet gjenstand",
+          "items": [
+            {
+              "type": "fieldset",
+              "title": "Legg til gjenstanden(e)",
+              "items": [
+                "question41",
+                {
+                  "key": "question42",
+                  "type": "select",
+                  "titleMap": {
+                    "15": "15 ar",
+                    "20": "20 ar",
+                    "25": "25 ar",
+                    "30": "30 ar",
+                    "35": "35 ar",
+                    "40": "40 ar",
+                    "45": "45 ar"
+                  }
+                },
+                {
+                  "key": "question43",
+                  "type": "textarea"
+                },
+                {
+                  "key": "question44",
+                  "type": "radios-inline",
+                  "titleMap": {
+                    "true": "Ja",
+                    "false": "Nei"
+                  }
+                },
+                {
+                  "key": "question45",
+                  "type": "radios-inline",
+                  "titleMap": {
+                    "true": "Ja",
+                    "false": "Nei"
+                  }
+                },
+                {
+                  "type": "actions",
+                  "items": [
+                    { "type": "button", "title": "Tilbake"},
+                    { "type": "button", "title": "Neste", "style": "btn-success"}
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Om reisen",
+          "items": [
+          ]
+        },
+        {
+          "title": "Perosonopplysninger",
+          "items": [
+          ]
+        },
+        {
+          "title": "Oppsummering",
+          "items": [
+          ]
+        },
+        {
+          "title": "Kvittering",
+          "items": [
+          ]
         }
-    ]
+      ]
+    }
+  ]
 }
