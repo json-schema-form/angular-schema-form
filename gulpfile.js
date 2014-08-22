@@ -60,7 +60,7 @@ gulp.task('stb-webmanual', function() {
 gulp.task('bootstrap-datepicker', function() {
   var stream = streamqueue({objectMode: true});
   stream.queue(
-              gulp.src('./src/directives/decorators/bootstrap/datepicker/*.html')
+              gulp.src('./src/directives/decorators/stb-webmanual/datepicker/*.html')
                   .pipe(minifyHtml({
                     empty: true,
                     spare: true,
@@ -68,10 +68,10 @@ gulp.task('bootstrap-datepicker', function() {
                   }))
                   .pipe(templateCache({
                     module: 'schemaForm',
-                    root: 'directives/decorators/bootstrap/datepicker/'
+                    root: 'directives/decorators/stb-webmanual/datepicker/'
                   }))
     );
-  stream.queue(gulp.src('./src/directives/decorators/bootstrap/datepicker/*.js'));
+  stream.queue(gulp.src('./src/directives/decorators/stb-webmanual/datepicker/*.js'));
 
   stream.done()
         .pipe(concat('bootstrap-datepicker.min.js'))
@@ -111,7 +111,6 @@ gulp.task('jscs', function() {
 
 gulp.task('default', [
   'minify',
-  'bootstrap',
   'bootstrap-datepicker',
   'stb-webmanual',
   'non-minified-dist'

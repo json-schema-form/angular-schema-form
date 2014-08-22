@@ -23,7 +23,8 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     radiobuttons: base + 'radio-buttons.html',
     help: base + 'help.html',
     'default': base + 'default.html',
-    file: base + 'file.html'
+    file: base + 'file.html',
+    datepicker: base + 'datepicker/datepicker.html'
   }, [
     function(form) {
       if (form.readonly && form.key && form.type !== 'fieldset') {
