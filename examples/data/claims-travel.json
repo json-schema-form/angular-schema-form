@@ -1,16 +1,10 @@
 {
   "schema": {
     "type": "object",
-    "required": [
-      "mainCause",
-      "dateQuestion",
-      "thirdQuestion"
-    ],
     "properties": {
       "mainCause": {
         "title": "Hva har skjedd med gjenstanden(e)?",
-        "type": "string",
-        "minLength": 1
+        "type": "string"
       },
       "dateQuestion": {
         "type": "string",
@@ -20,27 +14,32 @@
       "thirdQuestion": {
         "title": "I hvilket land skjadde skaden?",
         "type": "string",
-        "minLength": 1
+        "minLength": 2,
+        "maxLength": 5
       },
       "fourthQuestion": {
         "title": "Pa hvilket sted skjedde skaden?",
         "type": "string",
-        "minLength": 1
+        "minLength": 2,
+        "maxLength": 5
       },
       "question21": {
         "title": "Pa hvilken mote tror du skaden kan ha skjedd?",
         "type": "string",
-        "minLength": 1
+        "minLength": 2,
+        "maxLength": 5
       },
       "question22": {
         "title": "Hvor oppholdt du deg nar skaden skjedde? Og hvilke aktiviteter ble utfort?",
         "type": "string",
-        "minLength": 1
+        "minLength": 2,
+        "maxLength": 5
       },
       "question23": {
         "title": "La du merke til en speciell hendelse som kan ha med skaden a gjore?",
         "type": "string",
-        "minLength": 1
+        "minLength": 2,
+        "maxLength": 5
       },
       "question24": {
         "title": "Var det utenforstaende vitne(r) til hendelsen?",
@@ -81,7 +80,12 @@
         "title": "Kan gjenstanden repareres?",
         "type": "string"
       }
-    }
+    },
+    "required": [
+      "mainCause",
+      "dateQuestion",
+      "thirdQuestion"
+    ]
   },
 
 
@@ -90,6 +94,7 @@
       "type": "steps",
       "nextButtonText": "Neste",
       "prevButtonText": "Tillbake",
+      "lastButtonText": "Finish",
       "steps": [
         {
           "title": "Om skaden",

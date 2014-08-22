@@ -27,7 +27,8 @@
                  ng-class="{active: selected.tab === $index}">
                 <stb-webmanual-decorator ng-repeat="item in step.items" form="item"></stb-webmanual-decorator>
                 <button ng-hide="$first" class="stb-btn transparent">{{form.prevButtonText}}</button>
-                <button ng-hide="$last" class="stb-btn">{{form.nextButtonText}}</button>
+                <button ng-hide="$last" class="stb-btn" ng-click="">{{form.nextButtonText}}</button>
+                <button ng-show="$last" class="stb-btn">{{form.lastButtonText}}</button>
             </div>
         </div>
     </div>
