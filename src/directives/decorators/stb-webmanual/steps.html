@@ -1,15 +1,15 @@
-<div ng-init="selected = { step: 0 }" style="position: relative">
+<div ng-init="selected = { step: 0 }; completed = []" style="position: relative">
     <div class="progressBar hidden-xs hidden-sm">
         <div id="stepFigures" class="row">
             <div ng-repeat="step in form.steps" class="col-md-{{12 / form.steps.length}}">
-                <div ng-class="{'active current': selected.step === $index}"
+                <div ng-class="{'active': selected.step === $index, 'current': selected.step === $index && !completed[$index], 'completed': completed[$index]}"
                      class="square"></div>
             </div>
         </div>
         <div id="stepNumbers" class="row">
             <div ng-repeat="step in form.steps track by $index"
                  class="col-md-{{12 / form.steps.length}}"
-                 ng-click="$event.preventDefault() || (selected.step = $index)">
+                 ng-click="(completed[$index] || completed[$index - 1]) && ($event.preventDefault() || (selected.step = $index))">
                 <span class="number">{{$index + 1}}</span>
             </div>
         </div>
@@ -26,8 +26,9 @@
                  ng-show="selected.step === $index"
                  ng-class="{active: selected.tab === $index}">
                 <stb-webmanual-decorator ng-repeat="item in step.items" form="item"></stb-webmanual-decorator>
-                <button ng-hide="$first" class="stb-btn transparent">{{form.prevButtonText}}</button>
-                <button ng-hide="$last" class="stb-btn" ng-click="">{{form.nextButtonText}}</button>
+
+                <button ng-hide="$first" class="stb-btn transparent" ng-click="selected.step = $index - 1">{{form.prevButtonText}}</button>
+                <button ng-hide="$last" class="stb-btn" ng-click="nextStep($index)">{{form.nextButtonText}}</button>
                 <button ng-show="$last" class="stb-btn">{{form.lastButtonText}}</button>
             </div>
         </div>

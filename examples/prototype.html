@@ -13,15 +13,14 @@
 <style>
     .step-content {
         background: #efe8df;
-        padding: 20px;
     }
 </style>
 
 <div class="container">
-    <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" sf-decorator-name="stb-webmanual-decorator" ng-submit="submitForm(ngform,modelData)"></form>
+    <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" sf-decorator-name="stb-webmanual-decorator"></form>
 </div>
-<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script type="text/javascript" src="http://cdn.jsdelivr.net/g/jquery.ui@1.10"></script>
+<script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="../bower_components/jquery-ui/jquery-ui.js"></script>
 <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
 <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
@@ -44,18 +43,9 @@
         $http.get($scope.url).then(function(res){
             $scope.schema = res.data.schema;
             $scope.form   = res.data.form;
-            $scope.modelData = res.data.model || {};
+            $scope.modelData = {};
+            window.md = $scope.modelData;
         });
-
-
-        $scope.submitForm = function(form, model) {
-            // First we broadcast an event so all fields validate themselves
-            $scope.$broadcast('schemaFormValidate');
-            // Then we check if the form is valid
-            if (form.$valid) {
-                alert('You did it!');
-            }
-        }
 
     });
 

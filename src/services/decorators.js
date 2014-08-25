@@ -160,6 +160,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return 'Required';
 
             };
+
+            scope.nextStep = function (index) {
+              this.$broadcast('schemaFormValidate', this);
+              if (this.$parent.formCtrl.$valid) {
+                scope.completed[index] = true;
+                scope.selected.step = index + 1;
+              }
+            };
           }
         };
       }

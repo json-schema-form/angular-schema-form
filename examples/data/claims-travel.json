@@ -3,89 +3,83 @@
     "type": "object",
     "properties": {
       "mainCause": {
-        "title": "Hva har skjedd med gjenstanden(e)?",
-        "type": "string"
+        "type": "string",
+        "required": true,
+        "enum": ["true", "false"]
       },
       "dateQuestion": {
         "type": "string",
         "format": "date",
-        "title": "Nar ble gjenstanden(e) skadet?"
+        "required": true
       },
       "thirdQuestion": {
-        "title": "I hvilket land skjadde skaden?",
         "type": "string",
+        "required": true,
         "minLength": 2,
         "maxLength": 5
       },
       "fourthQuestion": {
-        "title": "Pa hvilket sted skjedde skaden?",
         "type": "string",
+        "required": true,
         "minLength": 2,
         "maxLength": 5
       },
       "question21": {
-        "title": "Pa hvilken mote tror du skaden kan ha skjedd?",
         "type": "string",
+        "required": true,
         "minLength": 2,
         "maxLength": 5
       },
       "question22": {
-        "title": "Hvor oppholdt du deg nar skaden skjedde? Og hvilke aktiviteter ble utfort?",
         "type": "string",
+        "required": true,
         "minLength": 2,
         "maxLength": 5
       },
       "question23": {
-        "title": "La du merke til en speciell hendelse som kan ha med skaden a gjore?",
         "type": "string",
-        "minLength": 2,
+        "required": true,
+        "minLength": 1,
         "maxLength": 5
       },
       "question24": {
-        "title": "Var det utenforstaende vitne(r) til hendelsen?",
-        "type": "string",
-        "minLength": 1
+        "type": "boolean",
+        "required": true
       },
       "question31": {
-        "title": "Hvor og hvordan var gjenstanden(e) oppbevart?",
         "type": "string",
+        "required": true,
         "minLength": 1
       },
       "question32": {
-        "title": "Andre opplysninger om skaden?",
         "type": "string",
+        "required": true,
         "minLength": 1
       },
       "question41": {
-        "title": "Type gjenstand",
         "type": "string",
+        "required": true,
         "minLength": 1
       },
       "question42": {
-        "title": "Hvor gammel er gjenstanden",
         "type": "string",
+        "required": true,
         "minLength": 1
       },
       "question43": {
-        "title": "Hvor ble gjenstanden kjopt?",
         "type": "string",
+        "required": true,
         "minLength": 1
       },
       "question44": {
-        "title": "Var gjenstanden ny ved anskaffelse?",
-        "type": "string",
-        "minLength": 1
+        "type": "boolean",
+        "required": true
       },
       "question45": {
-        "title": "Kan gjenstanden repareres?",
-        "type": "string"
+        "type": "boolean",
+        "required": true
       }
-    },
-    "required": [
-      "mainCause",
-      "dateQuestion",
-      "thirdQuestion"
-    ]
+    }
   },
 
 
@@ -110,7 +104,9 @@
               "items": [
                 {
                   "key": "mainCause",
+                  "title": "Hva har skjedd med gjenstanden(e)?",
                   "type": "radios-inline",
+                  "required": true,
                   "titleMap": {
                     "stolen": "Stjålet",
                     "broken": "Skadet"
@@ -118,11 +114,19 @@
                 },
                 {
                   "key": "dateQuestion",
+                  "title": "Nar ble gjenstanden(e) skadet?",
+                  "required": true,
                   "minDate": "1900-01-01",
                   "maxDate": "2014-04-04"
                 },
-                "thirdQuestion",
-                "fourthQuestion"
+                {
+                  "key": "thirdQuestion",
+                  "title": "I hvilket land skjadde skaden?"
+                },
+                {
+                  "key": "fourthQuestion",
+                  "title": "Pa hvilket sted skjedde skaden?"
+                }
               ]
             },
             {
@@ -131,18 +135,22 @@
               "items": [
                 {
                   "key": "question21",
+                  "title": "Pa hvilken mote tror du skaden kan ha skjedd?",
                   "type": "textarea"
                 },
                 {
                   "key": "question22",
+                  "title": "Hvor oppholdt du deg nar skaden skjedde? Og hvilke aktiviteter ble utfort?",
                   "type": "textarea"
                 },
                 {
                   "key": "question23",
+                  "title": "La du merke til en speciell hendelse som kan ha med skaden a gjore?",
                   "type": "textarea"
                 },
                 {
                   "key": "question24",
+                  "title": "Var det utenforstaende vitne(r) til hendelsen?",
                   "type": "radios-inline",
                   "titleMap": {
                     "true": "Ja",
@@ -157,10 +165,12 @@
               "items": [
                 {
                   "key": "question31",
+                  "title": "Hvor og hvordan var gjenstanden(e) oppbevart?",
                   "type": "textarea"
                 },
                 {
                   "key": "question32",
+                  "title": "Andre opplysninger om skaden?",
                   "type": "textarea"
                 }
               ]
@@ -182,11 +192,13 @@
               "items": [
                 {
                   "key": "question41",
-                  "type": "text",
-                  "subtitle": "(Merke og modell)"
+                  "title": "Type gjenstand",
+                  "subtitle": "(Merke og modell)",
+                  "type": "text"
                 },
                 {
                   "key": "question42",
+                  "title": "Hvor gammel er gjenstanden",
                   "type": "select",
                   "titleMap": {
                     "15": "15 ar",
@@ -200,11 +212,13 @@
                 },
                 {
                   "key": "question43",
+                  "title": "Hvor ble gjenstanden kjopt?",
                   "subtitle": "(Butikk eller annet)",
                   "type": "textarea"
                 },
                 {
                   "key": "question44",
+                  "title": "Var gjenstanden ny ved anskaffelse?",
                   "type": "radios-inline",
                   "titleMap": {
                     "true": "Ja",
@@ -213,6 +227,7 @@
                 },
                 {
                   "key": "question45",
+                  "title": "Kan gjenstanden repareres?",
                   "type": "radios-inline",
                   "titleMap": {
                     "true": "Ja",

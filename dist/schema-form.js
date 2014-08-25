@@ -286,6 +286,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return 'Required';
 
             };
+
+            scope.nextStep = function (index) {
+              this.$broadcast('schemaFormValidate', this);
+              if (this.$parent.formCtrl.$valid) {
+                scope.completed[index] = true;
+                scope.selected.step = index + 1;
+              }
+            };
           }
         };
       }
@@ -917,7 +925,7 @@ angular.module('schemaForm').factory('sfValidator', [function() {
     var propName = form.key[form.key.length - 1];
     wrap.properties[propName] = schema;
 
-    if (form.required) {
+    if (schema.required) {
       wrap.required = [propName];
     }
     var valueWrap = {};
