@@ -30,8 +30,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   var createDirective = function(name) {
-    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'focusOnError',
-      function($parse,  $compile,  $http,  $templateCache, focusOnError) {
+    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop',
+      function($parse,  $compile,  $http,  $templateCache, scrollingTop) {
 
         return {
           restrict: 'AE',
@@ -166,9 +166,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               if (this.formCtrl.$valid) {
                 scope.completed[index] = true;
                 scope.selected.step = index + 1;
+                scrollingTop.scrollTop();
               } else {
-                focusOnError(element);
+                scrollingTop.scrollToTheFirstError(element, scope.selected.step);
               }
+            };
+
+            scope.prevStep = function (index) {
+              scope.selected.step = index - 1;
+              scrollingTop.scrollTop();
             };
           }
         };

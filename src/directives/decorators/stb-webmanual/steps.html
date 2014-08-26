@@ -24,10 +24,10 @@
         <div class="col-md-6 col-md-offset-1">
             <div ng-repeat="step in form.steps"
                  ng-show="selected.step === $index"
-                 ng-class="{active: selected.tab === $index}">
+                 ng-class="{active: selected.tab === $index}" index="{{$index}}">
                 <stb-webmanual-decorator ng-repeat="item in step.items" form="item"></stb-webmanual-decorator>
 
-                <button ng-hide="$first" class="stb-btn transparent" ng-click="selected.step = $index - 1">{{form.prevButtonText}}</button>
+                <button ng-hide="$first" class="stb-btn transparent" ng-click="prevStep($index)">{{form.prevButtonText}}</button>
                 <button ng-hide="$last" class="stb-btn" ng-click="nextStep($index)">{{form.nextButtonText}}</button>
                 <button ng-show="$last" class="stb-btn">{{form.lastButtonText}}</button>
             </div>

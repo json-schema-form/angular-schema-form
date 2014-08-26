@@ -156,8 +156,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   var createDirective = function(name) {
-    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'focusOnError',
-      function($parse,  $compile,  $http,  $templateCache, focusOnError) {
+    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop',
+      function($parse,  $compile,  $http,  $templateCache, scrollingTop) {
 
         return {
           restrict: 'AE',
@@ -292,9 +292,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               if (this.formCtrl.$valid) {
                 scope.completed[index] = true;
                 scope.selected.step = index + 1;
+                scrollingTop.scrollTop(element, scope.selected.step);
               } else {
-                focusOnError(element);
+                scrollingTop.scrollToTheFirstError(element, scope.selected.step);
               }
+            };
+
+            scope.prevStep = function (index) {
+              scope.selected.step = index - 1;
+              scrollingTop.scrollTop(element, scope.selected.step);
             };
           }
         };
@@ -444,26 +450,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
   //Create a default directive
   createDirective('sfDecorator');
-
-}]);
-
-/**
- * @ngdoc service
- * @name focusOnError
- * @kind function
- *
- */
-angular.module('schemaForm').factory('focusOnError', ['$timeout', function ($timeout) {
-
-  var focusOnFirstError = function (element) {
-    $timeout(function () {
-      jQuery('html, body').animate({
-        scrollTop: jQuery(element[0]).find('.has-error:first').offset().top-100
-      }, 1000);
-    }, 0);
-  };
-
-  return focusOnFirstError;
 
 }]);
 
@@ -898,6 +884,38 @@ angular.module('schemaForm').provider('schemaForm',
     };
 
     return service;
+  };
+
+}]);
+
+/**
+ * @ngdoc service
+ * @name focusOnError
+ * @kind object
+ *
+ */
+angular.module('schemaForm').factory('scrollingTop', ['$timeout', function ($timeout) {
+
+  var scrollToTheFirstError = function (element, index) {
+    $timeout(function () {
+      jQuery('html, body').animate({
+        scrollTop: jQuery(element[0]).find('[index=' + index + '] .has-error:first').offset().top
+      }, 1000);
+    }, 0);
+  };
+
+  var scrollTop = function (element, index) {
+    $timeout(function () {
+      console.log(jQuery(element[0]).find('[index=' + index + '] .form-group:first'))
+      jQuery('html, body').animate({
+        scrollTop: 0
+      }, 1000);
+    }, 0);
+  };
+
+  return {
+    scrollToTheFirstError: scrollToTheFirstError,
+    scrollTop: scrollTop
   };
 
 }]);
