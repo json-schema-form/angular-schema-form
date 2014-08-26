@@ -7,6 +7,7 @@
            ng-class="{ active: item.value === $$value$$ }"
            ng-repeat="item in form.titleMap">
       <input type="radio"
+             schema-validate="form"
              sf-changed="form"
              style="display: none;"
              ng-model="$$value$$"

@@ -5,7 +5,7 @@
       "mainCause": {
         "type": "string",
         "required": true,
-        "enum": ["true", "false"]
+        "enum": ["broken"]
       },
       "dateQuestion": {
         "type": "string",
