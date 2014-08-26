@@ -293,7 +293,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 scope.completed[index] = true;
                 scope.selected.step = index + 1;
               } else {
-                focusOnError.focusOnError(element);
+                focusOnError(element);
               }
             };
           }
@@ -449,7 +449,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
 /**
  * @ngdoc service
- * @name sfSelect
+ * @name focusOnError
  * @kind function
  *
  */
@@ -463,9 +463,7 @@ angular.module('schemaForm').factory('focusOnError', ['$timeout', function ($tim
     }, 0);
   };
 
-  return {
-    focusOnError: focusOnFirstError
-  };
+  return focusOnFirstError;
 
 }]);
 

@@ -167,7 +167,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 scope.completed[index] = true;
                 scope.selected.step = index + 1;
               } else {
-                focusOnError.focusOnError(element);
+                focusOnError(element);
               }
             };
           }

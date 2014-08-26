@@ -1,6 +1,6 @@
 /**
  * @ngdoc service
- * @name sfSelect
+ * @name focusOnError
  * @kind function
  *
  */
@@ -14,8 +14,6 @@ angular.module('schemaForm').factory('focusOnError', ['$timeout', function ($tim
     }, 0);
   };
 
-  return {
-    focusOnError: focusOnFirstError
-  };
+  return focusOnFirstError;
 
 }]);
