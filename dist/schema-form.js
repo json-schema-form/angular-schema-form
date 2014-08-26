@@ -156,8 +156,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   var createDirective = function(name) {
-    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache',
-      function($parse,  $compile,  $http,  $templateCache) {
+    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'focusOnError',
+      function($parse,  $compile,  $http,  $templateCache, focusOnError) {
 
         return {
           restrict: 'AE',
@@ -289,9 +289,11 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
             scope.nextStep = function (index) {
               this.$broadcast('schemaFormValidate', this);
-              if (this.$parent.formCtrl.$valid) {
+              if (this.formCtrl.$valid) {
                 scope.completed[index] = true;
                 scope.selected.step = index + 1;
+              } else {
+                focusOnError.focusOnError(element);
               }
             };
           }
@@ -442,6 +444,28 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
   //Create a default directive
   createDirective('sfDecorator');
+
+}]);
+
+/**
+ * @ngdoc service
+ * @name sfSelect
+ * @kind function
+ *
+ */
+angular.module('schemaForm').factory('focusOnError', ['$timeout', function ($timeout) {
+
+  var focusOnFirstError = function (element) {
+    $timeout(function () {
+      jQuery('html, body').animate({
+        scrollTop: jQuery(element[0]).find('.has-error:first').offset().top-100
+      }, 1000);
+    }, 0);
+  };
+
+  return {
+    focusOnError: focusOnFirstError
+  };
 
 }]);
 
