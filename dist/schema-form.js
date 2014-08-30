@@ -1178,7 +1178,8 @@ angular.module('schemaForm')
       scope: {
         schema: '=sfSchema',
         initialForm: '=sfForm',
-        model: '=sfModel'
+        model: '=sfModel',
+        options: '=sfOptions'
       },
       controller: ['$scope', function($scope) {
         this.evalInParentScope = function(expr, locals) {
@@ -1231,10 +1232,7 @@ angular.module('schemaForm')
             lastDigest.schema = schema;
             lastDigest.form = form;
 
-            // Check for options
-            var options = scope.$eval(attrs.sfOptions);
-
-            var merged = schemaForm.merge(schema, form, ignore, options);
+            var merged = schemaForm.merge(schema, form, ignore, scope.options);
             var frag = document.createDocumentFragment();
 
             //make the form available to decorators
