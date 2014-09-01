@@ -1606,8 +1606,6 @@ describe('Schema form',function(){
         $compile(tmpl)(scope);
         $rootScope.$apply();
 
-        console.log(tmpl);
-
         tmpl.children().eq(0).find('select').eq(0).find('option').eq(0).text().trim().should.be.eq('');
         tmpl.children().eq(0).find('select').eq(0).find('option').eq(1).text().trim().should.be.eq('The B');
         tmpl.children().eq(0).find('select').eq(0).find('option').eq(2).text().trim().should.be.eq('The A');
