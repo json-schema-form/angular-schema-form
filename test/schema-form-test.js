@@ -1571,6 +1571,48 @@ describe('Schema form',function(){
       });
     });
 
+    it('should sort select options by enum',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "thing": {
+              "type": "string",
+              "title": "Thing",
+              "enum": [
+                // Intentionally non-alphabetical
+                // https://github.com/Textalk/angular-schema-form/issues/82
+                // https://github.com/Textalk/angular-schema-form/issues/83
+                "b",
+                "a"
+              ],
+              "enumNames": {
+                // Intentionally not the same order as the `enum`
+                "a": "The A",
+                "b": "The B"
+              }
+            }
+          }
+        };
+
+        scope.form = ["*"];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        console.log(tmpl);
+
+        tmpl.children().eq(0).find('select').eq(0).find('option').eq(0).text().trim().should.be.eq('');
+        tmpl.children().eq(0).find('select').eq(0).find('option').eq(1).text().trim().should.be.eq('The B');
+        tmpl.children().eq(0).find('select').eq(0).find('option').eq(2).text().trim().should.be.eq('The A');
+      });
+    });
 
   });
 
