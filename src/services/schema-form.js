@@ -219,8 +219,9 @@ angular.module('schemaForm').provider('schemaForm',
   /**
    * Provider API
    */
-  this.defaults    = defaults;
-  this.stdFormObj  = stdFormObj;
+  this.defaults              = defaults;
+  this.stdFormObj            = stdFormObj;
+  this.defaultFormDefinition = defaultFormDefinition;
 
   /**
    * Register a post process function.
