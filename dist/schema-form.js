@@ -658,8 +658,9 @@ angular.module('schemaForm').provider('schemaForm',
   /**
    * Provider API
    */
-  this.defaults    = defaults;
-  this.stdFormObj  = stdFormObj;
+  this.defaults              = defaults;
+  this.stdFormObj            = stdFormObj;
+  this.defaultFormDefinition = defaultFormDefinition;
 
   /**
    * Register a post process function.
@@ -738,9 +739,27 @@ angular.module('schemaForm').provider('schemaForm',
           obj = {key: obj};
         }
 
+        if (obj.key) {
+          if (typeof obj.key === 'string') {
+            obj.key = sfPathProvider.parse(obj.key);
+          }
+        }
+
         //If it has a titleMap make sure it's a list
         if (obj.titleMap) {
           obj.titleMap = canonicalTitleMap(obj.titleMap);
+        }
+
+        //
+        if (obj.itemForm) {
+          obj.items = [];
+          var str = sfPathProvider.stringify(obj.key);
+          var stdForm = lookup[str];
+          angular.forEach(stdForm.items, function(item) {
+            var o = angular.copy(obj.itemForm);
+            o.key = item.key;
+            obj.items.push(o);
+          });
         }
 
         //if it's a type with items, merge 'em!
@@ -757,10 +776,6 @@ angular.module('schemaForm').provider('schemaForm',
 
         //extend with std form from schema.
         if (obj.key) {
-          if (typeof obj.key === 'string') {
-            obj.key = sfPathProvider.parse(obj.key);
-          }
-
           var str = sfPathProvider.stringify(obj.key);
           if (lookup[str]) {
             obj = angular.extend(lookup[str], obj);
@@ -1178,7 +1193,8 @@ angular.module('schemaForm')
       scope: {
         schema: '=sfSchema',
         initialForm: '=sfForm',
-        model: '=sfModel'
+        model: '=sfModel',
+        options: '=sfOptions'
       },
       controller: ['$scope', function($scope) {
         this.evalInParentScope = function(expr, locals) {
@@ -1231,10 +1247,7 @@ angular.module('schemaForm')
             lastDigest.schema = schema;
             lastDigest.form = form;
 
-            // Check for options
-            var options = scope.$eval(attrs.sfOptions);
-
-            var merged = schemaForm.merge(schema, form, ignore, options);
+            var merged = schemaForm.merge(schema, form, ignore, scope.options);
             var frag = document.createDocumentFragment();
 
             //make the form available to decorators

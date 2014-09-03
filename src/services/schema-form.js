@@ -300,9 +300,27 @@ angular.module('schemaForm').provider('schemaForm',
           obj = {key: obj};
         }
 
+        if (obj.key) {
+          if (typeof obj.key === 'string') {
+            obj.key = sfPathProvider.parse(obj.key);
+          }
+        }
+
         //If it has a titleMap make sure it's a list
         if (obj.titleMap) {
           obj.titleMap = canonicalTitleMap(obj.titleMap);
+        }
+
+        //
+        if (obj.itemForm) {
+          obj.items = [];
+          var str = sfPathProvider.stringify(obj.key);
+          var stdForm = lookup[str];
+          angular.forEach(stdForm.items, function(item) {
+            var o = angular.copy(obj.itemForm);
+            o.key = item.key;
+            obj.items.push(o);
+          });
         }
 
         //if it's a type with items, merge 'em!
@@ -319,10 +337,6 @@ angular.module('schemaForm').provider('schemaForm',
 
         //extend with std form from schema.
         if (obj.key) {
-          if (typeof obj.key === 'string') {
-            obj.key = sfPathProvider.parse(obj.key);
-          }
-
           var str = sfPathProvider.stringify(obj.key);
           if (lookup[str]) {
             obj = angular.extend(lookup[str], obj);
