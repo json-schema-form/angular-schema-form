@@ -292,7 +292,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               if (this.formCtrl.$valid) {
                 scope.completed[index] = true;
                 scope.selected.step = index + 1;
-                scrollingTop.scrollTop(element, scope.selected.step);
+                scrollingTop.scrollTop();
               } else {
                 scrollingTop.scrollToTheFirstError(element, scope.selected.step);
               }
@@ -300,7 +300,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
             scope.prevStep = function (index) {
               scope.selected.step = index - 1;
-              scrollingTop.scrollTop(element, scope.selected.step);
+              scrollingTop.scrollTop();
             };
           }
         };
@@ -904,9 +904,8 @@ angular.module('schemaForm').factory('scrollingTop', ['$timeout', function ($tim
     }, 0);
   };
 
-  var scrollTop = function (element, index) {
+  var scrollTop = function () {
     $timeout(function () {
-      console.log(jQuery(element[0]).find('[index=' + index + '] .form-group:first'))
       jQuery('html, body').animate({
         scrollTop: 0
       }, 1000);
