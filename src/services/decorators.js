@@ -30,8 +30,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   var createDirective = function(name) {
-    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache',
-      function($parse,  $compile,  $http,  $templateCache) {
+    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop',
+      function($parse,  $compile,  $http,  $templateCache, scrollingTop) {
 
         return {
           restrict: 'AE',
@@ -159,6 +159,22 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               //Otherwise we only use required so it must be it.
               return 'Required';
 
+            };
+
+            scope.nextStep = function (index) {
+              this.$broadcast('schemaFormValidate', this);
+              if (this.formCtrl.$valid) {
+                scope.completed[index] = true;
+                scope.selected.step = index + 1;
+                scrollingTop.scrollTop();
+              } else {
+                scrollingTop.scrollToTheFirstError(element, scope.selected.step);
+              }
+            };
+
+            scope.prevStep = function (index) {
+              scope.selected.step = index - 1;
+              scrollingTop.scrollTop();
             };
           }
         };

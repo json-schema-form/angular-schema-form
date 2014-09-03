@@ -4,9 +4,17 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
     scope: false,
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
+
+      var error = null;
+
+      if (attrs.type === 'radio' || attrs.type === 'checkbox') {
+        scope = scope.$parent;
+      }
       //Since we have scope false this is the same scope
       //as the decorator
-      scope.ngModel = ngModel;
+      if (!scope.ngModelHolder) {
+        scope.ngModelHolder = ngModel;
+      }
 
       var error = null;
       var form   = scope.$eval(attrs.schemaValidate);
@@ -35,39 +43,40 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
 
         var result = sfValidator.validate(form, viewValue);
 
-        if (result.valid) {
-          // it is valid
-          ngModel.$setValidity('schema', true);
-          return viewValue;
-        } else {
-          // it is invalid, return undefined (no model update)
-          ngModel.$setValidity('schema', false);
-          error = result.error;
-          return undefined;
-        }
-      };
+          if (result.valid) {
+            // it is valid
+            scope.ngModelHolder.$setValidity('schema', true);
+            return viewValue;
+          } else {
+            // it is invalid, return undefined (no model update)
+            scope.ngModelHolder.$setValidity('schema', false);
+            error = result.error;
+            return undefined;
+          }
+        };
 
       // Unshift onto parsers of the ng-model.
       ngModel.$parsers.unshift(validate);
 
+
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function() {
 
-        if (ngModel.$commitViewValue) {
-          ngModel.$commitViewValue(true);
+        if (scope.ngModelHolder.$commitViewValue) {
+          scope.ngModelHolder.$commitViewValue(true);
         } else {
-          ngModel.$setViewValue(ngModel.$viewValue);
+          scope.ngModelHolder.$setViewValue(scope.ngModelHolder.$viewValue);
         }
       });
 
       //This works since we now we're inside a decorator and that this is the decorators scope.
       //If $pristine and empty don't show success (even if it's valid)
       scope.hasSuccess = function() {
-        return ngModel.$valid && (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue));
+        return scope.ngModelHolder.$valid && (!scope.ngModelHolder.$pristine || !scope.ngModelHolder.$isEmpty(scope.ngModelHolder.$modelValue));
       };
 
       scope.hasError = function() {
-        return ngModel.$invalid && !ngModel.$pristine;
+        return scope.ngModelHolder.$invalid && !scope.ngModelHolder.$pristine;
       };
 
       scope.schemaError = function() {

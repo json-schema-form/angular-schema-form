@@ -156,8 +156,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   var createDirective = function(name) {
-    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache',
-      function($parse,  $compile,  $http,  $templateCache) {
+    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop',
+      function($parse,  $compile,  $http,  $templateCache, scrollingTop) {
 
         return {
           restrict: 'AE',
@@ -285,6 +285,22 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               //Otherwise we only use required so it must be it.
               return 'Required';
 
+            };
+
+            scope.nextStep = function (index) {
+              this.$broadcast('schemaFormValidate', this);
+              if (this.formCtrl.$valid) {
+                scope.completed[index] = true;
+                scope.selected.step = index + 1;
+                scrollingTop.scrollTop(element, scope.selected.step);
+              } else {
+                scrollingTop.scrollToTheFirstError(element, scope.selected.step);
+              }
+            };
+
+            scope.prevStep = function (index) {
+              scope.selected.step = index - 1;
+              scrollingTop.scrollTop(element, scope.selected.step);
             };
           }
         };
@@ -449,7 +465,7 @@ angular.module('schemaForm').provider('schemaForm',
   var enumToTitleMap = function(enm) {
     var titleMap = []; //canonical titleMap format is a list.
     enm.forEach(function(name) {
-      titleMap.push({name: name, value: name});
+      titleMap.push({name: name, value: name, id: 'id_' + (Math.random() * 100)});
     });
     return titleMap;
   };
@@ -460,7 +476,7 @@ angular.module('schemaForm').provider('schemaForm',
     if (!angular.isArray(titleMap)) {
       var canonical = [];
       angular.forEach(titleMap, function(name, value) {
-        canonical.push({name: name, value: value});
+        canonical.push({name: name, value: value, id: 'id_' + (Math.random() * 100)});
       });
       return canonical;
     }
@@ -495,7 +511,7 @@ angular.module('schemaForm').provider('schemaForm',
     if (schema.description) { f.description = schema.description; }
     if (options.required === true || schema.required === true) { f.required = true; }
     if (schema.maxLength) { f.maxlength = schema.maxLength; }
-    if (schema.minLength) { f.minlength = schema.maxLength; }
+    if (schema.minLength) { f.minlength = schema.minLength; }
     if (schema.readOnly || schema.readonly) { f.readonly  = true; }
     if (schema.minimum) { f.minimum = schema.minimum + (schema.exclusiveMinimum ? 1 : 0); }
     if (schema.maximum) { f.maximum = schema.maximum - (schema.exclusiveMaximum ? 1 : 0); }
@@ -755,6 +771,13 @@ angular.module('schemaForm').provider('schemaForm',
           });
         }
 
+        //if its has steps, merge them also!
+        if (obj.steps) {
+          angular.forEach(obj.steps, function(step) {
+            step.items = service.merge(schema, step.items, ignore);
+          });
+        }
+
         //extend with std form from schema.
         if (obj.key) {
           if (typeof obj.key === 'string') {
@@ -850,9 +873,49 @@ angular.module('schemaForm').provider('schemaForm',
           });
         });
       }
+
+      if (form.steps) {
+        angular.forEach(form.steps, function(step) {
+          angular.forEach(step.items, function(f) {
+            service.traverseForm(f, fn);
+          });
+        });
+      }
     };
 
     return service;
+  };
+
+}]);
+
+/**
+ * @ngdoc service
+ * @name focusOnError
+ * @kind object
+ *
+ */
+angular.module('schemaForm').factory('scrollingTop', ['$timeout', function ($timeout) {
+
+  var scrollToTheFirstError = function (element, index) {
+    $timeout(function () {
+      jQuery('html, body').animate({
+        scrollTop: jQuery(element[0]).find('[index=' + index + '] .has-error:first').offset().top
+      }, 1000);
+    }, 0);
+  };
+
+  var scrollTop = function (element, index) {
+    $timeout(function () {
+      console.log(jQuery(element[0]).find('[index=' + index + '] .form-group:first'))
+      jQuery('html, body').animate({
+        scrollTop: 0
+      }, 1000);
+    }, 0);
+  };
+
+  return {
+    scrollToTheFirstError: scrollToTheFirstError,
+    scrollTop: scrollTop
   };
 
 }]);
@@ -902,7 +965,7 @@ angular.module('schemaForm').factory('sfValidator', [function() {
     var propName = form.key[form.key.length - 1];
     wrap.properties[propName] = schema;
 
-    if (form.required) {
+    if (schema.required) {
       wrap.required = [propName];
     }
     var valueWrap = {};
@@ -1278,9 +1341,17 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
     scope: false,
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
+
+      var error = null;
+
+      if (attrs.type === 'radio' || attrs.type === 'checkbox') {
+        scope = scope.$parent;
+      }
       //Since we have scope false this is the same scope
       //as the decorator
-      scope.ngModel = ngModel;
+      if (!scope.ngModelHolder) {
+        scope.ngModelHolder = ngModel;
+      }
 
       var error = null;
       var form   = scope.$eval(attrs.schemaValidate);
@@ -1309,39 +1380,40 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
 
         var result = sfValidator.validate(form, viewValue);
 
-        if (result.valid) {
-          // it is valid
-          ngModel.$setValidity('schema', true);
-          return viewValue;
-        } else {
-          // it is invalid, return undefined (no model update)
-          ngModel.$setValidity('schema', false);
-          error = result.error;
-          return undefined;
-        }
-      };
+          if (result.valid) {
+            // it is valid
+            scope.ngModelHolder.$setValidity('schema', true);
+            return viewValue;
+          } else {
+            // it is invalid, return undefined (no model update)
+            scope.ngModelHolder.$setValidity('schema', false);
+            error = result.error;
+            return undefined;
+          }
+        };
 
       // Unshift onto parsers of the ng-model.
       ngModel.$parsers.unshift(validate);
 
+
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function() {
 
-        if (ngModel.$commitViewValue) {
-          ngModel.$commitViewValue(true);
+        if (scope.ngModelHolder.$commitViewValue) {
+          scope.ngModelHolder.$commitViewValue(true);
         } else {
-          ngModel.$setViewValue(ngModel.$viewValue);
+          scope.ngModelHolder.$setViewValue(scope.ngModelHolder.$viewValue);
         }
       });
 
       //This works since we now we're inside a decorator and that this is the decorators scope.
       //If $pristine and empty don't show success (even if it's valid)
       scope.hasSuccess = function() {
-        return ngModel.$valid && (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue));
+        return scope.ngModelHolder.$valid && (!scope.ngModelHolder.$pristine || !scope.ngModelHolder.$isEmpty(scope.ngModelHolder.$modelValue));
       };
 
       scope.hasError = function() {
-        return ngModel.$invalid && !ngModel.$pristine;
+        return scope.ngModelHolder.$invalid && !scope.ngModelHolder.$pristine;
       };
 
       scope.schemaError = function() {

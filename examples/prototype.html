@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Stb Webmanual Form Editor</title>
+    <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.css">
+    <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.date.css">
+    <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.time.css">
+    <link rel="stylesheet" href="../bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css">
+    <link rel="stylesheet" href="../bower_components/stb-webmanual/css/stb-main.css">
+</head>
+<body ng-app="test" ng-controller="TestCtrl">
+<style>
+    .step-content {
+        background: #efe8df;
+    }
+</style>
+
+<div class="container">
+    <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" sf-decorator-name="stb-webmanual-decorator"></form>
+</div>
+<script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="../bower_components/jquery-ui/jquery-ui.js"></script>
+<script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
+<script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+
+<script type="text/javascript" src="../bower_components/angular-ui-sortable/sortable.js"></script>
+<script type="text/javascript" src="../bower_components/objectpath/lib/ObjectPath.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/picker.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/picker.date.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/translations/sv_SE.js"></script>
+
+<script type="text/javascript" src="../dist/schema-form.js"></script>
+<script type="text/javascript" src="../dist/stb-webmanual-decorator.min.js"></script>
+<script type="text/javascript" src="../dist/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript">
+
+    angular.module('test',['schemaForm']).controller('TestCtrl', function($scope,$http){
+
+        $scope.url = 'data/claims-travel.json';
+
+        $http.get($scope.url).then(function(res){
+            $scope.schema = res.data.schema;
+            $scope.form   = res.data.form;
+            $scope.modelData = {};
+            window.md = $scope.modelData;
+        });
+
+    });
+
+</script>
+</body>
+</html>

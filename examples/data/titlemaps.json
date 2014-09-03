@@ -71,18 +71,18 @@
       "key": "array2",
       "type": "checkboxes",
       "titleMap": [
-        { "value":"a", "name": "A" },
-        { "value":"b", "name":"B" },
-        { "value":"c", "name":"C" }
+        { "value":"a", "name": "A", "id": "01-02" },
+        { "value":"b", "name":"B", "id": "01-03"  },
+        { "value":"c", "name":"C", "id": "01-04"  }
       ]
     },
     {
       "key": "radios",
       "type": "radios",
       "titleMap": [
-        { "value":"c", "name": "C" },
-        { "value":"b", "name":"B" },
-        { "value":"a", "name":"A" }
+        { "value":"c", "name": "C", "id": "01-05"  },
+        { "value":"b", "name":"B", "id": "01-06"  },
+        { "value":"a", "name":"A", "id": "01-07"  }
       ]
     },
     {

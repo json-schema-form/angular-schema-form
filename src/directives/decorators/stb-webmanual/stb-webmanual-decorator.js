@@ -7,6 +7,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     array: base + 'array.html',
     tabarray: base + 'tabarray.html',
     tabs: base + 'tabs.html',
+    steps: base + 'steps.html',
     section: base + 'section.html',
     conditional: base + 'section.html',
     actions: base + 'actions.html',
@@ -21,7 +22,9 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     'radios-inline': base + 'radios-inline.html',
     radiobuttons: base + 'radio-buttons.html',
     help: base + 'help.html',
-    'default': base + 'default.html'
+    'default': base + 'default.html',
+    file: base + 'file.html',
+    datepicker: base + 'datepicker/datepicker.html'
   }, [
     function(form) {
       if (form.readonly && form.key && form.type !== 'fieldset') {
@@ -47,6 +50,8 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     radios: base + 'radios.html',
     'radios-inline': base + 'radios-inline.html',
     radiobuttons: base + 'radio-buttons.html',
+    steps: base + 'steps.html',
+    file: base + 'file.html'
   });
 
 }]).directive('sfFieldset', function() {

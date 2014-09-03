@@ -43,7 +43,7 @@ angular.module('schemaForm').factory('sfValidator', [function() {
     var propName = form.key[form.key.length - 1];
     wrap.properties[propName] = schema;
 
-    if (form.required) {
+    if (schema.required) {
       wrap.required = [propName];
     }
     var valueWrap = {};

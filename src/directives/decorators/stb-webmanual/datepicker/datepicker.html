@@ -1,0 +1,19 @@
+<div class="form-group stb-form-group al" ng-class="{'has-error': hasError()}">
+  <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
+
+   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
+   <div class="input-group date datePicker">
+
+       <input ng-show="form.key"
+              style="background-color: white"
+              type="text"
+              class="form-control"
+              schema-validate="form"
+              ng-model="$$value$$"
+              pick-a-date
+              min-date="form.minDate"
+              max-date="form.maxDate" />
+       <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+   </div>
+
+</div>
