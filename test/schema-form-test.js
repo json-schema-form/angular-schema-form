@@ -62,7 +62,7 @@ describe('Schema form',function(){
       });
     });
 
-    it.only('should generate html and compile it, deep structure',function(){
+    it('should generate html and compile it, deep structure',function(){
 
       inject(function($compile,$rootScope){
         var scope = $rootScope.$new();
