@@ -5,7 +5,7 @@
     "dist/bootstrap-decorator.min.js",
     "dist/bootstrap-datepicker.min.js"
   ],
-  "version": "0.7.2",
+  "version": "0.7.3",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>"
