@@ -456,12 +456,18 @@ angular.module('schemaForm').provider('schemaForm',
 
   // Takes a titleMap in either object or list format and returns one in
   // in the list format.
-  var canonicalTitleMap = function(titleMap) {
+  var canonicalTitleMap = function(titleMap, originalEnum) {
     if (!angular.isArray(titleMap)) {
       var canonical = [];
-      angular.forEach(titleMap, function(name, value) {
-        canonical.push({name: name, value: value});
-      });
+      if (originalEnum) {
+        angular.forEach(originalEnum, function(value, index) {
+          canonical.push({name: titleMap[value], value: value});
+        });
+      } else {
+        angular.forEach(titleMap, function(name, value) {
+          canonical.push({name: name, value: value});
+        });
+      }
       return canonical;
     }
     return titleMap;
@@ -502,7 +508,7 @@ angular.module('schemaForm').provider('schemaForm',
 
     //Non standard attributes
     if (schema.validationMessage) { f.validationMessage = schema.validationMessage; }
-    if (schema.enumNames) { f.titleMap = canonicalTitleMap(schema.enumNames); }
+    if (schema.enumNames) { f.titleMap = canonicalTitleMap(schema.enumNames, schema.enum); }
     f.schema = schema;
 
     // Ng model options doesn't play nice with undefined, might be defined
