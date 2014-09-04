@@ -62,55 +62,55 @@ describe('Schema form',function(){
       });
     });
 
-    it('should generate html and compile it, deep structure',function(){
+    it.only('should generate html and compile it, deep structure',function(){
 
       inject(function($compile,$rootScope){
         var scope = $rootScope.$new();
         scope.person = {};
 
         scope.schema =  {
-          "type": "object",
-          "properties": {
-            "name": {
-              "title": "Name",
-              "description": "Gimme yea name lad",
-              "type": "string"
+          'type': 'object',
+          'properties': {
+            'name': {
+              'title': 'Name',
+              'description': 'Gimme yea name lad',
+              'type': 'string'
             },
-            "ianal": {
-              "type": "boolean",
-              "title":'IANAL'
+            'ianal': {
+              'type': 'boolean',
+              'title':'IANAL'
             },
-            "age": {
-              "type": "integer",
-              "title":'Age',
-              "minimum": 0
+            'age': {
+              'type': 'integer',
+              'title':'Age',
+              'minimum': 0
             },
-            "sum": {
-              "type": "number",
-              "title": "summa"
+            'sum': {
+              'type': 'number',
+              'title': 'summa'
             },
-            "gender": {
-              "title": "Choose",
-              "type": "string",
-              "enum": [
-                "undefined",
-                "null",
-                "NaN",
+            'gender': {
+              'title': 'Choose',
+              'type': 'string',
+              'enum': [
+                'undefined',
+                'null',
+                'NaN',
               ]
             },
-            "attributes": {
-              "type": "object",
-              "title": "Attributes",
-              "required": ['eyecolor'],
-              "properties": {
-                "eyecolor": { "type": "string", "title": "Eye color" },
-                "haircolor": { "type": "string", "title": "Hair color" },
-                "shoulders": {
-                  "type": "object",
-                  "title": "Shoulders",
-                  "properties": {
-                    "left": { "type": "string" },
-                    "right": { "type": "string" },
+            'attributes': {
+              'type': 'object',
+              'title': 'Attributes',
+              'required': ['eyecolor'],
+              'properties': {
+                'eyecolor': { 'type': 'string', 'title': 'Eye color' },
+                'haircolor': { 'type': 'string', 'title': 'Hair color' },
+                'shoulders': {
+                  'type': 'object',
+                  'title': 'Shoulders',
+                  'properties': {
+                    'left': { 'type': 'string' },
+                    'right': { 'type': 'string' },
                   }
                 }
               }
@@ -118,12 +118,13 @@ describe('Schema form',function(){
           }
         };
 
-        scope.form = ["*"];
+        scope.form = ['*'];
 
         var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-decorator-name="bootstrap-decorator"></form>');
 
         $compile(tmpl)(scope);
         $rootScope.$apply();
+
 
         tmpl.children().length.should.be.equal(6);
         tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
@@ -145,10 +146,11 @@ describe('Schema form',function(){
         tmpl.children().eq(5).children().eq(0).is('fieldset').should.be.true;
         tmpl.children().eq(5).children().eq(0).children().eq(0).is('legend').should.be.true;
         tmpl.children().eq(5).children().eq(0).children().eq(3).is('sf-decorator').should.be.true;
-        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).is('fieldset').should.be.true;
-        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).children().length.should.be.eq(3);
-        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'left\']"]').length.should.be.eq(1);
-        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'right\']"]').length.should.be.eq(1);
+
+        tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).is('fieldset').should.be.true;
+        tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).children().length.should.be.eq(4);
+        tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'left\']"]').length.should.be.eq(1);
+        tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'right\']"]').length.should.be.eq(1);
 
       });
     });
