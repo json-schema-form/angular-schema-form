@@ -286,7 +286,6 @@ angular.module('schemaForm').provider('schemaForm',
       options = options || {};
 
       var stdForm = service.defaults(schema, ignore, options);
-
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf('*');
       if (idx !== -1) {
@@ -371,7 +370,7 @@ angular.module('schemaForm').provider('schemaForm',
       if (schema.type === 'object') {
         angular.forEach(schema.properties, function(v, k) {
           if (ignore[k] !== true) {
-            var required = schema.required && schema.required.indexOf(k[k.length - 1]) !== -1;
+            var required = schema.required && schema.required.indexOf(k) !== -1;
             var def = defaultFormDefinition(k, v, {
               path: [k],         // Path to this property in bracket notation.
               lookup: lookup,    // Extra map to register with. Optimization for merger.
