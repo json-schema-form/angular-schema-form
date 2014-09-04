@@ -69,48 +69,48 @@ describe('Schema form',function(){
         scope.person = {};
 
         scope.schema =  {
-          "type": "object",
-          "properties": {
-            "name": {
-              "title": "Name",
-              "description": "Gimme yea name lad",
-              "type": "string"
+          'type': 'object',
+          'properties': {
+            'name': {
+              'title': 'Name',
+              'description': 'Gimme yea name lad',
+              'type': 'string'
             },
-            "ianal": {
-              "type": "boolean",
-              "title":'IANAL'
+            'ianal': {
+              'type': 'boolean',
+              'title':'IANAL'
             },
-            "age": {
-              "type": "integer",
-              "title":'Age',
-              "minimum": 0
+            'age': {
+              'type': 'integer',
+              'title':'Age',
+              'minimum': 0
             },
-            "sum": {
-              "type": "number",
-              "title": "summa"
+            'sum': {
+              'type': 'number',
+              'title': 'summa'
             },
-            "gender": {
-              "title": "Choose",
-              "type": "string",
-              "enum": [
-                "undefined",
-                "null",
-                "NaN",
+            'gender': {
+              'title': 'Choose',
+              'type': 'string',
+              'enum': [
+                'undefined',
+                'null',
+                'NaN',
               ]
             },
-            "attributes": {
-              "type": "object",
-              "title": "Attributes",
-              "required": ['eyecolor'],
-              "properties": {
-                "eyecolor": { "type": "string", "title": "Eye color" },
-                "haircolor": { "type": "string", "title": "Hair color" },
-                "shoulders": {
-                  "type": "object",
-                  "title": "Shoulders",
-                  "properties": {
-                    "left": { "type": "string" },
-                    "right": { "type": "string" },
+            'attributes': {
+              'type': 'object',
+              'title': 'Attributes',
+              'required': ['eyecolor'],
+              'properties': {
+                'eyecolor': { 'type': 'string', 'title': 'Eye color' },
+                'haircolor': { 'type': 'string', 'title': 'Hair color' },
+                'shoulders': {
+                  'type': 'object',
+                  'title': 'Shoulders',
+                  'properties': {
+                    'left': { 'type': 'string' },
+                    'right': { 'type': 'string' },
                   }
                 }
               }
@@ -118,12 +118,13 @@ describe('Schema form',function(){
           }
         };
 
-        scope.form = ["*"];
+        scope.form = ['*'];
 
         var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-decorator-name="bootstrap-decorator"></form>');
 
         $compile(tmpl)(scope);
         $rootScope.$apply();
+
 
         tmpl.children().length.should.be.equal(6);
         tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
@@ -145,10 +146,11 @@ describe('Schema form',function(){
         tmpl.children().eq(5).children().eq(0).is('fieldset').should.be.true;
         tmpl.children().eq(5).children().eq(0).children().eq(0).is('legend').should.be.true;
         tmpl.children().eq(5).children().eq(0).children().eq(3).is('sf-decorator').should.be.true;
-        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).is('fieldset').should.be.true;
-        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).children().length.should.be.eq(3);
-        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'left\']"]').length.should.be.eq(1);
-        tmpl.children().eq(5).children().eq(0).children().eq(3).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'right\']"]').length.should.be.eq(1);
+
+        tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).is('fieldset').should.be.true;
+        tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).children().length.should.be.eq(4);
+        tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'left\']"]').length.should.be.eq(1);
+        tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'right\']"]').length.should.be.eq(1);
 
       });
     });
@@ -1571,6 +1573,46 @@ describe('Schema form',function(){
       });
     });
 
+    it('should sort select options by enum',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = {
+          "type": "object",
+          "properties": {
+            "thing": {
+              "type": "string",
+              "title": "Thing",
+              "enum": [
+                // Intentionally non-alphabetical
+                // https://github.com/Textalk/angular-schema-form/issues/82
+                // https://github.com/Textalk/angular-schema-form/issues/83
+                "b",
+                "a"
+              ],
+              "enumNames": {
+                // Intentionally not the same order as the `enum`
+                "a": "The A",
+                "b": "The B"
+              }
+            }
+          }
+        };
+
+        scope.form = ["*"];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().eq(0).find('select').eq(0).find('option').eq(0).text().trim().should.be.eq('');
+        tmpl.children().eq(0).find('select').eq(0).find('option').eq(1).text().trim().should.be.eq('The B');
+        tmpl.children().eq(0).find('select').eq(0).find('option').eq(2).text().trim().should.be.eq('The A');
+      });
+    });
 
   });
 

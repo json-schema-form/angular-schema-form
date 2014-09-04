@@ -28,7 +28,7 @@
            <sf-decorator form="copyWithIndex($index)"></sf-decorator>
 
 
-           <button ng-click="deleteFromArray($index)"
+           <button ng-click="selected.tab = deleteFromArray($index).length - 1"
                    type="button"
                    class="btn {{ form.style.remove || 'btn-default' }} pull-right">
              <i class="glyphicon glyphicon-trash"></i>

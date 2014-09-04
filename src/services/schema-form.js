@@ -17,12 +17,18 @@ angular.module('schemaForm').provider('schemaForm',
 
   // Takes a titleMap in either object or list format and returns one in
   // in the list format.
-  var canonicalTitleMap = function(titleMap) {
+  var canonicalTitleMap = function(titleMap, originalEnum) {
     if (!angular.isArray(titleMap)) {
       var canonical = [];
-      angular.forEach(titleMap, function(name, value) {
-        canonical.push({name: name, value: value});
-      });
+      if (originalEnum) {
+        angular.forEach(originalEnum, function(value, index) {
+          canonical.push({name: titleMap[value], value: value});
+        });
+      } else {
+        angular.forEach(titleMap, function(name, value) {
+          canonical.push({name: name, value: value});
+        });
+      }
       return canonical;
     }
     return titleMap;
@@ -63,7 +69,7 @@ angular.module('schemaForm').provider('schemaForm',
 
     //Non standard attributes
     if (schema.validationMessage) { f.validationMessage = schema.validationMessage; }
-    if (schema.enumNames) { f.titleMap = canonicalTitleMap(schema.enumNames); }
+    if (schema.enumNames) { f.titleMap = canonicalTitleMap(schema.enumNames, schema.enum); }
     f.schema = schema;
 
     // Ng model options doesn't play nice with undefined, might be defined
@@ -219,8 +225,9 @@ angular.module('schemaForm').provider('schemaForm',
   /**
    * Provider API
    */
-  this.defaults    = defaults;
-  this.stdFormObj  = stdFormObj;
+  this.defaults              = defaults;
+  this.stdFormObj            = stdFormObj;
+  this.defaultFormDefinition = defaultFormDefinition;
 
   /**
    * Register a post process function.
@@ -279,7 +286,6 @@ angular.module('schemaForm').provider('schemaForm',
       options = options || {};
 
       var stdForm = service.defaults(schema, ignore, options);
-
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf('*');
       if (idx !== -1) {
@@ -299,9 +305,27 @@ angular.module('schemaForm').provider('schemaForm',
           obj = {key: obj};
         }
 
+        if (obj.key) {
+          if (typeof obj.key === 'string') {
+            obj.key = sfPathProvider.parse(obj.key);
+          }
+        }
+
         //If it has a titleMap make sure it's a list
         if (obj.titleMap) {
           obj.titleMap = canonicalTitleMap(obj.titleMap);
+        }
+
+        //
+        if (obj.itemForm) {
+          obj.items = [];
+          var str = sfPathProvider.stringify(obj.key);
+          var stdForm = lookup[str];
+          angular.forEach(stdForm.items, function(item) {
+            var o = angular.copy(obj.itemForm);
+            o.key = item.key;
+            obj.items.push(o);
+          });
         }
 
         //if it's a type with items, merge 'em!
@@ -318,10 +342,6 @@ angular.module('schemaForm').provider('schemaForm',
 
         //extend with std form from schema.
         if (obj.key) {
-          if (typeof obj.key === 'string') {
-            obj.key = sfPathProvider.parse(obj.key);
-          }
-
           var str = sfPathProvider.stringify(obj.key);
           if (lookup[str]) {
             obj = angular.extend(lookup[str], obj);
@@ -350,7 +370,7 @@ angular.module('schemaForm').provider('schemaForm',
       if (schema.type === 'object') {
         angular.forEach(schema.properties, function(v, k) {
           if (ignore[k] !== true) {
-            var required = schema.required && schema.required.indexOf(k[k.length - 1]) !== -1;
+            var required = schema.required && schema.required.indexOf(k) !== -1;
             var def = defaultFormDefinition(k, v, {
               path: [k],         // Path to this property in bracket notation.
               lookup: lookup,    // Extra map to register with. Optimization for merger.
