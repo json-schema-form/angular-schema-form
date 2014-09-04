@@ -1,3 +1,12 @@
+v0.7.3
+------
+ * Fix for regression in enum order in selects, thanks @adamschwartz
+ * Descriptons in fieldsets, thanks @mike-marcacci
+ * Evaluate sfModel in the parent scope, thanks @mike-marcacci
+ * 'defaultFormDefinition' is now exported on the schemaForm provider making it possible to create
+   addons that have arbitrary forms inside them, i.e. like fieldset.
+ * A couple of bugs, required should now work fine, tabarrays behave, list tags be mathed etc
+
 v0.7.2
 ------
  * Add-ons now have their own repos, and there is a colorpicker!
