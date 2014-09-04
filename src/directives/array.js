@@ -100,6 +100,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             if (scope.validateArray) {
               scope.validateArray();
             }
+            return list;
           };
 
           // Always start with one empty form unless configured otherwise.
