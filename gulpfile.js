@@ -11,7 +11,3 @@ var jscs = require('gulp-jscs');
 
 
 require('./gulp');
-
-gulp.task('watch', function() {
-  gulp.watch('./src/**/*', ['default']);
-});
