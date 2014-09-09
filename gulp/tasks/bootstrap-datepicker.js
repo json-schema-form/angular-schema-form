@@ -1,9 +1,9 @@
 var gulp = require('gulp'),
-streamqueue = require('streamqueue'),
-minifyHtml = require('gulp-minify-html'),
-templateCache = require('gulp-angular-templatecache'),
-concat = require('gulp-concat'),
-uglify = require('gulp-uglify');
+  streamqueue = require('streamqueue'),
+  minifyHtml = require('gulp-minify-html'),
+  templateCache = require('gulp-angular-templatecache'),
+  concat = require('gulp-concat'),
+  uglify = require('gulp-uglify');
 
 gulp.task('bootstrap-datepicker', function() {
   var stream = streamqueue({objectMode: true});
