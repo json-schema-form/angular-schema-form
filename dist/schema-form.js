@@ -226,6 +226,19 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               }
             };
 
+            scope.finishIt = function($event, form) {
+              if (angular.isFunction(form.finishIt)) {
+                finishIt.onClick($event, form);
+              } else if (angular.isString(form.finishIt)) {
+                if (sfSchema) {
+                  //evaluating in scope outside of sfSchemas isolated scope
+                  sfSchema.evalInParentScope(form.finishIt, {'$event': $event, form: form});
+                } else {
+                  scope.$eval(form.finishIt, {'$event': $event, form: form});
+                }
+              }
+            };
+
             /**
              * Evaluate an expression, i.e. scope.$eval
              * but do it in sfSchemas parent scope sf-schema directive is used

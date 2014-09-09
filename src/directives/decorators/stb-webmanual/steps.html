@@ -29,7 +29,7 @@
 
                 <button ng-hide="$first" class="stb-btn transparent" ng-click="prevStep($index)">{{form.prevButtonText}}</button>
                 <button ng-hide="$last" class="stb-btn" ng-click="nextStep($index)">{{form.nextButtonText}}</button>
-                <button ng-show="$last" class="stb-btn">{{form.lastButtonText}}</button>
+                <button ng-show="$last" class="stb-btn" ng-click="finishIt($event,form)">{{form.lastButtonText}}</button>
             </div>
         </div>
     </div>
