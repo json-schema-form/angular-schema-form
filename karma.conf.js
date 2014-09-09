@@ -26,7 +26,8 @@ module.exports = function(config) {
       'src/directives/decorators/bootstrap/*.js',
       'src/**/*.html',
       'test/schema-form-test.js',
-      'test/service-test.js'
+      'test/service-test.js',
+      'test/decorator-factory-service-test.js',
     ],
 
     // list of files to exclude
