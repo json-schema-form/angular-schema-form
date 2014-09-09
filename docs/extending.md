@@ -5,7 +5,6 @@ Schema Form is designed to be easily extended and there are two basic ways to do
 1. Add a new type of field
 2. Add a new decorator
 
-
 Adding a Field
 --------------
 To add a new field to Schema Form you need to create a new form type and match that form type with
@@ -70,14 +69,14 @@ the defaults from the schema (it also has its part of the schema under *form.sch
 This is how you define and use new form field options, whatever is set on the form object is
 available here for you to act on.
 
- | Name     |  What it does  |
- |----------|----------------|
- | form      | Form definition object |
- | showTitle() | Shorthand for `form && form.notitle !== true && form.title` |
- | errorMessage(msg) | Error message formatting, makes validationMessage option work. |
- | evalInScope(expr, locals) | Eval supplied expression, ie scope.$eval |
- | evalExpr(expr, locals) | Eval an expression in the parent scope of the main `sf-schema` directive. |
- | buttonClick($event, form)  | Use this with ng-click to execute form.onClick |
+| Name     |  What it does  |
+|----------|----------------|
+| form      | Form definition object |
+| showTitle() | Shorthand for `form && form.notitle !== true && form.title` |
+| errorMessage(msg) | Error message formatting, makes validationMessage option work. |
+| evalInScope(expr, locals) | Eval supplied expression, ie scope.$eval |
+| evalExpr(expr, locals) | Eval an expression in the parent scope of the main `sf-schema` directive. |
+| buttonClick($event, form)  | Use this with ng-click to execute form.onClick |
 
 ### The magic $$value$$
 Schema Form wants to play nice with the built in Angular directives for form. Especially `ng-model`
@@ -101,6 +100,7 @@ responsible for validating the value against the schema using [tv4js](https://gi
 It takes the form definition as an argument.
 
 `schema-validate` also exports some things on the scope:
+
 | Name     | What it does |
 |----------|--------------|
 | ngModel  | the ngModelController |
