@@ -12,29 +12,6 @@ var jscs = require('gulp-jscs');
 
 require('./gulp');
 
-gulp.task('bootstrap-datepicker', function() {
-  var stream = streamqueue({objectMode: true});
-  stream.queue(
-              gulp.src('./src/directives/decorators/bootstrap/datepicker/*.html')
-                  .pipe(minifyHtml({
-                    empty: true,
-                    spare: true,
-                    quotes: true
-                  }))
-                  .pipe(templateCache({
-                    module: 'schemaForm',
-                    root: 'directives/decorators/bootstrap/datepicker/'
-                  }))
-    );
-  stream.queue(gulp.src('./src/directives/decorators/bootstrap/datepicker/*.js'));
-
-  stream.done()
-        .pipe(concat('bootstrap-datepicker.min.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('./dist/'));
-
-});
-
 gulp.task('minify', function() {
   gulp.src([
     './src/module.js',
