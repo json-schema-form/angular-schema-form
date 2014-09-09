@@ -10,8 +10,6 @@ describe('directive',function(){
     })
   );
 
-
-
   var exampleSchema = {
     "type": "object",
     "properties": {
@@ -31,7 +29,6 @@ describe('directive',function(){
       }
     }
   };
-
 
   it('should generate html and compile it',function(){
 
@@ -152,7 +149,6 @@ describe('directive',function(){
     });
   });
 
-
   it('should generate html and compile it, leaving existing inputs intact',function(){
 
     inject(function($compile,$rootScope){
@@ -239,7 +235,6 @@ describe('directive',function(){
       tmpl.children().eq(2).children().eq(0).find('button').click();
       scope.form[1].onClick.should.have.beenCalledOnce;
     });
-
   });
 
   it('should style submit buttons',function(){
@@ -438,7 +433,6 @@ describe('directive',function(){
     });
   });
 
-
   it('should use ng-required on required fields',function(){
 
     inject(function($compile,$rootScope){
@@ -636,7 +630,6 @@ describe('directive',function(){
     });
   });
 
-
   it('should skip title if form says "notitle"',function(){
 
     inject(function($compile,$rootScope){
@@ -663,7 +656,6 @@ describe('directive',function(){
       tmpl.children().eq(1).children().eq(0).find('label').hasClass('ng-hide').should.be.true;
     });
   });
-
 
   it('should generate checkboxes for arrays with enums',function(){
 
@@ -1063,9 +1055,6 @@ describe('directive',function(){
     });
   });
 
-
-
-
   it('should handle "action" groups, same as "section" but with a bootstrap class "btn-group"',function(){
 
     inject(function($compile,$rootScope){
@@ -1263,7 +1252,6 @@ describe('directive',function(){
 
     });
   });
-
 
   it('should render a list of subforms when schema type is array',function(){
 

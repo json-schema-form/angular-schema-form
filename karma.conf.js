@@ -27,7 +27,7 @@ module.exports = function(config) {
       'src/**/*.html',
       'test/services/schema-form-test.js',
       'test/services/decorators-test.js',
-      'test/directive-test.js',
+      'test/directives/schema-form-test.js',
     ],
 
     // list of files to exclude
