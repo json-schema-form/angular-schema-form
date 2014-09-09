@@ -44,7 +44,7 @@ angular.module('schemaForm').provider('sfPath',
   this.parse = ObjectPath.parse;
   this.stringify = ObjectPath.stringify;
   this.normalize = ObjectPath.normalize;
-  this.$get = function () {
+  this.$get = function() {
     return ObjectPath;
   };
 }]);
@@ -55,7 +55,7 @@ angular.module('schemaForm').provider('sfPath',
  * @kind function
  *
  */
-angular.module('schemaForm').factory('sfSelect', ['sfPath', function (sfPath) {
+angular.module('schemaForm').factory('sfSelect', ['sfPath', function(sfPath) {
   var numRe = /^\d+$/;
 
   /**
