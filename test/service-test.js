@@ -1,3 +1,5 @@
+chai.should();
+
 describe('service',function(){
   beforeEach(module('templates'));
   beforeEach(module('schemaForm'));

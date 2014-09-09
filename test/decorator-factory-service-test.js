@@ -1,3 +1,5 @@
+chai.should();
+
 describe('decorator factory service',function(){
   beforeEach(module('templates'));
   beforeEach(module('schemaForm'));
