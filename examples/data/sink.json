@@ -13,6 +13,12 @@
         "pattern": "^[^/]*$",
         "minLength": 2
       },
+      "invitation": {
+        "type": "string",
+        "format": "html",
+        "title": "Invitation Design",
+        "description": "Design the invitation in full technicolor HTML"
+      },
       "favorite": {
         "title": "Favorite",
         "type": "string",
@@ -150,6 +156,15 @@
                 {
                   "key": "shoesize",
                   "feedback": false
+                },
+                {
+                  "key": "invitation",
+                  "tinymceOptions": {
+                    "toolbar": [
+                      "undo redo| styleselect | bold italic | link image",
+                      "alignleft aligncenter alignright"
+                    ]
+                  }
                 },
                 "things",
                 "dislike"
