@@ -12,17 +12,6 @@ var jscs = require('gulp-jscs');
 
 require('./gulp');
 
-gulp.task('non-minified-dist', function() {
-  gulp.src([
-    './src/module.js',
-    './src/sfPath.js',
-    './src/services/*.js',
-    './src/directives/*.js'
-  ])
-  .pipe(concat('schema-form.js'))
-  .pipe(gulp.dest('./dist/'));
-});
-
 gulp.task('jscs', function() {
   gulp.src('./src/**/*.js')
       .pipe(jscs());
