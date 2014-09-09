@@ -25,7 +25,7 @@ module.exports = function(config) {
       'src/directives/*.js',
       'src/directives/decorators/bootstrap/*.js',
       'src/**/*.html',
-      'test/service-test.js',
+      'test/services/schema-form-test.js',
       'test/decorator-factory-service-test.js',
       'test/directive-test.js',
     ],
