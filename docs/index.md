@@ -25,6 +25,7 @@ Documentation
     1. [array](#array)
     1. [tabarray](#tabarray)
 1. [Post process function](#post-process-function)
+1. [Extending Schema Form](extending.md)
 
 Basic Usage
 -----------
