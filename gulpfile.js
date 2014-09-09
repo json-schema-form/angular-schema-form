@@ -12,13 +12,6 @@ var jscs = require('gulp-jscs');
 
 require('./gulp');
 
-gulp.task('default', [
-  'minify',
-  'bootstrap',
-  'bootstrap-datepicker',
-  'non-minified-dist'
-]);
-
 gulp.task('watch', function() {
   gulp.watch('./src/**/*', ['default']);
 });
