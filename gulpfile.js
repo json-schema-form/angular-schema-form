@@ -12,11 +12,6 @@ var jscs = require('gulp-jscs');
 
 require('./gulp');
 
-gulp.task('jscs', function() {
-  gulp.src('./src/**/*.js')
-      .pipe(jscs());
-});
-
 gulp.task('default', [
   'minify',
   'bootstrap',
