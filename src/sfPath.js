@@ -20,7 +20,7 @@ angular.module('schemaForm').provider('sfPath',
   this.parse = ObjectPath.parse;
   this.stringify = ObjectPath.stringify;
   this.normalize = ObjectPath.normalize;
-  this.$get = function () {
+  this.$get = function() {
     return ObjectPath;
   };
 }]);
