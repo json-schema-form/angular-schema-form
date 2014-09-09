@@ -1,13 +1,4 @@
-/* global require */
-
-var gulp = require('gulp');
-
-var templateCache = require('gulp-angular-templatecache');
-var minifyHtml = require('gulp-minify-html');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var streamqueue = require('streamqueue');
-var jscs = require('gulp-jscs');
-
+//all of the tasks themselves are contained in the gulp/tasks directory,
+//which is accessed through gulp/index.js
 
 require('./gulp');
