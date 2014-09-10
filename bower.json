@@ -3,7 +3,8 @@
   "main": [
     "dist/schema-form.min.js",
     "dist/bootstrap-decorator.min.js",
-    "dist/bootstrap-datepicker.min.js"
+    "dist/bootstrap-datepicker.min.js",
+    "dist/stb-webmanual-decorator.min.js"
   ],
   "version": "0.8.3",
   "authors": [
