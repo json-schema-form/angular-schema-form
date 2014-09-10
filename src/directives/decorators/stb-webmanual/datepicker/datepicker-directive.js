@@ -2,7 +2,7 @@ angular.module('schemaForm').directive('datepicker', function() {
   return {
     restrict: 'A',
     require : 'ngModel',
-    link : function (scope, element, attrs) {
+    link : function (scope, element, attrs, ngModelCtrl) {
       /* Unit test*/
       if (!$.datepicker) {
         return;
@@ -11,7 +11,12 @@ angular.module('schemaForm').directive('datepicker', function() {
         dateFormat:'dd/mm/yy',
         setDefaults: $.datepicker.regional.no,
         prevText: '<',
-        nextText: '>'
+        nextText: '>',
+        onSelect:function (date) {
+          ngModelCtrl.$setViewValue(date);
+          scope.$apply();
+
+        }
       }).datepicker('setDate', new Date());
 
     }
