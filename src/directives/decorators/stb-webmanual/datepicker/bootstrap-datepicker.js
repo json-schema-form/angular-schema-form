@@ -14,11 +14,5 @@ angular.module('schemaForm').config(
 
     schemaFormProvider.defaults.string.unshift(datepicker);
 
-    //Add to the bootstrap directive
-    schemaFormDecoratorsProvider.addMapping(
-      'bootstrapDecorator',
-      'datepicker',
-      'directives/decorators/stb-webmanual/datepicker/datepicker.html'
-    );
   }
 ]);

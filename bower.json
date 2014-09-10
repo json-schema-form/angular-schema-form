@@ -5,7 +5,7 @@
     "dist/bootstrap-decorator.min.js",
     "dist/bootstrap-datepicker.min.js"
   ],
-  "version": "0.8.3",
+  "version": "0.8.4",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>"
@@ -36,7 +36,8 @@
     "objectpath": "~1.0.4",
     "stb-webmanual": "ssh://git@github.com/storebrand/storebrand.ny.git",
     "angular-ui-sortable": "~0.12.10",
-    "bootstrap-vertical-tabs": "~1.2.0"
+    "bootstrap-vertical-tabs": "~1.2.0",
+    "angular-bootstrap": "~0.11.0"
   },
   "devDependencies": {
     "angular-ui-ace": "bower",

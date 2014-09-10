@@ -20,6 +20,12 @@ try {
   deps.push('angularSpectrumColorpicker');
 } catch (e) {}
 
+try {
+  //This throws an expection if module does not exist.
+  angular.module('ui.bootstrap');
+  deps.push('ui.bootstrap');
+} catch (e) {}
+
 angular.module('schemaForm', deps);
 
 angular.module('schemaForm').provider('sfPath',
@@ -156,8 +162,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   var createDirective = function(name) {
-    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop',
-      function($parse,  $compile,  $http,  $templateCache, scrollingTop) {
+    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop', '$timeout',
+      function($parse,  $compile,  $http,  $templateCache, scrollingTop, $timeout) {
 
         return {
           restrict: 'AE',
@@ -237,6 +243,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   scope.$eval(form.finishIt, {'$event': $event, form: form});
                 }
               }
+            };
+
+            scope.open = function () {
+
+              $timeout(function() {
+                scope.opened = !scope.opened;
+              });
+
             };
 
             /**

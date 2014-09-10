@@ -10,10 +10,17 @@
               class="form-control"
               schema-validate="form"
               ng-model="$$value$$"
-              pick-a-date
+              datepicker
               min-date="form.minDate"
               max-date="form.maxDate" />
-       <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
    </div>
 
 </div>
+<style>
+    .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {
+        border-bottom: none;
+    }
+</style>
