@@ -59,18 +59,18 @@ gulp.task('stb-webmanual', function() {
 
 gulp.task('bootstrap-datepicker', function() {
   var stream = streamqueue({objectMode: true});
-  stream.queue(
-              gulp.src('./src/directives/decorators/stb-webmanual/datepicker/*.html')
-                  .pipe(minifyHtml({
-                    empty: true,
-                    spare: true,
-                    quotes: true
-                  }))
-                  .pipe(templateCache({
-                    module: 'schemaForm',
-                    root: 'directives/decorators/stb-webmanual/datepicker/'
-                  }))
-    );
+//  stream.queue(
+//              gulp.src('./src/directives/decorators/stb-webmanual/datepicker/*.html')
+//                  .pipe(minifyHtml({
+//                    empty: true,
+//                    spare: true,
+//                    quotes: true
+//                  }))
+//                  .pipe(templateCache({
+//                    module: 'schemaForm',
+//                    root: 'directives/decorators/stb-webmanual/datepicker/'
+//                  }))
+//    );
   stream.queue(gulp.src('./src/directives/decorators/stb-webmanual/datepicker/*.js'));
 
   stream.done()
