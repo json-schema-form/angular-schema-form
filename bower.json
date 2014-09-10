@@ -2,7 +2,6 @@
   "name": "angular-schema-form",
   "main": [
     "dist/schema-form.min.js",
-    "dist/bootstrap-decorator.min.js",
     "dist/bootstrap-datepicker.min.js",
     "dist/stb-webmanual-decorator.min.js"
   ],
@@ -37,8 +36,7 @@
     "objectpath": "~1.0.4",
     "stb-webmanual": "ssh://git@github.com/storebrand/storebrand.ny.git",
     "angular-ui-sortable": "~0.12.10",
-    "bootstrap-vertical-tabs": "~1.2.0",
-    "angular-bootstrap": "~0.11.0"
+    "bootstrap-vertical-tabs": "~1.2.0"
   },
   "devDependencies": {
     "angular-ui-ace": "bower",
