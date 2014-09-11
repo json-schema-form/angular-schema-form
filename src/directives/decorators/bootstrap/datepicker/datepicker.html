@@ -1,6 +1,4 @@
 <div class="form-group" ng-class="{'has-error': hasError()}">
-  <label ng-show="showTitle()">{{form.title}}</label>
-
   <input ng-show="form.key"
          style="background-color: white"
          type="date"
@@ -10,6 +8,8 @@
          pick-a-date
          min-date="form.minDate"
          max-date="form.maxDate" />
+
+  <label ng-show="showTitle()">{{form.title}}</label>
 
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
 </div>
