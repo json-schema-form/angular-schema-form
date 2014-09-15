@@ -271,7 +271,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   return scope.form.validationMessage[schemaError.code] ||
                          scope.form.validationMessage['default'];
                 } else {
-                  return scope.form.validationMessage.required ||
+                  return scope.form.validationMessage.number ||
                          scope.form.validationMessage['default'] ||
                          scope.form.validationMessage;
                 }
@@ -282,8 +282,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 return schemaError.message; //use tv4.js validation message
               }
 
-              //Otherwise we only use required so it must be it.
-              return 'Required';
+              //Otherwise we only have input number not being a number
+              return 'Not a number';
 
             };
           }
@@ -893,26 +893,26 @@ angular.module('schemaForm').factory('sfValidator', [function() {
    * @return a tv4js result object.
    */
   validator.validate = function(form, value) {
-
+    if (!form) {
+      return {valid: true};
+    }
     var schema = form.schema;
 
     if (!schema) {
-      //Nothings to Validate
-      return value;
+      return {valid: true};
     }
 
-    //Type cast and validate against schema.
-    //Basic types of json schema sans array and object
-    if (schema.type === 'integer') {
-      value = parseInt(value, 10);
-    } else if (schema.type === 'number') {
-      value = parseFloat(value, 10);
-    } else if (schema.type === 'boolean' && typeof value === 'string') {
-      if (value === 'true') {
-        value = true;
-      } else if (value === 'false') {
-        value = false;
-      }
+    // Input of type text and textareas will give us a viewValue of ''
+    // when empty, this is a valid value in a schema and does not count as something
+    // that breaks validation of 'required'. But for our own sanity an empty field should
+    // not validate if it's required.
+    if (value === '') {
+      value = undefined;
+    }
+
+    // Numbers fields will give a null value, which also means empty field
+    if (form.type === 'number' && value === null) {
+      value = undefined;
     }
 
     // Version 4 of JSON Schema has the required property not on the
@@ -929,7 +929,6 @@ angular.module('schemaForm').factory('sfValidator', [function() {
     if (angular.isDefined(value)) {
       valueWrap[propName] = value;
     }
-
     return tv4.validateResult(valueWrap, wrap);
 
   };
@@ -1295,6 +1294,9 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
   return {
     restrict: 'A',
     scope: false,
+    // We want the link function to be *after* the input directives link function so we get access
+    // the parsed value, ex. a number instead of a string
+    priority: 1000,
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
       //Since we have scope false this is the same scope
@@ -1302,52 +1304,59 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
       scope.ngModel = ngModel;
 
       var error = null;
-      var form   = scope.$eval(attrs.schemaValidate);
-      // Validate against the schema.
-      var validate = function(viewValue) {
+
+      var getForm = function() {
         if (!form) {
           form = scope.$eval(attrs.schemaValidate);
         }
-
-        //Still might be undefined
-        if (!form) {
-          return viewValue;
-        }
-
-        // Is required is handled by ng-required?
-        if (angular.isDefined(attrs.ngRequired) && angular.isUndefined(viewValue)) {
-          return undefined;
-        }
-
-        // An empty field gives us the an empty string, which JSON schema
-        // happily accepts as a proper defined string, but an empty field
-        // for the user should trigger "required". So we set it to undefined.
-        if (viewValue === '') {
-          viewValue = undefined;
-        }
-
-        var result = sfValidator.validate(form, viewValue);
-
-        if (result.valid) {
-          // it is valid
-          ngModel.$setValidity('schema', true);
-          return viewValue;
-        } else {
-          // it is invalid, return undefined (no model update)
-          ngModel.$setValidity('schema', false);
-          error = result.error;
-          return undefined;
-        }
+        return form;
       };
+      var form   = getForm();
 
-      // Unshift onto parsers of the ng-model.
-      ngModel.$parsers.unshift(validate);
+      // Validate against the schema.
+
+      // Get in last of the parses so the parsed value has the correct type.
+      if (ngModel.$validators) { // Angular 1.3
+        ngModel.$validators.schema = function(value) {
+          var result = sfValidator.validate(getForm(), value);
+          error = result.error;
+          return result.valid;
+        };
+      } else {
+
+        // Angular 1.2
+        ngModel.$parsers.push(function(viewValue) {
+          form = getForm();
+          //Still might be undefined
+          if (!form) {
+            return viewValue;
+          }
+
+          var result =  sfValidator.validate(form, viewValue);
+
+          if (result.valid) {
+            // it is valid
+            ngModel.$setValidity('schema', true);
+            return viewValue;
+          } else {
+            // it is invalid, return undefined (no model update)
+            ngModel.$setValidity('schema', false);
+            error = result.error;
+            return undefined;
+          }
+        });
+      }
+
 
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function() {
 
-        if (ngModel.$commitViewValue) {
-          ngModel.$commitViewValue(true);
+        if (ngModel.$validate) {
+          ngModel.$validate();
+          if (ngModel.$invalid) { // The field must be made dirty so the error message is displayed
+            ngModel.$dirty = true;
+            ngModel.$pristine = false;
+          }
         } else {
           ngModel.$setViewValue(ngModel.$viewValue);
         }

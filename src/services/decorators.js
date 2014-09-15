@@ -145,7 +145,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   return scope.form.validationMessage[schemaError.code] ||
                          scope.form.validationMessage['default'];
                 } else {
-                  return scope.form.validationMessage.required ||
+                  return scope.form.validationMessage.number ||
                          scope.form.validationMessage['default'] ||
                          scope.form.validationMessage;
                 }
@@ -156,8 +156,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 return schemaError.message; //use tv4.js validation message
               }
 
-              //Otherwise we only use required so it must be it.
-              return 'Required';
+              //Otherwise we only have input number not being a number
+              return 'Not a number';
 
             };
           }

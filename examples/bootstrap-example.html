@@ -80,7 +80,7 @@
 <script type="text/javascript" src="../bower_components/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js"></script>
 
 
-<script type="text/javascript" src="../dist/schema-form.min.js"></script>
+<script type="text/javascript" src="../dist/schema-form.js"></script>
 <script type="text/javascript" src="../dist/bootstrap-decorator.min.js"></script>
 <script type="text/javascript" src="../dist/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-schema-form-colorpicker/bootstrap-colorpicker.min.js"></script>
@@ -96,6 +96,7 @@ angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($
 
   $scope.tests = [
     { name: "Simple", data: 'data/simple.json' },
+    { name: "Basic JSON Schema Type", data: 'data/types.json' },
     { name: "Complex Key Support", data: 'data/complex-keys.json' },
     { name: "Array", data: 'data/array.json' },
     { name: "Tab Array", data: 'data/tabarray.json' },
