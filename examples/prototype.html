@@ -17,7 +17,7 @@
 </style>
 
 <div class="container">
-    <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" sf-decorator-name="stb-webmanual-decorator"></form>
+    <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" sf-decorator-name="stb-webmanual-decorator" ng-submit="submitForm(ngform,modelData)"></form>
 </div>
 <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="../bower_components/jquery-ui/jquery-ui.js"></script>
@@ -35,7 +35,7 @@
 
     angular.module('test',['schemaForm']).controller('TestCtrl', function($scope,$http){
 
-        $scope.url = 'data/claims-travel.json';
+        $scope.url = 'data/car-insurance.json';
 
         $http.get($scope.url).then(function(res){
             $scope.schema = res.data.schema;
@@ -49,6 +49,10 @@
             $scope.modelData = {};
             window.md = $scope.modelData;
         });
+
+        $scope.submitForm = function (form, model) {
+            console.log(model)
+        };
 
     });
 

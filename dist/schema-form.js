@@ -251,7 +251,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.showCondition = function () {
-              console.log(scope.model[scope.form.conditionalKey], scope.form.conditionalValue, scope.model[scope.form.conditionalKey] === scope.form.conditionalValue)
                 return scope.model[scope.form.conditionalKey] === scope.form.conditionalValue;
             }
 
@@ -830,6 +829,9 @@ angular.module('schemaForm').provider('schemaForm',
         // Special case: checkbox
         // Since have to ternary state we need a default
         if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
+          if (!obj.id) {
+            obj.id = Math.random() * 100;
+          }
           obj.schema['default'] = false;
         }
 

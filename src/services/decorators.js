@@ -119,7 +119,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.showCondition = function () {
-              console.log(scope.model[scope.form.conditionalKey], scope.form.conditionalValue, scope.model[scope.form.conditionalKey] === scope.form.conditionalValue)
                 return scope.model[scope.form.conditionalKey] === scope.form.conditionalValue;
             }
 

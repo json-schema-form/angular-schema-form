@@ -338,6 +338,9 @@ angular.module('schemaForm').provider('schemaForm',
         // Special case: checkbox
         // Since have to ternary state we need a default
         if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
+          if (!obj.id) {
+            obj.id = Math.random() * 100;
+          }
           obj.schema['default'] = false;
         }
 
