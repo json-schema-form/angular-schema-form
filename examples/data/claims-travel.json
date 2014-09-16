@@ -144,9 +144,16 @@
                   "type": "textarea"
                 },
                 {
-                  "key": "question23",
-                  "title": "La du merke til en speciell hendelse som kan ha med skaden a gjore?",
-                  "type": "textarea"
+                  "type": "condition",
+                "conditionalKey": "question24",
+                "conditionalValue": "true",
+                  "items": [
+                      {
+                          "key": "question23",
+                          "title": "La du merke til en speciell hendelse som kan ha med skaden a gjore?",
+                          "type": "textarea"
+                      }
+                  ]
                 },
                 {
                   "key": "question24",

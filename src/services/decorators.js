@@ -53,6 +53,11 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 $http.get(url, {cache: $templateCache}).then(function(res) {
                   var key = form.key ?
                             sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
+                  var conditionalKey = form.conditionalKey ?
+                            sfPathProvider.stringify(form.conditionalKey).replace(/"/g, '&quot;') : '';
+                  var conditionalValue = form.conditionalValue ?
+                            sfPathProvider.stringify(form.conditionalValue).replace(/"/g, '&quot;') : '';
+
                   var template = res.data.replace(
                     /\$\$value\$\$/g,
                     'model' + (key[0] !== '[' ? '.' : '') + key
@@ -112,6 +117,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 }
               }
             };
+
+            scope.showCondition = function () {
+                return scope.model[scope.form.conditionalKey] === scope.form.conditionalValue;
+            }
 
             scope.open = function () {
 
