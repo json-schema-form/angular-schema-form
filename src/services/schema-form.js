@@ -24,8 +24,14 @@ angular.module('schemaForm').provider('schemaForm',
         canonical.push({name: name, value: value, id: 'id_' + (Math.random() * 100)});
       });
       return canonical;
+    } else {
+      angular.forEach(titleMap, function(obj, index) {
+        if (!obj.id) {
+          obj.id = 'id_' + (Math.random() * 100);
+        }
+      });
+      return titleMap;
     }
-    return titleMap;
   };
 
   var defaultFormDefinition = function(name, schema, options) {
@@ -338,9 +344,6 @@ angular.module('schemaForm').provider('schemaForm',
         // Special case: checkbox
         // Since have to ternary state we need a default
         if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
-          if (!obj.id) {
-            obj.id = Math.random() * 100;
-          }
           obj.schema['default'] = false;
         }
 

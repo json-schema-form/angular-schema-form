@@ -120,7 +120,16 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
             scope.showCondition = function () {
                 return scope.model[scope.form.conditionalKey] === scope.form.conditionalValue;
-            }
+            };
+
+            scope.clickCheckbox = function (event) {
+              var inputEl = angular.element(event.currentTarget).find('input');
+              var checked = !!inputEl.attr('checked');
+              $timeout(function() {
+                inputEl.attr('checked', !checked);
+                scope.model[scope.form.key] = !checked;
+              }, 0);
+            };
 
             scope.open = function () {
 

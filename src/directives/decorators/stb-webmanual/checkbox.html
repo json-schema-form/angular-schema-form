@@ -1,14 +1,14 @@
 <div class="stb-form-group al checkbox" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
 
   <div class="help-block info-message" ng-show="form.description" ng-bind-html="form.description"></div>
-
-    <input type="checkbox"
-           sf-changed="form"
-           ng-model="$$value$$"
-           ng-model-options="form.ngModelOptions"
-           schema-validate="form"
-           class="stb-checkbox"
-           id="{{form.id}}">
-    <label for="{{form.id}}" class="stb-custom-input" ng-bind-html="form.title"></label>
-
+    <div  ng-click="clickCheckbox($event)">
+        <input type="checkbox"
+               sf-changed="form"
+               ng-model="$$value$$"
+               ng-model-options="form.ngModelOptions"
+               schema-validate="form"
+               class="stb-checkbox"
+               id="{{form.id}}">
+        <label for="{{form.id}}" class="stb-custom-input" ng-bind-html="form.title"></label>
+    </div>
 </div>

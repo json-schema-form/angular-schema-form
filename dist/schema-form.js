@@ -252,7 +252,16 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
             scope.showCondition = function () {
                 return scope.model[scope.form.conditionalKey] === scope.form.conditionalValue;
-            }
+            };
+
+            scope.clickCheckbox = function (event) {
+              var inputEl = angular.element(event.currentTarget).find('input');
+              var checked = !!inputEl.attr('checked');
+              $timeout(function() {
+                inputEl.attr('checked', !checked);
+                scope.model[scope.form.key] = !checked;
+              }, 0);
+            };
 
             scope.open = function () {
 
@@ -515,8 +524,14 @@ angular.module('schemaForm').provider('schemaForm',
         canonical.push({name: name, value: value, id: 'id_' + (Math.random() * 100)});
       });
       return canonical;
+    } else {
+      angular.forEach(titleMap, function(obj, index) {
+        if (!obj.id) {
+          obj.id = 'id_' + (Math.random() * 100);
+        }
+      });
+      return titleMap;
     }
-    return titleMap;
   };
 
   var defaultFormDefinition = function(name, schema, options) {
@@ -829,9 +844,6 @@ angular.module('schemaForm').provider('schemaForm',
         // Special case: checkbox
         // Since have to ternary state we need a default
         if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
-          if (!obj.id) {
-            obj.id = Math.random() * 100;
-          }
           obj.schema['default'] = false;
         }
 

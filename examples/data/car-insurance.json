@@ -72,17 +72,17 @@
         {
           "type": "condition",
           "conditionalKey": "isNumberRegional",
-          "conditionalValue": "true",
+          "conditionalValue": true,
           "items": [
             {
               "key": "importedAndNotClearedYet",
               "validationMessage": "Denne bilen kan dessverre ikke tegnes på nett, vennligst ta kontakt med kundeservice.",
               "title": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge ?",
               "type": "radios-inline",
-              "titleMap": {
-                "true": "Ja",
-                "false": "Nei"
-              }
+              "titleMap": [
+                {"value": true, "name": "Ja"},
+                {"value": false, "name": "Nei"}
+              ]
 
             }
           ]
@@ -90,7 +90,7 @@
         {
           "type": "condition",
           "conditionalKey": "importedAndNotClearedYet",
-          "conditionalValue": "false",
+          "conditionalValue": false,
           "items": [
             {
               "key": "identNumber",
@@ -110,15 +110,15 @@
           "key": "needHelpToMove",
           "title": "Vil du ha hjelp til oppsigelse",
           "type": "radios",
-          "titleMap": {
-            "true": "Ja, jeg flytter forsikring til Storebrand fra et annet selskap.",
-            "false": "Nei, jeg har ingen forsikring som skal sies opp i annet selskap."
-          }
+          "titleMap": [
+            {"value": true, "name": "Ja, jeg flytter forsikring til Storebrand fra et annet selskap."},
+            {"value": false, "name": "Nei, jeg har ingen forsikring som skal sies opp i annet selskap."}
+          ]
         },
         {
           "type": "condition",
           "conditionalKey": "needHelpToMove",
-          "conditionalValue": "true",
+          "conditionalValue": true,
           "items": [
             {
               "key": "companyYouMoveFrom",
@@ -140,15 +140,15 @@
               "type": "radios",
               "required": true,
               "title": "Er forsikringen i nåværende selskap registrert i ditt navn?",
-              "titleMap": {
-                "true": "Ja",
-                "false": "Nei"
-              }
+              "titleMap": [
+                {"value": true, "name": "Ja"},
+                {"value": false, "name": "Nei"}
+              ]
             },
             {
               "type": "condition",
               "conditionalKey": "insuranceRegisteredToYou",
-              "conditionalValue": "false",
+              "conditionalValue": false,
               "items": [
                 {
                   "key": "nameOfTheRegistrator",
@@ -162,15 +162,15 @@
               "type": "radios",
               "required": true,
               "title": "Vet du dato for hovedforfall for denne forsikringen i ditt nåværende selskap?",
-              "titleMap": {
-                "true": "Ja",
-                "false": "Nei"
-              }
+              "titleMap": [
+                {"value": true, "name": "Ja"},
+                {"value": false, "name": "Nei"}
+              ]
             },
             {
               "type": "condition",
               "conditionalKey": "knowDateOfUpdate",
-              "conditionalValue": "true",
+              "conditionalValue": true,
               "items": [
                 {
                   "key": "dateInOtherCompany",
@@ -183,7 +183,7 @@
         {
           "type": "condition",
           "conditionalKey": "needHelpToMove",
-          "conditionalValue": "false",
+          "conditionalValue": false,
           "items": [
             {
               "key": "bonusFromCompany",
