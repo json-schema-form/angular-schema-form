@@ -508,7 +508,7 @@ angular.module('schemaForm').provider('schemaForm',
 
     //Non standard attributes
     if (schema.validationMessage) { f.validationMessage = schema.validationMessage; }
-    if (schema.enumNames) { f.titleMap = canonicalTitleMap(schema.enumNames, schema.enum); }
+    if (schema.enumNames) { f.titleMap = canonicalTitleMap(schema.enumNames, schema['enum']); }
     f.schema = schema;
 
     // Ng model options doesn't play nice with undefined, might be defined
@@ -518,7 +518,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var text = function(name, schema, options) {
-    if (schema.type === 'string' && !schema.enum) {
+    if (schema.type === 'string' && !schema['enum']) {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'text';
@@ -560,12 +560,12 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var select = function(name, schema, options) {
-    if (schema.type === 'string' && schema.enum) {
+    if (schema.type === 'string' && schema['enum']) {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'select';
       if (!f.titleMap) {
-        f.titleMap = enumToTitleMap(schema.enum);
+        f.titleMap = enumToTitleMap(schema['enum']);
       }
       options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
@@ -573,12 +573,12 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var checkboxes = function(name, schema, options) {
-    if (schema.type === 'array' && schema.items && schema.items.enum) {
+    if (schema.type === 'array' && schema.items && schema.items['enum']) {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'checkboxes';
       if (!f.titleMap) {
-        f.titleMap = enumToTitleMap(schema.items.enum);
+        f.titleMap = enumToTitleMap(schema.items['enum']);
       }
       options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
@@ -1007,8 +1007,8 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             var len = list.length;
             var copy = scope.copyWithIndex(len);
             schemaForm.traverseForm(copy, function(part) {
-              if (part.key && angular.isDefined(part.default)) {
-                sfSelect(part.key, scope.model, part.default);
+              if (part.key && angular.isDefined(part['default'])) {
+                sfSelect(part.key, scope.model, part['default']);
               }
             });
 
