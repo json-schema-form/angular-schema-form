@@ -7,7 +7,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
 
       var error = null;
 
-      if (attrs.type === 'radio' || attrs.type === 'checkbox') {
+      if (attrs.type === 'radio') {
         scope = scope.$parent;
       }
       //Since we have scope false this is the same scope
