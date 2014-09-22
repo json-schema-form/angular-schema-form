@@ -1,6 +1,6 @@
 <div class="stb-form-group al checkbox" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
 
-  <div class="help-block info-message" ng-show="form.description" ng-bind-html="form.description"></div>
+  <div class="help-block" ng-show="(hasError() && errorMessage(schemaError())) || form.description" ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
     <div  ng-click="clickCheckbox($event)">
         <input type="checkbox"
                sf-changed="form"
