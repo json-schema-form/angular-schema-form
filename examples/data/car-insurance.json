@@ -2,6 +2,13 @@
   "schema": {
     "type": "object",
     "properties": {
+      "ssn": {
+        "type": "string",
+        "format": "ssn",
+        "required": true,
+        "minLength": 11,
+        "maxLength": 11
+      },
       "carNumber": {
         "type": "string",
         "required": true,
@@ -66,6 +73,11 @@
     {
       "type": "fieldset",
       "items": [
+        {
+          "key": "ssn",
+          "title": "ssn",
+          "placeholder": "ssn"
+        },
         {
           "key": "carNumber",
           "title": "Bilnummer",

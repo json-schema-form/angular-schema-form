@@ -4,6 +4,34 @@ angular.module('schemaForm').factory('sfValidator', [function() {
 
   var validator = {};
 
+
+  tv4.addFormat({
+    'ssn': function (data, schema) {
+      var pn;
+      var v1 = [3,7,6,1,8,9,4,5,2,1,0];
+      var v2 = [5,4,3,2,7,6,5,4,3,2,1];
+      var sum1=0;
+      var sum2=0;
+      var i=0;
+
+      if (typeof data === 'string') {
+        pn = data.split('');
+      } else {
+        return 'ssn should be a string!';
+      }
+
+      for(; i<v1.length; i+=1) {
+        sum1 += pn[i]*v1[i];
+        sum2 += pn[i]*v2[i];
+      }
+      if (sum1%11==0 && sum2%11==0 ) {
+        return null;
+      } else {
+        return "incorrect ssn";
+      }
+    }
+  });
+
   /**
    * Validate a value against its form definition and schema.
    * The value should either be of proper type or a string, some type
@@ -13,6 +41,7 @@ angular.module('schemaForm').factory('sfValidator', [function() {
    * @param {Any} value the value to validate.
    * @return a tv4js result object.
    */
+
   validator.validate = function(form, value) {
 
     var schema = form.schema;
