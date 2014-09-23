@@ -4,21 +4,19 @@ angular.module('schemaForm').directive('datepicker', function() {
     require : 'ngModel',
     link : function (scope, element, attrs, ngModelCtrl) {
       /* Unit test*/
-      if (!$.datepicker) {
+      if (!$.fn.datetimepicker) {
         return;
       }
-      $(element).datepicker({
-        dateFormat:'dd/mm/yy',
-        setDefaults: $.datepicker.regional.no,
-        prevText: '<',
-        nextText: '>',
-        onSelect:function (date) {
-          ngModelCtrl.$setViewValue(date);
-          scope.$apply();
-
-        }
-      }).datepicker('setDate', new Date());
-
+      $(element).parent().datetimepicker({
+        pickTime: false,
+        language: 'no',
+        minDate: scope.$eval(attrs.minDate),
+        maxDate: scope.$eval(attrs.maxDate)
+    }).on('dp.change', function (e) {
+        scope.$apply(function () {
+          ngModelCtrl.$setViewValue(e.date.toISOString())
+        });
+      });
     }
   };
 });

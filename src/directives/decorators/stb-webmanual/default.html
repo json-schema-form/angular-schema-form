@@ -1,4 +1,4 @@
-<div class="form-group stb-form-group al" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
+<div class="form-group stb-form-group al has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>{{form.subtitle}}
 
       <div class="help-block info-message"
@@ -12,7 +12,5 @@
              ng-model-options="form.ngModelOptions"
              ng-model="$$value$$"
              schema-validate="form">
-      <span ng-if="form.feedback !== false"
-            class="form-control-feedback"
-            ng-class="evalInScope(form.feedback) || {'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"></span>
+    <i class="form-control-feedback glyphicon" ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}"></i>
 </div>

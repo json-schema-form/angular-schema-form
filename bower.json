@@ -35,7 +35,9 @@
     "angular-sanitize": ">= 1.2",
     "objectpath": "~1.0.4",
     "angular-ui-sortable": "~0.12.10",
-    "bootstrap-vertical-tabs": "~1.2.0"
+    "bootstrap-vertical-tabs": "~1.2.0",
+    "stb-datetimepicker": "~4.0.0",
+    "moment": "~2.8.3"
   },
   "devDependencies": {
     "stb-webmanual": "ssh://git@github.com/storebrand/storebrand.ny.git",

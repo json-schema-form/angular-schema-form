@@ -1,4 +1,4 @@
-<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+<div class="form-group  has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
   <div class="help-block" ng-show="(hasError() && errorMessage(schemaError())) || form.description" ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
   <div>
@@ -12,5 +12,7 @@
                  id="{{item.id}}">
           <label for="{{item.id}}" ng-bind-html="item.name"></label>
       </span>
+
+      <i class="form-control-feedback glyphicon" ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}"></i>
   </div>
 </div>

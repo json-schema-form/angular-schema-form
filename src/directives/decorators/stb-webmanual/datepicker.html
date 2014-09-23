@@ -1,4 +1,4 @@
-<div class="form-group stb-form-group al" ng-class="{'has-error': hasError()}">
+<div class="form-group stb-form-group al has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
 
    <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
@@ -13,14 +13,18 @@
               datepicker
               min-date="form.minDate"
               max-date="form.maxDate" />
-              <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+              <span class="input-group-addon">
+                  <span class="glyphicon-calendar glyphicon"></span>
               </span>
    </div>
+    <i class="form-control-feedback glyphicon" ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}"></i>
 
 </div>
 <style>
     .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {
         border-bottom: none;
+    }
+    .input-group.date {
+        width: 50%;
     }
 </style>

@@ -276,14 +276,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               }, 0);
             };
 
-            scope.open = function () {
-
-              $timeout(function() {
-                scope.opened = !scope.opened;
-              });
-
-            };
-
             /**
              * Evaluate an expression, i.e. scope.$eval
              * but do it in sfSchemas parent scope sf-schema directive is used
