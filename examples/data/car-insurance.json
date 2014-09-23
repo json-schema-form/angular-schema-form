@@ -4,6 +4,7 @@
     "properties": {
       "carNumber": {
         "type": "string",
+        "required": true,
         "pattern": "\\w{2}\\d{5}"
       },
       "isNumberRegional": {
@@ -11,28 +12,36 @@
       },
       "importedAndNotClearedYet": {
         "type": "boolean",
+        "required": true,
         "enum": [false]
       },
       "identNumber": {
         "type": "string",
+        "required": true,
         "pattern": "\\d{6}"
       },
       "distance": {
-        "type": "string"
+        "type": "string",
+        "required": true
       },
       "needHelpToMove": {
+        "required": true,
         "type": "boolean"
       },
       "companyYouMoveFrom": {
+        "required": true,
         "type": "string"
       },
       "policyNumber": {
+        "required": true,
         "type": "string"
       },
       "insuranceRegisteredToYou": {
+        "required": true,
         "type": "boolean"
       },
       "nameOfTheRegistrator": {
+        "required": true,
         "type": "string"
       },
       "knowDateOfUpdate": {
@@ -60,7 +69,6 @@
         {
           "key": "carNumber",
           "title": "Bilnummer",
-          "required": true,
           "type": "string",
           "placeholder": "Bilnummer"
         },
@@ -102,7 +110,6 @@
         {
           "key": "distance",
           "type": "string",
-          "required": true,
           "title": "Kilometerstand",
           "placeholder": "Kilometerstand"
         },
@@ -132,13 +139,11 @@
             {
               "key": "policyNumber",
               "type": "string",
-              "required": false,
               "title": "Polisenummer i eksisterende selskap"
             },
             {
               "key": "insuranceRegisteredToYou",
               "type": "radios",
-              "required": true,
               "title": "Er forsikringen i nåværende selskap registrert i ditt navn?",
               "titleMap": [
                 {"value": true, "name": "Ja"},
@@ -160,7 +165,6 @@
             {
               "key": "knowDateOfUpdate",
               "type": "radios",
-              "required": true,
               "title": "Vet du dato for hovedforfall for denne forsikringen i ditt nåværende selskap?",
               "titleMap": [
                 {"value": true, "name": "Ja"},
@@ -197,7 +201,6 @@
             {
               "key": "bonusCarNumber",
               "title": "Bilnummer",
-              "required": "true",
               "type": "string",
               "placeholder": "Bilnummer"
             }

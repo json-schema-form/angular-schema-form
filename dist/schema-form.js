@@ -251,7 +251,20 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.showCondition = function () {
-                return scope.model[scope.form.conditionalKey] === scope.form.conditionalValue;
+              var show = scope.model[scope.form.conditionalKey] === scope.form.conditionalValue;
+              angular.forEach(scope.form.items, function (item) {
+                if (!angular.isUndefined(item.required)) {
+                  if (show) {
+                    item.required = true;
+                    item.schema.required = true;
+                  } else {
+                    item.required = false;
+                    item.schema.required = false;
+                  }
+                }
+              });
+
+              return show;
             };
 
             scope.clickCheckbox = function (event) {
