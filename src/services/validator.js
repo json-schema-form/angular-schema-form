@@ -29,6 +29,17 @@ angular.module('schemaForm').factory('sfValidator', [function() {
       } else {
         return "incorrect ssn";
       }
+    },
+    'email': function(data, schema) {
+      if (typeof data === 'string') {
+       if (/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/.test(data)) {
+         return null;
+       } else {
+         return 'invalid email';
+       }
+      } else {
+        return 'email should be a string!';
+      }
     }
   });
 
