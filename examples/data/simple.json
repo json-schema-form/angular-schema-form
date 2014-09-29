@@ -27,7 +27,8 @@
     "email",
     {
       "key": "comment",
-      "type": "textarea"
+      "type": "textarea",
+      "placeholder": "Make a comment"
     },
     {
       "type": "submit",

@@ -308,6 +308,7 @@ General options most field types can handle:
   validationMessage: "Oh noes, please write a proper address",  // A custom validation error message
   onChange: "valueChanged(form.key,modelValue)", // onChange event handler, expression or function
   feedback: false,             // Inline feedback icons
+  placeholder: "Input...",     // placeholder on inputs and textarea
   ngModelOptions: { ... }      // Passed along to ng-model-options
 }
 ```
