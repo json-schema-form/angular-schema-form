@@ -586,7 +586,6 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var fieldset = function(name, schema, options) {
-
     if (schema.type === 'object') {
       var f   = stdFormObj(name, schema, options);
       f.type  = 'fieldset';
@@ -640,7 +639,8 @@ angular.module('schemaForm').provider('schemaForm',
         path: arrPath,
         required: required || false,
         lookup: options.lookup,
-        ignore: options.ignore
+        ignore: options.ignore,
+        global: options.global
       })];
 
       return f;
@@ -769,13 +769,13 @@ angular.module('schemaForm').provider('schemaForm',
 
         //if it's a type with items, merge 'em!
         if (obj.items) {
-          obj.items = service.merge(schema, obj.items, ignore);
+          obj.items = service.merge(schema, obj.items, ignore, options);
         }
 
         //if its has tabs, merge them also!
         if (obj.tabs) {
           angular.forEach(obj.tabs, function(tab) {
-            tab.items = service.merge(schema, tab.items, ignore);
+            tab.items = service.merge(schema, tab.items, ignore, options);
           });
         }
 
@@ -984,8 +984,16 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             // section. Unless there is just one.
             var subForm = form.items[0];
             if (form.items.length > 1) {
-              subForm = {type: 'section', items: form.items};
+              subForm = {
+                type: 'section',
+                items: form.items.map(function(item){
+                  item.ngModelOptions = form.ngModelOptions;
+                  item.readonly = form.readonly;
+                  return item;
+                })
+              };
             }
+
           }
 
           // We ceate copies of the form on demand, caching them for

@@ -4,6 +4,7 @@
       <label class="radio-inline" ng-repeat="item in form.titleMap" >
       <input type="radio"
              sf-changed="form"
+             ng-disabled="form.readonly"
              ng-model="$$value$$"
              ng-value="item.value">
       <span ng-bind-html="item.name"></span>
