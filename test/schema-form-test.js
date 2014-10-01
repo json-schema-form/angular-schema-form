@@ -180,6 +180,26 @@ describe('Schema form',function(){
       });
     });
 
+    it('should preserve existing html and insert fields in matching slots',function(){
+
+      inject(function($compile,$rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {};
+
+        scope.schema = exampleSchema;
+
+        scope.form = ["*"];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"><ul><li sf-insert-field="name"></li></ul></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        tmpl.children().eq(0).is('ul').should.be.true;
+        tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
+      });
+    });
+    
     it('should handle submit buttons',function(){
 
       inject(function($compile,$rootScope){
