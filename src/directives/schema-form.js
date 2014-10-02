@@ -87,7 +87,13 @@ angular.module('schemaForm')
             angular.forEach(merged,function(obj,i){
               var n = document.createElement(attrs.sfDecorator || snakeCase(schemaFormDecorators.defaultDecorator,'-'));
               n.setAttribute('form','schemaForm.form['+i+']');
-              var slot = element[0].querySelector('*[sf-insert-field="' + obj.key + '"]');
+              var slot;
+              try {
+                slot = element[0].querySelector('*[sf-insert-field="' + obj.key + '"]');
+              } catch(err) {
+                // field insertion not supported for complex keys
+                slot = null;
+              }
               if(slot) {
                 slot.appendChild(n);  
               } else {
