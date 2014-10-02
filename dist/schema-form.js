@@ -1264,9 +1264,14 @@ angular.module('schemaForm')
 
             //Create directives from the form definition
             angular.forEach(merged,function(obj,i){
-              var n = document.createElement(attrs.sfDecorator || snake_case(schemaFormDecorators.defaultDecorator,'-'));
+              var n = document.createElement(attrs.sfDecorator || snakeCase(schemaFormDecorators.defaultDecorator,'-'));
               n.setAttribute('form','schemaForm.form['+i+']');
-              var slot = element[0].querySelector('*[sf-insert-field="' + obj.key + '"]');
+              var slot;
+              try {
+                slot = element[0].querySelector('*[sf-insert-field="' + obj.key + '"]');
+              } catch(err) {
+                slot = null;
+              }
               if(slot) {
                 slot.appendChild(n);  
               } else {
