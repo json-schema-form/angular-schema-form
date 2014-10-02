@@ -251,16 +251,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.showCondition = function () {
-              var show = scope.model[scope.form.conditionalKey] === scope.form.conditionalValue;
+              var show = scope.model[scope.form.conditionalKey] === scope.form.conditionalValue ;
+              if (scope.form.secondConditionalKey) {
+                show = show && (scope.model[scope.form.secondConditionalKey] === scope.form.secondConditionalValue);
+              }
               angular.forEach(scope.form.items, function (item) {
                 if (!angular.isUndefined(item.required)) {
-                  if (show) {
-                    item.required = true;
-                    item.schema.required = true;
-                  } else {
-                    item.required = false;
-                    item.schema.required = false;
-                  }
+                  item.required = show;
+                  item.schema.required = show;
                 }
               });
 
@@ -1030,8 +1028,7 @@ angular.module('schemaForm').factory('sfValidator', [function() {
    * @return a tv4js result object.
    */
 
-  validator.validate = function(form, value, model) {
-    console.log(model)
+  validator.validate = function(form, value) {
 
     var schema = form.schema;
 
@@ -1474,7 +1471,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
           viewValue = undefined;
         }
 
-        var result = sfValidator.validate(form, viewValue, scope.ngModelHolder);
+        var result = sfValidator.validate(form, viewValue);
 
           if (result.valid) {
             // it is valid
