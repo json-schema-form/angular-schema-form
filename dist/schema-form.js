@@ -1030,7 +1030,8 @@ angular.module('schemaForm').factory('sfValidator', [function() {
    * @return a tv4js result object.
    */
 
-  validator.validate = function(form, value) {
+  validator.validate = function(form, value, model) {
+    console.log(model)
 
     var schema = form.schema;
 
@@ -1473,7 +1474,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
           viewValue = undefined;
         }
 
-        var result = sfValidator.validate(form, viewValue);
+        var result = sfValidator.validate(form, viewValue, scope.ngModelHolder);
 
           if (result.valid) {
             // it is valid
