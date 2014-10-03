@@ -1270,9 +1270,11 @@ angular.module('schemaForm')
               try {
                 slot = element[0].querySelector('*[sf-insert-field="' + obj.key + '"]');
               } catch(err) {
+                // field insertion not supported for complex keys
                 slot = null;
               }
               if(slot) {
+                slot.innerHTML = "";
                 slot.appendChild(n);  
               } else {
                 frag.appendChild(n);
