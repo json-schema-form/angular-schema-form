@@ -1,4 +1,4 @@
-angular.module('schemaForm').directive('datepicker', function() {
+angular.module('schemaForm').directive('stbDatepicker', function() {
   return {
     restrict: 'A',
     require : 'ngModel',
