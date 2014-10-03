@@ -9,6 +9,7 @@
          class="form-control"
          ng-model-options="form.ngModelOptions"
          ng-model="$$value$$"
+         ng-disabled="form.readonly"
          schema-validate="form">
   <span ng-if="form.feedback !== false"
         class="form-control-feedback"

@@ -413,5 +413,117 @@ describe('schemaForm', function() {
 
       });
     });
+
+    it('should translate "readOnly" in schema to "readonly" on the merged form defintion',function(){
+      inject(function(schemaForm){
+        var schema = {
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "description": "Gimme yea name lad",
+              "type": "string"
+            },
+            "gender": {
+              "readOnly": true,
+              "title": "Choose",
+              "type": "string",
+              "enum": [
+                "undefined",
+                "null",
+                "NaN",
+              ]
+            }
+          }
+        };
+
+        var merged = schemaForm.merge(schema, ['gender']);
+        merged[0].should.have.property('readonly');
+        merged[0].readonly.should.eq(true)
+      });
+    });
+
+    it('should push readOnly in schema down into objects and arrays', function() {
+      inject(function(schemaForm) {
+        var schema = {
+          'type': 'object',
+          'readOnly': true,
+          'properties': {
+            'sub': {
+              'type': 'object',
+              'properties': {
+                'array': {
+                  'type': 'array',
+                  'items': {
+                    'type': 'object',
+                    'properties': {
+                      'foo': {
+                        'type': 'string'
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        var merged = schemaForm.merge(schema, ['*']);
+
+        //sub
+        merged[0].should.have.property('readonly');
+        merged[0].readonly.should.eq(true);
+
+        //array
+        merged[0].items[0].should.have.property('readonly');
+        merged[0].items[0].readonly.should.eq(true);
+
+        //array items
+        merged[0].items[0].items[0].should.have.property('readonly');
+        merged[0].items[0].items[0].readonly.should.eq(true);
+
+      });
+    });
+
+    it('should push readonly in form def down into objects and arrays', function() {
+      inject(function(schemaForm) {
+        var schema = {
+          'type': 'object',
+          'properties': {
+            'sub': {
+              'type': 'object',
+              'properties': {
+                'array': {
+                  'type': 'array',
+                  'items': {
+                    'type': 'object',
+                    'properties': {
+                      'foo': {
+                        'type': 'string'
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        var merged = schemaForm.merge(schema, [{key: 'sub', readonly: true}]);
+
+        //sub
+        merged[0].should.have.property('readonly');
+        merged[0].readonly.should.eq(true);
+
+        //array
+        merged[0].items[0].should.have.property('readonly');
+        merged[0].items[0].readonly.should.eq(true);
+
+        //array items
+        merged[0].items[0].items[0].should.have.property('readonly');
+        merged[0].items[0].items[0].readonly.should.eq(true);
+
+      });
+    });
   });
 });

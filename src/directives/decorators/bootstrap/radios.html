@@ -4,6 +4,7 @@
     <label>
       <input type="radio"
              sf-changed="form"
+             ng-disabled="form.readonly"
              ng-model="$$value$$"
              ng-model-options="form.ngModelOptions"
              ng-value="item.value">

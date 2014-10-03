@@ -586,7 +586,6 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var fieldset = function(name, schema, options) {
-
     if (schema.type === 'object') {
       var f   = stdFormObj(name, schema, options);
       f.type  = 'fieldset';
@@ -640,7 +639,8 @@ angular.module('schemaForm').provider('schemaForm',
         path: arrPath,
         required: required || false,
         lookup: options.lookup,
-        ignore: options.ignore
+        ignore: options.ignore,
+        global: options.global
       })];
 
       return f;
@@ -720,23 +720,27 @@ angular.module('schemaForm').provider('schemaForm',
 
     var service = {};
 
-    service.merge = function(schema, form, ignore, options) {
+    service.merge = function(schema, form, ignore, options, readonly) {
       form  = form || ['*'];
       options = options || {};
 
+      // Get readonly from root object
+      readonly = readonly || schema.readonly || schema.readOnly;
+
       var stdForm = service.defaults(schema, ignore, options);
+
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf('*');
       if (idx !== -1) {
         form  = form.slice(0, idx)
                     .concat(stdForm.form)
                     .concat(form.slice(idx + 1));
-        return form;
       }
 
       //ok let's merge!
       //We look at the supplied form and extend it with schema standards
       var lookup = stdForm.lookup;
+
       return postProcessFn(form.map(function(obj) {
 
         //handle the shortcut with just a name
@@ -767,24 +771,30 @@ angular.module('schemaForm').provider('schemaForm',
           });
         }
 
+        //extend with std form from schema.
+
+        if (obj.key) {
+          var strid = sfPathProvider.stringify(obj.key);
+          if (lookup[strid]) {
+            obj = angular.extend(lookup[strid], obj);
+          }
+        }
+
+        // Are we inheriting readonly?
+        if (readonly === true) { // Inheriting false is not cool.
+          obj.readonly = true;
+        }
+
         //if it's a type with items, merge 'em!
         if (obj.items) {
-          obj.items = service.merge(schema, obj.items, ignore);
+          obj.items = service.merge(schema, obj.items, ignore, options, obj.readonly);
         }
 
         //if its has tabs, merge them also!
         if (obj.tabs) {
           angular.forEach(obj.tabs, function(tab) {
-            tab.items = service.merge(schema, tab.items, ignore);
+            tab.items = service.merge(schema, tab.items, ignore, options, obj.readonly);
           });
-        }
-
-        //extend with std form from schema.
-        if (obj.key) {
-          var str = sfPathProvider.stringify(obj.key);
-          if (lookup[str]) {
-            obj = angular.extend(lookup[str], obj);
-          }
         }
 
         // Special case: checkbox
@@ -984,8 +994,16 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             // section. Unless there is just one.
             var subForm = form.items[0];
             if (form.items.length > 1) {
-              subForm = {type: 'section', items: form.items};
+              subForm = {
+                type: 'section',
+                items: form.items.map(function(item){
+                  item.ngModelOptions = form.ngModelOptions;
+                  item.readonly = form.readonly;
+                  return item;
+                })
+              };
             }
+
           }
 
           // We ceate copies of the form on demand, caching them for
