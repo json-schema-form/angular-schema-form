@@ -95,6 +95,7 @@ angular.module('schemaForm')
                 slot = null;
               }
               if(slot) {
+                slot.innerHTML = "";
                 slot.appendChild(n);  
               } else {
                 frag.appendChild(n);
