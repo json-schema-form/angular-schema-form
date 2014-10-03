@@ -6,6 +6,7 @@
          ng-if="item.type === 'submit'">
   <button ng-repeat-end class="btn {{ item.style || 'btn-default' }}"
           type="button"
+          ng-disabled="form.readonly"
           ng-if="item.type !== 'submit'"
           ng-click="buttonClick($event,item)">{{item.title}}</button>
 </div>

@@ -3,6 +3,7 @@
   <textarea class="form-control"
             sf-changed="form"
             placeholder="{{form.placeholder}}"
+            ng-disabled="form.readonly"
             ng-model="$$value$$"
             ng-model-options="form.ngModelOptions"
             schema-validate="form"></textarea>
