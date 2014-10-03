@@ -37,9 +37,11 @@
   "devDependencies": {
     "angular-ui-ace": "bower",
     "angular-schema-form-datepicker": ">= 0.1.0",
+    "angular-schema-form-colorpicker": ">= 0.1.0",
     "jquery": "~2.1.1",
     "angular-mocks": ">= 1.2",
-    "angular-schema-form-colorpicker": ">= 0.1.0",
-    "tx-tinymce": ">= 0.0.5"
+    "tx-tinymce": ">= 0.0.5",
+    "angular-ui-sortable": "~0.12.11",
+    "bootstrap-vertical-tabs": "~1.2.0"
   }
 }
