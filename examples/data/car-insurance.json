@@ -2,17 +2,10 @@
   "schema": {
     "type": "object",
     "properties": {
-      "ssn": {
-        "type": "string",
-        "format": "ssn",
-        "required": true,
-        "minLength": 11,
-        "maxLength": 11
-      },
       "carNumber": {
         "type": "string",
         "required": true,
-        "pattern": "\\w{2}\\d{5}"
+        "pattern": "^[A-Z]{2}\\d{5}$"
       },
       "isNumberRegional": {
         "type": "boolean"
@@ -25,19 +18,26 @@
       "identNumber": {
         "type": "string",
         "required": true,
-        "pattern": "\\d{6}"
+        "pattern": "^\\w{6}$"
       },
       "distance": {
         "type": "string",
+        "maxLength": "6",
+        "pattern": "^\\d{1,6}$",
         "required": true
       },
       "needHelpToMove": {
         "required": true,
         "type": "boolean"
       },
-      "companyYouMoveFrom": {
+      "hidden_needHelpToMove": {
         "required": true,
         "type": "string"
+      },
+      "companyYouMoveFrom": {
+        "required": true,
+        "type": "string",
+        "enum": ["AIG Europe", "Agria Dyreforsikring", "Annet Norsk selskap", "Atlantica Båtforsikring", "Bluewater Insurance ASA", "Codan", "DNB Skadeforsikring", "Dancia Pensjon", "Duborgh Forsikring", "Eika Forsikring", "Enter Forsikring AS", "Europeiske Reiseforsikring ", "Fjaler Sparebank", "Forsikring fra Norske Boligbyggelag", "Frende Skadeforsikring AS", "Frisk Forsikring", "GS Banken", "Gjensidige", "Gouda Reiseforsikring", "Halden Sparebank 1", "Helgeland Sparebank", "Hjartdal og Gransherad Sparebank", "IF Skadeforsikring", "Interhannover/ White Labell Insurance ASA", "Jernbanepers. bank og forsikring", "KLP Skadeforsikring", "Kollektivtrafikkens Personellservice BA", "Kristen Norges Innkjøpsfellesskap", "Kvinnherad Sparebank", "Landbruksforsikring", "Lederenes private skadeforsikringer", "Lom og Skjåk Sparebank", "Maskinentreprenørenes Forbund", "Modum SpareBank 1", "Møretrygd Gjensidig Forsikring", "NAF Forsikring", "NEMI Forsikring ASA", "Nordic Insurance", "Norsk Familieøkonomi", "Norsk Hussopp Forsikring Gjensidig", "Norsk Privatforsikring", "Norsk Sykepleierforbund", "Norske Sjø AS", "Norwegian Broker AS", "Nøtterø Sparebank 1", "Obos ", "Postbanken", "Protector Forsikring ASA", "Quality Broker AS", "Rein Forsikring", "Renault Forsikring", "Rygge-Vaaler Sparebank", "Sandnes Sparebank", "Smart Club Forsikring", "SpareBank 1 Fredrikstad", "SpareBank 1 Gran", "SpareBank 1 Gudbrandsdal", "SpareBank 1 Hallingdal", "Sparebank 1 Bergen", "Sparebank 1 Drammen", "Sparebank 1 Eksterne Partnere", "Sparebank 1 Grenland", "Sparebank 1 Hedmark", "Sparebank 1 Jevnaker", "Sparebank 1 Kongsberg", "Sparebank 1 Lunner", "Sparebank 1 Midt-Norge", "Sparebank 1 Moss", "Sparebank 1 Nittedal", "Sparebank 1 Nord-Norge", "Sparebank 1 Nordvest", "Sparebank 1 Oslo", "Sparebank 1 Ringerike", "Sparebank 1 RomsdalsFellesbank", "Sparebank 1 Rygge", "Sparebank 1 Råde", "Sparebank 1 SR-bank", "Sparebank 1 Soon", "Sparebank 1 Telemark", "Sparebank 1 Valdres", "Sparebank 1 Vestby", "Sparebank 1 Vestfold", "Sparebank 1 Volda Ørsta", "Sparebank 1 Våler", "Sparebanken Vest", "Storebrand", "Tennant Forsikring", "Terra Skadeforsikring AS", "Toyota Forsikring - AIOI", "Troll Forsikring", "Tryg Forsikring", "Unison forsikring", "Vardia Forsikring", "Volvia Forsikring", "Watercircles Norge AS", "White Label Insurance AS", "Winterbergh Forsikring", "YA BANK AS"]
       },
       "policyNumber": {
         "required": true,
@@ -59,11 +59,12 @@
         "format": "date"
       },
       "bonusFromCompany": {
-        "type": "string"
+        "type": "string",
+        "enum": ["AIG Europe", "Agria Dyreforsikring", "Annet Norsk selskap", "Atlantica Båtforsikring", "Bluewater Insurance ASA", "Codan", "DNB Skadeforsikring", "Dancia Pensjon", "Duborgh Forsikring", "Eika Forsikring", "Enter Forsikring AS", "Europeiske Reiseforsikring ", "Fjaler Sparebank", "Forsikring fra Norske Boligbyggelag", "Frende Skadeforsikring AS", "Frisk Forsikring", "GS Banken", "Gjensidige", "Gouda Reiseforsikring", "Halden Sparebank 1", "Helgeland Sparebank", "Hjartdal og Gransherad Sparebank", "IF Skadeforsikring", "Interhannover/ White Labell Insurance ASA", "Jernbanepers. bank og forsikring", "KLP Skadeforsikring", "Kollektivtrafikkens Personellservice BA", "Kristen Norges Innkjøpsfellesskap", "Kvinnherad Sparebank", "Landbruksforsikring", "Lederenes private skadeforsikringer", "Lom og Skjåk Sparebank", "Maskinentreprenørenes Forbund", "Modum SpareBank 1", "Møretrygd Gjensidig Forsikring", "NAF Forsikring", "NEMI Forsikring ASA", "Nordic Insurance", "Norsk Familieøkonomi", "Norsk Hussopp Forsikring Gjensidig", "Norsk Privatforsikring", "Norsk Sykepleierforbund", "Norske Sjø AS", "Norwegian Broker AS", "Nøtterø Sparebank 1", "Obos ", "Postbanken", "Protector Forsikring ASA", "Quality Broker AS", "Rein Forsikring", "Renault Forsikring", "Rygge-Vaaler Sparebank", "Sandnes Sparebank", "Smart Club Forsikring", "SpareBank 1 Fredrikstad", "SpareBank 1 Gran", "SpareBank 1 Gudbrandsdal", "SpareBank 1 Hallingdal", "Sparebank 1 Bergen", "Sparebank 1 Drammen", "Sparebank 1 Eksterne Partnere", "Sparebank 1 Grenland", "Sparebank 1 Hedmark", "Sparebank 1 Jevnaker", "Sparebank 1 Kongsberg", "Sparebank 1 Lunner", "Sparebank 1 Midt-Norge", "Sparebank 1 Moss", "Sparebank 1 Nittedal", "Sparebank 1 Nord-Norge", "Sparebank 1 Nordvest", "Sparebank 1 Oslo", "Sparebank 1 Ringerike", "Sparebank 1 RomsdalsFellesbank", "Sparebank 1 Rygge", "Sparebank 1 Råde", "Sparebank 1 SR-bank", "Sparebank 1 Soon", "Sparebank 1 Telemark", "Sparebank 1 Valdres", "Sparebank 1 Vestby", "Sparebank 1 Vestfold", "Sparebank 1 Volda Ørsta", "Sparebank 1 Våler", "Sparebanken Vest", "Storebrand", "Tennant Forsikring", "Terra Skadeforsikring AS", "Toyota Forsikring - AIOI", "Troll Forsikring", "Tryg Forsikring", "Unison forsikring", "Vardia Forsikring", "Volvia Forsikring", "Watercircles Norge AS", "White Label Insurance AS", "Winterbergh Forsikring", "YA BANK AS"]
       },
       "bonusCarNumber": {
         "type": "string",
-        "pattern": "\\w{2}\\d{5}"
+        "pattern": "^[a-zA-Z]{2}\\d{5}$"
       }
     }
   },
@@ -74,12 +75,8 @@
       "type": "fieldset",
       "items": [
         {
-          "key": "ssn",
-          "title": "ssn",
-          "placeholder": "ssn"
-        },
-        {
           "key": "carNumber",
+          "validationMessage": "Vennligst oppgi bilnummer i riktig format, eks: AD12345",
           "title": "Bilnummer",
           "type": "string",
           "placeholder": "Bilnummer"
@@ -120,7 +117,15 @@
           ]
         },
         {
+          "type": "hidden",
+          "key": "hidden_needHelpToMove",
+          "conditionalKey": "needHelpToMove",
+          "conditionalValue": false,
+          "validationMessage": "Du haroppgitt en bonus høyere enn 20 %. Hvillken bil og hvilket forsikringsselskap skal bonusen overføres fra?"
+        },
+        {
           "key": "distance",
+          "validationMessage": "Ugyldig verdi for kilometerstand. Vennligst bruk et gyldig tall for kilometerstanden",
           "type": "string",
           "title": "Kilometerstand",
           "placeholder": "Kilometerstand"
@@ -142,11 +147,7 @@
             {
               "key": "companyYouMoveFrom",
               "type": "select",
-              "title": "Angi selskap du flytter fra.",
-              "titleMap": {
-                "AIG EUROPE": "AIG EUROPE",
-                "CODAN": "CODAN"
-              }
+              "title": "Angi selskap du flytter fra."
             },
             {
               "key": "policyNumber",
@@ -155,6 +156,7 @@
             },
             {
               "key": "insuranceRegisteredToYou",
+              "validationMessage": "Vennligst oppgi om forsikringen i nåværende er registrert i ditt navn",
               "type": "radios",
               "title": "Er forsikringen i nåværende selskap registrert i ditt navn?",
               "titleMap": [
@@ -190,6 +192,7 @@
               "items": [
                 {
                   "key": "dateInOtherCompany",
+                  "validationMessage": "Vennligst fyll inn dato for oppsigelse i annet selskap",
                   "title": "Dato for forfall i annet forsikringsselskap"
                 }
               ]
@@ -204,24 +207,17 @@
             {
               "key": "bonusFromCompany",
               "type": "select",
-              "title": "Angi selskap vi skal hente bonus fra.",
-              "titleMap": {
-                "AIG EUROPE": "AIG EUROPE",
-                "CODAN": "CODAN"
-              }
+              "validationMessage": "Vennligst oppgi hvilke forsikringsselskap bonusen skal overføres fra.",
+              "title": "Angi selskap vi skal hente bonus fra."
             },
             {
               "key": "bonusCarNumber",
+              "validationMessage": "Vennligst oppgi bilnummer i riktig format, eks: AD12345",
               "title": "Bilnummer",
               "type": "string",
               "placeholder": "Bilnummer"
             }
           ]
-        },
-        {
-          "type": "submit",
-          "title": "finish",
-          "style": "stb-btn"
         }
       ]
     }

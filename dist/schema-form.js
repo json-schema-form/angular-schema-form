@@ -255,12 +255,19 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               if (scope.form.secondConditionalKey) {
                 show = show && (scope.model[scope.form.secondConditionalKey] === scope.form.secondConditionalValue);
               }
-              angular.forEach(scope.form.items, function (item) {
-                if (!angular.isUndefined(item.required)) {
-                  item.required = show;
-                  item.schema.required = show;
+              if (scope.form.items) {
+                angular.forEach(scope.form.items, function (item) {
+                  if (!angular.isUndefined(item.required)) {
+                    item.required = show;
+                    item.schema.required = show;
+                  }
+                });
+              } else {
+                if (!angular.isUndefined(scope.form.required)) {
+                  scope.form.required = show;
+                  scope.form.schema.required = show;
                 }
-              });
+              }
 
               return show;
             };

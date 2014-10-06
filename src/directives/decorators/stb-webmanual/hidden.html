@@ -1,0 +1,10 @@
+<div class="stb-form-group has-error" ng-show="showCondition()">
+    <div class="help-block" ng-bind-html="form.validationMessage"></div>
+    <input type="hidden"
+           sf-changed="form"
+           ng-model="$$value$$"
+           ng-model-options="form.ngModelOptions"
+           schema-validate="form"
+           class="stb-checkbox"
+           id="{{form.id}}">
+</div>
