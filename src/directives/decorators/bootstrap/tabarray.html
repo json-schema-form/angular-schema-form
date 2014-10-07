@@ -19,7 +19,7 @@
     </ul>
   </div>
 
-  <div ng-class="{'col-xs-9': !form.tabsType || form.tabsType === 'left' || form.tabsType === 'right'}">
+  <div ng-class="{'col-xs-9': !form.tabType || form.tabType === 'left' || form.tabType === 'right'}">
     <div class="tab-content">
       <div class="tab-pane clearfix"
            ng-repeat="item in modelArray track by $index"
