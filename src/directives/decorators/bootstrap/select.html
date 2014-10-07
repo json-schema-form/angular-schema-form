@@ -1,7 +1,5 @@
 <div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false}">
-  <label class="control-label" ng-show="showTitle()">
-    {{form.title}}
-  </label>
+  <label class="control-label" ng-show="showTitle()" ng-bind="form.title"></label>
   <select ng-model="$$value$$"
           ng-model-options="form.ngModelOptions"
           sf-changed="form"

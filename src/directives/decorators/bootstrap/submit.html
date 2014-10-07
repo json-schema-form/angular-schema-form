@@ -1,10 +1,12 @@
 <div class="form-group">
   <input type="submit"
-         class="btn {{ form.style || 'btn-primary' }}"
-         value="{{form.title}}"
+         class="btn"
+         ng-class="form.style || 'btn-primary'"
+         ng-value="form.title"
          ng-if="form.type === 'submit'">
-  <button class="btn {{ form.style || 'btn-default' }}"
+  <button class="btn"
+          ng-class="form.style || 'btn-default'"
           type="button"
           ng-click="buttonClick($event,form)"
-          ng-if="form.type !== 'submit'">{{form.title}}</button>
+          ng-if="form.type !== 'submit'" ng-bind="form.title"></button>
 </div>
