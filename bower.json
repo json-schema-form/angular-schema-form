@@ -40,7 +40,7 @@
     "moment": "~2.8.3"
   },
   "devDependencies": {
-    "stb-webmanual": "ssh://git@github.com/storebrand/storebrand.ny.git",
+    "stb-webmanual": "ssh://git@github.com/storebrand/storebrand.ny.git#master",
     "angular-ui-ace": "bower",
     "jquery": "~2.1.1",
     "angular-mocks": ">= 1.2",
