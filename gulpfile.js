@@ -122,7 +122,6 @@ gulp.task('jscs', function() {
 });
 
 gulp.task('default', [
-  'test',
   'minify',
   'bootstrap-datepicker',
   'stb-webmanual',

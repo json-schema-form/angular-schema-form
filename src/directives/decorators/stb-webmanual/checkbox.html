@@ -1,6 +1,18 @@
 <div class="stb-form-group al checkbox" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
 
-  <div class="help-block" ng-show="(hasError() && errorMessage(schemaError())) || form.description" ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
+    <div class="help-block info-message"
+         ng-show="form.description && !hasError()"
+         ng-bind-html="form.description"
+         ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
+    </div>
+    <div class="help-block info-message has-error"
+         ng-show="(hasError() && errorMessage(schemaError()))">
+        <small class="help-block">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+        </small>
+    </div>
+
     <div  ng-click="clickCheckbox($event)">
         <input type="checkbox"
                sf-changed="form"
@@ -11,4 +23,7 @@
                id="{{form.id}}">
         <label for="{{form.id}}" class="stb-custom-input" ng-bind-html="form.title"></label>
     </div>
+
+    <i class="form-control-feedback glyphicon"
+       ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}" style="top: 8px"></i>
 </div>

@@ -1,30 +1,36 @@
-<div class="form-group stb-form-group al has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
-  <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
+<div class="form-group stb-form-group al has-feedback"
+     ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+    <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
 
-   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
-   <div class="input-group date datePicker">
+    <div class="help-block info-message"
+         ng-show="form.description && !hasError()"
+         ng-bind-html="form.description"
+         ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
+    </div>
+    <div class="help-block info-message has-error"
+         ng-show="(hasError() && errorMessage(schemaError()))">
+        <small class="help-block">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+        </small>
+    </div>
 
-       <input ng-show="form.key"
-              style="background-color: white"
-              type="text"
-              class="form-control"
-              schema-validate="form"
-              ng-model="$$value$$"
-              stb-datepicker
-              min-date="form.minDate"
-              max-date="form.maxDate" />
+    <div class="input-group date datePicker">
+
+        <input ng-show="form.key"
+               style="background-color: white"
+               type="text"
+               class="form-control"
+               schema-validate="form"
+               ng-model="$$value$$"
+               stb-datepicker
+               min-date="form.minDate"
+               max-date="form.maxDate"/>
               <span class="input-group-addon">
                   <span class="glyphicon-calendar glyphicon"></span>
               </span>
-   </div>
-    <i class="form-control-feedback glyphicon" ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}"></i>
+    </div>
+    <i class="form-control-feedback glyphicon" ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}"
+       style="top: 0px"></i>
 
 </div>
-<style>
-    .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next {
-        border-bottom: none;
-    }
-    .input-group.date {
-        width: 50%;
-    }
-</style>

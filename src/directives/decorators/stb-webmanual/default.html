@@ -1,16 +1,26 @@
-<div class="form-group stb-form-group al has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
-  <label class="control-label" ng-show="showTitle()">{{form.title}}</label>{{form.subtitle}}
-
-      <div class="help-block info-message"
-           ng-show="(hasError() && errorMessage(schemaError())) || form.description"
-           ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
-      <input ng-show="form.key"
-             type="{{form.type}}"
-             sf-changed="form"
-             placeholder="{{form.placeholder}}"
-             class="form-control"
-             ng-model-options="form.ngModelOptions"
-             ng-model="$$value$$"
-             schema-validate="form">
-    <i class="form-control-feedback glyphicon" ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}"></i>
+<label class="control-label" ng-show="showTitle()">{{form.title}}</label>{{form.subtitle}}
+<div class="help-block info-message"
+     ng-show="form.description && !hasError()"
+     ng-bind-html="form.description"
+     ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
+</div>
+<div class="help-block info-message has-error"
+     ng-show="(hasError() && errorMessage(schemaError()))">
+    <small class="help-block">
+        <span class="glyphicon glyphicon-exclamation-sign"></span>
+        <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+    </small>
+</div>
+<div class="form-group stb-form-group al has-feedback"
+     ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
+    <input ng-show="form.key"
+           type="{{form.type}}"
+           sf-changed="form"
+           placeholder="{{form.placeholder}}"
+           class="form-control"
+           ng-model-options="form.ngModelOptions"
+           ng-model="$$value$$"
+           schema-validate="form">
+    <i class="form-control-feedback glyphicon"
+       ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}" style="top: 0px"></i>
 </div>
