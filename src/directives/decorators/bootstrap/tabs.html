@@ -3,7 +3,7 @@
     <li ng-repeat="tab in form.tabs"
         ng-click="$event.preventDefault() || (selected.tab = $index)"
         ng-class="{active: selected.tab === $index}">
-        <a href="#" ng-bind="tab.title"></a>
+        <a href="#">{{ tab.title }}</a>
     </li>
   </ul>
 

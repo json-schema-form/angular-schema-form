@@ -1,11 +1,10 @@
 <div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
-  <label class="control-label" ng-show="showTitle()" ng-bind="form.title"></label>
+  <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
 
   <input ng-show="form.key"
-         sf-default-input
-         sf-type="form.type"
-         sf-placeholder="form.placeholder"
+         type="{{form.type}}"
          sf-changed="form"
+         placeholder="{{form.placeholder}}"
          class="form-control"
          ng-model-options="form.ngModelOptions"
          ng-model="$$value$$"
