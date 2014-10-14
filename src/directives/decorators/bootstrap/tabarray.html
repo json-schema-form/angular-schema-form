@@ -8,12 +8,12 @@
       <li ng-repeat="item in modelArray track by $index"
           ng-click="$event.preventDefault() || (selected.tab = $index)"
           ng-class="{active: selected.tab === $index}">
-          <a href="#" ng-bind="evalExpr(form.title,{'$index':$index, value: item}) || $index"></a>
+          <a href="#">{{evalExpr(form.title,{'$index':$index, value: item}) || $index}}</a>
       </li>
       <li ng-click="$event.preventDefault() || (selected.tab = appendToArray().length - 1)">
         <a href="#">
           <i class="glyphicon glyphicon-plus"></i>
-          <span ng-bind="form.add || 'Add'"></span>
+          {{ form.add || 'Add'}}
           </a>
       </li>
     </ul>
@@ -30,10 +30,9 @@
 
            <button ng-click="selected.tab = deleteFromArray($index).length - 1"
                    type="button"
-                   class="btn pull-right"
-                   ng-class="form.style.remove || 'btn-default'">
+                   class="btn {{ form.style.remove || 'btn-default' }} pull-right">
              <i class="glyphicon glyphicon-trash"></i>
-             <span ng-bind="form.remove || 'Remove'"></span>
+             {{ form.remove || 'Remove'}}
            </button>
       </div>
     </div>
@@ -45,12 +44,12 @@
       <li ng-repeat="item in modelArray track by $index"
           ng-click="$event.preventDefault() || (selected.tab = $index)"
           ng-class="{active: selected.tab === $index}">
-          <a href="#" ng-bind="evalExpr(form.title,{'$index':$index, value: item}) || $index"></a>
+          <a href="#">{{evalExpr(form.title,{'$index':$index, value: item}) || $index}}</a>
       </li>
       <li ng-click="$event.preventDefault() || appendToArray()">
         <a href="#">
           <i class="glyphicon glyphicon-plus"></i>
-          <span ng-bind="form.add || 'Add'"></span>
+          {{ form.add || 'Add'}}
           </a>
       </li>
     </ul>

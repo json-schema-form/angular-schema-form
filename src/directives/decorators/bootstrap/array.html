@@ -1,5 +1,5 @@
 <div sf-array="form" ng-model="$$value$$" ng-model-options="form.ngModelOptions">
-  <h3 ng-show="form.title && form.notitle !== true" ng-bind="form.title"></h3>
+  <h3 ng-show="form.title && form.notitle !== true">{{ form.title }}</h3>
   <ol class="list-group" ng-model="modelArray" ui-sortable>
     <li class="list-group-item" ng-repeat="item in modelArray track by $index">
       <button ng-click="deleteFromArray($index)"
@@ -13,9 +13,9 @@
   <div class="clearfix" style="padding: 15px;">
     <button ng-click="appendToArray()"
             type="button"
-            class="btn pull-right" ng-class="form.style.add || 'btn-default'">
+            class="btn {{ form.style.add || 'btn-default' }} pull-right">
       <i class="glyphicon glyphicon-plus"></i>
-      <span ng-bind="form.add || 'Add'"></span>
+      {{ form.add || 'Add'}}
     </button>
   </div>
   <div class="help-block"

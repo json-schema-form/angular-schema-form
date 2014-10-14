@@ -1,5 +1,5 @@
 <div sf-array="form" ng-model="$$value$$" class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
-  <label class="control-label" ng-show="showTitle()" ng-bind="form.title"></label>
+  <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
   <div class="checkbox" ng-repeat="val in titleMapValues track by $index" >
     <label>
       <input type="checkbox"
