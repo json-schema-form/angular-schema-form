@@ -46,7 +46,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     input: base + 'default.html',
     radios: base + 'radios.html',
     'radios-inline': base + 'radios-inline.html',
-    radiobuttons: base + 'radio-buttons.html',
+    radiobuttons: base + 'radio-buttons.html'
   });
 
 }]).directive('sfFieldset', function() {
