@@ -186,7 +186,7 @@ angular.module('schemaForm').provider('schemaForm',
       options.lookup[sfPathProvider.stringify(options.path)] = f;
 
       var required = schema.required &&
-                     schema.required.indexOf(options.path(options.path.length - 1)) !== -1;
+                     schema.required.indexOf(options.path[options.path.length - 1]) !== -1;
 
       // The default is to always just create one child. This works since if the
       // schemas items declaration is of type: "object" then we get a fieldset.
