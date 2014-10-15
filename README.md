@@ -142,6 +142,8 @@ can find them here with usage instructions:
   * [https://github.com/Textalk/angular-schema-form-datepicker](https://github.com/Textalk/angular-schema-form-datepicker)
   * [https://github.com/Textalk/angular-schema-form-colorpicker](https://github.com/Textalk/angular-schema-form-colorpicker)
 
+Your can also [create your own add-ons.](docs/extending.md)
+
 Building
 --------
 The files in the `dist/` folder, plus dependencies, are all you need to use Schema Form. But if you'd like to build it yourself, we use [gulp](http://gulpjs.com/).
@@ -180,7 +182,10 @@ $ karma start karma.conf.js
 Contributing
 ------------
 
-All contributions are welcome! We're trying to use
+All contributions are welcome! If its a new field type consider making it an add-on instead,
+especially if it has dependecies. See [extending Schema Form documentation.](docs/extending.md)
+
+We're trying to use
 [git flow](http://danielkummer.github.io/git-flow-cheatsheet/), so please base any merge request
 on the **development** branch instead of **master**.
 

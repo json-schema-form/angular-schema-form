@@ -23,11 +23,11 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     help: base + 'help.html',
     'default': base + 'default.html'
   }, [
-    function(form) {
-      if (form.readonly && form.key && form.type !== 'fieldset') {
-        return base + 'readonly.html';
-      }
-    }
+    // function(form) {
+    //   if (form.readonly && form.key && form.type !== 'fieldset') {
+    //     return base + 'readonly.html';
+    //   }
+    // }
   ]);
 
   //manual use directives

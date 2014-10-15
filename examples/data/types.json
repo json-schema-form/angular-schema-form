@@ -1,0 +1,25 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Types",
+    "properties": {
+      "string":  {
+        "type": "string",
+        "minLength": 3
+      },
+      "integer":  {
+        "type": "integer"
+      },
+      "number":  {
+        "type": "number"
+      },
+      "boolean":  {
+        "type": "boolean"
+      }
+    },
+    "required": ["number"]
+  },
+  "form": [
+    "*"
+  ]
+}
