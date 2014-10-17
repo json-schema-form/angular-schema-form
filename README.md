@@ -7,25 +7,31 @@ Angular Schema Form
 
 Generate forms from JSON schemas using AngularJS!
 
-### [Try out the example page](http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html)
+Demo Time!
+----------
+[Try out the example page](http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html).
 Try editing the schema or form definition and see what comes out!
 
 What is it?
 ----------
 
-Schema Form is a set of AngularJS directives (and a couple of services). It can do two things to make life easier:
+Schema Form is a set of AngularJS directives (and a couple of services). It can do two things to
+make life easier:
 
 1. Create a form directly from a JSON schema.
 2. Validate form fields against that same JSON schema.
 
-Schema Form uses convention over configuration, so it comes packaged with some sensible defaults. But you can always customize it by changing the order and types of form fields.
+Schema Form uses convention over configuration, so it comes packaged with some sensible defaults.
+But you can always customize it by changing the order and types of form fields.
 
-JSON Form
----------
-Schema Form is inspired by the nice [JSON Form](https://github.com/joshfire/jsonform) library and aims to be roughly compatible with it, especially its form definition. So what sets Schema Form apart from JSON Form?
+#### JSON Form
+Schema Form is inspired by the nice [JSON Form](https://github.com/joshfire/jsonform) library and
+aims to be roughly compatible with it, especially its form definition. So what sets Schema Form
+apart from JSON Form?
 
 1. Schema Form integrates deeply with AngularJS and uses AngularJS conventions to handle forms.
-2. Schema Form uses [tv4](https://github.com/geraintluff/tv4) for validation, making it compatible with version 4 of the JSON schema standard.
+2. Schema Form uses [tv4](https://github.com/geraintluff/tv4) for validation, making it compatible
+   with version 4 of the JSON schema standard.
 3. By default, Schema Form generates Bootstrap 3-friendly HTML.
 
 
@@ -35,7 +41,8 @@ Basic Usage
 First, expose your schema, form, and model to the $scope.
 
 ```javascript
-function FormController($scope) {
+angular.module('myModule', ['schemaForm'])
+       .controller('FormController', function($scope) {
   $scope.schema = {
     type: "object",
     properties: {
@@ -56,7 +63,7 @@ function FormController($scope) {
   ];
 
   $scope.model = {};
-}
+});
 ```
 
 Then load them into Schema Form using the `sfSchema`, `sfForm`, and `sfModel` directives.
@@ -67,11 +74,6 @@ Then load them into Schema Form using the `sfSchema`, `sfForm`, and `sfModel` di
 </div>
 ```
 
-When you are done downloading all the [dependecies](#dependencies) and project files the only remaining part is to add dependencies on the `'schemaForm'` AngularJS module:
-
-```javascript
-angular.module('myModule', ['schemaForm']);
-```
 
 Documentation
 -------------
@@ -137,22 +139,45 @@ also needs to be loaded *before* Schema Form.
 <script type="text/javascript" src="bower_components/angular-schema-form/dist/bootstrap-decorator.min.js"></script>
 ```
 
+### Module loading
+Don't forget to load the `schemaForm` module or nothing will happen.
+
+```javascript
+angular.module('myModule', ['schemaForm']);
+```
 
 Add-ons
 ------
-There is currently two add-ons, a date picker and a colorpicker. They have their own repos and you
-can find them here with usage instructions:
+There is currently three add-ons, a date picker, a colorpicker and the wysiwyg html editor tinymce.
+They have their own repos and you can find them here with usage instructions:
 
   * [https://github.com/Textalk/angular-schema-form-datepicker](https://github.com/Textalk/angular-schema-form-datepicker)
   * [https://github.com/Textalk/angular-schema-form-colorpicker](https://github.com/Textalk/angular-schema-form-colorpicker)
+  * [https://github.com/Textalk/angular-schema-form-tinymce](https://github.com/Textalk/angular-schema-form-tinymce)
 
-Your can also [create your own add-ons.](docs/extending.md)
+Your can also [create your own add-ons!](docs/extending.md)
+
+Contributing
+------------
+
+All contributions are welcome! If its a new field type consider making it an add-on instead,
+especially if it has dependecies. See [extending Schema Form documentation.](docs/extending.md)
+
+We're trying to use
+[git flow](http://danielkummer.github.io/git-flow-cheatsheet/), *so please base any merge request on the **development** branch instead of **master**.*
+
+Also run any code through the code style checker [jscs](https://github.com/mdevils/node-jscs)
+(or even better use it in your editor) with preset set to `google`. You can also us `gulp jscs` to
+check your code.
+
 
 Building
 --------
-The files in the `dist/` folder, plus dependencies, are all you need to use Schema Form. But if you'd like to build it yourself, we use [gulp](http://gulpjs.com/).
+The files in the `dist/` folder, plus dependencies, are all you need to use Schema Form. But if
+you'd like to build it yourself, we use [gulp](http://gulpjs.com/).
 
-First off, you need to have nodejs installed. Then install all dev dependencies of the project with npm, install gulp and run the default task.
+First off, you need to have nodejs installed. Then install all dev dependencies of the
+project with npm, install gulp and run the default task.
 
 ```bash
 $ npm install
@@ -161,13 +186,17 @@ $ bower install
 $ gulp
 ```
 
-The default task uses [gulp-angular-templatecache](https://github.com/miickel/gulp-angular-templatecache) to compile all html templates to js and then concatenates and minifies them with the rest of the sources.
+The default task uses
+[gulp-angular-templatecache](https://github.com/miickel/gulp-angular-templatecache) to compile all
+html templates to js and then concatenates and minifies them with the rest of the sources.
 
 You can also run `gulp watch` to have it rebuild on change.
 
 Tests
 -----
-Unit tests are run with [karma](http://karma-runner.github.io) and written using [mocha](http://visionmedia.github.io/mocha/), [chai](http://chaijs.com/) and [sinon](http://sinonjs.org/)
+Unit tests are run with [karma](http://karma-runner.github.io) and written using
+[mocha](http://visionmedia.github.io/mocha/), [chai](http://chaijs.com/) and
+[sinon](http://sinonjs.org/)
 
 To run the tests:
 
@@ -182,17 +211,3 @@ $ bower install
 $ sudo npm install -g karma-cli
 $ karma start karma.conf.js
 ```
-
-Contributing
-------------
-
-All contributions are welcome! If its a new field type consider making it an add-on instead,
-especially if it has dependecies. See [extending Schema Form documentation.](docs/extending.md)
-
-We're trying to use
-[git flow](http://danielkummer.github.io/git-flow-cheatsheet/), so please base any merge request
-on the **development** branch instead of **master**.
-
-Also run any code through the code style checker [jscs](https://github.com/mdevils/node-jscs)
-(or even better use it in your editor) with preset set to `google`. You can also us `gulp jscs` to
-check your code.
