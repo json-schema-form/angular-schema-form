@@ -1,3 +1,16 @@
+v0.7.4
+------
+ * bower.json fixes, thanks @mike-marcacci, @morrislaptop
+ * Updated docs with a part on extending angular schema form.
+ * The example now includes the tinymce add on (https://github.com/Textalk/angular-schema-form-tinymce)
+ * @cameronprattedwards split the gulp tasks and tests into manageble files.
+ * Fixed validation bugs with numbers and dates, this also got validation working in Angular 1.3.0
+ * Placeholder on textarea
+ * step="any" so a HTML5 input doesn't default to 1 and break float validation
+ * Allow for a pre-existing layout where fields will be inserted, thanks @ebrehault
+   Docs are missing but lock at PR #112.
+ * Better "readonly" support, thanks @mike-marcacci! 
+
 v0.7.3
 ------
  * Fix for regression in enum order in selects, thanks @adamschwartz
