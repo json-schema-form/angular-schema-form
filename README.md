@@ -67,7 +67,11 @@ Then load them into Schema Form using the `sfSchema`, `sfForm`, and `sfModel` di
 </div>
 ```
 
+When you are done downloading all the [dependecies](#dependencies) and project files the only remaining part is to add dependencies on the `'schemaForm'` AngularJS module:
 
+```javascript
+angular.module('myModule', ['schemaForm']);
+```
 
 Documentation
 -------------
