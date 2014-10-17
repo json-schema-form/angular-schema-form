@@ -5,6 +5,8 @@
       "carNumber": {
         "type": "string",
         "required": true,
+        "category": "health",
+        "visibility": false,
         "pattern": "^[A-Z]{2}\\d{5}$"
       },
       "isNumberRegional": {
@@ -76,6 +78,7 @@
       "items": [
         {
           "key": "carNumber",
+          "disabled": true,
           "validationMessage": "Vennligst oppgi bilnummer i riktig format, eks: AD12345",
           "title": "Bilnummer",
           "type": "string",
@@ -125,6 +128,7 @@
         },
         {
           "key": "distance",
+          "disabled": false,
           "validationMessage": "Ugyldig verdi for kilometerstand. Vennligst bruk et gyldig tall for kilometerstanden",
           "type": "string",
           "title": "Kilometerstand",
