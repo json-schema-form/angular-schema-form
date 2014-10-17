@@ -1,4 +1,4 @@
-angular.module("schemaForm").run(["$templateCache", function($templateCache) {$templateCache.put("directives/decorators/bootstrap/datepicker/datepicker.html","<div class=\"form-group\" ng-class=\"{\'has-error\': hasError()}\">\n  <label class=\"control-label\" ng-show=\"showTitle()\">{{form.title}}</label>\n\n  <input ng-show=\"form.key\"\n         style=\"background-color: white\"\n         type=\"text\"\n         class=\"form-control\"\n         schema-validate=\"form\"\n         ng-model=\"$$value$$\"\n         pick-a-date\n         min-date=\"form.minDate\"\n         max-date=\"form.maxDate\" />\n\n  <span class=\"help-block\">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>\n</div>\n");}]);
+angular.module("schemaForm").run(["$templateCache", function($templateCache) {$templateCache.put("directives/decorators/bootstrap/datepicker/datepicker.html","<div class=\"form-group\" ng-class=\"{\'has-error\': hasError()}\">\n  <label class=\"control-label\" ng-show=\"showTitle()\">{{form.title}}</label>\n\n  <input ng-show=\"form.key\"\n         style=\"background-color: white\"\n         type=\"text\"\n         class=\"form-control\"\n         schema-validate=\"form\"\n         ng-model=\"$$value$$\"\n         pick-a-date\n         min-date=\"form.minDate\"\n         max-date=\"form.maxDate\"\n         format=\"form.format\" />\n\n  <span class=\"help-block\">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>\n</div>\n");}]);
 angular.module('schemaForm').directive('pickADate', function () {
 
   //String dates for min and max is not supported
@@ -18,7 +18,8 @@ angular.module('schemaForm').directive('pickADate', function () {
     scope: {
       ngModel: '=',
       minDate: '=',
-      maxDate: '='
+      maxDate: '=',
+      format: '='
     },
     link: function (scope, element, attrs, ngModel) {
       //Bail out gracefully if pickadate is not loaded.
@@ -53,15 +54,15 @@ angular.module('schemaForm').directive('pickADate', function () {
 
         //We set 'view' and 'highlight' instead of 'select'
         //since the latter also changes the input, which we do not want.
-        picker.set('view', value, {format: attrs.format || defaultFormat});
-        picker.set('highlight', value, {format: attrs.format || defaultFormat});
+        picker.set('view', value, {format: scope.format || defaultFormat});
+        picker.set('highlight', value, {format: scope.format || defaultFormat});
 
         //piggy back on highlight to and let pickadate do the transformation.
         return picker.get('highlight', viewFormat);
       });
 
       ngModel.$parsers.push(function() {
-        return picker.get('select', attrs.format || defaultFormat);
+        return picker.get('select', scope.format || defaultFormat);
       });
 
       //bind once.
@@ -91,7 +92,7 @@ angular.module('schemaForm').config(
   function(schemaFormProvider,  schemaFormDecoratorsProvider, sfPathProvider) {
 
     var datepicker = function(name, schema, options) {
-      if (schema.type === 'string' && schema.format === 'date') {
+      if (schema.type === 'string' && (schema.format === 'date' || schema.format === 'date-time')) {
         var f = schemaFormProvider.stdFormObj(name, schema, options);
         f.key  = options.path;
         f.type = 'datepicker';

@@ -13,7 +13,7 @@ The date picker add-on uses the excellent jQuery-based date picker,
 
 Dates in JSON Schema are of type *"string"* and follow the *RFC 3339* date fomat, which, in turn,
 follows *ISO 8601*. What does that mean for you? Basically, just stick with the format `yyyy-mm-dd`
-and you'll be fine.
+and you'll be fine (...but you can change it if you must).
 
 Within Schema Form, pickadate only supports dates - not times.
 
@@ -51,13 +51,14 @@ mapping.
 
 
 Form Type Options
--------
-The `datepicker` form type takes two options: `minDate` and `maxDate`. `minDate` and `maxDate` both
-accept one of the following as values:
+-----------------
+The `datepicker` form type takes two date range options: `minDate` and `maxDate`. `minDate` and `maxDate` both accept one of the following as values:
 
 1. A string in the format `yyyy-mm-dd`,
 2. A unix timestamp (as a Number), or
 3. An instance of `Date`
+
+It is also possible to set the date format using the `format` option, which is used to format the date stored by AngularJS, but note that in doing so you break the standard and other JSON Schema validators might complain. The view date displayed by pickadate is set by the translation files. see [Installation](#installation)
 
 Here's an example:
 
@@ -65,6 +66,7 @@ Here's an example:
 {
   key: "birthDate",
   minDate: "1900-01-01",
-  maxDate: new Date()
+  maxDate: new Date(),
+  format: "yyyy-mm-dd"
 }
 ```

@@ -3,7 +3,7 @@
   "main": [
     "bootstrap-datepicker.min.js"
   ],
-  "version": "0.1.1",
+  "version": "0.2.1",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>"
@@ -35,14 +35,13 @@
     "angular-mocks": ">= 1.2"
   },
   "homepage": "https://github.com/Textalk/angular-schema-form-datepicker",
-  "_release": "0.1.1",
+  "_release": "0.2.1",
   "_resolution": {
     "type": "version",
-    "tag": "0.1.1",
-    "commit": "25aad5a2d3dd5534658fd4eb62c2f2365aebef45"
+    "tag": "0.2.1",
+    "commit": "568f658f6c033fb6832ceb552a56c53ff7f645fd"
   },
   "_source": "git://github.com/Textalk/angular-schema-form-datepicker.git",
-  "_target": "0.1.1",
-  "_originalSource": "angular-schema-form-datepicker",
-  "_direct": true
+  "_target": ">= 0.1.0",
+  "_originalSource": "angular-schema-form-datepicker"
 }

@@ -43,6 +43,6 @@
     "commit": "e08f6c286be04455b0172a3ef358dadcfc0b6345"
   },
   "_source": "git://github.com/Textalk/angular-schema-form-colorpicker.git",
-  "_target": "~0.1.0",
+  "_target": ">= 0.1.0",
   "_originalSource": "angular-schema-form-colorpicker"
 }

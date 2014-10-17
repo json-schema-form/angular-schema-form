@@ -135,7 +135,8 @@ angular.module('ui.sortable', [])
               // the start and stop of repeat sections and sortable doesn't
               // respect their order (even if we cancel, the order of the
               // comments are still messed up).
-              if (hasSortingHelper(element, ui) && !ui.item.sortable.received) {
+              if (hasSortingHelper(element, ui) && !ui.item.sortable.received &&
+                  element.sortable( 'option', 'appendTo' ) === 'parent') {
                 // restore all the savedNodes except .ui-sortable-helper element
                 // (which is placed last). That way it will be garbage collected.
                 savedNodes = savedNodes.not(savedNodes.last());

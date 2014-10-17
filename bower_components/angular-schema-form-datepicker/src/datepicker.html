@@ -9,7 +9,8 @@
          ng-model="$$value$$"
          pick-a-date
          min-date="form.minDate"
-         max-date="form.maxDate" />
+         max-date="form.maxDate"
+         format="form.format" />
 
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
 </div>

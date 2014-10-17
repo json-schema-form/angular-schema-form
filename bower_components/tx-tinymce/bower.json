@@ -1,0 +1,30 @@
+{
+  "name": "tx-tinymce",
+  "version": "0.0.6",
+  "authors": [
+    "David Jensen <david.lgj@gmail.com>"
+  ],
+  "description": "AngularJS directive for TinyMCE",
+  "main": "tx-tinymce.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "angularjs",
+    "tinymce"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "composer.json",
+    "package.json",
+    "bower.json",
+    "gulpfile.js",
+    "example.html"
+  ],
+  "dependencies": {
+    "angular": ">= 1.2.0"
+  }
+}

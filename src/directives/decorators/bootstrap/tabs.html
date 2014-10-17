@@ -1,6 +1,7 @@
 <div ng-init="selected = { tab: 0 }">
   <ul class="nav nav-tabs" style="margin-bottom: 15px">
     <li ng-repeat="tab in form.tabs"
+        ng-disabled="form.readonly"
         ng-click="$event.preventDefault() || (selected.tab = $index)"
         ng-class="{active: selected.tab === $index}">
         <a href="#">{{ tab.title }}</a>
@@ -9,6 +10,7 @@
 
   <div class="tab-content">
     <div class="tab-pane"
+         ng-disabled="form.readonly"
          ng-repeat="tab in form.tabs"
          ng-show="selected.tab === $index"
          ng-class="{active: selected.tab === $index}">

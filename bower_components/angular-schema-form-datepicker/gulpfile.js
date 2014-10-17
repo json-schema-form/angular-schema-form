@@ -8,6 +8,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var streamqueue = require('streamqueue');
 var jscs = require('gulp-jscs');
+var plumber = require('gulp-plumber');
 
 gulp.task('minify', function() {
   var stream = streamqueue({objectMode: true});
@@ -51,6 +52,7 @@ gulp.task('non-minified-dist', function() {
 
 gulp.task('jscs', function() {
   gulp.src('./src/**/*.js')
+      .pipe(plumber())
       .pipe(jscs());
 });
 

@@ -1,7 +1,7 @@
 /*!
  * bootstrap-vertical-tabs - v1.1.0
  * https://dbtek.github.io/bootstrap-vertical-tabs
- * 2014-06-06
+ * 2014-07-24
  * Copyright (c) 2014 İsmail Demirbilek
  * License: MIT
  */
@@ -47,43 +47,43 @@
   border-radius: 0 4px 4px 0;
   margin-right: 0;
 }
-.vertical-text {
+.sideways {
   margin-top:50px;
   border: none;
   position: relative;
 }
-.vertical-text>li {
+.sideways>li {
   height: 20px;
   width: 120px;
   margin-bottom: 100px;
 }
-.vertical-text>li>a {
+.sideways>li>a {
   border-bottom: 1px solid #ddd;
   border-right-color: transparent;
   text-align: center;
   border-radius: 4px 4px 0px 0px;
 }
-.vertical-text>li.active>a,
-.vertical-text>li.active>a:hover,
-.vertical-text>li.active>a:focus {
+.sideways>li.active>a,
+.sideways>li.active>a:hover,
+.sideways>li.active>a:focus {
   border-bottom-color: transparent;
   border-right-color: #ddd;
   border-left-color: #ddd;
 }
-.vertical-text.tabs-left {
+.sideways.tabs-left {
   left: -50px;
 }
-.vertical-text.tabs-right {
+.sideways.tabs-right {
   right: -50px;
 }
-.vertical-text.tabs-right>li {
+.sideways.tabs-right>li {
   -webkit-transform: rotate(90deg);
   -moz-transform: rotate(90deg);
   -ms-transform: rotate(90deg);
   -o-transform: rotate(90deg);
   transform: rotate(90deg);
 }
-.vertical-text.tabs-left>li {
+.sideways.tabs-left>li {
   -webkit-transform: rotate(-90deg);
   -moz-transform: rotate(-90deg);
   -ms-transform: rotate(-90deg);

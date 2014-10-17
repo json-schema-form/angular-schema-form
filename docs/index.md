@@ -25,6 +25,7 @@ Documentation
     1. [array](#array)
     1. [tabarray](#tabarray)
 1. [Post process function](#post-process-function)
+1. [Extending Schema Form](extending.md)
 
 Basic Usage
 -----------
@@ -307,7 +308,10 @@ General options most field types can handle:
   validationMessage: "Oh noes, please write a proper address",  // A custom validation error message
   onChange: "valueChanged(form.key,modelValue)", // onChange event handler, expression or function
   feedback: false,             // Inline feedback icons
-  ngModelOptions: { ... }      // Passed along to ng-model-options
+  placeholder: "Input...",     // placeholder on inputs and textarea
+  ngModelOptions: { ... },     // Passed along to ng-model-options
+  readonly: true               // Same effect as readOnly in schema. Put on a fieldset or array
+                               // and their items will inherit it.
 }
 ```
 
