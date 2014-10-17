@@ -87,7 +87,8 @@
         {
           "key": "isNumberRegional",
           "type": "checkbox",
-          "title": "Har ikke bilen reg.nr?"
+          "title": "Har ikke bilen reg.nr?",
+          "emptyView": true
         },
         {
           "type": "condition",

@@ -21,7 +21,8 @@
                schema-validate="form"
                class="stb-checkbox"
                id="{{form.id}}">
-        <label for="{{form.id}}" class="stb-custom-input" ng-bind-html="form.title"></label>
+        <label for="{{form.id}}" class="stb-custom-input" ng-if="!form.emptyView" ng-bind-html="form.title"></label>
+        <label for="{{form.id}}" class="stb-custom-input" ng-if="form.emptyView" style="padding: 20px"></label>
     </div>
 
     <i class="form-control-feedback glyphicon"
