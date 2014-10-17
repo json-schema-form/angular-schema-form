@@ -1,3 +1,8 @@
+v0.7.5
+------
+ * Bracket notation for reserved words to make IE8 happier,thanks @jibwa
+ * Clarification of module loading in docs, thanks @CoderAjay
+
 v0.7.4
 ------
  * bower.json fixes, thanks @mike-marcacci, @morrislaptop
@@ -9,7 +14,7 @@ v0.7.4
  * step="any" so a HTML5 input doesn't default to 1 and break float validation
  * Allow for a pre-existing layout where fields will be inserted, thanks @ebrehault
    Docs are missing but lock at PR #112.
- * Better "readonly" support, thanks @mike-marcacci! 
+ * Better "readonly" support, thanks @mike-marcacci!
 
 v0.7.3
 ------
