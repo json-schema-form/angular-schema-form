@@ -31,9 +31,11 @@ Basic Usage
 -----------
 
 First, expose your schema, form, and model to the $scope.
+Don't forget to load the ``schemaForm` module.
 
 ```javascript
-function FormController($scope) {
+angular.module('myModule', ['schemaForm'])
+       .controller('FormController', function($scope) {
   $scope.schema = {
     type: "object",
     properties: {
