@@ -3,6 +3,7 @@
   <div class="checkbox" ng-repeat="val in titleMapValues track by $index" >
     <label>
       <input type="checkbox"
+             ng-disabled="form.readonly"
              sf-changed="form"
              ng-model="titleMapValues[$index]">
       <span ng-bind-html="form.titleMap[$index].name"></span>

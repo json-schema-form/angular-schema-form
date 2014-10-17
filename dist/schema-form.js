@@ -44,7 +44,7 @@ angular.module('schemaForm').provider('sfPath',
   this.parse = ObjectPath.parse;
   this.stringify = ObjectPath.stringify;
   this.normalize = ObjectPath.normalize;
-  this.$get = function () {
+  this.$get = function() {
     return ObjectPath;
   };
 }]);
@@ -55,7 +55,7 @@ angular.module('schemaForm').provider('sfPath',
  * @kind function
  *
  */
-angular.module('schemaForm').factory('sfSelect', ['sfPath', function (sfPath) {
+angular.module('schemaForm').factory('sfSelect', ['sfPath', function(sfPath) {
   var numRe = /^\d+$/;
 
   /**
@@ -271,7 +271,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   return scope.form.validationMessage[schemaError.code] ||
                          scope.form.validationMessage['default'];
                 } else {
-                  return scope.form.validationMessage.required ||
+                  return scope.form.validationMessage.number ||
                          scope.form.validationMessage['default'] ||
                          scope.form.validationMessage;
                 }
@@ -282,8 +282,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 return schemaError.message; //use tv4.js validation message
               }
 
-              //Otherwise we only use required so it must be it.
-              return 'Required';
+              //Otherwise we only have input number not being a number
+              return 'Not a number';
 
             };
           }
@@ -586,7 +586,6 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var fieldset = function(name, schema, options) {
-
     if (schema.type === 'object') {
       var f   = stdFormObj(name, schema, options);
       f.type  = 'fieldset';
@@ -626,7 +625,7 @@ angular.module('schemaForm').provider('schemaForm',
       options.lookup[sfPathProvider.stringify(options.path)] = f;
 
       var required = schema.required &&
-                     schema.required.indexOf(options.path(options.path.length - 1)) !== -1;
+                     schema.required.indexOf(options.path[options.path.length - 1]) !== -1;
 
       // The default is to always just create one child. This works since if the
       // schemas items declaration is of type: "object" then we get a fieldset.
@@ -640,7 +639,8 @@ angular.module('schemaForm').provider('schemaForm',
         path: arrPath,
         required: required || false,
         lookup: options.lookup,
-        ignore: options.ignore
+        ignore: options.ignore,
+        global: options.global
       })];
 
       return f;
@@ -720,23 +720,27 @@ angular.module('schemaForm').provider('schemaForm',
 
     var service = {};
 
-    service.merge = function(schema, form, ignore, options) {
+    service.merge = function(schema, form, ignore, options, readonly) {
       form  = form || ['*'];
       options = options || {};
 
+      // Get readonly from root object
+      readonly = readonly || schema.readonly || schema.readOnly;
+
       var stdForm = service.defaults(schema, ignore, options);
+
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf('*');
       if (idx !== -1) {
         form  = form.slice(0, idx)
                     .concat(stdForm.form)
                     .concat(form.slice(idx + 1));
-        return form;
       }
 
       //ok let's merge!
       //We look at the supplied form and extend it with schema standards
       var lookup = stdForm.lookup;
+
       return postProcessFn(form.map(function(obj) {
 
         //handle the shortcut with just a name
@@ -767,24 +771,30 @@ angular.module('schemaForm').provider('schemaForm',
           });
         }
 
+        //extend with std form from schema.
+
+        if (obj.key) {
+          var strid = sfPathProvider.stringify(obj.key);
+          if (lookup[strid]) {
+            obj = angular.extend(lookup[strid], obj);
+          }
+        }
+
+        // Are we inheriting readonly?
+        if (readonly === true) { // Inheriting false is not cool.
+          obj.readonly = true;
+        }
+
         //if it's a type with items, merge 'em!
         if (obj.items) {
-          obj.items = service.merge(schema, obj.items, ignore);
+          obj.items = service.merge(schema, obj.items, ignore, options, obj.readonly);
         }
 
         //if its has tabs, merge them also!
         if (obj.tabs) {
           angular.forEach(obj.tabs, function(tab) {
-            tab.items = service.merge(schema, tab.items, ignore);
+            tab.items = service.merge(schema, tab.items, ignore, options, obj.readonly);
           });
-        }
-
-        //extend with std form from schema.
-        if (obj.key) {
-          var str = sfPathProvider.stringify(obj.key);
-          if (lookup[str]) {
-            obj = angular.extend(lookup[str], obj);
-          }
         }
 
         // Special case: checkbox
@@ -893,26 +903,26 @@ angular.module('schemaForm').factory('sfValidator', [function() {
    * @return a tv4js result object.
    */
   validator.validate = function(form, value) {
-
+    if (!form) {
+      return {valid: true};
+    }
     var schema = form.schema;
 
     if (!schema) {
-      //Nothings to Validate
-      return value;
+      return {valid: true};
     }
 
-    //Type cast and validate against schema.
-    //Basic types of json schema sans array and object
-    if (schema.type === 'integer') {
-      value = parseInt(value, 10);
-    } else if (schema.type === 'number') {
-      value = parseFloat(value, 10);
-    } else if (schema.type === 'boolean' && typeof value === 'string') {
-      if (value === 'true') {
-        value = true;
-      } else if (value === 'false') {
-        value = false;
-      }
+    // Input of type text and textareas will give us a viewValue of ''
+    // when empty, this is a valid value in a schema and does not count as something
+    // that breaks validation of 'required'. But for our own sanity an empty field should
+    // not validate if it's required.
+    if (value === '') {
+      value = undefined;
+    }
+
+    // Numbers fields will give a null value, which also means empty field
+    if (form.type === 'number' && value === null) {
+      value = undefined;
     }
 
     // Version 4 of JSON Schema has the required property not on the
@@ -929,7 +939,6 @@ angular.module('schemaForm').factory('sfValidator', [function() {
     if (angular.isDefined(value)) {
       valueWrap[propName] = value;
     }
-
     return tv4.validateResult(valueWrap, wrap);
 
   };
@@ -985,8 +994,16 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             // section. Unless there is just one.
             var subForm = form.items[0];
             if (form.items.length > 1) {
-              subForm = {type: 'section', items: form.items};
+              subForm = {
+                type: 'section',
+                items: form.items.map(function(item){
+                  item.ngModelOptions = form.ngModelOptions;
+                  item.readonly = form.readonly;
+                  return item;
+                })
+              };
             }
+
           }
 
           // We ceate copies of the form on demand, caching them for
@@ -1259,16 +1276,27 @@ angular.module('schemaForm')
             //make the form available to decorators
             scope.schemaForm  = {form:  merged, schema: schema};
 
-            //Create directives from the form definition
-            angular.forEach(merged, function(obj, i) {
-              var n = document.createElement(attrs.sfDecoratorName ||
-                      snakeCase(schemaFormDecorators.defaultDecorator, '-'));
-              n.setAttribute('form', 'schemaForm.form[' + i + ']');
-              frag.appendChild(n);
-            });
-
             //clean all but pre existing html.
             element.children(':not(.schema-form-ignore)').remove();
+
+            //Create directives from the form definition
+            angular.forEach(merged,function(obj,i){
+              var n = document.createElement(attrs.sfDecorator || snakeCase(schemaFormDecorators.defaultDecorator,'-'));
+              n.setAttribute('form','schemaForm.form['+i+']');
+              var slot;
+              try {
+                slot = element[0].querySelector('*[sf-insert-field="' + obj.key + '"]');
+              } catch(err) {
+                // field insertion not supported for complex keys
+                slot = null;
+              }
+              if(slot) {
+                slot.innerHTML = "";
+                slot.appendChild(n);  
+              } else {
+                frag.appendChild(n);
+              }
+            });
 
             element[0].appendChild(frag);
 
@@ -1295,6 +1323,9 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
   return {
     restrict: 'A',
     scope: false,
+    // We want the link function to be *after* the input directives link function so we get access
+    // the parsed value, ex. a number instead of a string
+    priority: 1000,
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
       //Since we have scope false this is the same scope
@@ -1302,52 +1333,59 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
       scope.ngModel = ngModel;
 
       var error = null;
-      var form   = scope.$eval(attrs.schemaValidate);
-      // Validate against the schema.
-      var validate = function(viewValue) {
+
+      var getForm = function() {
         if (!form) {
           form = scope.$eval(attrs.schemaValidate);
         }
-
-        //Still might be undefined
-        if (!form) {
-          return viewValue;
-        }
-
-        // Is required is handled by ng-required?
-        if (angular.isDefined(attrs.ngRequired) && angular.isUndefined(viewValue)) {
-          return undefined;
-        }
-
-        // An empty field gives us the an empty string, which JSON schema
-        // happily accepts as a proper defined string, but an empty field
-        // for the user should trigger "required". So we set it to undefined.
-        if (viewValue === '') {
-          viewValue = undefined;
-        }
-
-        var result = sfValidator.validate(form, viewValue);
-
-        if (result.valid) {
-          // it is valid
-          ngModel.$setValidity('schema', true);
-          return viewValue;
-        } else {
-          // it is invalid, return undefined (no model update)
-          ngModel.$setValidity('schema', false);
-          error = result.error;
-          return undefined;
-        }
+        return form;
       };
+      var form   = getForm();
 
-      // Unshift onto parsers of the ng-model.
-      ngModel.$parsers.unshift(validate);
+      // Validate against the schema.
+
+      // Get in last of the parses so the parsed value has the correct type.
+      if (ngModel.$validators) { // Angular 1.3
+        ngModel.$validators.schema = function(value) {
+          var result = sfValidator.validate(getForm(), value);
+          error = result.error;
+          return result.valid;
+        };
+      } else {
+
+        // Angular 1.2
+        ngModel.$parsers.push(function(viewValue) {
+          form = getForm();
+          //Still might be undefined
+          if (!form) {
+            return viewValue;
+          }
+
+          var result =  sfValidator.validate(form, viewValue);
+
+          if (result.valid) {
+            // it is valid
+            ngModel.$setValidity('schema', true);
+            return viewValue;
+          } else {
+            // it is invalid, return undefined (no model update)
+            ngModel.$setValidity('schema', false);
+            error = result.error;
+            return undefined;
+          }
+        });
+      }
+
 
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function() {
 
-        if (ngModel.$commitViewValue) {
-          ngModel.$commitViewValue(true);
+        if (ngModel.$validate) {
+          ngModel.$validate();
+          if (ngModel.$invalid) { // The field must be made dirty so the error message is displayed
+            ngModel.$dirty = true;
+            ngModel.$pristine = false;
+          }
         } else {
           ngModel.$setViewValue(ngModel.$viewValue);
         }

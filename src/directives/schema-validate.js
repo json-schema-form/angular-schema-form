@@ -2,6 +2,9 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
   return {
     restrict: 'A',
     scope: false,
+    // We want the link function to be *after* the input directives link function so we get access
+    // the parsed value, ex. a number instead of a string
+    priority: 1000,
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
       //Since we have scope false this is the same scope
@@ -9,52 +12,59 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
       scope.ngModel = ngModel;
 
       var error = null;
-      var form   = scope.$eval(attrs.schemaValidate);
-      // Validate against the schema.
-      var validate = function(viewValue) {
+
+      var getForm = function() {
         if (!form) {
           form = scope.$eval(attrs.schemaValidate);
         }
-
-        //Still might be undefined
-        if (!form) {
-          return viewValue;
-        }
-
-        // Is required is handled by ng-required?
-        if (angular.isDefined(attrs.ngRequired) && angular.isUndefined(viewValue)) {
-          return undefined;
-        }
-
-        // An empty field gives us the an empty string, which JSON schema
-        // happily accepts as a proper defined string, but an empty field
-        // for the user should trigger "required". So we set it to undefined.
-        if (viewValue === '') {
-          viewValue = undefined;
-        }
-
-        var result = sfValidator.validate(form, viewValue);
-
-        if (result.valid) {
-          // it is valid
-          ngModel.$setValidity('schema', true);
-          return viewValue;
-        } else {
-          // it is invalid, return undefined (no model update)
-          ngModel.$setValidity('schema', false);
-          error = result.error;
-          return undefined;
-        }
+        return form;
       };
+      var form   = getForm();
 
-      // Unshift onto parsers of the ng-model.
-      ngModel.$parsers.unshift(validate);
+      // Validate against the schema.
+
+      // Get in last of the parses so the parsed value has the correct type.
+      if (ngModel.$validators) { // Angular 1.3
+        ngModel.$validators.schema = function(value) {
+          var result = sfValidator.validate(getForm(), value);
+          error = result.error;
+          return result.valid;
+        };
+      } else {
+
+        // Angular 1.2
+        ngModel.$parsers.push(function(viewValue) {
+          form = getForm();
+          //Still might be undefined
+          if (!form) {
+            return viewValue;
+          }
+
+          var result =  sfValidator.validate(form, viewValue);
+
+          if (result.valid) {
+            // it is valid
+            ngModel.$setValidity('schema', true);
+            return viewValue;
+          } else {
+            // it is invalid, return undefined (no model update)
+            ngModel.$setValidity('schema', false);
+            error = result.error;
+            return undefined;
+          }
+        });
+      }
+
 
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function() {
 
-        if (ngModel.$commitViewValue) {
-          ngModel.$commitViewValue(true);
+        if (ngModel.$validate) {
+          ngModel.$validate();
+          if (ngModel.$invalid) { // The field must be made dirty so the error message is displayed
+            ngModel.$dirty = true;
+            ngModel.$pristine = false;
+          }
         } else {
           ngModel.$setViewValue(ngModel.$viewValue);
         }

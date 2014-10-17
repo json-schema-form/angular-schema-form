@@ -14,26 +14,26 @@ angular.module('schemaForm').factory('sfValidator', [function() {
    * @return a tv4js result object.
    */
   validator.validate = function(form, value) {
-
+    if (!form) {
+      return {valid: true};
+    }
     var schema = form.schema;
 
     if (!schema) {
-      //Nothings to Validate
-      return value;
+      return {valid: true};
     }
 
-    //Type cast and validate against schema.
-    //Basic types of json schema sans array and object
-    if (schema.type === 'integer') {
-      value = parseInt(value, 10);
-    } else if (schema.type === 'number') {
-      value = parseFloat(value, 10);
-    } else if (schema.type === 'boolean' && typeof value === 'string') {
-      if (value === 'true') {
-        value = true;
-      } else if (value === 'false') {
-        value = false;
-      }
+    // Input of type text and textareas will give us a viewValue of ''
+    // when empty, this is a valid value in a schema and does not count as something
+    // that breaks validation of 'required'. But for our own sanity an empty field should
+    // not validate if it's required.
+    if (value === '') {
+      value = undefined;
+    }
+
+    // Numbers fields will give a null value, which also means empty field
+    if (form.type === 'number' && value === null) {
+      value = undefined;
     }
 
     // Version 4 of JSON Schema has the required property not on the
@@ -50,7 +50,6 @@ angular.module('schemaForm').factory('sfValidator', [function() {
     if (angular.isDefined(value)) {
       valueWrap[propName] = value;
     }
-
     return tv4.validateResult(valueWrap, wrap);
 
   };

@@ -37,7 +37,13 @@
   <div class="row">
     <div class="col-sm-4">
       <h3>The Generated Form</h3>
-      <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" ng-submit="submitForm(ngform,modelData)"></form>
+      <form name="ngform"
+            sf-model="modelData"
+            sf-form="form"
+            sf-schema="schema"
+            ng-submit="submitForm(ngform,modelData)">
+              <em>before</em><div sf-insert-field="name"></div><em>after</em>
+      </form>
       <h3>Model</h3>
       <pre ng-cloak>{{pretty()}}</pre>
     </div>
@@ -80,18 +86,23 @@
 <script type="text/javascript" src="../bower_components/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js"></script>
 
 
-<script type="text/javascript" src="../dist/schema-form.min.js"></script>
+<script type="text/javascript" src="../dist/schema-form.js"></script>
 <script type="text/javascript" src="../dist/bootstrap-decorator.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-schema-form-datepicker/bootstrap-datepicker.min.js"></script>
-
 <script type="text/javascript" src="../bower_components/angular-schema-form-colorpicker/bootstrap-colorpicker.min.js"></script>
+
+<!-- <script src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+<script type="text/javascript" src="../bower_components/tx-tinymce/tx-tinymce.js"></script>
+<script type="text/javascript" src="../bower_components/angular-schema-form-tinymce/bootstrap-tinymce.js"></script> -->
 
 <script type="text/javascript">
 
+// To test the tinymce addon, uncomment the files above and inject 'tx-tinymce' below.
 angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($scope,$http){
 
   $scope.tests = [
     { name: "Simple", data: 'data/simple.json' },
+    { name: "Basic JSON Schema Type", data: 'data/types.json' },
     { name: "Complex Key Support", data: 'data/complex-keys.json' },
     { name: "Array", data: 'data/array.json' },
     { name: "Tab Array", data: 'data/tabarray.json' },
