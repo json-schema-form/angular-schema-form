@@ -80,16 +80,27 @@ angular.module('schemaForm')
             //make the form available to decorators
             scope.schemaForm  = {form:  merged, schema: schema};
 
-            //Create directives from the form definition
-            angular.forEach(merged, function(obj, i) {
-              var n = document.createElement(attrs.sfDecoratorName ||
-                      snakeCase(schemaFormDecorators.defaultDecorator, '-'));
-              n.setAttribute('form', 'schemaForm.form[' + i + ']');
-              frag.appendChild(n);
-            });
-
             //clean all but pre existing html.
             element.children(':not(.schema-form-ignore)').remove();
+
+            //Create directives from the form definition
+            angular.forEach(merged,function(obj,i){
+              var n = document.createElement(attrs.sfDecorator || snakeCase(schemaFormDecorators.defaultDecorator,'-'));
+              n.setAttribute('form','schemaForm.form['+i+']');
+              var slot;
+              try {
+                slot = element[0].querySelector('*[sf-insert-field="' + obj.key + '"]');
+              } catch(err) {
+                // field insertion not supported for complex keys
+                slot = null;
+              }
+              if(slot) {
+                slot.innerHTML = "";
+                slot.appendChild(n);  
+              } else {
+                frag.appendChild(n);
+              }
+            });
 
             element[0].appendChild(frag);
 
