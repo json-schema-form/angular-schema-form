@@ -19,12 +19,9 @@
                ng-model="$$value$$"
                ng-model-options="form.ngModelOptions"
                schema-validate="form"
-               class="stb-checkbox"
-               id="{{form.id}}">
-        <label for="{{form.id}}" class="stb-custom-input" ng-if="!form.emptyView" ng-bind-html="form.title"></label>
-        <label for="{{form.id}}" class="stb-custom-input" ng-if="form.emptyView" style="padding: 20px"></label>
+               class="stb-checkbox">
+        <label class="stb-custom-input" ng-if="!form.emptyView" ng-bind-html="form.title"></label>
+        <label class="stb-custom-input" ng-if="form.emptyView" style="padding: 0"></label>
     </div>
 
-    <i class="form-control-feedback glyphicon"
-       ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}" style="top: 0px"></i>
 </div>
