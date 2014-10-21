@@ -1,5 +1,4 @@
-<label class="control-label" ng-show="showTitle()">{{form.title}}</label><label class="control-label"
-                                                                                ng-show="showTitle()">{{form.title}}</label>{{form.subtitle}}
+<label class="control-label" ng-show="showTitle()">{{form.title}}</label>
 <div class="help-block info-message"
      ng-show="form.description && !hasError()"
      ng-bind-html="form.description"
@@ -24,6 +23,6 @@
           <label for="{{item.id}}" ng-bind-html="item.name"></label>
       </span>
 
-    <i class="form-control-feedback glyphicon"
-       ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}" style="top: 8px"></i>
+    <!--<i class="form-control-feedback glyphicon"-->
+       <!--ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}" style="top: 8px"></i>-->
 </div>

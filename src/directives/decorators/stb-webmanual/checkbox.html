@@ -5,7 +5,8 @@
          ng-bind-html="form.description"
          ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
     </div>
-    <div class="help-block info-message has-error"
+    <div ng-if="!form.emptyView"
+         class="help-block info-message has-error"
          ng-show="(hasError() && errorMessage(schemaError()))">
         <small class="help-block">
             <span class="glyphicon glyphicon-exclamation-sign"></span>
