@@ -11,7 +11,7 @@
         <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
     </small>
 </div>
-<div class="form-group  has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+<div class="form-group  has-feedback radios-inline" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
       <span ng-repeat="item in form.titleMap">
           <input type="radio"
                  schema-validate="form"
