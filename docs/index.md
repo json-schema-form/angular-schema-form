@@ -187,6 +187,7 @@ Schema Form currently supports the following form field types out of the box:
 | text          |  input with type text   |
 | textarea      |  a textarea             |
 | number        |  input type number      |
+| password      |  input type password    |
 | checkbox      |  a checkbox             |
 | checkboxes    |  list of checkboxes     |
 | select        |  a select (single value)|
