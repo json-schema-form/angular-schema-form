@@ -55,7 +55,7 @@ describe('directive',function(){
 
     });
   });
-
+  
   it('should generate html and compile it, deep structure',function(){
 
     inject(function($compile,$rootScope){
@@ -172,7 +172,60 @@ describe('directive',function(){
 
     });
   });
+  
+  it('should regenerate html on schema update',function(){
 
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = exampleSchema;
+
+      scope.form = ["*"];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Name');
+      
+      scope.schema.properties.name.title = 'Updated Name';
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Updated Name');
+
+    });
+  });
+  
+  it('should regenerate html on form update',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = exampleSchema;
+
+      scope.form = [{
+        key: 'name',
+        title: 'Form Name'
+      }];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Form Name');
+      
+      scope.form[0].title = 'Updated Name';
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Updated Name');
+
+    });
+  });
+  
   it('should preserve existing html and insert fields in matching slots',function(){
 
     inject(function($compile,$rootScope){
