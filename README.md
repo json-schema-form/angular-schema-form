@@ -34,6 +34,9 @@ apart from JSON Form?
    with version 4 of the JSON schema standard.
 3. By default, Schema Form generates Bootstrap 3-friendly HTML.
 
+Documentation
+-------------
+Documentation covering defaults and form types [can be found here](docs/index.md). And you can find the documentation for how you extend angular schema form with your own types [here](https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md).
 
 Basic Usage
 -----------
@@ -73,12 +76,6 @@ Then load them into Schema Form using the `sfSchema`, `sfForm`, and `sfModel` di
     <form sf-schema="schema" sf-form="form" sf-model="model"></form>
 </div>
 ```
-
-
-Documentation
--------------
-Documentation covering defaults and form types [can be found here.](docs/index.md)
-
 
 Installation
 ------------
@@ -131,8 +128,8 @@ also needs to be loaded *before* Schema Form.
 
 
 ```html
-<script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
-<script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 <script type="text/javascript" src="bower_components/tv4/tv4.js"></script>
 <script type="text/javascript" src="bower_components/objectpath/lib/ObjectPath.js"></script>
 <script type="text/javascript" src="bower_components/angular-schema-form/dist/schema-form.min.js"></script>

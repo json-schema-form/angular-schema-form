@@ -4,7 +4,7 @@
     "dist/schema-form.min.js",
     "dist/bootstrap-decorator.min.js"
   ],
-  "version": "0.7.5",
+  "version": "0.7.6",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>"
@@ -41,7 +41,7 @@
     "jquery": "~2.1.1",
     "angular-mocks": ">= 1.2",
     "tx-tinymce": ">= 0.0.5",
-    "angular-ui-sortable": "~0.12.11",
+    "angular-ui-sortable": ">=0.12.11",
     "bootstrap-vertical-tabs": "~1.2.0"
   }
 }
