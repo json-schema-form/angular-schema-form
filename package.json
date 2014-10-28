@@ -1,6 +1,6 @@
 {
   "name": "angular-schema-form",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "Create forms from a JSON schema",
   "scripts": {
     "test": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js"
