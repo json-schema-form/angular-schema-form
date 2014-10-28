@@ -112,11 +112,16 @@ angular.module('schemaForm')
             });
           }
         };
-        //Since we are dependant on up to three
-        //attributes we'll do a common watch
-        scope.$watch('schema', refreshFrom, true);
-        scope.$watch('initialForm', refreshFrom, true);
-        scope.$watch('options', refreshFrom, true);
+        
+        if (scope.schema.watchFormChanges) {
+          //Since we are dependant on up to three
+          //attributes we'll do a common watch
+          scope.$watch('schema', refreshFrom, true);
+          scope.$watch('initialForm', refreshFrom, true);
+          scope.$watch('options', refreshFrom, true);
+        } else {
+          refreshFrom();
+        }
       }
     };
   }

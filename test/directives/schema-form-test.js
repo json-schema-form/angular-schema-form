@@ -173,14 +173,15 @@ describe('directive',function(){
     });
   });
 
-  it('should regenerate html on schema update',function(){
+  it('should regenerate html on schema update with schema.watchFormChanges',function(){
 
     inject(function($compile,$rootScope){
       var scope = $rootScope.$new();
       scope.person = {};
 
       scope.schema = angular.copy(exampleSchema);
-
+      scope.schema.watchFormChanges = true;
+      
       scope.form = ["*"];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -198,13 +199,14 @@ describe('directive',function(){
     });
   });
 
-  it('should regenerate html on form update',function(){
+  it('should regenerate html on form update with schema.watchFormChanges',function(){
 
     inject(function($compile,$rootScope){
       var scope = $rootScope.$new();
       scope.person = {};
 
       scope.schema = angular.copy(exampleSchema);
+      scope.schema.watchFormChanges = true;
 
       scope.form = [{
         key: 'name',
@@ -222,6 +224,31 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Updated Name');
+
+    });
+  });
+
+  it('shouldn\'t regenerate html on schema update without schema.watchFormChanges',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = angular.copy(exampleSchema);
+      
+      scope.form = ["*"];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Name');
+      
+      scope.schema.properties.name.title = 'Updated Name';
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Name');
 
     });
   });
