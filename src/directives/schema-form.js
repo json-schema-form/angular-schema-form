@@ -58,21 +58,15 @@ angular.module('schemaForm')
             }
           }
         });
-        //Since we are dependant on up to three
-        //attributes we'll do a common watch
-        var lastDigest = {};
-
-        scope.$watch(function() {
+        
+        var refreshFrom = function() {
 
           var schema = scope.schema;
           var form   = scope.initialForm || ['*'];
 
           //The check for schema.type is to ensure that schema is not {}
           if (form && schema && schema.type &&
-              (lastDigest.form !== form || lastDigest.schema !== schema) &&
               Object.keys(schema.properties).length > 0) {
-            lastDigest.schema = schema;
-            lastDigest.form = form;
 
             var merged = schemaForm.merge(schema, form, ignore, scope.options);
             var frag = document.createDocumentFragment();
@@ -117,7 +111,17 @@ angular.module('schemaForm')
               }
             });
           }
-        });
+        };
+        
+        if (scope.schema.watchFormChanges) {
+          //Since we are dependant on up to three
+          //attributes we'll do a common watch
+          scope.$watch('schema', refreshFrom, true);
+          scope.$watch('initialForm', refreshFrom, true);
+          scope.$watch('options', refreshFrom, true);
+        } else {
+          refreshFrom();
+        }
       }
     };
   }
