@@ -55,7 +55,7 @@ describe('directive',function(){
 
     });
   });
-
+  
   it('should generate html and compile it, deep structure',function(){
 
     inject(function($compile,$rootScope){
@@ -172,7 +172,87 @@ describe('directive',function(){
 
     });
   });
+  
+  it('shouldn\'t regenerate html on schema update without schema.watchFormChanges',function(){
 
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = angular.copy(exampleSchema);
+      
+      scope.form = ["*"];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Name');
+      
+      scope.schema.properties.name.title = 'Updated Name';
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Name');
+
+    });
+  });
+  
+  it('should regenerate html on schema update with schema.watchFormChanges',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = angular.copy(exampleSchema);
+      scope.schema.watchFormChanges = true;
+      
+      scope.form = ["*"];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Name');
+      
+      scope.schema.properties.name.title = 'Updated Name';
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Updated Name');
+
+    });
+  });
+  
+  it('should regenerate html on form update',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = angular.copy(exampleSchema);
+      scope.schema.watchFormChanges = true;
+
+      scope.form = [{
+        key: 'name',
+        title: 'Form Name'
+      }];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Form Name');
+      
+      scope.form[0].title = 'Updated Name';
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Updated Name');
+
+    });
+  });
+  
   it('should preserve existing html and insert fields in matching slots',function(){
 
     inject(function($compile,$rootScope){
@@ -1617,6 +1697,152 @@ describe('directive',function(){
       tmpl.children().eq(0).find('select').eq(0).find('option').eq(0).text().trim().should.be.eq('');
       tmpl.children().eq(0).find('select').eq(0).find('option').eq(1).text().trim().should.be.eq('The B');
       tmpl.children().eq(0).find('select').eq(0).find('option').eq(2).text().trim().should.be.eq('The A');
+    });
+  });
+  
+  
+  it('should update array form on model array ref change',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {
+        names:[
+          {
+            firstname: 'Bill',
+            lastname: 'Murray'
+          },{
+            firstname: 'Ghost',
+            lastname: 'Buster'
+          }
+        ]
+      };
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "names": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "title": "subform",
+              "properties": {
+                "firstname": {
+                  "type": "string"
+                },
+                "lastname": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      };
+
+      scope.form = ["*"];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).find('ol').children().length.should.be.eq(2);
+      
+      var new_names = [
+          {
+            firstname: 'Bill',
+            lastname: 'Murray'
+          },
+          {
+            firstname: 'Harold',
+            lastname: 'Ramis'
+          },{
+            firstname: 'Dan',
+            lastname: 'Aykroyd'
+          },{
+            firstname: 'Ghost',
+            lastname: 'Buster'
+          }
+        ];
+        
+      scope.person.names = new_names;
+      
+      $rootScope.$apply();
+      
+      tmpl.children().eq(0).find('ol').children().length.should.be.eq(4);
+    });
+  });
+
+  it('should update tabarray form on model array ref change',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {
+        names:[
+          {
+            firstname: 'Bill',
+            lastname: 'Murray'
+          },{
+            firstname: 'Ghost',
+            lastname: 'Buster'
+          }
+        ]
+      };
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "names": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "title": "subform",
+              "properties": {
+                "firstname": {
+                  "type": "string"
+                },
+                "lastname": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      };
+
+      scope.form = [{
+        key: 'names',
+        type: 'tabarray'
+      }];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).children().eq(0).children().eq(0).children().eq(0).children(0).children().length.should.be.eq(3);
+      
+      var new_names = [
+          {
+            firstname: 'Bill',
+            lastname: 'Murray'
+          },
+          {
+            firstname: 'Harold',
+            lastname: 'Ramis'
+          },{
+            firstname: 'Dan',
+            lastname: 'Aykroyd'
+          },{
+            firstname: 'Ghost',
+            lastname: 'Buster'
+          }
+        ];
+        
+      scope.person.names = new_names;
+      
+      $rootScope.$apply();
+      
+      tmpl.children().eq(0).children().eq(0).children().eq(0).children().eq(0).children().length.should.be.eq(5);
     });
   });
 
