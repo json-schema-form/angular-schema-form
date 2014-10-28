@@ -3,6 +3,7 @@ Documentation
 
 1. [Basic Usage](#basic-usage)
 1. [Handling Submit](#handling-submit)
+1. [Schema Options](#schema-options)
 1. [Global Options](#global-options)
 1. [Form types](#form-types)
 1. [Default form types](#default-form-types)
@@ -143,6 +144,30 @@ And the HTML would be something like this:
 </div>
 ```
 
+
+Schema Options
+--------------
+Schema Form can watch changes of  `sf-schema`,  `sf-form` and `sf-options`. By default, this isn't set for performance considerations.
+By setting `schema.watchFormChanges = true`, the form will be regenerated on schema, form or options changes.
+
+/!\ Be careful this can cause performance issues !
+
+ex.
+```javascript
+scope.schema = {
+  "type": "object",
+  "watchFormChanges": true,
+  "properties": {
+    "surname":     { "type": "string" },
+    "firstname":   { "type": "string" },
+  }
+}
+
+async.then(function () {
+  // scope.schema changes
+});
+
+```
 
 Global Options
 --------------
