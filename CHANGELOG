@@ -1,3 +1,8 @@
+v0.7.6
+------
+ * Fixed broken bower specification.
+ * Updated README and documentation.
+
 v0.7.5
 ------
  * Bracket notation for reserved words to make IE8 happier,thanks @jibwa
