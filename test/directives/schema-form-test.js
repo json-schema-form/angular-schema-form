@@ -1620,4 +1620,84 @@ describe('directive',function(){
     });
   });
 
+  it('should regenerate html on schema update with sfDeepSchemaWatch',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = angular.copy(exampleSchema);
+      scope.schema.watchFormChanges = true;
+      
+      scope.form = ["*"];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-deep-schema-watch></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Name');
+      
+      scope.schema.properties.name.title = 'Updated Name';
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Updated Name');
+
+    });
+  });
+
+  it('should regenerate html on form update with sfDeepSchemaWatch',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = angular.copy(exampleSchema);
+      scope.schema.watchFormChanges = true;
+
+      scope.form = [{
+        key: 'name',
+        title: 'Form Name'
+      }];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-deep-schema-watch></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Form Name');
+      
+      scope.form[0].title = 'Updated Name';
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Updated Name');
+
+    });
+  });
+
+  it('shouldn\'t regenerate html on schema update without sfDeepSchemaWatch',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = angular.copy(exampleSchema);
+      
+      scope.form = ["*"];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Name');
+      
+      scope.schema.properties.name.title = 'Updated Name';
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).children().eq(0).find('label').text().should.be.equal('Name');
+
+    });
+  });
+
 });
