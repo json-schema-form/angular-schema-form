@@ -593,7 +593,7 @@ describe('directive',function(){
     });
   });
 
-  it('should handle schema form defaults in deep structure',function(){
+  it('should handle schema form titles in deep structure',function(){
 
     inject(function($compile,$rootScope){
       var scope = $rootScope.$new();
