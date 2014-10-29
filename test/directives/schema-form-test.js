@@ -592,6 +592,62 @@ describe('directive',function(){
 
     });
   });
+  
+  it('should handle schema form default in deep structure',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {
+        name: 'Foobar'
+      };
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "props" : {
+            "type": "object",
+            "title": "Person",
+            "properties": {
+              "name": {
+                "type": "string",
+                "default": "Name"
+              },
+              "nick": {
+                "type": "string",
+                "default": "Nick"
+              },
+              "alias": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      };
+
+      //The form defines a fieldset for person, and changes the order of fields
+      //but titles should come from the schema
+      scope.form = [{
+        type: 'fieldset',
+        key:  'props',
+        items: [
+          'props.nick',
+          'props.name',
+          'props.alias'
+        ]
+      }];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      scope.person.props.name.should.be.equal('Name');
+      scope.person.props.nick.should.be.equal('Nick');
+      expect(scope.person.props.alias).to.be.undefined;
+
+    });
+  });
+
 
   it('should handle schema form titles in deep structure',function(){
 
