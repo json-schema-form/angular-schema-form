@@ -1620,4 +1620,36 @@ describe('directive',function(){
     });
   });
 
+  it('should call onChange callback with initial value and with external update',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      
+      scope.person = {
+        name:'Foo'
+      };
+
+      scope.schema = exampleSchema;
+
+      scope.form = [{ 
+        key:'name',
+        onChange: sinon.spy()
+      }];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      scope.form[0].onChange.should.have.been.calledOnce;
+      scope.form[0].onChange.should.have.calledWith('Foo');
+      
+      scope.person.name = 'Bar';
+      $rootScope.$apply();
+      
+      scope.form[0].onChange.should.have.been.calledTwice;
+      scope.form[0].onChange.should.have.calledWith('Bar');
+    });
+  });
+
 });
