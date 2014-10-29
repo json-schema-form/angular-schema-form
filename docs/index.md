@@ -172,8 +172,18 @@ Ex.
 </div>
 ```
 
+Schema Form can watch for schema, form or options deep changes by using the sf-deep-schema-watch attribute
 
-
+Ex.
+```html
+<div ng-controller="FormController">
+    <form sf-schema="schema"
+          sf-form="form"
+          sf-model="model"
+          sf-options="options"
+          sf-deep-schema-watch></form>
+</div>
+```
 Form types
 ----------
 Schema Form currently supports the following form field types out of the box:
