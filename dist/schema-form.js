@@ -1329,7 +1329,10 @@ angular.module('schemaForm').directive('ngModelOnblur', function() {
       elm.unbind('input').unbind('keydown').unbind('change');
       elm.bind('blur', function() {
         scope.$apply(function() {
-          ngModelCtrl.$setViewValue(elm.val());
+          if (elm.val() === '' && ngModelCtrl.$pristine) {
+          } else {
+            ngModelCtrl.$setViewValue(elm.val());
+          }
         });
       });
     }
