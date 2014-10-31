@@ -669,7 +669,7 @@ function FormCtrl($scope) {
 
   $scope.form = [
     {
-      key: "choice",
+      key: "confirm",
       type: "radios",
       titleMap: [
         { value: false, name: "No I don't understand these cryptic terms" },
