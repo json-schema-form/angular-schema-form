@@ -20,7 +20,8 @@ angular.module('schemaForm')
       scope: {
         schema: '=sfSchema',
         initialForm: '=sfForm',
-        model: '=sfModel'
+        model: '=sfModel',
+        defaultGlobals: '='
       },
       controller: ['$scope', function($scope) {
         this.evalInParentScope = function(expr, locals) {
@@ -35,6 +36,8 @@ angular.module('schemaForm')
 
         //expose form controller on scope so that we don't force authors to use name on form
         scope.formCtrl = formCtrl;
+
+        scope.defaultGlobals = scope.defaultGlobals || {visibility: '', category: ''};
 
         //We'd like to handle existing markup,
         //besides using it in our template we also
@@ -87,6 +90,7 @@ angular.module('schemaForm')
               var n = document.createElement(attrs.sfDecoratorName ||
                       snakeCase(schemaFormDecorators.defaultDecorator, '-'));
               n.setAttribute('form', 'schemaForm.form[' + i + ']');
+              n.setAttribute('default-globals', 'defaultGlobals');
               frag.appendChild(n);
             });
 

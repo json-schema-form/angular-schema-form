@@ -173,10 +173,12 @@ angular.module('schemaForm').provider('schemaFormDecorators',
           require: '?^sfSchema',
           link: function(scope, element, attrs, sfSchema) {
             //rebind our part of the form to the scope.
+            var defaultGlobals = scope.defaultGlobals || scope.$eval(attrs.defaultGlobals);
             var once = scope.$watch(attrs.form, function(form) {
 
               if (form) {
                 scope.form  = form;
+                scope.defaultGlobals = defaultGlobals;
 
                 //ok let's replace that template!
                 //We do this manually since we need to bind ng-model properly and also
@@ -185,15 +187,34 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 $http.get(url, {cache: $templateCache}).then(function(res) {
                   var key = form.key ?
                             sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
-                  var conditionalKey = form.conditionalKey ?
-                            sfPathProvider.stringify(form.conditionalKey).replace(/"/g, '&quot;') : '';
-                  var conditionalValue = form.conditionalValue ?
-                            sfPathProvider.stringify(form.conditionalValue).replace(/"/g, '&quot;') : '';
 
-                  var template = res.data.replace(
-                    /\$\$value\$\$/g,
-                    'model' + (key[0] !== '[' ? '.' : '') + key
-                  );
+                  var visibility, category;
+                  if (form.schema) {
+                    if (form.schema.visibility) {
+                      visibility = '.' + form.schema.visibility;
+                    } else if (scope.defaultGlobals.visibility) {
+                      visibility = '.' + scope.defaultGlobals.visibility;
+                    } else {
+                      visibility = '';
+                    }
+
+                    if (form.schema) {
+                      category = '.' + form.schema.category;
+                    } else if (scope.defaultGlobals.category) {
+                      category = '.' + scope.defaultGlobals.category;
+                    } else {
+                      category = '';
+                    }
+                  }
+
+
+                  scope.keyModelName = 'model' +
+                  visibility +
+                  category +
+                  (key[0] !== '[' ? '.' : '') +
+                  key;
+
+                  var template = res.data.replace(/\$\$value\$\$/g, scope.keyModelName);
                   element.html(template);
                   $compile(element.contents())(scope);
                 });
@@ -250,10 +271,22 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               }
             };
 
+            var lookupForKey = function (obj, key) {
+              var res;
+              $.each(obj, function (k, v) {
+                if (typeof v == "object") {
+                  res = lookupForKey(v, key);
+                } else if (k === key) {
+                  res =  v;
+                }
+              });
+              return res;
+            };
+
             scope.showCondition = function () {
-              var show = scope.model[scope.form.conditionalKey] === scope.form.conditionalValue ;
+              var show = lookupForKey(scope.model, scope.form.conditionalKey) === scope.form.conditionalValue ;
               if (scope.form.secondConditionalKey) {
-                show = show && (scope.model[scope.form.secondConditionalKey] === scope.form.secondConditionalValue);
+                show = show && (lookupForKey(scope.model, scope.form.secondConditionalKey) === scope.form.secondConditionalValue);
               }
               if (scope.form.items) {
                 angular.forEach(scope.form.items, function (item) {
@@ -277,7 +310,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               var checked = !!inputEl.attr('checked');
               $timeout(function() {
                 inputEl.attr('checked', !checked);
-                scope.model[scope.form.key] = !checked;
+
+                var model = $parse(scope.keyModelName);
+                model.assign(scope, !checked);
+                scope.$apply();
               }, 0);
             };
 
@@ -1360,7 +1396,8 @@ angular.module('schemaForm')
       scope: {
         schema: '=sfSchema',
         initialForm: '=sfForm',
-        model: '=sfModel'
+        model: '=sfModel',
+        defaultGlobals: '='
       },
       controller: ['$scope', function($scope) {
         this.evalInParentScope = function(expr, locals) {
@@ -1375,6 +1412,8 @@ angular.module('schemaForm')
 
         //expose form controller on scope so that we don't force authors to use name on form
         scope.formCtrl = formCtrl;
+
+        scope.defaultGlobals = scope.defaultGlobals || {visibility: '', category: ''};
 
         //We'd like to handle existing markup,
         //besides using it in our template we also
@@ -1427,6 +1466,7 @@ angular.module('schemaForm')
               var n = document.createElement(attrs.sfDecoratorName ||
                       snakeCase(schemaFormDecorators.defaultDecorator, '-'));
               n.setAttribute('form', 'schemaForm.form[' + i + ']');
+              n.setAttribute('default-globals', 'defaultGlobals');
               frag.appendChild(n);
             });
 
