@@ -66,7 +66,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                       visibility = '';
                     }
 
-                    if (form.schema) {
+                    if (form.schema.category) {
                       category = '.' + form.schema.category;
                     } else if (scope.defaultGlobals.category) {
                       category = '.' + scope.defaultGlobals.category;

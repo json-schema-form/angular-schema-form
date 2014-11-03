@@ -198,7 +198,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                       visibility = '';
                     }
 
-                    if (form.schema) {
+                    if (form.schema.category) {
                       category = '.' + form.schema.category;
                     } else if (scope.defaultGlobals.category) {
                       category = '.' + scope.defaultGlobals.category;
@@ -1396,8 +1396,7 @@ angular.module('schemaForm')
       scope: {
         schema: '=sfSchema',
         initialForm: '=sfForm',
-        model: '=sfModel',
-        defaultGlobals: '='
+        model: '=sfModel'
       },
       controller: ['$scope', function($scope) {
         this.evalInParentScope = function(expr, locals) {
@@ -1413,7 +1412,7 @@ angular.module('schemaForm')
         //expose form controller on scope so that we don't force authors to use name on form
         scope.formCtrl = formCtrl;
 
-        scope.defaultGlobals = scope.defaultGlobals || {visibility: '', category: ''};
+        scope.defaultGlobals = scope.$eval(attrs.defaultGlobals) || {visibility: '', category: ''};
 
         //We'd like to handle existing markup,
         //besides using it in our template we also
