@@ -141,11 +141,21 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
             var lookupForKey = function (obj, key) {
               var res;
-              $.each(obj, function (k, v) {
-                if (typeof v == "object") {
-                  res = lookupForKey(v, key);
-                } else if (k === key) {
-                  res =  v;
+              $.each(obj, function (k1, v1) {
+                if (typeof v1 == "object") {
+                  $.each(v1, function (k2, v2) {
+                    if (typeof v2 == "object") {
+                      $.each(v2, function (k3, v3) {
+                        if (k3 === key) {
+                          res =  v3;
+                        }
+                      });
+                    } else if (k2 === key) {
+                      res =  v2;
+                    }
+                  });
+                } else if (k1 === key) {
+                  res =  v1;
                 }
               });
               return res;

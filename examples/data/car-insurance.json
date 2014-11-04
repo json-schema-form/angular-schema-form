@@ -101,7 +101,7 @@
         },
         {
           "type": "condition",
-          "conditionalKey": "hasAutoIdentificationNumber",
+          "conditionalKey": "mortgagee",
           "conditionalValue": true,
           "items": [
             {
