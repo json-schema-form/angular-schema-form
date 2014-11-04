@@ -174,6 +174,25 @@ angular.module('schemaForm').provider('schemaFormDecorators',
           link: function(scope, element, attrs, sfSchema) {
             //rebind our part of the form to the scope.
             var defaultGlobals = scope.defaultGlobals || scope.$eval(attrs.defaultGlobals);
+            var createModelName = function (form, defGlobals, key) {
+              var visibility = '', category = '';
+              if (form.schema) {
+                if (form.schema.visibility) {
+                  visibility = '.' + form.schema.visibility;
+                } else if (defGlobals.visibility) {
+                  visibility = '.' + defGlobals.visibility;
+                }
+
+                if (form.schema.category) {
+                  category = '.' + form.schema.category;
+                } else if (defGlobals.category) {
+                  category = '.' + defGlobals.category;
+                }
+              }
+
+              return 'model' + visibility + category + (key[0] !== '[' ? '.' : '') + key;
+
+            };
             var once = scope.$watch(attrs.form, function(form) {
 
               if (form) {
@@ -188,31 +207,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   var key = form.key ?
                             sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
 
-                  var visibility, category;
-                  if (form.schema) {
-                    if (form.schema.visibility) {
-                      visibility = '.' + form.schema.visibility;
-                    } else if (scope.defaultGlobals.visibility) {
-                      visibility = '.' + scope.defaultGlobals.visibility;
-                    } else {
-                      visibility = '';
-                    }
 
-                    if (form.schema.category) {
-                      category = '.' + form.schema.category;
-                    } else if (scope.defaultGlobals.category) {
-                      category = '.' + scope.defaultGlobals.category;
-                    } else {
-                      category = '';
-                    }
-                  }
-
-
-                  scope.keyModelName = 'model' +
-                  visibility +
-                  category +
-                  (key[0] !== '[' ? '.' : '') +
-                  key;
+                  scope.keyModelName = createModelName(form, scope.defaultGlobals, key);
 
                   var template = res.data.replace(/\$\$value\$\$/g, scope.keyModelName);
                   element.html(template);
@@ -294,8 +290,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.showCondition = function () {
-              var show = lookupForKey(scope.model, scope.form.conditionalKey) === scope.form.conditionalValue ;
-              if (scope.form.secondConditionalKey) {
+              var show = angular.isDefined(scope.form.conditionalValue) && (lookupForKey(scope.model, scope.form.conditionalKey) === scope.form.conditionalValue);
+              if (angular.isDefined(scope.form.secondConditionalKey)) {
                 show = show && (lookupForKey(scope.model, scope.form.secondConditionalKey) === scope.form.secondConditionalValue);
               }
               if (scope.form.items) {
@@ -304,12 +300,11 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                     item.required = show;
                     item.schema.required = show;
                   }
+                  if (item.key && !show) {
+                    var model = $parse(createModelName(item, scope.defaultGlobals, item.key));
+                    model.assign(scope, undefined);
+                  }
                 });
-              } else {
-                if (!angular.isUndefined(scope.form.required)) {
-                  scope.form.required = show;
-                  scope.form.schema.required = show;
-                }
               }
 
               return show;
@@ -325,6 +320,17 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 model.assign(scope, !checked);
                 scope.$apply();
               }, 0);
+            };
+
+            scope.disabledElement = function () {
+              var disabled = angular.isDefined(scope.form.conditionalDisabledValue) && (lookupForKey(scope.model, scope.form.conditionalDisabledKey) === scope.form.conditionalDisabledValue);
+              scope.form.required = !disabled;
+              scope.form.schema.required = !disabled;
+              if (disabled) {
+                scope.ngModelHolder.$setViewValue(undefined);
+                element.find('input').val(scope.ngModelHolder.$viewValue);
+              }
+              return scope.form.disabled || disabled;
             };
 
             /**

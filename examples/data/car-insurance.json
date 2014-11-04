@@ -92,6 +92,8 @@
           "validationMessage": "Vennligst oppgi bilnummer i riktig format, eks: AD12345",
           "title": "Bilnummer",
           "type": "string",
+          "conditionalDisabledValue": true,
+          "conditionalDisabledKey": "hasAutoIdentificationNumber",
           "placeholder": "Bilnummer"
         },
         {
