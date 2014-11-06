@@ -1,5 +1,10 @@
-<div class="stb-form-group has-error" ng-show="showCondition()">
-    <div class="help-block" ng-bind-html="form.validationMessage"></div>
+<div class="row" ng-show="showCondition()">
+    <div class="col-md-12">
+        <div class="msgIcon stbcolor-primary first lighter" style="position: absolute; height: 100%; width: 15%"><span class="stb-color-sprite-medium warning"></span></div>
+        <div class="msgText stbcolor-background first" style="width: 85%; margin-left: 15%">
+            <p ng-bind-html="form.validationMessage"></p>
+        </div>
+    </div>
     <input type="hidden"
            sf-changed="form"
            ng-model="$$value$$"

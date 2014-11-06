@@ -1,24 +1,26 @@
-<label ng-show="showTitle()">{{form.title}}</label>
+<div  ng-show="showCondition()">
+    <label ng-show="showTitle()">{{form.title}}</label>
 
-<div class="help-block info-message"
-     ng-show="form.description && !hasError()"
-     ng-bind-html="form.description"
-     ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
-</div>
-<div class="help-block info-message has-error"
-     ng-show="(hasError() && errorMessage(schemaError()))">
-    <small class="help-block">
-        <span class="glyphicon glyphicon-exclamation-sign"></span>
-        <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
-    </small>
-</div>
-<div class="stb-form-group al text-area has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
-    <span class="help-block  info-message">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
-    <textarea class="form-control"
-              sf-changed="form"
-              ng-model="$$value$$"
-              ng-model-options="form.ngModelOptions"
-              schema-validate="form"></textarea>
-    <i class="form-control-feedback glyphicon"
-       ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}" style="top: 0px"></i>
+    <div class="help-block info-message"
+         ng-show="form.description && !hasError()"
+         ng-bind-html="form.description"
+         ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
+    </div>
+    <div class="help-block info-message has-error"
+         ng-show="(hasError() && errorMessage(schemaError()))">
+        <small class="help-block">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+        </small>
+    </div>
+    <div class="stb-form-group al text-area has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+        <span class="help-block  info-message">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
+        <textarea class="form-control"
+                  sf-changed="form"
+                  ng-model="$$value$$"
+                  ng-model-options="form.ngModelOptions"
+                  schema-validate="form"></textarea>
+        <i class="form-control-feedback glyphicon"
+           ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}" style="top: 0px"></i>
+    </div>
 </div>

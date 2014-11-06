@@ -1,4 +1,4 @@
-<div sf-array="form" ng-model="$$value$$" class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+<div sf-array="form" ng-model="$$value$$" class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}"  ng-show="showCondition()">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
   <div class="stb-form-group al checkbox  has-feedback" ng-repeat="val in titleMapValues track by $index" >
       <input type="checkbox"

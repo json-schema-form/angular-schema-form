@@ -1,4 +1,4 @@
-<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}"  ng-show="showCondition()">
     <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
     <div class="help-block" ng-show="(hasError() && errorMessage(schemaError())) || form.description" ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
     <div class="radio stb-form-group al" ng-repeat="item in form.titleMap" >
