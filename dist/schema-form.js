@@ -351,7 +351,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.disabledElement = function () {
-              var disabled = scope.form && angular.isDefined(scope.form.conditionalDisabledValue) && (lookupForKey(scope.model, scope.form.conditionalDisabledKey) === scope.form.schema.conditionalDisabledValue);
+              var disabled = scope.form && angular.isDefined(scope.form.conditionalDisabledValue) && (lookupForKey(scope.model, scope.form.conditionalDisabledKey) === scope.form.conditionalDisabledValue);
               scope.form.required = !disabled;
               scope.form.schema.required = !disabled;
               if (disabled) {
@@ -1415,6 +1415,28 @@ angular.module('schemaForm').directive('ngModelOnblur', function() {
           }
         });
       });
+
+      var maxLength = scope.$eval(attr.modelMaxLength);
+
+      if (angular.isDefined(maxLength)) {
+
+        elm.bind('keydown', function (e) {
+          var charCode = e.which;
+          var nonPrintableAllowed =
+              charCode < 32
+              || (charCode > 34 && charCode < 41) // home, end, arrows
+              || charCode === 46; // delete
+
+          if (nonPrintableAllowed) {
+            return true;
+          }
+
+          if (elm.val().length >= maxLength) {
+            return false;
+          }
+        });
+
+      }
     }
   };
 });

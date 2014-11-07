@@ -15,6 +15,7 @@
            placeholder="{{form.placeholder}}"
            ng-model-options="form.ngModelOptions"
            ng-model-onblur
+           model-max-length="form.schema.maxLength"
            ng-model="$$value$$"
            schema-validate="form"
            ng-disabled="disabledElement()"

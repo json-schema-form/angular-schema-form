@@ -21,7 +21,8 @@
       "autoIdentificationNumber": {
         "type": "string",
         "required": true,
-        "pattern": "^\\w{6}$"
+        "pattern": "^\\w{6}$",
+        "maxLength": 6
       },
       "mileage": {
         "type": "string",

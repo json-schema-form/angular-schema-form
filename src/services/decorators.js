@@ -219,7 +219,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.disabledElement = function () {
-              var disabled = scope.form && angular.isDefined(scope.form.conditionalDisabledValue) && (lookupForKey(scope.model, scope.form.conditionalDisabledKey) === scope.form.schema.conditionalDisabledValue);
+              var disabled = scope.form && angular.isDefined(scope.form.conditionalDisabledValue) && (lookupForKey(scope.model, scope.form.conditionalDisabledKey) === scope.form.conditionalDisabledValue);
               scope.form.required = !disabled;
               scope.form.schema.required = !disabled;
               if (disabled) {
