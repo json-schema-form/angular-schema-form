@@ -158,29 +158,31 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.showCondition = function () {
-              if (!scope.form.schema) {
-                return true;
-              }
               var show = true;
 
               var isHidden = function () {
-                return (lookupForKey(scope.model, scope.form.schema.conditionalHiddenKey) === scope.form.schema.conditionalHiddenValue);
+                return angular.isDefined(scope.form.conditionalHiddenValue) && (lookupForKey(scope.model, scope.form.conditionalHiddenKey) === scope.form.conditionalHiddenValue);
+              };
+
+
+              var setUndefinedAnyway = function () {
+                return  angular.isDefined(scope.form.secondConditionalHiddenValue) && (lookupForKey(scope.model, scope.form.secondConditionalHiddenKey) === scope.form.secondConditionalHiddenValue);
               };
 
               var isShown = function () {
-                var shown = (lookupForKey(scope.model, scope.form.schema.conditionalKey) === scope.form.schema.conditionalValue);
+                var shown = angular.isDefined(scope.form.conditionalValue) && (lookupForKey(scope.model, scope.form.conditionalKey) === scope.form.conditionalValue);
 
-                if (scope.form.schema && angular.isDefined(scope.form.schema.secondConditionalKey)) {
-                  shown = shown && (lookupForKey(scope.model, scope.form.schema.secondConditionalKey) === scope.form.schema.secondConditionalValue);
+                if (scope.form && angular.isDefined(scope.form.secondConditionalKey)) {
+                  shown = shown && (lookupForKey(scope.model, scope.form.secondConditionalKey) === scope.form.secondConditionalValue);
                 }
                 return shown;
               };
 
-              if (angular.isUndefined(scope.form.schema.conditionalValue) && angular.isUndefined(scope.form.schema.conditionalHiddenValue)) {
+              if (angular.isUndefined(scope.form.conditionalValue) && angular.isUndefined(scope.form.conditionalHiddenValue)) {
                 return true;
-              } else if (angular.isUndefined(scope.form.schema.conditionalValue)) {
+              } else if (angular.isUndefined(scope.form.conditionalValue)) {
                 show = show && !isHidden();
-              } else if (angular.isUndefined(scope.form.schema.conditionalHiddenValue)) {
+              } else if (angular.isUndefined(scope.form.conditionalHiddenValue)) {
                 show = show && isShown();
               } else {
                 show = show && isShown() && !isHidden();
@@ -192,7 +194,11 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               }
               if (scope.form.key && !show) {
                 var model = $parse(createModelName(scope.form, scope.defaultGlobals, scope.form.key));
-                model.assign(scope, undefined);
+                if (isHidden() && !setUndefinedAnyway() && angular.isDefined(scope.form.setHiddenValue)) {
+                  model.assign(scope, scope.form.setHiddenValue);
+                } else {
+                  model.assign(scope, undefined);
+                }
                 element.find('input').val('');
                 scope.ngModelHolder.$setPristine();
               }
@@ -213,7 +219,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.disabledElement = function () {
-              var disabled = scope.form.schema && angular.isDefined(scope.form.schema.conditionalDisabledValue) && (lookupForKey(scope.model, scope.form.schema.conditionalDisabledKey) === scope.form.schema.conditionalDisabledValue);
+              var disabled = scope.form && angular.isDefined(scope.form.conditionalDisabledValue) && (lookupForKey(scope.model, scope.form.conditionalDisabledKey) === scope.form.schema.conditionalDisabledValue);
               scope.form.required = !disabled;
               scope.form.schema.required = !disabled;
               if (disabled) {

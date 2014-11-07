@@ -25,7 +25,8 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     'default': base + 'default.html',
     file: base + 'file.html',
     datepicker: base + 'datepicker.html',
-    hidden: base + 'hidden.html'
+    hidden: base + 'hidden.html',
+    infobox: base + 'infobox.html'
   }, [
     function(form) {
       if (form.readonly && form.key && form.type !== 'fieldset') {

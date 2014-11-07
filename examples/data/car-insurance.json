@@ -5,112 +5,70 @@
       "licensePlateNumber": {
         "type": "string",
         "required": true,
-        "pattern": "^[a-zA-Z]{2}\\s?\\d{5}$",
-        "conditionalDisabledKey": "hasAutoIdentificationNumber",
-        "conditionalDisabledValue": true
+        "pattern": "^[a-zA-Z]{2}\\s?\\d{5}$"
       },
       "hasAutoIdentificationNumber": {
         "type": "boolean"
       },
       "importAndCustomsCleared": {
         "type": "boolean",
-        "required": true,
-        "conditionalKey": "hasAutoIdentificationNumber",
-        "conditionalValue": true
+        "required": true
       },
       "hidden_isNotAllowedToBuy": {
         "required": true,
-        "conditionalKey": "importAndCustomsCleared",
-        "conditionalValue": true,
         "type": "string"
       },
       "autoIdentificationNumber": {
         "type": "string",
         "required": true,
-        "conditionalKey": "importAndCustomsCleared",
-        "conditionalValue": false,
         "pattern": "^\\w{6}$"
       },
       "mileage": {
         "type": "string",
         "maxLength": "6",
         "pattern": "^\\d{1,6}$",
-        "required": true,
-        "conditionalHiddenKey": "importAndCustomsCleared",
-        "conditionalHiddenValue": true
+        "required": true
       },
       "intendsToMigrateInsurance": {
         "required": true,
-        "type": "boolean",
-        "conditionalHiddenKey": "importAndCustomsCleared",
-        "conditionalHiddenValue": true
-      },
-      "hidden_intendsToMigrateInsurance": {
-        "required": true,
-        "conditionalKey": "intendsToMigrateInsurance",
-        "conditionalValue": false,
-        "type": "string"
+        "type": "boolean"
       },
       "hidden_cantMove": {
         "required": true,
-        "conditionalKey": "hasAutoIdentificationNumber",
-        "conditionalValue": true,
-        "secondConditionalKey": "importAndCustomsCleared",
-        "secondConditionalValue": false,
         "type": "string"
       },
       "oldInsuranceCompany": {
         "required": true,
-        "conditionalKey": "intendsToMigrateInsurance",
-        "conditionalValue": true,
         "type": "object"
       },
       "customerPreviousInsurancePolicyholder": {
-        "conditionalKey": "intendsToMigrateInsurance",
-        "conditionalValue": true,
         "required": true,
         "type": "boolean"
       },
       "previousInsurancePolicyholderNameSSN": {
         "required": true,
-        "conditionalKey": "customerPreviousInsurancePolicyholder",
-        "conditionalValue": false,
         "type": "string"
       },
       "expirationDateKnown": {
-        "conditionalKey": "intendsToMigrateInsurance",
-        "conditionalValue": true,
         "type": "boolean"
       },
       "expirationDateDay": {
-        "conditionalKey": "expirationDateKnown",
-        "conditionalValue": true,
         "type": "string",
         "format": "date"
       },
       "insuranceCompany": {
-        "conditionalKey": "intendsToMigrateInsurance",
-        "conditionalValue": false,
         "required": true,
         "type": "object"
       },
       "issueDay": {
-        "conditionalKey": "intendsToMigrateInsurance",
-        "conditionalValue": false,
         "type": "string",
         "format": "date"
       },
       "bankCompany": {
-        "conditionalKey": "mortgagee",
-        "conditionalValue": true,
-        "conditionalHiddenKey": "importAndCustomsCleared",
-        "conditionalHiddenValue": true,
         "required": true,
         "type": "object"
       },
       "oldLicensePlateNumber": {
-        "conditionalKey": "intendsToMigrateInsurance",
-        "conditionalValue": false,
         "type": "string",
         "pattern": "^[a-zA-Z]{2}\\s?\\d{5}$"
       }
@@ -124,8 +82,10 @@
       "items": [
         {
           "key": "hidden_isNotAllowedToBuy",
-          "validationMessage": "Denne bilen kan dessverre ikke tegnes på nett, vennligst ta kontakt med kundeservice.",
-          "type": "hidden"
+          "validationMessage": "Denne bilen kan dessverre ikke tegnes på nett, vennligst ta kontakt med kundeservice",
+          "type": "hidden",
+          "conditionalKey": "importAndCustomsCleared",
+          "conditionalValue": true
 
         },
         {
@@ -133,7 +93,9 @@
           "validationMessage": "Vennligst oppgi registreringsnummer i riktig format, eks: AD12345",
           "title": "Registreringsnummer",
           "type": "string",
-          "placeholder": "Registreringsnummer"
+          "placeholder": "Registreringsnummer",
+          "conditionalDisabledKey": "hasAutoIdentificationNumber",
+          "conditionalDisabledValue": true
         },
         {
           "key": "hasAutoIdentificationNumber",
@@ -147,43 +109,58 @@
           "titleMap": [
             {"value": true, "name": "Ja"},
             {"value": false, "name": "Nei"}
-          ]
+          ],
+          "conditionalKey": "hasAutoIdentificationNumber",
+          "conditionalValue": true
         },
         {
           "key": "autoIdentificationNumber",
           "type": "string",
-          "title": "Understellsnummer – 6 siste tegn"
-        },
-        {
-          "type": "hidden",
-          "key": "hidden_intendsToMigrateInsurance",
-          "validationMessage": "Du haroppgitt en bonus høyere enn 20 %. Hvillken bil og hvilket forsikringsselskap skal bonusen overføres fra?"
+          "title": "Understellsnummer – 6 siste tegn",
+          "conditionalKey": "importAndCustomsCleared",
+          "conditionalValue": false
         },
         {
           "key": "mileage",
           "validationMessage": "Ugyldig verdi for kilometerstand. Vennligst bruk et gyldig tall for kilometerstanden",
           "type": "string",
           "title": "Kilometerstand",
-          "placeholder": "Kilometerstand"
+          "placeholder": "Kilometerstand",
+          "conditionalHiddenKey": "importAndCustomsCleared",
+          "conditionalHiddenValue": true
         },
         {
-          "type": "hidden",
-          "key": "hidden_cantMove",
-          "validationMessage": "Det er ikke mulig å flytte forsikringen fra et annet selskap hvis bilen ikke har reg.nr, vennligst ta kontakt med kundeservice."
+          "type": "infobox",
+          "infoMessage": "Det er ikke mulig å flytte forsikringen fra et annet selskap hvis bilen ikke har reg.nr, vennligst ta kontakt med kundeservice",
+          "conditionalKey": "hasAutoIdentificationNumber",
+          "conditionalValue": true,
+          "secondConditionalKey": "intendsToMigrateInsurance",
+          "secondConditionalValue": false
+        },
+        {
+          "type": "infobox",
+          "infoMessage": "Hvillken bil og hvilket forsikringsselskap skal bonusen overføres fra?",
+          "conditionalKey": "intendsToMigrateInsurance",
+          "conditionalValue": false
         },
         {
           "key": "intendsToMigrateInsurance",
           "title": "Vil du ha hjelp til oppsigelse",
           "type": "radios",
           "titleMap": [
-            {"value": true, "name": "Ja, jeg flytter forsikring til Storebrand fra et annet selskap."},
-            {"value": false, "name": "Nei, jeg har ingen forsikring som skal sies opp i annet selskap."}
-          ]
+            {"value": true, "name": "Ja, jeg flytter forsikring til Storebrand fra et annet selskap"},
+            {"value": false, "name": "Nei, jeg har ingen forsikring som skal sies opp i annet selskap"}
+          ],
+          "conditionalHiddenKey": "hasAutoIdentificationNumber",
+          "conditionalHiddenValue": true,
+          "secondConditionalHiddenKey": "importAndCustomsCleared",
+          "secondConditionalHiddenValue": true,
+          "setHiddenValue": false
         },
         {
           "key": "oldInsuranceCompany",
           "type": "select",
-          "title": "Angi selskap du flytter fra.",
+          "title": "Angi selskap du flytter fra",
           "titleMap": [
             {
               "name": "Agria Dyreforsikring",
@@ -1472,7 +1449,9 @@
                 }
               }
             }
-          ]
+          ],
+          "conditionalKey": "intendsToMigrateInsurance",
+          "conditionalValue": true
         },
         {
           "key": "customerPreviousInsurancePolicyholder",
@@ -1482,12 +1461,16 @@
           "titleMap": [
             {"value": true, "name": "Ja"},
             {"value": false, "name": "Nei"}
-          ]
+          ],
+          "conditionalKey": "intendsToMigrateInsurance",
+          "conditionalValue": true
         },
         {
           "key": "previousInsurancePolicyholderNameSSN",
           "type": "string",
-          "title": "Navn og fødselsdato på forsikringstaker i nåværende selskap"
+          "title": "Navn og fødselsdato på forsikringstaker i nåværende selskap",
+          "conditionalKey": "customerPreviousInsurancePolicyholder",
+          "conditionalValue": false
         },
         {
           "key": "expirationDateKnown",
@@ -1496,18 +1479,22 @@
           "titleMap": [
             {"value": true, "name": "Ja"},
             {"value": false, "name": "Nei"}
-          ]
+          ],
+          "conditionalKey": "intendsToMigrateInsurance",
+          "conditionalValue": true
         },
         {
           "key": "expirationDateDay",
           "validationMessage": "Vennligst fyll inn dato for oppsigelse i annet selskap",
-          "title": "Dato for forfall i annet forsikringsselskap"
+          "title": "Dato for forfall i annet forsikringsselskap",
+          "conditionalKey": "expirationDateKnown",
+          "conditionalValue": true
         },
         {
           "key": "insuranceCompany",
           "type": "select",
-          "validationMessage": "Vennligst oppgi hvilke forsikringsselskap bonusen skal overføres fra.",
-          "title": "Angi selskap vi skal hente bonus fra.",
+          "validationMessage": "Vennligst oppgi hvilke forsikringsselskap bonusen skal overføres fra",
+          "title": "Angi selskap vi skal hente bonus fra",
           "titleMap": [
             {
               "name": "Agria Dyreforsikring",
@@ -2788,19 +2775,25 @@
                 }
               }
             }
-          ]
+          ],
+          "conditionalKey": "intendsToMigrateInsurance",
+          "conditionalValue": false
         },
         {
           "key": "oldLicensePlateNumber",
           "validationMessage": "Vennligst oppgi registreringsnummer i riktig format, eks: AD12345",
           "title": "Registreringsnummer",
           "type": "string",
-          "placeholder": "Registreringsnummer"
+          "placeholder": "Registreringsnummer",
+          "conditionalKey": "intendsToMigrateInsurance",
+          "conditionalValue": false
         },
         {
           "key": "issueDay",
           "validationMessage": "Dato for forfall i annet forsikringsselskap",
-          "title": "Dato for forfall i annet forsikringsselskap"
+          "title": "Dato for forfall i annet forsikringsselskap",
+          "conditionalKey": "intendsToMigrateInsurance",
+          "conditionalValue": false
         },
         {
           "key": "bankCompany",
@@ -4225,7 +4218,11 @@
                 }
               }
             }
-          ]
+          ],
+          "conditionalKey": "mortgagee",
+          "conditionalValue": true,
+          "conditionalHiddenKey": "importAndCustomsCleared",
+          "conditionalHiddenValue": true
         }
       ]
     }
