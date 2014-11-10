@@ -325,7 +325,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 scope.form.schema.required = show;
               }
               if (scope.form.key && !show) {
-                var model = $parse(createModelName(scope.form, scope.defaultGlobals, scope.form.key));
+                var model = $parse(scope.keyModelName);
                 if (isHidden() && !setUndefinedAnyway() && angular.isDefined(scope.form.setHiddenValue)) {
                   model.assign(scope, scope.form.setHiddenValue);
                 } else {
@@ -359,6 +359,52 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 element.find('input').val('');
               }
               return scope.form.disabled || disabled;
+            };
+
+
+            var updateInfoDate = function () {
+              var date = lookupForKey(scope.model, scope.form.undefinedConditionKey);
+              var today = moment();
+              var minMonthlyDifference = scope.form.minMonthlyDifference || 0;
+              var maxMonthlyDifference = scope.form.maxMonthlyDifference;
+              var additionalMonthlyDifference = scope.form.additionalMonthlyDifference;
+              var selectedDate = moment(date);
+
+              if (date && maxMonthlyDifference && additionalMonthlyDifference) {
+
+                if ((selectedDate.toDate().getTime() < moment(today).add(minMonthlyDifference, 'Month').toDate().getTime())
+                    || (selectedDate.toDate().getTime() > moment(today).add(maxMonthlyDifference, 'Month').toDate().getTime())) {
+                  selectedDate = today.add(additionalMonthlyDifference, 'Month');
+                }
+              }
+
+              return selectedDate;
+            };
+
+            scope.hideWhenUndefined = function () {
+              var hide =  angular.isDefined(scope.form.undefinedConditionKey) && angular.isUndefined(lookupForKey(scope.model, scope.form.undefinedConditionKey));
+              var model = $parse(scope.keyModelName);
+
+              if (!hide) {
+                var selectedDate = updateInfoDate();
+
+                if (scope.form.key) {
+                  model.assign(scope, selectedDate.toDate().toISOString());
+                }
+              } else {
+                model.assign(scope, undefined);
+              }
+
+              return hide;
+            };
+
+            scope.getInfoDate = function () {
+              var selectedDate = updateInfoDate();
+
+
+              moment.locale(scope.form.encoding);
+              return moment(selectedDate).format(scope.form.format);
+
             };
 
             /**

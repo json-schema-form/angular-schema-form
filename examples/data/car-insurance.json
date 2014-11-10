@@ -26,7 +26,7 @@
       },
       "mileage": {
         "type": "string",
-        "maxLength": "6",
+        "maxLength": 6,
         "pattern": "^\\d{1,6}$",
         "required": true
       },
@@ -52,6 +52,10 @@
       },
       "expirationDateKnown": {
         "type": "boolean"
+      },
+      "hidden_expirationDateDay": {
+        "type": "string",
+        "format": "date"
       },
       "expirationDateDay": {
         "type": "string",
@@ -1485,7 +1489,7 @@
           "conditionalValue": true
         },
         {
-          "key": "expirationDateDay",
+          "key": "hidden_expirationDateDay",
           "validationMessage": "Vennligst fyll inn dato for oppsigelse i annet selskap",
           "title": "Dato for forfall i annet forsikringsselskap",
           "conditionalKey": "expirationDateKnown",
@@ -2793,6 +2797,8 @@
           "key": "issueDay",
           "validationMessage": "Dato for forfall i annet forsikringsselskap",
           "title": "Dato for forfall i annet forsikringsselskap",
+          "disableUntilToday": true,
+          "monthlyDifference": 3,
           "conditionalKey": "intendsToMigrateInsurance",
           "conditionalValue": false
         },
@@ -4224,6 +4230,24 @@
           "conditionalValue": true,
           "conditionalHiddenKey": "importAndCustomsCleared",
           "conditionalHiddenValue": true
+        },
+        {
+          "type": "infodate",
+          "undefinedConditionKey": "issueDay",
+          "encoding": "nn",
+          "format": "Do MMMM YYYY",
+          "staticMessage": "Forsikringen vil gjelde fra"
+        },
+        {
+          "type": "infodate",
+          "key": "expirationDateDay",
+          "maxMonthlyDifference": 2,
+          "minMonthlyDifference": 0,
+          "additionalMonthlyDifference": 1,
+          "undefinedConditionKey": "hidden_expirationDateDay",
+          "encoding": "nn",
+          "format": "Do MMMM YYYY",
+          "staticMessage": "Forsikringen vil gjelde fra"
         }
       ]
     }
