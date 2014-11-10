@@ -260,7 +260,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   model.assign(scope, selectedDate.toDate().toISOString());
                 }
               } else {
-                model.assign(scope, undefined);
+                if (scope.form.key) {
+                  model.assign(scope, undefined);
+                }
               }
 
               return hide;
