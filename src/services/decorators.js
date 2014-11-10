@@ -251,21 +251,19 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
             scope.hideWhenUndefined = function () {
               var hide =  angular.isDefined(scope.form.undefinedConditionKey) && angular.isUndefined(lookupForKey(scope.model, scope.form.undefinedConditionKey));
-              var model = $parse(scope.keyModelName);
-
-              if (!hide) {
-                var selectedDate = updateInfoDate();
-
-                if (scope.form.key) {
-                  model.assign(scope, selectedDate.toDate().toISOString());
-                }
-              } else {
-                if (scope.form.key) {
-                  model.assign(scope, undefined);
-                }
-              }
 
               return hide;
+            };
+
+            scope.setDateWatcher = function () {
+              var value = function () {
+                return lookupForKey(scope.model, scope.form.undefinedConditionKey);
+              };
+              scope.$watch(value, function () {
+                var model = $parse(scope.keyModelName);
+                var selectedDate = updateInfoDate();
+                model.assign(scope, selectedDate.toDate().toISOString());
+              });
             };
 
             scope.getInfoDate = function () {
