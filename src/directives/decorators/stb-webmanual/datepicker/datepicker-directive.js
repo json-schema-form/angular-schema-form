@@ -1,4 +1,4 @@
-angular.module('schemaForm').directive('stbDatepicker', function() {
+angular.module('schemaForm').directive('stbDatepicker', ['$timeout', function($timeout) {
   return {
     restrict: 'A',
     require : 'ngModel',
@@ -29,6 +29,10 @@ angular.module('schemaForm').directive('stbDatepicker', function() {
         });
       });
 
+      $timeout(function () {
+        $(element).parent().data("DateTimePicker").setDate(moment(ngModelCtrl.$viewValue).format("DD.MM.YYYY"));
+      }, 0);
+
     }
   };
-});
+}]);
