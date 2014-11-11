@@ -55,11 +55,13 @@
       },
       "hidden_expirationDateDay": {
         "type": "string",
-        "format": "date"
+        "required": true,
+        "format": "date-format"
       },
       "expirationDateDay": {
         "type": "string",
-        "format": "date"
+        "required": true,
+        "format": "date-format"
       },
       "insuranceCompany": {
         "required": true,
@@ -67,7 +69,8 @@
       },
       "issueDay": {
         "type": "string",
-        "format": "date"
+        "required": true,
+        "format": "date-format"
       },
       "bankCompany": {
         "required": true,

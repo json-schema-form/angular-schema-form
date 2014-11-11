@@ -230,8 +230,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
 
-            var updateInfoDate = function () {
-              var date = lookupForKey(scope.model, scope.form.undefinedConditionKey);
+            var updateInfoDate = function (date) {
+              date = date || lookupForKey(scope.model, scope.form.undefinedConditionKey);
               var today = moment();
               var minMonthlyDifference = scope.form.minMonthlyDifference || 0;
               var maxMonthlyDifference = scope.form.maxMonthlyDifference;
@@ -256,14 +256,18 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.setDateWatcher = function () {
-              var value = function () {
-                return lookupForKey(scope.model, scope.form.undefinedConditionKey);
-              };
-              scope.$watch(value, function () {
-                var model = $parse(scope.keyModelName);
-                var selectedDate = updateInfoDate();
-                model.assign(scope, selectedDate.toDate().toISOString());
-              });
+              if (scope.form.key) {
+                var value = function () {
+                  return lookupForKey(scope.model, scope.form.undefinedConditionKey);
+                };
+                scope.$watch(value, function (newDate) {
+                  if (newDate) {
+                    var model = $parse(scope.keyModelName);
+                    var selectedDate = updateInfoDate(newDate);
+                    model.assign(scope, selectedDate.toDate().toISOString());
+                  }
+                });
+              }
             };
 
             scope.getInfoDate = function () {
