@@ -33,7 +33,7 @@ angular.module('schemaForm').directive('ngModelOnblur', function() {
           }
 
           if (elm.val().length >= maxLength) {
-            return false;
+            e.preventDefault();
           }
         });
 
