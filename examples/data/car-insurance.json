@@ -4247,6 +4247,7 @@
           "maxMonthlyDifference": 2,
           "minMonthlyDifference": 0,
           "additionalMonthlyDifference": 1,
+          "additionalDailyDifference": 1,
           "undefinedConditionKey": "hidden_expirationDateDay",
           "encoding": "nn",
           "format": "Do MMMM YYYY",

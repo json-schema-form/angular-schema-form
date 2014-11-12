@@ -236,13 +236,19 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               var minMonthlyDifference = scope.form.minMonthlyDifference || 0;
               var maxMonthlyDifference = scope.form.maxMonthlyDifference;
               var additionalMonthlyDifference = scope.form.additionalMonthlyDifference;
+              var additionalDailyDifference = scope.form.additionalDailyDifference;
               var selectedDate = moment(date);
+
+              today.milliseconds(0);
+              today.second(0);
+              today.minute(0);
+              today.hours(0);
 
               if (date && maxMonthlyDifference && additionalMonthlyDifference) {
 
                 if ((selectedDate.toDate().getTime() < moment(today).add(minMonthlyDifference, 'Month').toDate().getTime())
                     || (selectedDate.toDate().getTime() > moment(today).add(maxMonthlyDifference, 'Month').toDate().getTime())) {
-                  selectedDate = today.add(additionalMonthlyDifference, 'Month');
+                  selectedDate = today.add(additionalMonthlyDifference, 'Month').add(additionalDailyDifference, 'Day');
                 }
               }
 
