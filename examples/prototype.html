@@ -51,7 +51,22 @@
             $scope.click = function () {
                 console.log('fasf')
             }
-            $scope.modelData = {};
+            $scope.modelData = {"mortgagee": true,
+                "$open": {
+                    "bankCompany": {
+                        "name": "Ørskog Sparebank",
+                        "value": {
+                            "orgInfo": {
+                                "orgName": {
+                                    "name": "Ørskog Sparebank"
+                                }
+                            },
+                            "contactPoints": {
+                                "Privat - Panthaver": "post@orskogsparebank.no"
+                            }
+                        }
+                    }
+                }};
             window.md = $scope.modelData;
         });
 
