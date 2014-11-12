@@ -25,7 +25,7 @@ angular.module('schemaForm').directive('stbDatepicker', ['$timeout', function($t
         });
       }).on('dp.error', function (e) {
         scope.$apply(function () {
-          ngModelCtrl.$setViewValue(element.val());
+          ngModelCtrl.$setViewValue(undefined);
         });
       });
 
