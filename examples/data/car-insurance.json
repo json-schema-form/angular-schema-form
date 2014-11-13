@@ -99,7 +99,7 @@
         {
           "key": "licensePlateNumber",
           "validationMessage": "Vennligst oppgi registreringsnummer i riktig format, eks: AD12345",
-          "infoMessage": "smth very helpful",
+          "infoMessage": "Vi trenger ditt bilnummer for å melde fra til bilregisteret om at du er forsikret. Gjelder forsikringen en nyregistert eller uregistrert bil, krysser du av på at du ikke har reg.nr og fyller inn understellsnummer",
           "title": "Registreringsnummer",
           "type": "string",
           "placeholder": "Registreringsnummer",
@@ -114,6 +114,7 @@
         {
           "key": "importAndCustomsCleared",
           "title": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge ?",
+          "validationMessage": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge?",
           "type": "radios-inline",
           "titleMap": [
             {"value": true, "name": "Ja"},
@@ -126,12 +127,14 @@
           "key": "autoIdentificationNumber",
           "type": "string",
           "title": "Understellsnummer – 6 siste tegn",
+          "validationMessage": "Understellsnummer må inneholde 6 tall",
           "conditionalKey": "importAndCustomsCleared",
           "conditionalValue": false
         },
         {
           "key": "mileage",
-          "validationMessage": "Ugyldig verdi for kilometerstand. Vennligst bruk et gyldig tall for kilometerstanden",
+          "validationMessage": "Ugyldig verdi for kilometerstand.",
+          "infoMessage": "'Kilometerstand leser du av på bilen din. Riktig kilometerstand er viktig i et eventuelt erstatningsoppgjør",
           "type": "string",
           "title": "Kilometerstand",
           "placeholder": "Kilometerstand",
@@ -147,14 +150,10 @@
           "secondConditionalValue": false
         },
         {
-          "type": "infobox",
-          "infoMessage": "Hvillken bil og hvilket forsikringsselskap skal bonusen overføres fra?",
-          "conditionalKey": "intendsToMigrateInsurance",
-          "conditionalValue": false
-        },
-        {
           "key": "intendsToMigrateInsurance",
           "title": "Vil du ha hjelp til oppsigelse",
+          "validationMessage": "Vennligst gjør et valg",
+          "infoMessage": "Har du tilsvarende forsikring fra før som skal sies opp i eksisterende selskap, velg JA. Du sender da oppsigelsen direkte til ditt eksisterende forsikringsselskap fra vår e-postserver",
           "type": "radios",
           "titleMap": [
             {"value": true, "name": "Ja, jeg flytter forsikring til Storebrand fra et annet selskap"},
@@ -167,8 +166,18 @@
           "setHiddenValue": false
         },
         {
+          "type": "infobox",
+          "infoMessage": "Hvillken bil og hvilket forsikringsselskap skal bonusen overføres fra?",
+          "conditionalKey": "intendsToMigrateInsurance",
+          "conditionalValue": false,
+          "conditionalHiddenKey": "bonusLevelCode",
+          "conditionalHiddenValue": "11"
+        },
+        {
           "key": "oldInsuranceCompany",
           "type": "select",
+          "validationMessage": "Vennligst gjør et valg",
+          "infoMessage": "Vi sender oppsigelsen til det selskap du oppgir",
           "title": "Angi selskap du flytter fra",
           "titleMap": [
             {
@@ -1464,7 +1473,8 @@
         },
         {
           "key": "customerPreviousInsurancePolicyholder",
-          "validationMessage": "Vennligst oppgi om forsikringen i nåværende er registrert i ditt navn",
+          "validationMessage": "Vennligst oppgi om forsikringen i nåværende selskap er registrert i ditt navn",
+          "infoMessage": "Forsikringer i nåværende selskap kan kun sies opp på vegne av ektefelle/samboere",
           "type": "radios-inline",
           "title": "Er forsikringen i nåværende selskap registrert i ditt navn?",
           "titleMap": [
@@ -1478,6 +1488,7 @@
           "key": "previousInsurancePolicyholderNameSSN",
           "type": "string",
           "title": "Navn og fødselsdato på forsikringstaker i nåværende selskap",
+          "validationMessage": "Vennligst oppgi navn og fødselsdato på forsikringstaker i nåværende selskap",
           "conditionalKey": "customerPreviousInsurancePolicyholder",
           "conditionalValue": false
         },
@@ -1485,6 +1496,8 @@
           "key": "expirationDateKnown",
           "type": "radios-inline",
           "title": "Vet du dato for hovedforfall for denne forsikringen i ditt nåværende selskap?",
+          "validationMessage": "Vennligst gjør et valg",
+          "infoMessage": "Hovedforfall finner sted en gang i året og definerer startdato for forsikringsavtalen.",
           "titleMap": [
             {"value": true, "name": "Ja"},
             {"value": false, "name": "Nei"}
@@ -1494,7 +1507,8 @@
         },
         {
           "key": "hidden_expirationDateDay",
-          "validationMessage": "Vennligst fyll inn dato for oppsigelse i annet selskap",
+          "validationMessage": "Vennligst fyll ut dato",
+          "infoMessage": "Her legger du inn dato for hovedforfall i det selskap du flytter ifra",
           "title": "Dato for forfall i annet forsikringsselskap",
           "conditionalKey": "expirationDateKnown",
           "conditionalValue": true
@@ -1502,7 +1516,8 @@
         {
           "key": "insuranceCompany",
           "type": "select",
-          "validationMessage": "Vennligst oppgi hvilke forsikringsselskap bonusen skal overføres fra",
+          "validationMessage": "Oppgi hvilket forsikringsselskap bonusen skal overføres fra",
+          "infoMessage": "Vi sender bonusforespørsel til det selskap du oppgir",
           "title": "Angi selskap vi skal hente bonus fra",
           "titleMap": [
             {
@@ -2786,21 +2801,27 @@
             }
           ],
           "conditionalKey": "intendsToMigrateInsurance",
-          "conditionalValue": false
+          "conditionalValue": false,
+          "conditionalHiddenKey": "bonusLevelCode",
+          "conditionalHiddenValue": "11"
         },
         {
           "key": "oldLicensePlateNumber",
           "validationMessage": "Vennligst oppgi registreringsnummer i riktig format, eks: AD12345",
+          "infoMessage": "Oppgi bilnummeret for bilen som bonus skal hentes fra. Ved nyanskaffelse av bil nr to, legger du inn kjennetegn på eksisterende bil i Storebrand. Oppgi din ønskede kjørelengde. Klikk her for mer informasjon om bonusregler",
           "title": "Registreringsnummer",
           "type": "string",
           "placeholder": "Registreringsnummer",
           "conditionalKey": "intendsToMigrateInsurance",
-          "conditionalValue": false
+          "conditionalValue": false,
+          "conditionalHiddenKey": "bonusLevelCode",
+          "conditionalHiddenValue": "11"
         },
         {
           "key": "issueDay",
-          "validationMessage": "Dato for forfall i annet forsikringsselskap",
-          "title": "Dato for forfall i annet forsikringsselskap",
+          "validationMessage": "Vennligst fyll ut dato",
+          "infoMessage": "Du kan ikke velge dato tilbake i tid. Du kan velge \"gjelder fra dato\" inntil 3 måneder frem i tid dersom det er ønskelig",
+          "title": "Når skal forsikringen gjelde fra",
           "disableUntilToday": true,
           "monthlyDifference": 3,
           "conditionalKey": "intendsToMigrateInsurance",
@@ -2809,6 +2830,7 @@
         {
           "key": "bankCompany",
           "validationMessage": "Vennligst gjør et valg",
+          "infoMessage": "Dersom du har tatt opp lån med sikkerhet i bilen så er vi lovpålagt å varsle din långiver om du selger bilen",
           "title": "I hvilket selskap har du lånt penger til bilen din?",
           "type": "select",
           "titleMap": [
