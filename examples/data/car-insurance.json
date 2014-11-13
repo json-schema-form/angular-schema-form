@@ -99,6 +99,7 @@
         {
           "key": "licensePlateNumber",
           "validationMessage": "Vennligst oppgi registreringsnummer i riktig format, eks: AD12345",
+          "infoMessage": "smth very helpful",
           "title": "Registreringsnummer",
           "type": "string",
           "placeholder": "Registreringsnummer",

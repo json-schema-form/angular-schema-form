@@ -1,0 +1,12 @@
+<span class="stb-color-sprite-medium info" ng-click="showInfo = !showInfo;"></span>
+<div class="row" ng-show="showInfo">
+        <div class="col-md-12 bottom-margin-20" style="display: table">
+        <div class="msgIcon stbcolor-secondary fifth" style="display: table-cell; text-align: center; vertical-align: middle; padding: 0;"><span class="stb-color-sprite-medium info"></span></div>
+        <div class="msgText stbcolor-background first" style="display: table-cell; vertical-align: middle; background: #fff">
+            <button data-dismiss="modal" ng-click="showInfo = !showInfo;" class="close" type="button">
+                <p class="pull-left">Lukk <span style="margin-right:10px;" class="stb-sprite-small remove"></span></p>
+            </button>
+            <p>{{infoMessage}}</p>
+        </div>
+    </div>
+</div>

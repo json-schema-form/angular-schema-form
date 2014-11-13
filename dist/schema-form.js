@@ -1466,6 +1466,21 @@ angular.module('schemaForm').directive('sfChanged', function() {
   };
 });
 
+
+angular.module('schemaForm')
+    .directive('infoHelpMessage', [function () {
+
+        return {
+            restrict: "AE",
+            templateUrl: 'directives/decorators/stb-webmanual/info-message.html',
+            scope: {
+                infoMessage: '='
+            },
+            link: function (scope, element, attrs) {
+            }
+        }
+    }]);
+
 // override the default input to update on blur
 angular.module('schemaForm').directive('ngModelOnblur', function() {
   return {
