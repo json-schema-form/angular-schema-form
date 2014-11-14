@@ -1,15 +1,10 @@
-<div class="stb-form-group al checkbox" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}" ng-show="showCondition()">
+<div class="stb-form-group checkboxes" ng-show="showCondition()">
 
-    <div class="help-block info-message"
-         ng-show="form.description && !hasError()"
-         ng-bind-html="form.description"
-         ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
-    </div>
     <div ng-if="!form.emptyView"
          class="help-block info-message has-error"
          ng-show="(hasError() && errorMessage(schemaError()))">
         <small class="help-block">
-            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <span class="stb-color-sprite-small warning circle"></span>
             <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
         </small>
     </div>
@@ -21,8 +16,8 @@
                ng-model-options="form.ngModelOptions"
                schema-validate="form"
                class="stb-checkbox">
-        <label class="stb-custom-input" ng-if="!form.emptyView" ng-bind-html="form.title"></label>
-        <label class="stb-custom-input" ng-if="form.emptyView" style="padding: 0; width: 40px; height: 40px"></label>
+        <label ng-if="!form.emptyView" ng-bind-html="form.title"></label>
+        <label ng-if="form.emptyView" style="padding: 0; width: 40px; height: 40px"></label>
     </div>
 
 </div>

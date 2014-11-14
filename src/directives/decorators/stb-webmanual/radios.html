@@ -1,16 +1,16 @@
-<div class="form-group top-margin-20" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}"  ng-show="showCondition()">
+<div class="radiobuttons top-margin-20"  ng-show="showCondition()">
 
-    <label ng-show="showTitle()" style="display: inline-block; margin-right: 10px">{{form.title}}
-        <span ng-show="!disabledElement() && hasSuccess()" class="success-message stb-color-sprite-small ok left-margin-10"></span>
-    </label>
+    <label ng-show="showTitle()" style="display: inline-block; margin-right: 10px">{{form.title}}</label>
     <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
 
-    <div class="error-message" ng-show="!disabledElement() && hasError()">
-        <span class="stb-color-sprite-small warning"></span>
-        <span class="input-faulty left-margin-10" ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
-    </div>
+    <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
+        <small class="help-block">
+            <span class="stb-color-sprite-small warning circle"></span>
+            <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+        </small>
+    </span>
 
-    <div class="radio stb-form-group al" ng-repeat="item in form.titleMap" >
+    <div class="stb-form-group" ng-repeat="item in form.titleMap" >
             <input type="radio"
                    sf-changed="form"
                    schema-validate="form"
@@ -19,6 +19,6 @@
                    ng-value="item.value"
                    class="stb-radio"
                    id="{{item.id}}">
-            <label for="{{item.id}}" class="stb-custom-input" ng-bind-html="item.name" style="margin: 3px"></label>
+            <label for="{{item.id}}" ng-bind-html="item.name" style="margin: 3px"></label>
     </div>
 </div>

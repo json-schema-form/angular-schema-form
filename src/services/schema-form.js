@@ -111,6 +111,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var checkbox = function(name, schema, options) {
+    console.log(options)
     if (schema.type === 'boolean') {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
@@ -341,9 +342,11 @@ angular.module('schemaForm').provider('schemaForm',
 
         // Special case: checkbox
         // Since have to ternary state we need a default
-        if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
-          obj.schema['default'] = false;
-        }
+
+        //TODO why is it here?
+        //if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
+        //  obj.schema['default'] = undefined;
+        //}
 
         return obj;
       }));

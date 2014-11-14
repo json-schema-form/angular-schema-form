@@ -1,24 +1,29 @@
-<div class="stb-form-group top-margin-20" ng-show="showCondition()">
-    <label ng-show="showTitle()" style="display: inline-block; margin-right: 10px">{{form.title}}
-        <span ng-show="!disabledElement() && hasSuccess()" class="success-message stb-color-sprite-small ok left-margin-10"></span>
-    </label>
+<div class="top-margin-20" ng-show="showCondition()">
+    <label ng-show="showTitle()" style="display: inline-block; margin-right: 10px">{{form.title}}</label>
     <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
 
-    <div class="error-message" ng-show="!disabledElement() && hasError()">
-        <span class="stb-color-sprite-small warning"></span>
-        <span class="input-faulty left-margin-10" ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
-    </div>
+    <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
+        <small class="help-block">
+            <span class="stb-color-sprite-small warning circle"></span>
+            <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+        </small>
+    </span>
+    <div class="stb-form-group" ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess(), 'has-feedback': form.feedback !== false }">
+        <input type="text"
+               ng-show="form.key"
+               type="{{form.type}}"
+               sf-changed="form"
+               placeholder="{{form.placeholder}}"
+               ng-model-options="form.ngModelOptions"
+               ng-model-onblur
+               model-max-length="form.schema.maxLength"
+               ng-model="$$value$$"
+               schema-validate="form"
+               ng-disabled="disabledElement()">
 
-    <input type="text"
-           ng-show="form.key"
-           type="{{form.type}}"
-           sf-changed="form"
-           placeholder="{{form.placeholder}}"
-           ng-model-options="form.ngModelOptions"
-           ng-model-onblur
-           model-max-length="form.schema.maxLength"
-           ng-model="$$value$$"
-           schema-validate="form"
-           ng-disabled="disabledElement()"
-           ng-class="{'input-fail': !disabledElement() && hasError(), 'input-success': !disabledElement() && hasSuccess()}">
+        <i class="form-control-feedback glyphicon"
+           style="top: 0px; display: block;"
+           ng-show="hasSuccess() || hasError()"
+           ng-class="{'glyphicon-remove': !disabledElement() && hasError(), 'glyphicon-ok': !disabledElement() && hasSuccess()}"></i>
+    </div>
 </div>

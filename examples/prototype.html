@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.time.css">
     <link rel="stylesheet" href="../bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css">
     <link rel="stylesheet" href="../bower_components/stb-datetimepicker/dist/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="../bower_components/stb-webmanual/css/stb-main.css">
+    <link href="//elements.storebrand.no/storebrand.ny/0.45/css/stb-main.css" type="text/css" rel="stylesheet"/>
 </head>
 <body ng-app="test" ng-controller="TestCtrl">
 <style>
@@ -51,27 +51,13 @@
             $scope.click = function () {
                 console.log('fasf')
             }
-            $scope.modelData = {"mortgagee": true,
-                "$open": {
-                    "bankCompany": {
-                        "name": "Ørskog Sparebank",
-                        "value": {
-                            "orgInfo": {
-                                "orgName": {
-                                    "name": "Ørskog Sparebank"
-                                }
-                            },
-                            "contactPoints": {
-                                "Privat - Panthaver": "post@orskogsparebank.no"
-                            }
-                        }
-                    }
-                }};
+            $scope.modelData = {"mortgagee": true};
+
             window.md = $scope.modelData;
         });
 
         $scope.submitForm = function (form, model) {
-            console.log(model)
+            console.log(model);
 
             $scope.$broadcast('schemaFormValidate');
             if (form.$valid) {

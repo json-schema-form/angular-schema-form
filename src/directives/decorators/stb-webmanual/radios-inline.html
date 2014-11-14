@@ -1,15 +1,15 @@
-<div class="top-margin-20" ng-show="showCondition()">
-    <label ng-show="showTitle()" style="display: inline-block; margin-right: 10px">{{form.title}}
-        <span ng-show="!disabledElement() && hasSuccess()" class="success-message stb-color-sprite-small ok left-margin-10"></span>
-    </label>
+<div class="top-margin-20 radiobuttons" ng-show="showCondition()">
+    <label ng-show="showTitle()" style="display: inline-block; margin-right: 10px">{{form.title}}</label>
     <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
 
-    <div class="error-message" ng-show="!disabledElement() && hasError()">
-        <span class="stb-color-sprite-small warning"></span>
-        <span class="input-faulty left-margin-10" ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
-    </div>
+    <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
+        <small class="help-block">
+            <span class="stb-color-sprite-small warning circle"></span>
+            <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+        </small>
+    </span>
 
-    <div class="form-group  has-feedback radios-inline" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+    <div class="stb-form-group radios-inline">
       <span ng-repeat="item in form.titleMap">
           <input type="radio"
                  schema-validate="form"
