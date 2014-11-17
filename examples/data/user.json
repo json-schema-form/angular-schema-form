@@ -1,0 +1,19 @@
+{
+"schema": {
+"type": "object",
+"properties": {
+"acceptTerms": {
+"type": "boolean",
+"required": true,
+"enum": [true]
+}
+}
+},
+
+
+"form": [{
+"key": "acceptTerms",
+"type": "checkbox",
+"emptyView": true
+}]
+}

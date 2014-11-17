@@ -269,6 +269,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
             var lookupForKey = function (obj, key) {
               var res;
+              if (angular.isUndefined(obj)) {
+                return res;
+              }
               $.each(obj, function (k1, v1) {
                 if (typeof v1 == "object") {
                   $.each(v1, function (k2, v2) {

@@ -41,7 +41,7 @@
 
     angular.module('test',['schemaForm']).controller('TestCtrl', function($scope,$http){
 
-        $scope.url = 'data/car-insurance.json';
+        $scope.url = 'data/user.json';
 
         $http.get($scope.url).then(function(res){
             $scope.schema = res.data.schema;
