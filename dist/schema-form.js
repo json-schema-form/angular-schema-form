@@ -273,9 +273,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 return res;
               }
               $.each(obj, function (k1, v1) {
-                if (typeof v1 == "object") {
+                if (angular.isObject(v1)) {
                   $.each(v1, function (k2, v2) {
-                    if (typeof v2 == "object") {
+                    if (angular.isObject(v2)) {
                       $.each(v2, function (k3, v3) {
                         if (k3 === key) {
                           res =  v3;
