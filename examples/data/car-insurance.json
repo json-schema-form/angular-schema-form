@@ -175,7 +175,7 @@
         },
         {
           "key": "oldInsuranceCompany",
-          "type": "select",
+          "type": "dropdown",
           "validationMessage": "Vennligst gjør et valg",
           "infoMessage": "Vi sender oppsigelsen til det selskap du oppgir",
           "title": "Angi selskap du flytter fra",
@@ -1515,7 +1515,7 @@
         },
         {
           "key": "insuranceCompany",
-          "type": "select",
+          "type": "dropdown",
           "validationMessage": "Oppgi hvilket forsikringsselskap bonusen skal overføres fra",
           "infoMessage": "Vi sender bonusforespørsel til det selskap du oppgir",
           "title": "Angi selskap vi skal hente bonus fra",
@@ -2832,7 +2832,7 @@
           "validationMessage": "Vennligst gjør et valg",
           "infoMessage": "Dersom du har tatt opp lån med sikkerhet i bilen så er vi lovpålagt å varsle din långiver om du selger bilen",
           "title": "I hvilket selskap har du lånt penger til bilen din?",
-          "type": "select",
+          "type": "dropdown",
           "titleMap": [
             {
               "name": "Annet Norsk selskap",

@@ -25,6 +25,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     'default': base + 'default.html',
     file: base + 'file.html',
     datepicker: base + 'datepicker.html',
+    dropdown: base + 'dropdown.html',
     hidden: base + 'hidden.html',
     infobox: base + 'infobox.html',
     infodate: base + 'date-info.html'
@@ -50,6 +51,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     date: base + 'default.html',
     password: base + 'default.html',
     datepicker: base + 'datepicker.html',
+    dropdown: base + 'dropdown.html',
     input: base + 'default.html',
     radios: base + 'radios.html',
     'radios-inline': base + 'radios-inline.html',

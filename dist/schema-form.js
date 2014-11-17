@@ -757,7 +757,6 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var checkbox = function(name, schema, options) {
-    console.log(options)
     if (schema.type === 'boolean') {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;

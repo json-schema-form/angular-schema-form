@@ -70,6 +70,18 @@ gulp.task('bootstrap-datepicker', function() {
 
 });
 
+gulp.task('dropdown', function() {
+  var stream = streamqueue({objectMode: true});
+  stream.queue(gulp.src('./src/directives/decorators/stb-webmanual/dropdown/*.js'));
+
+  stream.done()
+        .pipe(concat('dropdown.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest('./dist/'));
+
+
+});
+
 gulp.task('test', function() {
   return gulp.src([
     'bower_components/jquery/dist/jquery.min.js',
@@ -124,6 +136,7 @@ gulp.task('jscs', function() {
 gulp.task('default', [
   'minify',
   'bootstrap-datepicker',
+  'dropdown',
   'stb-webmanual',
   'non-minified-dist'
 ]);
