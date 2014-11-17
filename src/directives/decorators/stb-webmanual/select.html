@@ -1,15 +1,14 @@
 <div class="form-group top-margin-20" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false}"  ng-show="showCondition()">
-    <label ng-show="showTitle()" style="display: inline-block; margin-right: 10px">{{form.title}}
-        <span ng-show="!disabledElement() && hasSuccess()" class="success-message stb-color-sprite-small ok left-margin-10"></span>
-    </label>
-    <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
+    <div>
+        <label ng-show="showTitle()" style="display: inline-block; margin-right: 10px">{{form.title}}</label>
+        <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
+    </div>
 
     <div class="error-message" ng-show="!disabledElement() && hasError()">
         <span class="stb-color-sprite-small warning"></span>
         <span class="input-faulty left-margin-10" ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
     </div>
-
-    <div class="stb-form-group al select">
+    <div class="stb-form-group select" ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() &&(!form.conditionalValidationKey  || conditionalValidationSuccess()), 'has-feedback': form.feedback !== false }">
       <select ng-model="$$value$$"
               ng-model-options="form.ngModelOptions"
               sf-changed="form"

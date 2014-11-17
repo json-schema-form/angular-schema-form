@@ -1,4 +1,4 @@
-<div class="stb-form-group checkboxes" ng-show="showCondition()">
+<div class="stb-form-group top-margin-20 checkboxes" ng-show="showCondition()">
 
     <div ng-if="!form.emptyView"
          class="help-block info-message has-error"
@@ -16,7 +16,7 @@
                ng-model-options="form.ngModelOptions"
                schema-validate="form"
                class="stb-checkbox">
-        <label ng-if="!form.emptyView" ng-bind-html="form.title"></label>
+        <label ng-if="!form.emptyView" ng-bind-html="form.title" style="max-width: none"></label>
         <label ng-if="form.emptyView" style="padding: 0; width: 40px; height: 40px"></label>
     </div>
 
