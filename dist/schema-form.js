@@ -417,6 +417,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
             };
 
+            scope.conditionalValidationSuccess = function () {
+              return angular.isDefined(scope.form.conditionalValidationValue) && (lookupForKey(scope.model, scope.form.conditionalValidationKey) === scope.form.conditionalValidationValue);
+            };
+
             /**
              * Evaluate an expression, i.e. scope.$eval
              * but do it in sfSchemas parent scope sf-schema directive is used

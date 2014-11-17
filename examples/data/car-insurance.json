@@ -104,7 +104,9 @@
           "type": "string",
           "placeholder": "Registreringsnummer",
           "conditionalDisabledKey": "hasAutoIdentificationNumber",
-          "conditionalDisabledValue": true
+          "conditionalDisabledValue": true,
+          "conditionalValidationKey": "someKey",
+          "conditionalValidationValue": true
         },
         {
           "key": "hasAutoIdentificationNumber",

@@ -8,7 +8,7 @@
             <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
         </small>
     </span>
-    <div class="stb-form-group" ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess(), 'has-feedback': form.feedback !== false }">
+    <div class="stb-form-group" ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() &&(!form.conditionalValidationKey  || conditionalValidationSuccess()), 'has-feedback': form.feedback !== false }">
         <input type="text"
                ng-show="form.key"
                type="{{form.type}}"
@@ -24,7 +24,7 @@
 
         <i class="form-control-feedback glyphicon"
            style="top: 0px; display: block;"
-           ng-show="hasSuccess() || hasError()"
-           ng-class="{'glyphicon-remove': !disabledElement() && hasError(), 'glyphicon-ok': !disabledElement() && hasSuccess()}"></i>
+           ng-show="hasError() || hasSuccess() &&(!form.conditionalValidationKey  || conditionalValidationSuccess())"
+           ng-class="{'glyphicon-remove': !disabledElement() && hasError(), 'glyphicon-ok': !disabledElement() && hasSuccess() && (!form.conditionalValidationKey  || conditionalValidationSuccess())}"></i>
     </div>
 </div>
