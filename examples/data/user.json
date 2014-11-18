@@ -1,19 +1,115 @@
 {
-"schema": {
-"type": "object",
-"properties": {
-"acceptTerms": {
-"type": "boolean",
-"required": true,
-"enum": [true]
-}
-}
-},
+  "schema": {
+    "type": "object",
+    "properties": {
+      "hidden_userInvalidMessage": {
+        "type": "string",
+        "required": true
+      },
+      "hidden_wayToPay": {
+        "type": "string",
+        "required": true
+      },
+      "providedPersonInfo.nin": {
+        "type": "string",
+        "format": "ssn",
+        "required": true,
+        "minLength": 11,
+        "maxLength": 11
+      },
+      "providedPersonInfo.name.firstName": {
+        "type": "string",
+        "required": true
+      },
+      "providedPersonInfo.name.lastName": {
+        "type": "string",
+        "required": true
+      },
+      "providedContactInfo.email": {
+        "type": "string",
+        "format": "email",
+        "required": true
+      },
+      "providedContactInfo.mobilePhone": {
+        "type": "string",
+        "required": true,
+        "pattern": "^\\d{8}$"
+      }
+    }
+  },
 
 
-"form": [{
-"key": "acceptTerms",
-"type": "checkbox",
-"emptyView": true
-}]
+  "form": [
+    {
+      "key": "hidden_userInvalidMessage",
+      "validationMessage": "Vi har sjekket navnet ditt mot våre systemer, og ikke funnet treff i skrivemåte. Årsaken til dette kan være tegn som bindestrek, dobbel konsonanter (f.eks. Normann/Norman), K eller C (f.eks. Monica/Monika) eller utelatelse/tilføring av et mellomnavn uten at dette er registert i våre systemer. Har du fremdeles problemer, ta kontakt med kundeservice på telefon 08880 eller e-post skadeforsikring@storebrand.no.",
+      "type": "hidden",
+      "conditionalKey": "isValidCustomer",
+      "conditionalValue": false
+
+    },
+    {
+      "key": "hidden_wayToPay",
+      "title": "Hvordan ønsker du å betale forsikringen?",
+      "infoMessage": "Vi anbefaler at du oppretter avtalegiro. Dette kan du enkelt gjøre når du betaler første faktura i din nettbank",
+      "type": "radios",
+      "titleMap": [
+        {
+          "name": "Månedlig",
+          "value": "Månedlig"
+        },
+        {
+          "name": "Kvartalsvis",
+          "value": "Kvartalsvis"
+        },
+        {
+          "name": "Halvår",
+          "value": "Halvår"
+        },
+        {
+          "name": "Årlig",
+          "value": "Årlig"
+        }
+      ]
+    },
+    {
+      "key": "providedPersonInfo.nin",
+      "title": "Fødselsnummer",
+      "infoMessage": "'Fødselsnummer oppgis med 11 siffer",
+      "disabled": true,
+      "placeholder": "Fill in your ssn"
+    },
+    {
+      "key": "providedPersonInfo.name.firstName",
+      "title": "Fornavn",
+      "validationMessage": "Vennligst fyll inn ditt fornavn",
+      "infoMessage": "Vi anbefaler at du oppretter avtalegiro. Dette kan du enkelt gjøre når du betaler første faktura i din nettbank",
+      "placeholder": "Fornavn",
+      "conditionalValidationKey": "isValidCustomer",
+      "conditionalValidationValue": true
+    },
+    {
+      "key": "providedPersonInfo.name.lastName",
+      "title": "Etternavn",
+      "validationMessage": "Vennligst fyll inn ditt etternavn",
+      "infoMessage": "Vi anbefaler at du oppretter avtalegiro. Dette kan du enkelt gjøre når du betaler første faktura i din nettbank",
+      "placeholder": "Etternavn",
+      "conditionalValidationKey": "isValidCustomer",
+      "conditionalValidationValue": true
+    },
+    {
+      "key": "providedContactInfo.email",
+      "title": "Epost",
+      "validationMessage": "Vennligst sjekk at e-postadressen er korrekt",
+      "infoMessage": "Kontroller at din e-postadresse er riktig, da det er den vi sender bekreftelsesmelding til",
+      "placeholder": "Fill in your email"
+    },
+    {
+      "key": "providedContactInfo.mobilePhone",
+      "title": "Mobiltelefon",
+      "validationMessage": "Telefonnummeret må bestå av 8 siffer",
+      "infoMessage": "Vi anbefaler at du oppretter avtalegiro. Dette kan du enkelt gjøre når du betaler første faktura i din nettbank",
+      "placeholder": "Fill in your phone"
+    }
+  ]
 }
