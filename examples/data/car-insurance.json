@@ -144,7 +144,7 @@
           "conditionalHiddenValue": true
         },
         {
-          "type": "infobox",
+          "type": "successbox",
           "infoMessage": "Det er ikke mulig å flytte forsikringen fra et annet selskap hvis bilen ikke har reg.nr, vennligst ta kontakt med kundeservice",
           "conditionalKey": "hasAutoIdentificationNumber",
           "conditionalValue": true,

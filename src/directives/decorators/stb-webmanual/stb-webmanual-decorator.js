@@ -28,6 +28,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     dropdown: base + 'dropdown.html',
     hidden: base + 'hidden.html',
     infobox: base + 'infobox.html',
+    successbox: base + 'successbox.html',
     infodate: base + 'date-info.html'
   }, [
     function(form) {
