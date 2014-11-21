@@ -6,7 +6,7 @@
            ng-model="$$value$$"
            ng-model-options="form.ngModelOptions"
            schema-validate="form">
-    <span ng-bind-html="form.title"></span>
+    <span ng-bind-html="form.title" ng-show="showTitle()"></span>
   </label>
 
   <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
