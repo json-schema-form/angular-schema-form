@@ -10,7 +10,7 @@ angular.module('schemaForm').directive('stbDropdown', ['$timeout', '$parse', fun
         if (!value) {
           $(element).chosen().unbind('change').change(function (e, selected) {
             $.each(scope.form.titleMap, function (index, item) {
-                if (item.name === selected.selected) {
+                if (selected && item.name === selected.selected) {
 
                   ngModelCtrl.$setViewValue({name: item.name, value: item.value});
                 }
