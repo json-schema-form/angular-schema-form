@@ -32,7 +32,7 @@ angular.module('schemaForm').factory('sfValidator', [function() {
     },
     'email': function(data, schema) {
       if (typeof data === 'string') {
-       if (/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/.test(data)) {
+       if (/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/i.test(data)) {
          return null;
        } else {
          return 'invalid email';
