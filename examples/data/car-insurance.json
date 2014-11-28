@@ -142,6 +142,1654 @@
           "conditionalHiddenValue": true
         },
         {
+          "key": "bankCompany",
+          "validationMessage": "Vennligst gjør et valg",
+          "infoMessage": "Dersom du har tatt opp lån med sikkerhet i bilen så er vi lovpålagt å varsle din långiver om du selger bilen",
+          "title": "I hvilket selskap har du lånt penger til bilen din?",
+          "type": "dropdown",
+          "titleMap": [
+            {
+              "name": "Annet Norsk selskap",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Annet Norsk selskap"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "forsikring@storebrand.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "AS Financiering",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "AS Financiering"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "utbetaling@financiering.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Aurskog Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Aurskog Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "firmapost@aurskog-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Bertel O. Steen Finans AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Bertel O. Steen Finans AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "finans@bos.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "BFH Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "BFH Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@bfh-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Bjugn Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Bjugn Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@bjugn-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Blaker Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Blaker Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "blaker.sparebank@blakersparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "BMW Financial Services Norge Norsk avdeling av utenlandsk foretak",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "BMW Financial Services Norge Norsk avdeling av utenlandsk foretak"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "bmwfinans@bmw.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "BNP Paribas",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "BNP Paribas"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "kontaktoss@bnpparibas.com"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Brage Finans AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Brage Finans AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "regnskap@brage.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Danske Bank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Danske Bank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "08540@danskebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "DnB Finans",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "DnB Finans"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "forsikringsattest@dnb.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Duborgh Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Duborgh Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "duborgh@duborgh.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Eika Kredittbank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Eika Kredittbank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@eika.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Elcon/Santander Consumer Bank AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Elcon/Santander Consumer Bank AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "depot@santander.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "FCE Bank Norsk avdeling av utenlandsk foretak",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "FCE Bank Norsk avdeling av utenlandsk foretak"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "kundeser@ford.com"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Fjaler Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Fjaler Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@fjalerbank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Flekkefjord Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Flekkefjord Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "mail@flekkefjordsparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Fokus Bank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Fokus Bank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "08540@danskebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Ford Motor Norge AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Ford Motor Norge AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "kreditt@ford.com"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Forso Norge NUF",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Forso Norge NUF"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "kundeser@ford.com"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Ge Money Bilfinans AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Ge Money Bilfinans AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "bilfinans@ge.com"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Gjensidige Bank ASA ",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Gjensidige Bank ASA "
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "bilfinans@gjensidige.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Gjerstad Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Gjerstad Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@gjerstad-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Grong Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Grong Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "firmapost@grong-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "GS Banken",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "GS Banken"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@gsbanken.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Halden Sparebank 1",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Halden Sparebank 1"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@haldenspb.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Handelsbanken Finans NUF",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Handelsbanken Finans NUF"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "salgsfinansiering@handelsbanken.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Haugesund Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Haugesund Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@haugesund-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Hegra Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Hegra Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "banken@hegrasparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Helgeland Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Helgeland Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@hsb.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Hjartdal og Gransherad Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Hjartdal og Gransherad Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@hjartdalbanken.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Ikano Bank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Ikano Bank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "kundeservice.leasing@ikano.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Indre Sogn Sparebank ",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Indre Sogn Sparebank "
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "nettpost@indresognsparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Jernbanepers. bank og forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Jernbanepers. bank og forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "salg@jfg.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Kjøpmannshuset Norge AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Kjøpmannshuset Norge AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@kjopmannshuset.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Klepp Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Klepp Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@klepp-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Kollektivtrafikkens Personellservice BA",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Kollektivtrafikkens Personellservice BA"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@ktps.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Kvinnherad Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Kvinnherad Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "bankpost@ksbank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Lindorff",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Lindorff"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "laaneadm@lindorff.com"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Lom og Skjåk Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Lom og Skjåk Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "bankpost@lomogskjaak.sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Luster Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Luster Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@luster-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Marker Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Marker Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "epost@marker-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Maskinentreprenørenes Forbund",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Maskinentreprenørenes Forbund"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "firmapost@mef.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Melhus Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Melhus Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@melhusbanken.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Modum SpareBank 1",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Modum SpareBank 1"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "modum.sparebank@modum.sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Møre Finans AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Møre Finans AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "morefinans@sbm.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Nito AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Nito AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@nitotakst.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Nordea Finans Norge AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Nordea Finans Norge AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "forsikringer@nordeafinans.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Norsk Dental Depot AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Norsk Dental Depot AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "ndd@ndd.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Nøtterø Sparebank 1",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Nøtterø Sparebank 1"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "service@nottero.sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Obos ",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Obos "
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelser@eika.no "
+                  }
+                }
+              }
+            },
+            {
+              "name": "Odal Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Odal Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@odal-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Orkdal Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Orkdal Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "irene.auseth@orkdalsbanken.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Postbanken",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Postbanken"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "skadeforsikring@dnbnor.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Rygge-Vaaler Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Rygge-Vaaler Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@rvs.sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Rørosbanken",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Rørosbanken"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "firmapost@rorosbanken.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sandnes Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sandnes Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "direkte@sandnes-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Santander Consumer bank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Santander Consumer bank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "depot@santander.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "SG Finans AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SG Finans AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "kundeservice@sgfinans.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "SkandiaBanken AB",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SkandiaBanken AB"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "finansiering@skandiabanken.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Skandiabanken",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Skandiabanken"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "finansiering@skandiabanken.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Bergen",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Bergen"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Drammen",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Drammen"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Finans Østlandet AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Finans Østlandet AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@sb1fo.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Fredrikstad",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Fredrikstad"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Gran",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Gran"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Grenland",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Grenland"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Gudbrandsdal",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Gudbrandsdal"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Hallingdal",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Hallingdal"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Hedmark",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Hedmark"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Jevnaker",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Jevnaker"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Kongsberg",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Kongsberg"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Lunner",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Lunner"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Midt-Norge",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Midt-Norge"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Moss",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Moss"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Nittedal",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Nittedal"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Nord-Norge",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Nord-Norge"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Nordvest",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Nordvest"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Oslo",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Oslo"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@sb1fo.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Ringerike",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Ringerike"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 RomsdalsFellesbank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 RomsdalsFellesbank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Rygge",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Rygge"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Råde",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Råde"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Soon",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Soon"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 SR-bank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 SR-bank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Valdres",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Valdres"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Vestby",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Vestby"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Vestfold",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Vestfold"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Volda Ørsta",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Volda Ørsta"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Våler",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Våler"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebanken Hedmark",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebanken Hedmark"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "konsern@sparebanken-hedmark.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebanken Hemne",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebanken Hemne"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@sparebankenhemne.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebanken Møre",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebanken Møre"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "kundeservice@sbm.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebanken Pluss",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebanken Pluss"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "firmapost@sparebankenpluss.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebanken Sør",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebanken Sør"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "konsernledelsen@sor.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Sparebanken Vest",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebanken Vest"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "sparebanken.vest@spv.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Surnadal Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Surnadal Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@bank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Søgne og Greipstad Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Søgne og Greipstad Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@sgsparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Terra Finans AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Terra Finans AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@terra.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Thanke Retail AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Thanke Retail AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "firmapost@thanke.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Totens Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Totens Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@totenbanken.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Toyota kredittbank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Toyota kredittbank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "finans@toyota.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Volkswagen Møller bilfinans AS ",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Volkswagen Møller bilfinans AS "
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "kundeservice@vwfs.no "
+                  }
+                }
+              }
+            },
+            {
+              "name": "Volvo bilfinans",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Volvo bilfinans"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "hlundbla@volvocars.com"
+                  }
+                }
+              }
+            },
+            {
+              "name": "YA BANK AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "YA BANK AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@ya.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Ørland Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Ørland Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@orland-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Ørskog Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Ørskog Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@orskogsparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Åfjord Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Åfjord Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "firmapost@afjord-sparebank.no"
+                  }
+                }
+              }
+            }
+          ],
+          "conditionalKey": "mortgagee",
+          "conditionalValue": true,
+          "conditionalHiddenKey": "importAndCustomsCleared",
+          "conditionalHiddenValue": true
+        },
+        {
           "type": "infobox",
           "infoMessage": "Det er ikke mulig å flytte forsikringen fra et annet selskap hvis bilen ikke har reg.nr, vennligst ta kontakt med kundeservice",
           "conditionalKey": "hasAutoIdentificationNumber",
@@ -192,7 +1840,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "smadyr@agria.no"
+                      "Privat - Oppsigelse": {
+                        "email": "smadyr@agria.no"
+                      }
                     }
                   }
                 },
@@ -205,7 +1855,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "csg.norway@aig.com"
+                      "Privat - Oppsigelse": {
+                        "email": "csg.norway@aig.com"
+                      }
                     }
                   }
                 },
@@ -218,7 +1870,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "forsikring@storebrand.no"
+                      "Privat - Oppsigelse": {
+                        "email": "forsikring@storebrand.no"
+                      }
                     }
                   }
                 },
@@ -231,7 +1885,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "info@atlantica.no"
+                      "Privat - Oppsigelse": {
+                        "email": "info@atlantica.no"
+                      }
                     }
                   }
                 },
@@ -244,7 +1900,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "kunde@bluewater.no"
+                      "Privat - Oppsigelse": {
+                        "email": "kunde@bluewater.no"
+                      }
                     }
                   }
                 },
@@ -257,7 +1915,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@codanforsikring.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@codanforsikring.no"
+                      }
                     }
                   }
                 },
@@ -270,7 +1930,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "dancia@dancia.no"
+                      "Privat - Oppsigelse": {
+                        "email": "dancia@dancia.no"
+                      }
                     }
                   }
                 },
@@ -283,7 +1945,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelser.skadeforsikring@dnb.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelser.skadeforsikring@dnb.no"
+                      }
                     }
                   }
                 },
@@ -296,7 +1960,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "duborgh@duborgh.no"
+                      "Privat - Oppsigelse": {
+                        "email": "duborgh@duborgh.no"
+                      }
                     }
                   }
                 },
@@ -309,7 +1975,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelser@eika.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelser@eika.no"
+                      }
                     }
                   }
                 },
@@ -322,7 +1990,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelser@enter-forsikring.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelser@enter-forsikring.no"
+                      }
                     }
                   }
                 },
@@ -335,7 +2005,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelser@if.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelser@if.no"
+                      }
                     }
                   }
                 },
@@ -348,7 +2020,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@fjalerbank.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@fjalerbank.no"
+                      }
                     }
                   }
                 },
@@ -361,7 +2035,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@wli.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@wli.no"
+                      }
                     }
                   }
                 },
@@ -374,7 +2050,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@frende.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@frende.no"
+                      }
                     }
                   }
                 },
@@ -387,7 +2065,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "kundesenter@friskforsikring.no"
+                      "Privat - Oppsigelse": {
+                        "email": "kundesenter@friskforsikring.no"
+                      }
                     }
                   }
                 },
@@ -400,7 +2080,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse.privat@gjensidige.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse.privat@gjensidige.no"
+                      }
                     }
                   }
                 },
@@ -413,7 +2095,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@gouda.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@gouda.no"
+                      }
                     }
                   }
                 },
@@ -426,7 +2110,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@gsbanken.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@gsbanken.no"
+                      }
                     }
                   }
                 },
@@ -439,7 +2125,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@haldenspb.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@haldenspb.no"
+                      }
                     }
                   }
                 },
@@ -452,7 +2140,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@hsb.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@hsb.no"
+                      }
                     }
                   }
                 },
@@ -465,7 +2155,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@hjartdalbanken.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@hjartdalbanken.no"
+                      }
                     }
                   }
                 },
@@ -478,7 +2170,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelser@if.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelser@if.no"
+                      }
                     }
                   }
                 },
@@ -491,7 +2185,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@wli.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@wli.no"
+                      }
                     }
                   }
                 },
@@ -504,7 +2200,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "salg@jfg.no"
+                      "Privat - Oppsigelse": {
+                        "email": "salg@jfg.no"
+                      }
                     }
                   }
                 },
@@ -517,7 +2215,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "privatkunde@klp.no"
+                      "Privat - Oppsigelse": {
+                        "email": "privatkunde@klp.no"
+                      }
                     }
                   }
                 },
@@ -530,7 +2230,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@ktps.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@ktps.no"
+                      }
                     }
                   }
                 },
@@ -543,7 +2245,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@ktf-as.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@ktf-as.no"
+                      }
                     }
                   }
                 },
@@ -556,7 +2260,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "bankpost@ksbank.no"
+                      "Privat - Oppsigelse": {
+                        "email": "bankpost@ksbank.no"
+                      }
                     }
                   }
                 },
@@ -569,7 +2275,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@landbruksforsikring.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@landbruksforsikring.no"
+                      }
                     }
                   }
                 },
@@ -582,7 +2290,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "forsikring@lederne.no"
+                      "Privat - Oppsigelse": {
+                        "email": "forsikring@lederne.no"
+                      }
                     }
                   }
                 },
@@ -595,7 +2305,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "bankpost@lomogskjaak.sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "bankpost@lomogskjaak.sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -608,7 +2320,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "firmapost@mef.no"
+                      "Privat - Oppsigelse": {
+                        "email": "firmapost@mef.no"
+                      }
                     }
                   }
                 },
@@ -621,7 +2335,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@melhusbanken.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@melhusbanken.no"
+                      }
                     }
                   }
                 },
@@ -634,7 +2350,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "modum.sparebank@modum.sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "modum.sparebank@modum.sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -647,7 +2365,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "alesund@moretrygd.no"
+                      "Privat - Oppsigelse": {
+                        "email": "alesund@moretrygd.no"
+                      }
                     }
                   }
                 },
@@ -660,7 +2380,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelser@naf.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelser@naf.no"
+                      }
                     }
                   }
                 },
@@ -673,7 +2395,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@nemiforsikring.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@nemiforsikring.no"
+                      }
                     }
                   }
                 },
@@ -686,7 +2410,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@wli.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@wli.no"
+                      }
                     }
                   }
                 },
@@ -699,7 +2425,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "medlemsservice@norskfamilie.no"
+                      "Privat - Oppsigelse": {
+                        "email": "medlemsservice@norskfamilie.no"
+                      }
                     }
                   }
                 },
@@ -712,7 +2440,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "firmapost@hussoppen.no"
+                      "Privat - Oppsigelse": {
+                        "email": "firmapost@hussoppen.no"
+                      }
                     }
                   }
                 },
@@ -725,7 +2455,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "forsikring@norskprivatforsikring.no"
+                      "Privat - Oppsigelse": {
+                        "email": "forsikring@norskprivatforsikring.no"
+                      }
                     }
                   }
                 },
@@ -738,7 +2470,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "forsikring@sykepleierforbundet.no"
+                      "Privat - Oppsigelse": {
+                        "email": "forsikring@sykepleierforbundet.no"
+                      }
                     }
                   }
                 },
@@ -751,7 +2485,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@fender.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@fender.no"
+                      }
                     }
                   }
                 },
@@ -764,7 +2500,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "yacht@norwegianbroker.no "
+                      "Privat - Oppsigelse": {
+                        "email": "yacht@norwegianbroker.no "
+                      }
                     }
                   }
                 },
@@ -777,7 +2515,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "service@nottero.sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "service@nottero.sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -790,7 +2530,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelser@eika.no "
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelser@eika.no "
+                      }
                     }
                   }
                 },
@@ -803,7 +2545,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "skadeforsikring@dnbnor.no"
+                      "Privat - Oppsigelse": {
+                        "email": "skadeforsikring@dnbnor.no"
+                      }
                     }
                   }
                 },
@@ -816,7 +2560,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "meglerservice@protectorforsikring.no"
+                      "Privat - Oppsigelse": {
+                        "email": "meglerservice@protectorforsikring.no"
+                      }
                     }
                   }
                 },
@@ -829,7 +2575,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@quality-broker.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@quality-broker.no"
+                      }
                     }
                   }
                 },
@@ -842,7 +2590,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@reinforsikring.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@reinforsikring.no"
+                      }
                     }
                   }
                 },
@@ -855,7 +2605,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "volvia.norge@volvia.se"
+                      "Privat - Oppsigelse": {
+                        "email": "volvia.norge@volvia.se"
+                      }
                     }
                   }
                 },
@@ -868,7 +2620,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@rvs.sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@rvs.sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -881,7 +2635,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "direkte@sandnes-sparebank.no"
+                      "Privat - Oppsigelse": {
+                        "email": "direkte@sandnes-sparebank.no"
+                      }
                     }
                   }
                 },
@@ -894,7 +2650,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@wli.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@wli.no"
+                      }
                     }
                   }
                 },
@@ -907,7 +2665,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -920,7 +2680,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -933,7 +2695,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "eksternepartnere@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "eksternepartnere@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -946,7 +2710,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -959,7 +2725,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -972,7 +2740,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -985,7 +2755,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -998,7 +2770,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1011,7 +2785,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1024,7 +2800,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1037,7 +2815,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1050,7 +2830,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1063,7 +2845,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1076,7 +2860,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1089,7 +2875,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1102,7 +2890,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1115,7 +2905,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1128,7 +2920,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1141,7 +2935,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1154,7 +2950,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1167,7 +2965,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1180,7 +2980,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1193,7 +2995,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1206,7 +3010,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1219,7 +3025,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1232,7 +3040,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1245,7 +3055,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1258,7 +3070,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1271,7 +3085,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1284,7 +3100,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1297,7 +3115,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "kundeservice@frende.no"
+                      "Privat - Oppsigelse": {
+                        "email": "kundeservice@frende.no"
+                      }
                     }
                   }
                 },
@@ -1310,7 +3130,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "forsikring@storebrand.no"
+                      "Privat - Oppsigelse": {
+                        "email": "forsikring@storebrand.no"
+                      }
                     }
                   }
                 },
@@ -1323,7 +3145,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "kundeservice@tennant.no"
+                      "Privat - Oppsigelse": {
+                        "email": "kundeservice@tennant.no"
+                      }
                     }
                   }
                 },
@@ -1336,7 +3160,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelser@eika.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelser@eika.no"
+                      }
                     }
                   }
                 },
@@ -1349,7 +3175,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "backoffice@tennant.no"
+                      "Privat - Oppsigelse": {
+                        "email": "backoffice@tennant.no"
+                      }
                     }
                   }
                 },
@@ -1362,7 +3190,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@trollforsikring.no    "
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@trollforsikring.no    "
+                      }
                     }
                   }
                 },
@@ -1375,7 +3205,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelser.privat@tryg.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelser.privat@tryg.no"
+                      }
                     }
                   }
                 },
@@ -1388,7 +3220,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "eksternepartnere@sparebank1.no"
+                      "Privat - Oppsigelse": {
+                        "email": "eksternepartnere@sparebank1.no"
+                      }
                     }
                   }
                 },
@@ -1401,7 +3235,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelser@vardia.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelser@vardia.no"
+                      }
                     }
                   }
                 },
@@ -1414,7 +3250,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "volvia.norge@volvia.se"
+                      "Privat - Oppsigelse": {
+                        "email": "volvia.norge@volvia.se"
+                      }
                     }
                   }
                 },
@@ -1427,7 +3265,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@watercircles.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@watercircles.no"
+                      }
                     }
                   }
                 },
@@ -1440,7 +3280,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "oppsigelse@wli.no"
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@wli.no"
+                      }
                     }
                   }
                 },
@@ -1453,7 +3295,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@winterbergh.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@winterbergh.no"
+                      }
                     }
                   }
                 },
@@ -1466,7 +3310,9 @@
                       }
                     },
                     "contactPoints": {
-                      "Privat - Oppsigelse": "post@ya.no"
+                      "Privat - Oppsigelse": {
+                        "email": "post@ya.no"
+                      }
                     }
                   }
                 }
@@ -1515,1294 +3361,19 @@
               "title": "Dato for forfall i annet forsikringsselskap",
               "conditionalKey": "expirationDateKnown",
               "conditionalValue": true
-            },
+            }
+          ],
+          "conditionalKey": "intendsToMigrateInsurance",
+          "conditionalValue": true
+        },
+        {
+          "type": "whitebox",
+          "conditionalKey": "intendsToMigrateInsurance",
+          "conditionalValue": false,
+          "items": [
             {
-              "key": "insuranceCompany",
-              "type": "dropdown",
-              "validationMessage": "Oppgi hvilket forsikringsselskap bonusen skal overføres fra",
-              "infoMessage": "Vi sender bonusforespørsel til det selskap du oppgir",
-              "title": "Angi selskap vi skal hente bonus fra",
-              "titleMap": [
-                {
-                  "name": "Agria Dyreforsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Agria Dyreforsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "smadyr@agria.no"
-                    }
-                  }
-                },
-                {
-                  "name": "AIG Europe",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "AIG Europe"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "csg.norway@aig.com"
-                    }
-                  }
-                },
-                {
-                  "name": "Annet Norsk selskap",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Annet Norsk selskap"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "forsikring@storebrand.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Atlantica Båtforsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Atlantica Båtforsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "info@atlantica.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Bluewater Insurance ASA",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Bluewater Insurance ASA"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus@bluewater.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Codan",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Codan"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus@codanforsikring.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Dancia Pensjon",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Dancia Pensjon"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "dancia@dancia.no"
-                    }
-                  }
-                },
-                {
-                  "name": "DNB Skadeforsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "DNB Skadeforsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelser.skadeforsikring@dnb.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Duborgh Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Duborgh Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "duborgh@duborgh.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Eika Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Eika Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "fagstottepm@eika.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Enter Forsikring AS",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Enter Forsikring AS"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelser@enter-forsikring.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Europeiske Reiseforsikring ",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Europeiske Reiseforsikring "
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonusforesporsel@if.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Fjaler Sparebank",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Fjaler Sparebank"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@fjalerbank.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Forsikring fra Norske Boligbyggelag",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Forsikring fra Norske Boligbyggelag"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "nbbl@wli.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Frende Skadeforsikring AS",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Frende Skadeforsikring AS"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus@frende.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Frisk Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Frisk Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "kundesenter@friskforsikring.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Gjensidige",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Gjensidige"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus.privat@gjensidige.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Gouda Reiseforsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Gouda Reiseforsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@gouda.no"
-                    }
-                  }
-                },
-                {
-                  "name": "GS Banken",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "GS Banken"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@gsbanken.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Halden Sparebank 1",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Halden Sparebank 1"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@haldenspb.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Helgeland Sparebank",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Helgeland Sparebank"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@hsb.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Hjartdal og Gransherad Sparebank",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Hjartdal og Gransherad Sparebank"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@hjartdalbanken.no"
-                    }
-                  }
-                },
-                {
-                  "name": "IF Skadeforsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "IF Skadeforsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonusforesporsel@if.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Interhannover/ White Labell Insurance ASA",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Interhannover/ White Labell Insurance ASA"
-                      }
-                    },
-                    "contactPoints": {}
-                  }
-                },
-                {
-                  "name": "Jernbanepers. bank og forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Jernbanepers. bank og forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "salg@jfg.no"
-                    }
-                  }
-                },
-                {
-                  "name": "KLP Skadeforsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "KLP Skadeforsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "privatkunde@klp.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Kollektivtrafikkens Personellservice BA",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Kollektivtrafikkens Personellservice BA"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@ktps.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Kristen Norges Innkjøpsfellesskap",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Kristen Norges Innkjøpsfellesskap"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@ktf-as.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Kvinnherad Sparebank",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Kvinnherad Sparebank"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bankpost@kvinnherad.sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Landbruksforsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Landbruksforsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@landbruksforsikring.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Lederenes private skadeforsikringer",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Lederenes private skadeforsikringer"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "forsikring@lederne.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Lom og Skjåk Sparebank",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Lom og Skjåk Sparebank"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bankpost@lomogskjaak.sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Maskinentreprenørenes Forbund",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Maskinentreprenørenes Forbund"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "firmapost@mef.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Melhus Sparebank",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Melhus Sparebank"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@melhusbanken.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Modum SpareBank 1",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Modum SpareBank 1"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "modum.sparebank@modum.sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Møretrygd Gjensidig Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Møretrygd Gjensidig Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "alesund@moretrygd.no"
-                    }
-                  }
-                },
-                {
-                  "name": "NAF Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "NAF Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelser@naf.no"
-                    }
-                  }
-                },
-                {
-                  "name": "NEMI Forsikring ASA",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "NEMI Forsikring ASA"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus@nemiforsikring.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Nordic Insurance",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Nordic Insurance"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus@wli.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Norsk Familieøkonomi",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Norsk Familieøkonomi"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "kundeservice@tennant.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Norsk Hussopp Forsikring Gjensidig",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Norsk Hussopp Forsikring Gjensidig"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "firmapost@hussoppen.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Norsk Privatforsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Norsk Privatforsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "forsikring@norskprivatforsikring.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Norsk Sykepleierforbund",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Norsk Sykepleierforbund"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "forsikring@sykepleierforbundet.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Norske Sjø AS",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Norske Sjø AS"
-                      }
-                    },
-                    "contactPoints": {}
-                  }
-                },
-                {
-                  "name": "Norwegian Broker AS",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Norwegian Broker AS"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "yacht@norwegianbroker.no "
-                    }
-                  }
-                },
-                {
-                  "name": "Nøtterø Sparebank 1",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Nøtterø Sparebank 1"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "service@nottero.sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Obos ",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Obos "
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelser@eika.no "
-                    }
-                  }
-                },
-                {
-                  "name": "Postbanken",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Postbanken"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "skadeforsikring@dnbnor.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Protector Forsikring ASA",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Protector Forsikring ASA"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "meglerservice@protectorforsikring.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Quality Broker AS",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Quality Broker AS"
-                      }
-                    },
-                    "contactPoints": {}
-                  }
-                },
-                {
-                  "name": "Rein Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Rein Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus@reinforsikring.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Renault Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Renault Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "volvia.norge@volvia.se"
-                    }
-                  }
-                },
-                {
-                  "name": "Rygge-Vaaler Sparebank",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Rygge-Vaaler Sparebank"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@rvs.sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sandnes Sparebank",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sandnes Sparebank"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "direkte@sandnes-sparebank.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Smart Club Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Smart Club Forsikring"
-                      }
-                    },
-                    "contactPoints": {}
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Bergen",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Bergen"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Drammen",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Drammen"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Eksterne Partnere",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Eksterne Partnere"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus-ep@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "SpareBank 1 Fredrikstad",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Fredrikstad"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "SpareBank 1 Gran",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Gran"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Grenland",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Grenland"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "SpareBank 1 Gudbrandsdal",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Gudbrandsdal"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "SpareBank 1 Hallingdal",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Hallingdal"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Hedmark",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Hedmark"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Jevnaker",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Jevnaker"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Kongsberg",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Kongsberg"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Lunner",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Lunner"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Midt-Norge",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Midt-Norge"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Moss",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Moss"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Nittedal",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Nittedal"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Nord-Norge",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Nord-Norge"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Nordvest",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Nordvest"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Oslo",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Oslo"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Ringerike",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Ringerike"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 RomsdalsFellesbank",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 RomsdalsFellesbank"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Rygge",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Rygge"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Råde",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Råde"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Soon",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Soon"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 SR-bank",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 SR-bank"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Telemark",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Telemark"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Valdres",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Valdres"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Vestby",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Vestby"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Vestfold",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Vestfold"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Volda Ørsta",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Volda Ørsta"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebank 1 Våler",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebank 1 Våler"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Sparebanken Vest",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Sparebanken Vest"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "sparebanken.vest@spv.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Storebrand",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Storebrand"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "forsikring@storebrand.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Tennant Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Tennant Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "kundeservice@tennant.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Terra Skadeforsikring AS",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Terra Skadeforsikring AS"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "fagstottepm@eika.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Toyota Forsikring - AIOI",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Toyota Forsikring - AIOI"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "backoffice@tennant.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Troll Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Troll Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus@trollforsikring.no         "
-                    }
-                  }
-                },
-                {
-                  "name": "Tryg Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Tryg Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus@tryg.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Unison forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Unison forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus-ep@sparebank1.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Vardia Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Vardia Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "bonus@vardia.no "
-                    }
-                  }
-                },
-                {
-                  "name": "Volvia Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Volvia Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "volvia.norge@volvia.se"
-                    }
-                  }
-                },
-                {
-                  "name": "Watercircles Norge AS",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Watercircles Norge AS"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@watercircles.no"
-                    }
-                  }
-                },
-                {
-                  "name": "White Label Insurance AS",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "White Label Insurance AS"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "oppsigelse@wli.no"
-                    }
-                  }
-                },
-                {
-                  "name": "Winterbergh Forsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Winterbergh Forsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@winterbergh.no"
-                    }
-                  }
-                },
-                {
-                  "name": "YA BANK AS",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "YA BANK AS"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": "post@ya.no"
-                    }
-                  }
-                }
-              ],
+              "type": "help",
+              "helpvalue": "<div class='top-margin-20'><p><strong>Hvilken bil og hvilket forsikringsselskap skal bonusen overføres fra?</strong></p></div>",
               "conditionalKey": "intendsToMigrateInsurance",
               "conditionalValue": false,
               "conditionalHiddenKey": "bonusLevelCode",
@@ -2831,1436 +3402,6 @@
               "conditionalValue": false
             }
           ]
-        },
-        {
-          "key": "bankCompany",
-          "validationMessage": "Vennligst gjør et valg",
-          "infoMessage": "Dersom du har tatt opp lån med sikkerhet i bilen så er vi lovpålagt å varsle din långiver om du selger bilen",
-          "title": "I hvilket selskap har du lånt penger til bilen din?",
-          "type": "dropdown",
-          "titleMap": [
-            {
-              "name": "Annet Norsk selskap",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Annet Norsk selskap"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "forsikring@storebrand.no"
-                }
-              }
-            },
-            {
-              "name": "AS Financiering",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "AS Financiering"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "utbetaling@financiering.no"
-                }
-              }
-            },
-            {
-              "name": "Aurskog Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Aurskog Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "firmapost@aurskog-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Bertel O. Steen Finans AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Bertel O. Steen Finans AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "finans@bos.no"
-                }
-              }
-            },
-            {
-              "name": "BFH Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "BFH Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@bfh-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Bjugn Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Bjugn Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@bjugn-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Blaker Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Blaker Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "blaker.sparebank@blakersparebank.no"
-                }
-              }
-            },
-            {
-              "name": "BMW Financial Services Norge Norsk avdeling av utenlandsk foretak",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "BMW Financial Services Norge Norsk avdeling av utenlandsk foretak"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "bmwfinans@bmw.no"
-                }
-              }
-            },
-            {
-              "name": "BNP Paribas",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "BNP Paribas"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "kontaktoss@bnpparibas.com"
-                }
-              }
-            },
-            {
-              "name": "Brage Finans AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Brage Finans AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "regnskap@brage.no"
-                }
-              }
-            },
-            {
-              "name": "Danske Bank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Danske Bank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "08540@danskebank.no"
-                }
-              }
-            },
-            {
-              "name": "DnB Finans",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "DnB Finans"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "forsikringsattest@dnb.no"
-                }
-              }
-            },
-            {
-              "name": "Duborgh Forsikring",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Duborgh Forsikring"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "duborgh@duborgh.no"
-                }
-              }
-            },
-            {
-              "name": "Eika Kredittbank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Eika Kredittbank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@eika.no"
-                }
-              }
-            },
-            {
-              "name": "Elcon/Santander Consumer Bank AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Elcon/Santander Consumer Bank AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "depot@santander.no"
-                }
-              }
-            },
-            {
-              "name": "FCE Bank Norsk avdeling av utenlandsk foretak",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "FCE Bank Norsk avdeling av utenlandsk foretak"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "kundeser@ford.com"
-                }
-              }
-            },
-            {
-              "name": "Fjaler Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Fjaler Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@fjalerbank.no"
-                }
-              }
-            },
-            {
-              "name": "Flekkefjord Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Flekkefjord Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "mail@flekkefjordsparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Fokus Bank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Fokus Bank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "08540@danskebank.no"
-                }
-              }
-            },
-            {
-              "name": "Ford Motor Norge AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Ford Motor Norge AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "kreditt@ford.com"
-                }
-              }
-            },
-            {
-              "name": "Forso Norge NUF",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Forso Norge NUF"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "kundeser@ford.com"
-                }
-              }
-            },
-            {
-              "name": "Ge Money Bilfinans AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Ge Money Bilfinans AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "bilfinans@ge.com"
-                }
-              }
-            },
-            {
-              "name": "Gjensidige Bank ASA ",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Gjensidige Bank ASA "
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "bilfinans@gjensidige.no"
-                }
-              }
-            },
-            {
-              "name": "Gjerstad Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Gjerstad Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@gjerstad-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Grong Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Grong Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "firmapost@grong-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "GS Banken",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "GS Banken"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@gsbanken.no"
-                }
-              }
-            },
-            {
-              "name": "Halden Sparebank 1",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Halden Sparebank 1"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@haldenspb.no"
-                }
-              }
-            },
-            {
-              "name": "Handelsbanken Finans NUF",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Handelsbanken Finans NUF"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "salgsfinansiering@handelsbanken.no"
-                }
-              }
-            },
-            {
-              "name": "Haugesund Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Haugesund Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@haugesund-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Hegra Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Hegra Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "banken@hegrasparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Helgeland Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Helgeland Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@hsb.no"
-                }
-              }
-            },
-            {
-              "name": "Hjartdal og Gransherad Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Hjartdal og Gransherad Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@hjartdalbanken.no"
-                }
-              }
-            },
-            {
-              "name": "Ikano Bank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Ikano Bank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "kundeservice.leasing@ikano.no"
-                }
-              }
-            },
-            {
-              "name": "Indre Sogn Sparebank ",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Indre Sogn Sparebank "
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "nettpost@indresognsparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Jernbanepers. bank og forsikring",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Jernbanepers. bank og forsikring"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "salg@jfg.no"
-                }
-              }
-            },
-            {
-              "name": "Kjøpmannshuset Norge AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Kjøpmannshuset Norge AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@kjopmannshuset.no"
-                }
-              }
-            },
-            {
-              "name": "Klepp Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Klepp Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@klepp-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Kollektivtrafikkens Personellservice BA",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Kollektivtrafikkens Personellservice BA"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@ktps.no"
-                }
-              }
-            },
-            {
-              "name": "Kvinnherad Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Kvinnherad Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "bankpost@ksbank.no"
-                }
-              }
-            },
-            {
-              "name": "Lindorff",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Lindorff"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "laaneadm@lindorff.com"
-                }
-              }
-            },
-            {
-              "name": "Lom og Skjåk Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Lom og Skjåk Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "bankpost@lomogskjaak.sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Luster Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Luster Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@luster-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Marker Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Marker Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "epost@marker-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Maskinentreprenørenes Forbund",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Maskinentreprenørenes Forbund"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "firmapost@mef.no"
-                }
-              }
-            },
-            {
-              "name": "Melhus Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Melhus Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@melhusbanken.no"
-                }
-              }
-            },
-            {
-              "name": "Modum SpareBank 1",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Modum SpareBank 1"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "modum.sparebank@modum.sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Møre Finans AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Møre Finans AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "morefinans@sbm.no"
-                }
-              }
-            },
-            {
-              "name": "Nito AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Nito AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@nitotakst.no"
-                }
-              }
-            },
-            {
-              "name": "Nordea Finans Norge AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Nordea Finans Norge AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "forsikringer@nordeafinans.no"
-                }
-              }
-            },
-            {
-              "name": "Norsk Dental Depot AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Norsk Dental Depot AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "ndd@ndd.no"
-                }
-              }
-            },
-            {
-              "name": "Nøtterø Sparebank 1",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Nøtterø Sparebank 1"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "service@nottero.sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Obos ",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Obos "
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelser@eika.no "
-                }
-              }
-            },
-            {
-              "name": "Odal Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Odal Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@odal-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Orkdal Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Orkdal Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "irene.auseth@orkdalsbanken.no"
-                }
-              }
-            },
-            {
-              "name": "Postbanken",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Postbanken"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "skadeforsikring@dnbnor.no"
-                }
-              }
-            },
-            {
-              "name": "Rygge-Vaaler Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Rygge-Vaaler Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@rvs.sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Rørosbanken",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Rørosbanken"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "firmapost@rorosbanken.no"
-                }
-              }
-            },
-            {
-              "name": "Sandnes Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sandnes Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "direkte@sandnes-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Santander Consumer bank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Santander Consumer bank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "depot@santander.no"
-                }
-              }
-            },
-            {
-              "name": "SG Finans AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "SG Finans AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "kundeservice@sgfinans.no"
-                }
-              }
-            },
-            {
-              "name": "SkandiaBanken AB",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "SkandiaBanken AB"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "finansiering@skandiabanken.no"
-                }
-              }
-            },
-            {
-              "name": "Skandiabanken",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Skandiabanken"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "finansiering@skandiabanken.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Bergen",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Bergen"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Drammen",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Drammen"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Finans Østlandet AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Finans Østlandet AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@sb1fo.no"
-                }
-              }
-            },
-            {
-              "name": "SpareBank 1 Fredrikstad",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "SpareBank 1 Fredrikstad"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "SpareBank 1 Gran",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "SpareBank 1 Gran"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Grenland",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Grenland"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "SpareBank 1 Gudbrandsdal",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "SpareBank 1 Gudbrandsdal"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "SpareBank 1 Hallingdal",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "SpareBank 1 Hallingdal"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Hedmark",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Hedmark"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Jevnaker",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Jevnaker"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Kongsberg",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Kongsberg"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Lunner",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Lunner"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Midt-Norge",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Midt-Norge"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Moss",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Moss"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Nittedal",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Nittedal"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Nord-Norge",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Nord-Norge"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Nordvest",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Nordvest"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Oslo",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Oslo"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@sb1fo.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Ringerike",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Ringerike"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 RomsdalsFellesbank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 RomsdalsFellesbank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Rygge",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Rygge"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Råde",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Råde"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Soon",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Soon"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 SR-bank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 SR-bank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Valdres",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Valdres"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Vestby",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Vestby"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Vestfold",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Vestfold"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Volda Ørsta",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Volda Ørsta"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebank 1 Våler",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebank 1 Våler"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "oppsigelse@sparebank1.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebanken Hedmark",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebanken Hedmark"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "konsern@sparebanken-hedmark.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebanken Hemne",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebanken Hemne"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@sparebankenhemne.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebanken Møre",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebanken Møre"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "kundeservice@sbm.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebanken Pluss",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebanken Pluss"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "firmapost@sparebankenpluss.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebanken Sør",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebanken Sør"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "konsernledelsen@sor.no"
-                }
-              }
-            },
-            {
-              "name": "Sparebanken Vest",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Sparebanken Vest"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "sparebanken.vest@spv.no"
-                }
-              }
-            },
-            {
-              "name": "Surnadal Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Surnadal Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@bank.no"
-                }
-              }
-            },
-            {
-              "name": "Søgne og Greipstad Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Søgne og Greipstad Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@sgsparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Terra Finans AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Terra Finans AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@terra.no"
-                }
-              }
-            },
-            {
-              "name": "Thanke Retail AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Thanke Retail AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "firmapost@thanke.no"
-                }
-              }
-            },
-            {
-              "name": "Totens Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Totens Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@totenbanken.no"
-                }
-              }
-            },
-            {
-              "name": "Toyota kredittbank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Toyota kredittbank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "finans@toyota.no"
-                }
-              }
-            },
-            {
-              "name": "Volkswagen Møller bilfinans AS ",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Volkswagen Møller bilfinans AS "
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "kundeservice@vwfs.no "
-                }
-              }
-            },
-            {
-              "name": "Volvo bilfinans",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Volvo bilfinans"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "hlundbla@volvocars.com"
-                }
-              }
-            },
-            {
-              "name": "YA BANK AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "YA BANK AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@ya.no"
-                }
-              }
-            },
-            {
-              "name": "Ørland Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Ørland Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@orland-sparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Ørskog Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Ørskog Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "post@orskogsparebank.no"
-                }
-              }
-            },
-            {
-              "name": "Åfjord Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Åfjord Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": "firmapost@afjord-sparebank.no"
-                }
-              }
-            }
-          ],
-          "conditionalKey": "mortgagee",
-          "conditionalValue": true,
-          "conditionalHiddenKey": "importAndCustomsCleared",
-          "conditionalHiddenValue": true
         },
         {
           "type": "infodate",
