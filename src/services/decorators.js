@@ -29,6 +29,16 @@ angular.module('schemaForm').provider('schemaFormDecorators',
     return directive.mappings['default'];
   };
 
+
+  var generateHiddenSchema = function (form) {
+    if (form.type === "hidden" && form.key && /^_/.test(form.key)) {
+      form.schema = {
+        "type": "string",
+        "required": true
+      };
+    }
+  };
+
   var createDirective = function(name) {
     $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop', '$timeout',
       function($parse,  $compile,  $http,  $templateCache, scrollingTop, $timeout) {
@@ -64,6 +74,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             var once = scope.$watch(attrs.form, function(form) {
 
               if (form) {
+                generateHiddenSchema(form);
                 scope.form  = form;
                 scope.defaultGlobals = defaultGlobals;
 

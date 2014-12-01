@@ -14,10 +14,6 @@
         "type": "boolean",
         "required": true
       },
-      "hidden_isNotAllowedToBuy": {
-        "required": true,
-        "type": "string"
-      },
       "autoIdentificationNumber": {
         "type": "string",
         "required": true,
@@ -33,10 +29,6 @@
       "intendsToMigrateInsurance": {
         "required": true,
         "type": "boolean"
-      },
-      "hidden_cantMove": {
-        "required": true,
-        "type": "string"
       },
       "oldInsuranceCompany": {
         "required": true,
@@ -117,7 +109,7 @@
           "conditionalValue": true
         },
         {
-          "key": "hidden_isNotAllowedToBuy",
+          "key": "_isNotAllowedToBuy",
           "validationMessage": "Denne bilen kan dessverre ikke tegnes på nett, vennligst ta kontakt med kundeservice",
           "type": "hidden",
           "conditionalKey": "importAndCustomsCleared",
@@ -4900,7 +4892,7 @@
           "minMonthlyDifference": 0,
           "additionalMonthlyDifference": 1,
           "additionalDailyDifference": 1,
-          "undefinedConditionKey": "hidden_expirationDateDay",
+          "undefinedConditionKey": "_expirationDateDay",
           "encoding": "nn",
           "format": "Do MMMM YYYY",
           "staticMessage": "Forsikringen vil gjelde fra"
