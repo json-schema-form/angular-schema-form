@@ -9,6 +9,8 @@ var uglify = require('gulp-uglify');
 var streamqueue = require('streamqueue');
 var jscs = require('gulp-jscs');
 var karma = require('gulp-karma');
+var less = require('gulp-less');
+
 
 
 
@@ -133,8 +135,20 @@ gulp.task('jscs', function() {
       .pipe(jscs());
 });
 
+
+gulp.task('less', function() {
+  gulp.src([
+    './src/styles/*.less'
+  ])
+    .pipe(less())
+    .pipe(concat('schema-form.min.css'))
+    .pipe(gulp.dest('./dist/'));
+
+});
+
 gulp.task('default', [
   'minify',
+  'less',
   'bootstrap-datepicker',
   'dropdown',
   'stb-webmanual',

@@ -1,0 +1,73 @@
+label.non-empty-view {
+  max-width: none;
+}
+label.empty-view {
+  padding: 0;
+  width: 40px;
+  height: 40px;
+}
+.label-wrapper label {
+  display: inline;
+}
+.label-wrapper span {
+  margin-left: 10px;
+}
+.input-group.datePicker {
+  width: 260px;
+}
+.input-group.datePicker input {
+  background-color: white;
+}
+.stb-form-group input {
+  min-width: 260px;
+}
+.stb-form-group .form-control-feedback {
+  top: 0px;
+  display: block;
+}
+.stb-form-group.select-wrapper {
+  width: 260px;
+}
+.notification .notification-wrapper {
+  display: table;
+}
+.notification .msgIcon {
+  display: table-cell;
+  text-align: center;
+  padding: 24px 0 0 0;
+}
+.notification .msgText {
+  display: table-cell;
+  vertical-align: middle;
+}
+.notification .msgText.white {
+  background: #ffffff;
+}
+.notification .msgText button.close {
+  top: 5px;
+  right: 11px;
+  width: 100%;
+}
+.notification .msgText button.close .remove {
+  margin-right: 10px;
+}
+.notification .msgText .message-text {
+  margin-right: 8%;
+  margin-top: 24px;
+}
+.info-button {
+  margin-bottom: -3px;
+  cursor: pointer;
+}
+.white-box .white-box-wrapper {
+  min-height: 0;
+  background: #fff;
+}
+.white-box .padding-top {
+  width: 100%;
+  padding-top: 20px;
+}
+.white-box .padding-bottom {
+  width: 100%;
+  padding-bottom: 20px;
+}

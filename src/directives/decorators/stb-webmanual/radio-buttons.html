@@ -1,7 +1,7 @@
 <div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}"  ng-show="showCondition()">
-    <div>
-        <label ng-show="showTitle()" style="display: inline">{{form.title}}</label>
-        <span style="margin-left: 10px" ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
+    <div class="label-wrapper">
+        <label ng-show="showTitle()">{{form.title}}</label>
+        <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
     </div>
   <div class="btn-group">
     <label class="btn {{ (item.value === $$value$$) ? form.style.selected || 'btn-primary' : form.style.unselected || 'btn-primary'; }}"

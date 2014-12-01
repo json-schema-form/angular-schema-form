@@ -1,8 +1,8 @@
 <div ng-show="showCondition()">
     <div class="radiobuttons">
-        <div>
-            <label ng-show="showTitle()" style="display: inline">{{form.title}}</label>
-            <span style="margin-left: 10px" ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
+        <div class="label-wrapper">
+            <label ng-show="showTitle()">{{form.title}}</label>
+            <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
         </div>
 
     <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">

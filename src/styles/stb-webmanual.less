@@ -1,0 +1,103 @@
+//checkbox
+
+label {
+  &.non-empty-view {
+    max-width: none;
+  }
+
+  &.empty-view {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.label-wrapper {
+  label {
+    display: inline;
+  }
+  span {
+    margin-left: 10px;
+  }
+}
+
+//datepicker
+.input-group.datePicker {
+  width: 260px;
+
+  input {
+    background-color: white;
+  }
+}
+
+//default
+.stb-form-group {
+  input {
+    min-width: 260px;
+  }
+  .form-control-feedback {
+    top: 0px;
+    display: block;
+  }
+
+  //dropdown
+  &.select-wrapper {
+    width: 260px;
+  }
+}
+
+.notification {
+  .notification-wrapper {
+    display: table;
+  }
+  .msgIcon {
+    display: table-cell;
+    text-align: center;
+    padding: 24px 0 0 0;
+  }
+  .msgText {
+    display: table-cell;
+    vertical-align: middle;
+    &.white {
+      background: #ffffff;
+    }
+
+    button.close {
+      top: 5px;
+      right: 11px;
+      width: 100%;
+
+      .remove {
+        margin-right: 10px;
+      }
+    }
+
+    .message-text {
+      margin-right: 8%;
+      margin-top: 24px;
+    }
+  }
+}
+
+.info-button {
+  margin-bottom: -3px;
+  cursor: pointer;
+}
+
+.white-box {
+  .white-box-wrapper {
+    min-height: 0;
+    background: #fff;
+  }
+
+  .padding-top {
+    width: 100%;
+    padding-top: 20px;
+
+  }
+
+  .padding-bottom {
+    width: 100%;
+    padding-bottom: 20px;
+  }
+}

@@ -1,7 +1,7 @@
 <div class="" ng-show="showCondition()">
-    <div>
-        <label ng-show="showTitle()" style="display: inline">{{form.title}}</label>
-        <span style="margin-left: 10px" ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
+    <div class="label-wrapper">
+        <label ng-show="showTitle()">{{form.title}}</label>
+        <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
     </div>
 
     <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
@@ -22,11 +22,9 @@
                model-max-length="form.schema.maxLength"
                ng-model="$$value$$"
                schema-validate="form"
-               ng-disabled="disabledElement()"
-                style="min-width: 260px">
+               ng-disabled="disabledElement()">
 
         <i class="form-control-feedback glyphicon"
-           style="top: 0px; display: block;"
            ng-show="hasError() || hasSuccess() &&(!form.conditionalValidationKey  || conditionalValidationSuccess())"
            ng-class="{'glyphicon-remove': !disabledElement() && hasError(), 'glyphicon-ok': !disabledElement() && hasSuccess() && (!form.conditionalValidationKey  || conditionalValidationSuccess())}"></i>
     </div>

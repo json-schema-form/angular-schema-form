@@ -1,12 +1,12 @@
-<span class="stb-color-sprite-medium info" ng-click="showInfo = !showInfo;" style="margin-bottom: -3px; cursor: pointer;"></span>
-<div class="row" ng-show="showInfo">
-        <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12 bottom-margin-20" style="display: table;">
-        <div class="msgIcon stbcolor-secondary fifth" style="display: table-cell; text-align: center; padding: 0; padding-top: 24px;"><span class="stb-color-sprite-medium info"></span></div>
-        <div class="msgText" style="display: table-cell; vertical-align: middle; background: #fff">
-            <button data-dismiss="modal" ng-click="showInfo = !showInfo;" class="close" type="button" style="top: 5px; right: 11px; width: 100%">
-                <p class="pull-right">Lukk <span style="margin-right:10px;" class="stb-sprite-small remove"></span></p>
+<span class="stb-color-sprite-medium info info-button" ng-click="showInfo = !showInfo;"></span>
+<div class="row notification" ng-show="showInfo">
+        <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12 bottom-margin-20 notification-wrapper">
+        <div class="msgIcon stbcolor-secondary fifth"><span class="stb-color-sprite-medium info"></span></div>
+        <div class="msgText white">
+            <button data-dismiss="modal" ng-click="showInfo = !showInfo;" class="close" type="button">
+                <p class="pull-right">Lukk <span class="stb-sprite-small remove"></span></p>
             </button>
-            <p style="margin-right: 8%; margin-top: 24px;">{{infoMessage}}</p>
+            <p class="message-text">{{infoMessage}}</p>
         </div>
     </div>
 </div>
