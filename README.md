@@ -36,7 +36,7 @@ apart from JSON Form?
 
 Documentation
 -------------
-Documentation covering defaults and form types [can be found here](docs/index.md). And you can find the documentation for how you extend angular schema form with your own types [here](https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md).
+There is one section of documentation covering [defaults and form types](docs/index.md). There is another section for how you [extend angular schema form with your own types](https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md).
 
 Basic Usage
 -----------
