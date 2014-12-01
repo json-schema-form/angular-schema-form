@@ -87,6 +87,7 @@
           "title": "Registreringsnummer",
           "type": "string",
           "formType": "tel",
+          "formatterName": "carNumber",
           "placeholder": "Registreringsnummer",
           "conditionalDisabledKey": "hasAutoIdentificationNumber",
           "conditionalDisabledValue": true

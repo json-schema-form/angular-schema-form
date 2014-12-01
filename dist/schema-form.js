@@ -662,6 +662,27 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
 }]);
 
+angular.module('schemaForm').factory('formFormatters', [function () {
+  var formatters = {
+    'carNumber': function (input) {
+      if (/^[a-zA-Z]{2}\s?\d{5}$/.test(input)) {
+        input = input.replace(/^([a-zA-Z]{2})\s?(\d{5})$/, function (text, letters, numbers) {
+          return letters.toUpperCase() + numbers;
+        });
+      }
+
+      return input;
+    }
+  };
+
+  return {
+    getFormatter: function (type) {
+      return formatters[type];
+    }
+  };
+
+}]);
+
 /**
  * Schema form service.
  * This service is not that useful outside of schema form directive
@@ -1502,20 +1523,28 @@ angular.module('schemaForm')
     }]);
 
 // override the default input to update on blur
-angular.module('schemaForm').directive('ngModelOnblur', function() {
+angular.module('schemaForm').directive('ngModelOnblur', ['formFormatters', function(formFormatters) {
   return {
     restrict: 'A',
     require: 'ngModel',
+    scope: {
+      formatterName: "="
+    },
     priority: 1, // needed for angular 1.2.x
     link: function(scope, elm, attr, ngModelCtrl) {
       if (attr.type === 'radio' || attr.type === 'checkbox') return;
+
+      var formatter = formFormatters.getFormatter(scope.formatterName) || function (input) {
+          return input;
+      };
 
       elm.unbind('input').unbind('keydown').unbind('change');
       elm.bind('blur', function() {
         scope.$apply(function() {
           if (elm.val() === '' && ngModelCtrl.$pristine) {
           } else {
-            ngModelCtrl.$setViewValue(elm.val());
+            ngModelCtrl.$setViewValue(formatter(elm.val()));
+            ngModelCtrl.$render();
           }
         });
       });
@@ -1543,7 +1572,7 @@ angular.module('schemaForm').directive('ngModelOnblur', function() {
       }
     }
   };
-});
+}]);
 /*
 FIXME: real documentation
 <form sf-form="form"  sf-schema="schema" sf-decorator="foobar"></form>
