@@ -32,6 +32,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
   var generateHiddenSchema = function (form) {
     if (form.type === "hidden" && form.key && /^_/.test(form.key)) {
+      form.required = true;
       form.schema = {
         "type": "string",
         "required": true
