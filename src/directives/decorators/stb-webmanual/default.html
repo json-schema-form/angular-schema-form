@@ -11,7 +11,7 @@
         </small>
     </span>
     <div class="stb-form-group inline" ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() &&(!form.conditionalValidationKey  || conditionalValidationSuccess()), 'has-feedback': form.feedback !== false }">
-        <input type="text"
+        <input type="{{form.formType || 'text'}}"
                ng-show="form.key"
                type="{{form.type}}"
                sf-changed="form"

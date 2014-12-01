@@ -94,6 +94,7 @@
           "infoMessage": "Vi trenger ditt bilnummer for å melde fra til bilregisteret om at du er forsikret. Gjelder forsikringen en nyregistert eller uregistrert bil, krysser du av på at du ikke har reg.nr og fyller inn understellsnummer",
           "title": "Registreringsnummer",
           "type": "string",
+          "formType": "tel",
           "placeholder": "Registreringsnummer",
           "conditionalDisabledKey": "hasAutoIdentificationNumber",
           "conditionalDisabledValue": true
