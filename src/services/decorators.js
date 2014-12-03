@@ -187,8 +187,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
 
               if (angular.isArray(scope.form.conditionalValues)) {
-
-                model.assign(scope, getConditionalValue());
+                var conditionalValue = getConditionalValue();
+                if (angular.isDefined(conditionalValue)) {
+                  model.assign(scope, conditionalValue);
+                }
 
               } else if (scope.form.key && !show) {
 
