@@ -29,6 +29,11 @@ angular.module('schemaForm').provider('schemaFormDecorators',
     return directive.mappings['default'];
   };
 
+
+  var lookupForKey = function (key) {
+    return 'model' + (key[0] !== '[' ? '.' : '') + key;
+  };
+
   var createDirective = function(name) {
     $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache',
       function($parse,  $compile,  $http,  $templateCache) {
@@ -99,6 +104,67 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 }
               }
             };
+
+            var evalExpression = function (expression) {
+              angular.forEach(scope.form.dependencies, function (key) {
+                expression = expression.replace(key, lookupForKey(key));
+              });
+
+              return scope.$eval(expression);
+            };
+
+
+            var resetModelValue = function () {
+              if (scope.ngModel) {
+                scope.ngModel.$setViewValue(undefined);
+                scope.ngModel.$render();
+                scope.ngModel.$setPristine();
+              }
+            };
+
+            scope.showCondition = function () {
+              var expressionString = scope.form.expression;
+              if (angular.isUndefined(expressionString)) {
+                return true;
+              }
+
+              var show = evalExpression(expressionString);
+
+              if (angular.isDefined(scope.form.required)) {
+                scope.form.required = show;
+                scope.form.schema.required = show;
+              }
+
+
+              if (scope.form.key && !show) {
+                resetModelValue();
+              }
+
+              return show;
+
+            };
+
+
+            scope.disabledElement = function () {
+              var expressionString = scope.form.disabledExpression;
+
+              if (angular.isUndefined(expressionString)) {
+                return false;
+              }
+
+              var disabled = evalExpression(expressionString);
+
+              if (angular.isDefined(scope.form.required)) {
+                scope.form.required = !disabled;
+                scope.form.schema.required = !disabled;
+              }
+
+              if (disabled) {
+                resetModelValue();
+              }
+              return disabled;
+            };
+
 
             /**
              * Evaluate an expression, i.e. scope.$eval

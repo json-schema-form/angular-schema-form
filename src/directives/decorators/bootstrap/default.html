@@ -1,4 +1,4 @@
-<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }" ng-show="showCondition()">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
 
   <input ng-show="form.key"
@@ -9,7 +9,7 @@
          class="form-control"
          ng-model-options="form.ngModelOptions"
          ng-model="$$value$$"
-         ng-disabled="form.readonly"
+         ng-disabled="form.readonly || disabledElement()"
          schema-validate="form">
   <span ng-if="form.feedback !== false"
         class="form-control-feedback"

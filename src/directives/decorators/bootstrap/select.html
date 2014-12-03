@@ -1,10 +1,10 @@
-<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false}">
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false}" ng-show="showCondition()">
   <label class="control-label" ng-show="showTitle()">
     {{form.title}}
   </label>
   <select ng-model="$$value$$"
           ng-model-options="form.ngModelOptions"
-          ng-disabled="form.readonly"
+          ng-disabled="form.readonly || disabledElement()"
           sf-changed="form"
           class="form-control"
           schema-validate="form"

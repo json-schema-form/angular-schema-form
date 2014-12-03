@@ -404,6 +404,43 @@ describe('directive',function(){
     });
   });
 
+
+  it('should use disable  input fields if disabledExpression is provided',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {name: "test-name"};
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "nick": { "type": "string" }
+        }
+      };
+
+      scope.form = [
+        { key: 'name' },
+        { key: 'nick', dependencies: ["name"], disabledExpression: "name === 'test-name'"},
+      ];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().length.should.be.equal(2);
+      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+      expect(tmpl.children().eq(0).children().eq(0).children('input').attr('disabled')).to.be.undefined;
+      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
+      tmpl.children().eq(1).children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
+    });
+  });
+
+
+
   it('should display custom validationMessages when specified',function(done){
 
     inject(function($compile,$rootScope){
