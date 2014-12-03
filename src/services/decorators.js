@@ -53,9 +53,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 $http.get(url, {cache: $templateCache}).then(function(res) {
                   var key = form.key ?
                             sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
-                  var template = res.data.replace(
+                  var template = res.data;
+                  var template = template.replace(
                     /\$\$value\$\$/g,
                     'model' + (key[0] !== '[' ? '.' : '') + key
+                  );
+                  var template = template.replace(
+                    /\$\$key\$\$/g,
+                    key
                   );
                   element.html(template);
                   $compile(element.contents())(scope);
@@ -135,8 +140,12 @@ angular.module('schemaForm').provider('schemaFormDecorators',
              * error (i.e. required)
              */
             scope.errorMessage = function(schemaError) {
-              //User has supplied validation messages
-              if (scope.form.validationMessage) {
+              var key = scope.form.key ?
+                        sfPathProvider.stringify(scope.form.key).replace(/"/g, '&quot;') : '';
+              //Take validation message from the model (set by parent controller)
+              if (scope.model[key + '_error'] !== undefined) {
+                return scope.model[key + '_error'];
+              } if (scope.form.validationMessage) { //User has supplied validation messages
                 if (schemaError) {
                   if (angular.isString(scope.form.validationMessage)) {
                     return scope.form.validationMessage;
