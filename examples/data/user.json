@@ -85,8 +85,8 @@
       "validationMessage": "Vennligst fyll inn ditt fornavn",
       "infoMessage": "Vi anbefaler at du oppretter avtalegiro. Dette kan du enkelt gjøre når du betaler første faktura i din nettbank",
       "placeholder": "Fornavn",
-      "conditionalValidationKey": "isValidCustomer",
-      "conditionalValidationValue": true
+      "dependencies": ["isValidCustomer"],
+      "validationExpression": "isValidCustomer === true"
     },
     {
       "key": "providedPersonInfo.name.lastName",
@@ -94,8 +94,8 @@
       "validationMessage": "Vennligst fyll inn ditt etternavn",
       "infoMessage": "Vi anbefaler at du oppretter avtalegiro. Dette kan du enkelt gjøre når du betaler første faktura i din nettbank",
       "placeholder": "Etternavn",
-      "conditionalValidationKey": "isValidCustomer",
-      "conditionalValidationValue": true
+      "dependencies": ["isValidCustomer"],
+      "validationExpression": "isValidCustomer === true"
     },
     {
       "key": "providedContactInfo.email",

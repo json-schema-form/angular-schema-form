@@ -14,6 +14,10 @@
         "type": "boolean",
         "required": true
       },
+      "_isNotAllowedToBuy": {
+        "type": "string",
+        "required": true
+      },
       "autoIdentificationNumber": {
         "type": "string",
         "required": true,
@@ -45,7 +49,7 @@
       "expirationDateKnown": {
         "type": "boolean"
       },
-      "hidden_expirationDateDay": {
+      "_expirationDateDay": {
         "type": "string",
         "required": true,
         "format": "date-format"
@@ -89,8 +93,8 @@
           "formType": "tel",
           "formatterName": "carNumber",
           "placeholder": "Registreringsnummer",
-          "conditionalDisabledKey": "hasAutoIdentificationNumber",
-          "conditionalDisabledValue": true
+          "dependencies": ["hasAutoIdentificationNumber"],
+          "disableExpression": "hasAutoIdentificationNumber === true"
         },
         {
           "key": "hasAutoIdentificationNumber",
@@ -106,15 +110,15 @@
             {"value": true, "name": "Ja"},
             {"value": false, "name": "Nei"}
           ],
-          "conditionalKey": "hasAutoIdentificationNumber",
-          "conditionalValue": true
+          "dependencies": ["hasAutoIdentificationNumber"],
+          "expression": "hasAutoIdentificationNumber === true"
         },
         {
           "key": "_isNotAllowedToBuy",
           "validationMessage": "Denne bilen kan dessverre ikke tegnes på nett, vennligst ta kontakt med kundeservice",
           "type": "hidden",
-          "conditionalKey": "importAndCustomsCleared",
-          "conditionalValue": true
+          "dependencies": ["importAndCustomsCleared"],
+          "expression": "importAndCustomsCleared === true"
 
         },
         {
@@ -122,8 +126,8 @@
           "type": "string",
           "title": "Understellsnummer – 6 siste tegn",
           "validationMessage": "Understellsnummer må inneholde 6 tall",
-          "conditionalKey": "importAndCustomsCleared",
-          "conditionalValue": false
+          "dependencies": ["importAndCustomsCleared"],
+          "expression": "importAndCustomsCleared === false"
         },
         {
           "key": "mileage",
@@ -132,8 +136,8 @@
           "type": "string",
           "title": "Kilometerstand",
           "placeholder": "Kilometerstand",
-          "conditionalHiddenKey": "importAndCustomsCleared",
-          "conditionalHiddenValue": true
+          "dependencies": ["importAndCustomsCleared"],
+          "expression": "importAndCustomsCleared !== true"
         },
         {
           "key": "bankCompany",
@@ -1778,18 +1782,14 @@
               }
             }
           ],
-          "conditionalKey": "mortgagee",
-          "conditionalValue": true,
-          "conditionalHiddenKey": "importAndCustomsCleared",
-          "conditionalHiddenValue": true
+          "dependencies": ["mortgagee", "importAndCustomsCleared"],
+          "expression": "mortgagee === true && importAndCustomsCleared !== true"
         },
         {
           "type": "infobox",
           "infoMessage": "Det er ikke mulig å flytte forsikringen fra et annet selskap hvis bilen ikke har reg.nr, vennligst ta kontakt med kundeservice",
-          "conditionalKey": "hasAutoIdentificationNumber",
-          "conditionalValue": true,
-          "secondConditionalKey": "intendsToMigrateInsurance",
-          "secondConditionalValue": false
+          "dependencies": ["hasAutoIdentificationNumber", "intendsToMigrateInsurance"],
+          "expression": "hasAutoIdentificationNumber === true && intendsToMigrateInsurance === false"
         },
         {
           "key": "intendsToMigrateInsurance",
@@ -1801,11 +1801,12 @@
             {"value": true, "name": "Ja"},
             {"value": false, "name": "Nei"}
           ],
-          "conditionalHiddenKey": "hasAutoIdentificationNumber",
-          "conditionalHiddenValue": true,
-          "secondConditionalHiddenKey": "importAndCustomsCleared",
-          "secondConditionalHiddenValue": true,
-          "setHiddenValue": false
+          "dependencies": ["hasAutoIdentificationNumber", "importAndCustomsCleared"],
+          "expression": "hasAutoIdentificationNumber !== true && importAndCustomsCleared !== true",
+          "conditionalValues": [
+            {"expression": "hasAutoIdentificationNumber === true", "value": false},
+            {"expression": "hasAutoIdentificationNumber === true && importAndCustomsCleared === true", "value": null}
+          ]
         },
         {
           "type": "whitebox",
@@ -3303,8 +3304,8 @@
                   }
                 }
               ],
-              "conditionalKey": "intendsToMigrateInsurance",
-              "conditionalValue": true
+              "dependencies": ["intendsToMigrateInsurance"],
+              "expression": "intendsToMigrateInsurance === true"
             },
             {
               "key": "customerPreviousInsurancePolicyholder",
@@ -3316,16 +3317,16 @@
                 {"value": true, "name": "Ja"},
                 {"value": false, "name": "Nei"}
               ],
-              "conditionalKey": "intendsToMigrateInsurance",
-              "conditionalValue": true
+              "dependencies": ["intendsToMigrateInsurance"],
+              "expression": "intendsToMigrateInsurance === true"
             },
             {
               "key": "previousInsurancePolicyholderNameSSN",
               "type": "string",
               "title": "Navn og fødselsdato på forsikringstaker i nåværende selskap",
               "validationMessage": "Vennligst oppgi navn og fødselsdato på forsikringstaker i nåværende selskap",
-              "conditionalKey": "customerPreviousInsurancePolicyholder",
-              "conditionalValue": false
+              "dependencies": ["customerPreviousInsurancePolicyholder"],
+              "expression": "customerPreviousInsurancePolicyholder === false"
             },
             {
               "key": "expirationDateKnown",
@@ -3337,33 +3338,29 @@
                 {"value": true, "name": "Ja"},
                 {"value": false, "name": "Nei"}
               ],
-              "conditionalKey": "intendsToMigrateInsurance",
-              "conditionalValue": true
+              "dependencies": ["intendsToMigrateInsurance"],
+              "expression": "intendsToMigrateInsurance === true"
             },
             {
-              "key": "hidden_expirationDateDay",
+              "key": "_expirationDateDay",
               "validationMessage": "Vennligst fyll ut dato",
               "infoMessage": "Her legger du inn dato for hovedforfall i det selskap du flytter ifra",
               "title": "Dato for forfall i annet forsikringsselskap",
-              "conditionalKey": "expirationDateKnown",
-              "conditionalValue": true
+              "dependencies": ["expirationDateKnown"],
+              "expression": "expirationDateKnown === true"
             }
           ],
-          "conditionalKey": "intendsToMigrateInsurance",
-          "conditionalValue": true
+          "dependencies": ["intendsToMigrateInsurance"],
+          "expression": "intendsToMigrateInsurance === true"
         },
         {
           "type": "whitebox",
-          "conditionalKey": "intendsToMigrateInsurance",
-          "conditionalValue": false,
           "items": [
             {
               "type": "help",
               "helpvalue": "<div class='top-margin-20'><p><strong>Hvilken bil og hvilket forsikringsselskap skal bonusen overføres fra?</strong></p></div>",
-              "conditionalKey": "intendsToMigrateInsurance",
-              "conditionalValue": false,
-              "conditionalHiddenKey": "bonusLevelCode",
-              "conditionalHiddenValue": "11"
+              "dependencies": ["intendsToMigrateInsurance", "bonusLevelCode"],
+              "expression": "intendsToMigrateInsurance === false && bonusLevelCode !== '11'"
             },
             {
               "key": "insuranceCompany",
@@ -4850,10 +4847,8 @@
                   }
                 }
               ],
-              "conditionalKey": "intendsToMigrateInsurance",
-              "conditionalValue": false,
-              "conditionalHiddenKey": "bonusLevelCode",
-              "conditionalHiddenValue": "11"
+              "dependencies": ["intendsToMigrateInsurance", "bonusLevelCode"],
+              "expression": "intendsToMigrateInsurance === false && bonusLevelCode !== '11'"
             },
             {
               "key": "oldLicensePlateNumber",
@@ -4862,10 +4857,8 @@
               "title": "Registreringsnummer bonus skal hentes fra",
               "type": "string",
               "placeholder": "Registreringsnummer",
-              "conditionalKey": "intendsToMigrateInsurance",
-              "conditionalValue": false,
-              "conditionalHiddenKey": "bonusLevelCode",
-              "conditionalHiddenValue": "11"
+              "dependencies": ["intendsToMigrateInsurance", "bonusLevelCode"],
+              "expression": "intendsToMigrateInsurance === false && bonusLevelCode !== '11'"
             },
             {
               "key": "issueDay",
@@ -4874,29 +4867,35 @@
               "title": "Når skal forsikringen gjelde fra",
               "disableUntilToday": true,
               "monthlyDifference": 3,
-              "conditionalKey": "intendsToMigrateInsurance",
-              "conditionalValue": false
+              "dependencies": ["intendsToMigrateInsurance"],
+              "expression": "intendsToMigrateInsurance === false"
             }
-          ]
+          ],
+          "dependencies": ["intendsToMigrateInsurance"],
+          "expression": "intendsToMigrateInsurance === false"
         },
         {
           "type": "infodate",
-          "undefinedConditionKey": "issueDay",
+          "dateKey": "issueDay",
           "encoding": "nn",
           "format": "Do MMMM YYYY",
-          "staticMessage": "Forsikringen vil gjelde fra"
+          "staticMessage": "Forsikringen vil gjelde fra",
+          "dependencies": ["issueDay"],
+          "expression": "issueDay !== undefined"
         },
         {
           "type": "infodate",
           "key": "expirationDateDay",
+          "dateKey": "_expirationDateDay",
           "maxMonthlyDifference": 2,
           "minMonthlyDifference": 0,
           "additionalMonthlyDifference": 1,
           "additionalDailyDifference": 1,
-          "undefinedConditionKey": "_expirationDateDay",
           "encoding": "nn",
           "format": "Do MMMM YYYY",
-          "staticMessage": "Forsikringen vil gjelde fra"
+          "staticMessage": "Forsikringen vil gjelde fra",
+          "dependencies": ["_expirationDateDay"],
+          "expression": "_expirationDateDay !== undefined"
         }
       ]
     }

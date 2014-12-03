@@ -30,16 +30,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
 
-  var generateHiddenSchema = function (form) {
-    if (form.type === "hidden" && form.key && /^_/.test(form.key)) {
-      form.required = true;
-      form.schema = {
-        "type": "string",
-        "required": true
-      };
-    }
-  };
-
   var createDirective = function(name) {
     $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop', '$timeout',
       function($parse,  $compile,  $http,  $templateCache, scrollingTop, $timeout) {
@@ -53,6 +43,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
           link: function(scope, element, attrs, sfSchema) {
             //rebind our part of the form to the scope.
             var defaultGlobals = scope.defaultGlobals || scope.$eval(attrs.defaultGlobals);
+
             var createModelName = function (form, defGlobals, key) {
               var visibility = '', category = '';
               if (form.schema) {
@@ -75,7 +66,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             var once = scope.$watch(attrs.form, function(form) {
 
               if (form) {
-                generateHiddenSchema(form);
                 scope.form  = form;
                 scope.defaultGlobals = defaultGlobals;
 
@@ -97,6 +87,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 once();
               }
             });
+
+            scope.globalSchema = sfSchema.evalInParentScope('schema');
 
             //Keep error prone logic from the template
             scope.showTitle = function() {
@@ -134,91 +126,82 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               }
             };
 
-            scope.finishIt = function($event, form) {
-              if (angular.isFunction(form.finishIt)) {
-                finishIt.onClick($event, form);
-              } else if (angular.isString(form.finishIt)) {
-                if (sfSchema) {
-                  //evaluating in scope outside of sfSchemas isolated scope
-                  sfSchema.evalInParentScope(form.finishIt, {'$event': $event, form: form});
-                } else {
-                  scope.$eval(form.finishIt, {'$event': $event, form: form});
-                }
+            var lookupForKey = function (key) {
+              var res = '';
+
+              var schema = scope.globalSchema.properties[key];
+
+              if (angular.isUndefined(schema)) {
+                return;
               }
+
+              var visibility = schema.visibility || scope.defaultGlobals.visibility;
+
+              if (visibility) {
+                res += '.' + visibility;
+              }
+
+              var category = schema.category || scope.defaultGlobals.category;
+
+              if (category) {
+                res += '.' + category;
+              }
+
+              res += (key[0] !== '[' ? '.' : '') + key;
+
+              return 'model' + res;
             };
 
-            var lookupForKey = function (obj, key) {
-              var res;
-              if (angular.isUndefined(obj)) {
-                return res;
-              }
-              $.each(obj, function (k1, v1) {
-                if (angular.isObject(v1)) {
-                  $.each(v1, function (k2, v2) {
-                    if (angular.isObject(v2)) {
-                      $.each(v2, function (k3, v3) {
-                        if (k3 === key) {
-                          res =  v3;
-                        }
-                      });
-                    } else if (k2 === key) {
-                      res =  v2;
-                    }
-                  });
-                } else if (k1 === key) {
-                  res =  v1;
+            var evalExpression = function (expression) {
+              angular.forEach(scope.form.dependencies, function (key) {
+                expression = expression.replace(key, lookupForKey(key));
+              });
+
+              return scope.$eval(expression)
+            };
+
+            var getConditionalValue = function () {
+              var value;
+              angular.forEach(scope.form.conditionalValues, function (conditionalObject) {
+                if (evalExpression(conditionalObject.expression)) {
+                  value = conditionalObject.value;
                 }
               });
-              return res;
+
+              return value;
             };
 
             scope.showCondition = function () {
-              var show = true;
-
-              var isHidden = function () {
-                return angular.isDefined(scope.form.conditionalHiddenValue) && (lookupForKey(scope.model, scope.form.conditionalHiddenKey) === scope.form.conditionalHiddenValue);
-              };
-
-
-              var setUndefinedAnyway = function () {
-                return  angular.isDefined(scope.form.secondConditionalHiddenValue) && (lookupForKey(scope.model, scope.form.secondConditionalHiddenKey) === scope.form.secondConditionalHiddenValue);
-              };
-
-              var isShown = function () {
-                var shown = angular.isDefined(scope.form.conditionalValue) && (lookupForKey(scope.model, scope.form.conditionalKey) === scope.form.conditionalValue);
-
-                if (scope.form && angular.isDefined(scope.form.secondConditionalKey)) {
-                  shown = shown && (lookupForKey(scope.model, scope.form.secondConditionalKey) === scope.form.secondConditionalValue);
-                }
-                return shown;
-              };
-
-              if (angular.isUndefined(scope.form.conditionalValue) && angular.isUndefined(scope.form.conditionalHiddenValue)) {
+              var expressionString = scope.form.expression;
+              if (angular.isUndefined(expressionString)) {
                 return true;
-              } else if (angular.isUndefined(scope.form.conditionalValue)) {
-                show = show && !isHidden();
-              } else if (angular.isUndefined(scope.form.conditionalHiddenValue)) {
-                show = show && isShown();
-              } else {
-                show = show && isShown() && !isHidden();
               }
+
+              var show = evalExpression(expressionString);
+              var model = $parse(scope.keyModelName);
 
               if (angular.isDefined(scope.form.required)) {
                 scope.form.required = show;
                 scope.form.schema.required = show;
               }
-              if (scope.form.key && !show) {
-                var model = $parse(scope.keyModelName);
-                if (isHidden() && !setUndefinedAnyway() && angular.isDefined(scope.form.setHiddenValue)) {
-                  model.assign(scope, scope.form.setHiddenValue);
-                } else {
-                  model.assign(scope, undefined);
+
+
+              if (angular.isArray(scope.form.conditionalValues)) {
+
+                model.assign(scope, getConditionalValue());
+
+              } else if (scope.form.key && !show) {
+
+                model.assign(scope, undefined);
+                if (scope.ngModelHolder) {
+                  scope.ngModelHolder.$render();
+                  scope.ngModelHolder.$setPristine();
                 }
-                element.find('input').val('');
-                scope.ngModelHolder.$setPristine();
+
               }
 
               return show;
+
             };
 
             scope.clickCheckbox = function (event) {
@@ -234,19 +217,29 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.disabledElement = function () {
-              var disabled = scope.form && angular.isDefined(scope.form.conditionalDisabledValue) && (lookupForKey(scope.model, scope.form.conditionalDisabledKey) === scope.form.conditionalDisabledValue);
-              scope.form.required = !disabled;
-              scope.form.schema.required = !disabled;
+              var expressionString = scope.form.disableExpression;
+
+              if (angular.isUndefined(expressionString)) {
+                return false;
+              }
+
+              var disabled = evalExpression(expressionString);
+
+              if (angular.isDefined(scope.form.required)) {
+                scope.form.required = !disabled;
+                scope.form.schema.required = !disabled;
+              }
+
               if (disabled) {
                 scope.ngModelHolder.$setViewValue(undefined);
                 element.find('input').val('');
               }
-              return scope.form.disabled || disabled;
+              return disabled;
             };
 
 
             var updateInfoDate = function (date) {
-              date = date || lookupForKey(scope.model, scope.form.undefinedConditionKey);
+              date = date || scope.$eval(lookupForKey(scope.form.dateKey));
               var today = moment();
               var minMonthlyDifference = scope.form.minMonthlyDifference || 0;
               var maxMonthlyDifference = scope.form.maxMonthlyDifference;
@@ -270,16 +263,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return selectedDate;
             };
 
-            scope.hideWhenUndefined = function () {
-              var hide =  angular.isDefined(scope.form.undefinedConditionKey) && angular.isUndefined(lookupForKey(scope.model, scope.form.undefinedConditionKey));
-
-              return hide;
-            };
-
             scope.setDateWatcher = function () {
               if (scope.form.key) {
                 var value = function () {
-                  return lookupForKey(scope.model, scope.form.undefinedConditionKey);
+                  return scope.$eval(lookupForKey(scope.form.dateKey));
                 };
                 scope.$watch(value, function (newDate) {
                   if (newDate) {
@@ -301,7 +288,12 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.conditionalValidationSuccess = function () {
-              return angular.isDefined(scope.form.conditionalValidationValue) && (lookupForKey(scope.model, scope.form.conditionalValidationKey) === scope.form.conditionalValidationValue);
+              var expressionString = scope.form.validationExpression;
+
+              if (angular.isUndefined(expressionString)) {
+                return true;
+              }
+              return evalExpression(expressionString);
             };
 
             /**
@@ -365,6 +357,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
             };
 
+            /**TODO delete it*/
+
             scope.nextStep = function (index) {
               this.$broadcast('schemaFormValidate', this);
               if (this.formCtrl.$valid) {
@@ -380,6 +374,23 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               scope.selected.step = index - 1;
               scrollingTop.scrollTop();
             };
+
+
+
+            scope.finishIt = function($event, form) {
+              if (angular.isFunction(form.finishIt)) {
+                finishIt.onClick($event, form);
+              } else if (angular.isString(form.finishIt)) {
+                if (sfSchema) {
+                  //evaluating in scope outside of sfSchemas isolated scope
+                  sfSchema.evalInParentScope(form.finishIt, {'$event': $event, form: form});
+                } else {
+                  scope.$eval(form.finishIt, {'$event': $event, form: form});
+                }
+              }
+            };
+
+            /**TODO delete it*/
           }
         };
       }
