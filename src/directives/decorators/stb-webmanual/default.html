@@ -10,7 +10,7 @@
             <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
         </small>
     </span>
-    <div class="stb-form-group inline" ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() &&(!form.conditionalValidationKey  || conditionalValidationSuccess()), 'has-feedback': form.feedback !== false }">
+    <div class="stb-form-group inline" ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() && conditionalValidationSuccess(), 'has-feedback': form.feedback !== false }">
         <input type="{{form.formType || 'text'}}"
                ng-show="form.key"
                type="{{form.type}}"
@@ -26,7 +26,7 @@
                ng-disabled="disabledElement()">
 
         <i class="form-control-feedback glyphicon"
-           ng-show="hasError() || hasSuccess() &&(!form.conditionalValidationKey  || conditionalValidationSuccess())"
-           ng-class="{'glyphicon-remove': !disabledElement() && hasError(), 'glyphicon-ok': !disabledElement() && hasSuccess() && (!form.conditionalValidationKey  || conditionalValidationSuccess())}"></i>
+           ng-show="hasError() || hasSuccess() && conditionalValidationSuccess()"
+           ng-class="{'glyphicon-remove': !disabledElement() && hasError(), 'glyphicon-ok': !disabledElement() && hasSuccess() && conditionalValidationSuccess()}"></i>
     </div>
 </div>

@@ -12,7 +12,7 @@
         </small>
     </span>
 
-    <div class="input-group date datePicker"  ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() &&(!form.conditionalValidationKey  || conditionalValidationSuccess()), 'has-feedback': form.feedback !== false }">
+    <div class="input-group date datePicker"  ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() && conditionalValidationSuccess(), 'has-feedback': form.feedback !== false }">
 
         <input ng-show="form.key"
                type="text"

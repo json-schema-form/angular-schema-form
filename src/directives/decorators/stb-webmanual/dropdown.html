@@ -9,7 +9,7 @@
         <span class="input-faulty left-margin-10" ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
     </div>
     <div class="stb-form-group has-feedback select-wrapper"
-         ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() &&(!form.conditionalValidationKey  || conditionalValidationSuccess())}">
+         ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() && conditionalValidationSuccess()}">
         <div class="selectContainer">
             <select ng-model="$$value$$"
                     ng-model-options="form.ngModelOptions"

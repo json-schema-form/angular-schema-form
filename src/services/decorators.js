@@ -220,7 +220,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             scope.disabledElement = function () {
               var expressionString = scope.form.disableExpression;
 
-              if (angular.isUndefined(expressionString)) {
+              if (angular.isUndefined(expressionString) && angular.isUndefined(scope.form.disabled)) {
                 return false;
               }
 
@@ -235,7 +235,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 scope.ngModelHolder.$setViewValue(undefined);
                 element.find('input').val('');
               }
-              return disabled;
+              return disabled || scope.form.disabled;
             };
 
 
