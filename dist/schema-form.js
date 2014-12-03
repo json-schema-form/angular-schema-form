@@ -263,21 +263,20 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
               var schema = scope.globalSchema.properties[key];
 
-              if (angular.isUndefined(schema)) {
-                return;
+              if (angular.isDefined(schema)) {
+                var visibility = schema.visibility || scope.defaultGlobals.visibility;
+
+                if (visibility) {
+                  res += '.' + visibility;
+                }
+
+                var category = schema.category || scope.defaultGlobals.category;
+
+                if (category) {
+                  res += '.' + category;
+                }
               }
 
-              var visibility = schema.visibility || scope.defaultGlobals.visibility;
-
-              if (visibility) {
-                res += '.' + visibility;
-              }
-
-              var category = schema.category || scope.defaultGlobals.category;
-
-              if (category) {
-                res += '.' + category;
-              }
 
               res += (key[0] !== '[' ? '.' : '') + key;
 
