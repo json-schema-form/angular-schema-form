@@ -28,7 +28,10 @@
     {
       "key": "comment",
       "type": "textarea",
-      "placeholder": "Make a comment"
+      "placeholder": "Make a comment",
+      "dependencies": ["name", "email"],
+      "expression": "name === 'secret'",
+      "disabledExpression": "email === 'test@test.com'"
     },
     {
       "type": "submit",

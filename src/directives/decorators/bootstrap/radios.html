@@ -1,10 +1,10 @@
-<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}" ng-show="showCondition()">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
   <div class="radio" ng-repeat="item in form.titleMap" >
     <label>
       <input type="radio"
              sf-changed="form"
-             ng-disabled="form.readonly"
+             ng-disabled="form.readonly || disabledElement()"
              ng-model="$$value$$"
              ng-model-options="form.ngModelOptions"
              ng-value="item.value">

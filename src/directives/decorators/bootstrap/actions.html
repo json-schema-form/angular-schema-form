@@ -1,4 +1,4 @@
-<div class="btn-group">
+<div class="btn-group" ng-show="showCondition()">
   <input ng-repeat-start="item in form.items"
          type="submit"
          class="btn {{ item.style || 'btn-primary' }}"
@@ -6,7 +6,7 @@
          ng-if="item.type === 'submit'">
   <button ng-repeat-end class="btn {{ item.style || 'btn-default' }}"
           type="button"
-          ng-disabled="form.readonly"
+          ng-disabled="form.readonly || disabledElement()"
           ng-if="item.type !== 'submit'"
           ng-click="buttonClick($event,item)">{{item.title}}</button>
 </div>

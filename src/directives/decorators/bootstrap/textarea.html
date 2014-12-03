@@ -1,9 +1,9 @@
-<div class="form-group has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+<div class="form-group has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}" ng-show="showCondition()">
   <label ng-show="showTitle()">{{form.title}}</label>
   <textarea class="form-control"
             sf-changed="form"
             placeholder="{{form.placeholder}}"
-            ng-disabled="form.readonly"
+            ng-disabled="form.readonly || disabledElement()"
             ng-model="$$value$$"
             ng-model-options="form.ngModelOptions"
             schema-validate="form"></textarea>
