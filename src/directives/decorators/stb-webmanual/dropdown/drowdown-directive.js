@@ -8,6 +8,7 @@ angular.module('schemaForm').directive('stbDropdown', ['$timeout', '$parse', fun
           if (selected && item.name === selected.selected) {
 
             ngModelCtrl.$setViewValue({name: item.name, value: item.value});
+            ngModelCtrl.$render();
           }
         })
       };

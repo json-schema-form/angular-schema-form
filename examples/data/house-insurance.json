@@ -1,0 +1,1486 @@
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "_addressType": {
+        "type": "string"
+      },
+      "streetAddress": {
+        "required": true,
+        "type": "string"
+      },
+      "cadastralGnr": {
+        "required": true,
+        "type": "string"
+      },
+      "cadastralBnr": {
+        "required": true,
+        "type": "string"
+      },
+      "intendsToMigrateInsurance": {
+        "required": true,
+        "type": "boolean"
+      },
+      "oldInsuranceCompany": {
+        "required": true,
+        "type": "object"
+      },
+      "customerPreviousInsurancePolicyholder": {
+        "required": true,
+        "type": "boolean"
+      },
+      "previousInsurancePolicyholderNameSSN": {
+        "required": true,
+        "type": "string"
+      },
+      "expirationDateKnown": {
+        "type": "boolean"
+      },
+      "_expirationDateDay": {
+        "required": true,
+        "type": "string",
+        "format": "date-format"
+      },
+      "expirationDateDay": {
+        "required": true,
+        "type": "string",
+        "format": "date-format"
+      },
+      "issueDay": {
+        "required": true,
+        "type": "string",
+        "format": "date-format"
+      }
+    }
+  },
+
+
+  "form": [
+    {
+      "type": "fieldset",
+      "items": [
+        {
+          "key": "_addressType",
+          "title": "Adresse",
+          "validationMessage": "Vennligst gjør et valg",
+          "infoMessage": "todo",
+          "type": "radios",
+          "titleMap": [
+            {"value": "useStreetAddress", "name": "Gateadresse"},
+            {"value": "useCadastralAddress", "name": "Uten gateadresse"}
+          ],
+          "dependencies": ["houseContAdrSameAsHomeAdr"],
+          "expression": "houseContAdrSameAsHomeAdr === false"
+        },
+        {
+          "key": "streetAddress",
+          "type": "string",
+          "title": "Gateadresse",
+          "validationMessage": "Vennligst oppgi gateadresse",
+          "dependencies": ["_addressType"],
+          "expression": "_addressType === 'useStreetAddress'"
+        },
+        {
+          "key": "cadastralGnr",
+          "type": "string",
+          "title": "Gårdsnummer",
+          "validationMessage": "Vennligst oppgi gårdsnummer",
+          "dependencies": ["_addressType"],
+          "expression": "_addressType === 'useCadastralAddress'"
+        },
+        {
+          "key": "cadastralBnr",
+          "type": "string",
+          "title": "Bruksnummer",
+          "validationMessage": "Vennligst oppgi bruksnummer",
+          "dependencies": ["_addressType"],
+          "expression": "_addressType === 'useCadastralAddress'"
+        },
+        {
+          "key": "intendsToMigrateInsurance",
+          "title": "Skal du flytte forsikringen fra et annet selskap?",
+          "validationMessage": "Vennligst gjør et valg",
+          "infoMessage": "Har du tilsvarende forsikring fra før som skal sies opp i eksisterende selskap, velg JA. Du sender da oppsigelsen direkte til ditt eksisterende forsikringsselskap fra vår e-postserver",
+          "type": "radios",
+          "titleMap": [
+            {"value": true, "name": "Ja"},
+            {"value": false, "name": "Nei"}
+          ]
+        },
+        {
+          "key": "oldInsuranceCompany",
+          "type": "dropdown",
+          "validationMessage": "Vennligst gjør et valg",
+          "infoMessage": "Vi sender oppsigelsen til det selskap du oppgir",
+          "title": "Angi selskap du flytter fra",
+          "titleMap": [
+            {
+              "name": "Agria Dyreforsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Agria Dyreforsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "smadyr@agria.no"
+                }
+              }
+            },
+            {
+              "name": "AIG Europe",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "AIG Europe"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "csg.norway@aig.com"
+                }
+              }
+            },
+            {
+              "name": "Annet Norsk selskap",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Annet Norsk selskap"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "forsikring@storebrand.no"
+                }
+              }
+            },
+            {
+              "name": "Atlantica Båtforsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Atlantica Båtforsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "info@atlantica.no"
+                }
+              }
+            },
+            {
+              "name": "Bluewater Insurance ASA",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Bluewater Insurance ASA"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "kunde@bluewater.no"
+                }
+              }
+            },
+            {
+              "name": "Codan",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Codan"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@codanforsikring.no"
+                }
+              }
+            },
+            {
+              "name": "Dancia Pensjon",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Dancia Pensjon"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "dancia@dancia.no"
+                }
+              }
+            },
+            {
+              "name": "DNB Skadeforsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "DNB Skadeforsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelser.skadeforsikring@dnb.no"
+                }
+              }
+            },
+            {
+              "name": "Duborgh Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Duborgh Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "duborgh@duborgh.no"
+                }
+              }
+            },
+            {
+              "name": "Eika Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Eika Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelser@eika.no"
+                }
+              }
+            },
+            {
+              "name": "Enter Forsikring AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Enter Forsikring AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelser@enter-forsikring.no"
+                }
+              }
+            },
+            {
+              "name": "Europeiske Reiseforsikring ",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Europeiske Reiseforsikring "
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelser@if.no"
+                }
+              }
+            },
+            {
+              "name": "Fjaler Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Fjaler Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@fjalerbank.no"
+                }
+              }
+            },
+            {
+              "name": "Forsikring fra Norske Boligbyggelag",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Forsikring fra Norske Boligbyggelag"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@wli.no"
+                }
+              }
+            },
+            {
+              "name": "Frende Skadeforsikring AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Frende Skadeforsikring AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@frende.no"
+                }
+              }
+            },
+            {
+              "name": "Frisk Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Frisk Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "kundesenter@friskforsikring.no"
+                }
+              }
+            },
+            {
+              "name": "Gjensidige",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Gjensidige"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse.privat@gjensidige.no"
+                }
+              }
+            },
+            {
+              "name": "Gouda Reiseforsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Gouda Reiseforsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@gouda.no"
+                }
+              }
+            },
+            {
+              "name": "GS Banken",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "GS Banken"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@gsbanken.no"
+                }
+              }
+            },
+            {
+              "name": "Halden Sparebank 1",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Halden Sparebank 1"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@haldenspb.no"
+                }
+              }
+            },
+            {
+              "name": "Helgeland Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Helgeland Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@hsb.no"
+                }
+              }
+            },
+            {
+              "name": "Hjartdal og Gransherad Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Hjartdal og Gransherad Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@hjartdalbanken.no"
+                }
+              }
+            },
+            {
+              "name": "IF Skadeforsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "IF Skadeforsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelser@if.no"
+                }
+              }
+            },
+            {
+              "name": "Interhannover/ White Labell Insurance ASA",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Interhannover/ White Labell Insurance ASA"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@wli.no"
+                }
+              }
+            },
+            {
+              "name": "Jernbanepers. bank og forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Jernbanepers. bank og forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "salg@jfg.no"
+                }
+              }
+            },
+            {
+              "name": "KLP Skadeforsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "KLP Skadeforsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "privatkunde@klp.no"
+                }
+              }
+            },
+            {
+              "name": "Kollektivtrafikkens Personellservice BA",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Kollektivtrafikkens Personellservice BA"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@ktps.no"
+                }
+              }
+            },
+            {
+              "name": "Kristen Norges Innkjøpsfellesskap",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Kristen Norges Innkjøpsfellesskap"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@ktf-as.no"
+                }
+              }
+            },
+            {
+              "name": "Kvinnherad Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Kvinnherad Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "bankpost@ksbank.no"
+                }
+              }
+            },
+            {
+              "name": "Landbruksforsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Landbruksforsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@landbruksforsikring.no"
+                }
+              }
+            },
+            {
+              "name": "Lederenes private skadeforsikringer",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Lederenes private skadeforsikringer"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "forsikring@lederne.no"
+                }
+              }
+            },
+            {
+              "name": "Lom og Skjåk Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Lom og Skjåk Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "bankpost@lomogskjaak.sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Maskinentreprenørenes Forbund",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Maskinentreprenørenes Forbund"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "firmapost@mef.no"
+                }
+              }
+            },
+            {
+              "name": "Melhus Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Melhus Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@melhusbanken.no"
+                }
+              }
+            },
+            {
+              "name": "Modum SpareBank 1",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Modum SpareBank 1"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "modum.sparebank@modum.sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Møretrygd Gjensidig Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Møretrygd Gjensidig Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "alesund@moretrygd.no"
+                }
+              }
+            },
+            {
+              "name": "NAF Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "NAF Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelser@naf.no"
+                }
+              }
+            },
+            {
+              "name": "NEMI Forsikring ASA",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "NEMI Forsikring ASA"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@nemiforsikring.no"
+                }
+              }
+            },
+            {
+              "name": "Nordic Insurance",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Nordic Insurance"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@wli.no"
+                }
+              }
+            },
+            {
+              "name": "Norsk Familieøkonomi",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Norsk Familieøkonomi"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "medlemsservice@norskfamilie.no"
+                }
+              }
+            },
+            {
+              "name": "Norsk Hussopp Forsikring Gjensidig",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Norsk Hussopp Forsikring Gjensidig"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "firmapost@hussoppen.no"
+                }
+              }
+            },
+            {
+              "name": "Norsk Privatforsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Norsk Privatforsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "forsikring@norskprivatforsikring.no"
+                }
+              }
+            },
+            {
+              "name": "Norsk Sykepleierforbund",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Norsk Sykepleierforbund"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "forsikring@sykepleierforbundet.no"
+                }
+              }
+            },
+            {
+              "name": "Norske Sjø AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Norske Sjø AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@fender.no"
+                }
+              }
+            },
+            {
+              "name": "Norwegian Broker AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Norwegian Broker AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "yacht@norwegianbroker.no "
+                }
+              }
+            },
+            {
+              "name": "Nøtterø Sparebank 1",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Nøtterø Sparebank 1"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "service@nottero.sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Obos ",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Obos "
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelser@eika.no "
+                }
+              }
+            },
+            {
+              "name": "Postbanken",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Postbanken"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "skadeforsikring@dnbnor.no"
+                }
+              }
+            },
+            {
+              "name": "Protector Forsikring ASA",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Protector Forsikring ASA"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "meglerservice@protectorforsikring.no"
+                }
+              }
+            },
+            {
+              "name": "Quality Broker AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Quality Broker AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@quality-broker.no"
+                }
+              }
+            },
+            {
+              "name": "Rein Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Rein Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@reinforsikring.no"
+                }
+              }
+            },
+            {
+              "name": "Renault Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Renault Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "volvia.norge@volvia.se"
+                }
+              }
+            },
+            {
+              "name": "Rygge-Vaaler Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Rygge-Vaaler Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@rvs.sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sandnes Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sandnes Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "direkte@sandnes-sparebank.no"
+                }
+              }
+            },
+            {
+              "name": "Smart Club Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Smart Club Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@wli.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Bergen",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Bergen"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Drammen",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Drammen"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Eksterne Partnere",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Eksterne Partnere"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "eksternepartnere@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Fredrikstad",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Fredrikstad"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Gran",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Gran"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Grenland",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Grenland"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Gudbrandsdal",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Gudbrandsdal"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Hallingdal",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Hallingdal"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Hedmark",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Hedmark"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Jevnaker",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Jevnaker"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Kongsberg",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Kongsberg"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Lunner",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Lunner"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Midt-Norge",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Midt-Norge"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Moss",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Moss"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Nittedal",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Nittedal"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Nord-Norge",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Nord-Norge"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Nordvest",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Nordvest"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Oslo",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Oslo"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Ringerike",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Ringerike"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 RomsdalsFellesbank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 RomsdalsFellesbank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Rygge",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Rygge"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Råde",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Råde"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Soon",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Soon"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 SR-bank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 SR-bank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Telemark",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Telemark"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Valdres",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Valdres"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Vestby",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Vestby"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Vestfold",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Vestfold"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Volda Ørsta",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Volda Ørsta"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebank 1 Våler",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebank 1 Våler"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Sparebanken Vest",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Sparebanken Vest"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "kundeservice@frende.no"
+                }
+              }
+            },
+            {
+              "name": "Storebrand",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Storebrand"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "forsikring@storebrand.no"
+                }
+              }
+            },
+            {
+              "name": "Tennant Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Tennant Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "kundeservice@tennant.no"
+                }
+              }
+            },
+            {
+              "name": "Terra Skadeforsikring AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Terra Skadeforsikring AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelser@eika.no"
+                }
+              }
+            },
+            {
+              "name": "Toyota Forsikring - AIOI",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Toyota Forsikring - AIOI"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "backoffice@tennant.no"
+                }
+              }
+            },
+            {
+              "name": "Troll Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Troll Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@trollforsikring.no    "
+                }
+              }
+            },
+            {
+              "name": "Tryg Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Tryg Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelser.privat@tryg.no"
+                }
+              }
+            },
+            {
+              "name": "Unison forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Unison forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "eksternepartnere@sparebank1.no"
+                }
+              }
+            },
+            {
+              "name": "Vardia Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Vardia Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelser@vardia.no"
+                }
+              }
+            },
+            {
+              "name": "Volvia Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Volvia Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "volvia.norge@volvia.se"
+                }
+              }
+            },
+            {
+              "name": "Watercircles Norge AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Watercircles Norge AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@watercircles.no"
+                }
+              }
+            },
+            {
+              "name": "White Label Insurance AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "White Label Insurance AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "oppsigelse@wli.no"
+                }
+              }
+            },
+            {
+              "name": "Winterbergh Forsikring",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Winterbergh Forsikring"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@winterbergh.no"
+                }
+              }
+            },
+            {
+              "name": "YA BANK AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "YA BANK AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Oppsigelse": "post@ya.no"
+                }
+              }
+            }
+          ],
+          "dependencies": ["intendsToMigrateInsurance"],
+          "expression": "intendsToMigrateInsurance === true"
+        },
+        {
+          "key": "customerPreviousInsurancePolicyholder",
+          "validationMessage": "Vennligst oppgi om forsikringen i nåværende selskap er registrert i ditt navn",
+          "infoMessage": "Forsikringer i nåværende selskap kan kun sies opp på vegne av ektefelle/samboere",
+          "type": "radios-inline",
+          "title": "Er forsikringen i nåværende selskap registrert i ditt navn?",
+          "titleMap": [
+            {"value": true, "name": "Ja"},
+            {"value": false, "name": "Nei"}
+          ],
+          "dependencies": ["intendsToMigrateInsurance"],
+          "expression": "intendsToMigrateInsurance === true"
+        },
+        {
+          "key": "previousInsurancePolicyholderNameSSN",
+          "type": "string",
+          "title": "Navn og fødselsdato på forsikringstaker i nåværende selskap",
+          "validationMessage": "Vennligst oppgi navn og fødselsdato på forsikringstaker i nåværende selskap",
+          "dependencies": ["customerPreviousInsurancePolicyholder"],
+          "expression": "customerPreviousInsurancePolicyholder === false"
+        },
+        {
+          "key": "expirationDateKnown",
+          "type": "radios-inline",
+          "title": "Vet du dato for hovedforfall for denne forsikringen i ditt nåværende selskap?",
+          "validationMessage": "Vennligst gjør et valg",
+          "infoMessage": "Hovedforfall finner sted en gang i året og definerer startdato for forsikringsavtalen.",
+          "titleMap": [
+            {"value": true, "name": "Ja"},
+            {"value": false, "name": "Nei"}
+          ],
+          "dependencies": ["intendsToMigrateInsurance"],
+          "expression": "intendsToMigrateInsurance === true"
+        },
+        {
+          "key": "_expirationDateDay",
+          "validationMessage": "Vennligst fyll ut dato",
+          "infoMessage": "Her legger du inn dato for hovedforfall i det selskap du flytter ifra",
+          "title": "Dato for forfall i annet forsikringsselskap",
+          "dependencies": ["expirationDateKnown"],
+          "expression": "expirationDateKnown === true"
+        },
+        {
+          "type": "infodate",
+          "key": "expirationDateDay",
+          "dateKey": "_expirationDateDay",
+          "maxMonthlyDifference": 2,
+          "minMonthlyDifference": 0,
+          "additionalMonthlyDifference": 1,
+          "additionalDailyDifference": 1,
+          "encoding": "nn",
+          "format": "Do MMMM YYYY",
+          "staticMessage": "Forsikringen vil gjelde fra",
+          "dependencies": ["_expirationDateDay"],
+          "expression": "_expirationDateDay !== undefined"
+        },
+        {
+          "key": "issueDay",
+          "validationMessage": "Vennligst fyll ut dato",
+          "infoMessage": "Du kan ikke velge dato tilbake i tid. Du kan velge \"gjelder fra dato\" inntil 3 måneder frem i tid dersom det er ønskelig",
+          "title": "Når skal forsikringen gjelde fra",
+          "disableUntilToday": true,
+          "monthlyDifference": 3,
+          "dependencies": ["intendsToMigrateInsurance"],
+          "expression": "intendsToMigrateInsurance === false"
+        },
+        {
+          "type": "infodate",
+          "dateKey": "issueDay",
+          "encoding": "nn",
+          "format": "Do MMMM YYYY",
+          "staticMessage": "Forsikringen vil gjelde fra",
+          "dependencies": ["issueDay"],
+          "expression": "issueDay !== undefined"
+        }
+      ]
+    }
+  ]
+}
