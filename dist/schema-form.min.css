@@ -19,6 +19,9 @@ label.empty-view {
   min-width: 100px;
   background-color: white;
 }
+.input-group.datePicker i.form-control-feedback {
+  right: inherit;
+}
 .stb-form-group input {
   min-width: 260px;
 }

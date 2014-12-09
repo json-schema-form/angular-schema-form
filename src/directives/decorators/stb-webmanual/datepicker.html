@@ -27,5 +27,9 @@
               <span class="input-group-addon">
                   <span class="glyphicon-calendar glyphicon"></span>
               </span>
+
+        <i class="form-control-feedback glyphicon"
+           ng-show="hasSuccess() || hasError()"
+           ng-class="{'glyphicon-remove': !disabledElement() && hasError(), 'glyphicon-ok': !disabledElement() && hasSuccess()}"></i>
     </div>
 </div>

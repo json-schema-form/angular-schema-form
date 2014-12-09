@@ -19,9 +19,9 @@
                     stb-dropdown
                     ng-options="item as item.name for (key, item) in form.titleMap track by item.name">
             </select>
-            <!--<i class="form-control-feedback glyphicon"-->
-               <!--ng-show="hasSuccess() || hasError()"-->
-               <!--ng-class="{'glyphicon-remove': !disabledElement() && hasError(), 'glyphicon-ok': !disabledElement() && hasSuccess()}"></i>-->
+            <i class="form-control-feedback glyphicon"
+               ng-show="hasSuccess() || hasError()"
+               ng-class="{'glyphicon-remove': !disabledElement() && hasError(), 'glyphicon-ok': !disabledElement() && hasSuccess()}"></i>
         </div>
     </div>
 </div>
