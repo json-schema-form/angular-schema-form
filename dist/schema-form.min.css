@@ -36,6 +36,9 @@ label.empty-view {
   text-align: center;
   padding: 24px 0 0 0;
 }
+.notification .msgIcon .info {
+  margin-left: 0;
+}
 .notification .msgText {
   display: table-cell;
   vertical-align: middle;
