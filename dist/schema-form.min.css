@@ -16,6 +16,7 @@ label.empty-view {
   width: 260px;
 }
 .input-group.datePicker input {
+  min-width: 100px;
   background-color: white;
 }
 .stb-form-group input {
@@ -73,4 +74,7 @@ label.empty-view {
 .white-box .padding-bottom {
   width: 100%;
   padding-bottom: 20px;
+}
+input[type=radio].stb-radio + label {
+  min-width: 100px;
 }
