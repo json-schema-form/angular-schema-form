@@ -37,6 +37,12 @@ label {
 
 //default
 .stb-form-group {
+  display: inline-block;
+
+  &.radios {
+    display: block;
+  }
+
   input {
     min-width: 260px;
   }
@@ -108,10 +114,4 @@ label {
     width: 100%;
     padding-bottom: 20px;
   }
-}
-
-//redundunt
-
-input[type=radio].stb-radio+label {
-  min-width: 100px;
 }
