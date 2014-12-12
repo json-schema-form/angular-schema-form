@@ -5,13 +5,12 @@
             <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
         </div>
 
-    <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
-        <small class="help-block">
-            <span class="stb-color-sprite-small warning circle"></span>
-            <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
-        </small>
-    </span>
-
+        <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
+            <small class="help-block">
+                <span class="stb-color-sprite-small warning circle"></span>
+                <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+            </small>
+        </span>
         <div class="stb-form-group radios-inline">
           <span ng-repeat="item in form.titleMap">
               <input type="radio"
