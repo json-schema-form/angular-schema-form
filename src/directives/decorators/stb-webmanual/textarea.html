@@ -15,6 +15,7 @@
         <span class="help-block  info-message">{{form.description}}</span>
         <textarea class="form-control"
                   sf-changed="form"
+                  ng-model-onblur
                   ng-model="$$value$$"
                   ng-model-options="form.ngModelOptions"
                   schema-validate="form"
