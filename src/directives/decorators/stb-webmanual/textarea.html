@@ -4,13 +4,12 @@
         <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
     </div>
 
-    <div class="help-block info-message has-error"
-         ng-show="(hasError() && errorMessage(schemaError()))">
+    <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
         <small class="help-block">
-            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            <span class="stb-color-sprite-small warning circle"></span>
             <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
         </small>
-    </div>
+    </span>
     <div class="stb-form-group al text-area has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
         <span class="help-block  info-message">{{form.description}}</span>
         <textarea class="form-control"
