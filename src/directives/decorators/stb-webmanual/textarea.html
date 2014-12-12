@@ -1,11 +1,9 @@
 <div  ng-show="showCondition()">
-    <label ng-show="showTitle()">{{form.title}}</label>
-
-    <div class="help-block info-message"
-         ng-show="form.description && !hasError()"
-         ng-bind-html="form.description"
-         ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
+    <div class="label-wrapper">
+        <label ng-show="showTitle()">{{form.title}}</label>
+        <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
     </div>
+
     <div class="help-block info-message has-error"
          ng-show="(hasError() && errorMessage(schemaError()))">
         <small class="help-block">
@@ -14,12 +12,13 @@
         </small>
     </div>
     <div class="stb-form-group al text-area has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
-        <span class="help-block  info-message">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
+        <span class="help-block  info-message">{{form.description}}</span>
         <textarea class="form-control"
                   sf-changed="form"
                   ng-model="$$value$$"
                   ng-model-options="form.ngModelOptions"
-                  schema-validate="form"></textarea>
+                  schema-validate="form"
+                  rows="{{form.rows}}"></textarea>
         <i class="form-control-feedback glyphicon"
            ng-class="{'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError()}"></i>
     </div>
