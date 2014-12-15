@@ -367,41 +367,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return 'Required';
 
             };
-
-            /**TODO delete it*/
-
-            scope.nextStep = function (index) {
-              this.$broadcast('schemaFormValidate', this);
-              if (this.formCtrl.$valid) {
-                scope.completed[index] = true;
-                scope.selected.step = index + 1;
-                scrollingTop.scrollTop();
-              } else {
-                scrollingTop.scrollToTheFirstError(element, scope.selected.step);
-              }
-            };
-
-            scope.prevStep = function (index) {
-              scope.selected.step = index - 1;
-              scrollingTop.scrollTop();
-            };
-
-
-
-            scope.finishIt = function($event, form) {
-              if (angular.isFunction(form.finishIt)) {
-                finishIt.onClick($event, form);
-              } else if (angular.isString(form.finishIt)) {
-                if (sfSchema) {
-                  //evaluating in scope outside of sfSchemas isolated scope
-                  sfSchema.evalInParentScope(form.finishIt, {'$event': $event, form: form});
-                } else {
-                  scope.$eval(form.finishIt, {'$event': $event, form: form});
-                }
-              }
-            };
-
-            /**TODO delete it*/
           }
         };
       }
