@@ -88,7 +88,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               }
             });
 
-            scope.globalSchema = sfSchema.evalInParentScope('schema');
+            scope.globalSchema = sfSchema.evalInMainScope('schema');
 
             //Keep error prone logic from the template
             scope.showTitle = function() {

@@ -220,7 +220,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               }
             });
 
-            scope.globalSchema = sfSchema.evalInParentScope('schema');
+            scope.globalSchema = sfSchema.evalInMainScope('schema');
 
             //Keep error prone logic from the template
             scope.showTitle = function() {
@@ -1584,8 +1584,13 @@ angular.module('schemaForm')
         model: '=sfModel'
       },
       controller: ['$scope', function($scope) {
+
         this.evalInParentScope = function(expr, locals) {
           return $scope.$parent.$eval(expr, locals);
+        };
+
+        this.evalInMainScope = function(expr, locals) {
+          return $scope.$eval(expr, locals);
         };
       }],
       replace: false,
