@@ -511,7 +511,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               scope.selected.step = index - 1;
               scrollingTop.scrollTop();
               scope.$emit('stepChanged', {
-                'description': 'previous',
+                'description': 'prev',
                 'targetStep': scope.selected.step
               });
             };
