@@ -366,6 +366,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 scope.completed[index] = true;
                 scope.selected.step = index + 1;
                 scrollingTop.scrollTop();
+                scope.$emit('stepChanged', {
+                  'description': 'next',
+                  'targetStep': scope.selected.step
+                });
               } else {
                 scrollingTop.scrollToTheFirstError(element, scope.selected.step);
               }
@@ -374,6 +378,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             scope.prevStep = function (index) {
               scope.selected.step = index - 1;
               scrollingTop.scrollTop();
+              scope.$emit('stepChanged', {
+                'description': 'previous',
+                'targetStep': scope.selected.step
+              });
             };
 
 
