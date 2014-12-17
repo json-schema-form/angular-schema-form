@@ -17,7 +17,7 @@
                     class="form-control"
                     schema-validate="form"
                     stb-dropdown
-                    ng-options="item as item.name for (key, item) in form.titleMap track by item.name">
+                    ng-options="item as item.name for item in form.titleMap | orderBy:'name'">
             </select>
             <i class="form-control-feedback glyphicon"
                ng-show="hasSuccess() || hasError()"
