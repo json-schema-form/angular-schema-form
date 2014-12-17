@@ -400,8 +400,12 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.$on('stepChange', function(e, options){
-                scope.selected.step = options.step;
-                scrollingTop.scrollTop();
+              if(e.defaultPrevented) {
+                return;
+              }
+              e.preventDefault();
+              scope.selected.step = options.step;
+              scrollingTop.scrollTop();
             });
 
             /**TODO delete it*/
