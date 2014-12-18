@@ -1,8 +1,8 @@
 /**
  * Directive that handles the model arrays
  */
-angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sfValidator',
-  function(sfSelect, schemaForm, sfValidator) {
+angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sfValidator', 'sfPath',
+  function(sfSelect, schemaForm, sfValidator, sfPath) {
 
     var setIndex = function(index) {
       return function(form) {
@@ -18,17 +18,25 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
       require: '?ngModel',
       link: function(scope, element, attrs, ngModel) {
         var formDefCache = {};
-
+        var arr_change_watcher = false;
+        
         // Watch for the form definition and then rewrite it.
         // It's the (first) array part of the key, '[]' that needs a number
         // corresponding to an index of the form.
         var once = scope.$watch(attrs.sfArray, function(form) {
-
+          
           // An array model always needs a key so we know what part of the model
           // to look at. This makes us a bit incompatible with JSON Form, on the
           // other hand it enables two way binding.
           var list = sfSelect(form.key, scope.model);
-
+          
+          // Stop a previous watcher
+          if (arr_change_watcher) arr_change_watcher();
+          arr_change_watcher = scope.$watch('model' + sfPath.normalize(form.key), function (val) {
+            list = sfSelect(form.key, scope.model);
+            scope.modelArray = list;
+          });
+          
           // Since ng-model happily creates objects in a deep path when setting a
           // a value but not arrays we need to create the array.
           if (angular.isUndefined(list)) {
