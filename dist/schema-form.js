@@ -1,7 +1,7 @@
 // Deps is sort of a problem for us, maybe in the future we will ask the user to depend
 // on modules for add-ons
 
-var deps = ['ObjectPath'];
+var deps = [];
 try {
   //This throws an expection if module does not exist.
   angular.module('ngSanitize');
@@ -23,29 +23,31 @@ try {
 angular.module('schemaForm', deps);
 
 angular.module('schemaForm').provider('sfPath',
-['ObjectPathProvider', function(ObjectPathProvider) {
-  var ObjectPath = {parse: ObjectPathProvider.parse};
+[function() {
+  var sfPath = {parse: ObjectPath.parse};
 
   // if we're on Angular 1.2.x, we need to continue using dot notation
   if (angular.version.major === 1 && angular.version.minor < 3) {
-    ObjectPath.stringify = function(arr) {
+    sfPath.stringify = function(arr) {
       return Array.isArray(arr) ? arr.join('.') : arr.toString();
     };
   } else {
-    ObjectPath.stringify = ObjectPathProvider.stringify;
+    sfPath.stringify = ObjectPath.stringify;
   }
 
   // We want this to use whichever stringify method is defined above,
   // so we have to copy the code here.
-  ObjectPath.normalize = function(data, quote) {
-    return ObjectPath.stringify(Array.isArray(data) ? data : ObjectPath.parse(data), quote);
+  sfPath.normalize = function(data, quote) {
+    return sfPath.stringify(Array.isArray(data) ? data : sfPath.parse(data), quote);
   };
 
-  this.parse = ObjectPath.parse;
-  this.stringify = ObjectPath.stringify;
-  this.normalize = ObjectPath.normalize;
+  // expose the methods in sfPathProvider
+  this.parse = sfPath.parse;
+  this.stringify = sfPath.stringify;
+  this.normalize = sfPath.normalize;
+
   this.$get = function() {
-    return ObjectPath;
+    return sfPath;
   };
 }]);
 
@@ -949,8 +951,8 @@ angular.module('schemaForm').factory('sfValidator', [function() {
 /**
  * Directive that handles the model arrays
  */
-angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sfValidator',
-  function(sfSelect, schemaForm, sfValidator) {
+angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sfValidator', 'sfPath',
+  function(sfSelect, schemaForm, sfValidator, sfPath) {
 
     var setIndex = function(index) {
       return function(form) {
@@ -977,6 +979,14 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
           // other hand it enables two way binding.
           var list = sfSelect(form.key, scope.model);
 
+          // We only modify the same array instance but someone might change the array from
+          // the outside so let's watch for that. We use an ordinary watch since the only case
+          // we're really interested in is if its a new instance.
+          scope.$watch('model' + sfPath.normalize(form.key), function() {
+            list = sfSelect(form.key, scope.model);
+            scope.modelArray = list;
+          });
+
           // Since ng-model happily creates objects in a deep path when setting a
           // a value but not arrays we need to create the array.
           if (angular.isUndefined(list)) {
@@ -996,7 +1006,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             if (form.items.length > 1) {
               subForm = {
                 type: 'section',
-                items: form.items.map(function(item){
+                items: form.items.map(function(item) {
                   item.ngModelOptions = form.ngModelOptions;
                   item.readonly = form.readonly;
                   return item;
@@ -1024,8 +1034,20 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             var len = list.length;
             var copy = scope.copyWithIndex(len);
             schemaForm.traverseForm(copy, function(part) {
-              if (part.key && angular.isDefined(part['default'])) {
-                sfSelect(part.key, scope.model, part['default']);
+
+              if (part.key) {
+                var def;
+                if (angular.isDefined(part['default'])) {
+                  def = part['default'];
+                }
+                if (angular.isDefined(part.schema) &&
+                    angular.isDefined(part.schema['default'])) {
+                  def = part.schema['default'];
+                }
+
+                if (angular.isDefined(def)) {
+                  sfSelect(part.key, scope.model, def);
+                }
               }
             });
 
