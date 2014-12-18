@@ -163,8 +163,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
 
   var createDirective = function(name) {
-    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop', '$timeout',
-      function($parse,  $compile,  $http,  $templateCache, scrollingTop, $timeout) {
+    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop', '$timeout', '$filter',
+      function($parse,  $compile,  $http,  $templateCache, scrollingTop, $timeout, $filter) {
 
         return {
           restrict: 'AE',

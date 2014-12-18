@@ -16,7 +16,7 @@
               sf-changed="form"
               class="form-control"
               schema-validate="form"
-              ng-options="item as item.name for item in form.titleMap | orderBy:'name'">
+              ng-options="item as item.name for (key, item) in form.titleMap track by item.name">
       </select>
     </div>
 </div>
