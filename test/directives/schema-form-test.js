@@ -707,6 +707,56 @@ describe('directive',function(){
     });
   });
 
+  it('should handle schema form default in deep structure with array',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {
+        "arr":[]
+      };
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "arr" : {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "title": "Person",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "Name"
+                },
+                "nick": {
+                  "type": "string",
+                  "default": "Nick"
+                },
+                "alias": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      };
+
+      //The form defines a fieldset for person, and changes the order of fields
+      //but titles should come from the schema
+      scope.form = ['*'];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      scope.person.arr[0].name.should.be.equal('Name');
+      scope.person.arr[0].nick.should.be.equal('Nick');
+      expect(scope.person.arr[0].alias).to.be.undefined;
+
+    });
+  });
+
   it('should skip title if form says "notitle"',function(){
 
     inject(function($compile,$rootScope){
