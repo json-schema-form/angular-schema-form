@@ -84,8 +84,20 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             var len = list.length;
             var copy = scope.copyWithIndex(len);
             schemaForm.traverseForm(copy, function(part) {
-              if (part.key && part.schema && angular.isDefined(part.schema['default'])) {
-                sfSelect(part.key, scope.model, part.schema['default']);
+
+              if (part.key) {
+                var def;
+                if (angular.isDefined(part['default'])) {
+                  def = part['default'];
+                }
+                if (angular.isDefined(part.schema) &&
+                    angular.isDefined(part.schema['default'])) {
+                  def = part.schema['default'];
+                }
+
+                if (angular.isDefined(def)) {
+                  sfSelect(part.key, scope.model, def);
+                }
               }
             });
 
