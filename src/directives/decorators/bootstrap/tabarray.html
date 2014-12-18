@@ -25,7 +25,7 @@
            ng-repeat="item in modelArray track by $index"
            ng-show="selected.tab === $index"
            ng-class="{active: selected.tab === $index}">
-           <sf-decorator form="copyWithIndex($index)"></sf-decorator>
+           <sf-decorator ng-init="arrayIndex = $index" form="copyWithIndex($index)"></sf-decorator>
 
 
            <button ng-hide="form.readonly"
