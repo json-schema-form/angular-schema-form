@@ -18,25 +18,25 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
       require: '?ngModel',
       link: function(scope, element, attrs, ngModel) {
         var formDefCache = {};
-        var arr_change_watcher = false;
-        
+
         // Watch for the form definition and then rewrite it.
         // It's the (first) array part of the key, '[]' that needs a number
         // corresponding to an index of the form.
         var once = scope.$watch(attrs.sfArray, function(form) {
-          
+
           // An array model always needs a key so we know what part of the model
           // to look at. This makes us a bit incompatible with JSON Form, on the
           // other hand it enables two way binding.
           var list = sfSelect(form.key, scope.model);
-          
-          // Stop a previous watcher
-          if (arr_change_watcher) arr_change_watcher();
-          arr_change_watcher = scope.$watch('model' + sfPath.normalize(form.key), function (val) {
+
+          // We only modify the same array instance but someone might change the array from
+          // the outside so let's watch for that. We use an ordinary watch since the only case
+          // we're really interested in is if its a new instance.
+          scope.$watch('model' + sfPath.normalize(form.key), function() {
             list = sfSelect(form.key, scope.model);
             scope.modelArray = list;
           });
-          
+
           // Since ng-model happily creates objects in a deep path when setting a
           // a value but not arrays we need to create the array.
           if (angular.isUndefined(list)) {
@@ -56,7 +56,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             if (form.items.length > 1) {
               subForm = {
                 type: 'section',
-                items: form.items.map(function(item){
+                items: form.items.map(function(item) {
                   item.ngModelOptions = form.ngModelOptions;
                   item.readonly = form.readonly;
                   return item;
