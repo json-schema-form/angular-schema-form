@@ -4,10 +4,14 @@
         <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
     </div>
 
-    <div class="error-message" ng-show="!disabledElement() && hasError()">
-        <span class="stb-color-sprite-small warning"></span>
-        <span class="input-faulty left-margin-10" ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
-    </div>
+
+    <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
+        <small class="help-block">
+            <span class="stb-color-sprite-small warning circle"></span>
+            <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+        </small>
+    </span>
+
     <div class="stb-form-group has-feedback select-wrapper"
          ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() && conditionalValidationSuccess()}">
         <div class="selectContainer">

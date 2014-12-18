@@ -9,7 +9,6 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     tabs: base + 'tabs.html',
     steps: base + 'steps.html',
     section: base + 'section.html',
-    condition: base + 'condition.html',
     actions: base + 'actions.html',
     select: base + 'select.html',
     checkbox: base + 'checkbox.html',
