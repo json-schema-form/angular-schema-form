@@ -162,6 +162,36 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
 
+  var addDotOrHashNotaion = function (name) {
+    if (/^#/.test(name)) {
+      return '[\'' + name + '\']';
+    } else {
+      return '.' + name;
+    }
+  };
+
+  var createModelName = function (form, defGlobals, key) {
+    var res = '';
+    if (angular.isDefined(form.schema)) {
+      var visibility = form.schema.visibility || defGlobals.visibility.visibility;
+
+      if (visibility) {
+        res += addDotOrHashNotaion(visibility);
+      }
+
+      var category = form.schema.category || defGlobals.category;
+
+      if (category) {
+        res += addDotOrHashNotaion(category);
+      }
+    }
+
+    res += (key[0] !== '[' ? '.' : '') + key;
+
+    return 'model' + res;
+
+  };
+
   var createDirective = function(name) {
     $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop', '$timeout', '$filter',
       function($parse,  $compile,  $http,  $templateCache, scrollingTop, $timeout, $filter) {
@@ -176,25 +206,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             //rebind our part of the form to the scope.
             var defaultGlobals = scope.defaultGlobals || scope.$eval(attrs.defaultGlobals);
 
-            var createModelName = function (form, defGlobals, key) {
-              var visibility = '', category = '';
-              if (form.schema) {
-                if (form.schema.visibility) {
-                  visibility = '.' + form.schema.visibility;
-                } else if (defGlobals.visibility) {
-                  visibility = '.' + defGlobals.visibility;
-                }
-
-                if (form.schema.category) {
-                  category = '.' + form.schema.category;
-                } else if (defGlobals.category) {
-                  category = '.' + defGlobals.category;
-                }
-              }
-
-              return 'model' + visibility + category + (key[0] !== '[' ? '.' : '') + key;
-
-            };
             var once = scope.$watch(attrs.form, function(form) {
 
               if (form) {
@@ -267,13 +278,13 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 var visibility = schema.visibility || scope.defaultGlobals.visibility;
 
                 if (visibility) {
-                  res += '.' + visibility;
+                  res += addDotOrHashNotaion(visibility);
                 }
 
                 var category = schema.category || scope.defaultGlobals.category;
 
                 if (category) {
-                  res += '.' + category;
+                  res += addDotOrHashNotaion(category);
                 }
               }
 
