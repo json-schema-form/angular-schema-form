@@ -173,17 +173,17 @@ describe('directive',function(){
     });
   });
 
-  it('should preserve existing html and insert fields in matching slots',function(){
+  it('should preserve existing html and insert fields in matching slots', function() {
 
-    inject(function($compile,$rootScope){
+    inject(function($compile, $rootScope){
       var scope = $rootScope.$new();
       scope.person = {};
 
       scope.schema = exampleSchema;
 
-      scope.form = ["*"];
+      scope.form = ['*'];
 
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"><ul><li sf-insert-field="name"></li></ul></form>');
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"><ul><li sf-insert-field="[\'name\']"></li></ul></form>');
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
@@ -192,7 +192,7 @@ describe('directive',function(){
       tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
     });
   });
-  
+
 
   it('should handle submit buttons',function(){
 
@@ -592,7 +592,7 @@ describe('directive',function(){
 
     });
   });
-  
+
   it('should handle schema form default in deep structure',function(){
 
     inject(function($compile,$rootScope){
@@ -1725,8 +1725,8 @@ describe('directive',function(){
       tmpl.children().eq(0).find('select').eq(0).find('option').eq(2).text().trim().should.be.eq('The A');
     });
   });
-  
-  
+
+
   it('should update array form on model array ref change',function(){
 
     inject(function($compile,$rootScope){
@@ -1772,7 +1772,7 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().eq(0).find('ol').children().length.should.be.eq(2);
-      
+
       var new_names = [
           {
             firstname: 'Bill',
@@ -1789,11 +1789,11 @@ describe('directive',function(){
             lastname: 'Buster'
           }
         ];
-        
+
       scope.person.names = new_names;
-      
+
       $rootScope.$apply();
-      
+
       tmpl.children().eq(0).find('ol').children().length.should.be.eq(4);
     });
   });

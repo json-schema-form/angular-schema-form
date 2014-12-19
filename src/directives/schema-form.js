@@ -5,8 +5,8 @@ FIXME: real documentation
 
 angular.module('schemaForm')
        .directive('sfSchema',
-['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect',
-  function($compile,  schemaForm,  schemaFormDecorators, sfSelect) {
+['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath',
+  function($compile,  schemaForm,  schemaFormDecorators, sfSelect, sfPath) {
 
     var SNAKE_CASE_REGEXP = /[A-Z]/g;
     var snakeCase = function(name, separator) {
@@ -83,23 +83,35 @@ angular.module('schemaForm')
             //clean all but pre existing html.
             element.children(':not(.schema-form-ignore)').remove();
 
+            // Find all slots.
+            var slots = {};
+            var slotsFound = element[0].querySelectorAll('*[sf-insert-field]');
+
+            for (var i = 0; i < slotsFound.length; i++) {
+              slots[slotsFound[i].getAttribute('sf-insert-field')] = slotsFound[i];
+            }
+
             //Create directives from the form definition
-            angular.forEach(merged,function(obj,i){
-              var n = document.createElement(attrs.sfDecorator || snakeCase(schemaFormDecorators.defaultDecorator,'-'));
+            angular.forEach(merged, function(obj, i) {
+              var n = document.createElement(attrs.sfDecorator ||
+                                             snakeCase(schemaFormDecorators.defaultDecorator, '-'));
               n.setAttribute('form','schemaForm.form['+i+']');
-              var slot;
-              try {
-                slot = element[0].querySelector('*[sf-insert-field="' + obj.key + '"]');
-              } catch(err) {
-                // field insertion not supported for complex keys
-                slot = null;
+
+              // Check if there is a slot to put this in...
+              if (obj.key) {
+                var slot = slots[sfPath.stringify(obj.key)];
+                if (slot) {
+                  while (slot.firstChild) {
+                    slot.removeChild(slot.firstChild);
+                  }
+                  slot.appendChild(n);
+                  return;
+                }
               }
-              if(slot) {
-                slot.innerHTML = "";
-                slot.appendChild(n);  
-              } else {
-                frag.appendChild(n);
-              }
+
+              // ...otherwise add it to the frag
+              frag.appendChild(n);
+
             });
 
             element[0].appendChild(frag);
