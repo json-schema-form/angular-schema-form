@@ -25,6 +25,7 @@ Documentation
     1. [array](#array)
     1. [tabarray](#tabarray)
 1. [Post process function](#post-process-function)
+1. [Manual field insertion](#manual-field-insertion)
 1. [Extending Schema Form](extending.md)
 
 Basic Usage
@@ -1009,4 +1010,39 @@ angular.module('myModule', ['schemaForm']).config(function(schemaFormProvider){
   })
 
 });
+```
+
+
+
+### Manual field insertion
+There is a limited feature for controlling manually where a generated field should go so you can
+,as an example, wrap it in custom html. Consider the feature experimental.
+
+It has a number of drawbacks though.
+
+1. You can only insert fields that are in the root level of your form definition, i.e. not inside fieldset, arrays etc.
+1. Generated fields are always last in the form so if you don't supply slots for all of your top level fields the rest goes below.
+1. To match "keys" of forms we match against the internal array format, hence the key "name" becomes "['name']" and "foo.bar" becomes "['foo']['bar']"
+
+Define "slots" for the generated field by adding an element with the attribute `sf-insert-field`
+
+ex.
+```js
+$scope.form = [
+  "name",
+  "email",
+  "comment"
+]
+```
+
+```html
+<form sf-model="model"
+      sf-form="form"
+      sf-schema="schema">
+  <em>before</em>
+  <div sf-insert-field="['email']"></div>
+  <em>after</em>
+
+  <!-- the rest of the form, i.e. name and comment will be generated here -->
+</form>
 ```
