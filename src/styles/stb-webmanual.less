@@ -1,4 +1,6 @@
-//checkbox
+.radiobuttons {
+  margin-bottom: 0 !important;
+}
 
 label {
   &.non-empty-view {
@@ -15,6 +17,8 @@ label {
 .label-wrapper {
   label {
     display: inline;
+    font-family: "open sans bold";
+    font-size: 16px;
   }
   span {
     margin-left: 10px;
@@ -43,37 +47,56 @@ label {
     display: block;
   }
 
+  &.checkboxes, &.radios-inline, &.date-picker, &.select-wrapper {
+    margin-bottom: 24px;
+  }
+
   input {
     min-width: 260px;
   }
+
   .form-control-feedback {
     top: 0px;
     display: block;
   }
 
-  //dropdown
+
   &.select-wrapper {
     width: 260px;
   }
+
 }
 
 .notification {
   .notification-wrapper {
-    display: table;
+    position: relative;
+    margin-bottom: 24px;
+    &.info-message {
+      margin-bottom: 0;
+    }
   }
   .msgIcon {
-    display: table-cell;
+    position: absolute;
+    display: block;
     text-align: center;
-    padding: 24px 0 0 0;
+    padding: 24px;
+    width: 72px;
+    height: 100%;
     .info {
       margin-left: 0;
     }
   }
   .msgText {
-    display: table-cell;
-    vertical-align: middle;
+    width: 100%;
+    display: block;
+    min-height: 72px;
+    padding: 24px 24px 24px 96px;
     &.white {
       background: #ffffff;
+    }
+
+    p {
+      margin: 0;
     }
 
     button.close {
@@ -111,15 +134,11 @@ label {
     background: #fff;
   }
 
-  .padding-top {
-    width: 100%;
-    padding-top: 20px;
-
-  }
-
-  .padding-bottom {
-    width: 100%;
-    padding-bottom: 20px;
+  &.shown {
+    .white-box-wrapper {
+      margin-bottom: 24px;
+      padding-top: 20px;
+    }
   }
 
   .msgText {
@@ -133,4 +152,20 @@ form {
   .col-md-12 {
     padding-right: 24px !important; //crap from stb.ny
   }
+}
+
+@media (max-width: 767px) {
+
+
+  .notification {
+    .msgIcon {
+      padding: 12px;
+      width: 48px;
+    }
+    .msgText {
+      min-height: 48px;
+      padding: 12px 12px 12px 60px;
+    }
+  }
+
 }

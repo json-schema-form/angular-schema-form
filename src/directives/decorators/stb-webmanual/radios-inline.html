@@ -1,9 +1,8 @@
-<div ng-show="showCondition()">
-    <div class="radiobuttons">
-        <div class="label-wrapper">
-            <label ng-show="showTitle()">{{form.title}}</label>
-            <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
-        </div>
+<div ng-show="showCondition()" class="radiobuttons">
+    <div class="label-wrapper">
+        <label ng-show="showTitle()">{{form.title}}</label>
+        <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
+    </div>
 
         <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
             <small class="help-block">
@@ -11,7 +10,8 @@
                 <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
             </small>
         </span>
-        <div class="stb-form-group radios-inline">
+
+    <div class="stb-form-group radios-inline">
           <span ng-repeat="item in form.titleMap">
               <input type="radio"
                      schema-validate="form"
@@ -22,7 +22,6 @@
                      id="{{item.id}}">
               <label for="{{item.id}}" ng-bind-html="item.name"></label>
           </span>
-        </div>
-
     </div>
+
 </div>

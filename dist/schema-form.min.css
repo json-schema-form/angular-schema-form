@@ -1,3 +1,6 @@
+.radiobuttons {
+  margin-bottom: 0 !important;
+}
 label.non-empty-view {
   max-width: none;
 }
@@ -8,6 +11,8 @@ label.empty-view {
 }
 .label-wrapper label {
   display: inline;
+  font-family: "open sans bold";
+  font-size: 16px;
 }
 .label-wrapper span {
   margin-left: 10px;
@@ -28,6 +33,12 @@ label.empty-view {
 .stb-form-group.radios {
   display: block;
 }
+.stb-form-group.checkboxes,
+.stb-form-group.radios-inline,
+.stb-form-group.date-picker,
+.stb-form-group.select-wrapper {
+  margin-bottom: 24px;
+}
 .stb-form-group input {
   min-width: 260px;
 }
@@ -39,22 +50,34 @@ label.empty-view {
   width: 260px;
 }
 .notification .notification-wrapper {
-  display: table;
+  position: relative;
+  margin-bottom: 24px;
+}
+.notification .notification-wrapper.info-message {
+  margin-bottom: 0;
 }
 .notification .msgIcon {
-  display: table-cell;
+  position: absolute;
+  display: block;
   text-align: center;
-  padding: 24px 0 0 0;
+  padding: 24px;
+  width: 72px;
+  height: 100%;
 }
 .notification .msgIcon .info {
   margin-left: 0;
 }
 .notification .msgText {
-  display: table-cell;
-  vertical-align: middle;
+  width: 100%;
+  display: block;
+  min-height: 72px;
+  padding: 24px 24px 24px 96px;
 }
 .notification .msgText.white {
   background: #ffffff;
+}
+.notification .msgText p {
+  margin: 0;
 }
 .notification .msgText button.close {
   top: 5px;
@@ -83,17 +106,23 @@ label.empty-view {
   min-height: 0;
   background: #fff;
 }
-.white-box .padding-top {
-  width: 100%;
+.white-box.shown .white-box-wrapper {
+  margin-bottom: 24px;
   padding-top: 20px;
-}
-.white-box .padding-bottom {
-  width: 100%;
-  padding-bottom: 20px;
 }
 .white-box .msgText.white {
   background: #efe8df;
 }
 form .col-md-12 {
   padding-right: 24px !important;
+}
+@media (max-width: 767px) {
+  .notification .msgIcon {
+    padding: 12px;
+    width: 48px;
+  }
+  .notification .msgText {
+    min-height: 48px;
+    padding: 12px 12px 12px 60px;
+  }
 }
