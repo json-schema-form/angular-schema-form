@@ -30,9 +30,10 @@
         "visibility": "#open"
       },
       "mileage": {
-        "type": "string",
+        "type": "integer",
+        "maximum": 999999,
+        "minimum": 1,
         "maxLength": 6,
-        "pattern": "^\\d{1,6}$",
         "required": true,
         "visibility": "#open"
       },
@@ -158,7 +159,7 @@
           "key": "mileage",
           "validationMessage": "Ugyldig verdi for kilometerstand.",
           "infoMessage": "'Kilometerstand leser du av på bilen din. Riktig kilometerstand er viktig i et eventuelt erstatningsoppgjør",
-          "type": "string",
+          "formatterName": "number",
           "title": "Kilometerstand",
           "placeholder": "Kilometerstand",
           "dependencies": ["importAndCustomsCleared"],
