@@ -1,6 +1,6 @@
 <div ng-init="selected = { step: 0 }; completed = []" style="position: relative">
     <div class="step-content row">
-        <div class="col-md-6 col-md-offset-1">
+        <div class="col-xs-12">
             <div ng-repeat="step in form.steps"
                  ng-show="selected.step === $index"
                  ng-class="{active: selected.tab === $index}" index="{{$index}}">
