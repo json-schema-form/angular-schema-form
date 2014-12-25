@@ -1,28 +1,36 @@
+<!-- this file IS USED in digital claims step 1 -->
+<!-- mark up corresponds Webmanual 0.47 -->
+
 <div ng-show="showCondition()">
     <div class="radiobuttons">
+
+        <!--TITLE OF RADIOBULLONS (MAIN LABEL)-->
         <div class="label-wrapper">
             <label ng-show="showTitle()">{{form.title}}</label>
             <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
         </div>
 
+        <!--ERROR MESSAGE-->
         <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
             <small class="help-block">
                 <span class="stb-color-sprite-small warning circle"></span>
                 <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
             </small>
         </span>
-        <div class="stb-form-group radios-inline">
-          <span ng-repeat="item in form.titleMap">
-              <input type="radio"
-                     schema-validate="form"
-                     sf-changed="form"
-                     ng-model="$$value$$"
-                     ng-value="item.value"
-                     class="stb-radio"
-                     id="{{item.id}}">
-              <label for="{{item.id}}" ng-bind-html="item.name"></label>
-          </span>
-        </div>
 
+        <!--RADIOBUTTONS INLINE AREA-->
+        <ul class="radiobuttons" id="radiobuttons1">
+            <li ng-repeat="item in form.titleMap">
+                <input type="radio"
+                       class="stb-radio"
+                       id="{{item.id}}"
+                       schema-validate="form"
+                       sf-changed="form"
+                       ng-model="$$value$$"
+                       ng-value="item.value"
+                       value="African swallow" />
+                <label for="{{item.id}}"><span></span>{{item.name}}</label>
+            </li>
+        </ul>
     </div>
 </div>

@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="../bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css">
     <link rel="stylesheet" href="../bower_components/stb-datetimepicker/dist/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="../dist/schema-form.min.css">
-    <link href="//elements.storebrand.no/storebrand.ny/0.45/css/stb-main.css" type="text/css" rel="stylesheet"/>
+    <link href="//elements.storebrand.no/storebrand.ny/0.47/css/stb-main.css" type="text/css" rel="stylesheet"/>
 </head>
 <body style="background: #efe8df;" ng-app="test" ng-controller="TestCtrl">
 <style>
@@ -20,11 +20,8 @@
 
 <div class="container">
     <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" sf-decorator-name="stb-webmanual-decorator" default-globals="{'visibility': '$open', 'category': ''}" ng-submit="submitForm(ngform,modelData)">
-
+        <button type="submit"></button>
     </form>
-
-    <!--<steps form-data="form" schema-data="schema" model-data="modelData"></steps>-->
-
 </div>
 <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript" src="../bower_components/jquery-ui/jquery-ui.js"></script>
@@ -42,36 +39,26 @@
 <script type="text/javascript" src="../dist/dropdown.min.js"></script>
 <script type="text/javascript" src="../dist/stb-webmanual-decorator.min.js"></script>
 <script type="text/javascript">
-
     angular.module('test',['schemaForm']).controller('TestCtrl', function($scope,$http){
-
         $scope.url = 'data/claims-travel.json';
-
         $http.get($scope.url).then(function(res){
             $scope.schema = res.data.schema;
             $scope.form   = res.data.form;
-
             $scope.form[0].finishIt = 'click()';
-
             $scope.click = function () {
-                console.log('fasf')x
+                console.log('fasf')
             }
             $scope.modelData = {"isValidCustomer": true};
-
             window.md = $scope.modelData;
         });
-
         $scope.submitForm = function (form, model) {
             console.log(model);
-
             $scope.$broadcast('schemaFormValidate');
             if (form.$valid) {
                 alert('You did it!');
             }
         };
-
     });
-
 </script>
 </body>
 </html>
