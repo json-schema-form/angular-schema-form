@@ -116,7 +116,8 @@ angular.module('schemaForm')
                 }
               }
             });
-          }
+          };
+          $(element[0]).triggerHandler("sf-render-finished");
         });
       }
     };
