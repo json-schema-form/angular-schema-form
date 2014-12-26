@@ -1,3 +1,11 @@
+.pseuso-table .commonmessage {
+  display: table-cell;
+}
+.pseuso-table .commonmessage > div {
+  border: 1px solid brown;
+  display: table-cell;
+  float: none;
+}
 label.non-empty-view {
   max-width: none;
 }
