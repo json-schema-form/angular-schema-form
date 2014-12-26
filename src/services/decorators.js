@@ -276,13 +276,13 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.setDateWatcher = function () {
-              if (scope.form.key) {
+              if (scope.form.modelKey) {
                 var value = function () {
                   return scope.$eval(lookupForKey(scope.form.dateKey));
                 };
                 scope.$watch(value, function (newDate) {
                   if (newDate) {
-                    var model = $parse(scope.keyModelName);
+                    var model = $parse(lookupForKey(scope.form.modelKey));
                     var selectedDate = updateInfoDate(newDate);
                     model.assign(scope, selectedDate.format('YYYY-MM-DD'));
                   }
@@ -299,7 +299,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               } else if (scope.form.hasDefaultDateValue) {
 
                 selectedDate = updateInfoDate(null, true);
-                var model = $parse(scope.keyModelName);
+                var model = $parse(lookupForKey(scope.form.modelKey));
                 model.assign(scope, selectedDate.format('YYYY-MM-DD'));
 
               }

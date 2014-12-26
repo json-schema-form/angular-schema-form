@@ -3371,7 +3371,7 @@
             },
             {
               "type": "infodate",
-              "key": "expirationDateDay",
+              "modelKey": "expirationDateDay",
               "dateKey": "_expirationDateDay",
               "maxMonthlyDifference": 2,
               "minMonthlyDifference": 0,
