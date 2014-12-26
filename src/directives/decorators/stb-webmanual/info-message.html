@@ -1,4 +1,7 @@
-<span class="stb-color-sprite-medium info info-button" ng-click="showInfo = !showInfo;"></span>
+<!-- this wrapper "info-icon-wrap" is nessesary, bacause it generates two opening spans without one closing-->
+<div class="info-icon-wrap">
+    <span class="stb-color-sprite-medium info info-button" ng-click="showInfo = !showInfo;"></span>
+</div>
 <div class="commonmessage" ng-show="showInfo">
     <div class="msgIcon col-md-2 fifth"><span class="stb-color-sprite-medium info"></span></div>
     <div class="msgText col-md-10">
