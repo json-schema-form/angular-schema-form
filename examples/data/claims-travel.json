@@ -105,6 +105,7 @@
                 {
                   "key": "mainCause",
                   "title": "Hva har skjedd med gjenstanden(e)?",
+                  "infoMessage": "Most elements on this page are now finalized and ready to use. Contact the storebrand.ny",
                   "type": "radios-inline",
                   "required": true,
                   "titleMap": {
