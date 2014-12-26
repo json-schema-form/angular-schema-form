@@ -416,7 +416,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   if (newDate) {
                     var model = $parse(scope.keyModelName);
                     var selectedDate = updateInfoDate(newDate);
-                    model.assign(scope, selectedDate.toDate().toISOString());
+                    model.assign(scope, selectedDate.format('YYYY-MM-DD'));
                   }
                 });
               }
@@ -432,7 +432,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                 selectedDate = updateInfoDate(null, true);
                 var model = $parse(scope.keyModelName);
-                model.assign(scope, selectedDate.toDate().toISOString());
+                model.assign(scope, selectedDate.format('YYYY-MM-DD'));
 
               }
 
