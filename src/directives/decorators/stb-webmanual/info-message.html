@@ -1,9 +1,13 @@
-<div class="commonmessage">
-    <div class="col-md-2 msgIcon column stbcolor-secondary fifth"><span class="stb-color-sprite-medium info"></span></div>
-    <div class="col-md-10 msgText column pull-right stbcolor-secondary sixth">
-        <a class="pull-right closeLink" href="#" onclick="hideCommonMsg(this);return false;">
-            <p>Lukk <span class="stb-sprite-small remove"></span></p>
-        </a>
-        <p>{{infoMessage}}</p>
+<span class="stb-color-sprite-medium info info-button" ng-click="showInfo = !showInfo;"></span>
+<div class="row commonmessage" ng-show="showInfo">
+    <div class="msgIcon col-md-2 fifth"><span class="stb-color-sprite-medium info"></span></div>
+    <div class="msgText col-md-8">
+        <button data-dismiss="modal"
+                ng-click="showInfo = !showInfo;"
+                class="close"
+                type="button">
+           Lukk <span class="stb-sprite-small remove"></span>
+        </button>
+        <p class="message-text">{{infoMessage}}</p>
     </div>
 </div>
