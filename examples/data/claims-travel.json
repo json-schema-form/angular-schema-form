@@ -105,7 +105,6 @@
                 {
                   "key": "mainCause",
                   "title": "Hva har skjedd med gjenstanden(e)?",
-                  "infoMessage": "Progress tracker to be used in forms. In order to add more steps the developer needs to adjust the width of the main div. In the example it is set to 400px. This progress tracker is currently only for desktop. For mobile vesions an accordion progress tracker will be added.(not yet implemented)",
                   "type": "radios-inline",
                   "required": true,
                   "titleMap": {
@@ -168,22 +167,26 @@
               ]
             },
             {
-              "type": "fieldset",
-              "title": "Annet",
+              "type": "whitebox",
               "items": [
                 {
-                  "key": "question31",
-                  "title": "Hvor og hvordan var gjenstanden(e) oppbevart?",
-                  "type": "textarea"
-                },
-                {
-                  "key": "question32",
-                  "title": "Andre opplysninger om skaden?",
-                  "type": "textarea"
+                  "type": "fieldset",
+                  "title": "Annet",
+                  "items": [
+                    {
+                      "key": "question31",
+                      "title": "Hvor og hvordan var gjenstanden(e) oppbevart?",
+                      "type": "textarea"
+                    },
+                    {
+                      "key": "question32",
+                      "title": "Andre opplysninger om skaden?",
+                      "type": "textarea"
+                    }
+                  ]
                 }
               ]
             }
-
           ]
         },
         {
