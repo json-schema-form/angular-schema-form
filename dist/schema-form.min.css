@@ -53,10 +53,7 @@ label.empty-view {
   position: relative;
   margin-bottom: 24px;
 }
-.notification .notification-wrapper.info-message {
-  margin-bottom: 0;
-}
-.notification .msgIcon {
+.notification .notification-wrapper .msgIcon {
   position: absolute;
   display: block;
   text-align: center;
@@ -64,53 +61,89 @@ label.empty-view {
   width: 72px;
   height: 100%;
 }
-.notification .msgIcon .info {
+.notification .notification-wrapper .msgIcon .info {
   margin-left: 0;
 }
-.notification .msgText {
+.notification .notification-wrapper .msgText {
   width: 100%;
   display: block;
   min-height: 72px;
   padding: 24px 24px 24px 96px;
 }
-.notification .msgText.white {
+.notification .notification-wrapper .msgText.white {
   background: #ffffff;
 }
-.notification .msgText p {
+.notification .notification-wrapper .msgText p {
   margin: 0;
 }
-.notification .msgText button.close {
+.notification .notification-wrapper .msgText button.close {
   top: 5px;
   right: 11px;
   width: 100%;
   opacity: .8;
   filter: alpha(opacity=80);
 }
-.notification .msgText button.close:focus,
-.notification .msgText button.close:hover {
+.notification .notification-wrapper .msgText button.close:focus,
+.notification .notification-wrapper .msgText button.close:hover {
   opacity: .5;
   filter: alpha(opacity=50);
 }
-.notification .msgText button.close .remove {
+.notification .notification-wrapper .msgText button.close .remove {
   margin-right: 10px;
 }
-.notification .msgText .message-text {
+.notification .notification-wrapper .msgText .message-text {
   margin-right: 8%;
   margin-top: 24px;
+}
+.row.info-message-wrapper {
+  padding-bottom: 0px;
+}
+.row.info-message-wrapper .info-message {
+  margin-bottom: 0;
+}
+.row.info-message-wrapper .info-message .msgText {
+  width: 100%;
+  border-left: 1px solid black;
+  padding: 0 0 0 24px;
+  margin-top: 24px;
+  display: block;
+}
+.row.info-message-wrapper .info-message .msgText p {
+  margin: 0;
+}
+.row.info-message-wrapper .info-message .msgText button.close {
+  float: none;
+  opacity: .8;
+  filter: alpha(opacity=80);
+  margin-top: 24px;
+}
+.row.info-message-wrapper .info-message .msgText button.close:focus,
+.row.info-message-wrapper .info-message .msgText button.close:hover {
+  opacity: .5;
+  filter: alpha(opacity=50);
+}
+.row.info-message-wrapper .info-message .msgText button.close .remove {
+  margin-right: 10px;
 }
 .info-button {
   margin-bottom: -3px;
   cursor: pointer;
 }
-.white-box .white-box-wrapper {
+.row.white-box {
+  padding-bottom: 0;
+}
+.row.white-box .white-box-wrapper {
   min-height: 0;
   background: #fff;
 }
-.white-box.shown .white-box-wrapper {
+.row.white-box.shown .white-box-wrapper {
   margin-bottom: 24px;
   padding-top: 20px;
 }
-.white-box .msgText.white {
+.row.white-box .msgText.white {
+  background: #efe8df;
+}
+.row.white-box .info-message-wrapper .info-message .msgText {
   background: #efe8df;
 }
 form .col-md-12 {

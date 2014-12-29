@@ -71,54 +71,87 @@ label {
   .notification-wrapper {
     position: relative;
     margin-bottom: 24px;
-    &.info-message {
-      margin-bottom: 0;
-    }
-  }
-  .msgIcon {
-    position: absolute;
-    display: block;
-    text-align: center;
-    padding: 24px;
-    width: 72px;
-    height: 100%;
-    .info {
-      margin-left: 0;
-    }
-  }
-  .msgText {
-    width: 100%;
-    display: block;
-    min-height: 72px;
-    padding: 24px 24px 24px 96px;
-    &.white {
-      background: #ffffff;
-    }
 
-    p {
-      margin: 0;
+    .msgIcon {
+      position: absolute;
+      display: block;
+      text-align: center;
+      padding: 24px;
+      width: 72px;
+      height: 100%;
+      .info {
+        margin-left: 0;
+      }
     }
-
-    button.close {
-      top: 5px;
-      right: 11px;
+    .msgText {
       width: 100%;
-      opacity: .8;
-      filter: alpha(opacity=80);
-
-      &:focus, &:hover {
-        opacity: .5;
-        filter: alpha(opacity=50);
+      display: block;
+      min-height: 72px;
+      padding: 24px 24px 24px 96px;
+      &.white {
+        background: #ffffff;
       }
 
-      .remove {
-        margin-right: 10px;
+      p {
+        margin: 0;
+      }
+
+      button.close {
+        top: 5px;
+        right: 11px;
+        width: 100%;
+        opacity: .8;
+        filter: alpha(opacity=80);
+
+        &:focus, &:hover {
+          opacity: .5;
+          filter: alpha(opacity=50);
+        }
+
+        .remove {
+          margin-right: 10px;
+        }
+      }
+
+      .message-text {
+        margin-right: 8%;
+        margin-top: 24px;
       }
     }
+  }
+}
 
-    .message-text {
-      margin-right: 8%;
+.row.info-message-wrapper {
+  padding-bottom: 0px;
+  .info-message {
+    margin-bottom: 0;
+
+    .msgText {
+      width: 100%;
+      border-left: 1px solid black;
+      padding: 0 0 0 24px;
       margin-top: 24px;
+      display: block;
+
+      p {
+        margin: 0;
+      }
+
+      button.close {
+        float: none;
+        opacity: .8;
+        filter: alpha(opacity=80);
+        margin-top: 24px;
+
+        &:focus, &:hover {
+          opacity: .5;
+          filter: alpha(opacity=50);
+        }
+
+        .remove {
+          margin-right: 10px;
+        }
+      }
     }
   }
 }
@@ -128,7 +161,8 @@ label {
   cursor: pointer;
 }
 
-.white-box {
+.row.white-box {
+  padding-bottom: 0;
   .white-box-wrapper {
     min-height: 0;
     background: #fff;
@@ -144,6 +178,15 @@ label {
   .msgText {
     &.white {
       background: #efe8df;
+    }
+  }
+
+
+  .info-message-wrapper {
+    .info-message {
+      .msgText {
+        background: #efe8df;
+      }
     }
   }
 }
