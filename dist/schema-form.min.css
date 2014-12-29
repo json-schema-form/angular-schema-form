@@ -22,6 +22,10 @@ label.empty-view {
 .input-group.datePicker i.form-control-feedback {
   right: inherit;
 }
+.radiobuttons li {
+  display: inline-block;
+  list-style: none;
+}
 .stb-form-group {
   display: inline-block;
 }

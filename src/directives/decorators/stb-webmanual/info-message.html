@@ -1,10 +1,13 @@
 <span class="stb-color-sprite-medium info info-button" ng-click="showInfo = !showInfo;"></span>
-<div class="row notification" ng-show="showInfo">
-        <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12 bottom-margin-20 notification-wrapper">
-        <div class="msgIcon stbcolor-secondary fifth"><span class="stb-color-sprite-medium info"></span></div>
-        <div class="msgText white">
-            <button data-dismiss="modal" ng-click="showInfo = !showInfo;" class="close" type="button">
-                <p class="pull-right">Lukk <span class="stb-sprite-small remove"></span></p>
+<div class="pseuso-table"  ng-show="showInfo">
+    <div class="commonmessage row pseudo-table-row">
+        <div class="msgIcon pseudo-table-cell col-md-2 col-md-height fifth"><span class="stb-color-sprite-medium info"></span></div>
+        <div class="msgText pseudo-table-cell col-md-10 col-md-height">
+            <button data-dismiss="modal"
+                    ng-click="showInfo = !showInfo;"
+                    class="close"
+                    type="button">
+               Lukk <span class="stb-sprite-small remove"></span>
             </button>
             <p class="message-text">{{infoMessage}}</p>
         </div>

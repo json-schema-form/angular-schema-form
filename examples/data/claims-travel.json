@@ -167,22 +167,26 @@
               ]
             },
             {
-              "type": "fieldset",
-              "title": "Annet",
+              "type": "whitebox",
               "items": [
                 {
-                  "key": "question31",
-                  "title": "Hvor og hvordan var gjenstanden(e) oppbevart?",
-                  "type": "textarea"
-                },
-                {
-                  "key": "question32",
-                  "title": "Andre opplysninger om skaden?",
-                  "type": "textarea"
+                  "type": "fieldset",
+                  "title": "Annet",
+                  "items": [
+                    {
+                      "key": "question31",
+                      "title": "Hvor og hvordan var gjenstanden(e) oppbevart?",
+                      "type": "textarea"
+                    },
+                    {
+                      "key": "question32",
+                      "title": "Andre opplysninger om skaden?",
+                      "type": "textarea"
+                    }
+                  ]
                 }
               ]
             }
-
           ]
         },
         {
