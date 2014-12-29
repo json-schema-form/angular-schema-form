@@ -64,6 +64,13 @@ label.empty-view {
   top: 5px;
   right: 11px;
   width: 100%;
+  opacity: .8;
+  filter: alpha(opacity=80);
+}
+.notification .msgText button.close:focus,
+.notification .msgText button.close:hover {
+  opacity: .5;
+  filter: alpha(opacity=50);
 }
 .notification .msgText button.close .remove {
   margin-right: 10px;
@@ -87,4 +94,10 @@ label.empty-view {
 .white-box .padding-bottom {
   width: 100%;
   padding-bottom: 20px;
+}
+.white-box .msgText.white {
+  background: #efe8df;
+}
+form .col-md-12 {
+  padding-right: 24px !important;
 }

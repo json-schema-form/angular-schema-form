@@ -47,7 +47,7 @@ angular.module('schemaForm').factory('sfValidator', [function() {
         if (Date.parse(data)) {
           return null;
         } else {
-          return 'invalid email';
+          return 'invalid date';
         }
       } else {
         return 'date should be ISO string!';

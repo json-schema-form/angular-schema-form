@@ -59,6 +59,11 @@
         "required": true,
         "format": "date-format"
       },
+      "defaultExpirationDateDay": {
+        "type": "string",
+        "required": true,
+        "format": "date-format"
+      },
       "insuranceCompany": {
         "required": true,
         "type": "object"
@@ -4891,11 +4896,12 @@
           "minMonthlyDifference": 0,
           "additionalMonthlyDifference": 1,
           "additionalDailyDifference": 1,
+          "hasDefaultDateValue": true,
           "encoding": "nn",
           "format": "Do MMMM YYYY",
           "staticMessage": "Forsikringen vil gjelde fra",
-          "dependencies": ["_expirationDateDay"],
-          "expression": "_expirationDateDay !== undefined"
+          "dependencies": ["intendsToMigrateInsurance"],
+          "expression": "intendsToMigrateInsurance === true"
         }
       ]
     }

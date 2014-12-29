@@ -371,8 +371,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
 
-            var updateInfoDate = function (date) {
-              date = date || scope.$eval(lookupForKey(scope.form.dateKey));
+            var updateInfoDate = function (date, alwaysAddMonlthlyDifferent) {
               var today = moment();
               var minMonthlyDifference = scope.form.minMonthlyDifference || 0;
               var maxMonthlyDifference = scope.form.maxMonthlyDifference;
@@ -385,9 +384,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               today.minute(0);
               today.hours(0);
 
-              if (date && maxMonthlyDifference && additionalMonthlyDifference) {
+              if (maxMonthlyDifference && additionalMonthlyDifference) {
 
-                if ((selectedDate.toDate().getTime() < moment(today).add(minMonthlyDifference, 'Month').toDate().getTime())
+                if (alwaysAddMonlthlyDifferent
+                    || (selectedDate.toDate().getTime() < moment(today).add(minMonthlyDifference, 'Month').toDate().getTime())
                     || (selectedDate.toDate().getTime() > moment(today).add(maxMonthlyDifference, 'Month').toDate().getTime())) {
                   selectedDate = today.add(additionalMonthlyDifference, 'Month').add(additionalDailyDifference, 'Day');
                 }
@@ -412,8 +412,18 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.getInfoDate = function () {
-              var selectedDate = updateInfoDate();
+              var date = scope.$eval(lookupForKey(scope.form.dateKey));
+              var selectedDate;
 
+              if (date) {
+                selectedDate = updateInfoDate(date);
+              } else if (scope.form.hasDefaultDateValue) {
+
+                selectedDate = updateInfoDate(null, true);
+                var model = $parse(scope.keyModelName);
+                model.assign(scope, selectedDate.toDate().toISOString());
+
+              }
 
               moment.locale(scope.form.encoding);
               return moment(selectedDate).format(scope.form.format);
@@ -1234,7 +1244,7 @@ angular.module('schemaForm').factory('sfValidator', [function() {
         if (Date.parse(data)) {
           return null;
         } else {
-          return 'invalid email';
+          return 'invalid date';
         }
       } else {
         return 'date should be ISO string!';
