@@ -118,7 +118,6 @@
         {
           "key": "hasAutoIdentificationNumber",
           "type": "checkbox",
-          "emptyView": true,
           "title": "Har ikke bilen registreringsnummer?"
         },
         {

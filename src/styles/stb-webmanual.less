@@ -38,7 +38,9 @@ label.empty-view {
 
 //default
 .stb-form-group {
-  width: inherit !important;
+  &:not(.checkboxes) {
+    width: inherit !important;
+  }
   display: inline-block;
 
   &.radios {

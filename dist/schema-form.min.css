@@ -29,8 +29,10 @@ label.empty-view span {
   right: inherit;
 }
 .stb-form-group {
-  width: inherit !important;
   display: inline-block;
+}
+.stb-form-group:not(.checkboxes) {
+  width: inherit !important;
 }
 .stb-form-group.radios {
   display: block;
