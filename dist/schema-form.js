@@ -269,6 +269,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               }
             };
 
+            scope.$on('stepChange', function(e, options){
+              if(e.defaultPrevented) {
+                return;
+              }
+              e.preventDefault();
+              scope.selected.step = options.step;
+              scrollingTop.scrollTop();
+            });
+
             var lookupForKey = function (key) {
               var res = '';
 
@@ -510,6 +519,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return 'Required';
 
             };
+
+
           }
         };
       }
