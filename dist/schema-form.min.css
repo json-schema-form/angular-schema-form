@@ -1,13 +1,14 @@
-.radiobuttons {
-  margin-bottom: 0 !important;
-}
-label.non-empty-view {
-  max-width: none;
+.steps {
+  position: relative;
 }
 label.empty-view {
   padding: 0 !important;
-  width: 40px;
-  height: 40px;
+  margin: 0 !important;
+}
+label.empty-view span {
+  padding-top: 33px !important;
+  padding-left: 38px !important;
+  display: inline-block;
 }
 .label-wrapper label {
   display: inline;
@@ -18,7 +19,7 @@ label.empty-view {
   margin-left: 10px;
 }
 .input-group.datePicker {
-  width: 260px;
+  width: 260px !important;
 }
 .input-group.datePicker input {
   min-width: 100px;
@@ -28,6 +29,7 @@ label.empty-view {
   right: inherit;
 }
 .stb-form-group {
+  width: inherit !important;
   display: inline-block;
 }
 .stb-form-group.radios {
@@ -47,13 +49,16 @@ label.empty-view {
   display: block;
 }
 .stb-form-group.select-wrapper {
-  width: 260px;
+  width: 260px !important;
 }
-.notification .notification-wrapper {
-  position: relative;
+.row.notification {
+  padding-bottom: 0;
   margin-bottom: 24px;
 }
-.notification .notification-wrapper .msgIcon {
+.row.notification .notification-wrapper {
+  position: relative;
+}
+.row.notification .notification-wrapper .msgIcon {
   position: absolute;
   display: block;
   text-align: center;
@@ -61,37 +66,37 @@ label.empty-view {
   width: 72px;
   height: 100%;
 }
-.notification .notification-wrapper .msgIcon .info {
+.row.notification .notification-wrapper .msgIcon .info {
   margin-left: 0;
 }
-.notification .notification-wrapper .msgText {
+.row.notification .notification-wrapper .msgText {
   width: 100%;
   display: block;
   min-height: 72px;
   padding: 24px 24px 24px 96px;
 }
-.notification .notification-wrapper .msgText.white {
+.row.notification .notification-wrapper .msgText.white {
   background: #ffffff;
 }
-.notification .notification-wrapper .msgText p {
+.row.notification .notification-wrapper .msgText p {
   margin: 0;
 }
-.notification .notification-wrapper .msgText button.close {
+.row.notification .notification-wrapper .msgText button.close {
   top: 5px;
   right: 11px;
   width: 100%;
   opacity: .8;
   filter: alpha(opacity=80);
 }
-.notification .notification-wrapper .msgText button.close:focus,
-.notification .notification-wrapper .msgText button.close:hover {
+.row.notification .notification-wrapper .msgText button.close:focus,
+.row.notification .notification-wrapper .msgText button.close:hover {
   opacity: .5;
   filter: alpha(opacity=50);
 }
-.notification .notification-wrapper .msgText button.close .remove {
+.row.notification .notification-wrapper .msgText button.close .remove {
   margin-right: 10px;
 }
-.notification .notification-wrapper .msgText .message-text {
+.row.notification .notification-wrapper .msgText .message-text {
   margin-right: 8%;
   margin-top: 24px;
 }

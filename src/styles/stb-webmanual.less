@@ -1,16 +1,13 @@
-.radiobuttons {
-  margin-bottom: 0 !important;
+.steps {
+  position: relative;
 }
-
-label {
-  &.non-empty-view {
-    max-width: none;
-  }
-
-  &.empty-view {
-    padding: 0 !important;
-    width: 40px;
-    height: 40px;
+label.empty-view {
+  padding: 0 !important;
+  margin: 0 !important;
+  span {
+    padding-top: 33px !important;
+    padding-left: 38px !important;
+    display: inline-block;
   }
 }
 
@@ -27,7 +24,7 @@ label {
 
 //datepicker
 .input-group.datePicker {
-  width: 260px;
+  width: 260px !important;
 
   input {
     min-width: 100px;
@@ -41,6 +38,7 @@ label {
 
 //default
 .stb-form-group {
+  width: inherit !important;
   display: inline-block;
 
   &.radios {
@@ -62,15 +60,16 @@ label {
 
 
   &.select-wrapper {
-    width: 260px;
+    width: 260px !important;
   }
 
 }
 
-.notification {
+.row.notification {
+  padding-bottom: 0;
+  margin-bottom: 24px;
   .notification-wrapper {
     position: relative;
-    margin-bottom: 24px;
 
     .msgIcon {
       position: absolute;

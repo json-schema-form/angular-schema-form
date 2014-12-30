@@ -1,1 +1,11 @@
-<div></div>
+<div ng-init="selected = { step: 0 }; completed = []" class="steps">
+    <div class="step-content row">
+        <div class="col-xs-12">
+            <div ng-repeat="step in form.steps"
+                 ng-show="selected.step === $index"
+                 ng-class="{active: selected.tab === $index}" index="{{$index}}">
+                <stb-webmanual-decorator ng-repeat="item in step.items" form="item"></stb-webmanual-decorator>
+            </div>
+        </div>
+    </div>
+</div>
