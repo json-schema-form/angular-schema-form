@@ -21,7 +21,7 @@ angular.module('schemaForm').directive('stbDatepicker', ['$timeout', function($t
         maxDate: scope.$eval(attrs.maxDate) || difference && moment(today).add(difference, 'Month').toDate()
     }).on('dp.change', function (e) {
         scope.$apply(function () {
-          ngModelCtrl.$setViewValue(e.date.toISOString());
+          ngModelCtrl.$setViewValue(moment(e.date).format('YYYY-MM-DD'));
         });
       }).on('dp.error', function (e) {
         scope.$apply(function () {

@@ -8,6 +8,14 @@ angular.module('schemaForm').factory('formFormatters', [function () {
       }
 
       return input;
+    },
+    'number': function (input) {
+      var parsed = parseInt(input, 10);
+      if (isNaN(parsed)) {
+        return undefined;
+      } else {
+        return parsed;
+      }
     }
   };
 

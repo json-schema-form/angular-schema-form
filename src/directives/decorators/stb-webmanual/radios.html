@@ -14,9 +14,9 @@
         </small>
     </span>
 
-    <div class="stb-form-group radios">
+    <div class="stb-form-group radios" ng-repeat="item in form.titleMap">
             <input type="radio"
-                   ng-repeat-start="item in form.titleMap"
+
                    sf-changed="form"
                    schema-validate="form"
                    ng-model="$$value$$"
@@ -24,6 +24,6 @@
                    ng-value="item.value"
                    class="stb-radio"
                    id="{{item.id}}">
-            <label ng-repeat-end for="{{item.id}}" ng-bind-html="item.name"></label>
+            <label for="{{item.id}}" ng-bind-html="item.name"></label>
     </div>
 </div>
