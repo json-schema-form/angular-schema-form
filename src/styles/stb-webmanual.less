@@ -1,4 +1,6 @@
-//checkbox
+.radiobuttons {
+  margin-bottom: 0 !important;
+}
 
 label {
   &.non-empty-view {
@@ -15,6 +17,8 @@ label {
 .label-wrapper {
   label {
     display: inline;
+    font-family: "open sans bold";
+    font-size: 16px;
   }
   span {
     margin-left: 10px;
@@ -35,14 +39,6 @@ label {
   }
 }
 
-//radiobuttons are used
-.radiobuttons {
-  li {
-    display: inline-block;
-    list-style: none;
-  }
-}
-
 //default
 .stb-form-group {
   display: inline-block;
@@ -51,52 +47,111 @@ label {
     display: block;
   }
 
+  &.checkboxes, &.radios-inline, &.date-picker, &.select-wrapper {
+    margin-bottom: 24px;
+  }
+
   input {
     min-width: 260px;
   }
+
   .form-control-feedback {
     top: 0px;
     display: block;
   }
 
-  //dropdown
+
   &.select-wrapper {
     width: 260px;
   }
+
 }
 
 .notification {
   .notification-wrapper {
-    display: table;
-  }
-  .msgIcon {
-    display: table-cell;
-    text-align: center;
-    padding: 24px 0 0 0;
-    .info {
-      margin-left: 0;
-    }
-  }
-  .msgText {
-    display: table-cell;
-    vertical-align: middle;
-    &.white {
-      background: #ffffff;
-    }
+    position: relative;
+    margin-bottom: 24px;
 
-    button.close {
-      top: 5px;
-      right: 11px;
-      width: 100%;
-
-      .remove {
-        margin-right: 10px;
+    .msgIcon {
+      position: absolute;
+      display: block;
+      text-align: center;
+      padding: 24px;
+      width: 72px;
+      height: 100%;
+      .info {
+        margin-left: 0;
       }
     }
+    .msgText {
+      width: 100%;
+      display: block;
+      min-height: 72px;
+      padding: 24px 24px 24px 96px;
+      &.white {
+        background: #ffffff;
+      }
 
-    .message-text {
-      margin-right: 8%;
+      p {
+        margin: 0;
+      }
+
+      button.close {
+        top: 5px;
+        right: 11px;
+        width: 100%;
+        opacity: .8;
+        filter: alpha(opacity=80);
+
+        &:focus, &:hover {
+          opacity: .5;
+          filter: alpha(opacity=50);
+        }
+
+        .remove {
+          margin-right: 10px;
+        }
+      }
+
+      .message-text {
+        margin-right: 8%;
+        margin-top: 24px;
+      }
+    }
+  }
+}
+
+.row.info-message-wrapper {
+  padding-bottom: 0px;
+  .info-message {
+    margin-bottom: 0;
+
+    .msgText {
+      width: 100%;
+      border-left: 1px solid black;
+      padding: 0 0 0 24px;
       margin-top: 24px;
+      display: block;
+
+      p {
+        margin: 0;
+      }
+
+      button.close {
+        float: none;
+        opacity: .8;
+        filter: alpha(opacity=80);
+        margin-top: 24px;
+
+        &:focus, &:hover {
+          opacity: .5;
+          filter: alpha(opacity=50);
+        }
+
+        .remove {
+          margin-right: 10px;
+        }
+      }
     }
   }
 }
@@ -106,20 +161,46 @@ label {
   cursor: pointer;
 }
 
-.white-box {
+.row.white-box {
+  padding-bottom: 0;
   .white-box-wrapper {
     min-height: 0;
     background: #fff;
   }
 
-  .padding-top {
-    width: 100%;
-    padding-top: 20px;
-
+  &.shown {
+    .white-box-wrapper {
+      margin-bottom: 24px;
+      padding-top: 20px;
+    }
   }
 
-  .padding-bottom {
-    width: 100%;
-    padding-bottom: 20px;
+  .msgText {
+    &.white {
+      background: #efe8df;
+    }
   }
+
+}
+
+form {
+  .col-md-12 {
+    padding-right: 24px !important; //crap from stb.ny
+  }
+}
+
+@media (max-width: 767px) {
+
+
+  .notification {
+    .msgIcon {
+      padding: 12px;
+      width: 48px;
+    }
+    .msgText {
+      min-height: 48px;
+      padding: 12px 12px 12px 60px;
+    }
+  }
+
 }

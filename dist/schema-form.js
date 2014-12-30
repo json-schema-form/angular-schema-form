@@ -162,9 +162,39 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
 
+  var addDotOrHashNotaion = function (name) {
+    if (/^#/.test(name)) {
+      return '[\'' + name + '\']';
+    } else {
+      return '.' + name;
+    }
+  };
+
+  var createModelName = function (form, defGlobals, key) {
+    var res = '';
+    if (angular.isDefined(form.schema)) {
+      var visibility = form.schema.visibility || defGlobals.visibility.visibility;
+
+      if (visibility) {
+        res += addDotOrHashNotaion(visibility);
+      }
+
+      var category = form.schema.category || defGlobals.category;
+
+      if (category) {
+        res += addDotOrHashNotaion(category);
+      }
+    }
+
+    res += (key[0] !== '[' ? '.' : '') + key;
+
+    return 'model' + res;
+
+  };
+
   var createDirective = function(name) {
-    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop', '$timeout',
-      function($parse,  $compile,  $http,  $templateCache, scrollingTop, $timeout) {
+    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', 'scrollingTop', '$timeout', '$filter',
+      function($parse,  $compile,  $http,  $templateCache, scrollingTop, $timeout, $filter) {
 
         return {
           restrict: 'AE',
@@ -176,25 +206,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             //rebind our part of the form to the scope.
             var defaultGlobals = scope.defaultGlobals || scope.$eval(attrs.defaultGlobals);
 
-            var createModelName = function (form, defGlobals, key) {
-              var visibility = '', category = '';
-              if (form.schema) {
-                if (form.schema.visibility) {
-                  visibility = '.' + form.schema.visibility;
-                } else if (defGlobals.visibility) {
-                  visibility = '.' + defGlobals.visibility;
-                }
-
-                if (form.schema.category) {
-                  category = '.' + form.schema.category;
-                } else if (defGlobals.category) {
-                  category = '.' + defGlobals.category;
-                }
-              }
-
-              return 'model' + visibility + category + (key[0] !== '[' ? '.' : '') + key;
-
-            };
             var once = scope.$watch(attrs.form, function(form) {
 
               if (form) {
@@ -267,13 +278,13 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 var visibility = schema.visibility || scope.defaultGlobals.visibility;
 
                 if (visibility) {
-                  res += '.' + visibility;
+                  res += addDotOrHashNotaion(visibility);
                 }
 
                 var category = schema.category || scope.defaultGlobals.category;
 
                 if (category) {
-                  res += '.' + category;
+                  res += addDotOrHashNotaion(category);
                 }
               }
 
@@ -371,8 +382,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
 
-            var updateInfoDate = function (date) {
-              date = date || scope.$eval(lookupForKey(scope.form.dateKey));
+            var updateInfoDate = function (date, alwaysAddMonlthlyDifferent) {
               var today = moment();
               var minMonthlyDifference = scope.form.minMonthlyDifference || 0;
               var maxMonthlyDifference = scope.form.maxMonthlyDifference;
@@ -385,9 +395,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               today.minute(0);
               today.hours(0);
 
-              if (date && maxMonthlyDifference && additionalMonthlyDifference) {
+              if (maxMonthlyDifference && additionalMonthlyDifference) {
 
-                if ((selectedDate.toDate().getTime() < moment(today).add(minMonthlyDifference, 'Month').toDate().getTime())
+                if (alwaysAddMonlthlyDifferent
+                    || (selectedDate.toDate().getTime() < moment(today).add(minMonthlyDifference, 'Month').toDate().getTime())
                     || (selectedDate.toDate().getTime() > moment(today).add(maxMonthlyDifference, 'Month').toDate().getTime())) {
                   selectedDate = today.add(additionalMonthlyDifference, 'Month').add(additionalDailyDifference, 'Day');
                 }
@@ -397,23 +408,33 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.setDateWatcher = function () {
-              if (scope.form.key) {
+              if (scope.form.modelKey) {
                 var value = function () {
                   return scope.$eval(lookupForKey(scope.form.dateKey));
                 };
                 scope.$watch(value, function (newDate) {
                   if (newDate) {
-                    var model = $parse(scope.keyModelName);
+                    var model = $parse(lookupForKey(scope.form.modelKey));
                     var selectedDate = updateInfoDate(newDate);
-                    model.assign(scope, selectedDate.toDate().toISOString());
+                    model.assign(scope, selectedDate.format('YYYY-MM-DD'));
                   }
                 });
               }
             };
 
             scope.getInfoDate = function () {
-              var selectedDate = updateInfoDate();
+              var date = scope.$eval(lookupForKey(scope.form.dateKey));
+              var selectedDate;
 
+              if (date) {
+                selectedDate = updateInfoDate(date);
+              } else if (scope.form.hasDefaultDateValue) {
+
+                selectedDate = updateInfoDate(null, true);
+                var model = $parse(lookupForKey(scope.form.modelKey));
+                model.assign(scope, selectedDate.format('YYYY-MM-DD'));
+
+              }
 
               moment.locale(scope.form.encoding);
               return moment(selectedDate).format(scope.form.format);
@@ -489,58 +510,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return 'Required';
 
             };
-
-            /**TODO delete it*/
-
-            scope.nextStep = function (index) {
-              this.$broadcast('schemaFormValidate', this);
-              if (this.formCtrl.$valid) {
-                scope.completed[index] = true;
-                scope.selected.step = index + 1;
-                scrollingTop.scrollTop();
-                scope.$emit('stepChanged', {
-                  'description': 'next',
-                  'targetStep': scope.selected.step
-                });
-              } else {
-                scrollingTop.scrollToTheFirstError(element, scope.selected.step);
-              }
-            };
-
-            scope.prevStep = function (index) {
-              scope.selected.step = index - 1;
-              scrollingTop.scrollTop();
-              scope.$emit('stepChanged', {
-                'description': 'prev',
-                'targetStep': scope.selected.step
-              });
-            };
-
-
-
-            scope.finishIt = function($event, form) {
-              if (angular.isFunction(form.finishIt)) {
-                finishIt.onClick($event, form);
-              } else if (angular.isString(form.finishIt)) {
-                if (sfSchema) {
-                  //evaluating in scope outside of sfSchemas isolated scope
-                  sfSchema.evalInParentScope(form.finishIt, {'$event': $event, form: form});
-                } else {
-                  scope.$eval(form.finishIt, {'$event': $event, form: form});
-                }
-              }
-            };
-
-            scope.$on('stepChange', function(e, options){
-              if(e.defaultPrevented) {
-                return;
-              }
-              e.preventDefault();
-              scope.selected.step = options.step;
-              scrollingTop.scrollTop();
-            });
-
-            /**TODO delete it*/
           }
         };
       }
@@ -702,6 +671,14 @@ angular.module('schemaForm').factory('formFormatters', [function () {
       }
 
       return input;
+    },
+    'number': function (input) {
+      var parsed = parseInt(input, 10);
+      if (isNaN(parsed)) {
+        return undefined;
+      } else {
+        return parsed;
+      }
     }
   };
 
@@ -1234,7 +1211,7 @@ angular.module('schemaForm').factory('sfValidator', [function() {
         if (Date.parse(data)) {
           return null;
         } else {
-          return 'invalid email';
+          return 'invalid date';
         }
       } else {
         return 'date should be ISO string!';

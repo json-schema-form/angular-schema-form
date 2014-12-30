@@ -1,13 +1,17 @@
-<div class="top-margin-20" ng-show="showCondition()">
+<div ng-show="showCondition()" class="select">
     <div class="label-wrapper">
         <label ng-show="showTitle()">{{form.title}}</label>
         <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
     </div>
 
-    <div class="error-message" ng-show="!disabledElement() && hasError()">
-        <span class="stb-color-sprite-small warning"></span>
-        <span class="input-faulty left-margin-10" ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
-    </div>
+
+    <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
+        <small class="help-block">
+            <span class="stb-color-sprite-small warning circle"></span>
+            <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+        </small>
+    </span>
+
     <div class="stb-form-group has-feedback select-wrapper"
          ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() && conditionalValidationSuccess()}">
         <div class="selectContainer">
@@ -17,7 +21,7 @@
                     class="form-control"
                     schema-validate="form"
                     stb-dropdown
-                    ng-options="item as item.name for (key, item) in form.titleMap track by item.name">
+                    ng-options="item as item.name for item in form.titleMap | orderBy: 'name' track by item.name">
             </select>
             <i class="form-control-feedback glyphicon"
                ng-show="hasSuccess() || hasError()"

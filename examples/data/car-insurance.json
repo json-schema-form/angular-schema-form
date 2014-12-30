@@ -5,76 +5,96 @@
       "licensePlateNumber": {
         "type": "string",
         "required": true,
-        "pattern": "^[a-zA-Z]{2}\\s?\\d{5}$"
+        "pattern": "^[a-zA-Z]{2}\\s?\\d{5}$",
+        "visibility": "#restricted"
       },
       "hasAutoIdentificationNumber": {
-        "type": "boolean"
+        "type": "boolean",
+        "visibility": "#open"
       },
       "importAndCustomsCleared": {
         "type": "boolean",
-        "required": true
+        "required": true,
+        "visibility": "#open"
       },
       "_isNotAllowedToBuy": {
         "type": "string",
-        "required": true
+        "required": true,
+        "visibility": "#open"
       },
       "autoIdentificationNumber": {
         "type": "string",
         "required": true,
         "pattern": "^\\w{6}$",
-        "maxLength": 6
+        "maxLength": 6,
+        "visibility": "#open"
       },
       "mileage": {
-        "type": "string",
+        "type": "integer",
+        "maximum": 999999,
+        "minimum": 1,
         "maxLength": 6,
-        "pattern": "^\\d{1,6}$",
-        "required": true
+        "required": true,
+        "visibility": "#open"
       },
       "intendsToMigrateInsurance": {
         "required": true,
-        "type": "boolean"
+        "type": "boolean",
+        "visibility": "#open"
       },
       "oldInsuranceCompany": {
         "required": true,
-        "type": "object"
+        "type": "object",
+        "visibility": "#open"
       },
       "customerPreviousInsurancePolicyholder": {
         "required": true,
-        "type": "boolean"
+        "type": "boolean",
+        "visibility": "#open"
       },
       "previousInsurancePolicyholderNameSSN": {
         "required": true,
-        "type": "string"
+        "type": "string",
+        "visibility": "#open"
       },
       "expirationDateKnown": {
-        "type": "boolean"
+        "required": true,
+        "type": "boolean",
+        "visibility": "#open"
       },
       "_expirationDateDay": {
         "type": "string",
         "required": true,
-        "format": "date-format"
+        "format": "date-format",
+        "visibility": "#open"
       },
       "expirationDateDay": {
         "type": "string",
         "required": true,
-        "format": "date-format"
+        "format": "date-format",
+        "visibility": "#open"
       },
       "insuranceCompany": {
         "required": true,
-        "type": "object"
+        "type": "object",
+        "visibility": "#open"
       },
       "issueDay": {
         "type": "string",
         "required": true,
-        "format": "date-format"
+        "format": "date-format",
+        "visibility": "#open"
       },
       "bankCompany": {
         "required": true,
-        "type": "object"
+        "type": "object",
+        "visibility": "#open"
       },
       "oldLicensePlateNumber": {
+        "required": true,
         "type": "string",
-        "pattern": "^[a-zA-Z]{2}\\s?\\d{5}$"
+        "pattern": "^[a-zA-Z]{2}\\s?\\d{5}$",
+        "visibility": "#restricted"
       }
     }
   },
@@ -90,7 +110,6 @@
           "infoMessage": "Vi trenger ditt bilnummer for å melde fra til bilregisteret om at du er forsikret. Gjelder forsikringen en nyregistert eller uregistrert bil, krysser du av på at du ikke har reg.nr og fyller inn understellsnummer",
           "title": "Registreringsnummer",
           "type": "string",
-          "formType": "tel",
           "formatterName": "carNumber",
           "placeholder": "Registreringsnummer",
           "dependencies": ["hasAutoIdentificationNumber"],
@@ -102,38 +121,45 @@
           "title": "Har ikke bilen registreringsnummer?"
         },
         {
-          "key": "importAndCustomsCleared",
-          "title": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge?",
-          "validationMessage": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge?",
-          "type": "radios-inline",
-          "titleMap": [
-            {"value": true, "name": "Ja"},
-            {"value": false, "name": "Nei"}
+          "type": "whitebox",
+          "items": [
+            {
+              "key": "importAndCustomsCleared",
+              "title": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge?",
+              "validationMessage": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge?",
+              "type": "radios-inline",
+              "titleMap": [
+                {"value": true, "name": "Ja"},
+                {"value": false, "name": "Nei"}
+              ],
+              "dependencies": ["hasAutoIdentificationNumber"],
+              "expression": "hasAutoIdentificationNumber === true"
+            },
+            {
+              "key": "_isNotAllowedToBuy",
+              "validationMessage": "Denne bilen kan dessverre ikke tegnes på nett, vennligst ta kontakt med kundeservice",
+              "type": "hidden",
+              "dependencies": ["importAndCustomsCleared"],
+              "expression": "importAndCustomsCleared === true"
+
+            },
+            {
+              "key": "autoIdentificationNumber",
+              "type": "string",
+              "title": "Understellsnummer – 6 siste tegn",
+              "validationMessage": "Understellsnummer må inneholde 6 tall",
+              "dependencies": ["importAndCustomsCleared"],
+              "expression": "importAndCustomsCleared === false"
+            }
           ],
           "dependencies": ["hasAutoIdentificationNumber"],
           "expression": "hasAutoIdentificationNumber === true"
         },
         {
-          "key": "_isNotAllowedToBuy",
-          "validationMessage": "Denne bilen kan dessverre ikke tegnes på nett, vennligst ta kontakt med kundeservice",
-          "type": "hidden",
-          "dependencies": ["importAndCustomsCleared"],
-          "expression": "importAndCustomsCleared === true"
-
-        },
-        {
-          "key": "autoIdentificationNumber",
-          "type": "string",
-          "title": "Understellsnummer – 6 siste tegn",
-          "validationMessage": "Understellsnummer må inneholde 6 tall",
-          "dependencies": ["importAndCustomsCleared"],
-          "expression": "importAndCustomsCleared === false"
-        },
-        {
           "key": "mileage",
           "validationMessage": "Ugyldig verdi for kilometerstand.",
           "infoMessage": "'Kilometerstand leser du av på bilen din. Riktig kilometerstand er viktig i et eventuelt erstatningsoppgjør",
-          "type": "string",
+          "formatterName": "number",
           "title": "Kilometerstand",
           "placeholder": "Kilometerstand",
           "dependencies": ["importAndCustomsCleared"],
@@ -147,21 +173,6 @@
           "type": "dropdown",
           "titleMap": [
             {
-              "name": "Annet Norsk selskap",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Annet Norsk selskap"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": {
-                    "email": "forsikring@storebrand.no"
-                  }
-                }
-              }
-            },
-            {
               "name": "AS Financiering",
               "value": {
                 "orgInfo": {
@@ -172,6 +183,21 @@
                 "contactPoints": {
                   "Privat - Panthaver": {
                     "email": "utbetaling@financiering.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Annet Norsk selskap",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Annet Norsk selskap"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "forsikring@storebrand.no"
                   }
                 }
               }
@@ -192,21 +218,6 @@
               }
             },
             {
-              "name": "Bertel O. Steen Finans AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Bertel O. Steen Finans AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": {
-                    "email": "finans@bos.no"
-                  }
-                }
-              }
-            },
-            {
               "name": "BFH Sparebank",
               "value": {
                 "orgInfo": {
@@ -217,36 +228,6 @@
                 "contactPoints": {
                   "Privat - Panthaver": {
                     "email": "post@bfh-sparebank.no"
-                  }
-                }
-              }
-            },
-            {
-              "name": "Bjugn Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Bjugn Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": {
-                    "email": "post@bjugn-sparebank.no"
-                  }
-                }
-              }
-            },
-            {
-              "name": "Blaker Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Blaker Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": {
-                    "email": "blaker.sparebank@blakersparebank.no"
                   }
                 }
               }
@@ -277,6 +258,51 @@
                 "contactPoints": {
                   "Privat - Panthaver": {
                     "email": "kontaktoss@bnpparibas.com"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Bertel O. Steen Finans AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Bertel O. Steen Finans AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "finans@bos.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Bjugn Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Bjugn Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@bjugn-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "Blaker Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Blaker Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "blaker.sparebank@blakersparebank.no"
                   }
                 }
               }
@@ -462,6 +488,21 @@
               }
             },
             {
+              "name": "GS Banken",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "GS Banken"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "post@gsbanken.no"
+                  }
+                }
+              }
+            },
+            {
               "name": "Ge Money Bilfinans AS",
               "value": {
                 "orgInfo": {
@@ -517,21 +558,6 @@
                 "contactPoints": {
                   "Privat - Panthaver": {
                     "email": "firmapost@grong-sparebank.no"
-                  }
-                }
-              }
-            },
-            {
-              "name": "GS Banken",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "GS Banken"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": {
-                    "email": "post@gsbanken.no"
                   }
                 }
               }
@@ -1002,6 +1028,21 @@
               }
             },
             {
+              "name": "SG Finans AS",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SG Finans AS"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "kundeservice@sgfinans.no"
+                  }
+                }
+              }
+            },
+            {
               "name": "Sandnes Sparebank",
               "value": {
                 "orgInfo": {
@@ -1032,21 +1073,6 @@
               }
             },
             {
-              "name": "SG Finans AS",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "SG Finans AS"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": {
-                    "email": "kundeservice@sgfinans.no"
-                  }
-                }
-              }
-            },
-            {
               "name": "SkandiaBanken AB",
               "value": {
                 "orgInfo": {
@@ -1072,6 +1098,66 @@
                 "contactPoints": {
                   "Privat - Panthaver": {
                     "email": "finansiering@skandiabanken.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Fredrikstad",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Fredrikstad"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Gran",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Gran"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Gudbrandsdal",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Gudbrandsdal"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
+                  }
+                }
+              }
+            },
+            {
+              "name": "SpareBank 1 Hallingdal",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "SpareBank 1 Hallingdal"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "oppsigelse@sparebank1.no"
                   }
                 }
               }
@@ -1122,71 +1208,11 @@
               }
             },
             {
-              "name": "SpareBank 1 Fredrikstad",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "SpareBank 1 Fredrikstad"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": {
-                    "email": "oppsigelse@sparebank1.no"
-                  }
-                }
-              }
-            },
-            {
-              "name": "SpareBank 1 Gran",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "SpareBank 1 Gran"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": {
-                    "email": "oppsigelse@sparebank1.no"
-                  }
-                }
-              }
-            },
-            {
               "name": "Sparebank 1 Grenland",
               "value": {
                 "orgInfo": {
                   "orgName": {
                     "name": "Sparebank 1 Grenland"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": {
-                    "email": "oppsigelse@sparebank1.no"
-                  }
-                }
-              }
-            },
-            {
-              "name": "SpareBank 1 Gudbrandsdal",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "SpareBank 1 Gudbrandsdal"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": {
-                    "email": "oppsigelse@sparebank1.no"
-                  }
-                }
-              }
-            },
-            {
-              "name": "SpareBank 1 Hallingdal",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "SpareBank 1 Hallingdal"
                   }
                 },
                 "contactPoints": {
@@ -1407,11 +1433,11 @@
               }
             },
             {
-              "name": "Sparebank 1 Soon",
+              "name": "Sparebank 1 SR-bank",
               "value": {
                 "orgInfo": {
                   "orgName": {
-                    "name": "Sparebank 1 Soon"
+                    "name": "Sparebank 1 SR-bank"
                   }
                 },
                 "contactPoints": {
@@ -1422,11 +1448,11 @@
               }
             },
             {
-              "name": "Sparebank 1 SR-bank",
+              "name": "Sparebank 1 Soon",
               "value": {
                 "orgInfo": {
                   "orgName": {
-                    "name": "Sparebank 1 SR-bank"
+                    "name": "Sparebank 1 Soon"
                   }
                 },
                 "contactPoints": {
@@ -1737,6 +1763,21 @@
               }
             },
             {
+              "name": "Åfjord Sparebank",
+              "value": {
+                "orgInfo": {
+                  "orgName": {
+                    "name": "Åfjord Sparebank"
+                  }
+                },
+                "contactPoints": {
+                  "Privat - Panthaver": {
+                    "email": "firmapost@afjord-sparebank.no"
+                  }
+                }
+              }
+            },
+            {
               "name": "Ørland Sparebank",
               "value": {
                 "orgInfo": {
@@ -1765,38 +1806,17 @@
                   }
                 }
               }
-            },
-            {
-              "name": "Åfjord Sparebank",
-              "value": {
-                "orgInfo": {
-                  "orgName": {
-                    "name": "Åfjord Sparebank"
-                  }
-                },
-                "contactPoints": {
-                  "Privat - Panthaver": {
-                    "email": "firmapost@afjord-sparebank.no"
-                  }
-                }
-              }
             }
           ],
           "dependencies": ["mortgagee", "importAndCustomsCleared"],
           "expression": "mortgagee === true && importAndCustomsCleared !== true"
         },
         {
-          "type": "infobox",
-          "infoMessage": "Det er ikke mulig å flytte forsikringen fra et annet selskap hvis bilen ikke har reg.nr, vennligst ta kontakt med kundeservice",
-          "dependencies": ["hasAutoIdentificationNumber", "intendsToMigrateInsurance"],
-          "expression": "hasAutoIdentificationNumber === true && intendsToMigrateInsurance === false"
-        },
-        {
           "key": "intendsToMigrateInsurance",
           "title": "Skal du flytte forsikringen fra et annet selskap?",
           "validationMessage": "Vennligst gjør et valg",
           "infoMessage": "Har du tilsvarende forsikring fra før som skal sies opp i eksisterende selskap, velg JA. Du sender da oppsigelsen direkte til ditt eksisterende forsikringsselskap fra vår e-postserver",
-          "type": "radios",
+          "type": "radios-inline",
           "titleMap": [
             {"value": true, "name": "Ja"},
             {"value": false, "name": "Nei"}
@@ -1819,21 +1839,6 @@
               "title": "Angi selskap du flytter fra",
               "titleMap": [
                 {
-                  "name": "Agria Dyreforsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Agria Dyreforsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Oppsigelse": {
-                        "email": "smadyr@agria.no"
-                      }
-                    }
-                  }
-                },
-                {
                   "name": "AIG Europe",
                   "value": {
                     "orgInfo": {
@@ -1844,6 +1849,21 @@
                     "contactPoints": {
                       "Privat - Oppsigelse": {
                         "email": "csg.norway@aig.com"
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "Agria Dyreforsikring",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "Agria Dyreforsikring"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Oppsigelse": {
+                        "email": "smadyr@agria.no"
                       }
                     }
                   }
@@ -1909,21 +1929,6 @@
                   }
                 },
                 {
-                  "name": "Dancia Pensjon",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Dancia Pensjon"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Oppsigelse": {
-                        "email": "dancia@dancia.no"
-                      }
-                    }
-                  }
-                },
-                {
                   "name": "DNB Skadeforsikring",
                   "value": {
                     "orgInfo": {
@@ -1934,6 +1939,21 @@
                     "contactPoints": {
                       "Privat - Oppsigelse": {
                         "email": "oppsigelser.skadeforsikring@dnb.no"
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "Dancia Pensjon",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "Dancia Pensjon"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Oppsigelse": {
+                        "email": "dancia@dancia.no"
                       }
                     }
                   }
@@ -2059,6 +2079,21 @@
                   }
                 },
                 {
+                  "name": "GS Banken",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "GS Banken"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Oppsigelse": {
+                        "email": "post@gsbanken.no"
+                      }
+                    }
+                  }
+                },
+                {
                   "name": "Gjensidige",
                   "value": {
                     "orgInfo": {
@@ -2084,21 +2119,6 @@
                     "contactPoints": {
                       "Privat - Oppsigelse": {
                         "email": "post@gouda.no"
-                      }
-                    }
-                  }
-                },
-                {
-                  "name": "GS Banken",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "GS Banken"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Oppsigelse": {
-                        "email": "post@gsbanken.no"
                       }
                     }
                   }
@@ -2644,6 +2664,66 @@
                   }
                 },
                 {
+                  "name": "SpareBank 1 Fredrikstad",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "SpareBank 1 Fredrikstad"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "SpareBank 1 Gran",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "SpareBank 1 Gran"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "SpareBank 1 Gudbrandsdal",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "SpareBank 1 Gudbrandsdal"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "SpareBank 1 Hallingdal",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "SpareBank 1 Hallingdal"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Oppsigelse": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
+                    }
+                  }
+                },
+                {
                   "name": "Sparebank 1 Bergen",
                   "value": {
                     "orgInfo": {
@@ -2689,71 +2769,11 @@
                   }
                 },
                 {
-                  "name": "SpareBank 1 Fredrikstad",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Fredrikstad"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Oppsigelse": {
-                        "email": "oppsigelse@sparebank1.no"
-                      }
-                    }
-                  }
-                },
-                {
-                  "name": "SpareBank 1 Gran",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Gran"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Oppsigelse": {
-                        "email": "oppsigelse@sparebank1.no"
-                      }
-                    }
-                  }
-                },
-                {
                   "name": "Sparebank 1 Grenland",
                   "value": {
                     "orgInfo": {
                       "orgName": {
                         "name": "Sparebank 1 Grenland"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Oppsigelse": {
-                        "email": "oppsigelse@sparebank1.no"
-                      }
-                    }
-                  }
-                },
-                {
-                  "name": "SpareBank 1 Gudbrandsdal",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Gudbrandsdal"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Oppsigelse": {
-                        "email": "oppsigelse@sparebank1.no"
-                      }
-                    }
-                  }
-                },
-                {
-                  "name": "SpareBank 1 Hallingdal",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Hallingdal"
                       }
                     },
                     "contactPoints": {
@@ -2974,11 +2994,11 @@
                   }
                 },
                 {
-                  "name": "Sparebank 1 Soon",
+                  "name": "Sparebank 1 SR-bank",
                   "value": {
                     "orgInfo": {
                       "orgName": {
-                        "name": "Sparebank 1 Soon"
+                        "name": "Sparebank 1 SR-bank"
                       }
                     },
                     "contactPoints": {
@@ -2989,11 +3009,11 @@
                   }
                 },
                 {
-                  "name": "Sparebank 1 SR-bank",
+                  "name": "Sparebank 1 Soon",
                   "value": {
                     "orgInfo": {
                       "orgName": {
-                        "name": "Sparebank 1 SR-bank"
+                        "name": "Sparebank 1 Soon"
                       }
                     },
                     "contactPoints": {
@@ -3348,6 +3368,21 @@
               "title": "Dato for forfall i annet forsikringsselskap",
               "dependencies": ["expirationDateKnown"],
               "expression": "expirationDateKnown === true"
+            },
+            {
+              "type": "infodate",
+              "modelKey": "expirationDateDay",
+              "dateKey": "_expirationDateDay",
+              "maxMonthlyDifference": 2,
+              "minMonthlyDifference": 0,
+              "additionalMonthlyDifference": 1,
+              "additionalDailyDifference": 1,
+              "hasDefaultDateValue": true,
+              "encoding": "nn",
+              "format": "Do MMMM YYYY",
+              "staticMessage": "Forsikringen vil gjelde fra",
+              "dependencies": ["intendsToMigrateInsurance", "expirationDateKnown", "_expirationDateDay"],
+              "expression": "intendsToMigrateInsurance === true && (expirationDateKnown === false || _expirationDateDay !== undefined)"
             }
           ],
           "dependencies": ["intendsToMigrateInsurance"],
@@ -3357,8 +3392,14 @@
           "type": "whitebox",
           "items": [
             {
+              "type": "infobox",
+              "infoMessage": "Det er ikke mulig å flytte forsikringen fra et annet selskap hvis bilen ikke har reg.nr, vennligst ta kontakt med kundeservice",
+              "dependencies": ["hasAutoIdentificationNumber", "intendsToMigrateInsurance"],
+              "expression": "hasAutoIdentificationNumber === true && intendsToMigrateInsurance === false"
+            },
+            {
               "type": "help",
-              "helpvalue": "<div class='top-margin-20'><p><strong>Hvilken bil og hvilket forsikringsselskap skal bonusen overføres fra?</strong></p></div>",
+              "helpvalue": "<div><p><strong>Hvilken bil og hvilket forsikringsselskap skal bonusen overføres fra?</strong></p></div>",
               "dependencies": ["intendsToMigrateInsurance", "bonusLevelCode"],
               "expression": "intendsToMigrateInsurance === false && bonusLevelCode !== '11'"
             },
@@ -3370,21 +3411,6 @@
               "title": "Angi selskap vi skal hente bonus fra",
               "titleMap": [
                 {
-                  "name": "Agria Dyreforsikring",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Agria Dyreforsikring"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": {
-                        "email": "smadyr@agria.no"
-                      }
-                    }
-                  }
-                },
-                {
                   "name": "AIG Europe",
                   "value": {
                     "orgInfo": {
@@ -3395,6 +3421,21 @@
                     "contactPoints": {
                       "Privat - Bonus": {
                         "email": "csg.norway@aig.com"
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "Agria Dyreforsikring",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "Agria Dyreforsikring"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Bonus": {
+                        "email": "smadyr@agria.no"
                       }
                     }
                   }
@@ -3460,21 +3501,6 @@
                   }
                 },
                 {
-                  "name": "Dancia Pensjon",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "Dancia Pensjon"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": {
-                        "email": "dancia@dancia.no"
-                      }
-                    }
-                  }
-                },
-                {
                   "name": "DNB Skadeforsikring",
                   "value": {
                     "orgInfo": {
@@ -3485,6 +3511,21 @@
                     "contactPoints": {
                       "Privat - Bonus": {
                         "email": "oppsigelser.skadeforsikring@dnb.no"
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "Dancia Pensjon",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "Dancia Pensjon"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Bonus": {
+                        "email": "dancia@dancia.no"
                       }
                     }
                   }
@@ -3610,6 +3651,21 @@
                   }
                 },
                 {
+                  "name": "GS Banken",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "GS Banken"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Bonus": {
+                        "email": "post@gsbanken.no"
+                      }
+                    }
+                  }
+                },
+                {
                   "name": "Gjensidige",
                   "value": {
                     "orgInfo": {
@@ -3635,21 +3691,6 @@
                     "contactPoints": {
                       "Privat - Bonus": {
                         "email": "post@gouda.no"
-                      }
-                    }
-                  }
-                },
-                {
-                  "name": "GS Banken",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "GS Banken"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": {
-                        "email": "post@gsbanken.no"
                       }
                     }
                   }
@@ -4187,6 +4228,66 @@
                   }
                 },
                 {
+                  "name": "SpareBank 1 Fredrikstad",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "SpareBank 1 Fredrikstad"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Bonus": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "SpareBank 1 Gran",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "SpareBank 1 Gran"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Bonus": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "SpareBank 1 Gudbrandsdal",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "SpareBank 1 Gudbrandsdal"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Bonus": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
+                    }
+                  }
+                },
+                {
+                  "name": "SpareBank 1 Hallingdal",
+                  "value": {
+                    "orgInfo": {
+                      "orgName": {
+                        "name": "SpareBank 1 Hallingdal"
+                      }
+                    },
+                    "contactPoints": {
+                      "Privat - Bonus": {
+                        "email": "oppsigelse@sparebank1.no"
+                      }
+                    }
+                  }
+                },
+                {
                   "name": "Sparebank 1 Bergen",
                   "value": {
                     "orgInfo": {
@@ -4232,71 +4333,11 @@
                   }
                 },
                 {
-                  "name": "SpareBank 1 Fredrikstad",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Fredrikstad"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": {
-                        "email": "oppsigelse@sparebank1.no"
-                      }
-                    }
-                  }
-                },
-                {
-                  "name": "SpareBank 1 Gran",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Gran"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": {
-                        "email": "oppsigelse@sparebank1.no"
-                      }
-                    }
-                  }
-                },
-                {
                   "name": "Sparebank 1 Grenland",
                   "value": {
                     "orgInfo": {
                       "orgName": {
                         "name": "Sparebank 1 Grenland"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": {
-                        "email": "oppsigelse@sparebank1.no"
-                      }
-                    }
-                  }
-                },
-                {
-                  "name": "SpareBank 1 Gudbrandsdal",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Gudbrandsdal"
-                      }
-                    },
-                    "contactPoints": {
-                      "Privat - Bonus": {
-                        "email": "oppsigelse@sparebank1.no"
-                      }
-                    }
-                  }
-                },
-                {
-                  "name": "SpareBank 1 Hallingdal",
-                  "value": {
-                    "orgInfo": {
-                      "orgName": {
-                        "name": "SpareBank 1 Hallingdal"
                       }
                     },
                     "contactPoints": {
@@ -4517,11 +4558,11 @@
                   }
                 },
                 {
-                  "name": "Sparebank 1 Soon",
+                  "name": "Sparebank 1 SR-bank",
                   "value": {
                     "orgInfo": {
                       "orgName": {
-                        "name": "Sparebank 1 Soon"
+                        "name": "Sparebank 1 SR-bank"
                       }
                     },
                     "contactPoints": {
@@ -4532,11 +4573,11 @@
                   }
                 },
                 {
-                  "name": "Sparebank 1 SR-bank",
+                  "name": "Sparebank 1 Soon",
                   "value": {
                     "orgInfo": {
                       "orgName": {
-                        "name": "Sparebank 1 SR-bank"
+                        "name": "Sparebank 1 Soon"
                       }
                     },
                     "contactPoints": {
@@ -4856,6 +4897,7 @@
               "infoMessage": "Oppgi bilnummeret for bilen som bonus skal hentes fra. Ved nyanskaffelse av bil nr to, legger du inn kjennetegn på eksisterende bil i Storebrand. Oppgi din ønskede kjørelengde. Klikk her for mer informasjon om bonusregler",
               "title": "Registreringsnummer bonus skal hentes fra",
               "type": "string",
+              "formatterName": "carNumber",
               "placeholder": "Registreringsnummer",
               "dependencies": ["intendsToMigrateInsurance", "bonusLevelCode"],
               "expression": "intendsToMigrateInsurance === false && bonusLevelCode !== '11'"
@@ -4869,33 +4911,19 @@
               "monthlyDifference": 3,
               "dependencies": ["intendsToMigrateInsurance"],
               "expression": "intendsToMigrateInsurance === false"
+            },
+            {
+              "type": "infodate",
+              "dateKey": "issueDay",
+              "encoding": "nn",
+              "format": "Do MMMM YYYY",
+              "staticMessage": "Forsikringen vil gjelde fra",
+              "dependencies": ["issueDay"],
+              "expression": "issueDay !== undefined"
             }
           ],
           "dependencies": ["intendsToMigrateInsurance"],
           "expression": "intendsToMigrateInsurance === false"
-        },
-        {
-          "type": "infodate",
-          "dateKey": "issueDay",
-          "encoding": "nn",
-          "format": "Do MMMM YYYY",
-          "staticMessage": "Forsikringen vil gjelde fra",
-          "dependencies": ["issueDay"],
-          "expression": "issueDay !== undefined"
-        },
-        {
-          "type": "infodate",
-          "key": "expirationDateDay",
-          "dateKey": "_expirationDateDay",
-          "maxMonthlyDifference": 2,
-          "minMonthlyDifference": 0,
-          "additionalMonthlyDifference": 1,
-          "additionalDailyDifference": 1,
-          "encoding": "nn",
-          "format": "Do MMMM YYYY",
-          "staticMessage": "Forsikringen vil gjelde fra",
-          "dependencies": ["_expirationDateDay"],
-          "expression": "_expirationDateDay !== undefined"
         }
       ]
     }
