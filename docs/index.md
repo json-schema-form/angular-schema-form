@@ -381,7 +381,7 @@ ex. displaying an asterisk on required fields
   $sope.form = [
     {
       key: "name",
-      feedback: "{ 'glyphicon': true, 'glyphicon-asterisk': form.requires && !hasSuccess && !hassError() ,'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"
+      feedback: "{ 'glyphicon': true, 'glyphicon-asterisk': form.required && !hasSuccess() && !hasError() ,'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"
     }
 ```
 
