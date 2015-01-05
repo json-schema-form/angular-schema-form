@@ -203,7 +203,7 @@ Schema Form currently supports the following form field types out of the box:
 | tabarray      |  a tabbed version of array |
 
 More field types can be added, for instance a "datepicker" type can be added by
-including the [datepicker addon](datepicker.md)
+including the [datepicker addon](https://github.com/Textalk/angular-schema-form-datepicker)
 
 
 Default form types
