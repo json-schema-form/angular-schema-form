@@ -1,6 +1,10 @@
 .radiobuttons {
   margin-bottom: 0 !important;
 }
+.radiobuttons ul li {
+  list-style: none;
+  display: inline-block;
+}
 label.non-empty-view {
   max-width: none;
 }
