@@ -127,7 +127,7 @@
               "key": "importAndCustomsCleared",
               "title": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge?",
               "validationMessage": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge?",
-              "type": "radios-inline",
+              "type": "radios",
               "titleMap": [
                 {"value": true, "name": "Ja"},
                 {"value": false, "name": "Nei"}

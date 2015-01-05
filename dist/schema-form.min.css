@@ -147,7 +147,7 @@ label.empty-view span {
   margin-bottom: 24px;
   padding-top: 20px;
 }
-.row.white-box .msgText.white {
+.row.white-box .notification-wrapper .msgText.white {
   background: #efe8df;
 }
 form .col-md-12 {
