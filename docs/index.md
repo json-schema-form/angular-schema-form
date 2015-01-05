@@ -350,22 +350,39 @@ If you supply a `validationMessage` property in the form definition, and if its 
 string that will be used instead on any validation error.
 
 If you need more fine grained control you can supply an object instead with keys matching the error
-codes of [tv4](https://github.com/geraintluff/tv4). See `tv4.errorCodes`
+codes of [tv4](https://github.com/geraintluff/tv4). tv4 is available
+globally in angular schema form along with it's error codes, they can be found in `tv4.errorCodes`.
 
 Ex.
 ```javascript
-{
-  key: "address.street",
-  validationMessage: {
-    tv4.errorCodes.STRING_LENGTH_SHORT: "Address is too short, man.",
-    "default": "Just write a proper address, will you?"   //Special catch all error message
+var form = [
+  "address.zip",
+  {
+    key: "address.street",
+    validationMessage: {
+      "default": "Just write a proper address, will you?"
+    }
+  }
+];
+
+form[1].validationMessage[tv4.errorCodes.STRING_LENGTH_SHORT] = "Address is too short, man.";
+```
+
+However, it can sometimes be clunky to use variables as keys so you can use the
+[error codes](https://github.com/geraintluff/tv4/blob/master/source/api.js#L1) directly.
+The example below also illustrates how to define validation messages globally. This uses
+*formDefaults*, for more info on how to use it, see [Global Options](#global-options).
+
+```javascript
+scope.options = {
+  formDefaults: {
+    validationMessage: {
+      200: "This string is too short, man.",
+      302: "You can't just leave it blank, man."
+    }
   }
 }
 ```
-
-You can also set a global `validationMessage` in *formDefaults* see
-[Global Options](#global-options).
-
 
 ### Inline feedback icons
 *input* and *textarea* based fields get inline status icons by default. A check
