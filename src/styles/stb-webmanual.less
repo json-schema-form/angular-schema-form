@@ -143,14 +143,23 @@ label.empty-view {
         opacity: .8;
         filter: alpha(opacity=80);
         margin-top: 24px;
+        font-size: 18px;
+        font-family: "Open Sans Bold",Arial,ArialMT,sans-serif;
 
         &:focus, &:hover {
           opacity: .5;
           filter: alpha(opacity=50);
         }
 
+        .close-text {
+          display: inline-block;
+          margin-left: 0;
+          margin-bottom: 5px;
+        }
+
         .remove {
-          margin-right: 10px;
+          margin-left: 5px;
+          margin-bottom: -5px;
         }
       }
     }

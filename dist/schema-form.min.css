@@ -123,14 +123,22 @@ label.empty-view span {
   opacity: .8;
   filter: alpha(opacity=80);
   margin-top: 24px;
+  font-size: 18px;
+  font-family: "Open Sans Bold", Arial, ArialMT, sans-serif;
 }
 .row.info-message-wrapper .info-message .msgText button.close:focus,
 .row.info-message-wrapper .info-message .msgText button.close:hover {
   opacity: .5;
   filter: alpha(opacity=50);
 }
+.row.info-message-wrapper .info-message .msgText button.close .close-text {
+  display: inline-block;
+  margin-left: 0;
+  margin-bottom: 5px;
+}
 .row.info-message-wrapper .info-message .msgText button.close .remove {
-  margin-right: 10px;
+  margin-left: 5px;
+  margin-bottom: -5px;
 }
 .info-button {
   margin-bottom: -3px;
