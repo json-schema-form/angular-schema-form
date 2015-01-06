@@ -14,7 +14,7 @@
         </small>
     </span>
 
-    <div class="stb-form-group radios" ng-repeat="item in form.titleMap">
+    <div class="stb-form-group radios" ng-repeat="item in form.titleMap"  ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() && conditionalValidationSuccess(), 'has-feedback': form.feedback !== false }">
             <input type="radio"
 
                    sf-changed="form"
