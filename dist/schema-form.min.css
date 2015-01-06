@@ -16,7 +16,7 @@ label.empty-view span {
   font-size: 16px;
 }
 .label-wrapper span {
-  margin-left: 10px;
+  margin-left: 5px;
 }
 .input-group.datePicker {
   width: 260px !important;
@@ -141,6 +141,7 @@ label.empty-view span {
   margin-bottom: -5px;
 }
 .info-button {
+  background-position: -100px -800px !important;
   margin-bottom: -3px;
   cursor: pointer;
 }
