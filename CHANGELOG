@@ -1,3 +1,14 @@
+v0.7.7
+------
+ * Array ref changes in model updates form, thanks @Sandreu
+ * Tabarray & array fixes, thanks @Sandreu, @davidlgj
+ * Use objectpath more generically to fix requirejs issues, thanks @mike-marcacci
+ * README and documentation updates, thanks @davidlgj, @engelfrost, @Dervisevic, @stramel, @Sandreu
+ * Expanded documentation on custom validation messages, thanks @Dervisevic
+ * Deep structure tests, thanks @Sandreu
+ * SF-insert-field documentation, thanks @davidlgj
+ * Array model watch & array defaults, thanks @Sandreu
+
 v0.7.6
 ------
  * Fixed broken bower specification.
