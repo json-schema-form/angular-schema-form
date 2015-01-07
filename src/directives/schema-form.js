@@ -117,7 +117,7 @@ angular.module('schemaForm')
               }
             });
           };
-          $(element[0]).triggerHandler("sf-render-finished");
+          scope.$emit("sf-render-finished");
         });
       }
     };
