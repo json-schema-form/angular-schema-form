@@ -836,6 +836,9 @@ need the reordering.
 In the form definition you can refer to properties of an array item by the empty
 bracket notation. In the `key` simply end the name of the array with `[]`
 
+By default the array will start with one *undefined* value so that the user is presented with one a
+form, to supress this the attribute `startEmpty` to `true`
+
 Given the schema:
 ```json
 {
@@ -888,7 +891,7 @@ function FormCtrl($scope) {
 
 Example with sub form, note that you can get rid of the form field the object wrapping the
 subform fields gives you per default by using the `items` option in the
-form definition.
+form definition, also example of `startEmpty`.
 
 ```javascript
 function FormCtrl($scope) {
@@ -926,7 +929,8 @@ function FormCtrl($scope) {
         "subforms[].nick",
         "subforms[].name",
         "subforms[].emails",
-      ]
+      ],
+      startEmpty: true
     }
   ];
 }
