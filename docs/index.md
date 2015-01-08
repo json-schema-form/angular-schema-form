@@ -1039,7 +1039,7 @@ Events
 Events are emitted or broadcast at various points in the process of rendering or validating the
 form. Below is a list of these events and how they are propagated.
 
-| Event                | When                   | type  | arguments                          |
+| Event                | When                   | Type  | Arguments                          |
 |:--------------------:|:----------------------:|:-----:|:----------------------------------:|
 | `sf-render-finished` | After form is rendered | emit  | The sf-schema directives's element |
 
