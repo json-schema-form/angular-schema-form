@@ -12,7 +12,7 @@
     "David Jensen <david.lgj@gmail.com> (https://github.com/davidlgj)",
     "Cameron Edwards (https://github.com/cameronprattedwards)",
     "Mike Marcacci <david.lgj@gmail.com> (https://github.com/mike-marcacci)",
-    "Denis Dervisevic <denis@dervisevic.se> (https://github.com/Dervisevic)",
+    "Denis Dervisevic <denis@dervisevic.se> (https://github.com/Dervisevic)"
   ],
   "license": "MIT",
   "dependencies": {
@@ -50,11 +50,11 @@
     "sinon": "^1.9.0",
     "sinon-chai": "^2.5.0",
     "streamqueue": "0.0.5"
-  }
-},
+  },
 "licenses": [
   {
     "type": "MIT",
     "url": "https://raw.githubusercontent.com/Textalk/angular-schema-form/master/LICENSE"
   }
 ]
+}
