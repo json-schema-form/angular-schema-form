@@ -137,7 +137,8 @@ angular.module('schemaForm')
                 }
               }
             });
-          }
+          };
+          scope.$emit('sf-render-finished', element);
         });
       }
     };

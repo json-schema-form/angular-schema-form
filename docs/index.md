@@ -25,6 +25,7 @@ Documentation
     1. [array](#array)
     1. [tabarray](#tabarray)
 1. [Post process function](#post-process-function)
+1. [Events](#events)
 1. [Manual field insertion](#manual-field-insertion)
 1. [Extending Schema Form](extending.md)
 
@@ -1033,7 +1034,14 @@ angular.module('myModule', ['schemaForm']).config(function(schemaFormProvider){
 });
 ```
 
+Events
+---------------------
+Events are emitted or broadcast at various points in the process of rendering or validating the
+form. Below is a list of these events and how they are propagated.
 
+| Event                | When                   | Type  | Arguments                          |
+|:--------------------:|:----------------------:|:-----:|:----------------------------------:|
+| `sf-render-finished` | After form is rendered | emit  | The sf-schema directives's element |
 
 ### Manual field insertion
 There is a limited feature for controlling manually where a generated field should go so you can
