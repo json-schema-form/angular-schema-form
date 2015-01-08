@@ -315,8 +315,10 @@ General options most field types can handle:
   feedback: false,             // Inline feedback icons
   placeholder: "Input...",     // placeholder on inputs and textarea
   ngModelOptions: { ... },     // Passed along to ng-model-options
-  readonly: true               // Same effect as readOnly in schema. Put on a fieldset or array
+  readonly: true,              // Same effect as readOnly in schema. Put on a fieldset or array
                                // and their items will inherit it.
+  htmlClass: "street foobar",  // CSS Class(es) to be added to the container div
+  fieldHtmlClass: "street"     // CSS Class(es) to be added to field input (or similar)
 }
 ```
 
