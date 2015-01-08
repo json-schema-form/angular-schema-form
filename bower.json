@@ -8,6 +8,9 @@
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>"
+    "Cameron Edwards",
+    "Mike Marcacci",
+    "Denis Dervisevic <denis@dervisevic.se>",
   ],
   "moduleType": [
     "globals"
@@ -23,10 +26,17 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
+    "*.js",
+    "*.json",
     "node_modules",
     "bower_components",
     "test",
-    "coverage"
+    "coverage",
+    "docs",
+    "examples",
+    "gulp",
+    "CHANGELOG",
+    "LICENSE"
   ],
   "dependencies": {
     "angular": ">= 1.2",
