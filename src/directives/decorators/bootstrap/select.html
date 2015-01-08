@@ -1,4 +1,5 @@
-<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false}">
+<div class="form-group {{form.htmlClass}} schema-form-select"
+     ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false}">
   <label class="control-label" ng-show="showTitle()">
     {{form.title}}
   </label>
@@ -6,9 +7,10 @@
           ng-model-options="form.ngModelOptions"
           ng-disabled="form.readonly"
           sf-changed="form"
-          class="form-control"
+          class="form-control {{form.fieldHtmlClass}}"
           schema-validate="form"
-          ng-options="item.value as item.name for item in form.titleMap">
+          ng-options="item.value as item.name for item in form.titleMap"
+          name="{{form.key.slice(-1)[0]}}">
   </select>
   <div class="help-block"
        ng-show="(hasError() && errorMessage(schemaError())) || form.description"
