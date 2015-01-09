@@ -257,7 +257,7 @@ describe('schemaForm', function() {
       });
     });
 
-    it.only('should handle x-schema-form defaults',function(){
+    it('should handle x-schema-form defaults',function(){
       inject(function(schemaForm){
 
         var schema = {
