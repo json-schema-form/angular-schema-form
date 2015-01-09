@@ -4,6 +4,7 @@ Documentation
 1. [Basic Usage](#basic-usage)
 1. [Handling Submit](#handling-submit)
 1. [Global Options](#global-options)
+1. [Form defaults in schema](#form-defaults-in-schema)
 1. [Form types](#form-types)
 1. [Default form types](#default-form-types)
 1. [Form definitions](#form-definitions)
@@ -174,7 +175,29 @@ Ex.
 </div>
 ```
 
+Form defaults in schema
+-----------------------
+Its recommended to split presentation and validation into a form definition and a json schema. But
+if you for some reason can't do this, but *do* have the power to change the schema, you can supply form
+default values within the schema using the custom attribute `x-schema-form`. `x-schema-form` should
+be a form object and acts as form definition defaults for that field.  
 
+Example schema.
+```js
+{
+  "type": "object",
+  "properties": {
+    "comment": {
+      "type": "string",
+      "title": "Comment",
+      "x-schema-form": {
+        "type": "textarea",
+        "placeholder": "Don't hold back"
+      }
+    }
+  }
+}
+```
 
 Form types
 ----------
