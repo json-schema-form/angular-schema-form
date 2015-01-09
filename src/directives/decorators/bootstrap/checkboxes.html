@@ -1,11 +1,15 @@
-<div sf-array="form" ng-model="$$value$$" class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+<div sf-array="form" ng-model="$$value$$"
+     class="form-group schema-form-checkboxes {{form.htmlClass}}"
+     ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
   <div class="checkbox" ng-repeat="val in titleMapValues track by $index" >
     <label>
       <input type="checkbox"
              ng-disabled="form.readonly"
              sf-changed="form"
-             ng-model="titleMapValues[$index]">
+             class="{{form.fieldHtmlClass}}"
+             ng-model="titleMapValues[$index]"
+             name="{{form.key.slice(-1)[0]}}">
       <span ng-bind-html="form.titleMap[$index].name"></span>
     </label>
 

@@ -1,4 +1,5 @@
-<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
+<div class="form-group schema-form-{{form.type}} {{form.htmlClass}}"
+     ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
 
   <input ng-show="form.key"
@@ -6,11 +7,12 @@
          step="any"
          sf-changed="form"
          placeholder="{{form.placeholder}}"
-         class="form-control"
+         class="form-control {{form.fieldHtmlClass}}"
          ng-model-options="form.ngModelOptions"
          ng-model="$$value$$"
          ng-disabled="form.readonly"
-         schema-validate="form">
+         schema-validate="form"
+         name="{{form.key.slice(-1)[0]}}">
   <span ng-if="form.feedback !== false"
         class="form-control-feedback"
         ng-class="evalInScope(form.feedback) || {'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"></span>

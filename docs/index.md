@@ -4,6 +4,7 @@ Documentation
 1. [Basic Usage](#basic-usage)
 1. [Handling Submit](#handling-submit)
 1. [Global Options](#global-options)
+1. [Form defaults in schema](#form-defaults-in-schema)
 1. [Form types](#form-types)
 1. [Default form types](#default-form-types)
 1. [Form definitions](#form-definitions)
@@ -25,6 +26,7 @@ Documentation
     1. [array](#array)
     1. [tabarray](#tabarray)
 1. [Post process function](#post-process-function)
+1. [Events](#events)
 1. [Manual field insertion](#manual-field-insertion)
 1. [Extending Schema Form](extending.md)
 
@@ -173,7 +175,29 @@ Ex.
 </div>
 ```
 
+Form defaults in schema
+-----------------------
+Its recommended to split presentation and validation into a form definition and a json schema. But
+if you for some reason can't do this, but *do* have the power to change the schema, you can supply form
+default values within the schema using the custom attribute `x-schema-form`. `x-schema-form` should
+be a form object and acts as form definition defaults for that field.  
 
+Example schema.
+```js
+{
+  "type": "object",
+  "properties": {
+    "comment": {
+      "type": "string",
+      "title": "Comment",
+      "x-schema-form": {
+        "type": "textarea",
+        "placeholder": "Don't hold back"
+      }
+    }
+  }
+}
+```
 
 Form types
 ----------
@@ -314,8 +338,10 @@ General options most field types can handle:
   feedback: false,             // Inline feedback icons
   placeholder: "Input...",     // placeholder on inputs and textarea
   ngModelOptions: { ... },     // Passed along to ng-model-options
-  readonly: true               // Same effect as readOnly in schema. Put on a fieldset or array
+  readonly: true,              // Same effect as readOnly in schema. Put on a fieldset or array
                                // and their items will inherit it.
+  htmlClass: "street foobar",  // CSS Class(es) to be added to the container div
+  fieldHtmlClass: "street"     // CSS Class(es) to be added to field input (or similar)
 }
 ```
 
@@ -836,6 +862,9 @@ need the reordering.
 In the form definition you can refer to properties of an array item by the empty
 bracket notation. In the `key` simply end the name of the array with `[]`
 
+By default the array will start with one *undefined* value so that the user is presented with one a
+form, to supress this the attribute `startEmpty` to `true`
+
 Given the schema:
 ```json
 {
@@ -888,7 +917,7 @@ function FormCtrl($scope) {
 
 Example with sub form, note that you can get rid of the form field the object wrapping the
 subform fields gives you per default by using the `items` option in the
-form definition.
+form definition, also example of `startEmpty`.
 
 ```javascript
 function FormCtrl($scope) {
@@ -926,7 +955,8 @@ function FormCtrl($scope) {
         "subforms[].nick",
         "subforms[].name",
         "subforms[].emails",
-      ]
+      ],
+      startEmpty: true
     }
   ];
 }
@@ -1029,7 +1059,14 @@ angular.module('myModule', ['schemaForm']).config(function(schemaFormProvider){
 });
 ```
 
+Events
+---------------------
+Events are emitted or broadcast at various points in the process of rendering or validating the
+form. Below is a list of these events and how they are propagated.
 
+| Event                | When                   | Type  | Arguments                          |
+|:--------------------:|:----------------------:|:-----:|:----------------------------------:|
+| `sf-render-finished` | After form is rendered | emit  | The sf-schema directives's element |
 
 ### Manual field insertion
 There is a limited feature for controlling manually where a generated field should go so you can
