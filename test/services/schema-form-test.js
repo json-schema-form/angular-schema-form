@@ -257,6 +257,30 @@ describe('schemaForm', function() {
       });
     });
 
+    it('should handle x-schema-form defaults',function(){
+      inject(function(schemaForm){
+
+        var schema = {
+          "type": "object",
+          "properties": {
+            "name": {
+              "title": "Name",
+              "description": "Gimme yea name lad",
+              "type": "string",
+              "x-schema-form": {
+                "type": "textarea"
+              }
+            }
+          }
+        };
+
+
+
+        var f = schemaForm.defaults(schema,{});
+        f.form[0].type.should.be.eq('textarea');
+      });
+    });
+
     it('should ignore parts of schema in ignore list',function(){
       inject(function(schemaForm){
 

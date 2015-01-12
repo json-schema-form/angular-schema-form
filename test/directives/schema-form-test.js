@@ -986,12 +986,9 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
       //Radiobuttons uninitialized and both styles
@@ -1002,10 +999,8 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
@@ -1017,11 +1012,9 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
       //Radiobuttons uninitialized and only unselected style
@@ -1032,10 +1025,8 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
@@ -1048,11 +1039,9 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
       //Radiobuttons initialized and both styles
@@ -1063,10 +1052,8 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
@@ -1078,11 +1065,9 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
       //Radiobuttons initialized and only unselected style
@@ -1093,10 +1078,8 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
@@ -1258,16 +1241,12 @@ describe('directive',function(){
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).children().length.should.be.equal(1);
       tmpl.children().eq(0).children().eq(0).children().length.should.be.eq(4);
-      tmpl.children().eq(0).children().eq(0).children().eq(0).hasClass('btn-primary').should.be.true;
       tmpl.children().eq(0).children().eq(0).children().eq(0).hasClass('btn-success').should.be.false;
       tmpl.children().eq(0).children().eq(0).children().eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).children().eq(0).children().eq(1).hasClass('btn-danger').should.be.false;
-      tmpl.children().eq(0).children().eq(0).children().eq(2).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).children().eq(0).children().eq(2).hasClass('btn-success').should.be.true;
       tmpl.children().eq(0).children().eq(0).children().eq(3).hasClass('btn-default').should.be.false;
       tmpl.children().eq(0).children().eq(0).children().eq(3).hasClass('btn-danger').should.be.true;
-
-
 
     });
   });

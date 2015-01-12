@@ -4,6 +4,7 @@ Angular Schema Form
 [![Build Status](https://travis-ci.org/Textalk/angular-schema-form.svg?branch=master)](https://travis-ci.org/Textalk/angular-schema-form)
 [![Coverage Status](https://coveralls.io/repos/Textalk/angular-schema-form/badge.png?branch=master)](https://coveralls.io/r/Textalk/angular-schema-form?branch=development)
 [![Bower version](https://badge.fury.io/bo/angular-schema-form.svg)](http://badge.fury.io/bo/angular-schema-form)
+[![npm version](https://badge.fury.io/js/angular-schema-form.svg)](http://badge.fury.io/js/angular-schema-form)
 
 Generate forms from JSON schemas using AngularJS!
 
@@ -145,12 +146,13 @@ angular.module('myModule', ['schemaForm']);
 
 Add-ons
 ------
-There is currently three add-ons, a date picker, a colorpicker and the wysiwyg html editor tinymce.
+There are a couple of add-ons, a date picker, a colorpicker and two wysiwyg editors. 
 They have their own repos and you can find them here with usage instructions:
 
   * [https://github.com/Textalk/angular-schema-form-datepicker](https://github.com/Textalk/angular-schema-form-datepicker)
   * [https://github.com/Textalk/angular-schema-form-colorpicker](https://github.com/Textalk/angular-schema-form-colorpicker)
   * [https://github.com/Textalk/angular-schema-form-tinymce](https://github.com/Textalk/angular-schema-form-tinymce)
+  * [https://github.com/webcanvas/angular-schema-form-ckeditor](https://github.com/webcanvas/angular-schema-form-ckeditor)
 
 Your can also [create your own add-ons!](docs/extending.md)
 
