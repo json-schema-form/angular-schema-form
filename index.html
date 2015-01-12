@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Angular Schema Form</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/railscasts.min.css">
+  </head>
+  <body ng-app="schemaForm" ng-controller="PageCtrl">
+    <div class="header-wraper">
+      <header class="container">
+        <h1>Angular Schema Form</h1>
+        <span>Generate forms from a JSON schema, with AngularJS!</span>
+      </header>
+    </div>
+
+    <div class="container what-is-it">
+      <div class="col-sm-12">
+        <h2>What is it?</h2>
+        <p>
+          Schema Form is a set of AngularJS directives (and a couple of services) to generate
+          Bootstrap 3 ready forms from a JSON Schema.
+        </p>
+      </div>
+    </div>
+    <div class="example container">
+
+      <div class="col-sm-6">
+        <h4>JSON Schema</h4>
+        <pre><code class="json">
+{
+  "type": "object",
+  "title": "Comment",
+  "properties": {
+    "name":  {
+      "title": "Name",
+      "type": "string"
+    },
+    "email":  {
+      "title": "Email",
+      "type": "string",
+      "pattern": "^\\S+@\\S+$",
+      "description": "Email will be used for evil."
+    },
+    "comment": {
+      "title": "Comment",
+      "type": "string",
+      "maxLength": 20,
+      "validationMessage": "Don't be greedy!"
+    }
+  },
+  "required": ["name","email","comment"]
+}
+        </code></pre>
+      </div>
+
+      <div class="col-sm-6">
+        <h4>Form definition</h4>
+        <pre><code class="json">
+[
+  "name",
+  "email",
+  {
+    "key": "comment",
+    "type": "textarea",
+    "placeholder": "Make a comment"
+  },
+  {
+    "type": "submit",
+    "title": "OK"
+  }
+]
+        </code></pre>
+      </div>
+
+
+      <div class="col-sm-6 col-sm-offset-3">
+        <form sf-schema="schema" sf-form="form" sf-model="data"></form>
+      </div>
+
+      <div class="alert alert-info col-sm-12">
+        Check out the
+        <a href="http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html">demo page</a>
+        for more examples
+      </div>
+    </div>
+
+    <div class="container">
+      <h2>Features</h2>
+      <ul>
+        <li>Bootstrap 3 ready forms</li>
+        <li>Validate form using the JSON Schema<li>
+        <li>Fine tune presentation with a form definition, change field types, change order</li>
+        <li>Lots of basic form types out of the box.</li>
+        <li>Supports array with drag'n'drop or in tabs</li>
+        <li>Add-ons for more fanciful stuff like wysiwyg editors, datepickers, colorpickers etc</li>
+      </ul>
+    </div>
+
+    <div class="container">
+      <h2>Get It</h2>
+      Use bower:
+      <pre><code class="sh">bower install angular-schema-form</code></pre>
+
+      Or just <a href="https://github.com/Textalk/angular-schema-form">download from github!</a>
+
+    </div>
+
+    <div class="container">
+      <h2>Add-ons</h2>
+      <p>
+        Schema Form was built to be extended and its easy to create your own form field types that
+        suit your specific requirement. Check out
+        <a href="https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md">
+          the docs on extending schema form
+        </a> for more details.
+      <p>
+    </div>
+    <div class="container">
+      <h2>Third Party Add-ons</h2>
+      <small>
+        (Don't see your package? Tag it with <em>angular-schema-form-add-on</em> in your bower.json.)
+      </small>
+      <add-ons></add-ons>
+    </div>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
+
+    <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
+    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="../bower_components/objectpath/lib/ObjectPath.js"></script>
+    <script type="text/javascript" src="../dist/schema-form.min.js"></script>
+    <script type="text/javascript" src="../dist/bootstrap-decorator.min.js"></script>
+
+    <script>
+      hljs.initHighlightingOnLoad();
+
+      angular.module('schemaForm').controller("PageCtrl",function($scope) {
+        $scope.schema = {
+          "type": "object",
+          "title": "Comment",
+          "properties": {
+            "name":  {
+              "title": "Name",
+              "type": "string"
+            },
+            "email":  {
+              "title": "Email",
+              "type": "string",
+              "pattern": "^\\S+@\\S+$",
+              "description": "Email will be used for evil."
+            },
+            "comment": {
+              "title": "Comment",
+              "type": "string",
+              "maxLength": 20,
+              "validationMessage": "Don't be greedy!"
+            }
+          },
+          "required": ["name","email","comment"]
+        };
+
+      $scope.form = [
+        "name",
+        "email",
+        {
+          "key": "comment",
+          "type": "textarea",
+          "placeholder": "Make a comment"
+        },
+        {
+          "type": "submit",
+          "title": "OK"
+        }
+      ];
+
+      $scope.data = {};
+
+    });
+    </script>
+
+  </body>
+</html>
