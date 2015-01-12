@@ -9,6 +9,7 @@
             <label ng-show="showTitle()">{{form.title}}</label>
             <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
         </div>
+        <div ng-bind-html="form.subtitle"></div>
 
         <!--ERROR MESSAGE-->
         <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
