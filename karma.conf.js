@@ -45,12 +45,6 @@ module.exports = function(config) {
       'src/**/*.html': ['ng-html2js']
     },
 
-    progressReporter: {
-      suppressPassed: true,
-      suppressFailed: false,
-      suppressSkipped: false
-    },
-
     // optionally, configure the reporter
     coverageReporter: {
       type : 'lcov',
