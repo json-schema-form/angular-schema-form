@@ -1,6 +1,6 @@
 <div class="form-group schema-form-{{form.type}} {{form.htmlClass}}"
      ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false }">
-  <label class="control-label" ng-class="{'sr-only': showTitle()}">{{form.title}}</label>
+  <label class="control-label" ng-class="{'sr-only': !showTitle()}">{{form.title}}</label>
 
   <input ng-show="form.key"
          type="{{form.type}}"

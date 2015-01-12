@@ -1,5 +1,5 @@
 <div class="form-group has-feedback {{form.htmlClass}} schema-form-textarea" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
-  <label ng-class="{'sr-only': showTitle()}">{{form.title}}</label>
+  <label ng-class="{'sr-only': !showTitle()}">{{form.title}}</label>
   <textarea class="form-control {{form.fieldHtmlClass}}"
             sf-changed="form"
             placeholder="{{form.placeholder}}"
