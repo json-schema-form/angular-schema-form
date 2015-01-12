@@ -2,7 +2,7 @@
 <div class="row info-message-wrapper" ng-show="showInfo">
         <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12 info-message">
         <div class="msgText">
-            <p class="message-text">{{infoMessage}}</p>
+            <p class="message-text" ng-bind-html="infoMessage | reduceMessage"></p>
             <button data-dismiss="modal" ng-click="showInfo = !showInfo;" class="close" type="button">
                 <span class="close-text">Lukk</span><span class="stb-sprite-medium remove"></span>
             </button>

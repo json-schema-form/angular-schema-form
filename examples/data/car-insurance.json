@@ -107,7 +107,7 @@
         {
           "key": "licensePlateNumber",
           "validationMessage": "Vennligst oppgi registreringsnummer i riktig format, eks: AD12345",
-          "infoMessage": "Vi trenger ditt bilnummer for å melde fra til bilregisteret om at du er forsikret. Gjelder forsikringen en nyregistert eller uregistrert bil, krysser du av på at du ikke har reg.nr og fyller inn understellsnummer",
+          "infoMessage": ["Samtykket er frivillig og du kan når som helst trekke det tilbake.", "Storebrand-konsernet betyr Storebrand Livsforsikring AS, Storebrand Bank ASA, Storebrand Fondene AS, Storebrand Kapitalforvaltning AS, Storebrand Forsikring AS, Storebrand Helseforsikring AS, Storebrand Finansiell Rådgivning AS, samt eventuelle senere etablerte selskaper med personkunder."],
           "title": "Registreringsnummer",
           "type": "string",
           "formatterName": "carNumber",

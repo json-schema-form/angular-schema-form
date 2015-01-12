@@ -130,6 +130,16 @@ angular.module('schemaForm').factory('sfSelect', ['sfPath', function (sfPath) {
   };
 }]);
 
+// override the default input to update on blur
+angular.module('schemaForm').filter('reduceMessage', [function() {
+  return function (input) {
+    if (angular.isArray(input)) {
+      return input.join('<br>');
+    } else {
+      return input;
+    }
+  }
+}]);
 angular.module('schemaForm').provider('schemaFormDecorators',
 ['$compileProvider', 'sfPathProvider', function($compileProvider, sfPathProvider) {
   var defaultDecorator = '';
