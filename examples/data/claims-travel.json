@@ -78,6 +78,14 @@
       "question45": {
         "type": "boolean",
         "required": true
+      },
+      "insuredEvent": {
+        "type": "string",
+        "required": true
+      },
+      "insuredEvent_1": {
+        "type": "object",
+        "required": true
       }
     }
   },
@@ -102,6 +110,44 @@
               "type": "fieldset",
               "title": "Hva har skjedd?",
               "items": [
+                {
+                  "key": "insuredEvent",
+                  "title": "insuredEvent",
+                  "type": "select",
+                  "dataType": "string",
+                  "titleMap": [
+                    {"name": "steal_n", "value": "steal"},
+                    {"name": "ran_n", "value": "ran"},
+                    {"name": "houseBurglary_n", "value": "houseBurglary"},
+                    {"name": "carBurglary_n", "value": "carBurglary"},
+                    {"name": "naturalHazards_n", "value": "naturalHazards"},
+                    {"name": "collision_n", "value": "collision"},
+                    {"name": "baggageLoss_n", "value": "baggageLoss"},
+                    {"name": "other_n", "value": "other"}
+                  ],
+                  "validationMessage": {
+                    "302": "Required error"
+                  }
+                },
+                {
+                  "key": "insuredEvent_1",
+                  "title": "insuredEvent_1",
+                  "type": "select",
+                  "dataType": "object",
+                  "titleMap": [
+                    {"name": "steal_n_1", "value": "steal"},
+                    {"name": "ran_n_1", "value": "ran"},
+                    {"name": "houseBurglary_n_1", "value": "houseBurglary"},
+                    {"name": "carBurglary_n_1", "value": "carBurglary"},
+                    {"name": "naturalHazards_n_1", "value": "naturalHazards"},
+                    {"name": "collision_n_1", "value": "collision"},
+                    {"name": "baggageLoss_n_1", "value": "baggageLoss"},
+                    {"name": "other_n_1", "value": "other"}
+                  ],
+                  "validationMessage": {
+                    "302": "Required error"
+                  }
+                },
                 {
                   "key": "mainCause",
                   "title": "Hva har skjedd med gjenstanden(e)?",
