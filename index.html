@@ -5,6 +5,7 @@
     <title>Angular Schema Form</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/railscasts.min.css">
+    <link rel="stylesheet" href="index.css">
   </head>
   <body ng-app="schemaForm" ng-controller="PageCtrl">
     <div class="header-wraper">
@@ -24,11 +25,9 @@
       </div>
     </div>
     <div class="example container">
-
       <div class="col-sm-6">
         <h4>JSON Schema</h4>
-        <pre><code class="json">
-{
+        <pre><code class="json">{
   "type": "object",
   "title": "Comment",
   "properties": {
@@ -56,8 +55,7 @@
 
       <div class="col-sm-6">
         <h4>Form definition</h4>
-        <pre><code class="json">
-[
+        <pre><code class="json">[
   "name",
   "email",
   {
@@ -73,9 +71,15 @@
         </code></pre>
       </div>
 
+      <div class="col-sm-6">
+        <h4>Model</h4>
 
-      <div class="col-sm-6 col-sm-offset-3">
-        <form sf-schema="schema" sf-form="form" sf-model="data"></form>
+      <pre class="model">{{obj.model | prettyjson}}</pre>
+      </div>
+
+      <div class="col-sm-6">
+        <h4>Output/Demo</h4>
+        <form sf-schema="schema" sf-form="form" sf-model="obj.model"></form>
       </div>
 
       <div class="alert alert-info col-sm-12">
@@ -120,7 +124,7 @@
       <h2>Third Party Add-ons</h2>
       <ul class="list-group add-ons">
         <li ng-repeat="addon in addons" class="list-group-item">
-          {{::addon.name}}
+          {{::addon.name}} {{::addon.stars}}
         </li>
       </ul>
     </div>
@@ -176,7 +180,14 @@
         }
       ];
 
-      $scope.data = {};
+      $scope.obj = {};
+
+      $scope.obj.model = {
+        "name": 'Leeroy Jenkins',
+        "email": 'leeroy@palsforlife.com',
+        "comment": 'At least i have chicken.'
+      };
+
 
 
       //$http.get('https://bower.herokuapp.com/packages/search/angular-schema-form-')
@@ -197,6 +208,10 @@
         $scope.addons = filtered;
       });
 
+    }).filter('prettyjson', function() {
+      return function(input) {
+        return JSON.stringify(input, undefined, 2);
+      };
     });
     </script>
 
