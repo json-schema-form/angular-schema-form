@@ -104,7 +104,7 @@
     <div class="container">
       <h2>Get It</h2>
       Use bower:
-      <pre><code class="sh">bower install angular-schema-form</code></pre>
+      <pre>bower install angular-schema-form</pre>
 
       Or just <a href="https://github.com/Textalk/angular-schema-form">download from github!</a>
 
@@ -123,11 +123,17 @@
     <div class="container">
       <h2>Third Party Add-ons</h2>
       <ul class="list-group add-ons">
-        <li ng-repeat="addon in addons" class="list-group-item">
-          {{::addon.name}} {{::addon.stars}}
+        <li ng-click="navigate(addon.website)" ng-repeat="addon in addons" class="list-group-item">
+          <span class="badge"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{::addon.stars}}</span>
+          <a href="{{::addon.website}}">
+            <h3>{{::addon.name}}</h2>
+              <p>{{::addon.owner}}</p>
+            <p>{{::addon.description}}&nbsp;</p>
+          </a>
         </li>
       </ul>
     </div>
+    <footer>Built with <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> by <a href="http://textalk.se">Textalk</a>.</footer>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 
@@ -186,6 +192,18 @@
         "name": 'Leeroy Jenkins',
         "email": 'leeroy@palsforlife.com',
         "comment": 'At least i have chicken.'
+      };
+
+      $scope.navigate = function($event, url) {
+        // Is this a ctrl click? Or right ot middle? then do nothing
+        if ($event.ctrlKey || $event.button !== 0) {
+          return;
+        }
+
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        location.href = url;
       };
 
 
