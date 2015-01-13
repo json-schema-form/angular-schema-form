@@ -3,7 +3,7 @@ angular.module('schemaForm').config(
   function(schemaFormProvider,  schemaFormDecoratorsProvider, sfPathProvider) {
 
     var datepicker = function(name, schema, options) {
-      if (schema.type === 'string' && schema.format === 'date-format') {
+      if (schema.type === 'string' && schema.format === 'date') {
         var f = schemaFormProvider.stdFormObj(name, schema, options);
         f.key  = options.path;
         f.type = 'datepicker';

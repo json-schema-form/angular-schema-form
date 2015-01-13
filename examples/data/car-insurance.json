@@ -65,13 +65,13 @@
       "_expirationDateDay": {
         "type": "string",
         "required": true,
-        "format": "date-format",
+        "format": "date",
         "visibility": "#open"
       },
       "expirationDateDay": {
         "type": "string",
         "required": true,
-        "format": "date-format",
+        "format": "date",
         "visibility": "#open"
       },
       "insuranceCompany": {
@@ -82,7 +82,7 @@
       "issueDay": {
         "type": "string",
         "required": true,
-        "format": "date-format",
+        "format": "date",
         "visibility": "#open"
       },
       "bankCompany": {

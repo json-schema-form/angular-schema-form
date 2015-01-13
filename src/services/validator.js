@@ -40,18 +40,6 @@ angular.module('schemaForm').factory('sfValidator', [function() {
       } else {
         return 'email should be a string!';
       }
-    },
-
-    'date-format': function(data, schema) {
-      if (typeof data === 'string') {
-        if (Date.parse(data)) {
-          return null;
-        } else {
-          return 'invalid date';
-        }
-      } else {
-        return 'date should be ISO string!';
-      }
     }
 
   });
