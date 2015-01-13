@@ -1,0 +1,12 @@
+.json {
+  height: 450px;
+}
+
+.model {
+  height: 300px;
+}
+
+.list-group-item > a {
+  text-decoration: none;
+  color: inherit;
+}
