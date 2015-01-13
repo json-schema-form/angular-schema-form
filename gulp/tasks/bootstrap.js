@@ -3,6 +3,7 @@ var gulp = require('gulp'),
   minifyHtml = require('gulp-minify-html'),
   templateCache = require('gulp-angular-templatecache'),
   concat = require('gulp-concat'),
+  rename = require('gulp-rename'),
   uglify = require('gulp-uglify');
 
 gulp.task('bootstrap', function() {
@@ -22,8 +23,10 @@ gulp.task('bootstrap', function() {
   stream.queue(gulp.src('./src/directives/decorators/bootstrap/*.js'));
 
   stream.done()
-  .pipe(concat('bootstrap-decorator.min.js'))
+  .pipe(concat('bootstrap-decorator.js'))
+  .pipe(gulp.dest('./dist/'))
   .pipe(uglify())
+  .pipe(rename('bootstrap-decorator.min.js'))
   .pipe(gulp.dest('./dist/'));
 
 });
