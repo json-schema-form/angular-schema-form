@@ -216,16 +216,17 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
             };
 
-            scope.clickCheckbox = function (event) {
-              var inputEl = angular.element(event.currentTarget).find('input');
+            scope.clickCheckbox = function () {
+              var inputEl = element.find('input');
               var checked = !!inputEl.attr('checked');
-              $timeout(function() {
-                inputEl.attr('checked', !checked);
+              inputEl.attr('checked', !checked);
+              scope.ngModelHolder.$setViewValue(!checked);
+              scope.ngModelHolder.$render();
+            };
 
-                var model = $parse(scope.keyModelName);
-                model.assign(scope, !checked);
-                scope.$apply();
-              }, 0);
+            scope.changeCheckbox = function () {
+              var input = element.find('input');
+              input.attr('checked', scope.ngModelHolder.$modelValue);
             };
 
             scope.disabledElement = function () {

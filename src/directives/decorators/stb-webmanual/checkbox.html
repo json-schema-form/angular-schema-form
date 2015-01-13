@@ -9,15 +9,14 @@
         </small>
     </div>
 
-    <div  ng-click="clickCheckbox($event)">
         <input type="checkbox"
                sf-changed="form"
                ng-model="$$value$$"
                ng-model-options="form.ngModelOptions"
                schema-validate="form"
-               class="stb-checkbox">
-        <label ng-if="!form.emptyView" ng-class="{'non-empty-view': !form.emptyView}"><span></span>{{form.title}}</label>
-        <label ng-if="form.emptyView" ng-class="{'empty-view': form.emptyView}"><span></span></label>
-    </div>
+               class="stb-checkbox"
+               ng-change="changeCheckbox()">
+        <label ng-if="!form.emptyView" ng-class="{'non-empty-view': !form.emptyView}" ng-click="clickCheckbox($event)"><span></span>{{form.title}}</label>
+        <label ng-if="form.emptyView" ng-class="{'empty-view': form.emptyView}" ng-click="clickCheckbox($event)"><span></span></label>
 
 </div>
