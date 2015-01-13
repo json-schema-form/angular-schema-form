@@ -118,10 +118,11 @@
     </div>
     <div class="container">
       <h2>Third Party Add-ons</h2>
-      <small>
-        (Don't see your package? Tag it with <em>angular-schema-form-add-on</em> in your bower.json.)
-      </small>
-      <add-ons></add-ons>
+      <ul class="list-group add-ons">
+        <li ng-repeat="addon in addons" class="list-group-item">
+          {{::addon.name}}
+        </li>
+      </ul>
     </div>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
@@ -136,7 +137,7 @@
     <script>
       hljs.initHighlightingOnLoad();
 
-      angular.module('schemaForm').controller("PageCtrl",function($scope) {
+      angular.module('schemaForm').controller("PageCtrl",function($scope, $http) {
         $scope.schema = {
           "type": "object",
           "title": "Comment",
@@ -176,6 +177,25 @@
       ];
 
       $scope.data = {};
+
+
+      //$http.get('https://bower.herokuapp.com/packages/search/angular-schema-form-')
+      $http.get('http://bower-component-list.herokuapp.com/')
+           .then(function(res){
+
+        var filtered = res.data.filter(function(p) {
+          return p.name.indexOf('angular-schema-form-') === 0 ||
+                (p.keywords && p.keywords.indexOf('angular-schema-form-add-on') !== -1);
+        })
+
+        filtered.sort(function(a, b){
+          return b.stars - a.stars;
+        });
+
+        console.log(filtered)
+
+        $scope.addons = filtered;
+      });
 
     });
     </script>
