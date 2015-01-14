@@ -2,14 +2,14 @@
     <table class="stb-table hoverable">
         <thead>
             <th ng-repeat="item in form.columnTitles">{{item}}</th>
-            <th></th>
-            <th></th>
+            <th ng-repeat="action in form.actions"></th>
         </thead>
         <tbody>
             <tr ng-repeat="row in $$value$$" index="{{$index}}">
                 <td ng-repeat="column in row" ng-bind="column"></td>
-                <td><a ng-click="form.edit($$value$$, $index)"> Edit</a></td>
-                <td><a ng-click="form.delete($$value$$, $index)">Delete</a></td>
+                <td ng-repeat="action in form.actions">
+                    <a ng-click="action.action($$value$$, $index)" ng-bind="action.title"> Edit</a>
+                </td>
             </tr>
         </tbody>
     </table>
