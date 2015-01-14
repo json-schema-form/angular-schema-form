@@ -137,16 +137,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               }
             };
 
-            scope.$on('stepChange', function(e, options){
-              if(e.defaultPrevented) {
-                return;
-              }
-              e.preventDefault();
-              scope.selected.step = options.step;
-              scrollingTop.scrollTop();
-            });
-
-            var lookupForKey = function (key) {
+           var lookupForKey = function (key) {
               var res = '';
 
               var schema = scope.globalSchema.properties[key];

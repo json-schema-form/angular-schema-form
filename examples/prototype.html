@@ -19,7 +19,7 @@
 </style>
 
 <div class="container">
-    <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" sf-decorator-name="stb-webmanual-decorator" default-globals="{'visibility': '#open', 'category': ''}" ng-submit="submitForm(ngform,modelData)">
+    <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" sf-decorator-name="stb-webmanual-decorator" ng-submit="submitForm(ngform,modelData)">
         <button type="submit"></button>
     </form>
 </div>
@@ -44,12 +44,11 @@
         $http.get($scope.url).then(function(res){
             $scope.schema = res.data.schema;
             $scope.form   = res.data.form;
-            $scope.form[0].curStep = 0;
             $scope.form[0].finishIt = 'click()';
             $scope.click = function () {
                 console.log('fasf')
             }
-            $scope.modelData = {};
+            $scope.modelData = { currentStep: 1 };
 
             window.md = $scope.modelData;
         });
