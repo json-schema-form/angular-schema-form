@@ -1,4 +1,3 @@
-<h1>It's a table! yahoo!</h1>
 <div ng-show="showCondition()">
     <table class="stb-table hoverable">
         <thead>
@@ -7,10 +6,10 @@
             <th></th>
         </thead>
         <tbody>
-            <tr ng-repeat="row in $$value$$[0]" index="{{$index}}">
+            <tr ng-repeat="row in $$value$$" index="{{$index}}">
                 <td ng-repeat="column in row" ng-bind="column"></td>
-                <td >Edit</td>
-                <td><a ng-click="$$value$$[1].deleteRowAction($index)">Delete</a></td>
+                <td><a ng-click="form.edit($$value$$, $index)"> Edit</a></td>
+                <td><a ng-click="form.delete($$value$$, $index)">Delete</a></td>
             </tr>
         </tbody>
     </table>
