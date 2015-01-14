@@ -41,7 +41,7 @@ angular.module('schemaForm')
         //expose form controller on scope so that we don't force authors to use name on form
         scope.formCtrl = formCtrl;
 
-        scope.defaultGlobals = scope.$eval(attrs.defaultGlobals) || {visibility: '', category: ''};
+        scope.defaultGlobals = scope.$eval(attrs.defaultGlobals) || {visibility: '', category: '', prefix: ''};
 
         //We'd like to handle existing markup,
         //besides using it in our template we also

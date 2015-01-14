@@ -6,28 +6,28 @@
         "type": "string",
         "required": true,
         "pattern": "^[a-zA-Z]{2}\\s?\\d{5}$",
-        "visibility": "#restricted"
+        "visibility": "restricted"
       },
       "hasAutoIdentificationNumber": {
         "type": "boolean",
-        "visibility": "#open"
+        "visibility": "open"
       },
       "importAndCustomsCleared": {
         "type": "boolean",
         "required": true,
-        "visibility": "#open"
+        "visibility": "open"
       },
       "_isNotAllowedToBuy": {
         "type": "string",
         "required": true,
-        "visibility": "#open"
+        "visibility": "open"
       },
       "autoIdentificationNumber": {
         "type": "string",
         "required": true,
         "pattern": "^\\w{6}$",
         "maxLength": 6,
-        "visibility": "#open"
+        "visibility": "open"
       },
       "mileage": {
         "type": "integer",
@@ -35,66 +35,66 @@
         "minimum": 1,
         "maxLength": 6,
         "required": true,
-        "visibility": "#open"
+        "visibility": "open"
       },
       "intendsToMigrateInsurance": {
         "required": true,
         "type": "boolean",
-        "visibility": "#open"
+        "visibility": "open"
       },
       "oldInsuranceCompany": {
         "required": true,
         "type": "object",
-        "visibility": "#open"
+        "visibility": "open"
       },
       "customerPreviousInsurancePolicyholder": {
         "required": true,
         "type": "boolean",
-        "visibility": "#open"
+        "visibility": "open"
       },
       "previousInsurancePolicyholderNameSSN": {
         "required": true,
         "type": "string",
-        "visibility": "#open"
+        "visibility": "open"
       },
       "expirationDateKnown": {
         "required": true,
         "type": "boolean",
-        "visibility": "#open"
+        "visibility": "open"
       },
       "_expirationDateDay": {
         "type": "string",
         "required": true,
         "format": "date",
-        "visibility": "#open"
+        "visibility": "open"
       },
       "expirationDateDay": {
         "type": "string",
         "required": true,
         "format": "date",
-        "visibility": "#open"
+        "visibility": "open"
       },
       "insuranceCompany": {
         "required": true,
         "type": "object",
-        "visibility": "#open"
+        "visibility": "open"
       },
       "issueDay": {
         "type": "string",
         "required": true,
         "format": "date",
-        "visibility": "#open"
+        "visibility": "open"
       },
       "bankCompany": {
         "required": true,
         "type": "object",
-        "visibility": "#open"
+        "visibility": "open"
       },
       "oldLicensePlateNumber": {
         "required": true,
         "type": "string",
         "pattern": "^[a-zA-Z]{2}\\s?\\d{5}$",
-        "visibility": "#restricted"
+        "visibility": "restricted"
       }
     }
   },

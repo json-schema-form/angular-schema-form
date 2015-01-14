@@ -183,16 +183,17 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   var createModelName = function (form, defGlobals, key) {
     var res = '';
     if (angular.isDefined(form.schema)) {
-      var visibility = form.schema.visibility || defGlobals.visibility.visibility;
+      var visibility = form.schema.visibility || defGlobals.visibility;
+      var prefix = defGlobals.prefix || '';
 
       if (visibility) {
-        res += addDotOrHashNotaion(visibility);
+        res += addDotOrHashNotaion(prefix + visibility);
       }
 
       var category = form.schema.category || defGlobals.category;
 
       if (category) {
-        res += addDotOrHashNotaion(category);
+        res += addDotOrHashNotaion(prefix + category);
       }
     }
 
@@ -286,15 +287,16 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
               if (angular.isDefined(schema)) {
                 var visibility = schema.visibility || scope.defaultGlobals.visibility;
+                var prefix = scope.defaultGlobals.prefix || '';
 
                 if (visibility) {
-                  res += addDotOrHashNotaion(visibility);
+                  res += addDotOrHashNotaion(prefix + visibility);
                 }
 
                 var category = schema.category || scope.defaultGlobals.category;
 
                 if (category) {
-                  res += addDotOrHashNotaion(category);
+                  res += addDotOrHashNotaion(prefix + category);
                 }
               }
 
@@ -1620,7 +1622,7 @@ angular.module('schemaForm')
         //expose form controller on scope so that we don't force authors to use name on form
         scope.formCtrl = formCtrl;
 
-        scope.defaultGlobals = scope.$eval(attrs.defaultGlobals) || {visibility: '', category: ''};
+        scope.defaultGlobals = scope.$eval(attrs.defaultGlobals) || {visibility: '', category: '', prefix: ''};
 
         //We'd like to handle existing markup,
         //besides using it in our template we also
