@@ -138,15 +138,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               }
             };
 
-            scope.deleteRow = function(index) {
-              //form.deleteRowAction(index);
-              console.log('form.deleteRowAction(index);');
-            };
-
-            //scope.addRowClick = function(index) {
-            //  model.splice(index,1);
-            //};
-
             scope.$on('stepChange', function(e, options){
               if(e.defaultPrevented) {
                 return;

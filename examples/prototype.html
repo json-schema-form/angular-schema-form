@@ -58,11 +58,19 @@
             }
 
             $scope.modelData = {};
-//            $scope.modelData['question31'] = '123';
+
             $scope.modelData.previousDamagesTable = [
-                {'damage': 'd1', 'insurance':'i1'},
-                {'damage': 'd2', 'insurance':'i2'},
-                {'damage': 'd3', 'insurance':'i3'}
+                [
+                    {'damage': 'd1', 'insurance':'i1'},
+                    {'damage': 'd2', 'insurance':'i2'},
+                    {'damage': 'd3', 'insurance':'i3'},
+                ],
+                {
+                    deleteRowAction: function (index){
+                        var model = $scope.modelData.previousDamagesTable[0];
+                        model.splice(index,1);
+                    }
+                }
             ];
 
             window.md = $scope.modelData;

@@ -7,10 +7,10 @@
             <th></th>
         </thead>
         <tbody>
-            <tr ng-repeat="row in $$value$$" index="{{$index}}">
+            <tr ng-repeat="row in $$value$$[0]" index="{{$index}}">
                 <td ng-repeat="column in row" ng-bind="column"></td>
-                <td>Edit</td>
-                <td><a ng-click="deleteRow($index)">Delete</a></td>
+                <td >Edit</td>
+                <td><a ng-click="$$value$$[1].deleteRowAction($index)">Delete</a></td>
             </tr>
         </tbody>
     </table>
