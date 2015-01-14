@@ -8,7 +8,7 @@
             <tr ng-repeat="row in $$value$$" index="{{$index}}">
                 <td ng-repeat="column in row" ng-bind="column"></td>
                 <td ng-repeat="action in form.actions">
-                    <a ng-click="action.action(model, $$value$$, $parent.$index)" ng-bind="action.title"></a>
+                    <a ng-click="action.action($$value$$, $parent.$index, model)" ng-bind="action.title"></a>
                 </td>
             </tr>
         </tbody>
