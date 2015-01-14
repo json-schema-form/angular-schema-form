@@ -84,14 +84,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 //We do this manually since we need to bind ng-model properly and also
                 //for fieldsets to recurse properly.
                 var url = templateUrl(name, form);
+
                 $http.get(url, {cache: $templateCache}).then(function(res) {
                   var key = form.key ?
                             sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
 
-
                   scope.keyModelName = createModelName(form, scope.defaultGlobals, key);
 
                   var template = res.data.replace(/\$\$value\$\$/g, scope.keyModelName);
+
                   element.html(template);
                   $compile(element.contents())(scope);
                 });
@@ -136,6 +137,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 }
               }
             };
+
+            scope.deleteRow = function(index) {
+              //form.deleteRowAction(index);
+              console.log('form.deleteRowAction(index);');
+            };
+
+            //scope.addRowClick = function(index) {
+            //  model.splice(index,1);
+            //};
 
             scope.$on('stepChange', function(e, options){
               if(e.defaultPrevented) {

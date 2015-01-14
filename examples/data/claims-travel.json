@@ -182,6 +182,19 @@
                       "key": "question32",
                       "title": "Andre opplysninger om skaden?",
                       "type": "textarea"
+                    },
+                    {
+                      "key": "addRowButtonStep1",
+                      "type": "addrowbutton",
+
+                      "columnsContent": ["question31", "question32"],
+                      "title": "Add row"
+                    },
+                    {
+                      "key": "previousDamagesTable",
+                      "addRowAction": function() {hjghjghj gh jghj gh j},
+                      "type": "standarttable",
+                      "columnTitles": ["Tidligere skade", "Forsikrinsselscap"]
                     }
                   ]
                 }

@@ -1,0 +1,17 @@
+<h1>It's a table! yahoo!</h1>
+<div ng-show="showCondition()">
+    <table class="stb-table hoverable">
+        <thead>
+            <th ng-repeat="item in form.columnTitles">{{item}}</th>
+            <th></th>
+            <th></th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in $$value$$" index="{{$index}}">
+                <td ng-repeat="column in row" ng-bind="column"></td>
+                <td>Edit</td>
+                <td><a ng-click="deleteRow($index)">Delete</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

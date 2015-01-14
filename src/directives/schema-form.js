@@ -31,6 +31,7 @@ angular.module('schemaForm')
         this.evalInMainScope = function(expr, locals) {
           return $scope.$eval(expr, locals);
         };
+
       }],
       replace: false,
       restrict: 'A',
