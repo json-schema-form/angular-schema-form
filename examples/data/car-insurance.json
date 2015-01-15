@@ -119,6 +119,7 @@
           "validationMessage": "Vennligst oppgi registreringsnummer i riktig format, eks: AD12345",
           "infoMessage": "Vi trenger ditt bilnummer for å melde fra til bilregisteret om at du er forsikret. Gjelder forsikringen en nyregistert eller uregistrert bil, krysser du av på at du ikke har reg.nr og fyller inn understellsnummer",
           "title": "Registreringsnummer",
+          "subtitle": "Registreringsnummer",
           "type": "string",
           "formatterName": "carNumber",
           "placeholder": "Registreringsnummer",

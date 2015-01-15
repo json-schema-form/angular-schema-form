@@ -5,7 +5,7 @@
         <label ng-show="showTitle()">{{form.title}}</label>
         <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
     </div>
-    <div ng-bind-html="form.subtitle"></div>
+    <div ng-bind-html="form.subtitle" class="subtitle-wrapper"></div>
   <div class="btn-group">
     <label class="btn {{ (item.value === $$value$$) ? form.style.selected || 'btn-primary' : form.style.unselected || 'btn-primary'; }}"
            ng-class="{ active: item.value === $$value$$ }"

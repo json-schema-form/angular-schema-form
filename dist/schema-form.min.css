@@ -18,6 +18,9 @@ label.empty-view span {
 .label-wrapper span {
   margin-left: 5px;
 }
+.subtitle-wrapper {
+  margin-bottom: 10px;
+}
 .input-group.datePicker {
   width: 260px !important;
 }

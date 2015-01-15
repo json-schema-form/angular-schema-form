@@ -3,7 +3,7 @@
         <label ng-show="showTitle()">{{form.title}}</label>
         <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
     </div>
-    <div ng-bind-html="form.subtitle"></div>
+    <div ng-bind-html="form.subtitle" class="subtitle-wrapper"></div>
 
   <div class="stb-form-group al checkbox  has-feedback" ng-repeat="val in titleMapValues track by $index" >
       <input type="checkbox"
