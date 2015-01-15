@@ -184,13 +184,6 @@
                       "type": "textarea"
                     },
                     {
-                      "key": "addRowButtonStep1",
-                      "type": "addrowbutton",
-
-                      "columnsContent": ["question31", "question32"],
-                      "title": "Add row"
-                    },
-                    {
                       "key": "previousDamagesTable",
                       "addRowAction":  "",
                       "type": "standarttable",

@@ -51,7 +51,6 @@
         $http.get($scope.url).then(function(res){
             $scope.schema = res.data.schema;
             $scope.form   = res.data.form;
-            $scope.form[0].curStep = 0;
             $scope.form[0].finishIt = 'click()';
             $scope.click = function () {
                 console.log('fasf')
