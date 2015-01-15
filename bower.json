@@ -26,7 +26,6 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
-    "*.js",
     "*.json",
     "node_modules",
     "bower_components",
@@ -36,7 +35,9 @@
     "examples",
     "gulp",
     "CHANGELOG",
-    "LICENSE"
+    "LICENSE",
+    "gulpfile.js",
+    "karma.conf.js"
   ],
   "dependencies": {
     "angular": ">= 1.2",
