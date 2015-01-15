@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>Stb Webmanual Form Editor</title>
-    <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.css">
-    <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.date.css">
-    <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.time.css">
+    <!--<link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.css">-->
+    <!--<link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.date.css">-->
+    <!--<link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.time.css">-->
     <link rel="stylesheet" href="../bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css">
-    <link rel="stylesheet" href="../bower_components/stb-datetimepicker/dist/bootstrap-datetimepicker.min.css">
+    <!--<link rel="stylesheet" href="../bower_components/stb-datetimepicker/dist/bootstrap-datetimepicker.min.css">-->
     <link rel="stylesheet" href="../dist/schema-form.min.css">
     <link href="//elements.storebrand.no/storebrand.ny/0.47/css/stb-main.css" type="text/css" rel="stylesheet"/>
 </head>
@@ -15,6 +15,12 @@
 <style>
     .step-content {
         background: #efe8df;
+    }
+
+    .white-box {
+        background-color: white;
+        padding: 0 24px 24px;
+        margin-top: 24px;
     }
 </style>
 
@@ -40,6 +46,7 @@
 <script type="text/javascript" src="../dist/stb-webmanual-decorator.min.js"></script>
 <script type="text/javascript">
     angular.module('test',['schemaForm']).controller('TestCtrl', function($scope,$http){
+
         $scope.url = 'data/claims-travel.json';
         $http.get($scope.url).then(function(res){
             $scope.schema = res.data.schema;
@@ -48,7 +55,14 @@
             $scope.click = function () {
                 console.log('fasf')
             }
+
             $scope.modelData = { currentStep: 1 };
+
+            $scope.modelData.previousDamagesTable = [
+                {'damage': 'd1', 'insurance':'i1'},
+                {'damage': 'd2', 'insurance':'i2'},
+                {'damage': 'd3', 'insurance':'i3'}
+            ];
 
             window.md = $scope.modelData;
         });
@@ -59,6 +73,7 @@
                 alert('You did it!');
             }
         };
+
     });
 </script>
 </body>

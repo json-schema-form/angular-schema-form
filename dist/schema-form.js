@@ -216,14 +216,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 //We do this manually since we need to bind ng-model properly and also
                 //for fieldsets to recurse properly.
                 var url = templateUrl(name, form);
+
                 $http.get(url, {cache: $templateCache}).then(function(res) {
                   var key = form.key ?
                             sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
 
-
                   scope.keyModelName = createModelName(form, scope.defaultGlobals, key);
 
                   var template = res.data.replace(/\$\$value\$\$/g, scope.keyModelName);
+
                   element.html(template);
                   $compile(element.contents())(scope);
                 });
@@ -1613,6 +1614,7 @@ angular.module('schemaForm')
         this.evalInMainScope = function(expr, locals) {
           return $scope.$eval(expr, locals);
         };
+
       }],
       replace: false,
       restrict: 'A',

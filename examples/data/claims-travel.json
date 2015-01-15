@@ -228,6 +228,11 @@
                       "key": "question32",
                       "title": "Andre opplysninger om skaden?",
                       "type": "textarea"
+                    },
+                    {
+                      "key": "previousDamagesTable",
+                      "type": "standarttable",
+                      "columnTitles": ["Tidligere skade", "Forsikrinsselscap"]
                     }
                   ]
                 }
