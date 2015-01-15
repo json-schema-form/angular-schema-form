@@ -395,7 +395,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
 
-            var updateInfoDate = function (date, alwaysAddMonlthlyDifferent) {
+            var updateInfoDate = function (date) {
               var today = moment();
               var minMonthlyDifference = scope.form.minMonthlyDifference || 0;
               var maxMonthlyDifference = scope.form.maxMonthlyDifference;
@@ -408,49 +408,25 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               today.minute(0);
               today.hours(0);
 
-              if (maxMonthlyDifference && additionalMonthlyDifference) {
-
-                if (alwaysAddMonlthlyDifferent
-                    || (selectedDate.toDate().getTime() < moment(today).add(minMonthlyDifference, 'Month').toDate().getTime())
-                    || (selectedDate.toDate().getTime() > moment(today).add(maxMonthlyDifference, 'Month').toDate().getTime())) {
+                if (!date ||
+                ((maxMonthlyDifference && additionalMonthlyDifference) &&
+                ((selectedDate.toDate().getTime() < moment(today).add(minMonthlyDifference, 'Month').toDate().getTime())
+                || (selectedDate.toDate().getTime() > moment(today).add(maxMonthlyDifference, 'Month').toDate().getTime())))) {
                   selectedDate = today.add(additionalMonthlyDifference, 'Month').add(additionalDailyDifference, 'Day');
                 }
-              }
 
               return selectedDate;
             };
 
-            scope.setDateWatcher = function () {
-              if (scope.form.modelKey) {
-                var value = function () {
-                  return scope.$eval(lookupForKey(scope.form.dateKey));
-                };
-                scope.$watch(value, function (newDate) {
-                  if (newDate) {
-                    var model = $parse(lookupForKey(scope.form.modelKey));
-                    var selectedDate = updateInfoDate(newDate);
-                    model.assign(scope, selectedDate.format('YYYY-MM-DD'));
-                  }
-                });
-              }
-            };
-
             scope.getInfoDate = function () {
-              var date = scope.$eval(lookupForKey(scope.form.dateKey));
-              var selectedDate;
-
-              if (date) {
-                selectedDate = updateInfoDate(date);
-              } else if (scope.form.hasDefaultDateValue) {
-
-                selectedDate = updateInfoDate(null, true);
+              if (evalExpression(scope.form.expression)) {
+                var date = scope.form.dateKey && scope.$eval(lookupForKey(scope.form.dateKey));
+                var selectedDate = updateInfoDate(date);
                 var model = $parse(lookupForKey(scope.form.modelKey));
                 model.assign(scope, selectedDate.format('YYYY-MM-DD'));
-
+                moment.locale(scope.form.encoding);
+                return moment(selectedDate).format(scope.form.format);
               }
-
-              moment.locale(scope.form.encoding);
-              return moment(selectedDate).format(scope.form.format);
 
             };
 

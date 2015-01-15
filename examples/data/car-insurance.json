@@ -2,32 +2,42 @@
   "schema": {
     "type": "object",
     "properties": {
+      "bonusLevelCode": {
+        "type": "string",
+        "visibility": "group_open",
+        "category": "group_price"
+      },
+      "mortgagee": {
+        "type": "boolean",
+        "visibility": "group_open",
+        "category": "group_price"
+      },
       "licensePlateNumber": {
         "type": "string",
         "required": true,
         "pattern": "^[a-zA-Z]{2}\\s?\\d{5}$",
-        "visibility": "restricted"
+        "visibility": "group_restricted"
       },
       "hasAutoIdentificationNumber": {
         "type": "boolean",
-        "visibility": "open"
+        "visibility": "group_open"
       },
       "importAndCustomsCleared": {
         "type": "boolean",
         "required": true,
-        "visibility": "open"
+        "visibility": "group_open"
       },
       "_isNotAllowedToBuy": {
         "type": "string",
         "required": true,
-        "visibility": "open"
+        "visibility": "group_open"
       },
       "autoIdentificationNumber": {
         "type": "string",
         "required": true,
         "pattern": "^\\w{6}$",
         "maxLength": 6,
-        "visibility": "open"
+        "visibility": "group_open"
       },
       "mileage": {
         "type": "integer",
@@ -35,66 +45,66 @@
         "minimum": 1,
         "maxLength": 6,
         "required": true,
-        "visibility": "open"
+        "visibility": "group_open"
       },
       "intendsToMigrateInsurance": {
         "required": true,
         "type": "boolean",
-        "visibility": "open"
+        "visibility": "group_open"
       },
       "oldInsuranceCompany": {
         "required": true,
         "type": "object",
-        "visibility": "open"
+        "visibility": "group_open"
       },
       "customerPreviousInsurancePolicyholder": {
         "required": true,
         "type": "boolean",
-        "visibility": "open"
+        "visibility": "group_ignored"
       },
       "previousInsurancePolicyholderNameSSN": {
         "required": true,
         "type": "string",
-        "visibility": "open"
+        "visibility": "group_ignored"
       },
       "expirationDateKnown": {
         "required": true,
         "type": "boolean",
-        "visibility": "open"
+        "visibility": "group_ignored"
       },
       "_expirationDateDay": {
         "type": "string",
         "required": true,
         "format": "date",
-        "visibility": "open"
+        "visibility": "group_ignored"
       },
-      "expirationDateDay": {
-        "type": "string",
-        "required": true,
-        "format": "date",
-        "visibility": "open"
-      },
-      "insuranceCompany": {
+      "bonusInsuranceCompany": {
         "required": true,
         "type": "object",
-        "visibility": "open"
+        "visibility": "group_open"
       },
-      "issueDay": {
+      "_issueDay": {
         "type": "string",
         "required": true,
         "format": "date",
-        "visibility": "open"
+        "visibility": "group_ignored"
+      },
+      "issueDate": {
+        "type": "string",
+        "required": true,
+        "format": "date",
+        "visibility": "group_open"
       },
       "bankCompany": {
         "required": true,
         "type": "object",
-        "visibility": "open"
+        "visibility": "group_open"
       },
       "oldLicensePlateNumber": {
         "required": true,
         "type": "string",
         "pattern": "^[a-zA-Z]{2}\\s?\\d{5}$",
-        "visibility": "restricted"
+        "visibility": "group_restricted"
       }
     }
   },
@@ -107,7 +117,7 @@
         {
           "key": "licensePlateNumber",
           "validationMessage": "Vennligst oppgi registreringsnummer i riktig format, eks: AD12345",
-          "infoMessage": ["Samtykket er frivillig og du kan når som helst trekke det tilbake.", "Storebrand-konsernet betyr Storebrand Livsforsikring AS, Storebrand Bank ASA, Storebrand Fondene AS, Storebrand Kapitalforvaltning AS, Storebrand Forsikring AS, Storebrand Helseforsikring AS, Storebrand Finansiell Rådgivning AS, samt eventuelle senere etablerte selskaper med personkunder."],
+          "infoMessage": "Vi trenger ditt bilnummer for å melde fra til bilregisteret om at du er forsikret. Gjelder forsikringen en nyregistert eller uregistrert bil, krysser du av på at du ikke har reg.nr og fyller inn understellsnummer",
           "title": "Registreringsnummer",
           "type": "string",
           "formatterName": "carNumber",
@@ -126,10 +136,8 @@
             {
               "key": "importAndCustomsCleared",
               "title": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge?",
-              "subtitle": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge?",
-              "infoMessage": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge?",
               "validationMessage": "Importeres bilen fra utlandet og er ennå ikke fortollet i Norge?",
-              "type": "radios",
+              "type": "radios-inline",
               "titleMap": [
                 {"value": true, "name": "Ja"},
                 {"value": false, "name": "Nei"}
@@ -169,7 +177,6 @@
         },
         {
           "key": "bankCompany",
-          "placeholder": "hey you",
           "validationMessage": "Vennligst gjør et valg",
           "infoMessage": "Dersom du har tatt opp lån med sikkerhet i bilen så er vi lovpålagt å varsle din långiver om du selger bilen",
           "title": "I hvilket selskap har du lånt penger til bilen din?",
@@ -1836,7 +1843,6 @@
           "items": [
             {
               "key": "oldInsuranceCompany",
-              "placeholder": "hey you",
               "type": "dropdown",
               "validationMessage": "Vennligst gjør et valg",
               "infoMessage": "Vi sender oppsigelsen til det selskap du oppgir",
@@ -3375,7 +3381,7 @@
             },
             {
               "type": "infodate",
-              "modelKey": "expirationDateDay",
+              "modelKey": "issueDate",
               "dateKey": "_expirationDateDay",
               "maxMonthlyDifference": 2,
               "minMonthlyDifference": 0,
@@ -3386,7 +3392,18 @@
               "format": "Do MMMM YYYY",
               "staticMessage": "Forsikringen vil gjelde fra",
               "dependencies": ["intendsToMigrateInsurance", "expirationDateKnown", "_expirationDateDay"],
-              "expression": "intendsToMigrateInsurance === true && (expirationDateKnown === false || _expirationDateDay !== undefined)"
+              "expression": "intendsToMigrateInsurance === true && expirationDateKnown === true &&  _expirationDateDay !== undefined"
+            },
+            {
+              "type": "infodate",
+              "modelKey": "issueDate",
+              "additionalMonthlyDifference": 1,
+              "additionalDailyDifference": 1,
+              "encoding": "nn",
+              "format": "Do MMMM YYYY",
+              "staticMessage": "Forsikringen vil gjelde fra",
+              "dependencies": ["intendsToMigrateInsurance", "expirationDateKnown"],
+              "expression": "intendsToMigrateInsurance === true && expirationDateKnown === false"
             }
           ],
           "dependencies": ["intendsToMigrateInsurance"],
@@ -3403,13 +3420,12 @@
             },
             {
               "type": "help",
-              "helpvalue": "<div><p><strong>Hvilken bil og hvilket forsikringsselskap skal bonusen overføres fra?</strong></p></div>",
+              "helpvalue": "<p>Hvilken bil og hvilket forsikringsselskap skal bonusen overføres fra?</p>",
               "dependencies": ["intendsToMigrateInsurance", "bonusLevelCode"],
               "expression": "intendsToMigrateInsurance === false && bonusLevelCode !== '11'"
             },
             {
-              "key": "insuranceCompany",
-              "placeholder": "hey you",
+              "key": "bonusInsuranceCompany",
               "type": "dropdown",
               "validationMessage": "Oppgi hvilket forsikringsselskap bonusen skal overføres fra",
               "infoMessage": "Vi sender bonusforespørsel til det selskap du oppgir",
@@ -4908,7 +4924,7 @@
               "expression": "intendsToMigrateInsurance === false && bonusLevelCode !== '11'"
             },
             {
-              "key": "issueDay",
+              "key": "_issueDay",
               "validationMessage": "Vennligst fyll ut dato",
               "infoMessage": "Du kan ikke velge dato tilbake i tid. Du kan velge \"gjelder fra dato\" inntil 3 måneder frem i tid dersom det er ønskelig",
               "title": "Når skal forsikringen gjelde fra",
@@ -4919,12 +4935,13 @@
             },
             {
               "type": "infodate",
-              "dateKey": "issueDay",
+              "dateKey": "_issueDay",
+              "modelKey": "issueDate",
               "encoding": "nn",
               "format": "Do MMMM YYYY",
               "staticMessage": "Forsikringen vil gjelde fra",
-              "dependencies": ["issueDay"],
-              "expression": "issueDay !== undefined"
+              "dependencies": ["intendsToMigrateInsurance", "_issueDay"],
+              "expression": "intendsToMigrateInsurance === false && _issueDay !== undefined"
             }
           ],
           "dependencies": ["intendsToMigrateInsurance"],
