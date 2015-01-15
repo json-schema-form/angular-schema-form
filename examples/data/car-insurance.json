@@ -169,6 +169,7 @@
         },
         {
           "key": "bankCompany",
+          "placeholder": "hey you",
           "validationMessage": "Vennligst gjør et valg",
           "infoMessage": "Dersom du har tatt opp lån med sikkerhet i bilen så er vi lovpålagt å varsle din långiver om du selger bilen",
           "title": "I hvilket selskap har du lånt penger til bilen din?",
@@ -1835,6 +1836,7 @@
           "items": [
             {
               "key": "oldInsuranceCompany",
+              "placeholder": "hey you",
               "type": "dropdown",
               "validationMessage": "Vennligst gjør et valg",
               "infoMessage": "Vi sender oppsigelsen til det selskap du oppgir",
@@ -3407,6 +3409,7 @@
             },
             {
               "key": "insuranceCompany",
+              "placeholder": "hey you",
               "type": "dropdown",
               "validationMessage": "Oppgi hvilket forsikringsselskap bonusen skal overføres fra",
               "infoMessage": "Vi sender bonusforespørsel til det selskap du oppgir",

@@ -17,7 +17,7 @@ angular.module('schemaForm').directive('stbDropdown', ['$timeout', '$parse', fun
         return el.css('display') === 'none';
       }, function (value) {
         if (!value) {
-          $(element).chosen().unbind('change', listener).change(listener);
+          $(element).chosen({placeholder_text: scope.form.placeholder}).unbind('change', listener).change(listener);
         }
       });
     }
