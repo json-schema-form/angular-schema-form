@@ -4,7 +4,7 @@
     "dist/schema-form.min.js",
     "dist/bootstrap-decorator.min.js"
   ],
-  "version": "0.7.8",
+  "version": "0.7.9",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>",
@@ -26,7 +26,6 @@
   "license": "MIT",
   "ignore": [
     "**/.*",
-    "*.js",
     "*.json",
     "node_modules",
     "bower_components",
@@ -36,7 +35,9 @@
     "examples",
     "gulp",
     "CHANGELOG",
-    "LICENSE"
+    "LICENSE",
+    "gulpfile.js",
+    "karma.conf.js"
   ],
   "dependencies": {
     "angular": ">= 1.2",
