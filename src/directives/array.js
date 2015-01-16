@@ -170,7 +170,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
                 // Apparently the fastest way to clear an array, readable too.
                 // http://jsperf.com/array-destroy/32
                 while (arr.length > 0) {
-                  arr.shift();
+                  arr.pop();
                 }
 
                 form.titleMap.forEach(function(item, index) {
