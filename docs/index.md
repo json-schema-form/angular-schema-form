@@ -627,7 +627,7 @@ As an object:
 }
 ```
 
-The submit button has btn-primary as default. The button has btn-default as default.
+The submit and other buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 {
@@ -652,7 +652,7 @@ the ```sf-schema``` directive.
 [
 ```
 
-The submit button has btn-primary as default. The button has btn-default as default.
+The submit and other buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 [
@@ -725,7 +725,7 @@ function FormCtrl($scope) {
 ```
 
 
-With *radiobuttons*, both selected and unselected buttons have btn-primary as default.
+With *radiobuttons*, both selected and unselected buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 function FormCtrl($scope) {
