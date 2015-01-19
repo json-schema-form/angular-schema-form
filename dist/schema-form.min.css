@@ -144,8 +144,7 @@ label.empty-view span {
   margin-bottom: -5px;
 }
 .info-button {
-  background-position: -100px -800px !important;
-  margin-bottom: -3px;
+  margin-bottom: -6px;
   cursor: pointer;
 }
 .row.white-box {
