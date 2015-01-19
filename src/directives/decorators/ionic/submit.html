@@ -1,0 +1,10 @@
+<input type="submit"
+       class="button button-block button-positive {{ form.style || 'button-positive' }} {{form.fieldHtmlClass}}"
+       value="{{form.title}}"
+       ng-disabled="form.readonly"
+       ng-if="form.type === 'submit'">
+<button class="button button-block button-positive {{ form.style || 'button-positive' }}"
+        type="submit"
+        ng-click="buttonClick($event,form)"
+        ng-disabled="form.readonly"
+        ng-if="form.type !== 'submit'">{{form.title}}</button>

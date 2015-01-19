@@ -1,0 +1,39 @@
+<!-- <div class="form-group {{form.htmlClass}} schema-form-select"
+     ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false}">
+  <label class="control-label" ng-show="showTitle()">
+    {{form.title}}
+  </label>
+  <select ng-model="$$value$$"
+          ng-model-options="form.ngModelOptions"
+          ng-disabled="form.readonly"
+          sf-changed="form"
+          class="form-control {{form.fieldHtmlClass}}"
+          schema-validate="form"
+          ng-options="item.value as item.name for item in form.titleMap"
+          name="{{form.key.slice(-1)[0]}}">
+  </select>
+  <div class="help-block"
+       ng-show="(hasError() && errorMessage(schemaError())) || form.description"
+       ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
+</div>
+ -->
+
+ <label class="item item-input item-select {{form.htmlClass}} schema-form-select"
+    ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false}">
+    <label class="input-label" ng-show="showTitle()">
+    {{form.title}}
+  </label>
+     <select ng-model="$$value$$"
+              ng-model-options="form.ngModelOptions"
+              ng-disabled="form.readonly"
+              sf-changed="form"
+              class="{{form.fieldHtmlClass}}"
+              schema-validate="form"
+              ng-options="item.value as item.name for item in form.titleMap"
+              name="{{form.key.slice(-1)[0]}}">
+      </select>
+
+      <div class="help-block"
+             ng-show="(hasError() && errorMessage(schemaError())) || form.description"
+             ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
+  </label>

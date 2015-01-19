@@ -1,0 +1,33 @@
+<!-- <div class="checkbox schema-form-checkbox {{form.htmlClass}}"
+     ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+  <label>
+    <input type="checkbox"
+           sf-changed="form"
+           ng-disabled="form.readonly"
+           ng-model="$$value$$"
+           ng-model-options="form.ngModelOptions"
+           schema-validate="form"
+           class="{{form.fieldHtmlClass}}"
+           name="{{form.key.slice(-1)[0]}}">
+    <span ng-bind-html="form.title"></span>
+  </label>
+
+  <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
+</div> -->
+
+
+<li class="item item-checkbox schema-form-checkbox {{form.htmlClass}}"
+  ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+     <label class="checkbox">
+        <input type="checkbox"
+                 sf-changed="form"
+                 ng-disabled="form.readonly"
+                 ng-model="$$value$$"
+                 ng-model-options="form.ngModelOptions"
+                 schema-validate="form"
+                 class="{{form.fieldHtmlClass}}"
+                 name="{{form.key.slice(-1)[0]}}">
+          <span ng-bind-html="form.title"></span>
+     </label>
+     <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
+  </li>

@@ -1,0 +1,13 @@
+<div class="btn-group schema-form-actions {{form.htmlClass}}">
+  <input ng-repeat-start="item in form.items"
+         type="submit"
+         class="btn {{ item.style || 'btn-default' }} {{form.fieldHtmlClass}}"
+         value="{{item.title}}"
+         ng-if="item.type === 'submit'">
+  <button ng-repeat-end
+          class="btn {{ item.style || 'btn-default' }} {{form.fieldHtmlClass}}"
+          type="button"
+          ng-disabled="form.readonly"
+          ng-if="item.type !== 'submit'"
+          ng-click="buttonClick($event,item)">{{item.title}}</button>
+</div>
