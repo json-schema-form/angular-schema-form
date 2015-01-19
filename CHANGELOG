@@ -1,3 +1,38 @@
+v0.7.9
+------
+* Fixed a wrongful glob in bower.json that caused files to be missing in the bower install. Thanks, @mohsen1 for reporting it.
+
+v0.7.8
+------
+* Thanks to @burdiuz for finding a memory leak issue and finding a solution. And thanks to @davidlgj for implementing that solution.
+* Post render event, thanks @mrijken
+* Events documentation, thanks @Dervisevic
+* startEmpty documentation, thanks @davidlj
+* npm and bower updates, thanks @Dervisevic
+* x-schema-form attribute, thanks @davidlgj
+* htmlClass and fieldHtmlClass form options, thanks @davidlgj
+
+v0.7.7
+------
+ * Array ref changes in model updates form, thanks @Sandreu
+ * Tabarray & array fixes, thanks @Sandreu, @davidlgj
+ * Use objectpath more generically to fix requirejs issues, thanks @mike-marcacci
+ * README and documentation updates, thanks @davidlgj, @engelfrost, @Dervisevic, @stramel, @Sandreu
+ * Expanded documentation on custom validation messages, thanks @Dervisevic
+ * Deep structure tests, thanks @Sandreu
+ * SF-insert-field documentation, thanks @davidlgj
+ * Array model watch & array defaults, thanks @Sandreu
+
+v0.7.6
+------
+ * Fixed broken bower specification.
+ * Updated README and documentation.
+
+v0.7.5
+------
+ * Bracket notation for reserved words to make IE8 happier,thanks @jibwa
+ * Clarification of module loading in docs, thanks @CoderAjay
+
 v0.7.4
 ------
  * bower.json fixes, thanks @mike-marcacci, @morrislaptop
@@ -9,7 +44,7 @@ v0.7.4
  * step="any" so a HTML5 input doesn't default to 1 and break float validation
  * Allow for a pre-existing layout where fields will be inserted, thanks @ebrehault
    Docs are missing but lock at PR #112.
- * Better "readonly" support, thanks @mike-marcacci! 
+ * Better "readonly" support, thanks @mike-marcacci!
 
 v0.7.3
 ------

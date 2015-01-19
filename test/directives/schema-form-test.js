@@ -173,17 +173,17 @@ describe('directive',function(){
     });
   });
 
-  it('should preserve existing html and insert fields in matching slots',function(){
+  it('should preserve existing html and insert fields in matching slots', function() {
 
-    inject(function($compile,$rootScope){
+    inject(function($compile, $rootScope){
       var scope = $rootScope.$new();
       scope.person = {};
 
       scope.schema = exampleSchema;
 
-      scope.form = ["*"];
+      scope.form = ['*'];
 
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"><ul><li sf-insert-field="name"></li></ul></form>');
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"><ul><li sf-insert-field="[\'name\']"></li></ul></form>');
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
@@ -192,7 +192,7 @@ describe('directive',function(){
       tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
     });
   });
-  
+
 
   it('should handle submit buttons',function(){
 
@@ -593,7 +593,63 @@ describe('directive',function(){
     });
   });
 
-  it('should handle schema form defaults in deep structure',function(){
+  it('should handle schema form default in deep structure',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {
+        name: 'Foobar'
+      };
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "props" : {
+            "type": "object",
+            "title": "Person",
+            "properties": {
+              "name": {
+                "type": "string",
+                "default": "Name"
+              },
+              "nick": {
+                "type": "string",
+                "default": "Nick"
+              },
+              "alias": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      };
+
+      //The form defines a fieldset for person, and changes the order of fields
+      //but titles should come from the schema
+      scope.form = [{
+        type: 'fieldset',
+        key:  'props',
+        items: [
+          'props.nick',
+          'props.name',
+          'props.alias'
+        ]
+      }];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      scope.person.props.name.should.be.equal('Name');
+      scope.person.props.nick.should.be.equal('Nick');
+      expect(scope.person.props.alias).to.be.undefined;
+
+    });
+  });
+
+
+  it('should handle schema form titles in deep structure',function(){
 
     inject(function($compile,$rootScope){
       var scope = $rootScope.$new();
@@ -647,6 +703,56 @@ describe('directive',function(){
       labels.eq(0).text().should.equal('Nick');
       labels.eq(1).text().should.equal('Name');
       labels.eq(2).text().should.equal('Alias');
+
+    });
+  });
+
+  it('should handle schema form default in deep structure with array',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {
+        "arr":[]
+      };
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "arr" : {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "title": "Person",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "Name"
+                },
+                "nick": {
+                  "type": "string",
+                  "default": "Nick"
+                },
+                "alias": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      };
+
+      //The form defines a fieldset for person, and changes the order of fields
+      //but titles should come from the schema
+      scope.form = ['*'];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      scope.person.arr[0].name.should.be.equal('Name');
+      scope.person.arr[0].nick.should.be.equal('Nick');
+      expect(scope.person.arr[0].alias).to.be.undefined;
 
     });
   });
@@ -880,12 +986,9 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
       //Radiobuttons uninitialized and both styles
@@ -896,10 +999,8 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
@@ -911,11 +1012,9 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
       //Radiobuttons uninitialized and only unselected style
@@ -926,10 +1025,8 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
@@ -942,11 +1039,9 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
       //Radiobuttons initialized and both styles
@@ -957,10 +1052,8 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
@@ -972,11 +1065,9 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
       //Radiobuttons initialized and only unselected style
@@ -987,10 +1078,8 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-primary').should.be.true;
-      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
@@ -1152,16 +1241,12 @@ describe('directive',function(){
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).children().length.should.be.equal(1);
       tmpl.children().eq(0).children().eq(0).children().length.should.be.eq(4);
-      tmpl.children().eq(0).children().eq(0).children().eq(0).hasClass('btn-primary').should.be.true;
       tmpl.children().eq(0).children().eq(0).children().eq(0).hasClass('btn-success').should.be.false;
       tmpl.children().eq(0).children().eq(0).children().eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).children().eq(0).children().eq(1).hasClass('btn-danger').should.be.false;
-      tmpl.children().eq(0).children().eq(0).children().eq(2).hasClass('btn-primary').should.be.false;
       tmpl.children().eq(0).children().eq(0).children().eq(2).hasClass('btn-success').should.be.true;
       tmpl.children().eq(0).children().eq(0).children().eq(3).hasClass('btn-default').should.be.false;
       tmpl.children().eq(0).children().eq(0).children().eq(3).hasClass('btn-danger').should.be.true;
-
-
 
     });
   });
@@ -1619,5 +1704,78 @@ describe('directive',function(){
       tmpl.children().eq(0).find('select').eq(0).find('option').eq(2).text().trim().should.be.eq('The A');
     });
   });
+
+
+  it('should update array form on model array ref change',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {
+        names:[
+          {
+            firstname: 'Bill',
+            lastname: 'Murray'
+          },{
+            firstname: 'Ghost',
+            lastname: 'Buster'
+          }
+        ]
+      };
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "names": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "title": "subform",
+              "properties": {
+                "firstname": {
+                  "type": "string"
+                },
+                "lastname": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      };
+
+      scope.form = ["*"];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).find('ol').children().length.should.be.eq(2);
+
+      var new_names = [
+          {
+            firstname: 'Bill',
+            lastname: 'Murray'
+          },
+          {
+            firstname: 'Harold',
+            lastname: 'Ramis'
+          },{
+            firstname: 'Dan',
+            lastname: 'Aykroyd'
+          },{
+            firstname: 'Ghost',
+            lastname: 'Buster'
+          }
+        ];
+
+      scope.person.names = new_names;
+
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).find('ol').children().length.should.be.eq(4);
+    });
+  });
+
 
 });

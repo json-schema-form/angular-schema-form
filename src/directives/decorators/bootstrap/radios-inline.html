@@ -1,12 +1,15 @@
-<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+<div class="form-group schema-form-radios-inline {{form.htmlClass}}"
+     ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
   <div>
       <label class="radio-inline" ng-repeat="item in form.titleMap" >
       <input type="radio"
+             class="{{form.fieldHtmlClass}}"
              sf-changed="form"
              ng-disabled="form.readonly"
              ng-model="$$value$$"
-             ng-value="item.value">
+             ng-value="item.value"
+             name="{{form.key.slice(-1)[0]}}">
       <span ng-bind-html="item.name"></span>
     </label>
   </div>
