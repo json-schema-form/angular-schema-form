@@ -21,6 +21,16 @@ label.empty-view span {
 .subtitle-wrapper {
   margin-bottom: 10px;
 }
+.input-group.datePicker {
+  width: 260px !important;
+}
+.input-group.datePicker input {
+  min-width: 100px;
+  background-color: white;
+}
+.input-group.datePicker i.form-control-feedback {
+  right: inherit;
+}
 .stb-form-group {
   display: inline-block;
 }
