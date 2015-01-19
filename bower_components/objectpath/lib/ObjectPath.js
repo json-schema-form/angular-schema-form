@@ -68,6 +68,18 @@
 
 		normalize: function(data, quote){
 			return ObjectPath.stringify(Array.isArray(data) ? data : ObjectPath.parse(data), quote);
+		},
+
+		// Angular
+		registerModule: function(angular) {
+			angular.module('ObjectPath', []).provider('ObjectPath', function(){
+				this.parse = ObjectPath.parse;
+				this.stringify = ObjectPath.stringify;
+				this.normalize = ObjectPath.normalize;
+				this.$get = function(){
+					return ObjectPath;
+				};
+			});
 		}
 	};
 
@@ -83,20 +95,9 @@
 		exports.ObjectPath = ObjectPath;
 	}
 
-	// Angular
-	else if (typeof angular === 'object') {
-		angular.module('ObjectPath', []).provider('ObjectPath', function(){
-			this.parse = ObjectPath.parse;
-			this.stringify = ObjectPath.stringify;
-			this.normalize = ObjectPath.normalize;
-			this.$get = function(){
-				return ObjectPath;
-			};
-		});
-	}
-
-	// Browser global.
+	// Browser global
 	else {
 		window.ObjectPath = ObjectPath;
 	}
+	
 }();
