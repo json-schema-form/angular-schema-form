@@ -170,7 +170,7 @@
           "key": "mileage",
           "validationMessage": "Ugyldig verdi for kilometerstand.",
           "infoMessage": "'Kilometerstand leser du av på bilen din. Riktig kilometerstand er viktig i et eventuelt erstatningsoppgjør",
-          "formatterName": "number",
+          "type": "number",
           "title": "Kilometerstand",
           "placeholder": "Kilometerstand",
           "dependencies": ["importAndCustomsCleared"],

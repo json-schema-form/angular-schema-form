@@ -1,0 +1,33 @@
+<div ng-show="showCondition()">
+    <div class="label-wrapper">
+        <label ng-show="showTitle()">{{form.title}}</label>
+        <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
+    </div>
+    <div ng-bind-html="form.subtitle" class="subtitle-wrapper"></div>
+
+    <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
+        <small class="help-block">
+            <span class="stb-color-sprite-small warning circle"></span>
+            <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+        </small>
+    </span>
+    <div class="stb-form-group" ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() && conditionalValidationSuccess(), 'has-feedback': form.feedback !== false }">
+        <input type="tel"
+               ng-show="form.key"
+               type="{{form.type}}"
+               sf-changed="form"
+               id="{{form.id}}"
+               placeholder="{{form.placeholder}}"
+               ng-model-options="form.ngModelOptions"
+               min="form.schema.minimum"
+               max="form.schema.maximum"
+               ui-number-mask="0"
+               ng-model="$$value$$"
+               schema-validate="form"
+               ng-disabled="disabledElement()">
+
+        <i class="form-control-feedback glyphicon"
+           ng-show="hasError() || hasSuccess() && conditionalValidationSuccess()"
+           ng-class="{'glyphicon-remove': !disabledElement() && hasError(), 'glyphicon-ok': !disabledElement() && hasSuccess() && conditionalValidationSuccess()}"></i>
+    </div>
+</div>

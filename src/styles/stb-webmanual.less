@@ -25,25 +25,8 @@ label.empty-view {
   margin-bottom: 10px;
 }
 
-//datepicker
-.input-group.datePicker {
-  width: 260px !important;
-
-  input {
-    min-width: 100px;
-    background-color: white;
-  }
-
-  i.form-control-feedback {
-    right: inherit;
-  }
-}
-
 //default
 .stb-form-group {
-  &:not(.checkboxes) {
-    width: inherit !important;
-  }
   display: inline-block;
 
   &.radios {
@@ -66,6 +49,12 @@ label.empty-view {
 
   &.select-wrapper {
     width: 260px !important;
+  }
+
+  &.checkboxes {
+    label {
+      max-width: inherit;
+    }
   }
 
 }
@@ -133,8 +122,8 @@ label.empty-view {
     .msgText {
       width: 100%;
       border-left: 1px solid black;
-      padding: 0 0 0 24px;
-      margin-top: 24px;
+      margin-top: 12px;
+      margin-bottom: 0 !important;
       display: block;
 
       p {

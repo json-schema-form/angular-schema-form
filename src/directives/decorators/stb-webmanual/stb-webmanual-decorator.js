@@ -30,7 +30,8 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     successbox: base + 'successbox.html',
     errorbox: base + 'errorbox.html',
     infodate: base + 'date-info.html',
-    whitebox: base + 'white-box.html'
+    whitebox: base + 'white-box.html',
+    number: base + 'number.html'
   }, [
     function(form) {
       if (form.readonly && form.key && form.type !== 'fieldset') {
@@ -59,6 +60,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     'radios-inline': base + 'radios-inline.html',
     radiobuttons: base + 'radio-buttons.html',
     whitebox: base + 'white-box.html',
+    number: base + 'number.html',
     steps: base + 'steps.html',
     file: base + 'file.html'
   });

@@ -22,8 +22,16 @@ try {
 
 try {
   //This throws an expection if module does not exist.
+  angular.module('ui.utils.masks');
+  deps.push('ui.utils.masks');
+} catch (e) {}
+
+try {
+  //This throws an expection if module does not exist.
   angular.module('ui.bootstrap');
   deps.push('ui.bootstrap');
 } catch (e) {}
 
-angular.module('schemaForm', deps);
+angular.module('schemaForm', deps).run(['$locale', function ($locale) {
+  $locale.NUMBER_FORMATS.GROUP_SEP = ' ';
+}]);
