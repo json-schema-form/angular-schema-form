@@ -22,6 +22,8 @@ gulp.task('ionic', function() {
   stream.queue(gulp.src('./src/directives/decorators/ionic/*.js'));
 
   stream.done()
+  .pipe(concat('ionic-decorator.js'))
+  .pipe(gulp.dest('./dist/'))
   .pipe(concat('ionic-decorator.min.js'))
   .pipe(uglify())
   .pipe(gulp.dest('./dist/'));
