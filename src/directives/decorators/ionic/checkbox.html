@@ -16,7 +16,7 @@
 </div> -->
 
 
-<li class="item item-checkbox schema-form-checkbox {{form.htmlClass}}"
+<div class="item item-checkbox schema-form-checkbox {{form.htmlClass}}"
   ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
      <label class="checkbox">
         <input type="checkbox"
@@ -27,7 +27,7 @@
                  schema-validate="form"
                  class="{{form.fieldHtmlClass}}"
                  name="{{form.key.slice(-1)[0]}}">
-          <span ng-bind-html="form.title"></span>
      </label>
+      <span ng-bind-html="form.title"></span>
      <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
-  </li>
+  </div>
