@@ -22,7 +22,9 @@
 </div>
  -->
 
-<label class="item item-input" ng-show="showTitle()">
+<label class="item item-input {{form.htmlClass}}" ng-show="showTitle()">
+
+  <span class="input-label" ng-if="form.htmlClass == 'item-stacked-label'">{{form.title}}</span>
 
   <input ng-show="form.key"
            type="{{form.type}}"
