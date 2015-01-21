@@ -779,7 +779,7 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).find('label').hasClass('ng-hide').should.be.true;
+      tmpl.children().eq(0).children().eq(0).find('label').hasClass('sr-only').should.be.true;
       tmpl.children().eq(1).children().eq(0).find('label').hasClass('ng-hide').should.be.true;
     });
   });
