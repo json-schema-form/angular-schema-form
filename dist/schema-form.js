@@ -1017,7 +1017,9 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
                 type: 'section',
                 items: form.items.map(function(item) {
                   item.ngModelOptions = form.ngModelOptions;
-                  item.readonly = form.readonly;
+                  if (item.readonly === undefined) {
+                    item.readonly = form.readonly;
+                  }
                   return item;
                 })
               };
