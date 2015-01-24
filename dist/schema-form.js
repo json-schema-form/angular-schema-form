@@ -1089,6 +1089,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             if (scope.validateArray) {
               scope.validateArray();
             }
+            ngModel.$setDirty();
             return list;
           };
 
