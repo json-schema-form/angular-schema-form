@@ -6,13 +6,13 @@
         ng-repeat="item in modelArray track by $index">
 
       <div class="row">
-      <div class="col-25 col-offset-75">
+      <div class="col-50 col-offset-50">
         <button ng-hide="form.readonly"
                 ng-click="deleteFromArray($index)"
                 style="position: relative; z-index: 20;"
                 type="button"
                 class="button button-assertive button-block icon-left ion-close-round {{ form.style.close || 'button-outline' }} close">
-                <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                <span class="sr-only">Close</span>
         </button>
       </div>
       </div>
@@ -21,10 +21,8 @@
     </li>
   </ol>
 
-
   <div class="row">
-  <div class="col-25 col-offset-75">
-  <!-- <div class="clearfix" style="padding: 15px;"> -->
+  <div class="col-50 col-offset-50">
     <button ng-hide="form.readonly || form.add === null"
             ng-click="appendToArray()"
             type="button"
