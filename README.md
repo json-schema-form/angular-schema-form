@@ -158,17 +158,7 @@ Your can also [create your own add-ons!](docs/extending.md)
 
 Contributing
 ------------
-
-All contributions are welcome! If its a new field type consider making it an add-on instead,
-especially if it has dependecies. See [extending Schema Form documentation.](docs/extending.md)
-
-We're trying to use
-[git flow](http://danielkummer.github.io/git-flow-cheatsheet/), *so please base any merge request on the **development** branch instead of **master**.*
-
-Also run any code through the code style checker [jscs](https://github.com/mdevils/node-jscs)
-(or even better use it in your editor) with preset set to `google`. You can also us `gulp jscs` to
-check your code.
-
+Contributions are welcome! Please see [Contributing.md](CONTRIBUTING.md) for more info.
 
 Building
 --------
