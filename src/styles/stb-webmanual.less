@@ -1,3 +1,8 @@
+@stbcolor-primary: #DA291C;
+@standart-indent: 24px;
+@standart-font-size: 16px;
+@bold-font-family: "open sans bold";
+
 .radiobuttons {
   margin-bottom: 0 !important;
   ul li {
@@ -193,8 +198,29 @@ form {
   }
 }
 
-@media (max-width: 767px) {
+.uploader {
+  margin: @standart-indent 0;
+  padding: @standart-indent;
+  background-color: #ffffff;
+  .link {
+    display: inline;
+    font-family: @bold-font-family;
+    font-size: @standart-font-size;
+    text-decoration: underline;
+    &:hover, &:focus {
+      color: @stbcolor-primary;
+    }
+  }
+  .filetable {
+    .filename {
+      padding: @standart-indent;
+      font-family: @bold-font-family;
+      font-size: @standart-font-size;
+    }
+  }
+}
 
+@media (max-width: 767px) {
 
   .notification {
     .msgIcon {

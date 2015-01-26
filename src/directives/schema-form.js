@@ -23,7 +23,6 @@ angular.module('schemaForm')
         model: '=sfModel'
       },
       controller: ['$scope', function($scope) {
-
         this.evalInParentScope = function(expr, locals) {
           return $scope.$parent.$eval(expr, locals);
         };
