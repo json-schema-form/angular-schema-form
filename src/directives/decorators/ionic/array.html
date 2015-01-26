@@ -10,14 +10,14 @@
         <button ng-hide="form.readonly"
                 ng-click="deleteFromArray($index)"
                 style="position: relative; z-index: 20;"
-                class="button button-outline button-negative close"
-                type="button">
-                <span aria-hidden="true">&times;</span><span class="sr-only"> {{ form.close || 'Close'}}</span>
-        <sf-decorator ng-init="arrayIndex = $index" form="copyWithIndex($index)"></sf-decorator>
+                type="button"
+                class="button button-assertive button-block icon-left ion-close-round {{ form.style.close || 'button-outline' }} close">
+                <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
         </button>
       </div>
       </div>
 
+      <sf-decorator ng-init="arrayIndex = $index" form="copyWithIndex($index)"></sf-decorator>
     </li>
   </ol>
 
@@ -28,8 +28,7 @@
     <button ng-hide="form.readonly || form.add === null"
             ng-click="appendToArray()"
             type="button"
-            class="button button-positive {{ form.style.add || 'button-outline' }}">
-      <i class="glyphicon glyphicon-plus"></i>
+            class="button button-positive button-block ion-plus-round icon-left {{ form.style.add || 'button-outline' }}">
       {{ form.add || 'Add'}}
     </button>
   </div>
