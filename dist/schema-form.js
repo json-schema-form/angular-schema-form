@@ -660,8 +660,9 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   // Overwrites default stdForm if "*" defined in form definition
+  // and if there are more definitions then just "*"
   var overwriteDefaults = function(form, stdForm) {
-    var mapped = stdForm.map(function(obj, stdIndex){
+    return stdForm.map(function(obj, stdIndex){
       angular.forEach(form, function(f, formIndex) {
         if (f.items) {
           angular.forEach(f.items, function(item) {
@@ -681,8 +682,7 @@ angular.module('schemaForm').provider('schemaForm',
         overwriteDefaults(form, obj.items);
       }
       return obj;
-    });
-    return mapped.concat(form);
+    }).concat(form);
   }
 
   //First sorted by schema type then a list.
@@ -758,7 +758,7 @@ angular.module('schemaForm').provider('schemaForm',
     var service = {};
 
     service.merge = function(schema, form, ignore, options, readonly) {
-      form  = form || ['*'];
+      form = form || ['*'];
       options = options || {};
 
       // Get readonly from root object
@@ -773,14 +773,23 @@ angular.module('schemaForm').provider('schemaForm',
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf('*');
       if (idx !== -1) {
-        form = form.slice(0, idx).concat(form.slice(idx + 1));
-        angular.forEach(lookup, function(k, v) {
-          if (!k.key) {
-            k.key = sfPathProvider.parse(v)
-          }
-        });
-        form = overwriteDefaults(form, stdForm.form);
+        // If there are more items in the form definition let's overwrite matches
+        if (form.length >= 1) {
+          form = form.slice(0, idx).concat(form.slice(idx + 1));
+          angular.forEach(lookup, function(k, v) {
+            if (!k.key) {
+              k.key = sfPathProvider.parse(v)
+            }
+          });
+          form = overwriteDefaults(form, stdForm.form);
+        } else {
+          // Replace "*" with the stdFrom.form
+          form = form.slice(0, idx)
+            .concat(stdForm.form)
+            .concat(form.slice(idx + 1));
+        }
       }
+
 
       return postProcessFn(form.map(function(obj) {
 
