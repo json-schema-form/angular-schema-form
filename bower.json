@@ -4,7 +4,7 @@
     "dist/schema-form.js",
     "dist/bootstrap-decorator.js"
   ],
-  "version": "0.7.9",
+  "version": "0.7.10",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>",
