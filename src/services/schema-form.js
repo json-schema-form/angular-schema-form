@@ -221,11 +221,11 @@ angular.module('schemaForm').provider('schemaForm',
   // Overwrites default stdForm if "*" defined in form definition
   // and if there are more definitions then just "*"
   var overwriteDefaults = function(form, stdForm) {
-    return stdForm.map(function(obj, stdIndex){
+    return stdForm.map(function(obj, stdIndex) {
       angular.forEach(form, function(f, formIndex) {
         if (f.items) {
           angular.forEach(f.items, function(item) {
-            if (obj.key.join('.') === item ) {
+            if (obj.key.join('.') === item) {
               stdForm[stdIndex] = f;
               delete form[formIndex];
             }
