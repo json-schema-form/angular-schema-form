@@ -1,5 +1,5 @@
-<div ng-init="selected = { tab: 0 }">
-  <ul class="nav nav-tabs" style="margin-bottom: 15px">
+<div ng-init="selected = { tab: 0 }" class="schema-form-tabs {{form.htmlClass}}">
+  <ul class="nav nav-tabs">
     <li ng-repeat="tab in form.tabs"
         ng-disabled="form.readonly"
         ng-click="$event.preventDefault() || (selected.tab = $index)"
@@ -8,7 +8,7 @@
     </li>
   </ul>
 
-  <div class="tab-content">
+  <div class="tab-content {{form.fieldHtmlClass}}">
     <div class="tab-pane"
          ng-disabled="form.readonly"
          ng-repeat="tab in form.tabs"

@@ -4,6 +4,7 @@ Documentation
 1. [Basic Usage](#basic-usage)
 1. [Handling Submit](#handling-submit)
 1. [Global Options](#global-options)
+1. [Form defaults in schema](#form-defaults-in-schema)
 1. [Form types](#form-types)
 1. [Default form types](#default-form-types)
 1. [Form definitions](#form-definitions)
@@ -25,6 +26,8 @@ Documentation
     1. [array](#array)
     1. [tabarray](#tabarray)
 1. [Post process function](#post-process-function)
+1. [Events](#events)
+1. [Manual field insertion](#manual-field-insertion)
 1. [Extending Schema Form](extending.md)
 
 Basic Usage
@@ -172,7 +175,29 @@ Ex.
 </div>
 ```
 
+Form defaults in schema
+-----------------------
+Its recommended to split presentation and validation into a form definition and a json schema. But
+if you for some reason can't do this, but *do* have the power to change the schema, you can supply form
+default values within the schema using the custom attribute `x-schema-form`. `x-schema-form` should
+be a form object and acts as form definition defaults for that field.  
 
+Example schema.
+```js
+{
+  "type": "object",
+  "properties": {
+    "comment": {
+      "type": "string",
+      "title": "Comment",
+      "x-schema-form": {
+        "type": "textarea",
+        "placeholder": "Don't hold back"
+      }
+    }
+  }
+}
+```
 
 Form types
 ----------
@@ -202,7 +227,7 @@ Schema Form currently supports the following form field types out of the box:
 | tabarray      |  a tabbed version of array |
 
 More field types can be added, for instance a "datepicker" type can be added by
-including the [datepicker addon](datepicker.md)
+including the [datepicker addon](https://github.com/Textalk/angular-schema-form-datepicker)
 
 
 Default form types
@@ -313,8 +338,10 @@ General options most field types can handle:
   feedback: false,             // Inline feedback icons
   placeholder: "Input...",     // placeholder on inputs and textarea
   ngModelOptions: { ... },     // Passed along to ng-model-options
-  readonly: true               // Same effect as readOnly in schema. Put on a fieldset or array
+  readonly: true,              // Same effect as readOnly in schema. Put on a fieldset or array
                                // and their items will inherit it.
+  htmlClass: "street foobar",  // CSS Class(es) to be added to the container div
+  fieldHtmlClass: "street"     // CSS Class(es) to be added to field input (or similar)
 }
 ```
 
@@ -349,22 +376,39 @@ If you supply a `validationMessage` property in the form definition, and if its 
 string that will be used instead on any validation error.
 
 If you need more fine grained control you can supply an object instead with keys matching the error
-codes of [tv4](https://github.com/geraintluff/tv4). See `tv4.errorCodes`
+codes of [tv4](https://github.com/geraintluff/tv4). tv4 is available
+globally in angular schema form along with it's error codes, they can be found in `tv4.errorCodes`.
 
 Ex.
 ```javascript
-{
-  key: "address.street",
-  validationMessage: {
-    tv4.errorCodes.STRING_LENGTH_SHORT: "Address is too short, man.",
-    "default": "Just write a proper address, will you?"   //Special catch all error message
+var form = [
+  "address.zip",
+  {
+    key: "address.street",
+    validationMessage: {
+      "default": "Just write a proper address, will you?"
+    }
+  }
+];
+
+form[1].validationMessage[tv4.errorCodes.STRING_LENGTH_SHORT] = "Address is too short, man.";
+```
+
+However, it can sometimes be clunky to use variables as keys so you can use the
+[error codes](https://github.com/geraintluff/tv4/blob/master/source/api.js#L1) directly.
+The example below also illustrates how to define validation messages globally. This uses
+*formDefaults*, for more info on how to use it, see [Global Options](#global-options).
+
+```javascript
+scope.options = {
+  formDefaults: {
+    validationMessage: {
+      200: "This string is too short, man.",
+      302: "You can't just leave it blank, man."
+    }
   }
 }
 ```
-
-You can also set a global `validationMessage` in *formDefaults* see
-[Global Options](#global-options).
-
 
 ### Inline feedback icons
 *input* and *textarea* based fields get inline status icons by default. A check
@@ -380,7 +424,7 @@ ex. displaying an asterisk on required fields
   $sope.form = [
     {
       key: "name",
-      feedback: "{ 'glyphicon': true, 'glyphicon-asterisk': form.requires && !hasSuccess && !hassError() ,'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"
+      feedback: "{ 'glyphicon': true, 'glyphicon-asterisk': form.required && !hasSuccess() && !hasError() ,'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"
     }
 ```
 
@@ -583,7 +627,7 @@ As an object:
 }
 ```
 
-The submit button has btn-primary as default. The button has btn-default as default.
+The submit and other buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 {
@@ -608,7 +652,7 @@ the ```sf-schema``` directive.
 [
 ```
 
-The submit button has btn-primary as default. The button has btn-default as default.
+The submit and other buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 [
@@ -669,7 +713,7 @@ function FormCtrl($scope) {
 
   $scope.form = [
     {
-      key: "choice",
+      key: "confirm",
       type: "radios",
       titleMap: [
         { value: false, name: "No I don't understand these cryptic terms" },
@@ -681,7 +725,7 @@ function FormCtrl($scope) {
 ```
 
 
-With *radiobuttons*, both selected and unselected buttons have btn-primary as default.
+With *radiobuttons*, both selected and unselected buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 function FormCtrl($scope) {
@@ -818,6 +862,9 @@ need the reordering.
 In the form definition you can refer to properties of an array item by the empty
 bracket notation. In the `key` simply end the name of the array with `[]`
 
+By default the array will start with one *undefined* value so that the user is presented with one a
+form, to supress this the attribute `startEmpty` to `true`
+
 Given the schema:
 ```json
 {
@@ -870,7 +917,7 @@ function FormCtrl($scope) {
 
 Example with sub form, note that you can get rid of the form field the object wrapping the
 subform fields gives you per default by using the `items` option in the
-form definition.
+form definition, also example of `startEmpty`.
 
 ```javascript
 function FormCtrl($scope) {
@@ -908,7 +955,8 @@ function FormCtrl($scope) {
         "subforms[].nick",
         "subforms[].name",
         "subforms[].emails",
-      ]
+      ],
+      startEmpty: true
     }
   ];
 }
@@ -1009,4 +1057,46 @@ angular.module('myModule', ['schemaForm']).config(function(schemaFormProvider){
   })
 
 });
+```
+
+Events
+---------------------
+Events are emitted or broadcast at various points in the process of rendering or validating the
+form. Below is a list of these events and how they are propagated.
+
+| Event                | When                   | Type  | Arguments                          |
+|:--------------------:|:----------------------:|:-----:|:----------------------------------:|
+| `sf-render-finished` | After form is rendered | emit  | The sf-schema directives's element |
+
+### Manual field insertion
+There is a limited feature for controlling manually where a generated field should go so you can
+,as an example, wrap it in custom html. Consider the feature experimental.
+
+It has a number of drawbacks though.
+
+1. You can only insert fields that are in the root level of your form definition, i.e. not inside fieldset, arrays etc.
+1. Generated fields are always last in the form so if you don't supply slots for all of your top level fields the rest goes below.
+1. To match "keys" of forms we match against the internal array format, hence the key "name" becomes "['name']" and "foo.bar" becomes "['foo']['bar']"
+
+Define "slots" for the generated field by adding an element with the attribute `sf-insert-field`
+
+ex.
+```js
+$scope.form = [
+  "name",
+  "email",
+  "comment"
+]
+```
+
+```html
+<form sf-model="model"
+      sf-form="form"
+      sf-schema="schema">
+  <em>before</em>
+  <div sf-insert-field="['email']"></div>
+  <em>after</em>
+
+  <!-- the rest of the form, i.e. name and comment will be generated here -->
+</form>
 ```

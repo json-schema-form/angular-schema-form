@@ -1,7 +1,7 @@
 // Deps is sort of a problem for us, maybe in the future we will ask the user to depend
 // on modules for add-ons
 
-var deps = ['ObjectPath'];
+var deps = [];
 try {
   //This throws an expection if module does not exist.
   angular.module('ngSanitize');
@@ -23,29 +23,31 @@ try {
 angular.module('schemaForm', deps);
 
 angular.module('schemaForm').provider('sfPath',
-['ObjectPathProvider', function(ObjectPathProvider) {
-  var ObjectPath = {parse: ObjectPathProvider.parse};
+[function() {
+  var sfPath = {parse: ObjectPath.parse};
 
   // if we're on Angular 1.2.x, we need to continue using dot notation
   if (angular.version.major === 1 && angular.version.minor < 3) {
-    ObjectPath.stringify = function(arr) {
+    sfPath.stringify = function(arr) {
       return Array.isArray(arr) ? arr.join('.') : arr.toString();
     };
   } else {
-    ObjectPath.stringify = ObjectPathProvider.stringify;
+    sfPath.stringify = ObjectPath.stringify;
   }
 
   // We want this to use whichever stringify method is defined above,
   // so we have to copy the code here.
-  ObjectPath.normalize = function(data, quote) {
-    return ObjectPath.stringify(Array.isArray(data) ? data : ObjectPath.parse(data), quote);
+  sfPath.normalize = function(data, quote) {
+    return sfPath.stringify(Array.isArray(data) ? data : sfPath.parse(data), quote);
   };
 
-  this.parse = ObjectPath.parse;
-  this.stringify = ObjectPath.stringify;
-  this.normalize = ObjectPath.normalize;
+  // expose the methods in sfPathProvider
+  this.parse = sfPath.parse;
+  this.stringify = sfPath.stringify;
+  this.normalize = sfPath.normalize;
+
   this.$get = function() {
-    return ObjectPath;
+    return sfPath;
   };
 }]);
 
@@ -479,8 +481,15 @@ angular.module('schemaForm').provider('schemaForm',
       var def;
       for (var i = 0; i < rules.length; i++) {
         def = rules[i](name, schema, options);
+
         //first handler in list that actually returns something is our handler!
         if (def) {
+
+          // Do we have form defaults in the schema under the x-schema-form-attribute?
+          if (def.schema['x-schema-form'] && angular.isObject(def.schema['x-schema-form'])) {
+            def = angular.extend(def, def.schema['x-schema-form']);
+          }
+
           return def;
         }
       }
@@ -506,7 +515,8 @@ angular.module('schemaForm').provider('schemaForm',
     if (schema.minimum) { f.minimum = schema.minimum + (schema.exclusiveMinimum ? 1 : 0); }
     if (schema.maximum) { f.maximum = schema.maximum - (schema.exclusiveMaximum ? 1 : 0); }
 
-    //Non standard attributes
+    // Non standard attributes (DONT USE DEPRECATED)
+    // If you must set stuff like this in the schema use the x-schema-form attribute
     if (schema.validationMessage) { f.validationMessage = schema.validationMessage; }
     if (schema.enumNames) { f.titleMap = canonicalTitleMap(schema.enumNames, schema['enum']); }
     f.schema = schema;
@@ -514,6 +524,7 @@ angular.module('schemaForm').provider('schemaForm',
     // Ng model options doesn't play nice with undefined, might be defined
     // globally though
     f.ngModelOptions = f.ngModelOptions || {};
+
     return f;
   };
 
@@ -949,8 +960,8 @@ angular.module('schemaForm').factory('sfValidator', [function() {
 /**
  * Directive that handles the model arrays
  */
-angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sfValidator',
-  function(sfSelect, schemaForm, sfValidator) {
+angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sfValidator', 'sfPath',
+  function(sfSelect, schemaForm, sfValidator, sfPath) {
 
     var setIndex = function(index) {
       return function(form) {
@@ -977,6 +988,14 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
           // other hand it enables two way binding.
           var list = sfSelect(form.key, scope.model);
 
+          // We only modify the same array instance but someone might change the array from
+          // the outside so let's watch for that. We use an ordinary watch since the only case
+          // we're really interested in is if its a new instance.
+          scope.$watch('model' + sfPath.normalize(form.key), function() {
+            list = sfSelect(form.key, scope.model);
+            scope.modelArray = list;
+          });
+
           // Since ng-model happily creates objects in a deep path when setting a
           // a value but not arrays we need to create the array.
           if (angular.isUndefined(list)) {
@@ -996,9 +1015,11 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             if (form.items.length > 1) {
               subForm = {
                 type: 'section',
-                items: form.items.map(function(item){
+                items: form.items.map(function(item) {
                   item.ngModelOptions = form.ngModelOptions;
-                  item.readonly = form.readonly;
+                  if (angular.isUndefined(item.readonly)) {
+                    item.readonly = form.readonly;
+                  }
                   return item;
                 })
               };
@@ -1024,8 +1045,20 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             var len = list.length;
             var copy = scope.copyWithIndex(len);
             schemaForm.traverseForm(copy, function(part) {
-              if (part.key && angular.isDefined(part['default'])) {
-                sfSelect(part.key, scope.model, part['default']);
+
+              if (part.key) {
+                var def;
+                if (angular.isDefined(part['default'])) {
+                  def = part['default'];
+                }
+                if (angular.isDefined(part.schema) &&
+                    angular.isDefined(part.schema['default'])) {
+                  def = part.schema['default'];
+                }
+
+                if (angular.isDefined(def)) {
+                  sfSelect(part.key, scope.model, def);
+                }
               }
             });
 
@@ -1055,6 +1088,11 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             // Trigger validation.
             if (scope.validateArray) {
               scope.validateArray();
+            }
+
+            // Angular 1.2 lacks setDirty
+            if (ngModel.$setDirty) {
+              ngModel.$setDirty();
             }
             return list;
           };
@@ -1098,7 +1136,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
                 // Apparently the fastest way to clear an array, readable too.
                 // http://jsperf.com/array-destroy/32
                 while (arr.length > 0) {
-                  arr.shift();
+                  arr.pop();
                 }
 
                 form.titleMap.forEach(function(item, index) {
@@ -1201,8 +1239,8 @@ FIXME: real documentation
 
 angular.module('schemaForm')
        .directive('sfSchema',
-['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect',
-  function($compile,  schemaForm,  schemaFormDecorators, sfSelect) {
+['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath',
+  function($compile,  schemaForm,  schemaFormDecorators, sfSelect, sfPath) {
 
     var SNAKE_CASE_REGEXP = /[A-Z]/g;
     var snakeCase = function(name, separator) {
@@ -1257,7 +1295,7 @@ angular.module('schemaForm')
         //Since we are dependant on up to three
         //attributes we'll do a common watch
         var lastDigest = {};
-
+        var childScope;
         scope.$watch(function() {
 
           var schema = scope.schema;
@@ -1273,35 +1311,56 @@ angular.module('schemaForm')
             var merged = schemaForm.merge(schema, form, ignore, scope.options);
             var frag = document.createDocumentFragment();
 
+            // Create a new form and destroy the old one.
+            // Not doing keeps old form elements hanging around after
+            // they have been removed from the DOM
+            // https://github.com/Textalk/angular-schema-form/issues/200
+            if (childScope) {
+              childScope.$destroy();
+            }
+            childScope = scope.$new();
+
             //make the form available to decorators
-            scope.schemaForm  = {form:  merged, schema: schema};
+            childScope.schemaForm  = {form:  merged, schema: schema};
 
             //clean all but pre existing html.
             element.children(':not(.schema-form-ignore)').remove();
 
+            // Find all slots.
+            var slots = {};
+            var slotsFound = element[0].querySelectorAll('*[sf-insert-field]');
+
+            for (var i = 0; i < slotsFound.length; i++) {
+              slots[slotsFound[i].getAttribute('sf-insert-field')] = slotsFound[i];
+            }
+
             //Create directives from the form definition
-            angular.forEach(merged,function(obj,i){
-              var n = document.createElement(attrs.sfDecorator || snakeCase(schemaFormDecorators.defaultDecorator,'-'));
+            angular.forEach(merged, function(obj, i) {
+              var n = document.createElement(attrs.sfDecorator ||
+                                             snakeCase(schemaFormDecorators.defaultDecorator, '-'));
               n.setAttribute('form','schemaForm.form['+i+']');
-              var slot;
-              try {
-                slot = element[0].querySelector('*[sf-insert-field="' + obj.key + '"]');
-              } catch(err) {
-                // field insertion not supported for complex keys
-                slot = null;
+
+              // Check if there is a slot to put this in...
+              if (obj.key) {
+                var slot = slots[sfPath.stringify(obj.key)];
+                if (slot) {
+                  while (slot.firstChild) {
+                    slot.removeChild(slot.firstChild);
+                  }
+                  slot.appendChild(n);
+                  return;
+                }
               }
-              if(slot) {
-                slot.innerHTML = "";
-                slot.appendChild(n);  
-              } else {
-                frag.appendChild(n);
-              }
+
+              // ...otherwise add it to the frag
+              frag.appendChild(n);
+
             });
 
             element[0].appendChild(frag);
 
             //compile only children
-            $compile(element.children())(scope);
+            $compile(element.children())(childScope);
 
             //ok, now that that is done let's set any defaults
             schemaForm.traverseSchema(schema, function(prop, path) {
@@ -1312,7 +1371,8 @@ angular.module('schemaForm')
                 }
               }
             });
-          }
+          };
+          scope.$emit('sf-render-finished', element);
         });
       }
     };

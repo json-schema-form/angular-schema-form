@@ -40,8 +40,15 @@ angular.module('schemaForm').provider('schemaForm',
       var def;
       for (var i = 0; i < rules.length; i++) {
         def = rules[i](name, schema, options);
+
         //first handler in list that actually returns something is our handler!
         if (def) {
+
+          // Do we have form defaults in the schema under the x-schema-form-attribute?
+          if (def.schema['x-schema-form'] && angular.isObject(def.schema['x-schema-form'])) {
+            def = angular.extend(def, def.schema['x-schema-form']);
+          }
+
           return def;
         }
       }
@@ -67,7 +74,8 @@ angular.module('schemaForm').provider('schemaForm',
     if (schema.minimum) { f.minimum = schema.minimum + (schema.exclusiveMinimum ? 1 : 0); }
     if (schema.maximum) { f.maximum = schema.maximum - (schema.exclusiveMaximum ? 1 : 0); }
 
-    //Non standard attributes
+    // Non standard attributes (DONT USE DEPRECATED)
+    // If you must set stuff like this in the schema use the x-schema-form attribute
     if (schema.validationMessage) { f.validationMessage = schema.validationMessage; }
     if (schema.enumNames) { f.titleMap = canonicalTitleMap(schema.enumNames, schema['enum']); }
     f.schema = schema;
@@ -75,6 +83,7 @@ angular.module('schemaForm').provider('schemaForm',
     // Ng model options doesn't play nice with undefined, might be defined
     // globally though
     f.ngModelOptions = f.ngModelOptions || {};
+
     return f;
   };
 

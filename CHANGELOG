@@ -1,3 +1,39 @@
+v0.7.10
+------
+* Accessability additions, thanks @stramel
+* Updates to the gulp tasks, thanks @stramel
+* Updated to bower, thanks @Dervisevic
+* Updates to documentation & README & Contributing.md, thanks @davidlgj @Dervisevic
+* Speed optimization, thanks @stramel
+* Call ngModel.$setDirty() when deleting from array, thanks @qstrahl
+* Don't override readonly if specified on items individually, thanks @qstrahl
+* Update to the examples, thanks @mike-marcacci
+
+v0.7.9
+------
+* Fixed a wrongful glob in bower.json that caused files to be missing in the bower install. Thanks, @mohsen1 for reporting it.
+
+v0.7.8
+------
+* Thanks to @burdiuz for finding a memory leak issue and finding a solution. And thanks to @davidlgj for implementing that solution.
+* Post render event, thanks @mrijken
+* Events documentation, thanks @Dervisevic
+* startEmpty documentation, thanks @davidlj
+* npm and bower updates, thanks @Dervisevic
+* x-schema-form attribute, thanks @davidlgj
+* htmlClass and fieldHtmlClass form options, thanks @davidlgj
+
+v0.7.7
+------
+ * Array ref changes in model updates form, thanks @Sandreu
+ * Tabarray & array fixes, thanks @Sandreu, @davidlgj
+ * Use objectpath more generically to fix requirejs issues, thanks @mike-marcacci
+ * README and documentation updates, thanks @davidlgj, @engelfrost, @Dervisevic, @stramel, @Sandreu
+ * Expanded documentation on custom validation messages, thanks @Dervisevic
+ * Deep structure tests, thanks @Sandreu
+ * SF-insert-field documentation, thanks @davidlgj
+ * Array model watch & array defaults, thanks @Sandreu
+
 v0.7.6
 ------
  * Fixed broken bower specification.

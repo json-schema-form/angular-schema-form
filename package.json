@@ -1,12 +1,34 @@
 {
   "name": "angular-schema-form",
-  "version": "0.7.6",
-  "description": "Create forms from a JSON schema",
+  "version": "0.7.10",
+  "description": "Create complex forms from a JSON schema with angular.",
+  "repository": "Textalk/angular-schema-form",
+  "main": "dist/schema-form.min.js",
   "scripts": {
     "test": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js"
   },
   "author": "Textalk",
+  "contributors": [
+    "David Jensen <david.lgj@gmail.com> (https://github.com/davidlgj)",
+    "Cameron Edwards (https://github.com/cameronprattedwards)",
+    "Mike Marcacci (https://github.com/mike-marcacci)",
+    "Denis Dervisevic <denis@dervisevic.se> (https://github.com/Dervisevic)"
+  ],
   "license": "MIT",
+  "dependencies": {
+    "angular": ">= 1.2",
+    "tv4": "~1.0.15",
+    "angular-sanitize": ">= 1.2",
+    "objectpath": "~1.1.0"
+  },
+  "keywords": [
+    "angular",
+    "angularjs",
+    "form",
+    "json",
+    "json-schema",
+    "schema"
+  ],
   "devDependencies": {
     "chai": "^1.9.0",
     "coveralls": "^2.11.0",
@@ -15,6 +37,7 @@
     "gulp-concat": "^2.2.0",
     "gulp-jscs": "^1.1.0",
     "gulp-minify-html": "^0.1.1",
+    "gulp-rename": "^1.2.0",
     "gulp-uglify": "^0.2.1",
     "karma": "^0.12.0",
     "karma-chai-sinon": "^0.1.3",
@@ -28,5 +51,11 @@
     "sinon": "^1.9.0",
     "sinon-chai": "^2.5.0",
     "streamqueue": "0.0.5"
-  }
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.githubusercontent.com/Textalk/angular-schema-form/master/LICENSE"
+    }
+  ]
 }

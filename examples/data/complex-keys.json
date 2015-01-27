@@ -4,7 +4,7 @@
     "title": "Complex Key Support",
     "properties": {
       "a[\"b\"].c": {
-        "type": "text"
+        "type": "string"
       },
       "simple": {
         "type": "object",
@@ -45,9 +45,9 @@
     {
       "key": "array-key",
       "items": [
-        "[array-key][]['a'rr[\"l']",
+        "['array-key'][]['a'rr[\"l']",
         {
-          "key": "[array-key][][˙∆∂∞˚¬]",
+          "key": "['array-key'][]['˙∆∂∞˚¬']",
           "title": "Unicode Characters"
         }
       ]

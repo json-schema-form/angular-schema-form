@@ -1,11 +1,13 @@
-<div class="form-group has-feedback" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
-  <label ng-show="showTitle()">{{form.title}}</label>
-  <textarea class="form-control"
+<div class="form-group has-feedback {{form.htmlClass}} schema-form-textarea" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+  <label ng-class="{'sr-only': !showTitle()}" for="{{form.key.slice(-1)[0]}}">{{form.title}}</label>
+  <textarea class="form-control {{form.fieldHtmlClass}}"
+            id="{{form.key.slice(-1)[0]}}"
             sf-changed="form"
             placeholder="{{form.placeholder}}"
             ng-disabled="form.readonly"
             ng-model="$$value$$"
             ng-model-options="form.ngModelOptions"
-            schema-validate="form"></textarea>
+            schema-validate="form"
+            name="{{form.key.slice(-1)[0]}}"></textarea>
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
 </div>
