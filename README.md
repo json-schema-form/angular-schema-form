@@ -153,6 +153,7 @@ They have their own repos and you can find them here with usage instructions:
   * [https://github.com/Textalk/angular-schema-form-colorpicker](https://github.com/Textalk/angular-schema-form-colorpicker)
   * [https://github.com/Textalk/angular-schema-form-tinymce](https://github.com/Textalk/angular-schema-form-tinymce)
   * [https://github.com/webcanvas/angular-schema-form-ckeditor](https://github.com/webcanvas/angular-schema-form-ckeditor)
+  * [https://github.com/Textalk/angular-schema-form-fontpicker](https://github.com/Textalk/angular-schema-form-fontpicker)
 
 Your can also [create your own add-ons!](docs/extending.md)
 
