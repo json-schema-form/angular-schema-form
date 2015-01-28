@@ -190,7 +190,7 @@
                     },
                     {
                       "key": "previousDamagesTable",
-                      "type": "standarttable",
+                      "type": "table",
                       "columnTitles": ["Tidligere skade", "Forsikrinsselscap"]
                     }
                   ]
