@@ -230,8 +230,13 @@
                       "type": "textarea"
                     },
                     {
+                      "key": "buttonAddRow",
+                      "title": "Add row",
+                      "type": "button"
+                    },
+                    {
                       "key": "previousDamagesTable",
-                      "type": "standarttable",
+                      "type": "table",
                       "columnTitles": ["Tidligere skade", "Forsikrinsselscap"]
                     }
                   ]

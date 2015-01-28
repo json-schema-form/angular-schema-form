@@ -30,7 +30,8 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     successbox: base + 'successbox.html',
     errorbox: base + 'errorbox.html',
     infodate: base + 'date-info.html',
-    standarttable: base + 'standart-table.html',
+    button: base + 'button.html',
+    table: base + 'table.html',
     whitebox: base + 'white-box.html'
   }, [
     function(form) {
@@ -59,7 +60,8 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     radios: base + 'radios.html',
     'radios-inline': base + 'radios-inline.html',
     radiobuttons: base + 'radio-buttons.html',
-    standarttable: base + 'standart-table.html',
+    button: base + 'button.html',
+    table: base + 'table.html',
     whitebox: base + 'white-box.html',
     steps: base + 'steps.html',
     file: base + 'file.html'
