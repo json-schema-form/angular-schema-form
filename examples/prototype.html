@@ -3,11 +3,11 @@
 <head>
     <meta charset="utf-8">
     <title>Stb Webmanual Form Editor</title>
-    <!--<link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.css">-->
-    <!--<link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.date.css">-->
-    <!--<link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.time.css">-->
+    <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.css">
+    <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.date.css">
+    <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.time.css">
     <link rel="stylesheet" href="../bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css">
-    <!--<link rel="stylesheet" href="../bower_components/stb-datetimepicker/dist/bootstrap-datetimepicker.min.css">-->
+    <link rel="stylesheet" href="../bower_components/stb-datetimepicker/dist/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" href="../dist/schema-form.min.css">
     <link href="//elements.storebrand.no/storebrand.ny/0.47/css/stb-main.css" type="text/css" rel="stylesheet"/>
 </head>
@@ -15,12 +15,6 @@
 <style>
     .step-content {
         background: #efe8df;
-    }
-
-    .white-box {
-        background-color: white;
-        padding: 0 24px 24px;
-        margin-top: 24px;
     }
 </style>
 
@@ -45,37 +39,310 @@
 <script type="text/javascript" src="../dist/dropdown.min.js"></script>
 <script type="text/javascript" src="../dist/stb-webmanual-decorator.min.js"></script>
 <script type="text/javascript">
-    angular.module('test',['schemaForm']).controller('TestCtrl', function($scope,$http){
-
-        $scope.url = 'data/claims-travel.json';
-        $http.get($scope.url).then(function(res){
-            $scope.schema = res.data.schema;
-
-            $scope.form   = res.data.form;
-//            $scope.form[0].curStep = 0;
-            $scope.form[0].finishIt = 'click()';
-            $scope.click = function () {
-                console.log('fasf')
-            }
-
-            $scope.modelData = { currentStep: 1 };
-
-            $scope.modelData.previousDamagesTable = [
-                {'damage': 'd1', 'insurance':'i1'},
-                {'damage': 'd2', 'insurance':'i2'},
-                {'damage': 'd3', 'insurance':'i3'}
-            ];
-
-            window.md = $scope.modelData;
-        });
+    angular.module('test',['schemaForm']).controller('TestCtrl', function TestCtrl ($scope, $http){
+        var res = {};
+        res.data = {
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "mainCause": {
+                        "type": "string",
+                        "required": true,
+                        "enum": ["broken"]
+                    },
+                    "dateQuestion": {
+                        "type": "string",
+                        "format": "date",
+                        "required": true
+                    },
+                    "thirdQuestion": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 2,
+                        "maxLength": 5
+                    },
+                    "fourthQuestion": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 2,
+                        "maxLength": 5
+                    },
+                    "question21": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 2,
+                        "maxLength": 5
+                    },
+                    "question22": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 2,
+                        "maxLength": 5
+                    },
+                    "question23": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 1,
+                        "maxLength": 5
+                    },
+                    "question24": {
+                        "type": "boolean",
+                        "required": true
+                    },
+                    "question31": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 1
+                    },
+                    "question32": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 1
+                    },
+                    "question41": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 1
+                    },
+                    "question42": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 1
+                    },
+                    "question43": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 1
+                    },
+                    "question44": {
+                        "type": "boolean",
+                        "required": true
+                    },
+                    "question45": {
+                        "type": "boolean",
+                        "required": true
+                    }
+                }
+            },
+            "form": [
+                {
+                    "type": "steps",
+                    "nextButtonText": "Neste",
+                    "prevButtonText": "Tillbake",
+                    "lastButtonText": "Finish",
+                    "steps": [
+                        {
+                            "title": "Om skaden",
+                            "items": [
+                                {
+                                    "type": "help",
+                                    "helpvalue": "<h2>Om tapet/skaden</h2>"
+                                },
+                                {
+                                    "type": "fieldset",
+                                    "title": "Hva har skjedd?",
+                                    "items": [
+                                        {
+                                            "key": "mainCause",
+                                            "title": "Hva har skjedd med gjenstanden(e)?",
+                                            "type": "radios-inline",
+                                            "required": true,
+                                            "titleMap": {
+                                                "stolen": "Stjålet",
+                                                "broken": "Skadet"
+                                            }
+                                        },
+                                        {
+                                            "key": "dateQuestion",
+                                            "title": "Nar ble gjenstanden(e) skadet?",
+                                            "required": true,
+                                            "minDate": "1900-01-01",
+                                            "maxDate": "2014-04-04"
+                                        },
+                                        {
+                                            "key": "thirdQuestion",
+                                            "title": "I hvilket land skjadde skaden?"
+                                        },
+                                        {
+                                            "key": "fourthQuestion",
+                                            "title": "Pa hvilket sted skjedde skaden?"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "fieldset",
+                                    "title": "Hvordan skjedde det?",
+                                    "items": [
+                                        {
+                                            "key": "question21",
+                                            "title": "Pa hvilken mote tror du skaden kan ha skjedd?",
+                                            "type": "textarea"
+                                        },
+                                        {
+                                            "key": "question22",
+                                            "title": "Hvor oppholdt du deg nar skaden skjedde? Og hvilke aktiviteter ble utfort?",
+                                            "type": "textarea"
+                                        },
+                                        {
+                                            "type": "condition",
+                                            "conditionalKey": "question24",
+                                            "conditionalValue": "true",
+                                            "items": [
+                                                {
+                                                    "key": "question23",
+                                                    "title": "La du merke til en speciell hendelse som kan ha med skaden a gjore?",
+                                                    "type": "textarea"
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "key": "question24",
+                                            "title": "Var det utenforstaende vitne(r) til hendelsen?",
+                                            "type": "radios-inline",
+                                            "titleMap": {
+                                                "true": "Ja",
+                                                "false": "Nei"
+                                            }
+                                        },
+                                        {
+                                            "key": "uploader",
+                                            "type": "file",
+                                            "extensions": ["jpg", "png", "pdf"],
+                                            "title": "Last opp"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "whitebox",
+                                    "items": [
+                                        {
+                                            "type": "fieldset",
+                                            "title": "Annet",
+                                            "items": [
+                                                {
+                                                    "key": "question31",
+                                                    "title": "Hvor og hvordan var gjenstanden(e) oppbevart?",
+                                                    "type": "textarea"
+                                                },
+                                                {
+                                                    "key": "question32",
+                                                    "title": "Andre opplysninger om skaden?",
+                                                    "type": "textarea"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Skadet gjenstand",
+                            "items": [
+                                {
+                                    "type": "help",
+                                    "helpvalue": "<h2>Skadet gjenstand</h2>"
+                                },
+                                {
+                                    "type": "fieldset",
+                                    "title": "Legg til gjenstanden(e)",
+                                    "items": [
+                                        {
+                                            "key": "question41",
+                                            "title": "Type gjenstand",
+                                            "subtitle": "(Merke og modell)",
+                                            "type": "text"
+                                        },
+                                        {
+                                            "key": "question42",
+                                            "title": "Hvor gammel er gjenstanden",
+                                            "type": "select",
+                                            "titleMap": {
+                                                "15": "15 ar",
+                                                "20": "20 ar",
+                                                "25": "25 ar",
+                                                "30": "30 ar",
+                                                "35": "35 ar",
+                                                "40": "40 ar",
+                                                "45": "45 ar"
+                                            }
+                                        },
+                                        {
+                                            "key": "question43",
+                                            "title": "Hvor ble gjenstanden kjopt?",
+                                            "subtitle": "(Butikk eller annet)",
+                                            "type": "textarea"
+                                        },
+                                        {
+                                            "key": "question44",
+                                            "title": "Var gjenstanden ny ved anskaffelse?",
+                                            "type": "radios-inline",
+                                            "titleMap": {
+                                                "true": "Ja",
+                                                "false": "Nei"
+                                            }
+                                        },
+                                        {
+                                            "key": "question45",
+                                            "title": "Kan gjenstanden repareres?",
+                                            "type": "radios-inline",
+                                            "titleMap": {
+                                                "true": "Ja",
+                                                "false": "Nei"
+                                            }
+                                        },
+                                        {
+                                            "type": "file",
+                                            "title": "Kvittering",
+                                            "downloadText": " Last opp",
+                                            "petitText": "Har du kvittering for gjenstanden eller annet bevis på kjøpet (avbetalingskontrakt, garanti e.l.)?"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "title": "Om reisen",
+                            "items": [
+                            ]
+                        },
+                        {
+                            "title": "Perosonopplysninger",
+                            "items": [
+                            ]
+                        },
+                        {
+                            "title": "Oppsummering",
+                            "items": [
+                            ]
+                        },
+                        {
+                            "title": "Kvittering",
+                            "items": [
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+        $scope.schema = res.data.schema;
+        $scope.form   = res.data.form;
+        $scope.form[0].finishIt = 'click()';
+        $scope.click = function () {
+            console.log('fasf')
+        };
+        $scope.modelData = { currentStep: 1 };
+        window.md = $scope.modelData;
+        //});
         $scope.submitForm = function (form, model) {
             console.log(model);
             $scope.$broadcast('schemaFormValidate');
             if (form.$valid) {
-                alert('You did it!');
+                console.log('You did it!');
             }
         };
-
+//        $scope.getFileName = function (name) {
+//          console.log(name);
+//        };
     });
 </script>
 </body>

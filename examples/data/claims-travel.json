@@ -209,6 +209,13 @@
                     "true": "Ja",
                     "false": "Nei"
                   }
+                },
+                {
+                  "key": "uploader",
+                  "type": "file",
+                  "title": "Last opp",
+                  "petitText": "petit text",
+                  "downloadText": "downloadtext"
                 }
               ]
             },

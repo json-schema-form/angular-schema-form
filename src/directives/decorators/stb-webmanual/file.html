@@ -1,19 +1,23 @@
-<div class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+<div class="form-group uploader label-wrapper">
+    <ul class="filetable" ng-if="form.fileList">
+        <li class="file" ng-repeat="file in form.fileList track by $index">
+            <span class="icon"><span class=""
+                                     ng-bind="file.fileExt"
+                                     ng-class="{ 'stb-color-sprite-small': (file.fileExt === 'pdf'), pdf: (file.fileExt === 'pdf') }">
+                </span>
+            </span>
+            <span class="filename" ng-bind="file.fileName"></span>
+            <span class="delete" ng-click="removeFileFromList($index)"><span class="stb-sprite-small remove red"></span>Delete</span>
+        </li>
+    </ul>
 
-    <div class="help-block" ng-show="(hasError() && errorMessage(schemaError())) || form.description" ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
-    <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
-    <p class="petit">{{form.petitText}}</p>
-    <div id="receiptItemUpload" class="list-group">
-    </div>
-    <div class="hidden">
-        <input name="upload"
-               type="file"
-        sf-changed="form"
-        ng-model="$$value$$"
-        ng-model-options="form.ngModelOptions"
-        ng-value="item.value"
-        id="receiptFile"/>
-    </div>
-    <a class="stb-btn secondary" onclick="$('#receiptFile').trigger('click');"><span class="glyphicon glyphicon-plus" style="margin-top:6px;"></span>{{form.downloadText}}</a>
-    <a id="addTaptGjenstandButton" class="stb-btn stb-btn-lg secondary add-btn">Legg til</a>
+    <input type="file"
+           class="hidden"
+           onchange="angular.element(this).scope().updateModelForInputFile(this.value)"
+           ng-model="$$value$$"
+           name="{{form.key}}"
+           id="{{form.key}}"/>
+
+    <label for="{{form.key}}" class="link">{{form.title}}</label>
+
 </div>
