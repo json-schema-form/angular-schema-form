@@ -212,18 +212,8 @@
                                         {
                                             "key": "uploader",
                                             "type": "file",
-                                            "title": "Last opp",
-                                            "petitText": "petit text",
-                                            "downloadText": "downloadtext",
-                                            onChange: function(fileName) {
-                                                $scope.$apply(function () {
-                                                    if (!$scope.modelData.uploader) {
-                                                        $scope.modelData.uploader = [];
-                                                    }
-                                                    
-                                                    $scope.modelData.uploader.push(fileName.replace("C:\\fakepath\\", ""));
-                                                });
-                                            }
+                                            "extensions": ["jpg", "png", "pdf"],
+                                            "title": "Last opp"
                                         }
                                     ]
                                 },

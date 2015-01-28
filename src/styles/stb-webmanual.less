@@ -3,6 +3,11 @@
 @standart-font-size: 16px;
 @bold-font-family: "open sans bold";
 
+.boldText {
+  font-family: @bold-font-family;
+  font-size: @standart-font-size;
+}
+
 .radiobuttons {
   margin-bottom: 0 !important;
   ul li {
@@ -201,22 +206,42 @@ form {
 .uploader {
   margin: @standart-indent 0;
   padding: @standart-indent;
-  background-color: #ffffff;
-  .link {
-    display: inline;
-    font-family: @bold-font-family;
-    font-size: @standart-font-size;
-    text-decoration: underline;
-    &:hover, &:focus {
-      color: @stbcolor-primary;
+  .filetable {
+    display: table;
+    .file {
+      display: table-row;
+      list-style: none;
+      .icon, .filename, .delete {
+        display: table-cell;
+        padding: @standart-indent/3 @standart-indent/2;
+      }
+      .filename {
+        .boldText;
+      }
+      .delete {
+        .boldText;
+        color: @stbcolor-primary;
+        &:hover, &:focus {
+          cursor: pointer;
+        }
+        .remove {
+          margin-right: @standart-indent/4;
+          margin-bottom: -2px;
+        }
+      }
     }
   }
-  .filetable {
-    .filename {
-      padding: @standart-indent;
-      font-family: @bold-font-family;
-      font-size: @standart-font-size;
+  .link {
+    display: inline;
+    text-decoration: underline;
+    .boldText;
+    &:hover, &:focus {
+      color: @stbcolor-primary;
+      cursor: pointer;
     }
+  }
+  .pdf {
+    color: transparent;
   }
 }
 

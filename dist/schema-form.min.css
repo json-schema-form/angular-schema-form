@@ -1,3 +1,7 @@
+.boldText {
+  font-family: "open sans bold";
+  font-size: 16px;
+}
 .radiobuttons {
   margin-bottom: 0 !important;
 }
@@ -153,22 +157,50 @@ form .col-md-12 {
 .uploader {
   margin: 24px 0;
   padding: 24px;
-  background-color: #ffffff;
+}
+.uploader .filetable {
+  display: table;
+}
+.uploader .filetable .file {
+  display: table-row;
+  list-style: none;
+}
+.uploader .filetable .file .icon,
+.uploader .filetable .file .filename,
+.uploader .filetable .file .delete {
+  display: table-cell;
+  padding: 8px 12px;
+}
+.uploader .filetable .file .filename {
+  font-family: "open sans bold";
+  font-size: 16px;
+}
+.uploader .filetable .file .delete {
+  font-family: "open sans bold";
+  font-size: 16px;
+  color: #da291c;
+}
+.uploader .filetable .file .delete:hover,
+.uploader .filetable .file .delete:focus {
+  cursor: pointer;
+}
+.uploader .filetable .file .delete .remove {
+  margin-right: 6px;
+  margin-bottom: -2px;
 }
 .uploader .link {
   display: inline;
+  text-decoration: underline;
   font-family: "open sans bold";
   font-size: 16px;
-  text-decoration: underline;
 }
 .uploader .link:hover,
 .uploader .link:focus {
   color: #da291c;
+  cursor: pointer;
 }
-.uploader .filetable .filename {
-  padding: 24px;
-  font-family: "open sans bold";
-  font-size: 16px;
+.uploader .pdf {
+  color: transparent;
 }
 @media (max-width: 767px) {
   .notification .msgIcon {
