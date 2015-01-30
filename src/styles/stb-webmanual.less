@@ -204,16 +204,20 @@ form {
 }
 
 .uploader {
-  margin: @standart-indent 0;
-  padding: @standart-indent;
+  margin: @standart-indent/2 0;
+  padding: @standart-indent/2 0;
   .filetable {
     display: table;
+    margin-bottom: @standart-indent;
     .file {
       display: table-row;
       list-style: none;
       .icon, .filename, .delete {
         display: table-cell;
-        padding: @standart-indent/3 @standart-indent/2;
+        padding: @standart-indent/2 @standart-indent/2 0 0;
+        & > span {
+          margin-left: 0;
+        }
       }
       .filename {
         .boldText;
@@ -232,7 +236,7 @@ form {
     }
   }
   .link {
-    display: inline;
+    display: inline-block;
     text-decoration: underline;
     .boldText;
     &:hover, &:focus {
@@ -243,6 +247,11 @@ form {
   .pdf {
     color: transparent;
   }
+}
+
+.helpvalue {
+  display: inline-block;
+  margin-right: 10px;
 }
 
 @media (max-width: 767px) {
