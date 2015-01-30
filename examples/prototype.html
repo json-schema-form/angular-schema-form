@@ -199,15 +199,38 @@
                                             "key": "question24",
                                             "title": "Var det utenforstaende vitne(r) til hendelsen?",
                                             "type": "radios-inline",
-                                            "titleMap": {
-                                                "true": "Ja",
-                                                "false": "Nei"
-                                            }
+                                            "titleMap": [
+                                                {'name': 'Ja', 'value': true},
+                                                {'name': 'Nei', 'value': false}
+                                            ]
                                         },
                                         {
                                             "key": "uploader",
                                             "type": "file",
                                             "title": "Last opp"
+                                        },
+                                        {
+                                            'key': 'previousDamagesCommands',
+                                            'type': 'command-panel',
+                                            'dependencies': ['question24'],
+                                            'expression': 'question24 === true',
+                                            'commands': [
+                                                {
+                                                    'title': 'add',
+                                                    'action': function () {alert('add');},
+                                                    'isVisible': function () {return true;}
+                                                },
+                                                {
+                                                    'title': 'update',
+                                                    'action': function () {alert('update');},
+                                                    'isVisible': function () {return false;}
+                                                },
+                                                {
+                                                    'title': 'delete',
+                                                    'action': function () {alert('delete');},
+                                                    'isVisible': function () {return true;}
+                                                }
+                                            ]
                                         }
                                     ]
                                 },
