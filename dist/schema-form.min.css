@@ -155,11 +155,12 @@ form .col-md-12 {
   padding-right: 24px !important;
 }
 .uploader {
-  margin: 24px 0;
-  padding: 24px;
+  margin: 12px 0;
+  padding: 12px 0;
 }
 .uploader .filetable {
   display: table;
+  margin-bottom: 24px;
 }
 .uploader .filetable .file {
   display: table-row;
@@ -169,7 +170,12 @@ form .col-md-12 {
 .uploader .filetable .file .filename,
 .uploader .filetable .file .delete {
   display: table-cell;
-  padding: 8px 12px;
+  padding: 12px 12px 0 0;
+}
+.uploader .filetable .file .icon > span,
+.uploader .filetable .file .filename > span,
+.uploader .filetable .file .delete > span {
+  margin-left: 0;
 }
 .uploader .filetable .file .filename {
   font-family: "open sans bold";
@@ -189,7 +195,7 @@ form .col-md-12 {
   margin-bottom: -2px;
 }
 .uploader .link {
-  display: inline;
+  display: inline-block;
   text-decoration: underline;
   font-family: "open sans bold";
   font-size: 16px;
@@ -201,6 +207,10 @@ form .col-md-12 {
 }
 .uploader .pdf {
   color: transparent;
+}
+.helpvalue {
+  display: inline-block;
+  margin-right: 10px;
 }
 @media (max-width: 767px) {
   .notification .msgIcon {
