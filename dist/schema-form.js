@@ -662,18 +662,20 @@ angular.module('schemaForm').provider('schemaForm',
   // Overwrites default stdForm if "*" defined in form definition
   // and if there are more definitions then just "*"
   var overwriteDefaults = function(form, stdForm) {
-    return stdForm.map(function(obj, stdIndex){
+    return stdForm.map(function(obj, stdIndex) {
       angular.forEach(form, function(f, formIndex) {
         if (f.items) {
           angular.forEach(f.items, function(item) {
-            if (obj.key.join('.') === item ) {
+            if (obj.key.join('.') === item) {
               stdForm[stdIndex] = f;
               delete form[formIndex];
             }
           });
         }
         if (f.key === obj.key.join('.')) {
-          stdForm[stdIndex] = f;
+          // We need the original key
+          delete f.key
+          stdForm[stdIndex] = angular.extend(stdForm[stdIndex], f);
           delete form[formIndex];
         }
       });
@@ -790,7 +792,7 @@ angular.module('schemaForm').provider('schemaForm',
         }
       }
 
-
+      console.log(form);
       return postProcessFn(form.map(function(obj) {
 
         //handle the shortcut with just a name

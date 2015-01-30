@@ -232,7 +232,9 @@ angular.module('schemaForm').provider('schemaForm',
           });
         }
         if (f.key === obj.key.join('.')) {
-          stdForm[stdIndex] = f;
+          // We need the original key
+          delete f.key
+          stdForm[stdIndex] = angular.extend(stdForm[stdIndex], f);
           delete form[formIndex];
         }
       });
@@ -348,7 +350,6 @@ angular.module('schemaForm').provider('schemaForm',
             .concat(form.slice(idx + 1));
         }
       }
-
 
       return postProcessFn(form.map(function(obj) {
 
