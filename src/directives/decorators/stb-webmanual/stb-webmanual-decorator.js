@@ -63,6 +63,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     radiobuttons: base + 'radio-buttons.html',
     button: base + 'button.html',
     table: base + 'table.html',
+    'command-panel': base + 'command-panel.html',
     whitebox: base + 'white-box.html',
     steps: base + 'steps.html',
     file: base + 'file.html'
