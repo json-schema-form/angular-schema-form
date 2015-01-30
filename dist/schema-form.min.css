@@ -1,5 +1,16 @@
-.steps {
-  position: relative;
+.row > div {
+  margin-bottom: 0;
+}
+.boldText {
+  font-family: "open sans bold";
+  font-size: 16px;
+}
+.radiobuttons {
+  margin-bottom: 0 !important;
+}
+.radiobuttons ul li {
+  list-style: none;
+  display: inline-block;
 }
 label.empty-view {
   padding: 0 !important;
@@ -127,7 +138,7 @@ label.empty-view span {
   filter: alpha(opacity=80);
   margin-top: 24px;
   font-size: 18px;
-  font-family: "Open Sans Bold", Arial, ArialMT, sans-serif;
+  font-family: "open sans bold", Arial, ArialMT, sans-serif;
 }
 .row.info-message-wrapper .info-message .msgText button.close:focus,
 .row.info-message-wrapper .info-message .msgText button.close:hover {
@@ -163,6 +174,64 @@ label.empty-view span {
 }
 form .col-md-12 {
   padding-right: 24px !important;
+}
+.uploader {
+  margin: 12px 0;
+  padding: 12px 0;
+}
+.uploader .filetable {
+  display: table;
+  margin-bottom: 24px;
+}
+.uploader .filetable .file {
+  display: table-row;
+  list-style: none;
+}
+.uploader .filetable .file .icon,
+.uploader .filetable .file .filename,
+.uploader .filetable .file .delete {
+  display: table-cell;
+  padding: 12px 12px 0 0;
+}
+.uploader .filetable .file .icon > span,
+.uploader .filetable .file .filename > span,
+.uploader .filetable .file .delete > span {
+  margin-left: 0;
+}
+.uploader .filetable .file .filename {
+  font-family: "open sans bold";
+  font-size: 16px;
+}
+.uploader .filetable .file .delete {
+  font-family: "open sans bold";
+  font-size: 16px;
+  color: #da291c;
+}
+.uploader .filetable .file .delete:hover,
+.uploader .filetable .file .delete:focus {
+  cursor: pointer;
+}
+.uploader .filetable .file .delete .remove {
+  margin-right: 6px;
+  margin-bottom: -2px;
+}
+.uploader .link {
+  display: inline-block;
+  text-decoration: underline;
+  font-family: "open sans bold";
+  font-size: 16px;
+}
+.uploader .link:hover,
+.uploader .link:focus {
+  color: #da291c;
+  cursor: pointer;
+}
+.uploader .pdf {
+  color: transparent;
+}
+.helpvalue {
+  display: inline-block;
+  margin-right: 10px;
 }
 @media (max-width: 767px) {
   .notification .msgIcon {

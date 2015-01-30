@@ -13,12 +13,19 @@
     </span>
 
     <div class="stb-form-group select" ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() && conditionalValidationSuccess(), 'has-feedback': form.feedback !== false }">
-      <select ng-model="$$value$$"
+        <select ng-if="form.dataType !== 'object'" ng-model="$$value$$"
+                ng-model-options="form.ngModelOptions"
+                sf-changed="form"
+                class="form-control"
+                schema-validate="form"
+                ng-options="item.value as item.name for item in form.titleMap">
+        </select>
+        <select ng-if="form.dataType === 'object'" ng-model="$$value$$"
               ng-model-options="form.ngModelOptions"
               sf-changed="form"
               class="form-control"
               schema-validate="form"
               ng-options="item as item.name for item in form.titleMap | orderBy: 'name' track by item.name">
-      </select>
+        </select>
     </div>
 </div>

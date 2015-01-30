@@ -1,5 +1,23 @@
-.steps {
-  position: relative;
+@stbcolor-primary: #DA291C;
+@standart-indent: 24px;
+@standart-font-size: 16px;
+@bold-font-family: "open sans bold";
+
+.row > div {
+  margin-bottom: 0;
+}
+
+.boldText {
+  font-family: @bold-font-family;
+  font-size: @standart-font-size;
+}
+
+.radiobuttons {
+  margin-bottom: 0 !important;
+  ul li {
+    list-style: none;
+    display: inline-block;
+  }
 }
 label.empty-view {
   padding: 0 !important;
@@ -14,7 +32,7 @@ label.empty-view {
 .label-wrapper {
   label {
     display: inline;
-    font-family: "open sans bold";
+    font-family: @bold-font-family;
     font-size: 16px;
   }
   span {
@@ -150,7 +168,7 @@ label.empty-view {
         filter: alpha(opacity=80);
         margin-top: 24px;
         font-size: 18px;
-        font-family: "Open Sans Bold",Arial,ArialMT,sans-serif;
+        font-family: @bold-font-family, Arial, ArialMT, sans-serif;
 
         &:focus, &:hover {
           opacity: .5;
@@ -207,8 +225,58 @@ form {
   }
 }
 
-@media (max-width: 767px) {
+.uploader {
+  margin: @standart-indent/2 0;
+  padding: @standart-indent/2 0;
+  .filetable {
+    display: table;
+    margin-bottom: @standart-indent;
+    .file {
+      display: table-row;
+      list-style: none;
+      .icon, .filename, .delete {
+        display: table-cell;
+        padding: @standart-indent/2 @standart-indent/2 0 0;
+        & > span {
+          margin-left: 0;
+        }
+      }
+      .filename {
+        .boldText;
+      }
+      .delete {
+        .boldText;
+        color: @stbcolor-primary;
+        &:hover, &:focus {
+          cursor: pointer;
+        }
+        .remove {
+          margin-right: @standart-indent/4;
+          margin-bottom: -2px;
+        }
+      }
+    }
+  }
+  .link {
+    display: inline-block;
+    text-decoration: underline;
+    .boldText;
+    &:hover, &:focus {
+      color: @stbcolor-primary;
+      cursor: pointer;
+    }
+  }
+  .pdf {
+    color: transparent;
+  }
+}
 
+.helpvalue {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+@media (max-width: 767px) {
 
   .notification {
     .msgIcon {

@@ -1,0 +1,16 @@
+<div ng-show="showCondition()">
+    <table class="stb-table hoverable">
+        <thead>
+            <th ng-repeat="item in form.columnTitles">{{item}}</th>
+            <th ng-repeat="action in form.actions"></th>
+        </thead>
+        <tbody>
+            <tr ng-repeat="row in $$value$$" index="{{$index}}">
+                <td ng-repeat="column in row" ng-bind="column"></td>
+                <td ng-repeat="action in form.actions">
+                    <a ng-click="action.action($$value$$, $parent.$index)" ng-bind="action.title"></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

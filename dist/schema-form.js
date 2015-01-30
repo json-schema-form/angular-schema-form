@@ -235,14 +235,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 //We do this manually since we need to bind ng-model properly and also
                 //for fieldsets to recurse properly.
                 var url = templateUrl(name, form);
+
                 $http.get(url, {cache: $templateCache}).then(function(res) {
                   var key = form.key ?
                             sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
 
-
                   scope.keyModelName = createModelName(form, scope.defaultGlobals, key);
 
                   var template = res.data.replace(/\$\$value\$\$/g, scope.keyModelName);
+
                   element.html(template);
                   $compile(element.contents())(scope);
                 });
@@ -288,7 +289,24 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               }
             };
 
-            var lookupForKey = function (key) {
+            scope.updateModelForInputFile = function (fileSource) {
+              scope.$apply(function () {
+                var file = {};
+                file.fileName = fileSource.split('\\').pop();
+                file.fileExt = file.fileName.split('.').pop();
+                if (!scope.form.fileList) {
+                  scope.form.fileList = [];
+                }
+                scope.form.fileList.push(file);
+              });
+            };
+
+            scope.removeFileFromList = function (index) {
+              scope.form.fileList.splice(index, 1);
+            };
+
+
+              var lookupForKey = function (key) {
               var res = '';
 
               var schema = scope.globalSchema.properties[key];
@@ -1588,7 +1606,6 @@ angular.module('schemaForm')
         model: '=sfModel'
       },
       controller: ['$scope', function($scope) {
-
         this.evalInParentScope = function(expr, locals) {
           return $scope.$parent.$eval(expr, locals);
         };
@@ -1596,6 +1613,7 @@ angular.module('schemaForm')
         this.evalInMainScope = function(expr, locals) {
           return $scope.$eval(expr, locals);
         };
+
       }],
       replace: false,
       restrict: 'A',
