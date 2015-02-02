@@ -6,7 +6,7 @@
   font-size: 16px;
 }
 .radiobuttons {
-  margin-bottom: 0 !important;
+  margin-bottom: 24px !important;
 }
 .radiobuttons ul li {
   list-style: none;
@@ -49,7 +49,6 @@ label.empty-view span {
   display: block;
 }
 .stb-form-group.checkboxes,
-.stb-form-group.radios-inline,
 .stb-form-group.date-picker,
 .stb-form-group.select-wrapper {
   margin-bottom: 24px;
