@@ -11,7 +11,7 @@
                 ng-click="deleteFromArray($index)"
                 style="position: relative; z-index: 20;"
                 type="button"
-                class="button button-assertive button-block icon-left ion-close-round {{ form.style.close || 'button-outline' }} close">
+                class="button button-assertive icon-left ion-close-round {{ form.style.close || 'button-outline' }} close">
                 <span class="sr-only">{{ form.close || 'Close'}}</span>
         </button>
       </div>
@@ -26,7 +26,7 @@
     <button ng-hide="form.readonly || form.add === null"
             ng-click="appendToArray()"
             type="button"
-            class="button button-positive button-block ion-plus-round icon-left {{ form.style.add || 'button-outline' }}">
+            class="button button-positive ion-plus-round icon-left {{ form.style.add || 'button-outline' }}">
       {{ form.add || 'Add'}}
     </button>
   </div>
