@@ -32,6 +32,13 @@ label.empty-view span {
 .subtitle-wrapper {
   margin-bottom: 10px;
 }
+.search-box .stb-form-group input {
+  display: inline-block;
+}
+.search-box .stb-form-group button {
+  margin-left: 6px;
+  margin-bottom: 4px;
+}
 .input-group.datePicker {
   width: 260px !important;
 }
@@ -240,5 +247,8 @@ form .col-md-12 {
   .notification .msgText {
     min-height: 48px;
     padding: 12px 12px 12px 60px;
+  }
+  .search-box .stb-form-group button {
+    margin-bottom: 2px;
   }
 }

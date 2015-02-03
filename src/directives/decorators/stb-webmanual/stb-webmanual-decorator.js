@@ -32,7 +32,8 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     table: base + 'table.html',
     'command-panel': base + 'command-panel.html',
     whitebox: base + 'white-box.html',
-    number: base + 'number.html'
+    number: base + 'number.html',
+    search: base + 'default.html'
   }, [
     function(form) {
       if (form.readonly && form.key && form.type !== 'fieldset') {
@@ -64,7 +65,8 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     whitebox: base + 'white-box.html',
     number: base + 'number.html',
     steps: base + 'steps.html',
-    file: base + 'file.html'
+    file: base + 'file.html',
+    search: base + 'default.html'
   });
 
 }]).directive('sfFieldset', function() {

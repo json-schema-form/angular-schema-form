@@ -1,4 +1,4 @@
-<div ng-show="showCondition()">
+<div ng-show="showCondition()" ng-class="{'search-box': form.type === 'search'}">
     <div class="label-wrapper">
         <label ng-show="showTitle()">{{form.title}}</label>
         <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
@@ -11,7 +11,7 @@
             <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
         </small>
     </span>
-    <div class="stb-form-group" ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() && conditionalValidationSuccess(), 'has-feedback': form.feedback !== false }">
+    <div class="stb-form-group"  ng-class="{'has-error': !disabledElement() && hasError(), 'has-success': !disabledElement() && hasSuccess() && conditionalValidationSuccess(), 'has-feedback': form.feedback !== false }">
         <input type="{{form.formType || 'text'}}"
                ng-show="form.key"
                type="{{form.type}}"
@@ -29,5 +29,13 @@
         <i class="form-control-feedback glyphicon"
            ng-show="hasError() || hasSuccess() && conditionalValidationSuccess()"
            ng-class="{'glyphicon-remove': !disabledElement() && hasError(), 'glyphicon-ok': !disabledElement() && hasSuccess() && conditionalValidationSuccess()}"></i>
+
+
+        <button ng-if="form.type === 'search'" class="stb-btn"
+                type="button"
+                ng-click="form.buttonAction()">
+            {{form.searchButtonText}}
+        </button>
+
     </div>
 </div>

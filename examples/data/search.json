@@ -1,0 +1,27 @@
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "input": {
+        "type": "string",
+        "format": "ssn",
+        "required": true,
+        "minLength": 11,
+        "maxLength": 11
+      }
+    }
+  },
+
+
+  "form": [
+    {
+      "type": "search",
+      "key": "providedPersonInfo.nin",
+      "title": "Fødselsnummer",
+      "infoMessage": "'Fødselsnummer oppgis med 11 siffer",
+      "placeholder": "Fill in your ssn",
+      "searchButtonText": "Search",
+      "buttonAction": "function () {console.log('here')}"
+    }
+  ]
+}
