@@ -39,6 +39,9 @@ label.empty-view span {
   margin-left: 6px;
   margin-bottom: 4px;
 }
+.search-box .stb-form-group i {
+  right: -30px;
+}
 .input-group.datePicker {
   width: 260px !important;
 }
