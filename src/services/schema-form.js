@@ -1,8 +1,8 @@
 /**
- * Schema form service.
- * This service is not that useful outside of schema form directive
- * but makes the code more testable.
- */
+* Schema form service.
+* This service is not that useful outside of schema form directive
+* but makes the code more testable.
+*/
 angular.module('schemaForm').provider('schemaForm',
 ['sfPathProvider', function(sfPathProvider) {
 
@@ -59,7 +59,7 @@ angular.module('schemaForm').provider('schemaForm',
   var stdFormObj = function(name, schema, options) {
     options = options || {};
     var f = options.global && options.global.formDefaults ?
-            angular.copy(options.global.formDefaults) : {};
+    angular.copy(options.global.formDefaults) : {};
     if (options.global && options.global.supressPropertyTitles === true) {
       f.title = schema.title;
     } else {
@@ -195,7 +195,7 @@ angular.module('schemaForm').provider('schemaForm',
       options.lookup[sfPathProvider.stringify(options.path)] = f;
 
       var required = schema.required &&
-                     schema.required.indexOf(options.path[options.path.length - 1]) !== -1;
+      schema.required.indexOf(options.path[options.path.length - 1]) !== -1;
 
       // The default is to always just create one child. This works since if the
       // schemas items declaration is of type: "object" then we get a fieldset.
@@ -218,6 +218,34 @@ angular.module('schemaForm').provider('schemaForm',
 
   };
 
+  // Overwrites default stdForm if "*" defined in form definition
+  // and if there are more definitions then just "*"
+  var overwriteDefaults = function(form, stdForm) {
+    return stdForm.map(function(obj, stdIndex) {
+      angular.forEach(form, function(f, formIndex) {
+        if (f.items) {
+          angular.forEach(f.items, function(item) {
+            if (obj.key.join('.') === item) {
+              stdForm[stdIndex] = f;
+              delete form[formIndex];
+            }
+          });
+        }
+        if (f.key === obj.key.join('.')) {
+          // We need the original key
+          delete f.key
+          stdForm[stdIndex] = angular.extend(stdForm[stdIndex], f);
+          delete form[formIndex];
+        }
+      });
+
+      if (obj.items) {
+        overwriteDefaults(form, obj.items);
+      }
+      return obj;
+    }).concat(form);
+  }
+
   //First sorted by schema type then a list.
   //Order has importance. First handler returning an form snippet will be used.
   var defaults = {
@@ -232,28 +260,28 @@ angular.module('schemaForm').provider('schemaForm',
   var postProcessFn = function(form) { return form; };
 
   /**
-   * Provider API
-   */
+  * Provider API
+  */
   this.defaults              = defaults;
   this.stdFormObj            = stdFormObj;
   this.defaultFormDefinition = defaultFormDefinition;
 
   /**
-   * Register a post process function.
-   * This function is called with the fully merged
-   * form definition (i.e. after merging with schema)
-   * and whatever it returns is used as form.
-   */
+  * Register a post process function.
+  * This function is called with the fully merged
+  * form definition (i.e. after merging with schema)
+  * and whatever it returns is used as form.
+  */
   this.postProcess = function(fn) {
     postProcessFn = fn;
   };
 
   /**
-   * Append default form rule
-   * @param {string}   type json schema type
-   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form
-   *                        definition or undefined
-   */
+  * Append default form rule
+  * @param {string}   type json schema type
+  * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form
+  *                        definition or undefined
+  */
   this.appendRule = function(type, rule) {
     if (!defaults[type]) {
       defaults[type] = [];
@@ -262,11 +290,11 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   /**
-   * Prepend default form rule
-   * @param {string}   type json schema type
-   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form
-   *                        definition or undefined
-   */
+  * Prepend default form rule
+  * @param {string}   type json schema type
+  * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form
+  *                        definition or undefined
+  */
   this.prependRule = function(type, rule) {
     if (!defaults[type]) {
       defaults[type] = [];
@@ -275,14 +303,14 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   /**
-   * Utility function to create a standard form object.
-   * This does *not* set the type of the form but rather all shared attributes.
-   * You probably want to start your rule with creating the form with this method
-   * then setting type and any other values you need.
-   * @param {Object} schema
-   * @param {Object} options
-   * @return {Object} a form field defintion
-   */
+  * Utility function to create a standard form object.
+  * This does *not* set the type of the form but rather all shared attributes.
+  * You probably want to start your rule with creating the form with this method
+  * then setting type and any other values you need.
+  * @param {Object} schema
+  * @param {Object} options
+  * @return {Object} a form field defintion
+  */
   this.createStandardForm = stdFormObj;
   /* End Provider API */
 
@@ -291,7 +319,7 @@ angular.module('schemaForm').provider('schemaForm',
     var service = {};
 
     service.merge = function(schema, form, ignore, options, readonly) {
-      form  = form || ['*'];
+      form = form || ['*'];
       options = options || {};
 
       // Get readonly from root object
@@ -299,17 +327,29 @@ angular.module('schemaForm').provider('schemaForm',
 
       var stdForm = service.defaults(schema, ignore, options);
 
-      //simple case, we have a "*", just put the stdForm there
-      var idx = form.indexOf('*');
-      if (idx !== -1) {
-        form  = form.slice(0, idx)
-                    .concat(stdForm.form)
-                    .concat(form.slice(idx + 1));
-      }
-
       //ok let's merge!
       //We look at the supplied form and extend it with schema standards
       var lookup = stdForm.lookup;
+
+      //simple case, we have a "*", just put the stdForm there
+      var idx = form.indexOf('*');
+      if (idx !== -1) {
+        // If there are more items in the form definition let's overwrite matches
+        if (form.length >= 1) {
+          form = form.slice(0, idx).concat(form.slice(idx + 1));
+          angular.forEach(lookup, function(k, v) {
+            if (!k.key) {
+              k.key = sfPathProvider.parse(v)
+            }
+          });
+          form = overwriteDefaults(form, stdForm.form);
+        } else {
+          // Replace "*" with the stdFrom.form
+          form = form.slice(0, idx)
+            .concat(stdForm.form)
+            .concat(form.slice(idx + 1));
+        }
+      }
 
       return postProcessFn(form.map(function(obj) {
 
@@ -378,8 +418,8 @@ angular.module('schemaForm').provider('schemaForm',
     };
 
     /**
-     * Create form defaults from schema
-     */
+    * Create form defaults from schema
+    */
     service.defaults = function(schema, ignore, globalOptions) {
       var form   = [];
       var lookup = {}; //Map path => form obj for fast lookup in merging
@@ -411,9 +451,9 @@ angular.module('schemaForm').provider('schemaForm',
 
     //Utility functions
     /**
-     * Traverse a schema, applying a function(schema,path) on every sub schema
-     * i.e. every property of an object.
-     */
+    * Traverse a schema, applying a function(schema,path) on every sub schema
+    * i.e. every property of an object.
+    */
     service.traverseSchema = function(schema, fn, path, ignoreArrays) {
       ignoreArrays = angular.isDefined(ignoreArrays) ? ignoreArrays : true;
 
