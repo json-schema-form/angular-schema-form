@@ -29,25 +29,39 @@
   <label class="item-input-wrapper" ng-if="form.htmlClass == 'item-input-inset'">
 
     <input ng-show="form.key"
-             type="{{form.type}}"
-             step="any"
-             sf-changed="form"
-             placeholder="{{form.placeholder}}"
-             class="{{form.fieldHtmlClass}}"
-             ng-model-options="form.ngModelOptions"
-             ng-model="$$value$$"
-             ng-disabled="form.readonly"
-             schema-validate="form"
-             name="{{form.key.slice(-1)[0]}}">
+      type="{{form.type}}"
+      step="any"
+      sf-changed="form"
+      placeholder="{{form.placeholder}}"
+      class="{{form.fieldHtmlClass}}"
+      ng-model-options="form.ngModelOptions"
+      ng-model="$$value$$"
+      ng-disabled="form.readonly"
+      schema-validate="form"
+      name="{{form.key.slice(-1)[0]}}">
 
-      <span ng-if="form.feedback !== false"
-            class="form-control-feedback"
-            ng-class="evalInScope(form.feedback) || {'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"></span>
-      <div class="help-block"
-           ng-show="(hasError() && errorMessage(schemaError())) || form.description"
-           ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
+  </label>
 
-  </label ng-if="form.htmlClass == 'item-input-inset'" >
+
+  <input ng-if="form.htmlClass != 'item-input-inset'"
+        ng-show="form.key"
+        type="{{form.type}}"
+        step="any"
+        sf-changed="form"
+        placeholder="{{form.placeholder}}"
+        class="{{form.fieldHtmlClass}}"
+        ng-model-options="form.ngModelOptions"
+        ng-model="$$value$$"
+        ng-disabled="form.readonly"
+        schema-validate="form"
+        name="{{form.key.slice(-1)[0]}}">
+
+  <span ng-if="form.feedback !== false"
+        class="form-control-feedback"
+        ng-class="evalInScope(form.feedback) || {'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"></span>
+  <div class="help-block"
+       ng-show="(hasError() && errorMessage(schemaError())) || form.description"
+       ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
 
   <button class="button button-small" ng-click="" ng-if="form.htmlClass == 'item-input-inset'">
       algo!
