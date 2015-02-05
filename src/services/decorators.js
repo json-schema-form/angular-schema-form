@@ -315,6 +315,41 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return evalExpression(expressionString);
             };
 
+            scope.extendUserForm = function (form) {
+              var updateExpressions = function (validateExpression, isCustomerValid) {
+                firstNameForm.validationExpression = "" + validateExpression;
+                lastNameForm.validationExpression =  "" + validateExpression;
+                userErrorForm.expression = "" + !isCustomerValid;
+              };
+
+              var personNumberForm = $filter('filter')(form.items, {itemType: "personNumber"})[0];
+              var personNumberKey = lookupForKey(personNumberForm.key);
+              var firstNameForm = $filter('filter')(form.items, {itemType: "firstName"})[0];
+              var firstNameKey = lookupForKey(firstNameForm.key);
+              var lastNameForm = $filter('filter')(form.items, {itemType: "lastName"})[0];
+              var lastNameKey = lookupForKey(lastNameForm.key);
+              var userErrorForm = $filter('filter')(form.items, {itemType: "userError"})[0];
+
+              updateExpressions(false, true);
+
+              scope.$watch(function () {
+                return scope.$eval(personNumberKey) && scope.$eval(firstNameKey) && scope.$eval(lastNameKey);
+              }, function (newValue) {
+                if (newValue) {
+                  scope.$emit('customer:validate', {
+                    nin: scope.$eval(personNumberKey),
+                    firstName: scope.$eval(firstNameKey),
+                    lastName: scope.$eval(lastNameKey)
+                  });
+                }
+              });
+
+              scope.$on('customer:isValid', function (e, isValid) {
+                updateExpressions(isValid, isValid);
+              });
+
+            };
+
             /**
              * Evaluate an expression, i.e. scope.$eval
              * but do it in sfSchemas parent scope sf-schema directive is used

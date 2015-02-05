@@ -15,8 +15,8 @@
 
   "form": [
     {
-      "type": "search",
-      "key": "providedPersonInfo.nin",
+      "type": "text",
+      "key": "input",
       "title": "Fødselsnummer",
       "infoMessage": "'Fødselsnummer oppgis med 11 siffer",
       "placeholder": "Fill in your ssn",
