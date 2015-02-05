@@ -306,8 +306,13 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
 
-              var lookupForKey = function (key) {
+            var lookupForKey = function (key) {
               var res = '';
+
+              if (angular.isArray(key)) {
+                key = key.join('.');
+              }
+
 
               var schema = scope.globalSchema.properties[key];
 

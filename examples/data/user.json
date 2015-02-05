@@ -2,22 +2,36 @@
   "schema": {
     "type": "object",
     "properties": {
-      "_userInvalidMessage": {
+      "providedContactInfo.email": {
         "type": "string",
+        "maxLength": 255,
+        "format": "email",
         "required": true
       },
-      "nin": {
+      "providedPersonInfo.nin": {
         "type": "string",
-        "format": "ssn",
         "required": true,
         "minLength": 11,
         "maxLength": 11
       },
-      "firstName": {
+      "providedPersonInfo.name.firstName": {
         "type": "string",
         "required": true
       },
-      "lastName": {
+      "_userInvalidMessage": {
+        "type": "string",
+        "required": true
+      },
+      "paymentPeriod": {
+        "type": "string",
+        "required": true
+      },
+      "providedContactInfo.mobilePhone": {
+        "type": "string",
+        "required": true,
+        "pattern": "^\\d{8}$"
+      },
+      "providedPersonInfo.name.lastName": {
         "type": "string",
         "required": true
       }
@@ -27,36 +41,119 @@
 
   "form": [
     {
-      "type": "customer",
+      "type": "fieldset",
       "items": [
         {
-          "itemType": "personNumber",
-          "key": "nin",
-          "title": "Fødselsnummer",
-          "infoMessage": "'Fødselsnummer oppgis med 11 siffer",
-          "placeholder": "Fill in your ssn"
-        },
-        {
-          "itemType": "firstName",
-          "key": "firstName",
-          "title": "Fornavn",
-          "validationMessage": "Vennligst fyll inn ditt fornavn",
+          "key": "paymentPeriod",
+          "title": "Hvor ofte vil du betale?",
           "infoMessage": "Vi anbefaler at du oppretter avtalegiro. Dette kan du enkelt gjøre når du betaler første faktura i din nettbank",
-          "placeholder": "Fornavn"
+          "validationMessage": "Vennligst gjør et valg",
+          "type": "radios",
+          "titleMap": [
+            {
+              "name": "Månedlig",
+              "value": "MONTHLY"
+            },
+            {
+              "name": "Kvartalsvis",
+              "value": "QUARTERLY"
+            },
+            {
+              "name": "Halvårlig",
+              "value": "HALFYEARLY"
+            },
+            {
+              "name": "Årlig",
+              "value": "YEARLY"
+            }
+          ],
+          "dependencies": [
+            "isNew"
+          ],
+          "expression": "isNew === true || isNew === null",
+          "schemaOverride": {
+            "type": "string",
+            "required": true
+          }
         },
         {
-          "itemType": "lastName",
-          "key": "lastName",
-          "title": "Etternavn",
-          "validationMessage": "Vennligst fyll inn ditt etternavn",
-          "infoMessage": "Vi anbefaler at du oppretter avtalegiro. Dette kan du enkelt gjøre når du betaler første faktura i din nettbank",
-          "placeholder": "Etternavn"
+          "type": "customer",
+          "items": [
+            {
+              "key": "providedPersonInfo.nin",
+              "itemType": "personNumber",
+              "title": "Fødselsnummer",
+              "infoMessage": "Fødselsnummeret ble oppgitt når du sjekket pris på produktet",
+              "disabled": true,
+              "placeholder": "Fødselsnummer",
+              "schemaOverride": {
+                "type": "string",
+                "required": true,
+                "minLength": 11,
+                "maxLength": 11
+              }
+            },
+            {
+              "key": "providedPersonInfo.name.firstName",
+              "itemType": "firstName",
+              "title": "Fornavn",
+              "validationMessage": "Vennligst fyll inn ditt fornavn",
+              "infoMessage": "Alle fornavn må fylles inn korrekt. Mellomnavn må ikke fylles inn",
+              "placeholder": "Fornavn",
+              "schemaOverride": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "key": "providedPersonInfo.name.lastName",
+              "itemType": "lastName",
+              "title": "Etternavn",
+              "validationMessage": "Vennligst fyll inn ditt etternavn",
+              "infoMessage": "Etternavnet ditt må fylles inn korrekt. Mellomnavn må ikke fylles inn",
+              "placeholder": "Etternavn",
+              "schemaOverride": {
+                "type": "string",
+                "required": true
+              }
+            },
+            {
+              "key": "_userInvalidMessage",
+              "itemType": "userError",
+              "validationMessage": "Navn og fødselsnummer stemmer ikke overens. Husk å fylle inn akkurat slik det er registrert i folkeregisteret. Mellomnavn må ikke inkluderes",
+              "type": "hidden",
+              "schemaOverride": {
+                "type": "string",
+                "required": true
+              }
+            }
+          ]
         },
         {
-          "itemType": "userError",
-          "key": "_userInvalidMessage",
-          "validationMessage": "Vi har sjekket navnet ditt mot våre systemer, og ikke funnet treff i skrivemåte. Årsaken til dette kan være tegn som bindestrek, dobbel konsonanter (f.eks. Normann/Norman), K eller C (f.eks. Monica/Monika) eller utelatelse/tilføring av et mellomnavn uten at dette er registert i våre systemer. Har du fremdeles problemer, ta kontakt med kundeservice på telefon 08880 eller e-post skadeforsikring@storebrand.no.",
-          "type": "hidden"
+          "key": "providedContactInfo.email",
+          "title": "Epost",
+          "formType": "email",
+          "validationMessage": "Vennligst sjekk at e-postadressen er korrekt",
+          "infoMessage": "Kontroller at din e-postadresse er riktig, da det er den vi sender bekreftelsesmelding til",
+          "placeholder": "E-postadresse",
+          "schemaOverride": {
+            "type": "string",
+            "maxLength": 255,
+            "format": "email",
+            "required": true
+          }
+        },
+        {
+          "key": "providedContactInfo.mobilePhone",
+          "title": "Mobiltelefon",
+          "formType": "tel",
+          "validationMessage": "Telefonnummeret må bestå av 8 siffer",
+          "placeholder": "Telefonnummer",
+          "schemaOverride": {
+            "type": "string",
+            "required": true,
+            "pattern": "^\\d{8}$"
+          }
         }
       ]
     }
