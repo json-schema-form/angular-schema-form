@@ -485,17 +485,42 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               var lastNameKey = lookupForKey(lastNameForm.key);
               var userErrorForm = $filter('filter')(form.items, {itemType: "userError"})[0];
 
+              var sendCustomerInfo = function () {
+                console.log('here')
+                var personNumber = scope.$eval(personNumberKey);
+                var firstName = scope.$eval(firstNameKey);
+                var lastName = scope.$eval(lastNameKey);
+                if (personNumber && firstName && lastName) {
+                  scope.$emit('customer:validate', {
+                    nin: personNumber,
+                    firstName: firstName,
+                    lastName: lastName
+                  });
+                }
+              };
+
               updateExpressions(false, true);
 
               scope.$watch(function () {
-                return scope.$eval(personNumberKey) && scope.$eval(firstNameKey) && scope.$eval(lastNameKey);
+                return scope.$eval(personNumberKey);
               }, function (newValue) {
                 if (newValue) {
-                  scope.$emit('customer:validate', {
-                    nin: scope.$eval(personNumberKey),
-                    firstName: scope.$eval(firstNameKey),
-                    lastName: scope.$eval(lastNameKey)
-                  });
+                  sendCustomerInfo();
+                }
+              });
+
+              scope.$watch(function () {
+                return scope.$eval(firstNameKey);
+              }, function (newValue) {
+                if (newValue) {
+                  sendCustomerInfo();
+                }
+              });
+              scope.$watch(function () {
+                return scope.$eval(lastNameKey);
+              }, function (newValue) {
+                if (newValue) {
+                  sendCustomerInfo();
                 }
               });
 

@@ -56,7 +56,12 @@
         };
 
         $scope.$on('customer:validate', function (e, data) {
-            $scope.$broadcast('customer:isValid', false);
+            console.log(data)
+            if (data.firstName == "1") {
+                $scope.$broadcast('customer:isValid', false);
+            } else {
+                $scope.$broadcast('customer:isValid', true);
+            }
         })
     });
 </script>

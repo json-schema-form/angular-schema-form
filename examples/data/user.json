@@ -84,7 +84,6 @@
               "itemType": "personNumber",
               "title": "Fødselsnummer",
               "infoMessage": "Fødselsnummeret ble oppgitt når du sjekket pris på produktet",
-              "disabled": true,
               "placeholder": "Fødselsnummer",
               "schemaOverride": {
                 "type": "string",
