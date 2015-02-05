@@ -336,7 +336,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               var userErrorForm = $filter('filter')(form.items, {itemType: "userError"})[0];
 
               var sendCustomerInfo = function () {
-                console.log('here')
                 var personNumber = scope.$eval(personNumberKey);
                 var firstName = scope.$eval(firstNameKey);
                 var lastName = scope.$eval(lastNameKey);
