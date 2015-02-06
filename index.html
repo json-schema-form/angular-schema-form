@@ -5,17 +5,66 @@
     <title>Angular Schema Form</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/railscasts.min.css">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.4.0/slick.css"/>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="gh-pages-files/index.css">
   </head>
   <body ng-app="schemaForm" ng-controller="PageCtrl">
+    <a href="https://github.com/Textalk/angular-schema-form" class="github-banner hidden-xs"><img src="gh-pages-files/img/github-banner.png" alt=""/></a>
+    <a href="https://github.com/Textalk/angular-schema-form" class="github-bar visible-xs"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> us on GitHub</a>
     <div class="header-wraper">
-      <header class="container">
-        <h1>Angular Schema Form</h1>
-        <span>Generate forms from a JSON schema, with AngularJS!</span>
-      </header>
+      <div class="wrap-my-slide">
+        <div class="slide-a-long hidden-xs">
+          <div class="slide" id="slide1">
+            <div class="container big">
+              <p>Is that a JSON Schema?</p>
+              <p>Here, have a form.</p>
+            </div>
+          </div>
+          <div class="slide" id="slide2">
+            <div class="container">
+              <h3>Reason #1</h3>
+              <p>Stressed? Not any more! Get out and touch some wheat, in a true sepia-colored moment.</p>
+              <p>You can do it!</p>
+            </div>
+          </div>
+          <div class="slide" id="slide3">
+            <div class="container">
+              <h3>Reason #2</h3>
+              <p>Wow, you got so much time on your hands. Become a goat herder. Goats are the coolest animals ever.</p>
+              <p>For realz!</p>
+            </div>
+          </div>
+          <div class="slide" id="slide4">
+            <div class="container">
+              <h3>Reason #3</h3>
+              <p>With time on your side, Find a great place to do awesome poses like reaching your arms to the sky.</p>
+              <p>Nothing says freedom like this.</p>
+            </div>
+          </div>
+        </div>
+
+
+        <header>
+          <div class="container">
+            <div id="logo">
+              <img src="gh-pages-files/img/logo.png" alt="Angular Schema Form" />
+            </div>
+            <h1>Generate forms from a JSON schema, with AngularJS!</h1>
+          </div>
+        </header>
+        <div class="anchor hidden-xs">
+          <div class="container">
+            <a href="#what-is-it">
+              <div class="circle"><span>⌵</span></div>
+            </a>
+          </div>
+        </div>
+
+      </div>
     </div>
 
-    <div class="container what-is-it">
+    <div id="what-is-it" class="container what-is-it">
       <div class="col-sm-12">
         <h2>What is it?</h2>
         <p>
@@ -24,7 +73,10 @@
         </p>
       </div>
     </div>
+  </div>
+  <div class="code">
     <div class="example container">
+      <div class="row">
       <div class="col-sm-6">
         <h4>JSON Schema</h4>
         <pre><code class="json">{
@@ -68,9 +120,13 @@
     "title": "OK"
   }
 ]
-        </code></pre>
+          </code></pre>
+        </div>
       </div>
-
+    </div>
+  </div>
+  <div class="example container">
+    <div class="row">
       <div class="col-sm-6">
         <h4>Model</h4>
 
@@ -82,116 +138,165 @@
         <form sf-schema="schema" sf-form="form" sf-model="obj.model"></form>
       </div>
 
-      <div class="alert alert-info col-sm-12">
-        Check out the
-        <a href="http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html">demo page</a>
-        for more examples
+    </div>
+  </div>
+
+
+  <div class="demo">
+    <div class="container">
+      <div class="col-sm-5 col-xs-6 text">
+        <h5>Check out<br/>the demo<br/>page for more<br/>examples</h5>
+      </div>
+      <div class="col-sm-2 hidden-xs pic">
+        <img src="gh-pages-files/img/arrow.png" alt="" />
+      </div>
+      <div class="col-sm-5 col-xs-6 batton">
+        <a href="http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html" class="btn">Demo</a>
       </div>
     </div>
+  </div>
 
+  <div class="container features">
+    <h2>Features</h2>
+    <ul>
+      <li>Bootstrap 3 ready forms</li>
+      <li>Validate form using the JSON Schema</li>
+      <li>Fine tune presentation with a form definition, change field types, change order</li>
+      <li>Lots of basic form types out of the box.</li>
+      <li>Supports array with drag'n'drop or in tabs</li>
+      <li>Add-ons for more fanciful stuff like wysiwyg editors, datepickers, colorpickers etc</li>
+    </ul>
+  </div>
+
+  <div class="container get-it">
+    <h2>Get It</h2>
+    <p>Use bower:</p>
+    <pre class="install">bower install angular-schema-form</pre>
+
+    <p>Or just <a href="https://github.com/Textalk/angular-schema-form">download from github!</a></p>
+
+  </div>
+
+  <div class="container add-ons">
+    <h2>Add-ons</h2>
+    <p>
+      Schema Form was built to be extended and its easy to create your own form field types that
+      suit your specific requirement. Check out
+      <a href="https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md">
+        the docs on extending schema form
+      </a> for more details.
+    <p>
+  </div>
+  <div class="container third-party">
+    <h2>Third Party Add-ons</h2>
+    <ul class="list-group add-ons">
+      <li ng-click="navigate(addon.website)" ng-repeat="addon in addons" class="list-group-item">
+        <span class="badge"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{::addon.stars}}</span>
+        <a href="{{::addon.website}}">
+          <h3>{{::addon.name}}</h2>
+            <p><span>{{::addon.owner}}</span></p>
+          <p>{{::addon.description}}&nbsp;</p>
+        </a>
+      </li>
+    </ul>
+  </div>
+  <footer>
     <div class="container">
-      <h2>Features</h2>
-      <ul>
-        <li>Bootstrap 3 ready forms</li>
-        <li>Validate form using the JSON Schema<li>
-        <li>Fine tune presentation with a form definition, change field types, change order</li>
-        <li>Lots of basic form types out of the box.</li>
-        <li>Supports array with drag'n'drop or in tabs</li>
-        <li>Add-ons for more fanciful stuff like wysiwyg editors, datepickers, colorpickers etc</li>
-      </ul>
-    </div>
+      <h5>Thank you & good bye!</h5>
+      <p>Made with <img src="gh-pages-files/img/icon-heart.png" alt=""/> by <a href="http://textalk.se">Textalk</a>.</p></footer>
 
-    <div class="container">
-      <h2>Get It</h2>
-      Use bower:
-      <pre>bower install angular-schema-form</pre>
-
-      Or just <a href="https://github.com/Textalk/angular-schema-form">download from github!</a>
-
-    </div>
-
-    <div class="container">
-      <h2>Add-ons</h2>
-      <p>
-        Schema Form was built to be extended and its easy to create your own form field types that
-        suit your specific requirement. Check out
-        <a href="https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md">
-          the docs on extending schema form
-        </a> for more details.
-      <p>
-    </div>
-    <div class="container">
-      <h2>Third Party Add-ons</h2>
-      <ul class="list-group add-ons">
-        <li ng-click="navigate(addon.website)" ng-repeat="addon in addons" class="list-group-item">
-          <span class="badge"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{::addon.stars}}</span>
-          <a href="{{::addon.website}}">
-            <h3>{{::addon.name}}</h2>
-              <p>{{::addon.owner}}</p>
-            <p>{{::addon.description}}&nbsp;</p>
-          </a>
-        </li>
-      </ul>
-    </div>
-    <footer>Built with <span class="glyphicon glyphicon-heart" aria-hidden="true"></span> by <a href="http://textalk.se">Textalk</a>.</footer>
+    <script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"></script>
 
-    <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
-    <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
-    <script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-    <script type="text/javascript" src="../bower_components/objectpath/lib/ObjectPath.js"></script>
-    <script type="text/javascript" src="../dist/schema-form.min.js"></script>
-    <script type="text/javascript" src="../dist/bootstrap-decorator.min.js"></script>
+    <script type="text/javascript" src="bower_components/tv4/tv4.js"></script>
+    <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script type="text/javascript" src="bower_components/objectpath/lib/ObjectPath.js"></script>
+    <script type="text/javascript" src="dist/schema-form.min.js"></script>
+    <script type="text/javascript" src="dist/bootstrap-decorator.min.js"></script>
+
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery.slick/1.4.0/slick.min.js"></script>
 
     <script>
-      hljs.initHighlightingOnLoad();
+      $(document).ready(function(){
+        $('.slide-a-long').slick({
+          autoplaySpeed: 5000,
+          dots: false,
+          arrows: false,
+          pauseOnHover: false,
+          autoplay: true
+        });
+      });
+</script>
 
-      angular.module('schemaForm').controller("PageCtrl",function($scope, $http) {
-        $scope.schema = {
-          "type": "object",
-          "title": "Comment",
-          "properties": {
-            "name":  {
-              "title": "Name",
-              "type": "string"
-            },
-            "email":  {
-              "title": "Email",
-              "type": "string",
-              "pattern": "^\\S+@\\S+$",
-              "description": "Email will be used for evil."
-            },
-            "comment": {
-              "title": "Comment",
-              "type": "string",
-              "maxLength": 20,
-              "validationMessage": "Don't be greedy!"
-            }
+    <script>
+
+    $(function() {
+      $('a[href*=#]:not([href=#])').click(function() {
+        if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+          var target = $(this.hash);
+          target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+          if (target.length) {
+            $('html,body').animate({
+              scrollTop: target.offset().top
+            }, 1000);
+            return false;
+          }
+        }
+      });
+    });
+</script>
+
+    <script>
+hljs.initHighlightingOnLoad();
+
+angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
+      $scope.schema = {
+        'type': 'object',
+        'title': 'Comment',
+        'properties': {
+          'name':  {
+            'title': 'Name',
+            'type': 'string'
           },
-          "required": ["name","email","comment"]
-        };
+          'email':  {
+            'title': 'Email',
+            'type': 'string',
+            'pattern': '^\\S+@\\S+$',
+            'description': 'Email will be used for evil.'
+          },
+          'comment': {
+            'title': 'Comment',
+            'type': 'string',
+            'maxLength': 20,
+            'validationMessage': 'Don\'t be greedy!'
+          }
+        },
+        'required': ['name','email','comment']
+      };
 
       $scope.form = [
-        "name",
-        "email",
+        'name',
+        'email',
         {
-          "key": "comment",
-          "type": "textarea",
-          "placeholder": "Make a comment"
+          'key': 'comment',
+          'type': 'textarea',
+          'placeholder': 'Make a comment'
         },
         {
-          "type": "submit",
-          "title": "OK"
+          'type': 'submit',
+          'title': 'OK'
         }
       ];
 
       $scope.obj = {};
 
       $scope.obj.model = {
-        "name": 'Leeroy Jenkins',
-        "email": 'leeroy@palsforlife.com',
-        "comment": 'At least i have chicken.'
+        'name': 'Leeroy Jenkins',
+        'email': 'leeroy@palsforlife.com',
+        'comment': 'At least i have chicken.'
       };
 
       $scope.navigate = function($event, url) {
@@ -206,24 +311,16 @@
         location.href = url;
       };
 
+      $http.get('http://s3-us-west-2.amazonaws.com/asf-addons-bucket/list.json')
+        .then(function(res) {
 
-
-      //$http.get('https://bower.herokuapp.com/packages/search/angular-schema-form-')
-      $http.get('http://bower-component-list.herokuapp.com/')
-           .then(function(res){
-
-        var filtered = res.data.filter(function(p) {
-          return p.name.indexOf('angular-schema-form-') === 0 ||
-                (p.keywords && p.keywords.indexOf('angular-schema-form-add-on') !== -1);
-        })
-
-        filtered.sort(function(a, b){
-          return b.stars - a.stars;
+        angular.forEach(res.data, function(addon) {
+          addon.name = addon.name.split('angular-schema-form-').pop();
         });
 
-        console.log(filtered)
+        console.log(res.data);
 
-        $scope.addons = filtered;
+        $scope.addons = res.data;
       });
 
     }).filter('prettyjson', function() {
@@ -231,7 +328,7 @@
         return JSON.stringify(input, undefined, 2);
       };
     });
-    </script>
+</script>
 
   </body>
 </html>
