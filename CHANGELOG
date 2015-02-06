@@ -1,3 +1,9 @@
+v0.7.11
+-------
+ * New front page with a list of add-on:s based on a bower search! Thanks @unicornforce @Dervisevic @davidlgj
+ * Twitter account, @ngSchemaForm, new releases will be announced here. Thanks @Dervisevic
+ * copyValueTo form option. Thanks @Dervisevic
+
 v0.7.10
 ------
 * Accessability additions, thanks @stramel
