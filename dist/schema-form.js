@@ -338,6 +338,11 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             var evalExpression = function (expression) {
+
+              if (!expression) {
+                return false;
+              }
+
               angular.forEach(scope.form.dependencies, function (key) {
                 expression = expression.replace(key, lookupForKey(key));
               });
