@@ -150,7 +150,7 @@ angular.module('myModule', ['schemaForm']);
 
 Add-ons
 ------
-There are several add-ons available, for a full list see the [web page](http://textalk.github.io/angular-schema-form/).
+There are several add-ons available, for a full list see the [web page](http://textalk.github.io/angular-schema-form/#third-party-addons).
 Your can also [create your own add-ons!](docs/extending.md)
 
 Contributing
