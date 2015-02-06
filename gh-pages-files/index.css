@@ -44,7 +44,7 @@ a.github-bar { position:fixed; top:0; z-index:200; padding:10px 0; width:100%; d
 
 .header-wrapper { position:relative; }
 
-.wrap-my-slide { height: 90vh; position:relative; background:url(img/bg-heart.png) no-repeat center center; }
+.wrap-my-slide { height: 90vh; position:relative; }
 .slide-a-long { height:100%; }
 .slide-a-long div { height:100%; }
 .slide { background-size:cover; background-position:center center; padding-top:240px; }
@@ -86,13 +86,13 @@ header { position:absolute; top:60px; width:100%; }
 .demo .batton { text-align:left; vertical-align:middle; display:table-cell; height:100%; float:none; }
 
 .demo a.btn {
-    display:inline-block; 
-    padding: 10px 60px 2px; 
-    background:#ffda47; 
-    border-radius:3px; 
-    color:#fff; 
-    font-family:stumpone, sans-serif; 
-    font-size:38px; 
+    display:inline-block;
+    padding: 10px 60px 2px;
+    background:#ffda47;
+    border-radius:3px;
+    color:#fff;
+    font-family:stumpone, sans-serif;
+    font-size:38px;
     letter-spacing:2px;
     box-shadow:0px 6px #f0c000;
 }
