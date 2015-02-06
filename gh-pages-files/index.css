@@ -54,8 +54,8 @@ a.github-bar { position:fixed; top:0; z-index:200; padding:10px 0; width:100%; d
 #slide3 { background-image:url(img/goat.jpg); }
 #slide4 { background-image:url(img/freedom.jpg); }
 
-.slide h3 { color:#fff; font-family: amatic_scregular, sans-serif; font-size:42px; line-height:42px; margin-bottom:30px; text-transform:uppercase; letter-spacing:2px;  }
-.slide p { color:#fff; font-family: amatic_scregular, sans-serif; font-size:72px; line-height:82px; margin-bottom:30px; text-transform:uppercase; letter-spacing:2px; }
+.slide h3 { color:#fff; font-family: amatic_scregular, sans-serif; font-size:42px; line-height:42px; margin-bottom:30px; text-transform:uppercase; letter-spacing:3px;  }
+.slide p { color:#fff; font-family: amatic_scregular, sans-serif; font-size:72px; line-height:82px; margin-bottom:30px; text-transform:uppercase; letter-spacing:3px; }
 .big p {font-size:100px; line-height:120px; margin-bottom:40px; }
 
 header { position:absolute; top:60px; width:100%; }

@@ -311,17 +311,32 @@ angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
         location.href = url;
       };
 
-      $http.get('http://s3-us-west-2.amazonaws.com/asf-addons-bucket/list.json')
-        .then(function(res) {
+      // UGH, IE9 specific CORS solution.
+      if (window.XDomainRequest) {
+        var xdr = new XDomainRequest();
+        var foo = true;
+        xdr.open('get', 'http://s3-us-west-2.amazonaws.com/asf-addons-bucket/list.json');
+        xdr.onprogress = function() { foo = !foo; };
+        xdr.onload = function() { setData(xdr.responseText); $scope.$apply(); };
+        setTimeout(function() { xdr.send(); }, 0);
+      }
+      else {
+        // Regular old $http for sensible browsers.
+        $http.get('http://s3-us-west-2.amazonaws.com/asf-addons-bucket/list.json').then(function(res) {
+          setData(res.data);
+        });
+      }
 
-        angular.forEach(res.data, function(addon) {
+      var setData = function(data) {
+        if (typeof(data) === 'string') { data = JSON.parse(data); }
+
+        angular.forEach(data, function(addon) {
           addon.name = addon.name.split('angular-schema-form-').pop();
         });
 
-        console.log(res.data);
+        $scope.addons = data;
 
-        $scope.addons = res.data;
-      });
+      };
 
     }).filter('prettyjson', function() {
       return function(input) {
