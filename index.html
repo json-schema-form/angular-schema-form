@@ -71,6 +71,8 @@
           Schema Form is a set of AngularJS directives (and a couple of services) to generate
           Bootstrap 3 ready forms from a JSON Schema.
         </p>
+        <p><a href="https://twitter.com/ngSchemaForm" class="twitter-follow-button" data-show-count="false">Follow @ngSchemaForm</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
       </div>
     </div>
   </div>
@@ -191,7 +193,7 @@
     <p>
   </div>
   <div id="third-party-addons" class="container third-party">
-    <h2>Third Party Add-ons</h2>
+    <h2>Third Party Add-ons ({{::addons.length}})</h2>
     <ul class="list-group add-ons">
       <li ng-click="navigate(addon.website)" ng-repeat="addon in addons" class="list-group-item">
         <span class="badge"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{::addon.stars}}</span>
@@ -255,6 +257,9 @@
     <script>
 hljs.initHighlightingOnLoad();
 
+/*
+    Actual usage of angular schema form code if you're looking for it.
+ */
 angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
       $scope.schema = {
         'type': 'object',
@@ -302,6 +307,9 @@ angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
         'comment': 'At least i have chicken.'
       };
 
+      /*
+          Navigation for addons list.
+       */
       $scope.navigate = function($event, url) {
         // Is this a ctrl click? Or right ot middle? then do nothing
         if ($event.ctrlKey || $event.button !== 0) {
@@ -314,8 +322,12 @@ angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
         location.href = url;
       };
 
-      // UGH, IE9 specific CORS solution.
+      /*
+          Code for getting addons. Uses a middle layer that caches the entire bower
+          repo list at 3MB+ and filters out out specific addons.
+       */
       if (window.XDomainRequest) {
+        // UGH, IE9 specific CORS solution.
         var xdr = new XDomainRequest();
         var foo = true;
         xdr.open('get', 'http://s3-us-west-2.amazonaws.com/asf-addons-bucket/list.json');
@@ -330,6 +342,9 @@ angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
         });
       }
 
+      /*
+        Function for displaying addons, takes both data types.
+       */
       var setData = function(data) {
         if (typeof(data) === 'string') { data = JSON.parse(data); }
 
@@ -341,6 +356,7 @@ angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
 
       };
 
+      // Filter for nice json output
     }).filter('prettyjson', function() {
       return function(input) {
         return JSON.stringify(input, undefined, 2);
