@@ -1379,7 +1379,7 @@ angular.module('schemaForm')
   }
 ]);
 
-angular.module('schemaForm').directive('schemaValidate', ['sfValidator', function(sfValidator) {
+angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSelect', function(sfValidator, sfSelect) {
   return {
     restrict: 'A',
     scope: false,
@@ -1401,6 +1401,15 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
         return form;
       };
       var form   = getForm();
+
+      if (form.copyValueTo) {
+        ngModel.$viewChangeListeners.push(function() {
+          var paths = form.copyValueTo;
+          angular.forEach(paths, function(path) {
+            sfSelect(path, scope.model, ngModel.$viewValue);
+          });
+        });
+      }
 
       // Validate against the schema.
 
@@ -1435,7 +1444,6 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
           }
         });
       }
-
 
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function() {

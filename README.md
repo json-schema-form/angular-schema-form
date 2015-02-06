@@ -8,6 +8,10 @@ Angular Schema Form [![alt text][1.1]][1]
 
 Generate forms from JSON schemas using AngularJS!
 
+Web Page
+--------
+[http://textalk.github.io/angular-schema-form/](http://textalk.github.io/angular-schema-form/)
+
 Demo Time!
 ----------
 [Try out the example page](http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html).
@@ -146,15 +150,7 @@ angular.module('myModule', ['schemaForm']);
 
 Add-ons
 ------
-There are a couple of add-ons, a date picker, a colorpicker and two wysiwyg editors. 
-They have their own repos and you can find them here with usage instructions:
-
-  * [https://github.com/Textalk/angular-schema-form-datepicker](https://github.com/Textalk/angular-schema-form-datepicker)
-  * [https://github.com/Textalk/angular-schema-form-colorpicker](https://github.com/Textalk/angular-schema-form-colorpicker)
-  * [https://github.com/Textalk/angular-schema-form-tinymce](https://github.com/Textalk/angular-schema-form-tinymce)
-  * [https://github.com/webcanvas/angular-schema-form-ckeditor](https://github.com/webcanvas/angular-schema-form-ckeditor)
-  * [https://github.com/Textalk/angular-schema-form-fontpicker](https://github.com/Textalk/angular-schema-form-fontpicker)
-
+There are several add-ons available, for a full list see the [web page](http://textalk.github.io/angular-schema-form/#third-party-addons).
 Your can also [create your own add-ons!](docs/extending.md)
 
 Contributing
