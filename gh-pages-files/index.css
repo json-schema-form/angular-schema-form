@@ -44,7 +44,7 @@ a.github-bar { position:fixed; top:0; z-index:200; padding:10px 0; width:100%; d
 
 .header-wrapper { position:relative; }
 
-.wrap-my-slide { height: 90vh; position:relative; }
+.wrap-my-slide { height: 90vh; position:relative; background:url(img/bg-heart.png) no-repeat center center; }
 .slide-a-long { height:100%; }
 .slide-a-long div { height:100%; }
 .slide { background-size:cover; background-position:center center; padding-top:240px; }
@@ -56,7 +56,8 @@ a.github-bar { position:fixed; top:0; z-index:200; padding:10px 0; width:100%; d
 
 .slide h3 { color:#fff; font-family: amatic_scregular, sans-serif; font-size:42px; line-height:42px; margin-bottom:30px; text-transform:uppercase; letter-spacing:3px;  }
 .slide p { color:#fff; font-family: amatic_scregular, sans-serif; font-size:72px; line-height:82px; margin-bottom:30px; text-transform:uppercase; letter-spacing:3px; }
-.big p {font-size:100px; line-height:120px; margin-bottom:40px; }
+
+.slide.big p {font-size:100px; line-height:120px; margin-bottom:40px; }
 
 header { position:absolute; top:60px; width:100%; }
 
@@ -69,9 +70,10 @@ header { position:absolute; top:60px; width:100%; }
 .code { background:#00bed5; }
 .example { padding:80px 15px; }
 
-.code pre { background:none; border:none; color:#fff; }
+.code pre { background:none; border:none; color:#fff; font-weight:bold; }
 .code pre code { background:none; }
 .code pre .hljs-attribute { color:#000; font-weight:normal; }
+
 .code pre .hljs-string,
 .code pre .hljs-number { color:#ffda47; }
 
@@ -84,13 +86,13 @@ header { position:absolute; top:60px; width:100%; }
 .demo .batton { text-align:left; vertical-align:middle; display:table-cell; height:100%; float:none; }
 
 .demo a.btn {
-    display:inline-block;
-    padding: 10px 60px 2px;
-    background:#ffda47;
-    border-radius:3px;
-    color:#fff;
-    font-family:stumpone, sans-serif;
-    font-size:38px;
+    display:inline-block; 
+    padding: 10px 60px 2px; 
+    background:#ffda47; 
+    border-radius:3px; 
+    color:#fff; 
+    font-family:stumpone, sans-serif; 
+    font-size:38px; 
     letter-spacing:2px;
     box-shadow:0px 6px #f0c000;
 }
