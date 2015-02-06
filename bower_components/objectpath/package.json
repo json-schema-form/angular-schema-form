@@ -2,7 +2,7 @@
   "name": "objectpath",
   "author": "Mike Marcacci <mike.marcacci@gmail.com>",
   "license": "MIT",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Parse js object paths using both dot and bracket notation. Stringify an array of properties into a valid path.",
   "main": "index.js",
   "directories": {
@@ -21,11 +21,11 @@
     "bracket notation",
     "path",
     "parse",
-    "string"
+    "string",
+    "object path",
+    "object"
   ],
-  "dependencies": {
-    "chai": "^1.9.1"
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "https://github.com/mike-marcacci/objectpath.git"

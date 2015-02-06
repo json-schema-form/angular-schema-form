@@ -1,11 +1,14 @@
-<div class="checkbox" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
+<div class="checkbox schema-form-checkbox {{form.htmlClass}}"
+     ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
   <label>
     <input type="checkbox"
            sf-changed="form"
            ng-disabled="form.readonly"
            ng-model="$$value$$"
            ng-model-options="form.ngModelOptions"
-           schema-validate="form">
+           schema-validate="form"
+           class="{{form.fieldHtmlClass}}"
+           name="{{form.key.slice(-1)[0]}}">
     <span ng-bind-html="form.title"></span>
   </label>
 

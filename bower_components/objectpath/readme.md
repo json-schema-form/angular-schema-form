@@ -37,3 +37,14 @@ ObjectPath.stringify(['a','1','b','c','d','e','f','g']);
 ObjectPath.stringify(['a','1','b','c','d','e','f','g'],'"');
 // => '["a"]["1"]["b"]["c"]["d"]["e"]["f"]["g"]'
 ```
+
+Normalize a Path
+----------------
+
+ObjectPath.normalize(str)
+
+```js
+var ObjectPath = require('objectpath');
+
+ObjectPath.parse('a[1].b.c.d["e"]["f"].g');
+// => '["a"]["1"]["b"]["c"]["d"]["e"]["f"]["g"]'

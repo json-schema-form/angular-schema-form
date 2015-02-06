@@ -5,8 +5,8 @@ FIXME: real documentation
 
 angular.module('schemaForm')
        .directive('sfSchema',
-['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect',
-  function($compile,  schemaForm,  schemaFormDecorators, sfSelect) {
+['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath',
+  function($compile,  schemaForm,  schemaFormDecorators, sfSelect, sfPath) {
 
     var SNAKE_CASE_REGEXP = /[A-Z]/g;
     var snakeCase = function(name, separator) {
@@ -61,7 +61,7 @@ angular.module('schemaForm')
         //Since we are dependant on up to three
         //attributes we'll do a common watch
         var lastDigest = {};
-
+        var childScope;
         scope.$watch(function() {
 
           var schema = scope.schema;
@@ -77,35 +77,56 @@ angular.module('schemaForm')
             var merged = schemaForm.merge(schema, form, ignore, scope.options);
             var frag = document.createDocumentFragment();
 
+            // Create a new form and destroy the old one.
+            // Not doing keeps old form elements hanging around after
+            // they have been removed from the DOM
+            // https://github.com/Textalk/angular-schema-form/issues/200
+            if (childScope) {
+              childScope.$destroy();
+            }
+            childScope = scope.$new();
+
             //make the form available to decorators
-            scope.schemaForm  = {form:  merged, schema: schema};
+            childScope.schemaForm  = {form:  merged, schema: schema};
 
             //clean all but pre existing html.
             element.children(':not(.schema-form-ignore)').remove();
 
+            // Find all slots.
+            var slots = {};
+            var slotsFound = element[0].querySelectorAll('*[sf-insert-field]');
+
+            for (var i = 0; i < slotsFound.length; i++) {
+              slots[slotsFound[i].getAttribute('sf-insert-field')] = slotsFound[i];
+            }
+
             //Create directives from the form definition
-            angular.forEach(merged,function(obj,i){
-              var n = document.createElement(attrs.sfDecorator || snakeCase(schemaFormDecorators.defaultDecorator,'-'));
+            angular.forEach(merged, function(obj, i) {
+              var n = document.createElement(attrs.sfDecorator ||
+                                             snakeCase(schemaFormDecorators.defaultDecorator, '-'));
               n.setAttribute('form','schemaForm.form['+i+']');
-              var slot;
-              try {
-                slot = element[0].querySelector('*[sf-insert-field="' + obj.key + '"]');
-              } catch(err) {
-                // field insertion not supported for complex keys
-                slot = null;
+
+              // Check if there is a slot to put this in...
+              if (obj.key) {
+                var slot = slots[sfPath.stringify(obj.key)];
+                if (slot) {
+                  while (slot.firstChild) {
+                    slot.removeChild(slot.firstChild);
+                  }
+                  slot.appendChild(n);
+                  return;
+                }
               }
-              if(slot) {
-                slot.innerHTML = "";
-                slot.appendChild(n);  
-              } else {
-                frag.appendChild(n);
-              }
+
+              // ...otherwise add it to the frag
+              frag.appendChild(n);
+
             });
 
             element[0].appendChild(frag);
 
             //compile only children
-            $compile(element.children())(scope);
+            $compile(element.children())(childScope);
 
             //ok, now that that is done let's set any defaults
             schemaForm.traverseSchema(schema, function(prop, path) {
@@ -116,7 +137,8 @@ angular.module('schemaForm')
                 }
               }
             });
-          }
+          };
+          scope.$emit('sf-render-finished', element);
         });
       }
     };
