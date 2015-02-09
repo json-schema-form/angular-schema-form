@@ -3,6 +3,15 @@
     "type": "object",
     "title": "Comment",
     "properties": {
+      "select": {
+        "title": "Select without titleMap",
+        "type": "string",
+        "enum": [
+          "a",
+          "b",
+          "c"
+        ]
+      },
       "name":  {
         "title": "Name",
         "type": "string"
@@ -18,22 +27,60 @@
         "type": "string",
         "maxLength": 20,
         "validationMessage": "Don't be greedy!"
+      },
+      "hasFavorites": {
+        "title": "Add Favorite Things",
+        "type": "boolean",
+        "default": false
+      },
+      "favorites": {
+        "type": "object",
+        "title": "Favorite Things",
+        "properties": {
+          "color": {
+            "title": "Favorite Color",
+            "type": "string",
+            "validationMessage": "Whats your favorite color!",
+            "required": true
+          }
+        }
       }
     },
     "required": ["name","email","comment"]
   },
   "form": [
-    "name",
-    "email",
+    "*",
+    {
+      "type": "submit",
+      "style": "btn-info",
+      "title": "OK"
+    }
+  ],
+  "overrides": [
+    {
+      "key": "select",
+      "type": "select",
+      "titleMap": {
+        "a": "A",
+        "b": "B",
+        "c": "C"
+      }
+    },
     {
       "key": "comment",
       "type": "textarea",
       "placeholder": "Make a comment"
     },
     {
-      "type": "submit",
-	  "style": "btn-info",
-      "title": "OK"
+      "key": "favorites.color",
+      "placeholder": "Your favorite color"
+    },
+    {
+      "type": "conditional",
+      "condition": "modelData.hasFavorites",
+      "items": [
+        "favorites"
+      ]
     }
   ]
 }

@@ -20,6 +20,7 @@ angular.module('schemaForm')
       scope: {
         schema: '=sfSchema',
         initialForm: '=sfForm',
+        overrides: '=sfOverrides',
         model: '=sfModel',
         options: '=sfOptions'
       },
@@ -73,8 +74,8 @@ angular.module('schemaForm')
               Object.keys(schema.properties).length > 0) {
             lastDigest.schema = schema;
             lastDigest.form = form;
-
-            var merged = schemaForm.merge(schema, form, ignore, scope.options);
+            console.log(scope.overrides)
+            var merged = schemaForm.merge(schema, form, ignore, scope.options, undefined, scope.overrides);
             var frag = document.createDocumentFragment();
 
             // Create a new form and destroy the old one.

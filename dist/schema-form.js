@@ -661,30 +661,30 @@ angular.module('schemaForm').provider('schemaForm',
 
   // Overwrites default stdForm if "*" defined in form definition
   // and if there are more definitions then just "*"
-  var overwriteDefaults = function(form, stdForm) {
+  var overwriteDefaults = function(overrides, stdForm) {
     return stdForm.map(function(obj, stdIndex) {
-      angular.forEach(form, function(f, formIndex) {
+      angular.forEach(overrides, function(f, formIndex) {
         if (f.items) {
           angular.forEach(f.items, function(item) {
             if (obj.key.join('.') === item) {
-              stdForm[stdIndex] = f;
-              delete form[formIndex];
+              delete f.items
+              stdForm[stdIndex] = angular.extend(stdForm[stdIndex], f);
+              delete overrides[formIndex];
             }
           });
         }
         if (f.key === obj.key.join('.')) {
-          // We need the original key
           delete f.key
           stdForm[stdIndex] = angular.extend(stdForm[stdIndex], f);
-          delete form[formIndex];
+          delete overrides[formIndex];
         }
       });
 
       if (obj.items) {
-        overwriteDefaults(form, obj.items);
+        overwriteDefaults(overrides, obj.items);
       }
       return obj;
-    }).concat(form);
+    }).concat(overrides);
   }
 
   //First sorted by schema type then a list.
@@ -759,9 +759,10 @@ angular.module('schemaForm').provider('schemaForm',
 
     var service = {};
 
-    service.merge = function(schema, form, ignore, options, readonly) {
+    service.merge = function(schema, form, ignore, options, readonly, overrides) {
       form = form || ['*'];
       options = options || {};
+      overrides = overrides || [];
 
       // Get readonly from root object
       readonly = readonly || schema.readonly || schema.readOnly;
@@ -783,7 +784,7 @@ angular.module('schemaForm').provider('schemaForm',
               k.key = sfPathProvider.parse(v)
             }
           });
-          form = overwriteDefaults(form, stdForm.form);
+          form = overwriteDefaults(overrides, stdForm.form).concat(form)
         } else {
           // Replace "*" with the stdFrom.form
           form = form.slice(0, idx)
@@ -792,7 +793,6 @@ angular.module('schemaForm').provider('schemaForm',
         }
       }
 
-      console.log(form);
       return postProcessFn(form.map(function(obj) {
 
         //handle the shortcut with just a name
@@ -1295,6 +1295,7 @@ angular.module('schemaForm')
       scope: {
         schema: '=sfSchema',
         initialForm: '=sfForm',
+        overrides: '=sfOverrides',
         model: '=sfModel',
         options: '=sfOptions'
       },
@@ -1348,8 +1349,8 @@ angular.module('schemaForm')
               Object.keys(schema.properties).length > 0) {
             lastDigest.schema = schema;
             lastDigest.form = form;
-
-            var merged = schemaForm.merge(schema, form, ignore, scope.options);
+            console.log(scope.overrides)
+            var merged = schemaForm.merge(schema, form, ignore, scope.options, undefined, scope.overrides);
             var frag = document.createDocumentFragment();
 
             // Create a new form and destroy the old one.
