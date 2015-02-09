@@ -24,7 +24,7 @@
 
 }
 
-p, body { font-family:roboto, sans-serif; font-size:16px; line-height:22px; color:#000; }
+p, body { font-family:roboto, sans-serif; font-size:16px; line-height:24px; color:#000; }
 
 h1, h2, h3, h4 { font-family: stumpone, sans-serif; }
 
@@ -57,7 +57,7 @@ a.github-bar { position:fixed; top:0; z-index:200; padding:10px 0; width:100%; d
 .slide h3 { color:#fff; font-family: amatic_scregular, sans-serif; font-size:42px; line-height:42px; margin-bottom:30px; text-transform:uppercase; letter-spacing:3px;  }
 .slide p { color:#fff; font-family: amatic_scregular, sans-serif; font-size:72px; line-height:82px; margin-bottom:30px; text-transform:uppercase; letter-spacing:3px; }
 
-.slide.big p {font-size:100px; line-height:120px; margin-bottom:40px; }
+.slide.big p {font-size:120px; line-height:140px; margin-bottom:40px; }
 
 header { position:absolute; top:60px; width:100%; }
 
@@ -86,13 +86,13 @@ header { position:absolute; top:60px; width:100%; }
 .demo .batton { text-align:left; vertical-align:middle; display:table-cell; height:100%; float:none; }
 
 .demo a.btn {
-    display:inline-block;
-    padding: 10px 60px 2px;
-    background:#ffda47;
-    border-radius:3px;
-    color:#fff;
-    font-family:stumpone, sans-serif;
-    font-size:38px;
+    display:inline-block; 
+    padding: 10px 60px 2px; 
+    background:#ffda47; 
+    border-radius:3px; 
+    color:#fff; 
+    font-family:stumpone, sans-serif; 
+    font-size:38px; 
     letter-spacing:2px;
     box-shadow:0px 6px #f0c000;
 }
@@ -101,7 +101,7 @@ pre.model, pre.install { color:#ff5182; }
 
 .features { padding:80px 15px; }
 .features ul { list-style:none; padding-left:0; }
-.features li { background:url(img/bullet-heart.png) left center no-repeat; padding: 4px 0 4px 20px; }
+.features li { background:url(img/bullet-heart.png) left top 11px no-repeat; padding: 4px 0 4px 20px; }
 
 div.add-ons { padding:80px 15px; }
 
@@ -114,11 +114,21 @@ ul.add-ons p span { color:#808080; font-size:12px; text-transform:uppercase; }
 
 ul.add-ons .badge { border-radius:3px; padding:10px 15px; background:#00bed5;}
 
+.third-party h3 { clear:both; }
 footer { background:#ffda47; padding:240px 0 100px; margin-top:80px;  }
 footer h5 { font-size:74px; margin-bottom:60px; color:#00bed5; text-transform:uppercase; letter-spacing:2px; }
 footer p { font-family:amatic_scregular, sans-serif; font-size:32px; text-transform:uppercase; letter-spacing:2px; }
 footer img { display:inline-block;  }
 footer a { text-decoration:underline; color:#000; }
+
+@media screen and (max-width: 1199px) {
+
+    .slide { padding-top:170px; }
+    .slide h3 { margin-bottom:20px; }
+    .slide p { font-size:62px; line-height:72px; margin-bottom:20px; }
+    .slide.big p {font-size:80px; line-height:100px; margin-bottom:25px; }
+
+}
 
 @media screen and (max-width: 991px) {
 
@@ -133,9 +143,21 @@ footer a { text-decoration:underline; color:#000; }
     .wrap-my-slide { height: auto; }
     header { position:static; margin-top:80px;  }
     h1 { color:#ff5182; }
+    h2 { font-size:34px; }
+    h4 { margin:30px 0 10px; }
 
-    .slide h3 { font-size:24px; line-height:24px; margin-bottom:15px;  }
-    .slide p { font-size:32px; line-height:38px; margin-bottom:15px; }
-    .big p { font-size:48px; line-height:58px; margin-bottom:20px; }
+    h5 { font-size: 24px; }
+    .demo, .what-is-it { padding: 40px 0; }
+    .example, .features, div.add-ons { padding:40px 15px; }
+
+    body, p { font-size:14px; }
+    pre { font-size:12px !important; }
+
+    .demo a.btn {
+        padding: 10px 30px 2px; 
+        font-size:28px; 
+    }
+
+    .third-party .badge { float:left; margin-bottom:10px; }
 
 }
