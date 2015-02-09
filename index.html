@@ -344,7 +344,7 @@ angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
       }
 
       /*
-        Function for displaying addons, takes both data types.
+        Function for displaying addons. Takes both data types.
        */
       var setData = function(data) {
         if (typeof(data) === 'string') { data = JSON.parse(data); }
