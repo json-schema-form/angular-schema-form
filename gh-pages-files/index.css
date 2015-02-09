@@ -114,7 +114,6 @@ ul.add-ons p span { color:#808080; font-size:12px; text-transform:uppercase; }
 
 ul.add-ons .badge { border-radius:3px; padding:10px 15px; background:#00bed5;}
 
-.third-party h3 { clear:both; }
 footer { background:#ffda47; padding:240px 0 100px; margin-top:80px;  }
 footer h5 { font-size:74px; margin-bottom:60px; color:#00bed5; text-transform:uppercase; letter-spacing:2px; }
 footer p { font-family:amatic_scregular, sans-serif; font-size:32px; text-transform:uppercase; letter-spacing:2px; }
@@ -157,7 +156,5 @@ footer a { text-decoration:underline; color:#000; }
         padding: 10px 30px 2px; 
         font-size:28px; 
     }
-
-    .third-party .badge { float:left; margin-bottom:10px; }
 
 }
