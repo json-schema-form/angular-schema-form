@@ -1017,7 +1017,9 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
                 type: 'section',
                 items: form.items.map(function(item) {
                   item.ngModelOptions = form.ngModelOptions;
-                  item.readonly = form.readonly;
+                  if (angular.isUndefined(item.readonly)) {
+                    item.readonly = form.readonly;
+                  }
                   return item;
                 })
               };
@@ -1087,6 +1089,11 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             if (scope.validateArray) {
               scope.validateArray();
             }
+
+            // Angular 1.2 lacks setDirty
+            if (ngModel.$setDirty) {
+              ngModel.$setDirty();
+            }
             return list;
           };
 
@@ -1129,7 +1136,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
                 // Apparently the fastest way to clear an array, readable too.
                 // http://jsperf.com/array-destroy/32
                 while (arr.length > 0) {
-                  arr.shift();
+                  arr.pop();
                 }
 
                 form.titleMap.forEach(function(item, index) {
@@ -1372,7 +1379,7 @@ angular.module('schemaForm')
   }
 ]);
 
-angular.module('schemaForm').directive('schemaValidate', ['sfValidator', function(sfValidator) {
+angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSelect', function(sfValidator, sfSelect) {
   return {
     restrict: 'A',
     scope: false,
@@ -1394,6 +1401,15 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
         return form;
       };
       var form   = getForm();
+
+      if (form.copyValueTo) {
+        ngModel.$viewChangeListeners.push(function() {
+          var paths = form.copyValueTo;
+          angular.forEach(paths, function(path) {
+            sfSelect(path, scope.model, ngModel.$viewValue);
+          });
+        });
+      }
 
       // Validate against the schema.
 
@@ -1428,7 +1444,6 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', functio
           }
         });
       }
-
 
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function() {

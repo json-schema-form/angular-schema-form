@@ -109,7 +109,7 @@ It takes the form definition as an argument.
 | schemaError() | The current error object from tv4js |
 
 
-### Setting up schema defualts
+### Setting up schema defaults
 So you got this shiny new add-on that adds a fancy field type, but feel a bit bummed out that you
 need to specify it in the form definition all the time? Fear not because you can also add a "rule"
 to map certain types and conditions in the schema to default to your type.
@@ -148,6 +148,19 @@ var datepicker = function(name, schema, options) {
 // Put it first in the list of functions
 schemaFormProvider.defaults.string.unshift(datepicker);
 ```
+
+### Sharing your add-on with the world
+So you made an add-on, why not share it with us? On the front page,
+[http://textalk.github.io/angular-schema-form/](http://textalk.github.io/angular-schema-form/#third-party-addons), we
+maintain a list of add ons based on a query of the bower register, and we love to see your add-on
+there.
+
+Any [bower](http://bower.io) package with a name starting with `angular-schema-form-` or that has
+the `keyword` `angular-schema-form-add-on` in its `bower.json` will be picked up. It's cached so
+there can be a delay of a day or so.
+
+So [make a bower package](http://bower.io/docs/creating-packages/), add the keyword
+`angular-schema-form-add-on` and [register it](http://bower.io/docs/creating-packages/#register)!
 
 Decorators
 ----------

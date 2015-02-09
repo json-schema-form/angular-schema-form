@@ -14,6 +14,7 @@ Documentation
     1. [Validation Messages](#validation-messages)
     1. [Inline feedback icons](#inline-feedback-icons)
     1. [ngModelOptions](#ngmodeloptions)
+    1. [copyValueTo](#copyvalueto)
 1. [Specific options and types](#specific-options-and-types)
     1. [fieldset and section](#fieldset-and-section)
     1. [conditional](#conditional)
@@ -342,6 +343,7 @@ General options most field types can handle:
                                // and their items will inherit it.
   htmlClass: "street foobar",  // CSS Class(es) to be added to the container div
   fieldHtmlClass: "street"     // CSS Class(es) to be added to field input (or similar)
+  copyValueTo: ["address.street"]     // Copy values to these schema keys.
 }
 ```
 
@@ -458,6 +460,16 @@ Ex.
 See [Global Options](#global-options) for an example how you set entire form
 to validate on blur.
 
+### copyValueTo
+This option has a very specific use case. Imagine you have the same option in several places, but you want them to be controlled from just one field. You specify what keys the value should be copied to, and the *viewValue* will be copied to these keys on the model. **Note: changing the model directly will not copy the value, it's intended for copying user input**. The recieving fields can be shown, but the intent for them is to be hidden. 
+
+Ex.
+```javascript
+{
+  key: "email.main",
+  copyValueTo: ["email.confirm", "other.email"]
+}
+```
 
 Specific options and types
 --------------------------
@@ -627,7 +639,7 @@ As an object:
 }
 ```
 
-The submit button has btn-primary as default. The button has btn-default as default.
+The submit and other buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 {
@@ -652,7 +664,7 @@ the ```sf-schema``` directive.
 [
 ```
 
-The submit button has btn-primary as default. The button has btn-default as default.
+The submit and other buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 [
@@ -725,7 +737,7 @@ function FormCtrl($scope) {
 ```
 
 
-With *radiobuttons*, both selected and unselected buttons have btn-primary as default.
+With *radiobuttons*, both selected and unselected buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 function FormCtrl($scope) {

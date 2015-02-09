@@ -1,9 +1,10 @@
 {
   "name": "angular-schema-form",
-  "version": "0.7.9",
+  "version": "0.7.11",
   "description": "Create complex forms from a JSON schema with angular.",
   "repository": "Textalk/angular-schema-form",
   "main": "dist/schema-form.min.js",
+  "homepage": "http://textalk.github.io/angular-schema-form/",
   "scripts": {
     "test": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js"
   },
@@ -37,6 +38,7 @@
     "gulp-concat": "^2.2.0",
     "gulp-jscs": "^1.1.0",
     "gulp-minify-html": "^0.1.1",
+    "gulp-rename": "^1.2.0",
     "gulp-uglify": "^0.2.1",
     "karma": "^0.12.0",
     "karma-chai-sinon": "^0.1.3",
@@ -51,10 +53,10 @@
     "sinon-chai": "^2.5.0",
     "streamqueue": "0.0.5"
   },
-"licenses": [
-  {
-    "type": "MIT",
-    "url": "https://raw.githubusercontent.com/Textalk/angular-schema-form/master/LICENSE"
-  }
-]
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.githubusercontent.com/Textalk/angular-schema-form/master/LICENSE"
+    }
+  ]
 }
