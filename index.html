@@ -357,7 +357,7 @@ angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
 
       };
 
-      // Filter for nice json output
+      // Filter for nice json output.
     }).filter('prettyjson', function() {
       return function(input) {
         return JSON.stringify(input, undefined, 2);
