@@ -200,7 +200,8 @@
         <span class="badge"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{::addon.stars}}</span>
         <a href="{{::addon.website}}">
           <h3>{{::addon.name}}</h2>
-            <p><span>{{::addon.owner}}</span></p>
+            <span class="date">Created {{addon.created | momentify}} / Updated {{addon.updated | momentify}}.</span>
+            <p><span>{{::addon.owner}} </span></p>
           <p>{{::addon.description}}&nbsp;</p>
         </a>
       </li>
@@ -220,6 +221,7 @@
     <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
     <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
     <script type="text/javascript" src="bower_components/objectpath/lib/ObjectPath.js"></script>
+    <script type="text/javascript" src="bower_components/moment/moment.js"></script>
     <script type="text/javascript" src="dist/schema-form.min.js"></script>
     <script type="text/javascript" src="dist/bootstrap-decorator.min.js"></script>
 
@@ -361,6 +363,10 @@ angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
     }).filter('prettyjson', function() {
       return function(input) {
         return JSON.stringify(input, undefined, 2);
+      };
+    }).filter('momentify', function() {
+      return function(input) {
+        return moment(input).fromNow();
       };
     });
 </script>
