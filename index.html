@@ -200,9 +200,8 @@
         <span class="badge"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{::addon.stars}}</span>
         <a href="{{::addon.website}}">
           <h3>{{::addon.name}}</h2>
-            <span class="date">Created {{addon.created | momentify}} / Updated {{addon.updated | momentify}}.</span>
-            <p><span>{{::addon.owner}} </span></p>
-          <p>{{::addon.description}}&nbsp;</p>
+          <p ng-class="{nodesc: !addon.description}">{{::addon.description || "No description"}}&nbsp;</p>
+          <p><span>{{::addon.owner}} •</span> <span class="date">Created {{addon.created | momentify}} / Updated {{addon.updated | momentify}}.</span></p>
         </a>
       </li>
     </ul>
