@@ -109,12 +109,12 @@ ul.add-ons li { border:none; margin-bottom: 8px; }
 ul.add-ons li:hover { background:#f9f9f9;  }
 ul.add-ons a:hover { text-decoration:none; }
 ul.add-ons h3 { color:#000; margin: 0; }
-ul.add-ons p { color:000; margin-bottom: 1px;}
+ul.add-ons p { color:#474747; margin-bottom: 1px; }
 ul.add-ons p span { color:#808080; font-size:13px; text-transform:uppercase; }
 ul.add-ons span.date { color:#808080; text-transform:none; font-size: 11px;  }
 ul.add-ons .badge { border-radius:3px; padding:10px 15px; background:#00bed5;}
 ul.add-ons a.stealth { color: #808080; text-decoration: underline; }
-ul.add-ons .nodesc {color: #ababab; font-style: italic}
+ul.add-ons .nodesc {color: #808080; font-style: italic}
 
 footer { background:#ffda47; padding:240px 0 100px; margin-top:80px;  }
 footer h5 { font-size:74px; margin-bottom:60px; color:#00bed5; text-transform:uppercase; letter-spacing:2px; }
