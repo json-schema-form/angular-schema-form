@@ -20,6 +20,7 @@
     display: inline-block;
   }
 }
+
 label.empty-view {
   padding: 0 !important;
   margin: 0 !important;
@@ -40,6 +41,7 @@ label.empty-view {
     margin-left: 5px;
   }
 }
+
 .subtitle-wrapper {
   margin-bottom: 10px;
 }
@@ -61,7 +63,7 @@ label.empty-view {
 
 //datepicker
 .input-group.datePicker {
-  width: 260px !important;
+    width: 260px !important;
 
   input {
     min-width: 100px;
@@ -93,7 +95,6 @@ label.empty-view {
     top: 0px;
     display: block;
   }
-
 
   &.select-wrapper {
     width: 260px !important;
@@ -236,9 +237,8 @@ label.empty-view {
 }
 
 form [class*="col-"] {
-  padding-right: 15px;//additional crap from stb.ny
+  padding-right: 15px; //additional crap from stb.ny
 }
-
 
 .uploader {
   margin: @standart-indent/2 0;
@@ -304,7 +304,6 @@ form [class*="col-"] {
     }
   }
 
-
   .search-box {
     .stb-form-group {
       button {
@@ -313,5 +312,25 @@ form [class*="col-"] {
     }
   }
 
+  div.stb-form-group.date-picker {
+    div.input-group.datePicker {
+      width: 235px !important;
+    }
+  }
 
+  form .stb-form-group .input-group input.form-control {
+    width: 193px !important;
+  }
+
+  .stb-form-group.select-wrapper {
+    width: 235px !important;
+  }
+
+  .chosen-container-single .chosen-single div b {
+    padding-left: 5px!important;
+  }
+
+  form .has-feedback .selectContainer i.form-control-feedback {
+    right: -35px!important;
+  }
 }
