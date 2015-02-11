@@ -30,12 +30,25 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         });
       }
 
+      scope.$parent.dirtyNgModelsList = []
+      scope.markSiblingsDirty = function(ngModel) {
+        var inDirtyNgModelsList = (scope.$parent.dirtyNgModelsList.indexOf(ngModel.$name) != -1);
+        if (ngModel.$dirty || inDirtyNgModelsList) {
+          if (!inDirtyNgModelsList) {
+            scope.$parent.dirtyNgModelsList.push(ngModel.$name);
+          }
+          ngModel.$dirty = true;
+          ngModel.$pristine = false;
+        }
+      }
+
       // Validate against the schema.
 
       // Get in last of the parses so the parsed value has the correct type.
       if (ngModel.$validators) { // Angular 1.3
         ngModel.$validators.schema = function(value) {
           var result = sfValidator.validate(getForm(), value);
+          scope.markSiblingsDirty(ngModel);
           error = result.error;
           return result.valid;
         };
@@ -50,6 +63,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
           }
 
           var result =  sfValidator.validate(form, viewValue);
+          scope.markSiblingsDirty(ngModel);
 
           if (result.valid) {
             // it is valid
@@ -80,15 +94,15 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
 
       //This works since we now we're inside a decorator and that this is the decorators scope.
       //If $pristine and empty don't show success (even if it's valid)
-      scope.hasSuccess = function() {
+      scope.hasSuccess = scope.$parent.hasSuccess = function() {
         return ngModel.$valid && (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue));
       };
 
-      scope.hasError = function() {
+      scope.hasError = scope.$parent.hasError = function() {
         return ngModel.$invalid && !ngModel.$pristine;
       };
 
-      scope.schemaError = function() {
+      scope.schemaError = scope.$parent.schemaError = function() {
         return error;
       };
 
