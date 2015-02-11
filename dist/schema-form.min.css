@@ -254,4 +254,19 @@ form [class*="col-"] {
   .search-box .stb-form-group button {
     margin-bottom: 2px;
   }
+  div.stb-form-group.date-picker div.input-group.datePicker {
+    width: 235px !important;
+  }
+  form .stb-form-group .input-group input.form-control {
+    width: 193px !important;
+  }
+  .stb-form-group.select-wrapper {
+    width: 235px !important;
+  }
+  .chosen-container-single .chosen-single div b {
+    padding-left: 5px!important;
+  }
+  form .has-feedback .selectContainer i.form-control-feedback {
+    right: -35px !important;
+  }
 }
