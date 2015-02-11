@@ -104,6 +104,7 @@ pre.model, pre.install { color:#ff5182; }
 .features li { background:url(img/bullet-heart.png) left top 11px no-repeat; padding: 4px 0 4px 20px; }
 
 div.add-ons { padding:80px 15px; }
+.input-group-addon.glyphicon { position: static; }
 
 ul.add-ons li { border:none; margin-bottom: 8px; }
 ul.add-ons li:hover { background:#f9f9f9;  }

@@ -195,8 +195,13 @@
   </div>
   <div id="third-party-addons" class="container third-party">
     <h2>Third Party Add-ons ({{::addons.length}})</h2>
+    <div class="input-group col-xs-11 col-sm-6 col-md-5 col-lg-4">
+      <span class="input-group-addon glyphicon glyphicon-search" id="search"></span>
+      <input type="text" ng-model="obj.search" class="form-control" aria-describedby="search">
+    </div>
+    <br>
     <ul class="list-group add-ons">
-      <li ng-click="navigate(addon.website)" ng-repeat="addon in addons" class="list-group-item">
+      <li ng-click="navigate(addon.website)" ng-repeat="addon in addons | filter:obj.search" class="list-group-item">
         <span class="badge"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{::addon.stars}}</span>
         <a href="{{::addon.website}}">
           <h3>{{::addon.name}}</h2>
