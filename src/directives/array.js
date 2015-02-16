@@ -154,6 +154,20 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
           if (form.titleMap && form.titleMap.length > 0) {
             scope.titleMapValues = [];
 
+            // Check that an array contains an item
+            var isItemInArray = function(arr, item){
+                if(form.subKey){
+                    var found = false;
+                    arr.every(function(arrItem){
+                        found = (arrItem[form.subKey] || arrItem) === item.value;
+                        return !found;
+                    });
+                    return found;
+                } else{
+                    return arr.indexOf(item.value) !== -1;
+                }
+            };
+
             // We watch the model for changes and the titleMapValues to reflect
             // the modelArray
             var updateTitleMapValues = function(arr) {
@@ -161,7 +175,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
               arr = arr || [];
 
               form.titleMap.forEach(function(item) {
-                scope.titleMapValues.push(arr.indexOf(item.value) !== -1);
+                scope.titleMapValues.push(isItemInArray(arr, item));
               });
 
             };
