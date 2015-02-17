@@ -85,6 +85,7 @@
               "title": "Fødselsnummer",
               "infoMessage": "Fødselsnummeret ble oppgitt når du sjekket pris på produktet",
               "placeholder": "Fødselsnummer",
+              "id": "someExample",
               "schemaOverride": {
                 "type": "string",
                 "required": true,
@@ -99,6 +100,7 @@
               "validationMessage": "Vennligst fyll inn ditt fornavn",
               "infoMessage": "Alle fornavn må fylles inn korrekt. Mellomnavn må ikke fylles inn",
               "placeholder": "Fornavn",
+              "id": "another",
               "schemaOverride": {
                 "type": "string",
                 "required": true

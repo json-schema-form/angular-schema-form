@@ -15,6 +15,7 @@
                ng-model-options="form.ngModelOptions"
                schema-validate="form"
                class="stb-checkbox"
+               id="{{form.id}}"
                ng-change="changeCheckbox()">
         <label ng-if="!form.emptyView" ng-class="{'non-empty-view': !form.emptyView}" ng-click="clickCheckbox($event)"><span></span>{{form.title}}</label>
         <label ng-if="form.emptyView" ng-class="{'empty-view': form.emptyView}" ng-click="clickCheckbox($event)"><span></span></label>

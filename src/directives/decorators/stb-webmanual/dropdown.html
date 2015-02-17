@@ -20,6 +20,7 @@
                     ng-model-options="form.ngModelOptions"
                     sf-changed="form"
                     class="form-control"
+                    id="{{form.id}}"
                     schema-validate="form"
                     stb-dropdown
                     ng-options="item as item.name for item in form.titleMap | orderBy: 'name' track by item.name">
