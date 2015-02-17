@@ -339,6 +339,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               var lastNameForm = $filter('filter')(form.items, {itemType: "lastName"})[0];
               var lastNameKey = lookupForKey(lastNameForm.key);
               var userErrorForm = $filter('filter')(form.items, {itemType: "userError"})[0];
+              var validCustomer = {};
 
               var sendCustomerInfo = function () {
                 var personNumber = scope.$eval(personNumberKey);
@@ -346,7 +347,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 var lastName = scope.$eval(lastNameKey);
                 if (personNumber && firstName && lastName) {
                   scope.$emit('customer:validate', {
-                    nin: personNumber,
+                    ssn: personNumber,
                     firstName: firstName,
                     lastName: lastName
                   });
@@ -366,20 +367,25 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               scope.$watch(function () {
                 return scope.$eval(firstNameKey);
               }, function (newValue) {
-                if (newValue) {
+                if (newValue && validCustomer.firstName !== newValue) {
                   sendCustomerInfo();
                 }
               });
               scope.$watch(function () {
                 return scope.$eval(lastNameKey);
               }, function (newValue) {
-                if (newValue) {
+                if (newValue && validCustomer.lastName !== newValue) {
                   sendCustomerInfo();
                 }
               });
 
-              scope.$on('customer:isValid', function (e, isValid) {
-                updateExpressions(isValid, isValid);
+              scope.$on('customer:isValid', function (e, data) {
+                if (data.isValid) {
+                  validCustomer = data;
+                  $parse(firstNameKey).assign(scope, data.firstName);
+                  $parse(lastNameKey).assign(scope, data.lastName);
+                }
+                updateExpressions(data.isValid, data.isValid);
               });
 
             };

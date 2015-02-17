@@ -58,9 +58,9 @@
         $scope.$on('customer:validate', function (e, data) {
             console.log(data)
             if (data.firstName == "1") {
-                $scope.$broadcast('customer:isValid', false);
+                $scope.$broadcast('customer:isValid', {isValid: false});
             } else {
-                $scope.$broadcast('customer:isValid', true);
+                $scope.$broadcast('customer:isValid', {firstName: 'Anton', lastName: 'Savchenko', isValid: true});
             }
         })
     });
