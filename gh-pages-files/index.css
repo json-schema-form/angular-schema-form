@@ -119,6 +119,7 @@ footer h5 { font-size:74px; margin-bottom:60px; color:#00bed5; text-transform:up
 footer p { font-family:amatic_scregular, sans-serif; font-size:32px; text-transform:uppercase; letter-spacing:2px; }
 footer img { display:inline-block;  }
 footer a { text-decoration:underline; color:#000; }
+footer small { display: inline-block; margin-top: 20px; font-family:roboto, sans-serif; font-size: 11px; text-transform: none; } 
 
 @media screen and (max-width: 1199px) {
 
@@ -158,3 +159,4 @@ footer a { text-decoration:underline; color:#000; }
     }
 
 }
+
