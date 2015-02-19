@@ -454,7 +454,7 @@ describe('directive',function(){
     });
   });
 
-  
+
   it('should honor defaults in schema',function(){
 
     inject(function($compile,$rootScope){
@@ -1675,6 +1675,45 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().eq(0).find('ol').children().length.should.be.eq(4);
+    });
+  });
+
+  it('should remove or add fields depending on condition',function(done) {
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {
+        flag: true
+      };
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [
+        {
+          key:'name',
+          condition: 'person.flag'
+        }
+      ];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      
+      tmpl.children().find('.schema-form-text').length.should.be.equal(1);
+
+      setTimeout(function() {
+        scope.person.flag = false;
+        $rootScope.$apply();
+        tmpl.children().find('.schema-form-text').length.should.be.equal(0);
+        done();
+      }, 0);
+
     });
   });
 
