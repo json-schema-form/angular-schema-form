@@ -1,4 +1,3 @@
-<div class="schema-form-section {{form.htmlClass}}" 
-     ng-if="!form.condition || evalExpr(form.condition,{ model: model, 'arrayIndex': arrayIndex })">
+<div class="schema-form-section {{form.htmlClass}}">
   <sf-decorator ng-repeat="item in form.items" form="item"></sf-decorator>
 </div>
