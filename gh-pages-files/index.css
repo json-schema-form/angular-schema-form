@@ -86,13 +86,13 @@ header { position:absolute; top:60px; width:100%; }
 .demo .batton { text-align:left; vertical-align:middle; display:table-cell; height:100%; float:none; }
 
 .demo a.btn {
-    display:inline-block; 
-    padding: 10px 60px 2px; 
-    background:#ffda47; 
-    border-radius:3px; 
-    color:#fff; 
-    font-family:stumpone, sans-serif; 
-    font-size:38px; 
+    display:inline-block;
+    padding: 10px 60px 2px;
+    background:#ffda47;
+    border-radius:3px;
+    color:#fff;
+    font-family:stumpone, sans-serif;
+    font-size:38px;
     letter-spacing:2px;
     box-shadow:0px 6px #f0c000;
 }
@@ -104,15 +104,18 @@ pre.model, pre.install { color:#ff5182; }
 .features li { background:url(img/bullet-heart.png) left top 11px no-repeat; padding: 4px 0 4px 20px; }
 
 div.add-ons { padding:80px 15px; }
+.input-group-addon.glyphicon { position: static; }
 
-ul.add-ons li { border:none; padding:15px; }
+ul.add-ons li { border:none; margin-bottom: 8px; }
 ul.add-ons li:hover { background:#f9f9f9;  }
 ul.add-ons a:hover { text-decoration:none; }
-ul.add-ons h3 { color:#000; margin-top:0; }
-ul.add-ons p { color:000; }
-ul.add-ons p span { color:#808080; font-size:12px; text-transform:uppercase; }
-
+ul.add-ons h3 { color:#000; margin: 0; }
+ul.add-ons p { color:#474747; margin-bottom: 1px; }
+ul.add-ons p span { color:#808080; font-size:13px; text-transform:uppercase; }
+ul.add-ons span.date { color:#808080; text-transform:none; font-size: 11px;  }
 ul.add-ons .badge { border-radius:3px; padding:10px 15px; background:#00bed5;}
+ul.add-ons a.stealth { color: #808080; text-decoration: underline; }
+ul.add-ons .nodesc {color: #808080; font-style: italic}
 
 footer { background:#ffda47; padding:240px 0 100px; margin-top:80px;  }
 footer h5 { font-size:74px; margin-bottom:60px; color:#00bed5; text-transform:uppercase; letter-spacing:2px; }
@@ -154,8 +157,8 @@ footer small { display: inline-block; margin-top: 20px; font-family:roboto, sans
     pre { font-size:12px !important; }
 
     .demo a.btn {
-        padding: 10px 30px 2px; 
-        font-size:28px; 
+        padding: 10px 30px 2px;
+        font-size:28px;
     }
 
 }

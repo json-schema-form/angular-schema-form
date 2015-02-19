@@ -209,13 +209,18 @@
   </div>
   <div id="third-party-addons" class="container third-party">
     <h2>Third Party Add-ons ({{::addons.length}})</h2>
+    <div class="input-group col-xs-11 col-sm-6 col-md-5 col-lg-4">
+      <span class="input-group-addon glyphicon glyphicon-search" id="search"></span>
+      <input type="text" ng-model="obj.search" class="form-control" aria-describedby="search">
+    </div>
+    <br>
     <ul class="list-group add-ons">
-      <li ng-click="navigate(addon.website)" ng-repeat="addon in addons" class="list-group-item">
+      <li ng-click="navigate(addon.website)" ng-repeat="addon in addons | filter:obj.search" class="list-group-item">
         <span class="badge"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> {{::addon.stars}}</span>
         <a href="{{::addon.website}}">
           <h3>{{::addon.name}}</h2>
-            <p><span>{{::addon.owner}}</span></p>
-          <p>{{::addon.description}}&nbsp;</p>
+            <p ng-class="{nodesc: !addon.description}">{{::addon.description || "No description"}}&nbsp;</p>
+            <p><span>{{::addon.owner}} •</span> <span class="date">Created {{addon.created | momentify}} / Updated {{addon.updated | momentify}}.</span></p>
         </a>
       </li>
     </ul>
@@ -234,6 +239,7 @@
   <script type="text/javascript" src="bower_components/angular/angular.min.js"></script>
   <script type="text/javascript" src="bower_components/angular-sanitize/angular-sanitize.min.js"></script>
   <script type="text/javascript" src="bower_components/objectpath/lib/ObjectPath.js"></script>
+  <script type="text/javascript" src="bower_components/moment/moment.js"></script>
   <script type="text/javascript" src="dist/schema-form.min.js"></script>
   <script type="text/javascript" src="dist/bootstrap-decorator.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.slick/1.4.0/slick.min.js"></script>
@@ -300,7 +306,6 @@
           },
           'required': ['name','email','comment']
         };
-
         $scope.form = [
           'name',
           'email',
@@ -314,15 +319,12 @@
             'title': 'OK'
           }
         ];
-
         $scope.obj = {};
-
         $scope.obj.model = {
           'name': 'Leeroy Jenkins',
           'email': 'leeroy@palsforlife.com',
           'comment': 'At least i have chicken.'
         };
-
         /*
             Navigation for addons list.
          */
@@ -331,13 +333,10 @@
           if ($event.ctrlKey || $event.button !== 0) {
             return;
           }
-
           $event.preventDefault();
           $event.stopPropagation();
-
           location.href = url;
         };
-
         /*
             Code for getting addons. Uses a middle layer that caches the entire bower
             repo list at 3MB+ and filters out out specific addons.
@@ -346,36 +345,35 @@
           // UGH, IE9 specific CORS solution.
           var xdr = new XDomainRequest();
           var foo = true;
-          xdr.open('get', 'https://s3-us-west-2.amazonaws.com/asf-addons-bucket/list.json');
+          xdr.open('get', 'https://s3-us-west-2.amazonaws.com/asf-addon/list.json');
           xdr.onprogress = function() { foo = !foo; };
           xdr.onload = function() { setData(xdr.responseText); $scope.$apply(); };
           setTimeout(function() { xdr.send(); }, 0);
         }
         else {
           // Regular old $http for sensible browsers.
-          $http.get('https://s3-us-west-2.amazonaws.com/asf-addons-bucket/list.json').then(function(res) {
+          $http.get('http://s3-us-west-2.amazonaws.com/asf-addon/list.json').then(function(res) {
             setData(res.data);
           });
         }
-
         /*
           Function for displaying addons. Takes both data types.
          */
         var setData = function(data) {
           if (typeof(data) === 'string') { data = JSON.parse(data); }
-
           angular.forEach(data, function(addon) {
             addon.name = addon.name.split('angular-schema-form-').pop();
           });
-
           $scope.addons = data;
-
         };
-
         // Filter for nice json output.
       }).filter('prettyjson', function() {
         return function(input) {
           return JSON.stringify(input, undefined, 2);
+        };
+      }).filter('momentify', function() {
+        return function(input) {
+          return moment(input).fromNow();
         };
       });
   // @license-end
