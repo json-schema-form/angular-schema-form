@@ -337,14 +337,14 @@ angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
         // UGH, IE9 specific CORS solution.
         var xdr = new XDomainRequest();
         var foo = true;
-        xdr.open('get', 'http://s3-us-west-2.amazonaws.com/asf-addons-bucket/list.json');
+        xdr.open('get', 'http://s3-us-west-2.amazonaws.com/asf-addon/list.json');
         xdr.onprogress = function() { foo = !foo; };
         xdr.onload = function() { setData(xdr.responseText); $scope.$apply(); };
         setTimeout(function() { xdr.send(); }, 0);
       }
       else {
         // Regular old $http for sensible browsers.
-        $http.get('http://s3-us-west-2.amazonaws.com/asf-addons-bucket/list.json').then(function(res) {
+        $http.get('http://s3-us-west-2.amazonaws.com/asf-addon/list.json').then(function(res) {
           setData(res.data);
         });
       }
