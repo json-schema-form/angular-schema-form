@@ -140,6 +140,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             // Rebind our part of the form to the scope.
             var once = scope.$watch(attrs.form, function(form) {
               if (form) {
+                // Workaround for 'updateOn' error from ngModelOptions
+                // see https://github.com/Textalk/angular-schema-form/issues/255
+                // and https://github.com/Textalk/angular-schema-form/issues/206
+                form.ngModelOptions = form.ngModelOptions || {};
                 scope.form  = form;
 
                 //ok let's replace that template!
