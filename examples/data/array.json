@@ -55,7 +55,7 @@
           "key": "comments[].spam",
           "type": "checkbox",
           "title": "Yes I want spam.",
-          "condition": "model.comments[arrayIndex].email",
+          "condition": "model.comments[arrayIndex].email"
         },
         {
           "key": "comments[].comment",
