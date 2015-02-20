@@ -3,6 +3,7 @@ Documentation
 
 1. [Basic Usage](#basic-usage)
 1. [Handling Submit](#handling-submit)
+1. [Updating Form](#updating-form)
 1. [Global Options](#global-options)
 1. [Form defaults in schema](#form-defaults-in-schema)
 1. [Form types](#form-types)
@@ -146,6 +147,28 @@ And the HTML would be something like this:
           ng-submit="onSubmit(myForm)"></form>
 </div>
 ```
+
+
+Updating Form
+-------------
+
+Schema Form watches `sf-form` and `sf-schema` and will redraw the form if one or both changes, but
+only if they change completly, i.e. not the same object and/or form instance. For performance
+reasons we have opted to not watch schema and form deeply. So if you have updated a part of the
+schema or the form definition you can trigger a redraw by issuing the event `schemaFormRedraw`.
+
+ex:
+```javascript
+function Ctrl($scope) {
+  $scope.removeLastField = function() {
+    $scope.form.pop()
+    $scope.$broadcast('schemaFormRedraw')
+  }
+}
+```
+
+
+
 
 
 Global Options
@@ -1077,6 +1100,16 @@ form. Below is a list of these events and how they are propagated.
 | Event                | When                   | Type  | Arguments                          |
 |:--------------------:|:----------------------:|:-----:|:----------------------------------:|
 | `sf-render-finished` | After form is rendered | emit  | The sf-schema directives's element |
+
+
+Schema form also listens to events.
+
+| Event                | What                   |  Docs|
+|:--------------------:|:----------------------:|:---------------------------------------:|
+| `schemaFormValidate` | Validates all fields   | [Handling Submit](#handling-submit)     |
+| `schemaFormRedraw`   | Redraws form           | [Updating Form](#updating-form)         |
+
+
 
 ### Manual field insertion
 There is a limited feature for controlling manually where a generated field should go so you can

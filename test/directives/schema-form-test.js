@@ -1704,11 +1704,48 @@ describe('directive',function(){
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
-      
+
       tmpl.children().find('.schema-form-text').length.should.be.equal(1);
 
       setTimeout(function() {
         scope.person.flag = false;
+        $rootScope.$apply();
+        tmpl.children().find('.schema-form-text').length.should.be.equal(0);
+        done();
+      }, 0);
+
+    });
+  });
+
+  it('should redraw form on schemaFormRedraw event',function(done) {
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [{
+        key: 'name',
+        type: 'text'
+      }];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().find('.schema-form-text').length.should.be.equal(1);
+      tmpl.children().find('.schema-form-textarea').length.should.be.equal(0);
+
+      setTimeout(function() {
+        scope.form[0].type = 'textarea';
+        scope.$broadcast('schemaFormRedraw');
         $rootScope.$apply();
         tmpl.children().find('.schema-form-text').length.should.be.equal(0);
         done();
