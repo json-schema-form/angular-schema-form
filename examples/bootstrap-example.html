@@ -42,7 +42,6 @@
             sf-form="form"
             sf-schema="schema"
             ng-submit="submitForm(ngform,modelData)">
-              <em>before</em><div sf-insert-field="name"></div><em>after</em>
       </form>
       <h3>Model</h3>
       <pre ng-cloak>{{pretty()}}</pre>
@@ -103,6 +102,7 @@ angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($
   $scope.tests = [
     { name: "Simple", data: 'data/simple.json' },
     { name: "Basic JSON Schema Type", data: 'data/types.json' },
+    { name: "Bootstrap Grid", data: 'data/grid.json' },
     { name: "Complex Key Support", data: 'data/complex-keys.json' },
     { name: "Array", data: 'data/array.json' },
     { name: "Tab Array", data: 'data/tabarray.json' },
