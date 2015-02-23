@@ -1,3 +1,11 @@
+v0.7.12
+-------
+ * Error on deleteFromArray task, thanks @bygiro
+ * Fix for copyValueTo on numeric fields, thanks @Anthropic
+ * "condition" option on every form type, thanks @davidlgj
+ * Force redraw "schemaFormRedraw", thanks @davidlgj
+ * Possible fix for "updateOn exception", thanks @plong0
+
 v0.7.11
 -------
  * New front page with a list of add-on:s based on a bower search! Thanks @unicornforce @Dervisevic @davidlgj
