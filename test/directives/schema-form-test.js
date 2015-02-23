@@ -454,105 +454,6 @@ describe('directive',function(){
     });
   });
 
-  it('should use ng-required on required fields',function(){
-
-    inject(function($compile,$rootScope){
-      var scope = $rootScope.$new();
-      scope.person = {};
-
-      scope.schema = {
-        "type": "object",
-        "required": ["name"],
-        "properties": {
-          "name": { "type": "string" },
-          "nick": { "type": "string" }
-        }
-      };
-
-      scope.form = ["*"];
-
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
-
-      $compile(tmpl)(scope);
-      $rootScope.$apply();
-
-      tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model-options').should.be.equal('form.ngModelOptions')
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
-      expect(tmpl.children().eq(1).children().eq(0).children('input').attr('required')).to.be.undefined;
-    });
-  });
-
-  it('should use ng-required on required fields, json schema v3',function(){
-
-    inject(function($compile,$rootScope){
-      var scope = $rootScope.$new();
-      scope.person = {};
-
-      scope.schema = {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string", "required": true },
-          "nick": { "type": "string" }
-        }
-      };
-
-      scope.form = ["*"];
-
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
-
-      $compile(tmpl)(scope);
-      $rootScope.$apply();
-
-      tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model-options').should.be.equal('form.ngModelOptions')
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
-      expect(tmpl.children().eq(1).children().eq(0).children('input').attr('required')).to.be.undefined;
-    });
-  });
-
-  it('should use ng-required on required fields, form override',function(){
-
-    inject(function($compile,$rootScope){
-      var scope = $rootScope.$new();
-      scope.person = {};
-
-      scope.schema = {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "nick": { "type": "string", "required": true }
-        }
-      };
-
-      scope.form = [
-        { key: 'name', required: true },
-        { key: 'nick', required: false },
-      ];
-
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
-
-      $compile(tmpl)(scope);
-      $rootScope.$apply();
-
-      tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model-options').should.be.equal('form.ngModelOptions');
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
-      expect(tmpl.children().eq(1).children().eq(0).children('input').attr('required')).to.be.undefined;
-    });
-  });
 
   it('should honor defaults in schema',function(){
 
@@ -1774,6 +1675,82 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().eq(0).find('ol').children().length.should.be.eq(4);
+    });
+  });
+
+  it('should remove or add fields depending on condition',function(done) {
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {
+        flag: true
+      };
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [
+        {
+          key:'name',
+          condition: 'person.flag'
+        }
+      ];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().find('.schema-form-text').length.should.be.equal(1);
+
+      setTimeout(function() {
+        scope.person.flag = false;
+        $rootScope.$apply();
+        tmpl.children().find('.schema-form-text').length.should.be.equal(0);
+        done();
+      }, 0);
+
+    });
+  });
+
+  it('should redraw form on schemaFormRedraw event',function(done) {
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [{
+        key: 'name',
+        type: 'text'
+      }];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().find('.schema-form-text').length.should.be.equal(1);
+      tmpl.children().find('.schema-form-textarea').length.should.be.equal(0);
+
+      setTimeout(function() {
+        scope.form[0].type = 'textarea';
+        scope.$broadcast('schemaFormRedraw');
+        $rootScope.$apply();
+        tmpl.children().find('.schema-form-text').length.should.be.equal(0);
+        done();
+      }, 0);
+
     });
   });
 

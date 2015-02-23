@@ -20,12 +20,11 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         return form;
       };
       var form   = getForm();
-
       if (form.copyValueTo) {
         ngModel.$viewChangeListeners.push(function() {
           var paths = form.copyValueTo;
           angular.forEach(paths, function(path) {
-            sfSelect(path, scope.model, ngModel.$viewValue);
+            sfSelect(path, scope.model, ngModel.$modelValue);
           });
         });
       }
