@@ -1111,7 +1111,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             }
 
             // Angular 1.2 lacks setDirty
-            if (ngModel.$setDirty) {
+            if (ngModel && ngModel.$setDirty) {
               ngModel.$setDirty();
             }
             return list;
