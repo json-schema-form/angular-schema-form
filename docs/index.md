@@ -3,6 +3,7 @@ Documentation
 
 1. [Basic Usage](#basic-usage)
 1. [Handling Submit](#handling-submit)
+1. [Updating Form](#updating-form)
 1. [Global Options](#global-options)
 1. [Form defaults in schema](#form-defaults-in-schema)
 1. [Form types](#form-types)
@@ -17,7 +18,6 @@ Documentation
     1. [copyValueTo](#copyvalueto)
 1. [Specific options and types](#specific-options-and-types)
     1. [fieldset and section](#fieldset-and-section)
-    1. [conditional](#conditional)
     1. [select and checkboxes](#select-and-checkboxes)
     1. [actions](#actions)
     1. [button](#button)
@@ -29,6 +29,7 @@ Documentation
 1. [Post process function](#post-process-function)
 1. [Events](#events)
 1. [Manual field insertion](#manual-field-insertion)
+1. [Deprecated fields](#deprecated-fields)
 1. [Extending Schema Form](extending.md)
 
 Basic Usage
@@ -148,6 +149,28 @@ And the HTML would be something like this:
 ```
 
 
+Updating Form
+-------------
+
+Schema Form watches `sf-form` and `sf-schema` and will redraw the form if one or both changes, but
+only if they change completly, i.e. not the same object and/or form instance. For performance
+reasons we have opted to not watch schema and form deeply. So if you have updated a part of the
+schema or the form definition you can trigger a redraw by issuing the event `schemaFormRedraw`.
+
+ex:
+```javascript
+function Ctrl($scope) {
+  $scope.removeLastField = function() {
+    $scope.form.pop()
+    $scope.$broadcast('schemaFormRedraw')
+  }
+}
+```
+
+
+
+
+
 Global Options
 --------------
 Schema Form also have two options you can set globally via the `sf-options`
@@ -208,7 +231,6 @@ Schema Form currently supports the following form field types out of the box:
 |:--------------|:------------------------|
 | fieldset      |  a fieldset with legend |
 | section       |  just a div             |
-| conditional   |  a section with a ```ng-if``` |
 | actions       |  horizontal button list, can only submit and buttons as items |
 | text          |  input with type text   |
 | textarea      |  a textarea             |
@@ -343,7 +365,8 @@ General options most field types can handle:
                                // and their items will inherit it.
   htmlClass: "street foobar",  // CSS Class(es) to be added to the container div
   fieldHtmlClass: "street"     // CSS Class(es) to be added to field input (or similar)
-  copyValueTo: ["address.street"]     // Copy values to these schema keys.
+  copyValueTo: ["address.street"],     // Copy values to these schema keys.
+  condition: "person.age < 18" // Show or hide field depending on an angular expression
 }
 ```
 
@@ -461,7 +484,7 @@ See [Global Options](#global-options) for an example how you set entire form
 to validate on blur.
 
 ### copyValueTo
-This option has a very specific use case. Imagine you have the same option in several places, but you want them to be controlled from just one field. You specify what keys the value should be copied to, and the *viewValue* will be copied to these keys on the model. **Note: changing the model directly will not copy the value, it's intended for copying user input**. The recieving fields can be shown, but the intent for them is to be hidden. 
+This option has a very specific use case. Imagine you have the same option in several places, but you want them to be controlled from just one field. You specify what keys the value should be copied to, and the *viewValue* will be copied to these keys on the model. **Note: changing the model directly will not copy the value, it's intended for copying user input**. The recieving fields can be shown, but the intent for them is to be hidden.
 
 Ex.
 ```javascript
@@ -471,29 +494,12 @@ Ex.
 }
 ```
 
-Specific options and types
---------------------------
+### condition
+The `condition` option lets you hide or show a field depending on an angular expression. Beneath
+the surface it uses `ng-if` so the hidden field is *not* part of the form.
 
-### fieldset and section
-
-*fieldset* and *section* doesn't need a key. You can create generic groups with them.
-They do need a list of ```items``` to have as children.
-```javascript
-{
-  type: "fieldset",
-  items: [
-    "name",
-    { key: "surname", notitle: true }
-  ]
-}
-```
-
-### conditional
-
-A *conditional* is exactly the same as a *section*, i.e. a `<div>` with other form elements in
-it, hence they need an `items` property. They also need a `condition` which is
-a string with an angular expression. If that expression evaluates as thruthy the *conditional*
-will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
+`condition` should be a string with an angular expression. If that expression evaluates as thruthy
+the field will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
 the `sf-schema` directive (the same as onClick on buttons) but with access to the current model
 and current array index under the name `model` and `arrayIndex`. This is useful for hiding/showing
 parts of a form depending on another form control.
@@ -526,17 +532,14 @@ function FormCtrl($scope) {
     "name",
     "eligible",
     {
-        type: "conditional",
-        condition: "person.eligible", //or "model.eligable"
-        items: [
-          "code"
-        ]
+      key: "code",
+      condition: "person.eligible", //or "model.eligable"
     }
   ]
 }
 ```
-Note that angulars two-way binding automatically will update the conditional block, no need for
-event handlers and such. The condition need not reference a model value it could be anything in
+Note that angulars two-way binding automatically will update the conditional field, no need for
+event handlers and such. The condition need not reference a model value it could be anything on
 scope.
 
 The same example, but inside an array:
@@ -578,11 +581,8 @@ function FormCtrl($scope) {
         "persons[].name",
         "persons[].eligible",
         {
-          type: "conditional",
-          condition: "persons[arrayIndex].eligible", //or "model.eligable"
-          items: [
-            "persons[].code"
-          ]
+          key: "persons[].code",
+          condition: "persons[arrayIndex].eligible", //or "model[arrayIndex].eligable"
         }
       ]
     }
@@ -590,7 +590,28 @@ function FormCtrl($scope) {
 }
 ```
 
-Note that arrays inside arrays won't work with conditional.
+Note that arrays inside arrays won't work with conditions.
+
+
+
+
+Specific options and types
+--------------------------
+
+### fieldset and section
+
+*fieldset* and *section* doesn't need a key. You can create generic groups with them.
+They do need a list of ```items``` to have as children.
+```javascript
+{
+  type: "fieldset",
+  items: [
+    "name",
+    { key: "surname", notitle: true }
+  ]
+}
+```
+
 
 ### select and checkboxes
 
@@ -1080,6 +1101,16 @@ form. Below is a list of these events and how they are propagated.
 |:--------------------:|:----------------------:|:-----:|:----------------------------------:|
 | `sf-render-finished` | After form is rendered | emit  | The sf-schema directives's element |
 
+
+Schema form also listens to events.
+
+| Event                | What                   |  Docs|
+|:--------------------:|:----------------------:|:---------------------------------------:|
+| `schemaFormValidate` | Validates all fields   | [Handling Submit](#handling-submit)     |
+| `schemaFormRedraw`   | Redraws form           | [Updating Form](#updating-form)         |
+
+
+
 ### Manual field insertion
 There is a limited feature for controlling manually where a generated field should go so you can
 ,as an example, wrap it in custom html. Consider the feature experimental.
@@ -1112,3 +1143,115 @@ $scope.form = [
   <!-- the rest of the form, i.e. name and comment will be generated here -->
 </form>
 ```
+
+
+
+Deprecated fields
+-----------------
+
+### conditional
+
+The *conditional* type is now deprecated since every form type now supports the form option
+`condition`.
+
+A *conditional* is exactly the same as a *section*, i.e. a `<div>` with other form elements in
+it, hence they need an `items` property. They also need a `condition` which is
+a string with an angular expression. If that expression evaluates as thruthy the *conditional*
+will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
+the `sf-schema` directive (the same as onClick on buttons) but with access to the current model
+and current array index under the name `model` and `arrayIndex`. This is useful for hiding/showing
+parts of a form depending on another form control.
+
+ex. A checkbox that shows an input field for a code when checked
+
+```javascript
+function FormCtrl($scope) {
+  $scope.person = {}
+
+  $scope.schema = {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "title": "Name"
+      },
+      "eligible": {
+        "type": "boolean",
+        "title": "Eligible for awesome things"
+      },
+      "code": {
+        "type":"string"
+        "title": "The Code"
+      }
+    }
+  }
+
+  $scope.form = [
+    "name",
+    "eligible",
+    {
+        type: "conditional",
+        condition: "person.eligible", //or "model.eligable"
+        items: [
+          "code"
+        ]
+    }
+  ]
+}
+```
+Note that angulars two-way binding automatically will update the conditional block, no need for
+event handlers and such. The condition need not reference a model value it could be anything in
+scope.
+
+The same example, but inside an array:
+
+```javascript
+function FormCtrl($scope) {
+  $scope.persons = []
+
+  $scope.schema = {
+    "type": "object",
+    "properties": {
+      "persons": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "title": "Name"
+            },
+            "eligible": {
+              "type": "boolean",
+              "title": "Eligible for awesome things"
+            },
+            "code": {
+              "type":"string"
+              "title": "The Code"
+            }
+          }
+        }
+      }
+    }
+  }
+
+  $scope.form = [
+    {
+      "key": "persons",
+      "items": [
+        "persons[].name",
+        "persons[].eligible",
+        {
+          type: "conditional",
+          condition: "persons[arrayIndex].eligible", //or "model.eligable"
+          items: [
+            "persons[].code"
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+Note that arrays inside arrays won't work with conditional.
