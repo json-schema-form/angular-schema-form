@@ -64,7 +64,7 @@
        ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
 
 <!--   <a class="button button-small" ng-if="form.htmlClass == 'item-input-inset'" ng-click="{{form.insetButtonAction}}"> -->
-  <a class="button button-small" ng-if="form.htmlClass == 'item-input-inset'" ng-click="manageButton()" data-ng-click"{{form.insetButtonAction}}">
+  <a class="button button-small" ng-if="form.htmlClass == 'item-input-inset'" ng-click="buttonClick(manageButton(),form)" data-ng-click"{{form.insetButtonAction}}">
       {{form.insetButtonBody}}
   </a>
 
