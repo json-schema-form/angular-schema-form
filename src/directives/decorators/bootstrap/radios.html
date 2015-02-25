@@ -9,7 +9,7 @@
              ng-model="$$value$$"
              ng-model-options="form.ngModelOptions"
              ng-value="item.value"
-             name="{{form.key.slice(-1)[0]}}">
+             name="{{form.key.join('.')}}">
       <span ng-bind-html="item.name"></span>
     </label>
   </div>
