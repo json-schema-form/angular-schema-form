@@ -290,9 +290,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   // Do we have a condition? Then we slap on an ng-if on all children,
                   // but be nice to existing ng-if.
                   if (form.condition) {
-                    element.children().each(function() {
-                      var ngIf = this.getAttribute('ng-if');
-                      this.setAttribute(
+                    angular.forEach(element.children(),function(child) {
+                      var ngIf = child.getAttribute('ng-if');
+                      child.setAttribute(
                         'ng-if',
                         ngIf ?
                         '(' + ngIf +
