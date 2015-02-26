@@ -83,7 +83,7 @@ label.empty-view {
     display: block;
   }
 
-  &.checkboxes, &.date-picker, &.select-wrapper {
+  &.checkbox, &.date-picker, &.select-wrapper {
     margin-bottom: 24px;
   }
 
@@ -100,8 +100,15 @@ label.empty-view {
     width: 260px !important;
   }
 
-  &.checkboxes {
+  &.checkbox {
     label {
+      max-width: inherit;
+    }
+  }
+  &.checkboxes {
+    display: block;
+    label {
+      margin: 0 0 6px 0 !important;
       max-width: inherit;
     }
   }

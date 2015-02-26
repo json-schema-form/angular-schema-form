@@ -34,6 +34,10 @@
       "providedPersonInfo.name.lastName": {
         "type": "string",
         "required": true
+      },
+      "some": {
+        "requried": true,
+        "type": "string"
       }
     }
   },
@@ -155,6 +159,17 @@
             "required": true,
             "pattern": "^\\d{8}$"
           }
+        },
+        {
+          "key": "some",
+          "type": "checkboxes",
+          "title": "Mobiltelefon",
+          "validationMessage": "Telefonnummeret må bestå av 8 siffer",
+          "titleMap": [
+            {"name": "smth", "value": "some1"},
+            {"name": "smth1", "value": "some2"},
+            {"name": "smth3", "value": "some4"}
+          ]
         }
       ]
     }

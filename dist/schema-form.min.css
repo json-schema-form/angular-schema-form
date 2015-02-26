@@ -58,7 +58,7 @@ label.empty-view span {
 .stb-form-group.radios {
   display: block;
 }
-.stb-form-group.checkboxes,
+.stb-form-group.checkbox,
 .stb-form-group.date-picker,
 .stb-form-group.select-wrapper {
   margin-bottom: 24px;
@@ -73,7 +73,14 @@ label.empty-view span {
 .stb-form-group.select-wrapper {
   width: 260px !important;
 }
+.stb-form-group.checkbox label {
+  max-width: inherit;
+}
+.stb-form-group.checkboxes {
+  display: block;
+}
 .stb-form-group.checkboxes label {
+  margin: 0 0 6px 0 !important;
   max-width: inherit;
 }
 .row.notification {

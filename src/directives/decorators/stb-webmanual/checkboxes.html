@@ -1,17 +1,25 @@
 <div sf-array="form" ng-model="$$value$$" class="form-group" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}"  ng-show="showCondition()">
+
     <div class="label-wrapper">
         <label ng-show="showTitle()">{{form.title}}</label>
         <span ng-if="form.infoMessage" info-help-message info-message="form.infoMessage"></span>
     </div>
     <div ng-bind-html="form.subtitle" class="subtitle-wrapper"></div>
 
-  <div class="stb-form-group al checkbox  has-feedback" ng-repeat="val in titleMapValues track by $index" >
+    <span class="help-block navn-message has-error" ng-show="!disabledElement() && hasError()">
+        <small class="help-block">
+            <span class="stb-color-sprite-small warning circle"></span>
+            <span ng-bind-html="(hasError() && errorMessage(schemaError()))"></span>
+        </small>
+    </span>
+
+  <div class="stb-form-group al checkboxes  has-feedback" ng-repeat="val in titleMapValues track by $index" >
       <input type="checkbox"
              sf-changed="form"
              ng-model="titleMapValues[$index]"
              class="stb-checkbox"
              id="{{form.titleMap[$index].id}}">
-      <label for="{{form.titleMap[$index].id}}" ng-bind-html="form.titleMap[$index].name"></label>
+      <label for="{{form.titleMap[$index].id}}" class="non-empty-view"><span></span>{{form.titleMap[$index].name}}</label>
 
   </div>
   <div class="help-block info-message"

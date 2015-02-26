@@ -43,7 +43,17 @@
             $scope.click = function () {
                 console.log('fasf')
             }
-            $scope.modelData = {};
+            $scope.modelData = {
+                group_open: {
+                    providedPersonInfo: {
+                        name: {
+                            firstName: "Anton",
+                            lastName: "Anton"
+                        },
+                        nin: "10056533201"
+                    }
+                }
+            };
 
             window.md = $scope.modelData;
         });
