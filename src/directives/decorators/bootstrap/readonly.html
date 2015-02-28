@@ -1,6 +1,30 @@
 <div class="form-group">
-  <label ng-class="{'sr-only': !showTitle()}" for="{{form.key.slice(-1)[0]}}">{{form.title}}</label>
-  <input ng-if="form.type !== 'textarea'" type="text" disabled class="form-control" id="{{form.key.slice(-1)[0]}}" value="{{$$value$$}}">
-  <textarea ng-if="form.type === 'textarea'"  disabled class="form-control">{{$$value$$}}</textarea>
-  <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
+  <label ng-class="{'sr-only': !showTitle()}"
+         for="{{form.key.slice(-1)[0]}}">
+    {{form.title}}
+  </label>
+  <div ng-class="{'input-group': (form.fieldAddonLeft || form.fieldAddonRight)}">
+    <span ng-if="form.fieldAddonLeft"
+          class="input-group-addon"
+          ng-bind-html="form.fieldAddonLeft"></span>
+    <input ng-if="form.type !== 'textarea'"
+           type="text"
+           disabled
+           class="form-control"
+           id="{{form.key.slice(-1)[0]}}"
+           value="{{$$value$$}}">
+    <textarea ng-if="form.type === 'textarea'"
+              disabled
+              class="form-control">
+      {{"$$value$$"}}
+    </textarea>
+
+    <span ng-if="form.fieldAddonRight"
+          class="input-group-addon"
+          ng-bind-html="form.fieldAddonRight"></span>
+
+  </div>
+  <div class="help-block"
+       ng-show="form.description"
+       ng-bind-html="form.description"></div>
 </div>
