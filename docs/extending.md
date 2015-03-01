@@ -76,6 +76,7 @@ available here for you to act on.
 | errorMessage(msg) | Error message formatting, makes validationMessage option work. |
 | evalInScope(expr, locals) | Eval supplied expression, ie scope.$eval |
 | evalExpr(expr, locals) | Eval an expression in the parent scope of the main `sf-schema` directive. |
+| interp(expr, locals) | Interpolate an expression which may or may not contain expression `{{ }}` sequences |
 | buttonClick($event, form)  | Use this with ng-click to execute form.onClick |
 
 ### The magic $$value$$

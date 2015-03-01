@@ -30,8 +30,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   var createDirective = function(name) {
-    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache',
-      function($parse,  $compile,  $http,  $templateCache) {
+    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', '$interpolate',
+      function($parse,  $compile,  $http,  $templateCache, $interpolate) {
 
         return {
           restrict: 'AE',
@@ -40,7 +40,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
           scope: true,
           require: '?^sfSchema',
           link: function(scope, element, attrs, sfSchema) {
-
+            
             //Keep error prone logic from the template
             scope.showTitle = function() {
               return scope.form && scope.form.notitle !== true && scope.form.title;
@@ -104,6 +104,23 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               if (expression) {
                 return scope.$eval(expression, locals);
               }
+            };
+            
+            /**
+             * Interpolate the expression.
+             * Similar to `evalExpr()` and `evalInScope()`
+             * but will not fail if the expression is
+             * text that contains spaces.
+             * 
+             * Use the Angular `{{ interpolation }}`
+             * braces to access properties on `locals`.
+             * 
+             * @param  {string} content The string to interpolate.
+             * @param  {Object} locals (optional) Properties that may be accessed in the `expression` string.
+             * @return {Any} The result of the expression or `undefined`.
+             */
+            scope.interp = function(expression, locals){
+              return (expression && $interpolate(expression)(locals));
             };
 
             /**
