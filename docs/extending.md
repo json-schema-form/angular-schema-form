@@ -170,12 +170,12 @@ to change *every* field. Maybe you like it old school and want to use bootstrap 
 to generate a table with the data instead? Right now there are no other decorators than bootstrap 3.
 
 Basically a *decorator* sets up all the mappings between form types and their respective templates
-using the `decoratorsProvider.createDecorator()` function.
+using the `schemaFormDecoratorsProvider.createDecorator()` function.
 
 ```javascript
 var base = 'directives/decorators/bootstrap/';
 
-decoratorsProvider.createDecorator('bootstrapDecorator', {
+schemaFormDecoratorsProvider.createDecorator('bootstrapDecorator', {
   textarea: base + 'textarea.html',
   fieldset: base + 'fieldset.html',
   array: base + 'array.html',
@@ -204,7 +204,7 @@ decoratorsProvider.createDecorator('bootstrapDecorator', {
   }
 ]);
 ```
-`decoratorsProvider.createDecorator(name, mapping, rules)` takes a name argument, a mapping object
+`schemaFormDecoratorsProvider.createDecorator(name, mapping, rules)` takes a name argument, a mapping object
 (type -> template) and an optional list of rule functions.
 
 When the decorator is trying to match a form type against a tempate it first executes all the rules
