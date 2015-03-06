@@ -45,8 +45,13 @@
       {{form.insetButtonBody}}
   </a>
  -->
-  <a class="button button-small" ng-if="form.htmlClass == 'item-input-inset'" ng-click="buttonClick($event,form)" >
+<!--   <a class="button button-small" ng-if="form.htmlClass == 'item-input-inset'" ng-click="buttonClick($event,form)" >
       {{form.insetButtonBody}}
   </a>
+ -->
+  <button class="button button-small"
+        ng-if="form.htmlClass == 'item-input-inset'"
+        ng-click="buttonClick($event,form)"
+        > {{form.insetButtonBody}}</button>
 </label>
 
