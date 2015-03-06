@@ -1647,7 +1647,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
     scope: false,
     // We want the link function to be *after* the input directives link function so we get access
     // the parsed value, ex. a number instead of a string
-    priority: 1000,
+    priority: 500,
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
 
