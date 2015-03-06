@@ -5,6 +5,7 @@ Documentation
 1. [Handling Submit](#handling-submit)
 1. [Updating Form](#updating-form)
 1. [Global Options](#global-options)
+1. [Validation Messages](#validation-messages)
 1. [Form defaults in schema](#form-defaults-in-schema)
 1. [Form types](#form-types)
 1. [Default form types](#default-form-types)
@@ -183,11 +184,10 @@ attribute which should be placed along side `sf-schema`.
 |:--------------|:------------------------|
 | supressPropertyTitles | by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
 | formDefaults | an object that will be used as a default for all form definitions |
+| validationMessage | an object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
 
 *formDefaults* is mostly useful for setting global [ngModelOptions](#ngmodeloptions)
-i.e. changing the entire form to validate on blur. But can also be used to set
-[Validation Messages](#validation-messages) for all fields if you like a bit more
-friendlier messages.
+i.e. changing the entire form to validate on blur.
 
 Ex.
 ```html
@@ -198,6 +198,112 @@ Ex.
           sf-options="{ formDefaults: { ngModelOptions: { updateOn: 'blur' } }}"></form>
 </div>
 ```
+
+
+Validation Messages
+-------------------
+
+We use [tv4](https://github.com/geraintluff/tv4) to validate the form and all of the
+validation messages match up [tv4 error codes](https://github.com/geraintluff/tv4/blob/master/source/api.js).
+
+There are several ways to change the default validation messages.
+
+  1. Change the defaults in `sfErrorMessages` service via its provider. This will set the validation
+     messages for all instances of `sf-schema`
+  1. Use the global option `validationMessage`
+  1. Use the form field option `validationMessage`
+
+If a specific validation error code can't be found in the form field option, schema form looks at
+the global option, if none is there it looks at it's own defaults and if all fails it will instead
+use the the message under the error code `'default'`
+
+Ex of form field option.
+```javascript
+var form = [
+  "address.zip",
+  {
+    key: "address.street",
+    validationMessage: {
+      302: "This field is like, uh, required?"
+    }
+  }
+];
+```
+
+And of global options
+```html
+<div ng-controller="FormController">
+    <form sf-schema="schema"
+          sf-form="form"
+          sf-model="model"
+          sf-options="{ validationMessage: { 302: 'Do not forget me!' }}"></form>
+</div>
+```
+
+
+### Message Interpolation
+Having a good validation message is hard, sometimes you need to reference the actual value, title
+och constraint that you hit. Schema Form supports interpolation of error messages to make this a
+little bit easier.
+
+The context variables available to you are:
+
+ | Name          |   Value                 |
+ |:--------------|:------------------------|
+ | error         | The error code          |
+ | title         | Title of the field, shorthand for `{{form.title || schema.title}}` |
+ | value         | The model value         |
+ | form          | form definition object for this field |
+ | schema        | schema for this field |
+
+ Ex.
+ ```javascript
+ var form = [
+   "address.zip",
+   {
+     key: "address.street",
+     validationMessage: {
+       101: 'Seriously? Value {{value}} totally less than {{schema.minimum}}, which is NOT OK.',
+     }
+   }
+ ];
+ ```
+
+### Taking over: functions as validationMessages
+If you really need to control the validaton messages and interpolation is not enough (like say
+your using [Jed](https://github.com/SlexAxton/Jed) for gettext translations) you can supply a
+function instead of a particular message or the entire validationMessage object.
+
+The should take one argument, and that is an object with the exact same properties as the context
+used for interpolation, see table above.
+
+
+Ex.
+```javascript
+var form = [
+  "address.zip",
+  {
+    key: "address.street",
+    validationMessage: {
+      302: function(ctx) { return Jed.gettext('This value is required.'); },
+    }
+  }
+];
+```
+
+Or:
+```javascript
+var form = [
+  "address.zip",
+  {
+    key: "address.street",
+    validationMessage: function(ctx) {
+      return lookupMessage[ctx.error];
+    }
+  }
+];
+```
+
 
 Form defaults in schema
 -----------------------
@@ -250,7 +356,9 @@ Schema Form currently supports the following form field types out of the box:
 | tabarray      |  a tabbed version of array |
 
 More field types can be added, for instance a "datepicker" type can be added by
-including the [datepicker addon](https://github.com/Textalk/angular-schema-form-datepicker)
+including the [datepicker addon](https://github.com/Textalk/angular-schema-form-datepicker), see
+the [front page](http://textalk.github.io/angular-schema-form/#third-party-addons) for an updated
+list.
 
 
 Default form types
@@ -394,46 +502,9 @@ $scope.form = [
 ```
 
 ### Validation Messages
+The validation message can be a string, an object with error codes as key and messages as values
+or a custom message function, see [Validation Messages](#validation-messages) for the details.
 
-Per default all error messages comes from the schema validator
-[tv4](https://github.com/geraintluff/tv4), this might or might not work for you.
-If you supply a `validationMessage` property in the form definition, and if its value is a
-string that will be used instead on any validation error.
-
-If you need more fine grained control you can supply an object instead with keys matching the error
-codes of [tv4](https://github.com/geraintluff/tv4). tv4 is available
-globally in angular schema form along with it's error codes, they can be found in `tv4.errorCodes`.
-
-Ex.
-```javascript
-var form = [
-  "address.zip",
-  {
-    key: "address.street",
-    validationMessage: {
-      "default": "Just write a proper address, will you?"
-    }
-  }
-];
-
-form[1].validationMessage[tv4.errorCodes.STRING_LENGTH_SHORT] = "Address is too short, man.";
-```
-
-However, it can sometimes be clunky to use variables as keys so you can use the
-[error codes](https://github.com/geraintluff/tv4/blob/master/source/api.js#L1) directly.
-The example below also illustrates how to define validation messages globally. This uses
-*formDefaults*, for more info on how to use it, see [Global Options](#global-options).
-
-```javascript
-scope.options = {
-  formDefaults: {
-    validationMessage: {
-      200: "This string is too short, man.",
-      302: "You can't just leave it blank, man."
-    }
-  }
-}
-```
 
 ### Inline feedback icons
 *input* and *textarea* based fields get inline status icons by default. A check

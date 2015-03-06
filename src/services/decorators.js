@@ -30,8 +30,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   var createDirective = function(name) {
-    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', '$interpolate',
-      function($parse,  $compile,  $http,  $templateCache, $interpolate) {
+    $compileProvider.directive(name,
+      ['$parse', '$compile', '$http', '$templateCache', '$interpolate','sfErrorMessage',
+      function($parse,  $compile,  $http,  $templateCache, $interpolate, sfErrorMessage) {
 
         return {
           restrict: 'AE',
@@ -40,7 +41,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',
           scope: true,
           require: '?^sfSchema',
           link: function(scope, element, attrs, sfSchema) {
-            
+
+            //The ngModelController is used in some templates and
+            //is needed for error messages,
+            scope.$on('schemaFormPropagateNgModelController', function(event, ngModel) {
+              event.stopPropagation();
+              event.preventDefault();
+              scope.ngModel = ngModel;
+            });
+
             //Keep error prone logic from the template
             scope.showTitle = function() {
               return scope.form && scope.form.notitle !== true && scope.form.title;
@@ -105,53 +114,54 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 return scope.$eval(expression, locals);
               }
             };
-            
+
             /**
              * Interpolate the expression.
              * Similar to `evalExpr()` and `evalInScope()`
              * but will not fail if the expression is
              * text that contains spaces.
-             * 
+             *
              * Use the Angular `{{ interpolation }}`
              * braces to access properties on `locals`.
-             * 
+             *
              * @param  {string} content The string to interpolate.
-             * @param  {Object} locals (optional) Properties that may be accessed in the `expression` string.
+             * @param  {Object} locals (optional) Properties that may be accessed in the
+             *                         `expression` string.
              * @return {Any} The result of the expression or `undefined`.
              */
-            scope.interp = function(expression, locals){
+            scope.interp = function(expression, locals) {
               return (expression && $interpolate(expression)(locals));
             };
 
+            //This works since we ot the ngModel from the array or the schema-validate directive.
+            scope.hasSuccess = function() {
+              if (!scope.ngModel) {
+                return false;
+              }
+              return scope.ngModel.$valid &&
+                  (!scope.ngModel.$pristine || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
+            };
+
+            scope.hasError = function() {
+              if (!scope.ngModel) {
+                return false;
+              }
+              return scope.ngModel.$invalid && !scope.ngModel.$pristine;
+            };
+
             /**
+             * DEPRECATED: use sf-messages instead.
              * Error message handler
              * An error can either be a schema validation message or a angular js validtion
              * error (i.e. required)
              */
             scope.errorMessage = function(schemaError) {
-              //User has supplied validation messages
-              if (scope.form.validationMessage) {
-                if (schemaError) {
-                  if (angular.isString(scope.form.validationMessage)) {
-                    return scope.form.validationMessage;
-                  }
-
-                  return scope.form.validationMessage[schemaError.code] ||
-                         scope.form.validationMessage['default'];
-                } else {
-                  return scope.form.validationMessage.number ||
-                         scope.form.validationMessage['default'] ||
-                         scope.form.validationMessage;
-                }
-              }
-
-              //No user supplied validation message.
-              if (schemaError) {
-                return schemaError.message; //use tv4.js validation message
-              }
-
-              //Otherwise we only have input number not being a number
-              return 'Not a number';
+              return sfErrorMessage.interpolate(
+                (schemaError && schemaError.code + '') || 'default',
+                (scope.ngModel && scope.ngModel.$modelValue) || '',
+                scope.form,
+                scope.options && scope.options.validationMessage
+              );
             };
 
             // Rebind our part of the form to the scope.
