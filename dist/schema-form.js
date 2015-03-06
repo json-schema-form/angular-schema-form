@@ -317,7 +317,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   // Do we have a condition? Then we slap on an ng-if on all children,
                   // but be nice to existing ng-if.
                   if (form.condition) {
-                    angular.forEach(element.children(),function(child) {
+                    angular.forEach(element.children(), function(child) {
                       var ngIf = child.getAttribute('ng-if');
                       child.setAttribute(
                         'ng-if',
@@ -331,6 +331,45 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                   $compile(element.contents())(scope);
                 });
+
+                // Where there is a key there is probably a ngModel
+                if (form.key) {
+                  // It looks better with dot notation.
+                  scope.$on(
+                    'schemaForm.error.' + form.key.join('.'),
+                    function(event, error, validationMessage, validity) {
+                      if (validationMessage === true || validationMessage === false) {
+                        validity = validationMessage;
+                        validationMessage = undefined;
+                      }
+
+                      if (scope.ngModel && error) {
+                        if (scope.ngModel.$setDirty()) {
+                          scope.ngModel.$setDirty();
+                        } else {
+                          // FIXME: Check that this actually works on 1.2
+                          scope.ngModel.$dirty = true;
+                          scope.ngModel.$pristine = false;
+                        }
+
+                        // Set the new validation message if one is supplied
+                        // Does not work when validationMessage is just a string.
+                        if (validationMessage) {
+                          if (!form.validationMessage) {
+                            form.validationMessage = {};
+                          }
+                          console.log('settings validationMessage', validationMessage)
+                          form.validationMessage[error] = validationMessage;
+                        }
+
+                        scope.ngModel.$setValidity(error, validity === true);
+
+                        // Setting or removing a validity can change the field to believe its valid
+                        // but its not. So lets trigger its validation as well.
+                        scope.$broadcast('schemaFormValidate');
+                      }
+                  })
+                }
 
                 once();
               }
@@ -1710,8 +1749,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         if (ngModel.$setDirty()) {
           ngModel.$setDirty();
         }
-        validate();
-        //}
+        validate(ngModel.$viewValue);
       });
 
       scope.schemaError = function() {
