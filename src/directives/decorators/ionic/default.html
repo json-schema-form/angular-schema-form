@@ -3,7 +3,8 @@
 
   <span class="input-label" ng-if="form.htmlClass == 'item-stacked-label'">{{form.title}}</span>
 
-  <input ng-if="!(form.htmlClass == 'item-input-inset')"
+  <span ng-if="!(form.htmlClass == 'item-input-inset')">
+  <input
         ng-show="form.key"
         type="{{form.type}}"
         step="any"
@@ -15,6 +16,7 @@
         ng-disabled="form.readonly"
         schema-validate="form"
         name="{{form.key.slice(-1)[0]}}">
+  </span>
 
   <span ng-if="form.feedback !== false"
         class="form-control-feedback"
