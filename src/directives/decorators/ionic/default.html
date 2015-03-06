@@ -3,18 +3,35 @@
 
   <span class="input-label" ng-if="form.htmlClass == 'item-stacked-label'">{{form.title}}</span>
 
-  <span ng-if="!(form.htmlClass == 'item-input-inset')">
-  <input ng-show="form.key"
-        type="{{form.type}}"
-        step="any"
-        sf-changed="form"
-        placeholder="{{form.placeholder}}"
-        class="{{form.fieldHtmlClass}}"
-        ng-model-options="form.ngModelOptions"
-        ng-model="$$value$$"
-        ng-disabled="form.readonly"
-        schema-validate="form"
-        name="{{form.key.slice(-1)[0]}}">
+  <label class="item-input-wrapper" ng-if="form.htmlClass == 'item-input-inset'">
+
+    <input ng-show="form.key"
+      type="{{form.type}}"
+      step="any"
+      sf-changed="form"
+      placeholder="{{form.placeholder}}"
+      class="{{form.fieldHtmlClass}}"
+      ng-model-options="form.ngModelOptions"
+      ng-model="$$value$$"
+      ng-disabled="form.readonly"
+      schema-validate="form"
+      name="{{form.key.slice(-1)[0]}}">
+
+  </label>
+
+  <span ng-if="form.htmlClass != 'item-input-inset'">
+    <input
+          ng-show="form.key"
+          type="{{form.type}}"
+          step="any"
+          sf-changed="form"
+          placeholder="{{form.placeholder}}"
+          class="{{form.fieldHtmlClass}}"
+          ng-model-options="form.ngModelOptions"
+          ng-model="$$value$$"
+          ng-disabled="form.readonly"
+          schema-validate="form"
+          name="{{form.key.slice(-1)[0]}}">
   </span>
 
   <span ng-if="form.feedback !== false"
@@ -24,6 +41,9 @@
        ng-show="(hasError() && errorMessage(schemaError())) || form.description"
        ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
 
+  <a class="button button-small" ng-if="form.htmlClass == 'item-input-inset'" data-click="{{form.insetButtonAction}}">
+      {{form.insetButtonBody}}
+  </a>
 
 </label>
 
