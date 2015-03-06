@@ -3,7 +3,7 @@
 
   <span class="input-label" ng-if="form.htmlClass == 'item-stacked-label'">{{form.title}}</span>
 
-  <input
+  <input ng-if="!(form.htmlClass == 'item-input-inset')"
         ng-show="form.key"
         type="{{form.type}}"
         step="any"
