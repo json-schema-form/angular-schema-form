@@ -56,7 +56,9 @@ angular.module('schemaForm').directive('sfMessage',
       update();
 
       scope.$watchCollection('ngModel.$error', function() {
+        if (scope.ngModel) {
           update(scope.ngModel.$valid);
+        }
       });
 
     }
