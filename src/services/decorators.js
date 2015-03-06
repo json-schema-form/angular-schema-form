@@ -140,10 +140,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
              */
             scope.errorMessage = function(schemaError) {
               return sfErrorMessage.interpolate(
-                (schemaError && schemaError.code) || 'default',
+                (schemaError && schemaError.code + '') || 'default',
                 (scope.ngModel && scope.ngModel.$modelValue) || '',
                 scope.form,
-                scope.options.validationMessage
+                scope.options && scope.options.validationMessage
               );
             };
 
