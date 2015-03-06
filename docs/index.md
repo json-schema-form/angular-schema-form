@@ -718,6 +718,22 @@ As an object:
 }
 ```
 
+The *select* can also take an optional `group` property in its `titleMap` that adds `<optgroup>`
+element to the select.
+
+```javascript
+{
+  type: "select",
+  titleMap: [
+    { value: "yes", name: "Yes I do", group: "Boolean" },
+    { value: "no", name: "Hell no" , group: "Boolean" },
+    { value: "no", name: "File Not Found", group: "Other" },
+  ]
+}
+```
+
+
+
 ### actions
 
 *actions* behaves the same as fieldset, but can only handle buttons as chidren.
