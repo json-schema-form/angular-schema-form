@@ -76,15 +76,6 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         }
       });
 
-      //This works since we now we're inside a decorator and that this is the decorators scope.
-      //If $pristine and empty don't show success (even if it's valid)
-      scope.hasSuccess = function() {
-        return ngModel.$valid && (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue));
-      };
-
-      scope.hasError = function() {
-        return ngModel.$invalid && !ngModel.$pristine;
-      };
 
       scope.schemaError = function() {
         return error;

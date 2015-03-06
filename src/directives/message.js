@@ -17,7 +17,7 @@ angular.module('schemaForm').directive('sfMessage',
       }
 
       var update = function(valid) {
-        if (valid) {
+        if (valid && scope.hasError()) {
           element.html(msg);
         } else {
 

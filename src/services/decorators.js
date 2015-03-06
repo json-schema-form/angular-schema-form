@@ -125,11 +125,28 @@ angular.module('schemaForm').provider('schemaFormDecorators',
              * braces to access properties on `locals`.
              *
              * @param  {string} content The string to interpolate.
-             * @param  {Object} locals (optional) Properties that may be accessed in the `expression` string.
+             * @param  {Object} locals (optional) Properties that may be accessed in the
+             *                         `expression` string.
              * @return {Any} The result of the expression or `undefined`.
              */
-            scope.interp = function(expression, locals){
+            scope.interp = function(expression, locals) {
               return (expression && $interpolate(expression)(locals));
+            };
+
+            //This works since we ot the ngModel from the array or the schema-validate directive.
+            scope.hasSuccess = function() {
+              if (!scope.ngModel) {
+                return false;
+              }
+              return scope.ngModel.$valid &&
+                  (!scope.ngModel.$pristine || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
+            };
+
+            scope.hasError = function() {
+              if (!scope.ngModel) {
+                return false;
+              }
+              return scope.ngModel.$invalid && !scope.ngModel.$pristine;
             };
 
             /**
