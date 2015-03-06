@@ -88,9 +88,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.buttonClick = function($event, form) {
-              console.log("BIG FUCK!");
-              alert("CACA");
-              debugger;
               if (angular.isFunction(form.onClick)) {
                 form.onClick($event, form);
               } else if (angular.isString(form.onClick)) {
