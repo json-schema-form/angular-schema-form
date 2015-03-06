@@ -248,13 +248,13 @@ little bit easier.
 
 The context variables available to you are:
 
- | Name          |   Value                 |
- |:--------------|:------------------------|
- | error         | The error code          |
- | title         | Title of the field, shorthand for `{{form.title || schema.title}}` |
- | value         | The model value         |
- | form          | form definition object for this field |
- | schema        | schema for this field |
+| Name          |   Value                 |
+|:--------------|:------------------------|
+| error         | The error code          |
+| title         | Title of the field      |
+| value         | The model value         |
+| form          | form definition object for this field |
+| schema        | schema for this field |
 
  Ex.
  ```javascript
