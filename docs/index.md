@@ -1066,6 +1066,28 @@ function FormCtrl($scope) {
 }
 ```
 
+To suppress add and remove buttons set `add` to `null` and `remove` to `null`.
+```javascript
+function FormCtrl($scope) {
+  $scope.form = [
+    {
+      key: "subforms",
+      add: null,
+      remove: null,
+      style: {
+		add: "btn-success"
+	  },
+      items: [
+        "subforms[].nick",
+        "subforms[].name",
+        "subforms[].emails",
+      ],
+    }
+  ];
+}
+```
+
+
 
 ### tabarray
 The `tabarray` form type behaves the same way and has the same options as
