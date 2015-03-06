@@ -67,8 +67,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         if (ngModel.$setDirty()) {
           ngModel.$setDirty();
         }
-        validate();
-        //}
+        validate(ngModel.$viewValue);
       });
 
       scope.schemaError = function() {
