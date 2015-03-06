@@ -1677,10 +1677,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
 
       // Validate against the schema.
 
-      // Get in last of the parses so the parsed value has the correct type.
-      // We don't use $validators since we like to set different errors depeding tv4 error codes
-
-      ngModel.$parsers.push(function(viewValue) {
+      var validate = function(viewValue) {
         form = getForm();
         //Still might be undefined
         if (!form) {
@@ -1688,7 +1685,6 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         }
 
         var result =  sfValidator.validate(form, viewValue);
-
         // Since we might have different tv4 errors we must clear all
         // errors that start with tv4-
         Object.keys(ngModel.$error)
@@ -1701,24 +1697,22 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
           error = result.error;
           return undefined;
         }
-
         return viewValue;
-      });
+      };
+
+      // Get in last of the parses so the parsed value has the correct type.
+      // We don't use $validators since we like to set different errors depeding tv4 error codes
+      ngModel.$parsers.push(validate);
 
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function() {
-
-        if (ngModel.$validate) {
-          ngModel.$validate();
-          if (ngModel.$invalid) { // The field must be made dirty so the error message is displayed
-            ngModel.$dirty = true;
-            ngModel.$pristine = false;
-          }
-        } else {
-          ngModel.$setViewValue(ngModel.$viewValue);
+        // FIXME: Try to make a fix for angular 1.2
+        if (ngModel.$setDirty()) {
+          ngModel.$setDirty();
         }
+        validate();
+        //}
       });
-
 
       scope.schemaError = function() {
         return error;
