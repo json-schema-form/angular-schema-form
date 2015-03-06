@@ -86,7 +86,7 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
       var message = validationMessage['default'] || global['default'] || '';
 
       [validationMessage, global, defaultMessages].some(function(val) {
-        if (angular.isString(val)) {
+        if (angular.isString(val) || angular.isFunction(val)) {
           message = val;
           return true;
         }

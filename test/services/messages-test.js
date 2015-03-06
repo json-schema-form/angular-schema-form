@@ -166,6 +166,36 @@ describe('schemaFormServices', function() {
       });
     });
 
+    it('should handle valdationMessage being a single function', function() {
+      inject(function(sfErrorMessage) {
+
+        var msgFn = sinon.stub().returns('Yes!');
+
+        var result = sfErrorMessage.interpolate(
+          'foobar-error',              //error
+          'foobar',                    //value
+          {
+            schema: {title: 'Foo'},
+            validationMessage: msgFn
+          },   //form
+          {'default': 'Oh noes!'}
+        );
+
+        result.should.be.eq('Yes!');
+        msgFn.should.have.been.calledOnce;
+        msgFn.should.have.been.calledWith({
+          error: 'foobar-error',
+          value: 'foobar',
+          form: {
+            schema: {title: 'Foo'},
+            validationMessage: msgFn
+          },
+          schema: {title: 'Foo'},
+          title: 'Foo'
+        });
+      });
+    });
+
     it('should strip "tv4-" prefix from error code', function() {
       inject(function(sfErrorMessage) {
 
