@@ -1108,9 +1108,55 @@ dependency [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical
 It is not needed for tabs on top.
 
 The `title` option is a bit special in `tabarray`, it defines the title
-of the tab and is considered a angular expression. The expression is evaluated
+of the tab and it is interpolated so you can use expression it. Its interpolated
 with two extra variables in context: **value** and **$index**, where **value**
 is the value in the array (i.e. that tab) and **$index** the index.
+
+You can include multiple expressions or mix expressions and text as needed:
+Ex:
+```javascript
+
+    {
+      "form": [
+        {
+          "type": "tabarray",
+          "title": "My {{ value.name }} is:",
+        }
+      ]
+    }
+
+```
+
+#### Deprecation Warning
+Before version 0.8.0 the entire title was evaluated as an expression and not interpolated.
+If you weren't using expressions in your form titles then no changes are needed.
+
+However, if your tabarray titles contain implicit Angular expressions like this:
+```js
+    {
+      "form": [
+        {
+          "type": "tabarray",
+          "title": "value.name || 'Tab '+$index",
+        }
+      ]
+    }
+```
+
+
+Then you should change this to explicit expressions by wrapping them with the Angular expression
+delimiter "{{ }}":
+```js
+    {
+      "form": [
+        {
+          "type": "tabarray",
+          "title": "{{ value.name || 'Tab '+$index }}",
+        }
+      ]
+    }
+```
+
 
 Example with tabs on the top:
 
@@ -1143,7 +1189,7 @@ function FormCtrl($scope) {
     {
       type: "tabarray",
       tabType: "top",
-      title: "value.nick || ('Tab '+$index)"
+      title: "{{value.nick || ('Tab '+$index)}}"
       key: "subforms",
       remove: "Delete",
       style: {
