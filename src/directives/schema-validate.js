@@ -15,6 +15,9 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
       scope.$emit('schemaFormPropagateNgModelController', ngModel);
 
       var error = null;
+      function setSchemaError(value) {
+        error = value;
+      }
 
       var getForm = function() {
         if (!form) {
@@ -51,7 +54,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         if (!result.valid) {
           // it is invalid, return undefined (no model update)
           ngModel.$setValidity('tv4-' + result.error.code, false);
-          error = result.error;
+          setSchemaError(result.error);
           return undefined;
         }
         return viewValue;
@@ -69,6 +72,8 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         }
         validate(ngModel.$viewValue);
       });
+
+      scope.setSchemaError = setSchemaError;
 
       scope.schemaError = function() {
         return error;

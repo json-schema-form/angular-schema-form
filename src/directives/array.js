@@ -202,6 +202,9 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
           // If there is a ngModel present we need to validate when asked.
           if (ngModel) {
             var error;
+            function setSchemaError(value) {
+              error = value;
+            }
 
             scope.validateArray = function() {
               // The actual content of the array is validated by each field
@@ -230,7 +233,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
                 // Set viewValue to trigger $dirty on field. If someone knows a
                 // a better way to do it please tell.
                 ngModel.$setViewValue(scope.modelArray);
-                error = result.error;
+                setSchemaError(result.error);
                 ngModel.$setValidity('tv4-' + result.error.code, false);
               }
             };
@@ -244,6 +247,8 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             scope.hasError = function() {
               return ngModel.$invalid;
             };
+
+            scope.setSchemaError = setSchemaError;
 
             scope.schemaError = function() {
               return error;
