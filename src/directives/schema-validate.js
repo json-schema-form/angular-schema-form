@@ -63,9 +63,12 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
 
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function() {
-        // FIXME: Try to make a fix for angular 1.2
-        if (ngModel.$setDirty()) {
+        if (ngModel.$setDirty) {
+          // Angular 1.3+
           ngModel.$setDirty();
+        } else {
+          // Angular 1.2
+          ngModel.$setViewValue(ngModel.$viewValue);
         }
         validate(ngModel.$viewValue);
       });
