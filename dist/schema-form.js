@@ -649,6 +649,15 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
  */
 angular.module('schemaForm').provider('schemaForm',
 ['sfPathProvider', function(sfPathProvider) {
+  var stripNullType = function(type) {
+    if (Array.isArray(type) && type.length == 2) {
+      if (type[0] === 'null')
+        return type[1];
+      if (type[1] === 'null')
+        return type[0];
+    }
+    return type;
+  }
 
   //Creates an default titleMap list from an enum, i.e. a list of strings.
   var enumToTitleMap = function(enm) {
@@ -679,7 +688,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var defaultFormDefinition = function(name, schema, options) {
-    var rules = defaults[schema.type];
+    var rules = defaults[stripNullType(schema.type)];
     if (rules) {
       var def;
       for (var i = 0; i < rules.length; i++) {
@@ -732,7 +741,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var text = function(name, schema, options) {
-    if (schema.type === 'string' && !schema['enum']) {
+    if (stripNullType(schema.type) === 'string' && !schema['enum']) {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'text';
@@ -744,7 +753,7 @@ angular.module('schemaForm').provider('schemaForm',
   //default in json form for number and integer is a text field
   //input type="number" would be more suitable don't ya think?
   var number = function(name, schema, options) {
-    if (schema.type === 'number') {
+    if (stripNullType(schema.type) === 'number') {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'number';
@@ -754,7 +763,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var integer = function(name, schema, options) {
-    if (schema.type === 'integer') {
+    if (stripNullType(schema.type) === 'integer') {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'number';
@@ -764,7 +773,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var checkbox = function(name, schema, options) {
-    if (schema.type === 'boolean') {
+    if (stripNullType(schema.type) === 'boolean') {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'checkbox';
@@ -774,7 +783,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var select = function(name, schema, options) {
-    if (schema.type === 'string' && schema['enum']) {
+    if (stripNullType(schema.type) === 'string' && schema['enum']) {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'select';
@@ -787,7 +796,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var checkboxes = function(name, schema, options) {
-    if (schema.type === 'array' && schema.items && schema.items['enum']) {
+    if (stripNullType(schema.type) === 'array' && schema.items && schema.items['enum']) {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'checkboxes';
@@ -800,7 +809,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var fieldset = function(name, schema, options) {
-    if (schema.type === 'object') {
+    if (stripNullType(schema.type) === 'object') {
       var f   = stdFormObj(name, schema, options);
       f.type  = 'fieldset';
       f.items = [];
@@ -832,7 +841,7 @@ angular.module('schemaForm').provider('schemaForm',
 
   var array = function(name, schema, options) {
 
-    if (schema.type === 'array') {
+    if (stripNullType(schema.type) === 'array') {
       var f   = stdFormObj(name, schema, options);
       f.type  = 'array';
       f.key   = options.path;
@@ -1030,7 +1039,7 @@ angular.module('schemaForm').provider('schemaForm',
       ignore = ignore || {};
       globalOptions = globalOptions || {};
 
-      if (schema.type === 'object') {
+      if (stripNullType(schema.type) === 'object') {
         angular.forEach(schema.properties, function(v, k) {
           if (ignore[k] !== true) {
             var required = schema.required && schema.required.indexOf(k) !== -1;
@@ -1507,7 +1516,9 @@ angular.module('schemaForm').directive('sfMessage',
       update();
 
       scope.$watchCollection('ngModel.$error', function() {
+        if (scope.ngModel) {
           update(scope.ngModel.$valid);
+        }
       });
 
     }
@@ -1608,7 +1619,7 @@ angular.module('schemaForm')
 
           //Create directives from the form definition
           angular.forEach(merged, function(obj, i) {
-            var n = document.createElement(attrs.sfDecorator ||
+            var n = document.createElement(attrs.sfUseDecorator ||
                                            snakeCase(schemaFormDecorators.defaultDecorator, '-'));
             n.setAttribute('form', 'schemaForm.form[' + i + ']');
 
@@ -1745,9 +1756,12 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
 
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function() {
-        // FIXME: Try to make a fix for angular 1.2
-        if (ngModel.$setDirty()) {
+        if (ngModel.$setDirty) {
+          // Angular 1.3+
           ngModel.$setDirty();
+        } else {
+          // Angular 1.2
+          ngModel.$setViewValue(ngModel.$viewValue);
         }
         validate(ngModel.$viewValue);
       });
