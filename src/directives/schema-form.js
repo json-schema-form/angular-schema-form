@@ -92,7 +92,7 @@ angular.module('schemaForm')
 
           //Create directives from the form definition
           angular.forEach(merged, function(obj, i) {
-            var n = document.createElement(attrs.sfDecorator ||
+            var n = document.createElement(attrs.sfDefaultDecorator ||
                                            snakeCase(schemaFormDecorators.defaultDecorator, '-'));
             n.setAttribute('form', 'schemaForm.form[' + i + ']');
 
