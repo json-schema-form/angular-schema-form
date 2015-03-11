@@ -1,0 +1,86 @@
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "one": {
+        "type": "string",
+        "enum": ["one", "two", "three"],
+        "description": "Default behaviour, empty when model is empty."
+      },
+      "two": {
+        "type": "string",
+        "enum": ["one", "two", "three"],
+        "description": "Never be empty."
+      },
+      "three": {
+        "type": ["null", "string"],
+        "enum": [null, "one", "two", "three"],
+        "description": "With null, empty label."
+      },
+      "four": {
+        "type": ["null", "string"],
+        "enum": [null, "one", "two", "three"],
+        "description": "With null, custom label via allowAutoNullOption"
+      },
+      "five": {
+        "type": ["null", "string"],
+        "enum": [null, "one", "two", "three"],
+        "description": "With null, custom label via titleMap"
+      },
+      "six": {
+        "type": ["null", "string"],
+        "description": "Without enum, select configured in form definition."
+      },
+      "seven": {
+        "type": ["null", "string"],
+        "enum": [null, "one", "two", "three"],
+        "description": "Look, null is not first!"
+      }
+
+    }
+  },
+  "form": [
+    "one",
+    {
+      "key": "two",
+      "allowAutoNullOption": false
+    },
+    "three",
+    {
+      "key": "four",
+      "type": "select",
+      "allowAutoNullOption": "Ooohhh coool"
+    },
+    {
+      "key": "five",
+      "type": "select",
+      "titleMap": [
+        {"name": "Nada", "value": null},
+        {"name": "One", "value": "one"},
+        {"name": "Two", "value": "two"},
+        {"name": "Three", "value": "three"}
+      ]
+    },
+    {
+      "key": "six",
+      "type": "select",
+      "titleMap": [
+        {"name": "Nada", "value": null},
+        {"name": "One", "value": "one"},
+        {"name": "Two", "value": "two"},
+        {"name": "Three", "value": "three"}
+      ]
+    },
+    {
+      "key": "seven",
+      "type": "select",
+      "allowAutoNullOption": false,
+      "titleMap": [
+        {"name": "One", "value": "one"},
+        {"name": "Two", "value": "two"},
+        {"name": "Nada", "value": null},
+        {"name": "Three", "value": "three"}
+      ]
+    }
+  ]
+}
