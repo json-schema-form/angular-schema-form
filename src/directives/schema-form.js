@@ -120,10 +120,16 @@ angular.module('schemaForm')
 
           //ok, now that that is done let's set any defaults
           schemaForm.traverseSchema(schema, function(prop, path) {
+            var val = sfSelect(path, scope.model);
             if (angular.isDefined(prop['default'])) {
-              var val = sfSelect(path, scope.model);
               if (angular.isUndefined(val)) {
                 sfSelect(path, scope.model, prop['default']);
+              }
+            }else if (angular.isUndefined(val)){
+              if (prop.type === 'array' ){
+                //undefined arrays cannot be pushed to 
+                //so even if there is no default value we must set it to an empty array
+                sfSelect(path, scope.model, []);
               }
             }
           });
