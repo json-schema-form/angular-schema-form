@@ -4,7 +4,7 @@ describe('directive',function(){
   beforeEach(module('templates'));
   beforeEach(module('schemaForm'));
   beforeEach(
-    //We don't need no sanitation. We don't need no though control.
+    //We don't need no sanitation. We don't need no thought control.
     module(function($sceProvider){
       $sceProvider.enabled(false);
     })
