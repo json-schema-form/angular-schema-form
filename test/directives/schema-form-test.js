@@ -1754,5 +1754,74 @@ describe('directive',function(){
     });
   });
 
+  it('should use supplied template with template field type',function() {
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [
+        {
+          type: 'template',
+          template: '<div>{{form.foo}}</div>',
+          foo: "Hello World"
+        }
+      ];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).html().should.be.eq('<div class="ng-binding ng-scope">Hello World</div>')
+
+    });
+  });
+
+  it('should load template by templateUrl, with template field type',function() {
+
+    inject(function($compile, $rootScope, $httpBackend){
+
+      $httpBackend.when('GET', '/template.html')
+                  .respond("<div>{{form.foo}}</div>");
+
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [
+        {
+          type: 'template',
+          templateUrl: '/template.html',
+          foo: 'Hello World'
+        }
+      ];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      $httpBackend.flush();
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+
+      tmpl.children().eq(0).html().should.be.eq('<div class="ng-binding ng-scope">Hello World</div>')
+
+    });
+  });
+
 
 });

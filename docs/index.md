@@ -24,6 +24,7 @@ Documentation
     1. [button](#button)
     1. [radios and radiobuttons](#radios-and-radiobuttons)
     1. [help](#help)
+    1. [template](#template)
     1. [tabs](#tabs)
     1. [array](#array)
     1. [tabarray](#tabarray)
@@ -351,6 +352,7 @@ Schema Form currently supports the following form field types out of the box:
 | radios-inline |  radio buttons in one line |
 | radiobuttons  |  radio buttons with bootstrap buttons |
 | help          |  insert arbitrary html |
+| template      |  insert an angular template |
 | tab           |  tabs with content     |
 | array         |  a list you can add, remove and reorder |
 | tabarray      |  a tabbed version of array |
@@ -901,6 +903,39 @@ function FormCtrl($scope) {
       helpvalue: "<h1>Yo Ninja!</h1>"
     },
     "name"
+  ];
+}
+```
+
+### template
+`template` fields are like `help` fields but instead of arbitrary html you can insert or refer to
+an angular template to be inserted where the field should go. There is one catch though and that
+is that the scope is that of the decorator directive and its inside the isolated scope of the
+`sf-schema` directive, so anything you like to access in the template should be put on the form,
+which is available in template. It's basically a simple one shot version of add-ons, so see the
+see the docs on [Extending Schema Form](extending.md) for details on what is on scope and what's up
+with `$$value$$`
+
+
+
+The `template` type should either have a `template` or a `templateUrl` option.
+
+Ex.
+```javascript
+function FormCtrl($scope) {
+
+  $scope.form = [
+    {
+      type: "template",
+      template: '<h1 ng-click="form.foo()">Yo {{form.name}}!</h1>',
+      name: 'Ninja',
+      foo: function() { console.log('oh noes!'); }
+    },
+    {
+      type: "template",
+      templateUrl: "templates/foo.html",
+      myFavouriteVariable: 'OMG!!'
+    }
   ];
 }
 ```
