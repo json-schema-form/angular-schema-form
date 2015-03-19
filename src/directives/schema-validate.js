@@ -57,6 +57,28 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         return viewValue;
       };
 
+      // Custom validators, parsers, formatters etc
+      if (typeof form.ngModel === 'function') {
+        form.ngModel(ngModel);
+      }
+
+      ['$parsers', '$viewChangeListeners', '$formatters'].forEach(function(attr) {
+        if (form[attr] && ngModel[attr]) {
+          form[attr].forEach(function(fn) {
+            ngModel[attr].push(fn);
+          });
+        }
+      });
+
+      ['$validators', '$asyncValidators'].forEach(function(attr) {
+        // Check if our version of angular has i, i.e. 1.3+
+        if (form[attr] && ngModel[attr]) {
+          angular.forEach(form[attr], function(fn, name) {
+            ngModel[attr][name] = fn;
+          });
+        }
+      });
+
       // Get in last of the parses so the parsed value has the correct type.
       // We don't use $validators since we like to set different errors depeding tv4 error codes
       ngModel.$parsers.push(validate);
