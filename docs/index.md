@@ -23,6 +23,7 @@ Documentation
     1. [ngModelOptions](#ngmodeloptions)
     1. [copyValueTo](#copyvalueto)
 1. [Specific options and types](#specific-options-and-types)
+    1. [input group addons](#input-group-addons)
     1. [fieldset and section](#fieldset-and-section)
     1. [select and checkboxes](#select-and-checkboxes)
     1. [actions](#actions)
@@ -822,6 +823,24 @@ Note that arrays inside arrays won't work with conditions.
 
 Specific options and types
 --------------------------
+
+### input group addons
+
+*input* and *textarea* types can also have
+[bootstrap input groups](http://getbootstrap.com/components/#input-groups).
+
+You can add them with the option `fieldAddonLeft` and `fieldAddonRight` which both takes a snippet
+of html.
+
+```js
+[
+  {
+    "key": "email"
+    "fieldAddonLeft": "@"
+  }
+]
+```
+
 
 ### fieldset and section
 
