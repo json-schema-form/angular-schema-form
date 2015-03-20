@@ -158,8 +158,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   var createDirective = function(name) {
-    $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache',
-      function($parse,  $compile,  $http,  $templateCache) {
+    $compileProvider.directive(name,
+      ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
+      function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage) {
 
         return {
           restrict: 'AE',
@@ -168,6 +169,14 @@ angular.module('schemaForm').provider('schemaFormDecorators',
           scope: true,
           require: '?^sfSchema',
           link: function(scope, element, attrs, sfSchema) {
+
+            //The ngModelController is used in some templates and
+            //is needed for error messages,
+            scope.$on('schemaFormPropagateNgModelController', function(event, ngModel) {
+              event.stopPropagation();
+              event.preventDefault();
+              scope.ngModel = ngModel;
+            });
 
             //Keep error prone logic from the template
             scope.showTitle = function() {
@@ -235,34 +244,52 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             /**
+             * Interpolate the expression.
+             * Similar to `evalExpr()` and `evalInScope()`
+             * but will not fail if the expression is
+             * text that contains spaces.
+             *
+             * Use the Angular `{{ interpolation }}`
+             * braces to access properties on `locals`.
+             *
+             * @param  {string} content The string to interpolate.
+             * @param  {Object} locals (optional) Properties that may be accessed in the
+             *                         `expression` string.
+             * @return {Any} The result of the expression or `undefined`.
+             */
+            scope.interp = function(expression, locals) {
+              return (expression && $interpolate(expression)(locals));
+            };
+
+            //This works since we ot the ngModel from the array or the schema-validate directive.
+            scope.hasSuccess = function() {
+              if (!scope.ngModel) {
+                return false;
+              }
+              return scope.ngModel.$valid &&
+                  (!scope.ngModel.$pristine || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
+            };
+
+            scope.hasError = function() {
+              if (!scope.ngModel) {
+                return false;
+              }
+              return scope.ngModel.$invalid && !scope.ngModel.$pristine;
+            };
+
+            /**
+             * DEPRECATED: use sf-messages instead.
              * Error message handler
              * An error can either be a schema validation message or a angular js validtion
              * error (i.e. required)
              */
             scope.errorMessage = function(schemaError) {
-              //User has supplied validation messages
-              if (scope.form.validationMessage) {
-                if (schemaError) {
-                  if (angular.isString(scope.form.validationMessage)) {
-                    return scope.form.validationMessage;
-                  }
-
-                  return scope.form.validationMessage[schemaError.code] ||
-                         scope.form.validationMessage['default'];
-                } else {
-                  return scope.form.validationMessage.number ||
-                         scope.form.validationMessage['default'] ||
-                         scope.form.validationMessage;
-                }
-              }
-
-              //No user supplied validation message.
-              if (schemaError) {
-                return schemaError.message; //use tv4.js validation message
-              }
-
-              //Otherwise we only have input number not being a number
-              return 'Not a number';
+              return sfErrorMessage.interpolate(
+                (schemaError && schemaError.code + '') || 'default',
+                (scope.ngModel && scope.ngModel.$modelValue) || '',
+                scope.form,
+                scope.options && scope.options.validationMessage
+              );
             };
 
             // Rebind our part of the form to the scope.
@@ -277,20 +304,34 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 //ok let's replace that template!
                 //We do this manually since we need to bind ng-model properly and also
                 //for fieldsets to recurse properly.
-                var url = templateUrl(name, form);
-                $http.get(url, {cache: $templateCache}).then(function(res) {
-                  var key = form.key ?
-                            sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
-                  var template = res.data.replace(
-                    /\$\$value\$\$/g,
-                    'model' + (key[0] !== '[' ? '.' : '') + key
-                  );
+                var templatePromise;
+
+                // type: "template" is a special case. It can contain a template inline or an url.
+                // otherwise we find out the url to the template and load them.
+                if (form.type === 'template' && form.template) {
+                  templatePromise = $q.when(form.template);
+                } else {
+                  var url = form.type === 'template' ? form.templateUrl : templateUrl(name, form);
+                  templatePromise = $http.get(url, {cache: $templateCache}).then(function(res) {
+                                      return res.data;
+                                    });
+                }
+
+                templatePromise.then(function(template) {
+                  if (form.key) {
+                    var key = form.key ?
+                              sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
+                    template = template.replace(
+                      /\$\$value\$\$/g,
+                      'model' + (key[0] !== '[' ? '.' : '') + key
+                    );
+                  }
                   element.html(template);
 
                   // Do we have a condition? Then we slap on an ng-if on all children,
                   // but be nice to existing ng-if.
                   if (form.condition) {
-                    angular.forEach(element.children(),function(child) {
+                    angular.forEach(element.children(), function(child) {
                       var ngIf = child.getAttribute('ng-if');
                       child.setAttribute(
                         'ng-if',
@@ -304,6 +345,45 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                   $compile(element.contents())(scope);
                 });
+
+                // Where there is a key there is probably a ngModel
+                if (form.key) {
+                  // It looks better with dot notation.
+                  scope.$on(
+                    'schemaForm.error.' + form.key.join('.'),
+                    function(event, error, validationMessage, validity) {
+                      if (validationMessage === true || validationMessage === false) {
+                        validity = validationMessage;
+                        validationMessage = undefined;
+                      }
+
+                      if (scope.ngModel && error) {
+                        if (scope.ngModel.$setDirty()) {
+                          scope.ngModel.$setDirty();
+                        } else {
+                          // FIXME: Check that this actually works on 1.2
+                          scope.ngModel.$dirty = true;
+                          scope.ngModel.$pristine = false;
+                        }
+
+                        // Set the new validation message if one is supplied
+                        // Does not work when validationMessage is just a string.
+                        if (validationMessage) {
+                          if (!form.validationMessage) {
+                            form.validationMessage = {};
+                          }
+                          console.log('settings validationMessage', validationMessage)
+                          form.validationMessage[error] = validationMessage;
+                        }
+
+                        scope.ngModel.$setValidity(error, validity === true);
+
+                        // Setting or removing a validity can change the field to believe its valid
+                        // but its not. So lets trigger its validation as well.
+                        scope.$broadcast('schemaFormValidate');
+                      }
+                  })
+                }
 
                 once();
               }
@@ -459,6 +539,123 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
 }]);
 
+angular.module('schemaForm').provider('sfErrorMessage', function() {
+
+  // The codes are tv4 error codes.
+  // Not all of these can actually happen in a field, but for
+  // we never know when one might pop up so it's best to cover them all.
+
+  // TODO: Humanize these.
+  var defaultMessages = {
+    'default': 'Field does not validate',
+    0: 'Invalid type, expected {{schema.type}})',
+    1: 'No enum match for: {{value}}',
+    10: 'Data does not match any schemas from "anyOf"',
+    11: 'Data does not match any schemas from "oneOf"',
+    12: 'Data is valid against more than one schema from "oneOf"',
+    13: 'Data matches schema from "not"',
+    // Numeric errors
+    100: 'Value {{value}} is not a multiple of {{schema.multipleOf}}',
+    101: 'Value {{value}} is less than minimum {{schema.minimum}}',
+    102: 'Value {{value}} is equal to exclusive minimum {{schema.minimum}}',
+    103: 'Value {{value}} is greater than maximum {{schema.maximum}}',
+    104: 'Value {{value}} is equal to exclusive maximum {{schema.maximum}}',
+    105: 'Value {{value}} is not a valid number',
+    // String errors
+    200: 'String is too short ({{value.length}} chars), minimum {{schema.minimum}}',
+    201: 'String is too long ({{value.length}} chars), maximum {{schema.maximum}}',
+    202: 'String does not match pattern: {{schema.pattern}}',
+    // Object errors
+    300: 'Too few properties defined, minimum {{schema.minimum}}',
+    301: 'Too many properties defined, maximum {{schema.maximum}}',
+    302: 'Required',
+    303: 'Additional properties not allowed',
+    304: 'Dependency failed - key must exist',
+    // Array errors
+    400: 'Array is too short ({{value.length}}), minimum {{schema.minimum}}',
+    401: 'Array is too long ({{value.length}}), maximum {{schema.maximum}}',
+    402: 'Array items are not unique',
+    403: 'Additional items not allowed',
+    // Format errors
+    500: 'Format validation failed',
+    501: 'Keyword failed: "{{title}}"',
+    // Schema structure
+    600: 'Circular $refs',
+    // Non-standard validation options
+    1000: 'Unknown property (not in schema)'
+  };
+
+  this.setDefaultMessages = function(messages) {
+    defaultMessages = messages;
+  };
+
+  this.getDefaultMessages = function() {
+    return defaultMessages;
+  };
+
+  this.setDefaultMessage = function(error, msg) {
+    defaultMessages[error] = msg;
+  };
+
+  this.$get = ['$interpolate', function($interpolate) {
+
+    var service = {};
+    service.defaultMessages = defaultMessages;
+
+    /**
+     * Interpolate and return proper error for an eror code.
+     * Validation message on form trumps global error messages.
+     * and if the message is a function instead of a string that function will be called instead.
+     * @param {string} error the error code, i.e. tv4-xxx for tv4 errors, otherwise it's whats on
+     *                       ngModel.$error for custom errors.
+     * @param {Any} value the actual model value.
+     * @param {Object} form a form definition object for this field
+     * @param  {Object} global the global validation messages object (even though its called global
+     *                         its actually just shared in one instance of sf-schema)
+     * @return {string} The error message.
+     */
+    service.interpolate = function(error, value, form, global) {
+      global = global || {};
+      var validationMessage = form.validationMessage || {};
+
+      // Drop tv4 prefix so only the code is left.
+      if (error.indexOf('tv4-') === 0) {
+        error = error.substring(4);
+      }
+
+      // First find apropriate message or function
+      var message = validationMessage['default'] || global['default'] || '';
+
+      [validationMessage, global, defaultMessages].some(function(val) {
+        if (angular.isString(val) || angular.isFunction(val)) {
+          message = val;
+          return true;
+        }
+        if (val && val[error]) {
+          message = val[error];
+          return true;
+        }
+      });
+
+      var context = {
+        error: error,
+        value: value,
+        form: form,
+        schema: form.schema,
+        title: form.title || (form.schema && form.schema.title)
+      };
+      if (angular.isFunction(message)) {
+        return message(context);
+      } else {
+        return $interpolate(message)(context);
+      }
+    };
+
+    return service;
+  }];
+
+});
+
 /**
  * Schema form service.
  * This service is not that useful outside of schema form directive
@@ -466,6 +663,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',
  */
 angular.module('schemaForm').provider('schemaForm',
 ['sfPathProvider', function(sfPathProvider) {
+  var stripNullType = function(type) {
+    if (Array.isArray(type) && type.length == 2) {
+      if (type[0] === 'null')
+        return type[1];
+      if (type[1] === 'null')
+        return type[0];
+    }
+    return type;
+  }
 
   //Creates an default titleMap list from an enum, i.e. a list of strings.
   var enumToTitleMap = function(enm) {
@@ -496,7 +702,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var defaultFormDefinition = function(name, schema, options) {
-    var rules = defaults[schema.type];
+    var rules = defaults[stripNullType(schema.type)];
     if (rules) {
       var def;
       for (var i = 0; i < rules.length; i++) {
@@ -549,7 +755,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var text = function(name, schema, options) {
-    if (schema.type === 'string' && !schema['enum']) {
+    if (stripNullType(schema.type) === 'string' && !schema['enum']) {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'text';
@@ -561,7 +767,7 @@ angular.module('schemaForm').provider('schemaForm',
   //default in json form for number and integer is a text field
   //input type="number" would be more suitable don't ya think?
   var number = function(name, schema, options) {
-    if (schema.type === 'number') {
+    if (stripNullType(schema.type) === 'number') {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'number';
@@ -571,7 +777,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var integer = function(name, schema, options) {
-    if (schema.type === 'integer') {
+    if (stripNullType(schema.type) === 'integer') {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'number';
@@ -581,7 +787,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var checkbox = function(name, schema, options) {
-    if (schema.type === 'boolean') {
+    if (stripNullType(schema.type) === 'boolean') {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'checkbox';
@@ -591,7 +797,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var select = function(name, schema, options) {
-    if (schema.type === 'string' && schema['enum']) {
+    if (stripNullType(schema.type) === 'string' && schema['enum']) {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'select';
@@ -604,7 +810,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var checkboxes = function(name, schema, options) {
-    if (schema.type === 'array' && schema.items && schema.items['enum']) {
+    if (stripNullType(schema.type) === 'array' && schema.items && schema.items['enum']) {
       var f = stdFormObj(name, schema, options);
       f.key  = options.path;
       f.type = 'checkboxes';
@@ -617,7 +823,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var fieldset = function(name, schema, options) {
-    if (schema.type === 'object') {
+    if (stripNullType(schema.type) === 'object') {
       var f   = stdFormObj(name, schema, options);
       f.type  = 'fieldset';
       f.items = [];
@@ -649,7 +855,7 @@ angular.module('schemaForm').provider('schemaForm',
 
   var array = function(name, schema, options) {
 
-    if (schema.type === 'array') {
+    if (stripNullType(schema.type) === 'array') {
       var f   = stdFormObj(name, schema, options);
       f.type  = 'array';
       f.key   = options.path;
@@ -803,11 +1009,15 @@ angular.module('schemaForm').provider('schemaForm',
         }
 
         //extend with std form from schema.
-
         if (obj.key) {
           var strid = sfPathProvider.stringify(obj.key);
           if (lookup[strid]) {
-            obj = angular.extend(lookup[strid], obj);
+            var schemaDefaults = lookup[strid];
+            angular.forEach(schemaDefaults, function(value, attr) {
+              if (obj[attr] === undefined) {
+                obj[attr] = schemaDefaults[attr];
+              }
+            });
           }
         }
 
@@ -847,7 +1057,7 @@ angular.module('schemaForm').provider('schemaForm',
       ignore = ignore || {};
       globalOptions = globalOptions || {};
 
-      if (schema.type === 'object') {
+      if (stripNullType(schema.type) === 'object') {
         angular.forEach(schema.properties, function(v, k) {
           if (ignore[k] !== true) {
             var required = schema.required && schema.required.indexOf(k) !== -1;
@@ -997,6 +1207,15 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
       require: '?ngModel',
       link: function(scope, element, attrs, ngModel) {
         var formDefCache = {};
+
+
+        if (ngModel) {
+          // We need the ngModelController on several places,
+          // most notably for errors.
+          // So we emit it up to the decorator directive so it can put it on scope.
+          scope.$emit('schemaFormPropagateNgModelController', ngModel);
+        }
+
 
         // Watch for the form definition and then rewrite it.
         // It's the (first) array part of the key, '[]' that needs a number
@@ -1184,6 +1403,14 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
                 form,
                 scope.modelArray.length > 0 ? scope.modelArray : undefined
               );
+
+              // TODO: DRY this up, it has a lot of similarities with schema-validate
+              // Since we might have different tv4 errors we must clear all
+              // errors that start with tv4-
+              Object.keys(ngModel.$error)
+                    .filter(function(k) { return k.indexOf('tv4-') === 0; })
+                    .forEach(function(k) { ngModel.$setValidity(k, true); });
+
               if (result.valid === false &&
                   result.error &&
                   (result.error.dataPath === '' ||
@@ -1193,10 +1420,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
                 // a better way to do it please tell.
                 ngModel.$setViewValue(scope.modelArray);
                 error = result.error;
-                ngModel.$setValidity('schema', false);
-
-              } else {
-                ngModel.$setValidity('schema', true);
+                ngModel.$setValidity('tv4-' + result.error.code, false);
               }
             };
 
@@ -1251,6 +1475,73 @@ angular.module('schemaForm').directive('sfChanged', function() {
     }
   };
 });
+
+angular.module('schemaForm').directive('sfMessage',
+['$injector', 'sfErrorMessage', function($injector, sfErrorMessage) {
+  return {
+    scope: false,
+    restrict: 'EA',
+    link: function(scope, element, attrs) {
+
+      //Inject sanitizer if it exists
+      var $sanitize = $injector.has('$sanitize') ?
+                      $injector.get('$sanitize') : function(html) { return html; };
+
+      //Prepare and sanitize message, i.e. description in most cases.
+      var msg = '';
+      if (attrs.sfMessage) {
+        msg = scope.$eval(attrs.sfMessage) || '';
+        msg = $sanitize(msg);
+      }
+
+      var update = function(valid) {
+        if (valid && scope.hasError()) {
+          element.html(msg);
+        } else {
+
+          var errors = Object.keys(
+            (scope.ngModel && scope.ngModel.$error) || {}
+          );
+
+          // We only show one error.
+          // TODO: Make that optional
+          // tv4- errors take precedence
+          var error = errors[0];
+          if (errors.length > 1) {
+
+            error = errors.reduce(function(prev, value) {
+              if (prev && prev.indexOf('tv4-') === 0) {
+                return prev;
+              }
+              return value;
+            });
+            console.log('reduced',errors, error)
+
+          }
+
+          if (error) {
+            element.html(sfErrorMessage.interpolate(
+              error,
+              scope.ngModel.$modelValue,
+              scope.form,
+              scope.options && scope.options.validationMessage
+            ));
+          } else {
+            element.html(msg);
+          }
+        }
+      };
+      update();
+
+      scope.$watchCollection('ngModel.$error', function() {
+        if (scope.ngModel) {
+          update(scope.ngModel.$valid);
+        }
+      });
+
+    }
+  };
+}]);
 
 /*
 FIXME: real documentation
@@ -1346,7 +1637,7 @@ angular.module('schemaForm')
 
           //Create directives from the form definition
           angular.forEach(merged, function(obj, i) {
-            var n = document.createElement(attrs.sfDecorator ||
+            var n = document.createElement(attrs.sfUseDecorator ||
                                            snakeCase(schemaFormDecorators.defaultDecorator, '-'));
             n.setAttribute('form', 'schemaForm.form[' + i + ']');
 
@@ -1424,12 +1715,15 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
     scope: false,
     // We want the link function to be *after* the input directives link function so we get access
     // the parsed value, ex. a number instead of a string
-    priority: 1000,
+    priority: 500,
     require: 'ngModel',
     link: function(scope, element, attrs, ngModel) {
-      //Since we have scope false this is the same scope
-      //as the decorator
-      scope.ngModel = ngModel;
+
+
+      // We need the ngModelController on several places,
+      // most notably for errors.
+      // So we emit it up to the decorator directive so it can put it on scope.
+      scope.$emit('schemaFormPropagateNgModelController', ngModel);
 
       var error = null;
 
@@ -1451,61 +1745,67 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
 
       // Validate against the schema.
 
-      // Get in last of the parses so the parsed value has the correct type.
-      if (ngModel.$validators) { // Angular 1.3
-        ngModel.$validators.schema = function(value) {
-          var result = sfValidator.validate(getForm(), value);
+      var validate = function(viewValue) {
+        form = getForm();
+        //Still might be undefined
+        if (!form) {
+          return viewValue;
+        }
+
+        var result =  sfValidator.validate(form, viewValue);
+        // Since we might have different tv4 errors we must clear all
+        // errors that start with tv4-
+        Object.keys(ngModel.$error)
+              .filter(function(k) { return k.indexOf('tv4-') === 0; })
+              .forEach(function(k) { ngModel.$setValidity(k, true); });
+
+        if (!result.valid) {
+          // it is invalid, return undefined (no model update)
+          ngModel.$setValidity('tv4-' + result.error.code, false);
           error = result.error;
-          return result.valid;
-        };
-      } else {
+          return undefined;
+        }
+        return viewValue;
+      };
 
-        // Angular 1.2
-        ngModel.$parsers.push(function(viewValue) {
-          form = getForm();
-          //Still might be undefined
-          if (!form) {
-            return viewValue;
-          }
-
-          var result =  sfValidator.validate(form, viewValue);
-
-          if (result.valid) {
-            // it is valid
-            ngModel.$setValidity('schema', true);
-            return viewValue;
-          } else {
-            // it is invalid, return undefined (no model update)
-            ngModel.$setValidity('schema', false);
-            error = result.error;
-            return undefined;
-          }
-        });
+      // Custom validators, parsers, formatters etc
+      if (typeof form.ngModel === 'function') {
+        form.ngModel(ngModel);
       }
 
-      // Listen to an event so we can validate the input on request
-      scope.$on('schemaFormValidate', function() {
-
-        if (ngModel.$validate) {
-          ngModel.$validate();
-          if (ngModel.$invalid) { // The field must be made dirty so the error message is displayed
-            ngModel.$dirty = true;
-            ngModel.$pristine = false;
-          }
-        } else {
-          ngModel.$setViewValue(ngModel.$viewValue);
+      ['$parsers', '$viewChangeListeners', '$formatters'].forEach(function(attr) {
+        if (form[attr] && ngModel[attr]) {
+          form[attr].forEach(function(fn) {
+            ngModel[attr].push(fn);
+          });
         }
       });
 
-      //This works since we now we're inside a decorator and that this is the decorators scope.
-      //If $pristine and empty don't show success (even if it's valid)
-      scope.hasSuccess = function() {
-        return ngModel.$valid && (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue));
-      };
+      ['$validators', '$asyncValidators'].forEach(function(attr) {
+        // Check if our version of angular has i, i.e. 1.3+
+        if (form[attr] && ngModel[attr]) {
+          angular.forEach(form[attr], function(fn, name) {
+            ngModel[attr][name] = fn;
+          });
+        }
+      });
 
-      scope.hasError = function() {
-        return ngModel.$invalid && !ngModel.$pristine;
-      };
+      // Get in last of the parses so the parsed value has the correct type.
+      // We don't use $validators since we like to set different errors depeding tv4 error codes
+      ngModel.$parsers.push(validate);
+
+      // Listen to an event so we can validate the input on request
+      scope.$on('schemaFormValidate', function() {
+        if (ngModel.$setDirty) {
+          // Angular 1.3+
+          ngModel.$setDirty();
+          validate(ngModel.$modelValue);
+        } else {
+          // Angular 1.2
+          ngModel.$setViewValue(ngModel.$viewValue);
+        }
+
+      });
 
       scope.schemaError = function() {
         return error;

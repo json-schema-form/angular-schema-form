@@ -1,3 +1,23 @@
+v0.8.0
+Loads of stuff happened this release, so we're bumping version to 0.8.0.
+Note as well that there is a small change to `tabsarray` type regarding its title, the title is now
+interpolated instead of eval'd. So if you have any problems slap on a `{{ }}` around the tab title.
+See the docs on `tabarray` for an more info.
+
+ * Custom validation via ngModel.$validators and ngModel.$asyncValidators, thanks @davidlgj
+ * Inject errors from backend directly to a field with events, thanks @davidlgj, @burdiuz, @jdgblinq
+ * Icons to `button` type, thanks @maff
+ * Fixed spoiled comment, thanks @mchapman
+ * A new `template` field type, insert a angular template, like a mini add-on.
+ * Support for schema type that allows null, thanks @ulion
+ * Option groups in selects, thanks @DennisHalmstad
+ * input group addons, thanks @quietlyconfident
+ * validationMessages overhaul, nicer validationMessages with interpolation and a new sf-messages
+   directive for add-on to use. thanks @davidlgj
+ * interpolation instead of eval'ing in tabarray title, thanks @coridyn
+ * Lots of bugfixes, most notable checkboxes validation now works, thanks @davidlgj, @coridyn,
+   @ulion, @adamcbuckley 
+
 v0.7.13
 -------
  * Bugfix for condition, it depended on jQuery

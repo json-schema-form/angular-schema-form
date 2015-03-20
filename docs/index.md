@@ -5,6 +5,12 @@ Documentation
 1. [Handling Submit](#handling-submit)
 1. [Updating Form](#updating-form)
 1. [Global Options](#global-options)
+1. [Validation Messages](#validation-messages)
+1. [Custom Validation](#custom-validation)
+    1. [Inject errors into form, aka backend validation](#inject-errors-into-form-aka-backend-validation)
+    1. [Using ngModelController](#using-ngmodelcontroller)
+        1. [$validators](#$validators)
+        1. [$asyncVaidators](#$asyncValidators)
 1. [Form defaults in schema](#form-defaults-in-schema)
 1. [Form types](#form-types)
 1. [Default form types](#default-form-types)
@@ -17,12 +23,14 @@ Documentation
     1. [ngModelOptions](#ngmodeloptions)
     1. [copyValueTo](#copyvalueto)
 1. [Specific options and types](#specific-options-and-types)
+    1. [input group addons](#input-group-addons)
     1. [fieldset and section](#fieldset-and-section)
     1. [select and checkboxes](#select-and-checkboxes)
     1. [actions](#actions)
     1. [button](#button)
     1. [radios and radiobuttons](#radios-and-radiobuttons)
     1. [help](#help)
+    1. [template](#template)
     1. [tabs](#tabs)
     1. [array](#array)
     1. [tabarray](#tabarray)
@@ -183,11 +191,10 @@ attribute which should be placed along side `sf-schema`.
 |:--------------|:------------------------|
 | supressPropertyTitles | by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
 | formDefaults | an object that will be used as a default for all form definitions |
+| validationMessage | an object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
 
 *formDefaults* is mostly useful for setting global [ngModelOptions](#ngmodeloptions)
-i.e. changing the entire form to validate on blur. But can also be used to set
-[Validation Messages](#validation-messages) for all fields if you like a bit more
-friendlier messages.
+i.e. changing the entire form to validate on blur.
 
 Ex.
 ```html
@@ -198,6 +205,259 @@ Ex.
           sf-options="{ formDefaults: { ngModelOptions: { updateOn: 'blur' } }}"></form>
 </div>
 ```
+
+
+Validation Messages
+-------------------
+
+We use [tv4](https://github.com/geraintluff/tv4) to validate the form and all of the
+validation messages match up [tv4 error codes](https://github.com/geraintluff/tv4/blob/master/source/api.js).
+
+There are several ways to change the default validation messages.
+
+  1. Change the defaults in `sfErrorMessages` service via its provider. This will set the validation
+     messages for all instances of `sf-schema`
+  1. Use the global option `validationMessage`
+  1. Use the form field option `validationMessage`
+
+If a specific validation error code can't be found in the form field option, schema form looks at
+the global option, if none is there it looks at it's own defaults and if all fails it will instead
+use the the message under the error code `'default'`
+
+Ex of form field option.
+```javascript
+var form = [
+  "address.zip",
+  {
+    key: "address.street",
+    validationMessage: {
+      302: "This field is like, uh, required?"
+    }
+  }
+];
+```
+
+And of global options
+```html
+<div ng-controller="FormController">
+    <form sf-schema="schema"
+          sf-form="form"
+          sf-model="model"
+          sf-options="{ validationMessage: { 302: 'Do not forget me!' }}"></form>
+</div>
+```
+
+
+### Message Interpolation
+Having a good validation message is hard, sometimes you need to reference the actual value, title
+och constraint that you hit. Schema Form supports interpolation of error messages to make this a
+little bit easier.
+
+The context variables available to you are:
+
+| Name          |   Value                 |
+|:--------------|:------------------------|
+| error         | The error code          |
+| title         | Title of the field      |
+| value         | The model value         |
+| form          | form definition object for this field |
+| schema        | schema for this field |
+
+ Ex.
+ ```javascript
+ var form = [
+   "address.zip",
+   {
+     key: "address.street",
+     validationMessage: {
+       101: 'Seriously? Value {{value}} totally less than {{schema.minimum}}, which is NOT OK.',
+     }
+   }
+ ];
+ ```
+
+### Taking over: functions as validationMessages
+If you really need to control the validaton messages and interpolation is not enough (like say
+your using [Jed](https://github.com/SlexAxton/Jed) for gettext translations) you can supply a
+function instead of a particular message or the entire validationMessage object.
+
+The should take one argument, and that is an object with the exact same properties as the context
+used for interpolation, see table above.
+
+
+Ex.
+```javascript
+var form = [
+  "address.zip",
+  {
+    key: "address.street",
+    validationMessage: {
+      302: function(ctx) { return Jed.gettext('This value is required.'); },
+    }
+  }
+];
+```
+
+Or:
+```javascript
+var form = [
+  "address.zip",
+  {
+    key: "address.street",
+    validationMessage: function(ctx) {
+      return lookupMessage[ctx.error];
+    }
+  }
+];
+```
+
+
+Custom Validation
+-----------------
+Sometimes the validation you want is tricky to express in a JSON Schema
+or Schema Form does not support it (yet), like `anyOf` and `oneOf`.
+
+Other times you really need to ask the backend, maybe to check that the a username is not already
+taken or some other constraint that only the backend can know about.
+
+### Inject errors into form aka backend validation
+To support validation outside of the form, most commonly on the backend, schema form lets you
+injecting arbitrary validationMessages to any field and setting it's validity.
+
+This is done via an event that starts with `schemaForm.error.` and ends with the key to the field.
+It also takes two arguments, the first being the error code, the second being either a
+validation message or a boolean that sets validity, specifying a validation message automatically
+sets the field to invalid.
+
+So lets do an example, say you have a form with a text field `name`:
+
+Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" }
+  }
+}
+```
+
+Form
+```json
+[
+  "name"
+]
+```
+
+To inject an error message and set that forms validity via [ngModelController.$setValidity](https://docs.angularjs.org/api/ng/type/ngModel.NgModelController)
+broadcast an event with the name `schemaForm.error.name` with name/code for the error and an
+optional validation message.
+
+```js
+scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken','The username is already taken');
+```
+This will invalidate the field and therefore the form and show the error message where it normally
+pops up, under the field for instance.
+
+There is a catch though, schema form can't now when this field is valid s you have to tell it by
+sending an event again, this time switch out the validation message for validity of the field,
+i.e. `true`.
+
+```js
+scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken',true);
+```
+
+You can also pre-populate the validation messages if you don't want to send them in the event.
+
+Form
+```json
+[
+  {
+    "key": "name",
+    "validationMessages": {
+      "userNameAlreadyTaken"
+    }
+  }
+]
+```
+
+```js
+scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken',false);
+```
+
+
+You can even trigger standard tv4 error messages, just prefix the error code with `tv4-`
+```js
+// Shows the "Required" error message
+scope.$broadcast('schemaForm.error.name','tv4-302',false);
+```
+
+
+### Using ngModelController
+Another way to validate your fields is to use Angulars built in support for validator functions
+and async validators via the [ngModelController](https://docs.angularjs.org/api/ng/type/ngModel.NgModelController)
+
+Schema Form can expose the `ngModelController` on a field for a function supplied with the form
+definition. Or you can use a shorthand by adding `$validators` and `$asyncValidators` objects as
+well as `$viewChangeListener`, `$parsers` and `$formatters` arrays to your form object and they
+will be picked up.
+
+Note that `$validators` and `$asyncValidators` are Angular 1.3+ only.
+
+See Angular docs for details and there is also an example you can look at here
+[examples/custom-validators.html](../examples/custom-validators.html)
+
+#### $validators
+Custom validator functions are added to the `$validators` object and their attribute name is the
+error code, so to specify a error message you also need to use.
+
+```js
+[
+  {
+    key: 'name',
+    validationMessages: {
+      'noBob': 'Bob is not OK! You here me?'
+    },
+    $validators: {
+      noBob: function(value) {
+        if (angular.isString(value) && value.indexOf('Bob') !== -1) {
+          return false;
+        }
+        return true
+      }
+    }
+  }
+]
+```
+
+
+#### $asyncValidators
+Async validators are basically the same as their synchronous counterparts, but instead you return
+a promise that resolves or rejects.
+
+```js
+[
+  {
+    key: 'name',
+    validationMessages: {
+      'noBob': 'Bob is not OK! You here me?'
+    },
+    $asyncValidators: {
+      noBob: function(value) {
+        var deferred = $q.defer();
+        $timeout(function(){
+          if (angular.isString(value) && value.indexOf('bob') !== -1) {
+            deferred.reject();
+          } else {
+            deferred.resolve();
+          }
+        }, 500);
+        return deferred.promise;
+      }
+    }
+  }
+]
+```
+
 
 Form defaults in schema
 -----------------------
@@ -245,12 +505,15 @@ Schema Form currently supports the following form field types out of the box:
 | radios-inline |  radio buttons in one line |
 | radiobuttons  |  radio buttons with bootstrap buttons |
 | help          |  insert arbitrary html |
+| template      |  insert an angular template |
 | tab           |  tabs with content     |
 | array         |  a list you can add, remove and reorder |
 | tabarray      |  a tabbed version of array |
 
 More field types can be added, for instance a "datepicker" type can be added by
-including the [datepicker addon](https://github.com/Textalk/angular-schema-form-datepicker)
+including the [datepicker addon](https://github.com/Textalk/angular-schema-form-datepicker), see
+the [front page](http://textalk.github.io/angular-schema-form/#third-party-addons) for an updated
+list.
 
 
 Default form types
@@ -394,46 +657,9 @@ $scope.form = [
 ```
 
 ### Validation Messages
+The validation message can be a string, an object with error codes as key and messages as values
+or a custom message function, see [Validation Messages](#validation-messages) for the details.
 
-Per default all error messages comes from the schema validator
-[tv4](https://github.com/geraintluff/tv4), this might or might not work for you.
-If you supply a `validationMessage` property in the form definition, and if its value is a
-string that will be used instead on any validation error.
-
-If you need more fine grained control you can supply an object instead with keys matching the error
-codes of [tv4](https://github.com/geraintluff/tv4). tv4 is available
-globally in angular schema form along with it's error codes, they can be found in `tv4.errorCodes`.
-
-Ex.
-```javascript
-var form = [
-  "address.zip",
-  {
-    key: "address.street",
-    validationMessage: {
-      "default": "Just write a proper address, will you?"
-    }
-  }
-];
-
-form[1].validationMessage[tv4.errorCodes.STRING_LENGTH_SHORT] = "Address is too short, man.";
-```
-
-However, it can sometimes be clunky to use variables as keys so you can use the
-[error codes](https://github.com/geraintluff/tv4/blob/master/source/api.js#L1) directly.
-The example below also illustrates how to define validation messages globally. This uses
-*formDefaults*, for more info on how to use it, see [Global Options](#global-options).
-
-```javascript
-scope.options = {
-  formDefaults: {
-    validationMessage: {
-      200: "This string is too short, man.",
-      302: "You can't just leave it blank, man."
-    }
-  }
-}
-```
 
 ### Inline feedback icons
 *input* and *textarea* based fields get inline status icons by default. A check
@@ -598,6 +824,24 @@ Note that arrays inside arrays won't work with conditions.
 Specific options and types
 --------------------------
 
+### input group addons
+
+*input* and *textarea* types can also have
+[bootstrap input groups](http://getbootstrap.com/components/#input-groups).
+
+You can add them with the option `fieldAddonLeft` and `fieldAddonRight` which both takes a snippet
+of html.
+
+```js
+[
+  {
+    "key": "email"
+    "fieldAddonLeft": "@"
+  }
+]
+```
+
+
 ### fieldset and section
 
 *fieldset* and *section* doesn't need a key. You can create generic groups with them.
@@ -647,9 +891,25 @@ As an object:
 }
 ```
 
+The *select* can also take an optional `group` property in its `titleMap` that adds `<optgroup>`
+element to the select.
+
+```javascript
+{
+  type: "select",
+  titleMap: [
+    { value: "yes", name: "Yes I do", group: "Boolean" },
+    { value: "no", name: "Hell no" , group: "Boolean" },
+    { value: "no", name: "File Not Found", group: "Other" },
+  ]
+}
+```
+
+
+
 ### actions
 
-*actions* behaves the same as fieldset, but can only handle buttons as chidren.
+*actions* behaves the same as fieldset, but can only handle buttons and submits as children.
 ```javascript
 {
   type: "actions",
@@ -672,15 +932,15 @@ We can change this with ```style``` attribute:
 }
 ```
 
-### button
+### button and submit
 
-*button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
+*button* and *submit* can have a ```onClick``` attribute that either a function *or* a
 string with an angular expression, as with ng-click. The expression is evaluated in the parent scope of
 the ```sf-schema``` directive.
 
 ```javascript
 [
-  { type: 'button', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'submit', title: 'Ok', onClick: function(){ ...  } }
   { type: 'button', title: 'Cancel', onClick: "cancel()" }
 [
 ```
@@ -689,10 +949,23 @@ The submit and other buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 [
-  { type: 'button', style: 'btn-warning', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'submit', style: 'btn-warning', title: 'Ok', onClick: function(){ ...  } }
   { type: 'button', style: 'btn-danger', title: 'Cancel', onClick: "cancel()" }
 [
 ```
+
+A *button* can also have optional icon classes:
+```javascript
+[
+  {
+    type: 'button',
+    title: 'Cancel',
+    icon: 'glyphicon glyphicon-icon-exclamation-sign'
+    onClick: "cancel()"
+  }
+[
+```
+
 
 ### radios and radiobuttons
 Both type *radios* and *radiobuttons* work the same way.
@@ -814,6 +1087,39 @@ function FormCtrl($scope) {
       helpvalue: "<h1>Yo Ninja!</h1>"
     },
     "name"
+  ];
+}
+```
+
+### template
+`template` fields are like `help` fields but instead of arbitrary html you can insert or refer to
+an angular template to be inserted where the field should go. There is one catch though and that
+is that the scope is that of the decorator directive and its inside the isolated scope of the
+`sf-schema` directive, so anything you like to access in the template should be put on the form,
+which is available in template. It's basically a simple one shot version of add-ons, so see the
+see the docs on [Extending Schema Form](extending.md) for details on what is on scope and what's up
+with `$$value$$`
+
+
+
+The `template` type should either have a `template` or a `templateUrl` option.
+
+Ex.
+```javascript
+function FormCtrl($scope) {
+
+  $scope.form = [
+    {
+      type: "template",
+      template: '<h1 ng-click="form.foo()">Yo {{form.name}}!</h1>',
+      name: 'Ninja',
+      foo: function() { console.log('oh noes!'); }
+    },
+    {
+      type: "template",
+      templateUrl: "templates/foo.html",
+      myFavouriteVariable: 'OMG!!'
+    }
   ];
 }
 ```
@@ -995,6 +1301,28 @@ function FormCtrl($scope) {
 }
 ```
 
+To suppress add and remove buttons set `add` to `null` and `remove` to `null`.
+```javascript
+function FormCtrl($scope) {
+  $scope.form = [
+    {
+      key: "subforms",
+      add: null,
+      remove: null,
+      style: {
+		add: "btn-success"
+	  },
+      items: [
+        "subforms[].nick",
+        "subforms[].name",
+        "subforms[].emails",
+      ],
+    }
+  ];
+}
+```
+
+
 
 ### tabarray
 The `tabarray` form type behaves the same way and has the same options as
@@ -1015,9 +1343,55 @@ dependency [bootstrap-vertical-tabs](https://github.com/dbtek/bootstrap-vertical
 It is not needed for tabs on top.
 
 The `title` option is a bit special in `tabarray`, it defines the title
-of the tab and is considered a angular expression. The expression is evaluated
+of the tab and it is interpolated so you can use expression it. Its interpolated
 with two extra variables in context: **value** and **$index**, where **value**
 is the value in the array (i.e. that tab) and **$index** the index.
+
+You can include multiple expressions or mix expressions and text as needed:
+Ex:
+```javascript
+
+    {
+      "form": [
+        {
+          "type": "tabarray",
+          "title": "My {{ value.name }} is:",
+        }
+      ]
+    }
+
+```
+
+#### Deprecation Warning
+Before version 0.8.0 the entire title was evaluated as an expression and not interpolated.
+If you weren't using expressions in your form titles then no changes are needed.
+
+However, if your tabarray titles contain implicit Angular expressions like this:
+```js
+    {
+      "form": [
+        {
+          "type": "tabarray",
+          "title": "value.name || 'Tab '+$index",
+        }
+      ]
+    }
+```
+
+
+Then you should change this to explicit expressions by wrapping them with the Angular expression
+delimiter "{{ }}":
+```js
+    {
+      "form": [
+        {
+          "type": "tabarray",
+          "title": "{{ value.name || 'Tab '+$index }}",
+        }
+      ]
+    }
+```
+
 
 Example with tabs on the top:
 
@@ -1050,7 +1424,7 @@ function FormCtrl($scope) {
     {
       type: "tabarray",
       tabType: "top",
-      title: "value.nick || ('Tab '+$index)"
+      title: "{{value.nick || ('Tab '+$index)}}"
       key: "subforms",
       remove: "Delete",
       style: {

@@ -8,7 +8,7 @@
       <li ng-repeat="item in modelArray track by $index"
           ng-click="$event.preventDefault() || (selected.tab = $index)"
           ng-class="{active: selected.tab === $index}">
-          <a href="#">{{evalExpr(form.title,{'$index':$index, value: item}) || $index}}</a>
+          <a href="#">{{interp(form.title,{'$index':$index, value: item}) || $index}}</a>
       </li>
       <li ng-hide="form.readonly" ng-click="$event.preventDefault() || (selected.tab = appendToArray().length - 1)">
         <a href="#">
@@ -44,7 +44,7 @@
       <li ng-repeat="item in modelArray track by $index"
           ng-click="$event.preventDefault() || (selected.tab = $index)"
           ng-class="{active: selected.tab === $index}">
-          <a href="#">{{evalExpr(form.title,{'$index':$index, value: item}) || $index}}</a>
+          <a href="#">{{interp(form.title,{'$index':$index, value: item}) || $index}}</a>
       </li>
       <li ng-hide="form.readonly" ng-click="$event.preventDefault() || appendToArray()">
         <a href="#">

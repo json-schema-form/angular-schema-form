@@ -22,13 +22,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     radiobuttons: base + 'radio-buttons.html',
     help: base + 'help.html',
     'default': base + 'default.html'
-  }, [
-    // function(form) {
-    //   if (form.readonly && form.key && form.type !== 'fieldset') {
-    //     return base + 'readonly.html';
-    //   }
-    // }
-  ]);
+  }, []);
 
   //manual use directives
   decoratorsProvider.createDirectives({
