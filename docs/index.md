@@ -6,6 +6,11 @@ Documentation
 1. [Updating Form](#updating-form)
 1. [Global Options](#global-options)
 1. [Validation Messages](#validation-messages)
+1. [Custom Validation](#custom-validation)
+    1. [Inject errors into form, aka backend validation](#inject-errors-into-form-aka-backend validation)
+    1. [Using ngModelController](#using-ngmodelcontroller)
+        1. [$validators](#$validators)
+        1. [$asyncVaidators](#$asyncValidators)
 1. [Form defaults in schema](#form-defaults-in-schema)
 1. [Form types](#form-types)
 1. [Default form types](#default-form-types)
@@ -303,6 +308,153 @@ var form = [
     }
   }
 ];
+```
+
+
+Custom Validations
+------------------
+Sometimes the validation you want is tricky to express in a JSON Schema
+or Schema Form does not support it (yet), like `anyOf` and `oneOf`.
+
+Other times you really need to ask the backend, maybe to check that the a username is not already
+taken or some other constraint that only the backend can know about.
+
+### Inject errors into form aka backend validation
+To support validation outside of the form, most commonly on the backend, schema form lets you
+injecting arbitrary validationMessages to any field and setting it's validity.
+
+This is done via an event that starts with `schemaForm.error.` and ends with the key to the field.
+It also takes two arguments, the first being the error code, the second being either a
+validation message or a boolean that sets validity, specifying a validation message automatically
+sets the field to invalid.
+
+So lets do an example, say you have a form with a text field `name`:
+
+Schema
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" }
+  }
+}
+```
+
+Form
+```json
+[
+  "name"
+]
+```
+
+To inject an error message and set that forms validity via [ngModelController.$setValidity](https://docs.angularjs.org/api/ng/type/ngModel.NgModelController)
+broadcast an event with the name `schemaForm.error.name` with name/code for the error and an
+optional validation message.
+
+```js
+scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken','The username is already taken');
+```
+This will invalidate the field and therefore the form and show the error message where it normally
+pops up, under the field for instance.
+
+There is a catch though, schema form can't now when this field is valid s you have to tell it by
+sending an event again, this time switch out the validation message for validity of the field,
+i.e. `true`.
+
+```js
+scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken',true);
+```
+
+You can also pre-populate the validation messages if you don't want to send them in the event.
+
+Form
+```json
+[
+  {
+    "key": "name",
+    "validationMessages": {
+      "userNameAlreadyTaken"
+    }
+  }
+]
+```
+
+```js
+scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken',false);
+```
+
+
+You can even trigger standard tv4 error messages, just prefix the error code with `tv4-`
+```js
+// Shows the "Required" error message
+scope.$broadcast('schemaForm.error.name','tv4-302',false);
+```
+
+
+### Using ngModelController
+Another way to validate your fields is to use Angulars built in support for validator functions
+and async validators via the [ngModelController](https://docs.angularjs.org/api/ng/type/ngModel.NgModelController)
+
+Schema Form can expose the `ngModelController` on a field for a function supplied with the form
+definition. Or you can use a shorthand by adding `$validators` and `$asyncValidators` objects as
+well as `$viewChangeListener`, `$parsers` and `$formatters` arrays to your form object and they
+will be picked up.
+
+Note that `$validators` and `$asyncValidators` are Angular 1.3+ only.
+
+See Angular docs for details and there is also an example you can look at here
+[examples/custom-validators.html](../examples/custom-validators.html)
+
+#### $validators
+Custom validator functions are added to the `$validators` object and their attribute name is the
+error code, so to specify a error message you also need to use.
+
+```js
+[
+  {
+    key: 'name',
+    validationMessages: {
+      'noBob': 'Bob is not OK! You here me?'
+    },
+    $validators: {
+      noBob: function(value) {
+        if (angular.isString(value) && value.indexOf('Bob') !== -1) {
+          return false;
+        }
+        return true
+      }
+    }
+  }
+]
+```
+
+
+#### $asyncValidators
+Async validators are basically the same as their synchronous counterparts, but instead you return
+a promise that resolves or rejects.
+
+```js
+[
+  {
+    key: 'name',
+    validationMessages: {
+      'noBob': 'Bob is not OK! You here me?'
+    },
+    $asyncValidators: {
+      noBob: function(value) {
+        var deferred = $q.defer();
+        $timeout(function(){
+          if (angular.isString(value) && value.indexOf('bob') !== -1) {
+            deferred.reject();
+          } else {
+            deferred.resolve();
+          }
+        }, 500);
+        return deferred.promise;
+      }
+    }
+  }
+]
 ```
 
 
