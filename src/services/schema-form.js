@@ -351,11 +351,15 @@ angular.module('schemaForm').provider('schemaForm',
         }
 
         //extend with std form from schema.
-
         if (obj.key) {
           var strid = sfPathProvider.stringify(obj.key);
           if (lookup[strid]) {
-            obj = angular.extend(lookup[strid], obj);
+            var schemaDefaults = lookup[strid];
+            angular.forEach(schemaDefaults, function(value, attr) {
+              if (obj[attr] === undefined) {
+                obj[attr] = schemaDefaults[attr];
+              }
+            });
           }
         }
 
