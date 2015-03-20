@@ -159,8 +159,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
   var createDirective = function(name) {
     $compileProvider.directive(name,
-      ['$parse', '$compile', '$http', '$templateCache', '$interpolate','sfErrorMessage',
-      function($parse,  $compile,  $http,  $templateCache, $interpolate, sfErrorMessage) {
+      ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
+      function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage) {
 
         return {
           restrict: 'AE',
@@ -304,14 +304,28 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 //ok let's replace that template!
                 //We do this manually since we need to bind ng-model properly and also
                 //for fieldsets to recurse properly.
-                var url = templateUrl(name, form);
-                $http.get(url, {cache: $templateCache}).then(function(res) {
-                  var key = form.key ?
-                            sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
-                  var template = res.data.replace(
-                    /\$\$value\$\$/g,
-                    'model' + (key[0] !== '[' ? '.' : '') + key
-                  );
+                var templatePromise;
+
+                // type: "template" is a special case. It can contain a template inline or an url.
+                // otherwise we find out the url to the template and load them.
+                if (form.type === 'template' && form.template) {
+                  templatePromise = $q.when(form.template);
+                } else {
+                  var url = form.type === 'template' ? form.templateUrl : templateUrl(name, form);
+                  templatePromise = $http.get(url, {cache: $templateCache}).then(function(res) {
+                                      return res.data;
+                                    });
+                }
+
+                templatePromise.then(function(template) {
+                  if (form.key) {
+                    var key = form.key ?
+                              sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
+                    template = template.replace(
+                      /\$\$value\$\$/g,
+                      'model' + (key[0] !== '[' ? '.' : '') + key
+                    );
+                  }
                   element.html(template);
 
                   // Do we have a condition? Then we slap on an ng-if on all children,
@@ -995,11 +1009,15 @@ angular.module('schemaForm').provider('schemaForm',
         }
 
         //extend with std form from schema.
-
         if (obj.key) {
           var strid = sfPathProvider.stringify(obj.key);
           if (lookup[strid]) {
-            obj = angular.extend(lookup[strid], obj);
+            var schemaDefaults = lookup[strid];
+            angular.forEach(schemaDefaults, function(value, attr) {
+              if (obj[attr] === undefined) {
+                obj[attr] = schemaDefaults[attr];
+              }
+            });
           }
         }
 
@@ -1749,6 +1767,28 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         }
         return viewValue;
       };
+
+      // Custom validators, parsers, formatters etc
+      if (typeof form.ngModel === 'function') {
+        form.ngModel(ngModel);
+      }
+
+      ['$parsers', '$viewChangeListeners', '$formatters'].forEach(function(attr) {
+        if (form[attr] && ngModel[attr]) {
+          form[attr].forEach(function(fn) {
+            ngModel[attr].push(fn);
+          });
+        }
+      });
+
+      ['$validators', '$asyncValidators'].forEach(function(attr) {
+        // Check if our version of angular has i, i.e. 1.3+
+        if (form[attr] && ngModel[attr]) {
+          angular.forEach(form[attr], function(fn, name) {
+            ngModel[attr][name] = fn;
+          });
+        }
+      });
 
       // Get in last of the parses so the parsed value has the correct type.
       // We don't use $validators since we like to set different errors depeding tv4 error codes
