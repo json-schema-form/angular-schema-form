@@ -1,7 +1,6 @@
 {
   "schema": {
     "type": "object",
-    "title": "Comment",
     "properties": {
       "switch": {
         "title": "Spam me, please",
