@@ -7,7 +7,7 @@ Documentation
 1. [Global Options](#global-options)
 1. [Validation Messages](#validation-messages)
 1. [Custom Validation](#custom-validation)
-    1. [Inject errors into form, aka backend validation](#inject-errors-into-form-aka-backend validation)
+    1. [Inject errors into form, aka backend validation](#inject-errors-into-form-aka-backend-validation)
     1. [Using ngModelController](#using-ngmodelcontroller)
         1. [$validators](#$validators)
         1. [$asyncVaidators](#$asyncValidators)
@@ -311,8 +311,8 @@ var form = [
 ```
 
 
-Custom Validations
-------------------
+Custom Validation
+-----------------
 Sometimes the validation you want is tricky to express in a JSON Schema
 or Schema Form does not support it (yet), like `anyOf` and `oneOf`.
 
