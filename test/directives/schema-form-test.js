@@ -250,7 +250,7 @@ describe('directive',function(){
       tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
       tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
       tmpl.children().eq(2).children().eq(0).find('button').length.should.be.equal(1);
-      tmpl.children().eq(2).children().eq(0).find('button').text().should.be.equal('Okidoki');
+      tmpl.children().eq(2).children().eq(0).find('button').text().should.include('Okidoki');
 
       scope.form[1].onClick.should.not.have.beenCalled;
       tmpl.children().eq(2).children().eq(0).find('button').click();
