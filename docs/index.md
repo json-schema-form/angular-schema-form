@@ -890,7 +890,7 @@ element to the select.
 
 ### actions
 
-*actions* behaves the same as fieldset, but can only handle buttons as chidren.
+*actions* behaves the same as fieldset, but can only handle buttons and submits as children.
 ```javascript
 {
   type: "actions",
@@ -913,15 +913,15 @@ We can change this with ```style``` attribute:
 }
 ```
 
-### button
+### button and submit
 
-*button* can have a ```onClick``` attribute that either, as in JSON Form, is a function *or* a
+*button* and *submit* can have a ```onClick``` attribute that either a function *or* a
 string with an angular expression, as with ng-click. The expression is evaluated in the parent scope of
 the ```sf-schema``` directive.
 
 ```javascript
 [
-  { type: 'button', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'submit', title: 'Ok', onClick: function(){ ...  } }
   { type: 'button', title: 'Cancel', onClick: "cancel()" }
 [
 ```
@@ -930,10 +930,23 @@ The submit and other buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 [
-  { type: 'button', style: 'btn-warning', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'submit', style: 'btn-warning', title: 'Ok', onClick: function(){ ...  } }
   { type: 'button', style: 'btn-danger', title: 'Cancel', onClick: "cancel()" }
 [
 ```
+
+A *button* can also have optional icon classes:
+```javascript
+[
+  {
+    type: 'button',
+    title: 'Cancel',
+    icon: 'glyphicon glyphicon-icon-exclamation-sign'
+    onClick: "cancel()"
+  }
+[
+```
+
 
 ### radios and radiobuttons
 Both type *radios* and *radiobuttons* work the same way.
