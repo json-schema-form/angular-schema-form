@@ -52,6 +52,9 @@ label.empty-view span {
 .input-group.datePicker i.form-control-feedback {
   right: inherit;
 }
+.input-group.datePicker .glyphicon-calendar:before {
+  content: '';
+}
 .stb-form-group {
   display: inline-block;
 }

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <title>Stb Webmanual Form Editor</title>
     <link rel="stylesheet" href="../dist/schema-form.min.css">
-    <link href="//elements.storebrand.no/storebrand.ny/0.50/css/stb-main.css" type="text/css" rel="stylesheet"/>
+    <link href="//elements.storebrand.no/storebrand.ny/0.77/css/stb-main.css" type="text/css" rel="stylesheet"/>
 </head>
 <body style="background: #efe8df;" ng-app="test" ng-controller="TestCtrl">
 <style>
@@ -35,7 +35,7 @@
 <script type="text/javascript" src="../dist/stb-webmanual-decorator.min.js"></script>
 <script type="text/javascript">
     angular.module('test',['schemaForm']).controller('TestCtrl', function($scope,$http){
-        $scope.url = 'data/user.json';
+        $scope.url = 'data/car-insurance.json';
         $http.get($scope.url).then(function(res){
             $scope.schema = res.data.schema;
             $scope.form   = res.data.form;
