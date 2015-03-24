@@ -202,6 +202,6 @@ $ karma start karma.conf.js
 ```
 
 <!-- Please don't remove this: Grab your social icons from https://github.com/carlsednaoui/gitsocial -->
-[1.1]: http://i.imgur.com/tXSoThF.png (twitter icon with padding)
+[1.1]: http://i.imgur.com/tXSoThF.png (Follow us on Twitter)
 [1]: http://www.twitter.com/ngSchemaForm
-[1.2]: http://i.imgur.com/wWzX9uB.png (twitter icon without padding)
+[1.2]: http://i.imgur.com/wWzX9uB.png (Follow us on Twitter)
