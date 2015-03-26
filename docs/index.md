@@ -628,6 +628,7 @@ General options most field types can handle:
                                // and their items will inherit it.
   htmlClass: "street foobar",  // CSS Class(es) to be added to the container div
   fieldHtmlClass: "street"     // CSS Class(es) to be added to field input (or similar)
+  labelHtmlClass: "street"     // CSS Class(es) to be added to the label of the field (or similar)
   copyValueTo: ["address.street"],     // Copy values to these schema keys.
   condition: "person.age < 18" // Show or hide field depending on an angular expression
 }
