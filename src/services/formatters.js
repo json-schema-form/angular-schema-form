@@ -16,6 +16,14 @@ angular.module('schemaForm').factory('formFormatters', [function () {
       } else {
         return parsed;
       }
+    },
+    'phoneNumber': function(input){
+      input = input.replace(/\s+/g, '');
+      input = input.replace(/\-+/g, '');
+
+      if (/^\\d{8}$/.test(input)) {
+        return input;
+      }
     }
   };
 
