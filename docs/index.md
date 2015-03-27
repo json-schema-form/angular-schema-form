@@ -672,7 +672,7 @@ a ```ngClass``` in the decorators scope. If not set att all the default value
 is ```{ 'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }```
 
 ex. displaying an asterisk on required fields
-```javascript
+```javascriptele
   $sope.form = [
     {
       key: "name",
@@ -759,8 +759,8 @@ function FormCtrl($scope) {
     "name",
     "eligible",
     {
-      key: "code",
-      condition: "person.eligible", //or "model.eligable"
+      "key": "code",
+      "condition": "person.eligible", //or "model.eligible"
     }
   ]
 }
