@@ -249,8 +249,8 @@ And of global options
 
 
 ### Message Interpolation
-Having a good validation message is hard, sometimes you need to reference the actual value, title
-och constraint that you hit. Schema Form supports interpolation of error messages to make this a
+Having a good validation message is hard, sometimes you need to reference the actual value, title,
+or constraint that you hit. Schema Form supports interpolation of error messages to make this a
 little bit easier.
 
 The context variables available to you are:
