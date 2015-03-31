@@ -139,7 +139,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 return false;
               }
               return scope.ngModel.$valid &&
-                  (!scope.ngModel.$pristine || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
+                  (!scope.ngModel.$pristine && !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
             };
 
             scope.hasError = function() {
