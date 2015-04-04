@@ -41,6 +41,11 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
           return viewValue;
         }
 
+        // Omit TV4 validation
+        if (scope.options && scope.options.tv4Validation === false) {
+          return viewValue;
+        }
+
         var result =  sfValidator.validate(form, viewValue);
         // Since we might have different tv4 errors we must clear all
         // errors that start with tv4-
