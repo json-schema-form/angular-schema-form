@@ -4,7 +4,7 @@ describe('directive',function(){
   beforeEach(module('templates'));
   beforeEach(module('schemaForm'));
   beforeEach(
-    //We don't need no sanitation. We don't need no though control.
+    //We don't need no sanitation. We don't need no thought control.
     module(function($sceProvider){
       $sceProvider.enabled(false);
     })
@@ -250,7 +250,7 @@ describe('directive',function(){
       tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
       tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
       tmpl.children().eq(2).children().eq(0).find('button').length.should.be.equal(1);
-      tmpl.children().eq(2).children().eq(0).find('button').text().should.be.equal('Okidoki');
+      tmpl.children().eq(2).children().eq(0).find('button').text().should.include('Okidoki');
 
       scope.form[1].onClick.should.not.have.beenCalled;
       tmpl.children().eq(2).children().eq(0).find('button').click();
@@ -1750,6 +1750,75 @@ describe('directive',function(){
         tmpl.children().find('.schema-form-text').length.should.be.equal(0);
         done();
       }, 0);
+
+    });
+  });
+
+  it('should use supplied template with template field type',function() {
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [
+        {
+          type: 'template',
+          template: '<div>{{form.foo}}</div>',
+          foo: "Hello World"
+        }
+      ];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).html().should.be.eq('<div class="ng-binding ng-scope">Hello World</div>')
+
+    });
+  });
+
+  it('should load template by templateUrl, with template field type',function() {
+
+    inject(function($compile, $rootScope, $httpBackend){
+
+      $httpBackend.when('GET', '/template.html')
+                  .respond("<div>{{form.foo}}</div>");
+
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [
+        {
+          type: 'template',
+          templateUrl: '/template.html',
+          foo: 'Hello World'
+        }
+      ];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      $httpBackend.flush();
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+
+      tmpl.children().eq(0).html().should.be.eq('<div class="ng-binding ng-scope">Hello World</div>')
 
     });
   });

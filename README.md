@@ -10,7 +10,7 @@ Generate forms from JSON schemas using AngularJS!
 
 Web Page
 --------
-[http://textalk.github.io/angular-schema-form/](http://textalk.github.io/angular-schema-form/)
+[schemaform.io](http://schemaform.io)
 
 Demo Time!
 ----------
@@ -41,7 +41,10 @@ apart from JSON Form?
 
 Documentation
 -------------
-There is one section of documentation covering [defaults and form types](docs/index.md). There is another section for how you [extend angular schema form with your own types](https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md).
+You can find [all documentation here](docs/index.md), it covers all the different field types
+and their options.
+
+It also covers how to [extend angular schema form with your own field types](https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md).
 
 Basic Usage
 -----------

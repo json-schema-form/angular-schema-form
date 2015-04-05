@@ -19,6 +19,15 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
       link: function(scope, element, attrs, ngModel) {
         var formDefCache = {};
 
+
+        if (ngModel) {
+          // We need the ngModelController on several places,
+          // most notably for errors.
+          // So we emit it up to the decorator directive so it can put it on scope.
+          scope.$emit('schemaFormPropagateNgModelController', ngModel);
+        }
+
+
         // Watch for the form definition and then rewrite it.
         // It's the (first) array part of the key, '[]' that needs a number
         // corresponding to an index of the form.
@@ -205,6 +214,14 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
                 form,
                 scope.modelArray.length > 0 ? scope.modelArray : undefined
               );
+
+              // TODO: DRY this up, it has a lot of similarities with schema-validate
+              // Since we might have different tv4 errors we must clear all
+              // errors that start with tv4-
+              Object.keys(ngModel.$error)
+                    .filter(function(k) { return k.indexOf('tv4-') === 0; })
+                    .forEach(function(k) { ngModel.$setValidity(k, true); });
+
               if (result.valid === false &&
                   result.error &&
                   (result.error.dataPath === '' ||
@@ -214,10 +231,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
                 // a better way to do it please tell.
                 ngModel.$setViewValue(scope.modelArray);
                 error = result.error;
-                ngModel.$setValidity('schema', false);
-
-              } else {
-                ngModel.$setValidity('schema', true);
+                ngModel.$setValidity('tv4-' + result.error.code, false);
               }
             };
 

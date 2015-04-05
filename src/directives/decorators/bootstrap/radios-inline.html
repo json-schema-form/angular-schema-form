@@ -8,10 +8,11 @@
              sf-changed="form"
              ng-disabled="form.readonly"
              ng-model="$$value$$"
+             schema-validate="form"
              ng-value="item.value"
-             name="{{form.key.slice(-1)[0]}}">
+             name="{{form.key.join('.')}}">
       <span ng-bind-html="item.name"></span>
     </label>
   </div>
-  <div class="help-block" ng-show="(hasError() && errorMessage(schemaError())) || form.description" ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
+  <div class="help-block" sf-message="form.description"></div>
 </div>
