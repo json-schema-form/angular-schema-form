@@ -28,6 +28,8 @@
   .ace_editor { font-size: 20px !important;}
   .form {  height: 400px;  }
   .schema {  height: 800px;  }
+
+  .btw { color: #777; font-size: 90%; padding-left: 6px;} 
   </style>
 </head>
 <body ng-app="test" ng-controller="TestCtrl">
@@ -60,6 +62,10 @@
                 ng-model="selectedTest"
                 ng-options="obj.name for obj in tests">
         </select>
+        <span class="btw">
+          By the way, there is also an example of
+          <a href="custom-validators.html">custom (async) validators</a> example.
+        </span>
       </div>
       <h3>Form</h3>
       <div ui-ace="{ theme: 'monokai',mode:'json'}"
