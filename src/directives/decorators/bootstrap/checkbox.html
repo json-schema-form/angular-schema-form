@@ -1,6 +1,6 @@
 <div class="checkbox schema-form-checkbox {{form.htmlClass}}"
      ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
-  <label>
+  <label class="{{form.labelHtmlClass}}">
     <input type="checkbox"
            sf-changed="form"
            ng-disabled="form.readonly"

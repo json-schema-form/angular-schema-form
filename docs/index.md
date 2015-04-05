@@ -249,8 +249,8 @@ And of global options
 
 
 ### Message Interpolation
-Having a good validation message is hard, sometimes you need to reference the actual value, title
-och constraint that you hit. Schema Form supports interpolation of error messages to make this a
+Having a good validation message is hard, sometimes you need to reference the actual value, title,
+or constraint that you hit. Schema Form supports interpolation of error messages to make this a
 little bit easier.
 
 The context variables available to you are:
@@ -628,6 +628,7 @@ General options most field types can handle:
                                // and their items will inherit it.
   htmlClass: "street foobar",  // CSS Class(es) to be added to the container div
   fieldHtmlClass: "street"     // CSS Class(es) to be added to field input (or similar)
+  labelHtmlClass: "street"     // CSS Class(es) to be added to the label of the field (or similar)
   copyValueTo: ["address.street"],     // Copy values to these schema keys.
   condition: "person.age < 18" // Show or hide field depending on an angular expression
 }
