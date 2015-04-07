@@ -28,21 +28,36 @@
   .ace_editor { font-size: 20px !important;}
   .form {  height: 400px;  }
   .schema {  height: 800px;  }
+
+  .btw { color: #777; font-size: 90%; padding-left: 6px;}
+
+  .glyphicon {
+    color: #000;
+    font-size: 80%;
+  }
+
   </style>
 </head>
 <body ng-app="test" ng-controller="TestCtrl">
 
 <div class="col-md-12">
-  <h1>Schema Form Example</h1>
+  <h1><a href="/"><span class="glyphicon glyphicon-home" aria-hidden="true"></a> Schema Form Example</h1>
   <div class="row">
     <div class="col-sm-4">
       <h3>The Generated Form</h3>
+
+      <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" ng-submit="submitForm(ngform,modelData)"></form>
+<!--
       <form name="ngform"
             sf-model="modelData"
             sf-form="form"
             sf-schema="schema"
             ng-submit="submitForm(ngform,modelData)">
       </form>
+-->
+      <div ng-show="ngform.$valid"><em>Form is valid</em></div>
+      <div ng-show="ngform.$invalid"><em>Form is not valid</em></div>
+
       <h3>Model</h3>
       <pre ng-cloak>{{pretty()}}</pre>
     </div>
@@ -53,6 +68,10 @@
                 ng-model="selectedTest"
                 ng-options="obj.name for obj in tests">
         </select>
+        <span class="btw">
+          By the way, there is also an example of
+          <a href="custom-validators.html">custom (async) validators</a> example.
+        </span>
       </div>
       <h3>Form</h3>
       <div ui-ace="{ theme: 'monokai',mode:'json'}"
@@ -85,7 +104,7 @@
 <script type="text/javascript" src="../bower_components/objectpath/lib/ObjectPath.js"></script>
 <script type="text/javascript" src="../bower_components/pickadate/lib/picker.js"></script>
 <script type="text/javascript" src="../bower_components/pickadate/lib/picker.date.js"></script>
-<script type="text/javascript" src="../bower_components/pickadate/lib/translations/sv_SE.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/translations/nl_NL.js"></script>
 
 <script type="text/javascript" src="../bower_components/spectrum/spectrum.js"></script>
 <script type="text/javascript" src="../bower_components/spectrum/i18n/jquery.spectrum-sv.js"></script>
