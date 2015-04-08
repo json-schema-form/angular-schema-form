@@ -41,11 +41,21 @@
     <div class="col-md-4"><p ng-if="error" class="alert alert-danger ">{{error}}</p></div>
   </div>
   <div class="row">
-  <div class="col-sm-4">
-    <button ng-click="save();">Save</button>
-    <br>
-    <p>{{link}}</p>
+    <div class="col-sm-4">
+      <button ng-click="save();">Save</button>
     </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-2">
+    <div class="input-group">
+      <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+      <span class="input-group-btn">
+        <button class="btn btn-default copy" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+      </span>
+    </div>
+
+  </div>
   </div>
   <div class="row">
     <div class="col-sm-4">
@@ -134,10 +144,9 @@ angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($
     $scope.loading = true;
     $http.get('https://api.github.com/gists/' + gistId).success(function(res) {
       $scope.loading = false;
-      //var data = JSON.parse(res.files['schemaform.json'].content);
       $scope.schemaJson = res.files['schema.json'].content;
       $scope.formJson   = res.files['form.json'].content;
-      $scope.modelData  = res.files['model.json'].content; // Knasig
+      $scope.modelData  = res.files['model.json'].content;
     }).error(function(res) {
       $scope.error = 'Failed to load gist.';
     });
@@ -188,7 +197,7 @@ angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($
   };
 
   $scope.pretty = function(){
-    return JSON.stringify($scope.modelData,undefined,2,2);
+    return typeof $scope.modelData === 'string' ? $scope.modelData : JSON.stringify($scope.modelData, undefined, 2);
   };
 
   $scope.log = function(msg){
