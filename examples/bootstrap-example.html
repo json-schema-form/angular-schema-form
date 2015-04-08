@@ -28,17 +28,23 @@
   .ace_editor { font-size: 20px !important;}
   .form {  height: 400px;  }
   .schema {  height: 800px;  }
+  [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+  }
   </style>
 </head>
-<body ng-app="test" ng-controller="TestCtrl">
+<body ng-app="test" ng-controller="TestCtrl" ng-cloak>
 
 <div class="col-md-12">
   <h1>Schema Form Example</h1>
   <div class="row">
+    <div class="col-md-4"><p ng-if="error" class="alert alert-danger ">{{error}}</p></div>
+  </div>
+  <div class="row">
   <div class="col-sm-4">
-    <button ng-click="loadGist();">Save</button>
-    <button ng-click="saveToGist();">Save as new</button>
-
+    <button ng-click="save();">Save</button>
+    <br>
+    <p>{{link}}</p>
     </div>
   </div>
   <div class="row">
@@ -125,12 +131,16 @@ angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($
   // Load data from gist.
   if ($location.path().length > 4) {
     var gistId = $location.path().replace('/','');
-    $http.get('https://api.github.com/gists/' + gistId).then(function(res) {
-      var data = JSON.parse(res.data.files['schemaform.json'].content);
-      setNewData(data);
+    $scope.loading = true;
+    $http.get('https://api.github.com/gists/' + gistId).success(function(res) {
+      $scope.loading = false;
+      //var data = JSON.parse(res.files['schemaform.json'].content);
+      $scope.schemaJson = res.files['schema.json'].content;
+      $scope.formJson   = res.files['form.json'].content;
+      $scope.modelData  = res.files['model.json'].content; // Knasig
+    }).error(function(res) {
+      $scope.error = 'Failed to load gist.';
     });
-
-    // ERROR HANDLING.
   }
 
   $scope.selectedTest = $scope.tests[0];
@@ -194,13 +204,32 @@ angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($
   };
 
   $scope.save = function() {
-    // $http.get(val.data).then(function(res){
-    //   $scope.schema = res.data.schema;
-    //   $scope.form   = res.data.form;
-    //   $scope.schemaJson = JSON.stringify($scope.schema,undefined,2);
-    //   $scope.formJson   = JSON.stringify($scope.form,undefined,2);
-    //   $scope.modelData = res.data.model || {};
-    // });
+    // To be able to save invalid json and point out errors, we
+    // don't save the schema/form but rather the ones in the input.
+
+    var gist = {
+      "description": "A saved configuration for a schema form example, http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html",
+      "public": true,
+      "files": {
+        "schema.json": {
+          "content": $scope.schemaJson
+        },
+        "form.json": {
+          "content": $scope.formJson
+        },
+        "model.json": {
+          "content": JSON.stringify($scope.modelData, undefined, 2)
+        }
+      }
+    };
+
+    $http.post('https://api.github.com/gists', gist).success(function(data) {
+      $scope.savedGistData = data;
+      $location.path('/' + data.id);
+      $scope.link = data.html_url;
+    }).error(function(data) {
+      $scope.error = 'Failed to save gist.'
+    });
   }
 
   $scope.submitForm = function(form, model) {
