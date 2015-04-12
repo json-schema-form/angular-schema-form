@@ -14,7 +14,7 @@ Web Page
 
 Demo Time!
 ----------
-[Try out the example page](http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html).
+[Try out the example page](http://schemaform.io/examples/bootstrap-example.html).
 Try editing the schema or form definition and see what comes out!
 
 What is it?
