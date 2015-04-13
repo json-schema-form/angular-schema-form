@@ -77,7 +77,12 @@
     color: red;
   }
 
-  </style>
+  .input-group-btn:last-child>.btn:not(:last-child):not(.dropdown-toggle) {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+</style>
 </head>
 <body ng-app="test" ng-controller="TestCtrl" ng-cloak>
   <nav class="navbar navbar-default">
@@ -103,16 +108,16 @@
           <div class="input-group" ng-show="navbarMode === 'saved' && savedGistData.url && !error">
             <div class="input-group-addon">Link</div>
             <input type="text" class="form-control" value="{{savedGistData.url}}">
-            <span class="input-group-btn">
-              <button class="btn btn-default copy" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+            <span ng-if="hasFlash" class="input-group-btn">
+              <button tooltip-trigger="focus" tooltip-placement="right" tooltip='Copied to clipboard' clip-copy="savedGistData.url" class="btn btn-default copy" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
             </span>
           </div>
 
           <div class="input-group" ng-show="navbarMode === 'saved' && savedGistData.data.html_url && !error">
             <div class="input-group-addon">Gist</div>
             <input type="text" class="form-control" value="{{savedGistData.data.html_url}}">
-            <span class="input-group-btn">
-              <button class="btn btn-default copy" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+            <span ng-if="hasFlash" class="input-group-btn">
+              <button tooltip-trigger="focus" tooltip-placement="right" tooltip='Copied to clipboard' clip-copy="savedGistData.data.html_url" class="btn btn-default copy" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
             </span>
           </div>
 
@@ -165,13 +170,25 @@
       </p>
   </div>
 </div>
+
+<script type="text/ng-template" id="template/tooltip/tooltip-popup.html">
+  <div class="tooltip {{placement}} {{class}}" ng-class="{ in: isOpen(), fade: animation() }">
+    <div class="tooltip-arrow"></div>
+    <div class="tooltip-inner" ng-bind="content"></div>
+  </div>
+</script>
+
 <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery.ui@1.10"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
 <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
 <script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
 <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ng-clip/0.2.6/ng-clip.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap.min.js"></script>
 <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script> -->
 <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-sanitize.min.js"></script> -->
 
@@ -198,7 +215,11 @@
 //
 // To test the tinymce addon, uncomment the files above and inject 'tx-tinymce' below.
 /*global alert*/
-angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($scope, $http, $location) {
+var app = angular.module('test', ['schemaForm', 'ui.ace', 'ngClipboard', 'ui.bootstrap.tooltip']);
+app.config(['ngClipProvider', function(ngClipProvider) {
+    ngClipProvider.setPath('//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.swf');
+  }]);
+app.controller('TestCtrl', function($scope, $http, $location) {
 
   $scope.tests = [
     //{ name: "Simple", data: 'data/simple.json' },
@@ -213,6 +234,7 @@ angular.module('test',['schemaForm','ui.ace']).controller('TestCtrl', function($
   ];
 
   $scope.navbarMode = 'default';
+  $scope.hasFlash = swfobject.hasFlashPlayerVersion('9');
 
   // Load data from gist.
   if ($location.path().length > 4) {
