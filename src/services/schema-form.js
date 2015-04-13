@@ -230,12 +230,12 @@ angular.module('schemaForm').provider('schemaForm',
   //First sorted by schema type then a list.
   //Order has importance. First handler returning an form snippet will be used.
   var defaults = {
-    string:  [select, text],
-    object:  [fieldset],
-    number:  [number],
-    integer: [integer],
-    boolean: [checkbox],
-    array:   [checkboxes, array]
+    "string":  [select, text],
+    "object":  [fieldset],
+    "number":  [number],
+    "integer": [integer],
+    "boolean": [checkbox],
+    "array":   [checkboxes, array]
   };
 
   var postProcessFn = function(form) { return form; };
