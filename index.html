@@ -298,7 +298,12 @@
   //
   // Actual usage of angular schema form code if you're looking for it.
   hljs.initHighlightingOnLoad();
-  angular.module('schemaForm').controller('PageCtrl', function($scope, $http) {
+  angular.module('schemaForm').controller('PageCtrl', function($scope, $http, $location) {
+    if (/\/ex\/([a-z0-9]+)/.test($location.path())) {
+      var match = $location.path().match(/\/ex\/([a-z0-9]+)/);
+      document.location.href = '/examples/bootstrap-example.html#/' + match[1];
+    }
+
         $scope.schema = {
           'type': 'object',
           'title': 'Comment',
@@ -382,6 +387,7 @@
           });
           $scope.addons = data;
         };
+
         // Filter for nice json output.
       }).filter('prettyjson', function() {
         return function(input) {
@@ -392,6 +398,7 @@
           return moment(input).fromNow();
         };
       });
+
   // @license-end
   </script>
 
