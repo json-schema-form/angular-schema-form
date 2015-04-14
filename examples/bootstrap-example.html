@@ -97,7 +97,7 @@
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
 
-          <button class="btn btn-primary" ng-click="save();">Save configuration</button>
+          <button class="btn btn-primary" ng-click="save();">Save to gist</button>
 
           <div class="input-group" ng-show="navbarMode === 'default' && !error"></div>
           <div class="input-group" ng-show="navbarMode === 'loaded' && !error">
@@ -250,7 +250,7 @@ app.controller('TestCtrl', function($scope, $http, $location) {
       $scope.loading = false;
       $scope.schemaJson = res.files['schema.json'].content;
       $scope.formJson   = res.files['form.json'].content;
-      $scope.modelData  = res.files['model.json'].content;
+      $scope.modelData  = JSON.parse(res.files['model.json'].content);
     }).error(function() {
       $scope.loadedData = 'dummy';
       $scope.error = 'Failed to load gist.';
