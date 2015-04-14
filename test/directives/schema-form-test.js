@@ -1896,7 +1896,7 @@ describe('directive',function(){
       }
     },
     {
-      name: 'select',
+      name: 'radios',
       property: {
         type: 'boolean',
       },
