@@ -1,4 +1,4 @@
-Angular Schema Form [![alt text][1.1]][1]
+Angular Schema Form
 ===================
 [![Build Status](https://travis-ci.org/Textalk/angular-schema-form.svg?branch=master)](https://travis-ci.org/Textalk/angular-schema-form)
 [![Coverage Status](https://coveralls.io/repos/Textalk/angular-schema-form/badge.png?branch=master)](https://coveralls.io/r/Textalk/angular-schema-form?branch=development)
@@ -8,9 +8,9 @@ Angular Schema Form [![alt text][1.1]][1]
 
 Generate forms from JSON schemas using AngularJS!
 
-Web Page
+Web Page / Twitter
 --------
-[schemaform.io](http://schemaform.io)
+[schemaform.io](http://schemaform.io) / [@SchemaFormIO](http://twitter.com/SchemaFormIO)
 
 Demo Time!
 ----------
@@ -201,8 +201,3 @@ $ bower install
 $ sudo npm install -g karma-cli
 $ karma start karma.conf.js
 ```
-
-<!-- Please don't remove this: Grab your social icons from https://github.com/carlsednaoui/gitsocial -->
-[1.1]: http://i.imgur.com/tXSoThF.png (Follow us on Twitter)
-[1]: http://www.twitter.com/ngSchemaForm
-[1.2]: http://i.imgur.com/wWzX9uB.png (Follow us on Twitter)
