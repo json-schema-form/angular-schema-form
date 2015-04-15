@@ -14,9 +14,9 @@ Web Page
 
 Demo Time!
 ----------
-[Try out the example page](http://schemaform.io/examples/bootstrap-example.html).
-Try editing the schema or form definition and see what comes out! Now you can save and share
-the code!
+[Try out the example page](http://schemaform.io/examples/bootstrap-example.html). Try editing the schema or form definition and see what comes out!
+
+Now you can save your code and share it!
 
 What is it?
 ----------
