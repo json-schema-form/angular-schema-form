@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
   concat = require('gulp-concat'),
   rename = require('gulp-rename'),
+  umd = require('gulp-umd'),
   uglify = require('gulp-uglify');
 
 gulp.task('minify', function() {
@@ -11,6 +12,17 @@ gulp.task('minify', function() {
     './src/directives/*.js'
     ])
   .pipe(concat('schema-form.js'))
+  .pipe(umd({
+    dependencies: function() {
+      return [
+        {name: 'angular'},
+        {name: 'ObjectPath'},
+        {name: 'tv4'},
+      ]
+    },
+    exports: function() {return 'schemaForm';},
+    namespace: function() {return 'schemaForm';}
+    }))
   .pipe(gulp.dest('./dist/'))
   .pipe(uglify())
   .pipe(rename('schema-form.min.js'))
