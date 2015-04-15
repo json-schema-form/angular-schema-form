@@ -1,12 +1,3 @@
-(function(root, factory) {
-  if (typeof define === 'function' && define.amd) {
-    define(['angular', 'ObjectPath', 'tv4'], factory);
-  } else if (typeof exports === 'object') {
-    module.exports = factory(require('angular'), require('ObjectPath'), require('tv4'));
-  } else {
-    root.schemaForm = factory(root.angular, root.ObjectPath, root.tv4);
-  }
-}(this, function(angular, ObjectPath, tv4) {
 // Deps is sort of a problem for us, maybe in the future we will ask the user to depend
 // on modules for add-ons
 
@@ -29,7 +20,7 @@ try {
   deps.push('angularSpectrumColorpicker');
 } catch (e) {}
 
-var schemaForm = angular.module('schemaForm', deps);
+angular.module('schemaForm', deps);
 
 angular.module('schemaForm').provider('sfPath',
 [function() {
@@ -387,11 +378,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                         scope.ngModel.$setValidity(error, validity === true);
 
-                        if (validity === true) {
-                          // Setting or removing a validity can change the field to believe its valid
-                          // but its not. So lets trigger its validation as well.
-                          scope.$broadcast('schemaFormValidate');
-                        }
+                        // Setting or removing a validity can change the field to believe its valid
+                        // but its not. So lets trigger its validation as well.
+                        scope.$broadcast('schemaFormValidate');
                       }
                   })
                 }
@@ -1763,11 +1752,6 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
           return viewValue;
         }
 
-        // Omit TV4 validation
-        if (scope.options && scope.options.tv4Validation === false) {
-          return viewValue;
-        }
-
         var result =  sfValidator.validate(form, viewValue);
         // Since we might have different tv4 errors we must clear all
         // errors that start with tv4-
@@ -1830,6 +1814,3 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
     }
   };
 }]);
-
-return schemaForm;
-}));
