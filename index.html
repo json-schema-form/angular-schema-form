@@ -168,7 +168,7 @@
         <img src="gh-pages-files/img/arrow.png" alt="" />
       </div>
       <div class="col-sm-5 col-xs-6 batton">
-        <a href="/examples/bootstrap-example.html" class="btn">Demo</a>
+        <a ng-href="{{exampleLink}}" class="btn">Demo</a>
       </div>
     </div>
   </div>
@@ -358,6 +358,11 @@
           $event.stopPropagation();
           location.href = url;
         };
+
+        // relative path is different on the github domain and schemaform.io
+        var exLink = '/examples/bootstrap-example.html';
+        $scope.exampleLink = location.href.indexOf('schemaform.io') > -1 ? exLink : '/angular-schema-form' + exLink;
+
         /*
             Code for getting addons. Uses a middle layer that caches the entire bower
             repo list at 3MB+ and filters out out specific addons.
