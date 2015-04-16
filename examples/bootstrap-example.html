@@ -262,6 +262,8 @@ app.controller('TestCtrl', function($scope, $http, $location) {
     $scope.loading = true;
     $http.get('https://api.github.com/gists/' + gistId).success(function(res) {
       $scope.error = null;
+      $scope.tests.unshift({name: 'Gist'});
+      $scope.selectedTest = $scope.tests[0];
       $scope.loadedData = {
         created: moment(res.created_at).fromNow(),
         user: res.user !== null ? res.user.login : 'Anonymous'
@@ -279,7 +281,7 @@ app.controller('TestCtrl', function($scope, $http, $location) {
   $scope.selectedTest = $scope.tests[0];
 
   $scope.$watch('selectedTest',function(val){
-    if (val) {
+    if (val && val.data !== undefined) {
       $http.get(val.data).then(function(res) {setNewData(res.data);});
     }
   });
