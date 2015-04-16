@@ -209,8 +209,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                         'ng-if',
                         ngIf ?
                         '(' + ngIf +
-                        ') || (evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex }))'
-                        : 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex })'
+                        ') || (evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "modelValue": model["' + form.key.join('"]["') + '"] }))'
+                        : 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "modelValue": model["' + form.key.join('"]["') + '"] })'
                       );
                     });
                   }
