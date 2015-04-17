@@ -250,7 +250,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                           if (!form.validationMessage) {
                             form.validationMessage = {};
                           }
-                          console.log('settings validationMessage', validationMessage)
                           form.validationMessage[error] = validationMessage;
                         }
 

@@ -84,7 +84,6 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
      * @return {string} The error message.
      */
     service.interpolate = function(error, value, viewValue, form, global) {
-      console.log(error, value, viewValue)
       global = global || {};
       var validationMessage = form.validationMessage || {};
 
