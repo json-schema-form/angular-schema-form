@@ -275,10 +275,11 @@ app.controller('TestCtrl', function($scope, $http, $location) {
     }).error(function() {
       $scope.loadedData = 'dummy';
       $scope.error = 'Failed to load gist.';
+      $scope.selectedTest = $scope.tests[0];
     });
+  } else {
+    $scope.selectedTest = $scope.tests[0];
   }
-
-  $scope.selectedTest = $scope.tests[0];
 
   $scope.$watch('selectedTest',function(val){
     if (val && val.data !== undefined) {

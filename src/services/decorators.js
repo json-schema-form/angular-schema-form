@@ -159,6 +159,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return sfErrorMessage.interpolate(
                 (schemaError && schemaError.code + '') || 'default',
                 (scope.ngModel && scope.ngModel.$modelValue) || '',
+                (scope.ngModel && scope.ngModel.$viewValue) || '',
                 scope.form,
                 scope.options && scope.options.validationMessage
               );
