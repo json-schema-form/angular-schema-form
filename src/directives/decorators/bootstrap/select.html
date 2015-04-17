@@ -1,4 +1,4 @@
-<div class="form-group {{form.htmlClass}} schema-form-select"
+<div ng-if="form.allowAutoNullOption !== undefined" class="form-group {{form.htmlClass}} schema-form-select"
      ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false}">
   <label class="control-label {{form.labelHtmlClass}}" ng-show="showTitle()">
     {{form.title}}
@@ -11,6 +11,25 @@
           schema-validate="form"
           ng-options="item.value as item.name group by item.group for item in form.titleMap"
           name="{{form.key.slice(-1)[0]}}">
+    <option ng-if="form.allowAutoNullOption !== false" value="">{{form.allowAutoNullOption !== true ? form.allowAutoNullOption : ''}}</option>
   </select>
   <div class="help-block" sf-message="form.description"></div>
+</div>
+<div ng-if="form.allowAutoNullOption === undefined" class="form-group {{form.htmlClass}} schema-form-select"
+     ng-class="{'has-error': hasError(), 'has-success': hasSuccess(), 'has-feedback': form.feedback !== false}">
+  <label class="control-label" ng-show="showTitle()">
+    {{form.title}}
+  </label>
+  <select ng-model="$$value$$"
+          ng-model-options="form.ngModelOptions"
+          ng-disabled="form.readonly"
+          sf-changed="form"
+          class="form-control {{form.fieldHtmlClass}}"
+          schema-validate="form"
+          ng-options="item.value as item.name for item in form.titleMap"
+          name="{{form.key.slice(-1)[0]}}">
+  </select>
+  <div class="help-block"
+       ng-show="(hasError() && errorMessage(schemaError())) || form.description"
+       ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
 </div>

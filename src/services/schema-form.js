@@ -363,6 +363,19 @@ angular.module('schemaForm').provider('schemaForm',
           }
         }
 
+        if (obj.type === 'select' && obj.titleMap) {
+          // we check whether null value is in titleMap. if so, we fix possible null
+          // label and set allowAutoNullOption to false, then leave the titleMap as it is
+          obj.titleMap.forEach(function(item) {
+            if (item.value === null) {
+              if (obj.allowAutoNullOption === undefined)
+                obj.allowAutoNullOption = false;
+              if (item.name === null)
+                item.name = '';
+            }
+          });
+        }
+
         // Are we inheriting readonly?
         if (readonly === true) { // Inheriting false is not cool.
           obj.readonly = true;
