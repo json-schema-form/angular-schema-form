@@ -260,6 +260,7 @@ The context variables available to you are:
 | error         | The error code          |
 | title         | Title of the field      |
 | value         | The model value         |
+| viewValue     | The view value (probably the one you want) |
 | form          | form definition object for this field |
 | schema        | schema for this field |
 
