@@ -728,9 +728,9 @@ the surface it uses `ng-if` so the hidden field is *not* part of the form.
 
 `condition` should be a string with an angular expression. If that expression evaluates as thruthy
 the field will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
-the `sf-schema` directive (the same as onClick on buttons) but with access to the current model
-and current array index under the name `model` and `arrayIndex`. This is useful for hiding/showing
-parts of a form depending on another form control.
+the `sf-schema` directive (the same as onClick on buttons) but with access to the current model,
+current model value and current array index under the name `model`, `modelValue` and `arrayIndex`.
+This is useful for hiding/showing parts of a form depending on another form control.
 
 ex. A checkbox that shows an input field for a code when checked
 
