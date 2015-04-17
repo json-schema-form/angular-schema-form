@@ -163,6 +163,7 @@ describe('schemaFormServices', function() {
         msgFn.should.have.been.calledWith({
           error: 'foobar-error',
           value: 'foobar',
+          viewValue: 'foobar',
           form: {
             schema: {title: 'Foo'},
             validationMessage: {
@@ -196,6 +197,7 @@ describe('schemaFormServices', function() {
         msgFn.should.have.been.calledWith({
           error: 'foobar-error',
           value: 'foobar',
+          viewValue: 'foobar',
           form: {
             schema: {title: 'Foo'},
             validationMessage: msgFn
