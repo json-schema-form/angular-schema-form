@@ -623,6 +623,8 @@ General options most field types can handle:
   validationMessage: "Oh noes, please write a proper address",  // A custom validation error message
   onChange: "valueChanged(form.key,modelValue)", // onChange event handler, expression or function
   feedback: false,             // Inline feedback icons
+  disableSuccessState: false,  // Set true to NOT apply 'has-success' class to a field that was validated successfully
+  disableErrorState: false,    // Set true to NOT apply 'has-error' class to a field that failed validation 
   placeholder: "Input...",     // placeholder on inputs and textarea
   ngModelOptions: { ... },     // Passed along to ng-model-options
   readonly: true,              // Same effect as readOnly in schema. Put on a fieldset or array
