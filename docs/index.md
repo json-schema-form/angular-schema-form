@@ -759,8 +759,8 @@ function FormCtrl($scope) {
     "name",
     "eligible",
     {
-      key: "code",
-      condition: "person.eligible", //or "model.eligable"
+      "key": "code",
+      "condition": "person.eligible", //or "model.eligible"
     }
   ]
 }
