@@ -2,14 +2,15 @@
   "undef": true,
   "unused": true,
   "browser": true,
-  "globals": { 
+  "globals": {
+    "ObjectPath": false,
     "console":false,
     "jQuery": false,
     "$":false,
     "assertEquals": false,
     "jstestdriver": false,
     "assertTrue": false,
-    "assertFalse": false, 
+    "assertFalse": false,
     "describe": false,
     "it":false,
     "expect": false,
