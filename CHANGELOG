@@ -1,3 +1,7 @@
+v0.8.2
+-------
+ * Fix embarrassing typo in package.json 
+
 v0.8.1
 ------
  * Fixed order of error messages, thanks @davidlgj
