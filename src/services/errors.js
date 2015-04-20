@@ -7,7 +7,7 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
   // TODO: Humanize these.
   var defaultMessages = {
     'default': 'Field does not validate',
-    0: 'Invalid type, expected {{schema.type}})',
+    0: 'Invalid type, expected {{schema.type}}',
     1: 'No enum match for: {{value}}',
     10: 'Data does not match any schemas from "anyOf"',
     11: 'Data does not match any schemas from "oneOf"',
