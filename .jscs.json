@@ -1,4 +1,5 @@
 {
   "preset": "google",
-  "maximumLineLength": 100
+  "maximumLineLength": 100,
+  "disallowMultipleLineBreaks": false
 }

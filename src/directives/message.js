@@ -17,7 +17,7 @@ angular.module('schemaForm').directive('sfMessage',
       }
 
       var update = function(valid) {
-        if (valid && scope.hasError()) {
+        if (valid && !scope.hasError()) {
           element.html(msg);
         } else {
 
@@ -27,24 +27,13 @@ angular.module('schemaForm').directive('sfMessage',
 
           // We only show one error.
           // TODO: Make that optional
-          // tv4- errors take precedence
           var error = errors[0];
-          if (errors.length > 1) {
-
-            error = errors.reduce(function(prev, value) {
-              if (prev && prev.indexOf('tv4-') === 0) {
-                return prev;
-              }
-              return value;
-            });
-            console.log('reduced',errors, error)
-
-          }
 
           if (error) {
             element.html(sfErrorMessage.interpolate(
               error,
               scope.ngModel.$modelValue,
+              scope.ngModel.$viewValue,
               scope.form,
               scope.options && scope.options.validationMessage
             ));

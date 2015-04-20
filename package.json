@@ -1,6 +1,6 @@
 {
   "name": "angular-schema-form",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Create complex forms from a JSON schema with angular.",
   "repository": "Textalk/angular-schema-form",
   "main": "dist/schema-form.min.js",
@@ -11,9 +11,9 @@
   "author": "Textalk",
   "contributors": [
     "David Jensen <david.lgj@gmail.com> (https://github.com/davidlgj)",
+    "Denis Dervisevic <denis@dervisevic.se> (https://github.com/Dervisevic)",
     "Cameron Edwards (https://github.com/cameronprattedwards)",
     "Mike Marcacci (https://github.com/mike-marcacci)",
-    "Denis Dervisevic <denis@dervisevic.se> (https://github.com/Dervisevic)"
   ],
   "license": "MIT",
   "dependencies": {
@@ -38,8 +38,10 @@
     "gulp-concat": "^2.2.0",
     "gulp-jscs": "^1.1.0",
     "gulp-minify-html": "^0.1.1",
+    "gulp-protractor": "^1.0.0",
     "gulp-rename": "^1.2.0",
     "gulp-uglify": "^0.2.1",
+    "gulp-umd": "^0.1.3",
     "karma": "^0.12.0",
     "karma-chai-sinon": "^0.1.3",
     "karma-coverage": "^0.2.1",
@@ -49,6 +51,7 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "mocha": "^1.18.0",
     "mocha-lcov-reporter": "0.0.1",
+    "protractor": "^2.0.0",
     "sinon": "^1.9.0",
     "sinon-chai": "^2.5.0",
     "streamqueue": "0.0.5"

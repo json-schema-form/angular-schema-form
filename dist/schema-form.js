@@ -1,3 +1,12 @@
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'ObjectPath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('ObjectPath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.ObjectPath, root.tv4);
+  }
+}(this, function(angular, ObjectPath, tv4) {
 // Deps is sort of a problem for us, maybe in the future we will ask the user to depend
 // on modules for add-ons
 
@@ -20,7 +29,7 @@ try {
   deps.push('angularSpectrumColorpicker');
 } catch (e) {}
 
-angular.module('schemaForm', deps);
+var schemaForm = angular.module('schemaForm', deps);
 
 angular.module('schemaForm').provider('sfPath',
 [function() {
@@ -159,8 +168,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
   var createDirective = function(name) {
     $compileProvider.directive(name,
-      ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
-      function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage) {
+      ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage', 'sfPath',
+      function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage, sfPath) {
 
         return {
           restrict: 'AE',
@@ -287,6 +296,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return sfErrorMessage.interpolate(
                 (schemaError && schemaError.code + '') || 'default',
                 (scope.ngModel && scope.ngModel.$modelValue) || '',
+                (scope.ngModel && scope.ngModel.$viewValue) || '',
                 scope.form,
                 scope.options && scope.options.validationMessage
               );
@@ -331,18 +341,23 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   // Do we have a condition? Then we slap on an ng-if on all children,
                   // but be nice to existing ng-if.
                   if (form.condition) {
+
+                    var evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex})';
+                    if (form.key) {
+                      evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "modelValue": model' + sfPath.stringify(form.key) + '})';
+                    }
+
                     angular.forEach(element.children(), function(child) {
                       var ngIf = child.getAttribute('ng-if');
                       child.setAttribute(
                         'ng-if',
                         ngIf ?
                         '(' + ngIf +
-                        ') || (evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex }))'
-                        : 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex })'
+                        ') || (' + evalExpr +')'
+                        : evalExpr
                       );
                     });
                   }
-
                   $compile(element.contents())(scope);
                 });
 
@@ -372,15 +387,16 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                           if (!form.validationMessage) {
                             form.validationMessage = {};
                           }
-                          console.log('settings validationMessage', validationMessage)
                           form.validationMessage[error] = validationMessage;
                         }
 
                         scope.ngModel.$setValidity(error, validity === true);
 
-                        // Setting or removing a validity can change the field to believe its valid
-                        // but its not. So lets trigger its validation as well.
-                        scope.$broadcast('schemaFormValidate');
+                        if (validity === true) {
+                          // Setting or removing a validity can change the field to believe its valid
+                          // but its not. So lets trigger its validation as well.
+                          scope.$broadcast('schemaFormValidate');
+                        }
                       }
                   })
                 }
@@ -548,32 +564,32 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
   // TODO: Humanize these.
   var defaultMessages = {
     'default': 'Field does not validate',
-    0: 'Invalid type, expected {{schema.type}})',
+    0: 'Invalid type, expected {{schema.type}}',
     1: 'No enum match for: {{value}}',
     10: 'Data does not match any schemas from "anyOf"',
     11: 'Data does not match any schemas from "oneOf"',
     12: 'Data is valid against more than one schema from "oneOf"',
     13: 'Data matches schema from "not"',
     // Numeric errors
-    100: 'Value {{value}} is not a multiple of {{schema.multipleOf}}',
-    101: 'Value {{value}} is less than minimum {{schema.minimum}}',
-    102: 'Value {{value}} is equal to exclusive minimum {{schema.minimum}}',
-    103: 'Value {{value}} is greater than maximum {{schema.maximum}}',
-    104: 'Value {{value}} is equal to exclusive maximum {{schema.maximum}}',
-    105: 'Value {{value}} is not a valid number',
+    100: 'Value is not a multiple of {{schema.divisibleBy}}',
+    101: '{{viewValue}} is less than the allowed minimum of {{schema.minimum}}',
+    102: '{{viewValue}} is equal to the exclusive minimum {{schema.minimum}}',
+    103: '{{viewValue}} is greater than the allowed maximum of {{schema.maximum}}',
+    104: '{{viewValue}} is equal to the exclusive maximum {{schema.maximum}}',
+    105: 'Value is not a valid number',
     // String errors
-    200: 'String is too short ({{value.length}} chars), minimum {{schema.minimum}}',
-    201: 'String is too long ({{value.length}} chars), maximum {{schema.maximum}}',
+    200: 'String is too short ({{viewValue.length}} chars), minimum {{schema.minLength}}',
+    201: 'String is too long ({{viewValue.length}} chars), maximum {{schema.maxLength}}',
     202: 'String does not match pattern: {{schema.pattern}}',
     // Object errors
-    300: 'Too few properties defined, minimum {{schema.minimum}}',
-    301: 'Too many properties defined, maximum {{schema.maximum}}',
+    300: 'Too few properties defined, minimum {{schema.minProperties}}',
+    301: 'Too many properties defined, maximum {{schema.maxProperties}}',
     302: 'Required',
     303: 'Additional properties not allowed',
     304: 'Dependency failed - key must exist',
     // Array errors
-    400: 'Array is too short ({{value.length}}), minimum {{schema.minimum}}',
-    401: 'Array is too long ({{value.length}}), maximum {{schema.maximum}}',
+    400: 'Array is too short ({{value.length}}), minimum {{schema.maxItems}}',
+    401: 'Array is too long ({{value.length}}), maximum {{schema.minItems}}',
     402: 'Array items are not unique',
     403: 'Additional items not allowed',
     // Format errors
@@ -584,6 +600,15 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
     // Non-standard validation options
     1000: 'Unknown property (not in schema)'
   };
+
+  // In some cases we get hit with an angular validation error
+  defaultMessages.number    = defaultMessages[105];
+  defaultMessages.required  = defaultMessages[302];
+  defaultMessages.min       = defaultMessages[101];
+  defaultMessages.max       = defaultMessages[103];
+  defaultMessages.maxlength = defaultMessages[201];
+  defaultMessages.minlength = defaultMessages[200];
+  defaultMessages.pattern   = defaultMessages[202];
 
   this.setDefaultMessages = function(messages) {
     defaultMessages = messages;
@@ -609,12 +634,13 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
      * @param {string} error the error code, i.e. tv4-xxx for tv4 errors, otherwise it's whats on
      *                       ngModel.$error for custom errors.
      * @param {Any} value the actual model value.
+     * @param {Any} viewValue the viewValue
      * @param {Object} form a form definition object for this field
      * @param  {Object} global the global validation messages object (even though its called global
      *                         its actually just shared in one instance of sf-schema)
      * @return {string} The error message.
      */
-    service.interpolate = function(error, value, form, global) {
+    service.interpolate = function(error, value, viewValue, form, global) {
       global = global || {};
       var validationMessage = form.validationMessage || {};
 
@@ -640,6 +666,7 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
       var context = {
         error: error,
         value: value,
+        viewValue: viewValue,
         form: form,
         schema: form.schema,
         title: form.title || (form.schema && form.schema.title)
@@ -1495,7 +1522,7 @@ angular.module('schemaForm').directive('sfMessage',
       }
 
       var update = function(valid) {
-        if (valid && scope.hasError()) {
+        if (valid && !scope.hasError()) {
           element.html(msg);
         } else {
 
@@ -1505,24 +1532,13 @@ angular.module('schemaForm').directive('sfMessage',
 
           // We only show one error.
           // TODO: Make that optional
-          // tv4- errors take precedence
           var error = errors[0];
-          if (errors.length > 1) {
-
-            error = errors.reduce(function(prev, value) {
-              if (prev && prev.indexOf('tv4-') === 0) {
-                return prev;
-              }
-              return value;
-            });
-            console.log('reduced',errors, error)
-
-          }
 
           if (error) {
             element.html(sfErrorMessage.interpolate(
               error,
               scope.ngModel.$modelValue,
+              scope.ngModel.$viewValue,
               scope.form,
               scope.options && scope.options.validationMessage
             ));
@@ -1752,6 +1768,11 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
           return viewValue;
         }
 
+        // Omit TV4 validation
+        if (scope.options && scope.options.tv4Validation === false) {
+          return viewValue;
+        }
+
         var result =  sfValidator.validate(form, viewValue);
         // Since we might have different tv4 errors we must clear all
         // errors that start with tv4-
@@ -1814,3 +1835,6 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
     }
   };
 }]);
+
+return schemaForm;
+}));

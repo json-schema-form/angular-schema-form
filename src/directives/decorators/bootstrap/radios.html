@@ -1,5 +1,5 @@
-<div class="form-group schema-form-radios {{form.htmlClass}}" ng-class="{'has-error': hasError(), 'has-success': hasSuccess()}">
-  <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
+<div class="form-group schema-form-radios {{form.htmlClass}}" ng-class="{'has-error': form.disableErrorState !== true &&  hasError(), 'has-success': form.disableSuccessState !== true && hasSuccess()}">
+  <label class="control-label {{form.labelHtmlClass}}" ng-show="showTitle()">{{form.title}}</label>
   <div class="radio" ng-repeat="item in form.titleMap" >
     <label>
       <input type="radio"

@@ -249,8 +249,8 @@ And of global options
 
 
 ### Message Interpolation
-Having a good validation message is hard, sometimes you need to reference the actual value, title
-och constraint that you hit. Schema Form supports interpolation of error messages to make this a
+Having a good validation message is hard, sometimes you need to reference the actual value, title,
+or constraint that you hit. Schema Form supports interpolation of error messages to make this a
 little bit easier.
 
 The context variables available to you are:
@@ -260,6 +260,7 @@ The context variables available to you are:
 | error         | The error code          |
 | title         | Title of the field      |
 | value         | The model value         |
+| viewValue     | The view value (probably the one you want) |
 | form          | form definition object for this field |
 | schema        | schema for this field |
 
@@ -622,12 +623,15 @@ General options most field types can handle:
   validationMessage: "Oh noes, please write a proper address",  // A custom validation error message
   onChange: "valueChanged(form.key,modelValue)", // onChange event handler, expression or function
   feedback: false,             // Inline feedback icons
+  disableSuccessState: false,  // Set true to NOT apply 'has-success' class to a field that was validated successfully
+  disableErrorState: false,    // Set true to NOT apply 'has-error' class to a field that failed validation 
   placeholder: "Input...",     // placeholder on inputs and textarea
   ngModelOptions: { ... },     // Passed along to ng-model-options
   readonly: true,              // Same effect as readOnly in schema. Put on a fieldset or array
                                // and their items will inherit it.
   htmlClass: "street foobar",  // CSS Class(es) to be added to the container div
   fieldHtmlClass: "street"     // CSS Class(es) to be added to field input (or similar)
+  labelHtmlClass: "street"     // CSS Class(es) to be added to the label of the field (or similar)
   copyValueTo: ["address.street"],     // Copy values to these schema keys.
   condition: "person.age < 18" // Show or hide field depending on an angular expression
 }
@@ -726,9 +730,9 @@ the surface it uses `ng-if` so the hidden field is *not* part of the form.
 
 `condition` should be a string with an angular expression. If that expression evaluates as thruthy
 the field will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
-the `sf-schema` directive (the same as onClick on buttons) but with access to the current model
-and current array index under the name `model` and `arrayIndex`. This is useful for hiding/showing
-parts of a form depending on another form control.
+the `sf-schema` directive (the same as onClick on buttons) but with access to the current model,
+current model value and current array index under the name `model`, `modelValue` and `arrayIndex`.
+This is useful for hiding/showing parts of a form depending on another form control.
 
 ex. A checkbox that shows an input field for a code when checked
 
@@ -758,8 +762,8 @@ function FormCtrl($scope) {
     "name",
     "eligible",
     {
-      key: "code",
-      condition: "person.eligible", //or "model.eligable"
+      "key": "code",
+      "condition": "person.eligible", //or "model.eligible"
     }
   ]
 }
