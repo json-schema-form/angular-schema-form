@@ -387,7 +387,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                           if (!form.validationMessage) {
                             form.validationMessage = {};
                           }
-                          console.log('settings validationMessage', validationMessage)
                           form.validationMessage[error] = validationMessage;
                         }
 
@@ -565,7 +564,7 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
   // TODO: Humanize these.
   var defaultMessages = {
     'default': 'Field does not validate',
-    0: 'Invalid type, expected {{schema.type}})',
+    0: 'Invalid type, expected {{schema.type}}',
     1: 'No enum match for: {{value}}',
     10: 'Data does not match any schemas from "anyOf"',
     11: 'Data does not match any schemas from "oneOf"',
@@ -642,7 +641,6 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
      * @return {string} The error message.
      */
     service.interpolate = function(error, value, viewValue, form, global) {
-      console.log(error, value, viewValue)
       global = global || {};
       var validationMessage = form.validationMessage || {};
 
@@ -1524,7 +1522,7 @@ angular.module('schemaForm').directive('sfMessage',
       }
 
       var update = function(valid) {
-        if (valid && scope.hasError()) {
+        if (valid && !scope.hasError()) {
           element.html(msg);
         } else {
 
