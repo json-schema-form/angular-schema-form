@@ -494,6 +494,48 @@ describe('directive',function(){
     });
   });
 
+  it('should honor defaults in schema unless told not to',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {
+        name: 'Foobar'
+      };
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "default": "Bar"
+          },
+          "nick": {
+            "type": "string",
+            "default": "Zeb"
+          },
+          "alias": {
+            "type": "string"
+          },
+        }
+      };
+
+      scope.form = ["*"];
+
+      scope.options = {setSchemaDefaults: false};
+
+      var tmpl = angular.element('<form sf-options="options" sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      scope.person.name.should.be.equal('Foobar');
+      expect(scope.person.nick).to.be.undefined;
+      expect(scope.person.alias).to.be.undefined;
+
+    });
+  });
+
+
   it('should handle schema form default in deep structure',function(){
 
     inject(function($compile,$rootScope){
@@ -1950,7 +1992,7 @@ describe('directive',function(){
           }
         };
         scope.form = [field.form];
-        
+
         var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
         $compile(tmpl)(scope);
         $rootScope.$apply();
@@ -1978,7 +2020,7 @@ describe('directive',function(){
           }
         };
         scope.form = [field.form];
-        
+
         var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
         $compile(tmpl)(scope);
         $rootScope.$apply();
