@@ -40,6 +40,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     'radios-inline': base + 'radios-inline.html',
     radiobuttons: base + 'radio-buttons.html',
     help: base + 'help.html',
+    date: base + 'date.html',
     'default': base + 'default.html'
   }, [
     // function(form) {
