@@ -827,7 +827,7 @@ Note that arrays inside arrays won't work with conditions.
 
 
 Specific options and types
---------------------------
+--------------------------m
 
 ### input group addons
 
@@ -1570,7 +1570,7 @@ function FormCtrl($scope) {
     "eligible",
     {
         type: "conditional",
-        condition: "person.eligible", //or "model.eligable"
+        condition: "model.person.eligible", 
         items: [
           "code"
         ]
