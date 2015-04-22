@@ -827,7 +827,7 @@ Note that arrays inside arrays won't work with conditions.
 
 
 Specific options and types
---------------------------m
+--------------------------
 
 ### input group addons
 
