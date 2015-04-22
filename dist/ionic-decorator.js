@@ -60,7 +60,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     submit: base + 'submit.html',
     button: base + 'submit.html',
     text: base + 'default.html',
-    date: base + 'date.html',
+    date: base + 'default.html',
     password: base + 'default.html',
     datepicker: base + 'datepicker.html',
     input: base + 'default.html',
