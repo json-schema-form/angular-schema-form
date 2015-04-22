@@ -1570,7 +1570,7 @@ function FormCtrl($scope) {
     "eligible",
     {
         type: "conditional",
-        condition: "person.eligible", //or "model.eligable"
+        condition: "model.person.eligible", 
         items: [
           "code"
         ]
