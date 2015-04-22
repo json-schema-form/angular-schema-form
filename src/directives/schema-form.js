@@ -58,10 +58,81 @@ angular.module('schemaForm')
             }
           }
         });
-        //Since we are dependant on up to three
-        //attributes we'll do a common watch
+
         var lastDigest = {};
         var childScope;
+
+        // Common renderer function, can either be triggered by a watch or by an event.
+        var render = function(schema, form) {
+          var merged = schemaForm.merge(schema, form, ignore, scope.options);
+          var frag = document.createDocumentFragment();
+
+          // Create a new form and destroy the old one.
+          // Not doing keeps old form elements hanging around after
+          // they have been removed from the DOM
+          // https://github.com/Textalk/angular-schema-form/issues/200
+          if (childScope) {
+            childScope.$destroy();
+          }
+          childScope = scope.$new();
+
+          //make the form available to decorators
+          childScope.schemaForm  = {form:  merged, schema: schema};
+
+          //clean all but pre existing html.
+          element.children(':not(.schema-form-ignore)').remove();
+
+          // Find all slots.
+          var slots = {};
+          var slotsFound = element[0].querySelectorAll('*[sf-insert-field]');
+
+          for (var i = 0; i < slotsFound.length; i++) {
+            slots[slotsFound[i].getAttribute('sf-insert-field')] = slotsFound[i];
+          }
+
+          //Create directives from the form definition
+          angular.forEach(merged, function(obj, i) {
+            var n = document.createElement(attrs.sfUseDecorator ||
+                                           snakeCase(schemaFormDecorators.defaultDecorator, '-'));
+            n.setAttribute('form', 'schemaForm.form[' + i + ']');
+
+            // Check if there is a slot to put this in...
+            if (obj.key) {
+              var slot = slots[sfPath.stringify(obj.key)];
+              if (slot) {
+                while (slot.firstChild) {
+                  slot.removeChild(slot.firstChild);
+                }
+                slot.appendChild(n);
+                return;
+              }
+            }
+
+            // ...otherwise add it to the frag
+            frag.appendChild(n);
+
+          });
+
+          element[0].appendChild(frag);
+
+          //compile only children
+          $compile(element.children())(childScope);
+
+          //ok, now that that is done let's set any defaults
+          schemaForm.traverseSchema(schema, function(prop, path) {
+            if (angular.isDefined(prop['default'])) {
+              var val = sfSelect(path, scope.model);
+              if (angular.isUndefined(val)) {
+                sfSelect(path, scope.model, prop['default']);
+              }
+            }
+          });
+
+          scope.$emit('sf-render-finished', element);
+        };
+
+        //Since we are dependant on up to three
+        //attributes we'll do a common watch
         scope.$watch(function() {
 
           var schema = scope.schema;
@@ -74,72 +145,20 @@ angular.module('schemaForm')
             lastDigest.schema = schema;
             lastDigest.form = form;
 
-            var merged = schemaForm.merge(schema, form, ignore, scope.options);
-            var frag = document.createDocumentFragment();
-
-            // Create a new form and destroy the old one.
-            // Not doing keeps old form elements hanging around after
-            // they have been removed from the DOM
-            // https://github.com/Textalk/angular-schema-form/issues/200
-            if (childScope) {
-              childScope.$destroy();
-            }
-            childScope = scope.$new();
-
-            //make the form available to decorators
-            childScope.schemaForm  = {form:  merged, schema: schema};
-
-            //clean all but pre existing html.
-            element.children(':not(.schema-form-ignore)').remove();
-
-            // Find all slots.
-            var slots = {};
-            var slotsFound = element[0].querySelectorAll('*[sf-insert-field]');
-
-            for (var i = 0; i < slotsFound.length; i++) {
-              slots[slotsFound[i].getAttribute('sf-insert-field')] = slotsFound[i];
-            }
-
-            //Create directives from the form definition
-            angular.forEach(merged, function(obj, i) {
-              var n = document.createElement(attrs.sfDecorator ||
-                                             snakeCase(schemaFormDecorators.defaultDecorator, '-'));
-              n.setAttribute('form','schemaForm.form['+i+']');
-
-              // Check if there is a slot to put this in...
-              if (obj.key) {
-                var slot = slots[sfPath.stringify(obj.key)];
-                if (slot) {
-                  while (slot.firstChild) {
-                    slot.removeChild(slot.firstChild);
-                  }
-                  slot.appendChild(n);
-                  return;
-                }
-              }
-
-              // ...otherwise add it to the frag
-              frag.appendChild(n);
-
-            });
-
-            element[0].appendChild(frag);
-
-            //compile only children
-            $compile(element.children())(childScope);
-
-            //ok, now that that is done let's set any defaults
-            schemaForm.traverseSchema(schema, function(prop, path) {
-              if (angular.isDefined(prop['default'])) {
-                var val = sfSelect(path, scope.model);
-                if (angular.isUndefined(val)) {
-                  sfSelect(path, scope.model, prop['default']);
-                }
-              }
-            });
-          };
-          scope.$emit('sf-render-finished', element);
+            render(schema, form);
+          }
         });
+
+        // We also listen to the event schemaFormRedraw so you can manually trigger a change if
+        // part of the form or schema is chnaged without it being a new instance.
+        scope.$on('schemaFormRedraw', function() {
+          var schema = scope.schema;
+          var form   = scope.initialForm || ['*'];
+          if (schema) {
+            render(schema, form);
+          }
+        });
+
       }
     };
   }

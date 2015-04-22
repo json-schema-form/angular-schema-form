@@ -3,7 +3,7 @@
     "type": "object",
     "required": [
       "name",
-      "shoesize"
+      "shoesizeLeft"
     ],
     "properties": {
       "name": {
@@ -28,8 +28,13 @@
           "NaN"
         ]
       },
-      "shoesize": {
-        "title": "Shoe size",
+      "shoesizeLeft": {
+        "title": "Shoe size (left)",
+        "default": 42,
+        "type": "number"
+      },
+      "shoesizeRight": {
+        "title": "Shoe size (right)",
         "default": 42,
         "type": "number"
       },
@@ -152,10 +157,21 @@
             {
               "title": "More stuff",
               "items": [
-                "attributes",
+                "attributes.eyecolor",
+                "attributes.haircolor",
                 {
-                  "key": "shoesize",
-                  "feedback": false
+                  "key": "attributes.shoulders.left",
+                  "title": "Left shoulder",
+                  "description": "This value is copied to attributes.shoulders.right in the model",
+                  "copyValueTo": ["attributes.shoulders.right"]
+                },
+                {
+                  "key": "shoesizeLeft",
+                  "feedback": false,
+                  "copyValueTo":["shoesizeRight"]
+                },
+                {
+                  "key": "shoesizeRight"
                 },
                 {
                   "key": "invitation",

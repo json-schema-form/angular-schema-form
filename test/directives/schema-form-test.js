@@ -4,7 +4,7 @@ describe('directive',function(){
   beforeEach(module('templates'));
   beforeEach(module('schemaForm'));
   beforeEach(
-    //We don't need no sanitation. We don't need no though control.
+    //We don't need no sanitation. We don't need no thought control.
     module(function($sceProvider){
       $sceProvider.enabled(false);
     })
@@ -250,7 +250,7 @@ describe('directive',function(){
       tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
       tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
       tmpl.children().eq(2).children().eq(0).find('button').length.should.be.equal(1);
-      tmpl.children().eq(2).children().eq(0).find('button').text().should.be.equal('Okidoki');
+      tmpl.children().eq(2).children().eq(0).find('button').text().should.include('Okidoki');
 
       scope.form[1].onClick.should.not.have.beenCalled;
       tmpl.children().eq(2).children().eq(0).find('button').click();
@@ -454,105 +454,6 @@ describe('directive',function(){
     });
   });
 
-  it('should use ng-required on required fields',function(){
-
-    inject(function($compile,$rootScope){
-      var scope = $rootScope.$new();
-      scope.person = {};
-
-      scope.schema = {
-        "type": "object",
-        "required": ["name"],
-        "properties": {
-          "name": { "type": "string" },
-          "nick": { "type": "string" }
-        }
-      };
-
-      scope.form = ["*"];
-
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
-
-      $compile(tmpl)(scope);
-      $rootScope.$apply();
-
-      tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model-options').should.be.equal('form.ngModelOptions')
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
-      expect(tmpl.children().eq(1).children().eq(0).children('input').attr('required')).to.be.undefined;
-    });
-  });
-
-  it('should use ng-required on required fields, json schema v3',function(){
-
-    inject(function($compile,$rootScope){
-      var scope = $rootScope.$new();
-      scope.person = {};
-
-      scope.schema = {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string", "required": true },
-          "nick": { "type": "string" }
-        }
-      };
-
-      scope.form = ["*"];
-
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
-
-      $compile(tmpl)(scope);
-      $rootScope.$apply();
-
-      tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model-options').should.be.equal('form.ngModelOptions')
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
-      expect(tmpl.children().eq(1).children().eq(0).children('input').attr('required')).to.be.undefined;
-    });
-  });
-
-  it('should use ng-required on required fields, form override',function(){
-
-    inject(function($compile,$rootScope){
-      var scope = $rootScope.$new();
-      scope.person = {};
-
-      scope.schema = {
-        "type": "object",
-        "properties": {
-          "name": { "type": "string" },
-          "nick": { "type": "string", "required": true }
-        }
-      };
-
-      scope.form = [
-        { key: 'name', required: true },
-        { key: 'nick', required: false },
-      ];
-
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
-
-      $compile(tmpl)(scope);
-      $rootScope.$apply();
-
-      tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model-options').should.be.equal('form.ngModelOptions');
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
-      expect(tmpl.children().eq(1).children().eq(0).children('input').attr('required')).to.be.undefined;
-    });
-  });
 
   it('should honor defaults in schema',function(){
 
@@ -779,7 +680,7 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).find('label').hasClass('ng-hide').should.be.true;
+      tmpl.children().eq(0).children().eq(0).find('label').hasClass('sr-only').should.be.true;
       tmpl.children().eq(1).children().eq(0).find('label').hasClass('ng-hide').should.be.true;
     });
   });
@@ -1777,5 +1678,319 @@ describe('directive',function(){
     });
   });
 
+  it('should remove or add fields depending on condition',function(done) {
 
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {
+        flag: true
+      };
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [
+        {
+          key:'name',
+          condition: 'person.flag'
+        }
+      ];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().find('.schema-form-text').length.should.be.equal(1);
+
+      setTimeout(function() {
+        scope.person.flag = false;
+        $rootScope.$apply();
+        tmpl.children().find('.schema-form-text').length.should.be.equal(0);
+        done();
+      }, 0);
+
+    });
+  });
+
+  it('should redraw form on schemaFormRedraw event',function(done) {
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [{
+        key: 'name',
+        type: 'text'
+      }];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().find('.schema-form-text').length.should.be.equal(1);
+      tmpl.children().find('.schema-form-textarea').length.should.be.equal(0);
+
+      setTimeout(function() {
+        scope.form[0].type = 'textarea';
+        scope.$broadcast('schemaFormRedraw');
+        $rootScope.$apply();
+        tmpl.children().find('.schema-form-text').length.should.be.equal(0);
+        done();
+      }, 0);
+
+    });
+  });
+
+  it('should use supplied template with template field type',function() {
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [
+        {
+          type: 'template',
+          template: '<div>{{form.foo}}</div>',
+          foo: "Hello World"
+        }
+      ];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().eq(0).html().should.be.eq('<div class="ng-binding ng-scope">Hello World</div>')
+
+    });
+  });
+
+  it('should load template by templateUrl, with template field type',function() {
+
+    inject(function($compile, $rootScope, $httpBackend){
+
+      $httpBackend.when('GET', '/template.html')
+                  .respond("<div>{{form.foo}}</div>");
+
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [
+        {
+          type: 'template',
+          templateUrl: '/template.html',
+          foo: 'Hello World'
+        }
+      ];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      $httpBackend.flush();
+      $httpBackend.verifyNoOutstandingExpectation();
+      $httpBackend.verifyNoOutstandingRequest();
+
+      tmpl.children().eq(0).html().should.be.eq('<div class="ng-binding ng-scope">Hello World</div>')
+
+    });
+  });
+
+  //generate disableSuccessState, disableErrorState tests for each field
+  var fields = [
+    {
+      name: 'default',
+      property: {
+        type: 'string',
+        pattern: "^[a-zA-Z]+$"
+      },
+      form: {
+        key: ['field']
+      }
+    },
+    {
+      name: 'textarea',
+      property: {
+        type: 'string',
+        pattern: "^[a-zA-Z]+$"
+      },
+      form: {
+        key: ['field'],
+        type: 'textarea'
+      }
+    },
+    {
+      name: 'checkbox',
+      property: {
+        type: 'boolean'
+      },
+      form: {
+        key: ["field"]
+      }
+    },
+    {
+      name: 'radio buttons',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radiobuttons",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    },
+    {
+      name: 'radios inline',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios-inline",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    },
+    {
+      name: 'radios',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    },
+    {
+      name: 'select',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "select",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    }
+  ];
+
+  fields.forEach(function (field) {
+
+    it('should not add "has-success" class to ' + field.name + " field if a correct value is entered, but disableSuccessState is set on form", function () {
+      inject(function($compile, $rootScope){
+        var scope = $rootScope.$new();
+        scope.model = {}
+        scope.schema = {
+          type: 'object',
+          properties: {
+            field: field.property
+          }
+        };
+        scope.form = [field.form];
+        
+        var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+        var ngModelCtrl = scope.theForm['{{form.key.slice(-1)[0]}}'] || scope.theForm['{{form.key.join(\'.\')}}'];
+        ngModelCtrl.$valid = true;
+        ngModelCtrl.$pristine = false;
+        $rootScope.$apply();
+        tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.true;
+        scope.form[0].disableSuccessState = true;
+        $rootScope.$apply();
+        tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.false;
+      });
+    });
+
+    it('should not add "has-error" class to ' + field.name + " field if invalid value is entered, but disableErrorState is set on form", function () {
+      inject(function($compile, $rootScope){
+        var scope = $rootScope.$new();
+        scope.model = {
+          field: field.errorValue
+        }
+        scope.schema = {
+          type: 'object',
+          properties: {
+            field: field.property
+          }
+        };
+        scope.form = [field.form];
+        
+        var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+        var ngModelCtrl = scope.theForm['{{form.key.slice(-1)[0]}}'] || scope.theForm['{{form.key.join(\'.\')}}'];
+        ngModelCtrl.$invalid = true;
+        ngModelCtrl.$pristine = false;
+        $rootScope.$apply();
+        tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.true;
+        scope.form[0].disableErrorState = true;
+        $rootScope.$apply();
+        tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.false;
+      });
+    });
+  });
 });

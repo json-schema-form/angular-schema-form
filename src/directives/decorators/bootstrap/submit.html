@@ -8,5 +8,8 @@
           type="button"
           ng-click="buttonClick($event,form)"
           ng-disabled="form.readonly"
-          ng-if="form.type !== 'submit'">{{form.title}}</button>
+          ng-if="form.type !== 'submit'">
+      <span ng-if="form.icon" class="{{form.icon}}"></span>
+      {{form.title}}
+  </button>
 </div>

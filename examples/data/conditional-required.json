@@ -1,0 +1,39 @@
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "switch": {
+        "title": "Spam me, please",
+        "type": "boolean"
+      },
+      "email":  {
+        "title": "Email",
+        "type": "string",
+        "pattern": "^\\S+@\\S+$",
+        "description": "Email will be used for evil."
+      }
+    },
+    "required": ["switch"]
+  },
+  "form": [
+    {
+      "type": "help",
+      "helpvalue": "<p>Schema Form does not support oneOf (yet), but you can do a workaround and simulate certain scenarios with 'condition' and 'required'  (and/or 'readonly') in the form.</p>"
+    },
+    "switch",
+    {
+      "key": "email",
+      "condition": "model.switch",
+      "required": true
+    },
+    {
+      "key": "email",
+      "condition": "!model.switch"
+    },
+    {
+      "type": "submit",
+	    "style": "btn-info",
+      "title": "OK"
+    }
+  ]
+}

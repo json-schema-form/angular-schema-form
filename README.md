@@ -1,16 +1,22 @@
 Angular Schema Form
 ===================
-
 [![Build Status](https://travis-ci.org/Textalk/angular-schema-form.svg?branch=master)](https://travis-ci.org/Textalk/angular-schema-form)
 [![Coverage Status](https://coveralls.io/repos/Textalk/angular-schema-form/badge.png?branch=master)](https://coveralls.io/r/Textalk/angular-schema-form?branch=development)
 [![Bower version](https://badge.fury.io/bo/angular-schema-form.svg)](http://badge.fury.io/bo/angular-schema-form)
+[![npm version](https://badge.fury.io/js/angular-schema-form.svg)](http://badge.fury.io/js/angular-schema-form)
+
 
 Generate forms from JSON schemas using AngularJS!
 
+Web Page / Twitter
+--------
+[schemaform.io](http://schemaform.io) / [@SchemaFormIO](http://twitter.com/SchemaFormIO)
+
 Demo Time!
 ----------
-[Try out the example page](http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html).
-Try editing the schema or form definition and see what comes out!
+[Try out the example page](http://schemaform.io/examples/bootstrap-example.html). Try editing the schema or form definition and see what comes out!
+
+Now you can save your code and share it!
 
 What is it?
 ----------
@@ -36,7 +42,10 @@ apart from JSON Form?
 
 Documentation
 -------------
-There is one section of documentation covering [defaults and form types](docs/index.md). There is another section for how you [extend angular schema form with your own types](https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md).
+You can find [all documentation here](docs/index.md), it covers all the different field types
+and their options.
+
+It also covers how to [extend angular schema form with your own field types](https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md).
 
 Basic Usage
 -----------
@@ -145,29 +154,12 @@ angular.module('myModule', ['schemaForm']);
 
 Add-ons
 ------
-There are a couple of add-ons, a date picker, a colorpicker and two wysiwyg editors. 
-They have their own repos and you can find them here with usage instructions:
-
-  * [https://github.com/Textalk/angular-schema-form-datepicker](https://github.com/Textalk/angular-schema-form-datepicker)
-  * [https://github.com/Textalk/angular-schema-form-colorpicker](https://github.com/Textalk/angular-schema-form-colorpicker)
-  * [https://github.com/Textalk/angular-schema-form-tinymce](https://github.com/Textalk/angular-schema-form-tinymce)
-  * [https://github.com/webcanvas/angular-schema-form-ckeditor](https://github.com/webcanvas/angular-schema-form-ckeditor)
-
+There are several add-ons available, for a full list see the [web page](http://textalk.github.io/angular-schema-form/#third-party-addons).
 Your can also [create your own add-ons!](docs/extending.md)
 
 Contributing
 ------------
-
-All contributions are welcome! If its a new field type consider making it an add-on instead,
-especially if it has dependecies. See [extending Schema Form documentation.](docs/extending.md)
-
-We're trying to use
-[git flow](http://danielkummer.github.io/git-flow-cheatsheet/), *so please base any merge request on the **development** branch instead of **master**.*
-
-Also run any code through the code style checker [jscs](https://github.com/mdevils/node-jscs)
-(or even better use it in your editor) with preset set to `google`. You can also us `gulp jscs` to
-check your code.
-
+Contributions are welcome! Please see [Contributing.md](CONTRIBUTING.md) for more info.
 
 Building
 --------

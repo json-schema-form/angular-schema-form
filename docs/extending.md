@@ -38,7 +38,7 @@ But wait, where is all the code? Basically it's then up to the template to use d
 implement whatever it likes to do. It does have some help though, lets look at template example and
 go through the basics.
 
-This is the template for the datepicker:
+This is sort of the template for the datepicker:
 ```html
 <div class="form-group" ng-class="{'has-error': hasError()}">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
@@ -54,7 +54,7 @@ This is the template for the datepicker:
          max-date="form.maxDate"
          format="form.format" />
 
-  <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
+  <span class="help-block" sf-message="form.description"></span>
 </div>
 ```
 
@@ -73,10 +73,18 @@ available here for you to act on.
 |----------|----------------|
 | form      | Form definition object |
 | showTitle() | Shorthand for `form && form.notitle !== true && form.title` |
-| errorMessage(msg) | Error message formatting, makes validationMessage option work. |
+| ngModel   | The ngModel controller, this will be on scope if you use either the directive `schema-validate` or `sf-array` |
 | evalInScope(expr, locals) | Eval supplied expression, ie scope.$eval |
 | evalExpr(expr, locals) | Eval an expression in the parent scope of the main `sf-schema` directive. |
+| interp(expr, locals) | Interpolate an expression which may or may not contain expression `{{ }}` sequences |
 | buttonClick($event, form)  | Use this with ng-click to execute form.onClick |
+| hasSuccess() | Shorthand for `ngModel.$valid && (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue))` |
+| hasError() | Shorthand for `ngModel.$invalid && !ngModel.$pristine` |
+
+#### Deprecation warning
+There is still a `errorMessage` function on scope but it's been deprecated. Please use the
+`sf-message` directive instead.
+
 
 ### The magic $$value$$
 Schema Form wants to play nice with the built in Angular directives for form. Especially `ng-model`
@@ -99,17 +107,13 @@ So basically always have a `ng-model="$$value$$"` (Pro tip: ng-model is fine on 
 responsible for validating the value against the schema using [tv4js](https://github.com/geraintluff/tv4)
 It takes the form definition as an argument.
 
-`schema-validate` also exports some things on the scope:
 
-| Name     | What it does |
-|----------|--------------|
-| ngModel  | the ngModelController |
-| hasSuccess() | Shorthand for `ngModel.$valid && (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue))` |
-| hasError() | Shorthand for `ngModel.$invalid && !ngModel.$pristine` |
-| schemaError() | The current error object from tv4js |
+### sf-message directive
+Error messages are nice, and the best way to get them is via the `sf-message` directive. It usually
+takes `form.description` as an argument so it can show that until an error occurs.
 
 
-### Setting up schema defualts
+### Setting up schema defaults
 So you got this shiny new add-on that adds a fancy field type, but feel a bit bummed out that you
 need to specify it in the form definition all the time? Fear not because you can also add a "rule"
 to map certain types and conditions in the schema to default to your type.
@@ -149,6 +153,19 @@ var datepicker = function(name, schema, options) {
 schemaFormProvider.defaults.string.unshift(datepicker);
 ```
 
+### Sharing your add-on with the world
+So you made an add-on, why not share it with us? On the front page,
+[http://textalk.github.io/angular-schema-form/](http://textalk.github.io/angular-schema-form/#third-party-addons), we
+maintain a list of add ons based on a query of the bower register, and we love to see your add-on
+there.
+
+Any [bower](http://bower.io) package with a name starting with `angular-schema-form-` or that has
+the `keyword` `angular-schema-form-add-on` in its `bower.json` will be picked up. It's cached so
+there can be a delay of a day or so.
+
+So [make a bower package](http://bower.io/docs/creating-packages/), add the keyword
+`angular-schema-form-add-on` and [register it](http://bower.io/docs/creating-packages/#register)!
+
 Decorators
 ----------
 Decorators are a second way to extend Schema Form, the thought being that you should easily be able
@@ -156,12 +173,12 @@ to change *every* field. Maybe you like it old school and want to use bootstrap 
 to generate a table with the data instead? Right now there are no other decorators than bootstrap 3.
 
 Basically a *decorator* sets up all the mappings between form types and their respective templates
-using the `decoratorsProvider.createDecorator()` function.
+using the `schemaFormDecoratorsProvider.createDecorator()` function.
 
 ```javascript
 var base = 'directives/decorators/bootstrap/';
 
-decoratorsProvider.createDecorator('bootstrapDecorator', {
+schemaFormDecoratorsProvider.createDecorator('bootstrapDecorator', {
   textarea: base + 'textarea.html',
   fieldset: base + 'fieldset.html',
   array: base + 'array.html',
@@ -190,7 +207,7 @@ decoratorsProvider.createDecorator('bootstrapDecorator', {
   }
 ]);
 ```
-`decoratorsProvider.createDecorator(name, mapping, rules)` takes a name argument, a mapping object
+`schemaFormDecoratorsProvider.createDecorator(name, mapping, rules)` takes a name argument, a mapping object
 (type -> template) and an optional list of rule functions.
 
 When the decorator is trying to match a form type against a tempate it first executes all the rules

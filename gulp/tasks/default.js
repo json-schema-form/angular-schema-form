@@ -4,6 +4,5 @@ gulp.task('default', [
   'minify',
   'ionic',
   'bootstrap',
-  'bootstrap-datepicker',
-  'non-minified-dist'
+  'bootstrap-datepicker'
 ]);
