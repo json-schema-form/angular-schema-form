@@ -31,8 +31,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
   var createDirective = function(name) {
     $compileProvider.directive(name,
-      ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
-      function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage) {
+      ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage', 'sfPath',
+      function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage, sfPath) {
 
         return {
           restrict: 'AE',
@@ -159,6 +159,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return sfErrorMessage.interpolate(
                 (schemaError && schemaError.code + '') || 'default',
                 (scope.ngModel && scope.ngModel.$modelValue) || '',
+                (scope.ngModel && scope.ngModel.$viewValue) || '',
                 scope.form,
                 scope.options && scope.options.validationMessage
               );
@@ -203,18 +204,23 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   // Do we have a condition? Then we slap on an ng-if on all children,
                   // but be nice to existing ng-if.
                   if (form.condition) {
+
+                    var evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex})';
+                    if (form.key) {
+                      evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "modelValue": model' + sfPath.stringify(form.key) + '})';
+                    }
+
                     angular.forEach(element.children(), function(child) {
                       var ngIf = child.getAttribute('ng-if');
                       child.setAttribute(
                         'ng-if',
                         ngIf ?
                         '(' + ngIf +
-                        ') || (evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex }))'
-                        : 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex })'
+                        ') || (' + evalExpr +')'
+                        : evalExpr
                       );
                     });
                   }
-
                   $compile(element.contents())(scope);
                 });
 
@@ -244,7 +250,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                           if (!form.validationMessage) {
                             form.validationMessage = {};
                           }
-                          console.log('settings validationMessage', validationMessage)
                           form.validationMessage[error] = validationMessage;
                         }
 

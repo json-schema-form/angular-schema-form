@@ -8,9 +8,9 @@ Angular Schema Form
 
 Generate forms from JSON schemas using AngularJS!
 
-Web Page / Twitter
+Web Page / Twitter / Video
 --------
-[schemaform.io](http://schemaform.io) / [@SchemaFormIO](http://twitter.com/SchemaFormIO)
+[schemaform.io](http://schemaform.io) / [@SchemaFormIO](http://twitter.com/SchemaFormIO) / [The Movie](https://www.youtube.com/watch?v=duBFMipRq2o)
 
 Demo Time!
 ----------

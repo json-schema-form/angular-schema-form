@@ -1,3 +1,20 @@
+v0.8.2
+-------
+ * Fix embarrassing typo in package.json 
+
+v0.8.1
+------
+ * Fixed order of error messages, thanks @davidlgj
+ * Added `modelValue` to  variables available in a condition, thanks @dben
+ * UMD wrapping, thanks @dwikle
+ * disableErrorState, disableSuccessState options, thanks @domasx2
+ * Awesome gist integration to example page, thanks @dervisevic
+ * Global option to disable tv4 validation, thanks @maff
+ * Option: labelHtmlClass, thanks @AlexAlbala
+ * Doc fixes and updates, thanks @Minisai, @jdcaballerov, @cjroth, @dervisevic
+ * Bugfixes, thanks @engelfrost, @mqamhieh, @carchrae
+
+
 v0.8.0
 Loads of stuff happened this release, so we're bumping version to 0.8.0.
 Note as well that there is a small change to `tabsarray` type regarding its title, the title is now
@@ -16,7 +33,7 @@ See the docs on `tabarray` for an more info.
    directive for add-on to use. thanks @davidlgj
  * interpolation instead of eval'ing in tabarray title, thanks @coridyn
  * Lots of bugfixes, most notable checkboxes validation now works, thanks @davidlgj, @coridyn,
-   @ulion, @adamcbuckley 
+   @ulion, @adamcbuckley
 
 v0.7.13
 -------

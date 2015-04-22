@@ -10,6 +10,7 @@ describe('schemaFormServices', function() {
         var result = sfErrorMessage.interpolate(
           'foobar-error',              //error
           'foobar',                    //value
+          'foobar',               //view value
           {schema: {title: 'Foo'}},   //form
           {'default': 'Oh noes!'}
         );
@@ -25,6 +26,7 @@ describe('schemaFormServices', function() {
         var result = sfErrorMessage.interpolate(
           'foobar-error',              //error
           'foobar',                    //value
+          'foobar',               //view value
           {validationMessage: {'default': 'Oh yes!'}, schema: {title: 'Foo'}},   //form
           {'default': 'Oh noes!'}
         );
@@ -40,6 +42,7 @@ describe('schemaFormServices', function() {
         var result = sfErrorMessage.interpolate(
           'foobar-error',              //error
           'foobar',                    //value
+          'foobar',               //view value
           {schema: {title: 'Foo'}},   //form
           {'default': 'Oh noes!', 'foobar-error': 'Aw chucks!'}
         );
@@ -54,6 +57,7 @@ describe('schemaFormServices', function() {
         var result = sfErrorMessage.interpolate(
           'foobar-error',              //error
           'foobar',                    //value
+          'foobar',               //view value
           {schema: {title: 'Foo'}, validationMessage: {'foobar-error': 'Noooooo!'}},   //form
           {'default': 'Oh noes!', 'foobar-error': 'Aw chucks!'}
         );
@@ -68,6 +72,7 @@ describe('schemaFormServices', function() {
         var result = sfErrorMessage.interpolate(
           'foobar-error',              //error
           'foobar',                    //value
+          'foobar',               //view value
           {
             schema: {title: 'Foo'},
             validationMessage: {
@@ -87,6 +92,7 @@ describe('schemaFormServices', function() {
         var result = sfErrorMessage.interpolate(
           'foobar-error',              //error
           'foobar',                    //value
+          'foobar',               //view value
           {
             schema: {title: 'Foo'},
             validationMessage: {
@@ -101,6 +107,7 @@ describe('schemaFormServices', function() {
         result = sfErrorMessage.interpolate(
           'foobar-error',              //error
           'foobar',                    //value
+          'foobar',               //view value
           {
             title: 'Bar',
             schema: {title: 'Foo'},
@@ -121,6 +128,7 @@ describe('schemaFormServices', function() {
         var result = sfErrorMessage.interpolate(
           'foobar-error',              //error
           'foobar',                    //value
+          'foobar',               //view value
           {
             schema: {title: 'Foo'},
             validationMessage: 'Huh?'
@@ -140,6 +148,7 @@ describe('schemaFormServices', function() {
         var result = sfErrorMessage.interpolate(
           'foobar-error',              //error
           'foobar',                    //value
+          'foobar',               //view value
           {
             schema: {title: 'Foo'},
             validationMessage: {
@@ -154,6 +163,7 @@ describe('schemaFormServices', function() {
         msgFn.should.have.been.calledWith({
           error: 'foobar-error',
           value: 'foobar',
+          viewValue: 'foobar',
           form: {
             schema: {title: 'Foo'},
             validationMessage: {
@@ -174,6 +184,7 @@ describe('schemaFormServices', function() {
         var result = sfErrorMessage.interpolate(
           'foobar-error',              //error
           'foobar',                    //value
+          'foobar',               //view value
           {
             schema: {title: 'Foo'},
             validationMessage: msgFn
@@ -186,6 +197,7 @@ describe('schemaFormServices', function() {
         msgFn.should.have.been.calledWith({
           error: 'foobar-error',
           value: 'foobar',
+          viewValue: 'foobar',
           form: {
             schema: {title: 'Foo'},
             validationMessage: msgFn
@@ -201,7 +213,8 @@ describe('schemaFormServices', function() {
 
         var result = sfErrorMessage.interpolate(
           'tv4-302',              //error
-          'foobar',                    //value
+          'foobar',               //value
+          'foobar',               //view value
           {
             schema: {title: 'Foo'},
             validationMessage: {302: 'tv4 error!'}
