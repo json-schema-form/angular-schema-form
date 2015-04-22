@@ -35,7 +35,9 @@
           ng-model="$$value$$"
           ng-disabled="form.readonly"
           schema-validate="form"
-          name="{{form.key.slice(-1)[0]}}">
+          name="{{form.key.slice(-1)[0]}}"
+          format-date
+          >
   </span>
 
   <span ng-if="form.feedback !== false"
