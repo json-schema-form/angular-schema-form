@@ -40,7 +40,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     'radios-inline': base + 'radios-inline.html',
     radiobuttons: base + 'radio-buttons.html',
     help: base + 'help.html',
-    date: base + 'date.html',
+    date: base + 'default.html',
     'default': base + 'default.html'
   }, [
     // function(form) {
@@ -60,7 +60,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     submit: base + 'submit.html',
     button: base + 'submit.html',
     text: base + 'default.html',
-    date: base + 'default.html',
+    date: base + 'date.html',
     password: base + 'default.html',
     datepicker: base + 'datepicker.html',
     input: base + 'default.html',
