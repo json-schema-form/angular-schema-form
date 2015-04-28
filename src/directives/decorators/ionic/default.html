@@ -36,9 +36,27 @@
           ng-disabled="form.readonly"
           schema-validate="form"
           name="{{form.key.slice(-1)[0]}}"
+          >
+  </span>
+
+  <span ng-if="form.htmlClass != 'item-input-inset' && form.type == 'date'">
+    <input
+          ng-show="form.key"
+          type="{{form.type}}"
+          step="any"
+          sf-changed="form"
+          placeholder="{{form.placeholder}}"
+          class="{{form.fieldHtmlClass}}"
+          ng-model-options="form.ngModelOptions"
+          ng-model="$$value$$"
+          ng-disabled="form.readonly"
+          schema-validate="form"
+          name="{{form.key.slice(-1)[0]}}"
           format-date
           >
   </span>
+
+
 
   <span ng-if="form.feedback !== false"
         class="form-control-feedback"
