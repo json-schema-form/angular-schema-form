@@ -86,4 +86,5 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
             return new Date(modelValue);
         })
     }
+    }
 });
