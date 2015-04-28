@@ -635,6 +635,7 @@ General options most field types can handle:
   labelHtmlClass: "street"     // CSS Class(es) to be added to the label of the field (or similar)
   copyValueTo: ["address.street"],     // Copy values to these schema keys.
   condition: "person.age < 18" // Show or hide field depending on an angular expression
+  destroyStrategy: null        // One of null, empty string, undefined, or 'retain'. Changes model on $destroy event.
 }
 ```
 
