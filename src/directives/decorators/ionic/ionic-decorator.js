@@ -58,7 +58,10 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
       scope.title = scope.$eval(attrs.title);
     }
   };
-}).directive('formatDate',function (){
+});
+
+/*
+).directive('formatDate',function (){
     return {
         require: 'ngModel',
         link: function(scope, elem, attr, modelCtrl) {
@@ -68,3 +71,4 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
         }
     };
 });
+*/
