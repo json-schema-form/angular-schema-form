@@ -129,6 +129,9 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             if (scope.validateArray) {
               scope.validateArray();
             }
+
+            setViewValue(list);
+
             return list;
           };
 
@@ -144,6 +147,9 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             if (ngModel && ngModel.$setDirty) {
               ngModel.$setDirty();
             }
+
+            setViewValue(list);
+
             return list;
           };
 
@@ -253,6 +259,12 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
 
           once();
         });
+
+        function setViewValue(value) {
+                if (ngModel) {
+                    ngModel.$setViewValue(angular.copy(value));
+                }
+            }
       }
     };
   }

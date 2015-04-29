@@ -1345,6 +1345,9 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             if (scope.validateArray) {
               scope.validateArray();
             }
+
+            setViewValue(list);
+
             return list;
           };
 
@@ -1360,6 +1363,9 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             if (ngModel && ngModel.$setDirty) {
               ngModel.$setDirty();
             }
+
+            setViewValue(list);
+
             return list;
           };
 
@@ -1469,6 +1475,12 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
 
           once();
         });
+
+        function setViewValue(value) {
+                if (ngModel) {
+                    ngModel.$setViewValue(angular.copy(value));
+                }
+            }
       }
     };
   }
@@ -1680,14 +1692,16 @@ angular.module('schemaForm')
           $compile(element.children())(childScope);
 
           //ok, now that that is done let's set any defaults
-          schemaForm.traverseSchema(schema, function(prop, path) {
-            if (angular.isDefined(prop['default'])) {
-              var val = sfSelect(path, scope.model);
-              if (angular.isUndefined(val)) {
-                sfSelect(path, scope.model, prop['default']);
+          if (!scope.options || scope.options.setSchemaDefaults !== false) {
+            schemaForm.traverseSchema(schema, function(prop, path) {
+              if (angular.isDefined(prop['default'])) {
+                var val = sfSelect(path, scope.model);
+                if (angular.isUndefined(val)) {
+                  sfSelect(path, scope.model, prop['default']);
+                }
               }
-            }
-          });
+            });
+          }
 
           scope.$emit('sf-render-finished', element);
         };
