@@ -864,7 +864,7 @@ They do need a list of ```items``` to have as children.
 
 ### select and checkboxes
 
-*select* and *checkboxes* can take an attribute, `titleMap`, wich defines a name
+*select* and *checkboxes* can take an attribute, `titleMap`, which defines a name
 and a value. The value is bound to the model while the name is used for display.
 In the case of *checkboxes* the names of the titleMap can be HTML.
 
