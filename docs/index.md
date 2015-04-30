@@ -192,6 +192,7 @@ attribute which should be placed along side `sf-schema`.
 | supressPropertyTitles | by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
 | formDefaults | an object that will be used as a default for all form definitions |
 | validationMessage | an object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
+| destroyStrategy | the default strategy to use for cleaning the model when a form element is removed. see [destroyStrategy](#destroyStrategy) below |
 
 *formDefaults* is mostly useful for setting global [ngModelOptions](#ngmodeloptions)
 i.e. changing the entire form to validate on blur.
@@ -830,7 +831,7 @@ will update the model to set the field value to undefined. This can be overridde
 on a field to one of null, empty string (""), undefined, or "retain". Any other value will be ignored and the default  
 behavior will apply. The empty string option only applies to fields that have a type of string; using the empty string 
 with other field types will just be set to the default destroyStrategy. If you'd like to set the destroyStrategy for 
-an entire form, add it to the formDefaults in the [globalOptions](#global-options)
+an entire form, add it to the [globalOptions](#global-options)
 
 
 
