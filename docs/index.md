@@ -192,6 +192,7 @@ attribute which should be placed along side `sf-schema`.
 | supressPropertyTitles | by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
 | formDefaults | an object that will be used as a default for all form definitions |
 | validationMessage | an object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
+| setSchemaDefaults | boolean, set to false an no defaults from the schema will be set on the model. |
 | destroyStrategy | the default strategy to use for cleaning the model when a form element is removed. see [destroyStrategy](#destroyStrategy) below |
 
 *formDefaults* is mostly useful for setting global [ngModelOptions](#ngmodeloptions)
@@ -625,7 +626,7 @@ General options most field types can handle:
   onChange: "valueChanged(form.key,modelValue)", // onChange event handler, expression or function
   feedback: false,             // Inline feedback icons
   disableSuccessState: false,  // Set true to NOT apply 'has-success' class to a field that was validated successfully
-  disableErrorState: false,    // Set true to NOT apply 'has-error' class to a field that failed validation 
+  disableErrorState: false,    // Set true to NOT apply 'has-error' class to a field that failed validation
   placeholder: "Input...",     // placeholder on inputs and textarea
   ngModelOptions: { ... },     // Passed along to ng-model-options
   readonly: true,              // Same effect as readOnly in schema. Put on a fieldset or array
@@ -874,7 +875,7 @@ They do need a list of ```items``` to have as children.
 
 ### select and checkboxes
 
-*select* and *checkboxes* can take an attribute, `titleMap`, wich defines a name
+*select* and *checkboxes* can take an attribute, `titleMap`, which defines a name
 and a value. The value is bound to the model while the name is used for display.
 In the case of *checkboxes* the names of the titleMap can be HTML.
 
@@ -1580,7 +1581,7 @@ function FormCtrl($scope) {
     "eligible",
     {
         type: "conditional",
-        condition: "person.eligible", //or "model.eligable"
+        condition: "model.person.eligible", 
         items: [
           "code"
         ]
