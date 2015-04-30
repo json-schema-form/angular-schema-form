@@ -103,49 +103,60 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         });
 
 
-        var DEFAULT_DESTROY_STRATEGY;
-        if (scope.options && scope.options.formDefaults) {
-          var formDefaultDestroyStrategy = scope.options.formDefaults.destroyStrategy;
-          var isValidFormDefaultDestroyStrategy = (formDefaultDestroyStrategy === undefined ||
-          formDefaultDestroyStrategy === '' ||
-          formDefaultDestroyStrategy === null ||
-          formDefaultDestroyStrategy === 'retain');
-          if (isValidFormDefaultDestroyStrategy) {
-            DEFAULT_DESTROY_STRATEGY = formDefaultDestroyStrategy;
+        var DEFAULT_DESTROY_STRATEGY = getGlobalOptionsDestroyStrategy();
+
+        function getGlobalOptionsDestroyStrategy() {
+          var defaultStrategy = undefined;
+          if (scope.options && scope.options.hasOwnProperty('destroyStrategy')) {
+            var globalOptionsDestroyStrategy = scope.options.destroyStrategy;
+            var isValidFormDefaultDestroyStrategy = (globalOptionsDestroyStrategy === undefined ||
+                                                    globalOptionsDestroyStrategy === '' ||
+                                                    globalOptionsDestroyStrategy === null ||
+                                                    globalOptionsDestroyStrategy === 'retain');
+            if (isValidFormDefaultDestroyStrategy) {
+              defaultStrategy = globalOptionsDestroyStrategy;
+            }
+            else {
+              console.warn('Unrecognized globalOptions destroyStrategy: %s \'%s\'. Used undefined instead.',
+                  typeof globalOptionsDestroyStrategy, globalOptionsDestroyStrategy);
+            }
           }
-          else {
-            console.warn('Unrecognized formDefaults.destroyStrategy: \'%s\'. Used undefined instead.',
-                formDefaultDestroyStrategy);
-            DEFAULT_DESTROY_STRATEGY = undefined;
-          }
+          return defaultStrategy;
         }
 
         // Clean up the model when the corresponding form field is $destroy-ed.
-        // Default behavior can be supplied as a formDefault, and behavior can be overridden in the form definition.
+        // Default behavior can be supplied as a globalOption, and behavior can be overridden in the form definition.
         scope.$on('$destroy', function() {
           var form = getForm();
-          var destroyStrategy = form.destroyStrategy; // Either set in form definition, or as part of formDefaults.
+
+          // Either set in form definition, or as part of globalOptions.
+          var destroyStrategy =
+              !form.hasOwnProperty('destroyStrategy') ? DEFAULT_DESTROY_STRATEGY : form.destroyStrategy;
           var schemaType = getSchemaType();
 
           if (destroyStrategy && destroyStrategy !== 'retain' ) {
             // Don't recognize the strategy, so give a warning.
-            console.warn('Unrecognized destroyStrategy: \'%s\'. Used default instead.', destroyStrategy);
+            console.warn('%s has defined unrecognized destroyStrategy: \'%s\'. Used default instead.',
+                attrs.name, destroyStrategy);
             destroyStrategy = DEFAULT_DESTROY_STRATEGY;
           }
           else if (schemaType !== 'string' && destroyStrategy === '') {
             // Only 'string' type fields can have an empty string value as a valid option.
-            console.warn('Attempted to use empty string destroyStrategy on non-string form type. Used default instead.');
+            console.warn('%s attempted to use empty string destroyStrategy on non-string form type. ' +
+                'Used default instead.', attrs.name);
             destroyStrategy = DEFAULT_DESTROY_STRATEGY;
           }
 
           if (destroyStrategy === 'retain') {
             return; // Valid option to avoid destroying data in the model.
           }
+          console.log('result %s', destroyStrategy);
 
           destroyUsingStrategy(destroyStrategy);
 
           function destroyUsingStrategy(strategy) {
-            var strategyIsDefined = (strategy === null || strategy === '' || typeof strategy == undefined);
+            console.log('Destroy called with %s', strategy);
+            var strategyIsDefined = (strategy === null || strategy === '' || strategy === undefined);
             if (!strategyIsDefined){
               strategy = DEFAULT_DESTROY_STRATEGY;
             }
@@ -153,12 +164,14 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
           }
 
           function getSchemaType() {
+            var sType;
             if (form.schema) {
-              schemaType = form.schema.type;
+              sType = form.schema.type;
             }
             else {
-              schemaType = null;
+              sType = null;
             }
+            return sType;
           }
         });
 
