@@ -150,12 +150,10 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
           if (destroyStrategy === 'retain') {
             return; // Valid option to avoid destroying data in the model.
           }
-          console.log('result %s', destroyStrategy);
 
           destroyUsingStrategy(destroyStrategy);
 
           function destroyUsingStrategy(strategy) {
-            console.log('Destroy called with %s', strategy);
             var strategyIsDefined = (strategy === null || strategy === '' || strategy === undefined);
             if (!strategyIsDefined){
               strategy = DEFAULT_DESTROY_STRATEGY;
