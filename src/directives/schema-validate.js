@@ -129,7 +129,6 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         scope.$on('$destroy', function() {
           var form = getForm();
           var conditionResult = $parse(form.condition);
-          console.log(conditionResult(scope));
 
           if (form.hasOwnProperty('condition') && !conditionResult(scope)) { // If condition is defined and not satisfied.
 
