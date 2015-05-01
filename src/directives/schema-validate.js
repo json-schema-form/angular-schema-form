@@ -1,5 +1,5 @@
-angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSelect', 'sfUnselect',
-  function(sfValidator, sfSelect, sfUnselect) {
+angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSelect', 'sfUnselect', '$parse',
+  function(sfValidator, sfSelect, sfUnselect, $parse) {
 
     return {
       restrict: 'A',
@@ -128,48 +128,53 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         // Default behavior can be supplied as a globalOption, and behavior can be overridden in the form definition.
         scope.$on('$destroy', function() {
           var form = getForm();
+          var conditionResult = $parse(form.condition);
+          console.log(conditionResult(scope));
 
-          // Either set in form definition, or as part of globalOptions.
-          var destroyStrategy =
-              !form.hasOwnProperty('destroyStrategy') ? DEFAULT_DESTROY_STRATEGY : form.destroyStrategy;
-          var schemaType = getSchemaType();
+          if (form.hasOwnProperty('condition') && !conditionResult(scope)) { // If condition is defined and not satisfied.
 
-          if (destroyStrategy && destroyStrategy !== 'retain' ) {
-            // Don't recognize the strategy, so give a warning.
-            console.warn('%s has defined unrecognized destroyStrategy: \'%s\'. Used default instead.',
-                attrs.name, destroyStrategy);
-            destroyStrategy = DEFAULT_DESTROY_STRATEGY;
-          }
-          else if (schemaType !== 'string' && destroyStrategy === '') {
-            // Only 'string' type fields can have an empty string value as a valid option.
-            console.warn('%s attempted to use empty string destroyStrategy on non-string form type. ' +
-                'Used default instead.', attrs.name);
-            destroyStrategy = DEFAULT_DESTROY_STRATEGY;
-          }
+            // Either set in form definition, or as part of globalOptions.
+            var destroyStrategy =
+                !form.hasOwnProperty('destroyStrategy') ? DEFAULT_DESTROY_STRATEGY : form.destroyStrategy;
+            var schemaType = getSchemaType();
 
-          if (destroyStrategy === 'retain') {
-            return; // Valid option to avoid destroying data in the model.
-          }
-
-          destroyUsingStrategy(destroyStrategy);
-
-          function destroyUsingStrategy(strategy) {
-            var strategyIsDefined = (strategy === null || strategy === '' || strategy === undefined);
-            if (!strategyIsDefined){
-              strategy = DEFAULT_DESTROY_STRATEGY;
+            if (destroyStrategy && destroyStrategy !== 'retain') {
+              // Don't recognize the strategy, so give a warning.
+              console.warn('%s has defined unrecognized destroyStrategy: \'%s\'. Used default instead.',
+                  attrs.name, destroyStrategy);
+              destroyStrategy = DEFAULT_DESTROY_STRATEGY;
             }
-            sfUnselect(scope.form.key, scope.model, strategy);
-          }
+            else if (schemaType !== 'string' && destroyStrategy === '') {
+              // Only 'string' type fields can have an empty string value as a valid option.
+              console.warn('%s attempted to use empty string destroyStrategy on non-string form type. ' +
+                  'Used default instead.', attrs.name);
+              destroyStrategy = DEFAULT_DESTROY_STRATEGY;
+            }
 
-          function getSchemaType() {
-            var sType;
-            if (form.schema) {
-              sType = form.schema.type;
+            if (destroyStrategy === 'retain') {
+              return; // Valid option to avoid destroying data in the model.
             }
-            else {
-              sType = null;
+
+            destroyUsingStrategy(destroyStrategy);
+
+            function destroyUsingStrategy(strategy) {
+              var strategyIsDefined = (strategy === null || strategy === '' || strategy === undefined);
+              if (!strategyIsDefined) {
+                strategy = DEFAULT_DESTROY_STRATEGY;
+              }
+              sfUnselect(scope.form.key, scope.model, strategy);
             }
-            return sType;
+
+            function getSchemaType() {
+              var sType;
+              if (form.schema) {
+                sType = form.schema.type;
+              }
+              else {
+                sType = null;
+              }
+              return sType;
+            }
           }
         });
 
