@@ -5,8 +5,8 @@ FIXME: real documentation
 
 angular.module('schemaForm')
        .directive('sfSchema',
-['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath',
-  function($compile,  schemaForm,  schemaFormDecorators, sfSelect, sfPath) {
+['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfRetainModel',
+  function($compile,  schemaForm,  schemaFormDecorators, sfSelect, sfPath, sfRetainModel) {
 
     var SNAKE_CASE_REGEXP = /[A-Z]/g;
     var snakeCase = function(name, separator) {
@@ -161,6 +161,9 @@ angular.module('schemaForm')
           }
         });
 
+        scope.$on('$destroy', function() {
+          sfRetainModel.setFlag(true);
+        });
       }
     };
   }

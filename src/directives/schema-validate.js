@@ -1,5 +1,5 @@
-angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSelect', 'sfUnselect', '$parse',
-  function(sfValidator, sfSelect, sfUnselect, $parse) {
+angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSelect', 'sfUnselect', '$parse', 'sfRetainModel',
+  function(sfValidator, sfSelect, sfUnselect, $parse, sfRetainModel) {
 
     return {
       restrict: 'A',
@@ -127,10 +127,13 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         // Clean up the model when the corresponding form field is $destroy-ed.
         // Default behavior can be supplied as a globalOption, and behavior can be overridden in the form definition.
         scope.$on('$destroy', function() {
+
           var form = getForm();
           var conditionResult = $parse(form.condition);
+          var formModelNotRetained = !sfRetainModel.getFlag();
 
-          if (form.hasOwnProperty('condition') && !conditionResult(scope)) { // If condition is defined and not satisfied.
+          // If condition is defined and not satisfied and the sfSchema model should not be retained.
+          if (form.hasOwnProperty('condition') && !conditionResult(scope) && formModelNotRetained) {
 
             // Either set in form definition, or as part of globalOptions.
             var destroyStrategy =
