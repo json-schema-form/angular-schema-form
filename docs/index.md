@@ -193,6 +193,7 @@ attribute which should be placed along side `sf-schema`.
 | formDefaults | an object that will be used as a default for all form definitions |
 | validationMessage | an object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
 | setSchemaDefaults | boolean, set to false an no defaults from the schema will be set on the model. |
+| destroyStrategy | the default strategy to use for cleaning the model when a form element is removed. see [destroyStrategy](#destroyStrategy) below |
 
 *formDefaults* is mostly useful for setting global [ngModelOptions](#ngmodeloptions)
 i.e. changing the entire form to validate on blur.
@@ -635,6 +636,7 @@ General options most field types can handle:
   labelHtmlClass: "street"     // CSS Class(es) to be added to the label of the field (or similar)
   copyValueTo: ["address.street"],     // Copy values to these schema keys.
   condition: "person.age < 18" // Show or hide field depending on an angular expression
+  destroyStrategy: null        // One of null, empty string, undefined, or 'retain'. Changes model on $destroy event.
 }
 ```
 
@@ -822,6 +824,15 @@ function FormCtrl($scope) {
 ```
 
 Note that arrays inside arrays won't work with conditions.
+
+
+### destroyStrategy
+By default, when a field is removed from the DOM and the $destroy event is broadcast, the schema-validate directive 
+will update the model to set the field value to undefined. This can be overridden by setting the destroyStrategy 
+on a field to one of null, empty string (""), undefined, or "retain". Any other value will be ignored and the default  
+behavior will apply. The empty string option only applies to fields that have a type of string; using the empty string 
+with other field types will just be set to the default destroyStrategy. If you'd like to set the destroyStrategy for 
+an entire form, add it to the [globalOptions](#global-options)
 
 
 
