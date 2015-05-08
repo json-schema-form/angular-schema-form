@@ -1206,8 +1206,8 @@ need the reordering.
 In the form definition you can refer to properties of an array item by the empty
 bracket notation. In the `key` simply end the name of the array with `[]`
 
-By default the array will start with one *undefined* value so that the user is presented with one a
-form, to supress this the attribute `startEmpty` to `true`
+By default the array will start with one *undefined* value so that the user is presented with one
+form element. To suppress this behaviour, set the attribute `startEmpty` to `true`.
 
 Given the schema:
 ```json
@@ -1570,7 +1570,7 @@ function FormCtrl($scope) {
     "eligible",
     {
         type: "conditional",
-        condition: "model.person.eligible", 
+        condition: "model.person.eligible",
         items: [
           "code"
         ]
