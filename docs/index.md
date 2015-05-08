@@ -636,7 +636,7 @@ General options most field types can handle:
   labelHtmlClass: "street"     // CSS Class(es) to be added to the label of the field (or similar)
   copyValueTo: ["address.street"],     // Copy values to these schema keys.
   condition: "person.age < 18" // Show or hide field depending on an angular expression
-  destroyStrategy: null        // One of null, empty string, undefined, or 'retain'. Changes model on $destroy event.
+  destroyStrategy: "remove"    // One of "null", "empty" , "remove", or 'retain'. Changes model on $destroy event. default is "remove".
 }
 ```
 
@@ -827,14 +827,23 @@ Note that arrays inside arrays won't work with conditions.
 
 
 ### destroyStrategy
-By default, when a field is removed from the DOM and the $destroy event is broadcast, the schema-validate directive 
-will update the model to set the field value to undefined. This can be overridden by setting the destroyStrategy 
-on a field to one of null, empty string (""), undefined, or "retain". Any other value will be ignored and the default  
-behavior will apply. The empty string option only applies to fields that have a type of string; using the empty string 
-with other field types will just be set to the default destroyStrategy. If you'd like to set the destroyStrategy for 
+By default, when a field is removed from the DOM and the `$destroy` event is broadcast, this happens
+if you use the `condition` option, the schema-validate directive will update the model to set the
+field value to `undefined`. This can be overridden by setting the destroyStrategy on a field, or as a
+global option, to one of the strings `"null"`, `"empty"` , `"remove"`, or `"retain"`.
+
+`"null"` means that model values will be set to `null` instead of being removed.
+
+`"empty"` means empty strings, `""`, for model values that has the `string` type, `{}` for model
+  values with `object` type and `[]` for `array` type. All other types will be treated as `"remove"`.
+
+`"remove"` deletes the property. This is the default.
+
+`"retain"` keeps the value of the property event though the field is no longer in the form or being
+vaidated before submit.
+
+If you'd like to set the destroyStrategy for
 an entire form, add it to the [globalOptions](#global-options)
-
-
 
 
 Specific options and types
@@ -1581,7 +1590,7 @@ function FormCtrl($scope) {
     "eligible",
     {
         type: "conditional",
-        condition: "model.person.eligible", 
+        condition: "model.person.eligible",
         items: [
           "code"
         ]

@@ -103,7 +103,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
         });
 
 
-        var DEFAULT_DESTROY_STRATEGY = getGlobalOptionsDestroyStrategy();
+        /*var DEFAULT_DESTROY_STRATEGY = getGlobalOptionsDestroyStrategy();
 
         function getGlobalOptionsDestroyStrategy() {
           var defaultStrategy = undefined;
@@ -122,14 +122,49 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
             }
           }
           return defaultStrategy;
-        }
+        }*/
+
 
         // Clean up the model when the corresponding form field is $destroy-ed.
         // Default behavior can be supplied as a globalOption, and behavior can be overridden in the form definition.
         scope.$on('$destroy', function() {
+          console.log('Schema validate destroy', scope.externalDestructionInProgress);
 
-          var form = getForm();
-          var conditionResult = $parse(form.condition);
+          // If the entire schema form is destroyed we don't touch the model
+          if (!scope.externalDestructionInProgress) {
+            var form = getForm();
+            var destroyStrategy = form.destroyStrategy ||
+                                  (scope.options && scope.options.destroyStrategy) || 'remove';
+            console.log('going with destroy strategy ', destroyStrategy, scope.options)
+            // No key no model, and we might have strategy 'retain'
+            if (form.key && destroyStrategy !== 'retain') {
+
+              // Get the object that has the property we wan't to clear.
+              var obj = scope.model;
+              if (form.key.length > 1) {
+                obj = sfSelect(form.key.slice(0, form.key.length - 1), obj);
+              }
+
+              // Type can also be a list in JSON Schema
+              var type = (form.schema && form.schema.type) || '';
+
+              // Empty means '',{} and [] for appropriate types and undefined for the rest
+              if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
+                obj[form.key.slice(-1)] = '';
+              } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
+                obj[form.key.slice(-1)] = {};
+              } else if (destroyStrategy === 'empty' && type.indexOf('array') !== -1) {
+                obj[form.key.slice(-1)] = [];
+              } else if (destroyStrategy === 'null') {
+                obj[form.key.slice(-1)] = null;
+              } else {
+                delete obj[form.key.slice(-1)];
+              }
+            }
+          }
+
+
+          /*var conditionResult = $parse(form.condition);
           var formModelNotRetained = !sfRetainModel.getFlag();
 
           // If condition is defined and not satisfied and the sfSchema model should not be retained.
@@ -166,18 +201,8 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
               }
               sfUnselect(scope.form.key, scope.model, strategy);
             }
-
-            function getSchemaType() {
-              var sType;
-              if (form.schema) {
-                sType = form.schema.type;
-              }
-              else {
-                sType = null;
-              }
-              return sType;
-            }
           }
+          */
         });
 
 
