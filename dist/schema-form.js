@@ -168,8 +168,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
   var createDirective = function(name) {
     $compileProvider.directive(name,
-      ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage', 'sfPath',
-      function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage, sfPath) {
+      ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
+       'sfPath','sfSelect',
+      function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage,
+               sfPath, sfSelect) {
 
         return {
           restrict: 'AE',
@@ -398,7 +400,48 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                           scope.$broadcast('schemaFormValidate');
                         }
                       }
-                  })
+                  });
+
+                  // Clean up the model when the corresponding form field is $destroy-ed.
+                  // Default behavior can be supplied as a globalOption, and behavior can be overridden in the form definition.
+                  scope.$on('$destroy', function() {
+                    // If the entire schema form is destroyed we don't touch the model
+                    if (!scope.externalDestructionInProgress) {
+                      var destroyStrategy = form.destroyStrategy ||
+                                            (scope.options && scope.options.destroyStrategy) || 'remove';
+                      // No key no model, and we might have strategy 'retain'
+                      if (form.key && destroyStrategy !== 'retain') {
+
+                        // Get the object that has the property we wan't to clear.
+                        var obj = scope.model;
+                        if (form.key.length > 1) {
+                          obj = sfSelect(form.key.slice(0, form.key.length - 1), obj);
+                        }
+
+                        // We can get undefined here if the form hasn't been filled out entirely
+                        if (obj === undefined) {
+                          return;
+                        }
+
+                        // Type can also be a list in JSON Schema
+                        var type = (form.schema && form.schema.type) || '';
+
+                        // Empty means '',{} and [] for appropriate types and undefined for the rest
+                        //console.log('destroy', destroyStrategy, form.key, type, obj);
+                        if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
+                          obj[form.key.slice(-1)] = '';
+                        } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
+                          obj[form.key.slice(-1)] = {};
+                        } else if (destroyStrategy === 'empty' && type.indexOf('array') !== -1) {
+                          obj[form.key.slice(-1)] = [];
+                        } else if (destroyStrategy === 'null') {
+                          obj[form.key.slice(-1)] = null;
+                        } else {
+                          delete obj[form.key.slice(-1)];
+                        }
+                      }
+                    }
+                  });
                 }
 
                 once();
@@ -1633,7 +1676,10 @@ angular.module('schemaForm')
           // they have been removed from the DOM
           // https://github.com/Textalk/angular-schema-form/issues/200
           if (childScope) {
+            // Destroy strategy should not be acted upon
+            scope.externalDestructionInProgress = true;
             childScope.$destroy();
+            scope.externalDestructionInProgress = false;
           }
           childScope = scope.$new();
 
@@ -1680,14 +1726,16 @@ angular.module('schemaForm')
           $compile(element.children())(childScope);
 
           //ok, now that that is done let's set any defaults
-          schemaForm.traverseSchema(schema, function(prop, path) {
-            if (angular.isDefined(prop['default'])) {
-              var val = sfSelect(path, scope.model);
-              if (angular.isUndefined(val)) {
-                sfSelect(path, scope.model, prop['default']);
+          if (!scope.options || scope.options.setSchemaDefaults !== false) {
+            schemaForm.traverseSchema(schema, function(prop, path) {
+              if (angular.isDefined(prop['default'])) {
+                var val = sfSelect(path, scope.model);
+                if (angular.isUndefined(val)) {
+                  sfSelect(path, scope.model, prop['default']);
+                }
               }
-            }
-          });
+            });
+          }
 
           scope.$emit('sf-render-finished', element);
         };
@@ -1720,121 +1768,131 @@ angular.module('schemaForm')
           }
         });
 
+        scope.$on('$destroy', function() {
+          // Each field listens to the $destroy event so that it can remove any value
+          // from the model if that field is removed from the form. This is the default
+          // destroy strategy. But if the entire form (or at least the part we're on)
+          // gets removed, like when routing away to another page, then we definetly want to
+          // keep the model intact. So therefore we set a flag to tell the others it's time to just
+          // let it be.
+          scope.externalDestructionInProgress = true;
+        });
       }
     };
   }
 ]);
 
-angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSelect', function(sfValidator, sfSelect) {
-  return {
-    restrict: 'A',
-    scope: false,
-    // We want the link function to be *after* the input directives link function so we get access
-    // the parsed value, ex. a number instead of a string
-    priority: 500,
-    require: 'ngModel',
-    link: function(scope, element, attrs, ngModel) {
+angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse',
+  function(sfValidator, $parse) {
 
+    return {
+      restrict: 'A',
+      scope: false,
+      // We want the link function to be *after* the input directives link function so we get access
+      // the parsed value, ex. a number instead of a string
+      priority: 500,
+      require: 'ngModel',
+      link: function(scope, element, attrs, ngModel) {
 
-      // We need the ngModelController on several places,
-      // most notably for errors.
-      // So we emit it up to the decorator directive so it can put it on scope.
-      scope.$emit('schemaFormPropagateNgModelController', ngModel);
+        // We need the ngModelController on several places,
+        // most notably for errors.
+        // So we emit it up to the decorator directive so it can put it on scope.
+        scope.$emit('schemaFormPropagateNgModelController', ngModel);
 
-      var error = null;
+        var error = null;
 
-      var getForm = function() {
-        if (!form) {
-          form = scope.$eval(attrs.schemaValidate);
-        }
-        return form;
-      };
-      var form   = getForm();
-      if (form.copyValueTo) {
-        ngModel.$viewChangeListeners.push(function() {
-          var paths = form.copyValueTo;
-          angular.forEach(paths, function(path) {
-            sfSelect(path, scope.model, ngModel.$modelValue);
+        var getForm = function() {
+          if (!form) {
+            form = scope.$eval(attrs.schemaValidate);
+          }
+          return form;
+        };
+        var form   = getForm();
+        if (form.copyValueTo) {
+          ngModel.$viewChangeListeners.push(function() {
+            var paths = form.copyValueTo;
+            angular.forEach(paths, function(path) {
+              sfSelect(path, scope.model, ngModel.$modelValue);
+            });
           });
-        });
-      }
-
-      // Validate against the schema.
-
-      var validate = function(viewValue) {
-        form = getForm();
-        //Still might be undefined
-        if (!form) {
-          return viewValue;
         }
 
-        // Omit TV4 validation
-        if (scope.options && scope.options.tv4Validation === false) {
-          return viewValue;
-        }
+        // Validate against the schema.
 
-        var result =  sfValidator.validate(form, viewValue);
-        // Since we might have different tv4 errors we must clear all
-        // errors that start with tv4-
-        Object.keys(ngModel.$error)
+        var validate = function(viewValue) {
+          form = getForm();
+          //Still might be undefined
+          if (!form) {
+            return viewValue;
+          }
+
+          // Omit TV4 validation
+          if (scope.options && scope.options.tv4Validation === false) {
+            return viewValue;
+          }
+
+          var result =  sfValidator.validate(form, viewValue);
+          // Since we might have different tv4 errors we must clear all
+          // errors that start with tv4-
+          Object.keys(ngModel.$error)
               .filter(function(k) { return k.indexOf('tv4-') === 0; })
               .forEach(function(k) { ngModel.$setValidity(k, true); });
 
-        if (!result.valid) {
-          // it is invalid, return undefined (no model update)
-          ngModel.$setValidity('tv4-' + result.error.code, false);
-          error = result.error;
-          return undefined;
-        }
-        return viewValue;
-      };
+          if (!result.valid) {
+            // it is invalid, return undefined (no model update)
+            ngModel.$setValidity('tv4-' + result.error.code, false);
+            error = result.error;
+            return undefined;
+          }
+          return viewValue;
+        };
 
-      // Custom validators, parsers, formatters etc
-      if (typeof form.ngModel === 'function') {
-        form.ngModel(ngModel);
+        // Custom validators, parsers, formatters etc
+        if (typeof form.ngModel === 'function') {
+          form.ngModel(ngModel);
+        }
+
+        ['$parsers', '$viewChangeListeners', '$formatters'].forEach(function(attr) {
+          if (form[attr] && ngModel[attr]) {
+            form[attr].forEach(function(fn) {
+              ngModel[attr].push(fn);
+            });
+          }
+        });
+
+        ['$validators', '$asyncValidators'].forEach(function(attr) {
+          // Check if our version of angular has i, i.e. 1.3+
+          if (form[attr] && ngModel[attr]) {
+            angular.forEach(form[attr], function(fn, name) {
+              ngModel[attr][name] = fn;
+            });
+          }
+        });
+
+        // Get in last of the parses so the parsed value has the correct type.
+        // We don't use $validators since we like to set different errors depeding tv4 error codes
+        ngModel.$parsers.push(validate);
+
+        // Listen to an event so we can validate the input on request
+        scope.$on('schemaFormValidate', function() {
+          if (ngModel.$setDirty) {
+            // Angular 1.3+
+            ngModel.$setDirty();
+            validate(ngModel.$modelValue);
+          } else {
+            // Angular 1.2
+            ngModel.$setViewValue(ngModel.$viewValue);
+          }
+
+        });
+
+        scope.schemaError = function() {
+          return error;
+        };
+
       }
-
-      ['$parsers', '$viewChangeListeners', '$formatters'].forEach(function(attr) {
-        if (form[attr] && ngModel[attr]) {
-          form[attr].forEach(function(fn) {
-            ngModel[attr].push(fn);
-          });
-        }
-      });
-
-      ['$validators', '$asyncValidators'].forEach(function(attr) {
-        // Check if our version of angular has i, i.e. 1.3+
-        if (form[attr] && ngModel[attr]) {
-          angular.forEach(form[attr], function(fn, name) {
-            ngModel[attr][name] = fn;
-          });
-        }
-      });
-
-      // Get in last of the parses so the parsed value has the correct type.
-      // We don't use $validators since we like to set different errors depeding tv4 error codes
-      ngModel.$parsers.push(validate);
-
-      // Listen to an event so we can validate the input on request
-      scope.$on('schemaFormValidate', function() {
-        if (ngModel.$setDirty) {
-          // Angular 1.3+
-          ngModel.$setDirty();
-          validate(ngModel.$modelValue);
-        } else {
-          // Angular 1.2
-          ngModel.$setViewValue(ngModel.$viewValue);
-        }
-
-      });
-
-      scope.schemaError = function() {
-        return error;
-      };
-
-    }
-  };
-}]);
+    };
+  }]);
 
 return schemaForm;
 }));
