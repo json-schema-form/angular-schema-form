@@ -145,10 +145,16 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
                 obj = sfSelect(form.key.slice(0, form.key.length - 1), obj);
               }
 
+              // We can get undefined here if the form hasn't been filled out entirely
+              if (obj === undefined) {
+                return;
+              }
+
               // Type can also be a list in JSON Schema
               var type = (form.schema && form.schema.type) || '';
 
               // Empty means '',{} and [] for appropriate types and undefined for the rest
+              console.log('destroy', destroyStrategy, form.key, type, obj);
               if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
                 obj[form.key.slice(-1)] = '';
               } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
