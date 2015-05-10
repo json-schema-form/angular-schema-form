@@ -5,8 +5,8 @@ FIXME: real documentation
 
 angular.module('schemaForm')
        .directive('sfSchema',
-['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfRetainModel',
-  function($compile,  schemaForm,  schemaFormDecorators, sfSelect, sfPath, sfRetainModel) {
+['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath',
+  function($compile,  schemaForm,  schemaFormDecorators, sfSelect, sfPath) {
 
     var SNAKE_CASE_REGEXP = /[A-Z]/g;
     var snakeCase = function(name, separator) {
@@ -165,7 +165,6 @@ angular.module('schemaForm')
         });
 
         scope.$on('$destroy', function() {
-          console.log('Total schema form destruction in progress.');
           // Each field listens to the $destroy event so that it can remove any value
           // from the model if that field is removed from the form. This is the default
           // destroy strategy. But if the entire form (or at least the part we're on)
@@ -173,8 +172,6 @@ angular.module('schemaForm')
           // keep the model intact. So therefore we set a flag to tell the others it's time to just
           // let it be.
           scope.externalDestructionInProgress = true;
-          //scope.$broadcast('externalDestroy')
-          //sfRetainModel.setFlag(true);
         });
       }
     };

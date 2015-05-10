@@ -1,5 +1,5 @@
-angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSelect', 'sfUnselect', '$parse', 'sfRetainModel',
-  function(sfValidator, sfSelect, sfUnselect, $parse, sfRetainModel) {
+angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse',
+  function(sfValidator, $parse) {
 
     return {
       restrict: 'A',
@@ -101,116 +101,6 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', 'sfSele
           }
 
         });
-
-
-        /*var DEFAULT_DESTROY_STRATEGY = getGlobalOptionsDestroyStrategy();
-
-        function getGlobalOptionsDestroyStrategy() {
-          var defaultStrategy = undefined;
-          if (scope.options && scope.options.hasOwnProperty('destroyStrategy')) {
-            var globalOptionsDestroyStrategy = scope.options.destroyStrategy;
-            var isValidFormDefaultDestroyStrategy = (globalOptionsDestroyStrategy === undefined ||
-                                                    globalOptionsDestroyStrategy === '' ||
-                                                    globalOptionsDestroyStrategy === null ||
-                                                    globalOptionsDestroyStrategy === 'retain');
-            if (isValidFormDefaultDestroyStrategy) {
-              defaultStrategy = globalOptionsDestroyStrategy;
-            }
-            else {
-              console.warn('Unrecognized globalOptions destroyStrategy: %s \'%s\'. Used undefined instead.',
-                  typeof globalOptionsDestroyStrategy, globalOptionsDestroyStrategy);
-            }
-          }
-          return defaultStrategy;
-        }*/
-
-
-        // Clean up the model when the corresponding form field is $destroy-ed.
-        // Default behavior can be supplied as a globalOption, and behavior can be overridden in the form definition.
-        scope.$on('$destroy', function() {
-          console.log('Schema validate destroy', scope.externalDestructionInProgress);
-
-          // If the entire schema form is destroyed we don't touch the model
-          if (!scope.externalDestructionInProgress) {
-            var form = getForm();
-            var destroyStrategy = form.destroyStrategy ||
-                                  (scope.options && scope.options.destroyStrategy) || 'remove';
-            console.log('going with destroy strategy ', destroyStrategy, scope.options)
-            // No key no model, and we might have strategy 'retain'
-            if (form.key && destroyStrategy !== 'retain') {
-
-              // Get the object that has the property we wan't to clear.
-              var obj = scope.model;
-              if (form.key.length > 1) {
-                obj = sfSelect(form.key.slice(0, form.key.length - 1), obj);
-              }
-
-              // We can get undefined here if the form hasn't been filled out entirely
-              if (obj === undefined) {
-                return;
-              }
-
-              // Type can also be a list in JSON Schema
-              var type = (form.schema && form.schema.type) || '';
-
-              // Empty means '',{} and [] for appropriate types and undefined for the rest
-              console.log('destroy', destroyStrategy, form.key, type, obj);
-              if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
-                obj[form.key.slice(-1)] = '';
-              } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
-                obj[form.key.slice(-1)] = {};
-              } else if (destroyStrategy === 'empty' && type.indexOf('array') !== -1) {
-                obj[form.key.slice(-1)] = [];
-              } else if (destroyStrategy === 'null') {
-                obj[form.key.slice(-1)] = null;
-              } else {
-                delete obj[form.key.slice(-1)];
-              }
-            }
-          }
-
-
-          /*var conditionResult = $parse(form.condition);
-          var formModelNotRetained = !sfRetainModel.getFlag();
-
-          // If condition is defined and not satisfied and the sfSchema model should not be retained.
-          if (form.hasOwnProperty('condition') && !conditionResult(scope) && formModelNotRetained) {
-
-            // Either set in form definition, or as part of globalOptions.
-            var destroyStrategy =
-                !form.hasOwnProperty('destroyStrategy') ? DEFAULT_DESTROY_STRATEGY : form.destroyStrategy;
-            var schemaType = getSchemaType();
-
-            if (destroyStrategy && destroyStrategy !== 'retain') {
-              // Don't recognize the strategy, so give a warning.
-              console.warn('%s has defined unrecognized destroyStrategy: \'%s\'. Used default instead.',
-                  attrs.name, destroyStrategy);
-              destroyStrategy = DEFAULT_DESTROY_STRATEGY;
-            }
-            else if (schemaType !== 'string' && destroyStrategy === '') {
-              // Only 'string' type fields can have an empty string value as a valid option.
-              console.warn('%s attempted to use empty string destroyStrategy on non-string form type. ' +
-                  'Used default instead.', attrs.name);
-              destroyStrategy = DEFAULT_DESTROY_STRATEGY;
-            }
-
-            if (destroyStrategy === 'retain') {
-              return; // Valid option to avoid destroying data in the model.
-            }
-
-            destroyUsingStrategy(destroyStrategy);
-
-            function destroyUsingStrategy(strategy) {
-              var strategyIsDefined = (strategy === null || strategy === '' || strategy === undefined);
-              if (!strategyIsDefined) {
-                strategy = DEFAULT_DESTROY_STRATEGY;
-              }
-              sfUnselect(scope.form.key, scope.model, strategy);
-            }
-          }
-          */
-        });
-
 
         scope.schemaError = function() {
           return error;

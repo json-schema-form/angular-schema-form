@@ -31,8 +31,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
   var createDirective = function(name) {
     $compileProvider.directive(name,
-      ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage', 'sfPath',
-      function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage, sfPath) {
+      ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
+       'sfPath','sfSelect',
+      function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage,
+               sfPath, sfSelect) {
 
         return {
           restrict: 'AE',
@@ -261,7 +263,48 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                           scope.$broadcast('schemaFormValidate');
                         }
                       }
-                  })
+                  });
+
+                  // Clean up the model when the corresponding form field is $destroy-ed.
+                  // Default behavior can be supplied as a globalOption, and behavior can be overridden in the form definition.
+                  scope.$on('$destroy', function() {
+                    // If the entire schema form is destroyed we don't touch the model
+                    if (!scope.externalDestructionInProgress) {
+                      var destroyStrategy = form.destroyStrategy ||
+                                            (scope.options && scope.options.destroyStrategy) || 'remove';
+                      // No key no model, and we might have strategy 'retain'
+                      if (form.key && destroyStrategy !== 'retain') {
+
+                        // Get the object that has the property we wan't to clear.
+                        var obj = scope.model;
+                        if (form.key.length > 1) {
+                          obj = sfSelect(form.key.slice(0, form.key.length - 1), obj);
+                        }
+
+                        // We can get undefined here if the form hasn't been filled out entirely
+                        if (obj === undefined) {
+                          return;
+                        }
+
+                        // Type can also be a list in JSON Schema
+                        var type = (form.schema && form.schema.type) || '';
+
+                        // Empty means '',{} and [] for appropriate types and undefined for the rest
+                        //console.log('destroy', destroyStrategy, form.key, type, obj);
+                        if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
+                          obj[form.key.slice(-1)] = '';
+                        } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
+                          obj[form.key.slice(-1)] = {};
+                        } else if (destroyStrategy === 'empty' && type.indexOf('array') !== -1) {
+                          obj[form.key.slice(-1)] = [];
+                        } else if (destroyStrategy === 'null') {
+                          obj[form.key.slice(-1)] = null;
+                        } else {
+                          delete obj[form.key.slice(-1)];
+                        }
+                      }
+                    }
+                  });
                 }
 
                 once();
