@@ -1,5 +1,5 @@
-angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse',
-  function(sfValidator, $parse) {
+angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse', 'sfSelect',
+  function(sfValidator, $parse, sfSelect) {
 
     return {
       restrict: 'A',
