@@ -5,7 +5,7 @@ Angular Schema Form
 [![npm downloads](https://img.shields.io/npm/dm/angular-schema-form.svg?style=flat-square)](http://npm-stat.com/charts.html?package=angular-schema-form&from=2015-01-01)
 
 [![Build Status](https://img.shields.io/travis/Textalk/angular-schema-form.svg?style=flat-square)](https://travis-ci.org/Textalk/angular-schema-form)
-[![Build Status](https://img.shields.io/coveralls/jekyll/jekyll.svg?style=flat-square)](https://travis-ci.org/Textalk/angular-schema-form)
+[![Build Status](https://img.shields.io/coveralls/jekyll/jekyll.svg?style=flat-square)](https://coveralls.io/r/Textalk/angular-schema-form?branch=development)
 [![Gitter](https://img.shields.io/badge/GITTER-JOIN%20CHAT%20%E2%86%92-ff69b4.svg?style=flat-square)](https://gitter.im/Textalk/angular-schema-form?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
@@ -195,10 +195,10 @@ Unit tests are run with [karma](http://karma-runner.github.io) and written using
 
 To run the tests:
 
-1. Install all dependencies via NPM
+1. Install all dependencies via NPM.
 2. Install dev dependencies with bower.
-3. Install the Karma CLI
-4. Run the tests
+3. Install the Karma CLI.
+4. Run the tests.
 
 ```bash
 $ npm install
