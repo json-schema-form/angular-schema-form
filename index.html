@@ -203,6 +203,13 @@
     </div>
   </div>
 
+  <div class="container">
+    <h2>The movie</h2>
+    <div class="videoWrapper">
+      <iframe width="1280" height="720" src="https://www.youtube.com/embed/duBFMipRq2o?rel=0" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
   <div class="container add-ons">
     <h2>Add-ons</h2>
     <p>
@@ -337,12 +344,12 @@
           'comment': 'At least i have chicken.'
         };
 
-        // var videoSize = { width: $(window).innerWidth() + 'px', height: Math.floor($(window).innerWidth() / 1.777777) + 'px' };
+        // var videoSize = { width: $(".container").innerWidth() + 'px', height: Math.floor($(".container").innerWidth() / 1.777777) + 'px' };
         // $('.video').css(videoSize);
         //
-        // // If you want to keep full screen on window resize
-        // $(window).resize(function(){
-        //   videoSize = { width: $(window).innerWidth() + 'px', height: Math.floor($(window).innerWidth() / 1.777777) + 'px' }
+        // // If you want to keep full screen on ".container" resize
+        // $(".container").resize(function(){
+        //   videoSize = { width: $(".container").innerWidth() + 'px', height: Math.floor($(".container").innerWidth() / 1.777777) + 'px' }
         //   $('.video').css(videoSize);
         // });
 

@@ -44,7 +44,7 @@ a.github-bar { position:fixed; top:0; z-index:200; padding:10px 0; width:100%; d
 
 .header-wrapper { position:relative; }
 
-.wrap-my-slide { height: 60vh; position:relative; }
+.wrap-my-slide { height: 65vh; position:relative; }
 .slide-a-long { height:100%; }
 .slide-a-long div { height:100%; }
 .slide { background-size:cover; background-position:center center; padding-top:240px; }
@@ -163,4 +163,18 @@ footer small { display: inline-block; margin-top: 20px; font-family:roboto, sans
         font-size:28px;
     }
 
+}
+
+.videoWrapper {
+	position: relative;
+	padding-bottom: 56.25%; /* 16:9 */
+	padding-top: 25px;
+	height: 0;
+}
+.videoWrapper iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 }
