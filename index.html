@@ -27,7 +27,7 @@
   <body ng-app="schemaForm" ng-controller="PageCtrl">
     <a href="https://github.com/Textalk/angular-schema-form" class="github-banner hidden-xs"><img src="gh-pages-files/img/github-banner.png" alt=""/></a>
     <a href="https://github.com/Textalk/angular-schema-form" class="github-bar visible-xs"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> us on GitHub</a>
-    <!-- <div class="header-wraper"> restore later
+    <div class="header-wraper">
       <div class="wrap-my-slide">
         <div class="slide-a-long hidden-xs">
           <div class="slide" id="slide1">
@@ -57,20 +57,9 @@
               <p>Nothing says freedom like this.</p>
             </div>
           </div>
-        </div> -->
-
-        <iframe class="video" src="https://www.youtube.com/embed/duBFMipRq2o?rel=0" frameborder="0" allowfullscreen></iframe>
-
-        <div class="title">
-          <div class="container pushdown">
-            <div id="logo">
-              <img src="gh-pages-files/img/logo.png" alt="Angular Schema Form" />
-            </div>
-            <h1 class="black">Generate forms from a JSON schema, with AngularJS!</h1>
-          </div>
         </div>
 
-    <!-- <header> Restore later
+        <header>
           <div class="container">
             <div id="logo">
               <img src="gh-pages-files/img/logo.png" alt="Angular Schema Form" />
@@ -78,15 +67,8 @@
             <h1>Generate forms from a JSON schema, with AngularJS!</h1>
           </div>
         </header>
-        <div class="anchor hidden-xs">
-          <div class="container">
-            <a href="#what-is-it">
-              <div class="circle"><span>⌵</span></div>
-            </a>
-          </div>
-        </div>
       </div>
-    </div>-->
+    </div>
 
     <div id="what-is-it" class="container what-is-it">
       <div class="col-sm-12">
@@ -220,7 +202,6 @@
       </div>
     </div>
   </div>
-
 
   <div class="container add-ons">
     <h2>Add-ons</h2>
@@ -356,14 +337,14 @@
           'comment': 'At least i have chicken.'
         };
 
-        var videoSize = { width: $(window).innerWidth() + 'px', height: Math.floor($(window).innerWidth() / 1.777777) + 'px' };
-        $('.video').css(videoSize);
-
-        // If you want to keep full screen on window resize
-        $(window).resize(function(){
-          videoSize = { width: $(window).innerWidth() + 'px', height: Math.floor($(window).innerWidth() / 1.777777) + 'px' }
-          $('.video').css(videoSize);
-        });
+        // var videoSize = { width: $(window).innerWidth() + 'px', height: Math.floor($(window).innerWidth() / 1.777777) + 'px' };
+        // $('.video').css(videoSize);
+        //
+        // // If you want to keep full screen on window resize
+        // $(window).resize(function(){
+        //   videoSize = { width: $(window).innerWidth() + 'px', height: Math.floor($(window).innerWidth() / 1.777777) + 'px' }
+        //   $('.video').css(videoSize);
+        // });
 
         /*
             Navigation for addons list.

@@ -44,7 +44,7 @@ a.github-bar { position:fixed; top:0; z-index:200; padding:10px 0; width:100%; d
 
 .header-wrapper { position:relative; }
 
-.wrap-my-slide { height: 90vh; position:relative; }
+.wrap-my-slide { height: 60vh; position:relative; }
 .slide-a-long { height:100%; }
 .slide-a-long div { height:100%; }
 .slide { background-size:cover; background-position:center center; padding-top:240px; }
@@ -66,7 +66,7 @@ header { position:absolute; top:60px; width:100%; }
 .anchor .circle { background:#00bed5; border-radius:200px; height:110px; width:110px; text-align:center; display:table-cell; vertical-align:middle; color:#fff; font-size:80px; }
 .anchor .circle span { position:relative; bottom: 10px;  }
 
-.what-is-it { padding: 30px 0 80px 0; }
+.what-is-it { padding:80px 0; }
 .code { background:#00bed5; }
 .example { padding:80px 15px; }
 
@@ -163,14 +163,4 @@ footer small { display: inline-block; margin-top: 20px; font-family:roboto, sans
         font-size:28px;
     }
 
-}
-
-.black {
-  color: black;
-}
-
-.title {
-  margin-top: -7px;
-  padding: 60px 0 70px;
-  background-color: #f5f5f5;
 }
