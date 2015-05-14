@@ -38,8 +38,9 @@
 
   </label>
 
-  <span ng-if="form.htmlClass != 'item-input-inset'">
+  <span ng-if="form.htmlClass != 'item-input-inset' && form.format != 'date'">
     <input
+
           ng-show="form.key"
           type="{{form.type}}"
           step="any"
@@ -57,7 +58,7 @@
   <span ng-if="form.htmlClass != 'item-input-inset' && form.format == 'date'">
     <input
           ng-show="form.key"
-          type="{{form.type}}"
+          type="date"
           step="any"
           sf-changed="form"
           placeholder="{{form.placeholder}}"
@@ -65,7 +66,6 @@
           ng-model-options="form.ngModelOptions"
           ng-model="$$value$$"
           ng-disabled="form.readonly"
-          schema-validate="form"
           name="{{form.key.slice(-1)[0]}}"
           format-date
           >
