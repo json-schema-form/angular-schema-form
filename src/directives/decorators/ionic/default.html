@@ -5,7 +5,9 @@
 
   <label class="item-input-wrapper" ng-if="form.htmlClass == 'item-input-inset'">
 
-    <input ng-show="form.key"
+    <input
+      ng-if="form.type == 'date'"
+      ng-show="form.key"
       type="{{form.type}}"
       step="any"
       sf-changed="form"
@@ -18,6 +20,20 @@
       format-date
       >
 
+    <input
+      ng-if="form.type != 'date'"
+      ng-show="form.key"
+      type="{{form.type}}"
+      step="any"
+      sf-changed="form"
+      placeholder="{{form.placeholder}}"
+      class="{{form.fieldHtmlClass}}"
+      ng-model-options="form.ngModelOptions"
+      ng-model="$$value$$"
+      ng-disabled="form.readonly"
+      schema-validate="form"
+      name="{{form.key.slice(-1)[0]}}"
+      >
 
 
   </label>
