@@ -61,13 +61,20 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
 })
 
 .directive('formatDate',function (){
-    return {
-        require: 'ngModel',
-        link: function(scope, elem, attr, modelCtrl) {
-            modelCtrl.$formatters.push(function(modelValue){
-                return new Date(modelValue);
-            });
-        }
-    };
+ return {
+   require: 'ngModel',
+   link: function(scope, elem, attr, modelCtrl) {
+     modelCtrl.$formatters.push(function(value){
+       if (angular.isString(value) || angular.isNumber(value)) {
+         return new Date(value);
+       }
+       return value;
+     })
+     modelCtrl.$parsers.push(function(value){
+       if(value){
+         return value.toString();
+       }
+     })
+   }
+ }
 });
-
