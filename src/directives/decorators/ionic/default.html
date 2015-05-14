@@ -6,7 +6,7 @@
   <label class="item-input-wrapper" ng-if="form.htmlClass == 'item-input-inset'">
 
     <input
-      ng-if="form.type == 'date'"
+      ng-if="schema.format == 'date'"
       ng-show="form.key"
       type="{{form.type}}"
       step="any"
@@ -21,7 +21,7 @@
       >
 
     <input
-      ng-if="form.type != 'date'"
+      ng-if="schema.format != 'date'"
       ng-show="form.key"
       type="{{form.type}}"
       step="any"
@@ -54,7 +54,7 @@
           >
   </span>
 
-  <span ng-if="form.htmlClass != 'item-input-inset' && form.type == 'date'">
+  <span ng-if="form.htmlClass != 'item-input-inset' && schema.format == 'date'">
     <input
           ng-show="form.key"
           type="{{form.type}}"
