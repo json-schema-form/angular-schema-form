@@ -54,7 +54,7 @@ This is sort of the template for the datepicker:
          max-date="form.maxDate"
          format="form.format" />
 
-  <span class="help-block" sf-message="form.description"></span>
+  <span class="help-block" sf-message></span>
 </div>
 ```
 
