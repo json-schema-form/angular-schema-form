@@ -17,6 +17,8 @@ The Web Site / The Twitter / The Movie
 --------
 [schemaform.io](http://schemaform.io) / [@SchemaFormIO](http://twitter.com/SchemaFormIO) / [Movie](https://www.youtube.com/watch?v=duBFMipRq2o)
 
+If you use ASF in your project/company please let us know! We'd love to feature you on the site.
+
 Demo Time!
 ----------
 [Try out the example page](http://schemaform.io/examples/bootstrap-example.html). Try editing the schema or form definition and see what comes out!
