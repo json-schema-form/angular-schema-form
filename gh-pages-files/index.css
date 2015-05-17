@@ -44,18 +44,18 @@ a.github-bar { position:fixed; top:0; z-index:200; padding:10px 0; width:100%; d
 
 .header-wrapper { position:relative; }
 
-.wrap-my-slide { height: 65vh; position:relative; }
+.wrap-my-slide { height: 520px; position:relative; }
 .slide-a-long { height:100%; }
 .slide-a-long div { height:100%; }
-.slide { background-size:cover; background-position:center center; padding-top:240px; }
+.slide { background-size:cover; background-position:center center; padding-top:200px; }
 
 #slide1 { background-image:url(img/sell.jpg); }
 #slide2 { background-image:url(img/wheat.jpg); }
 #slide3 { background-image:url(img/goat.jpg); }
 #slide4 { background-image:url(img/freedom.jpg); }
 
-.slide h3 { font-family: amatic_scregular, sans-serif; font-size:42px; line-height:42px; margin-bottom:30px; text-transform:uppercase; letter-spacing:3px;  }
-.slide p { font-family: amatic_scregular, sans-serif; font-size:72px; line-height:82px; margin-bottom:30px; text-transform:uppercase; letter-spacing:3px; }
+.slide h3 { font-family: amatic_scregular, sans-serif; font-size:35px; line-height:35px; margin-bottom:30px; text-transform:uppercase; letter-spacing:3px;  }
+.slide p { font-family: amatic_scregular, sans-serif; font-size:57px; line-height:57px; margin-bottom:30px; text-transform:uppercase; letter-spacing:3px; }
 
 .slide.big p {font-size:120px; line-height:140px; margin-bottom:40px; }
 
@@ -66,7 +66,7 @@ header { position:absolute; top:60px; width:100%; }
 .anchor .circle { border-radius:200px; height:110px; width:110px; text-align:center; display:table-cell; vertical-align:middle; font-size:80px; }
 .anchor .circle span { position:relative; bottom: 10px;  }
 
-.what-is-it { padding:80px 0; }
+.what-is-it { padding:40px 0; }
 
 .example { padding:80px 15px; }
 
