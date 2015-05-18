@@ -17,9 +17,7 @@ angular.module('schemaForm').factory('sfBuilder',
     // Check for slots
     if (form.key) {
       var slot = slots[sfPath.stringify(form.key)];
-      console.log('checking for slots!', sfPath.stringify(form.key), slot)
       if (slot) {
-        console.log('clearing and appending to slot')
         while (slot.firstChild) {
           slot.removeChild(slot.firstChild);
         }
@@ -64,12 +62,13 @@ angular.module('schemaForm').factory('sfBuilder',
         }
 
         div.innerHTML = template;
-        tmpl = document.createDocumentFragment();
 
-        var len = div.childNodes.length;
-        for (var i = 0; i < len; i++) {
-          tmpl.appendChild(div.childNodes[i]);
+        // Move node to a document fragment, we don't want the div.
+        tmpl = document.createDocumentFragment();
+        while (div.childNodes.length > 0) {
+          tmpl.appendChild(div.childNodes[0]);
         }
+
 
         tmpl.firstChild.setAttribute('sf-field',path + '[' + index + ']');
 
