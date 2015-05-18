@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html ng-app="schemaForm" ng-controller="PageCtrl" lang="en">
   <head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
     <title>Angular Schema Form</title>
@@ -22,10 +22,10 @@
 
     <!-- @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&dn=expat.txt Expat -->
     <link rel="stylesheet" href="gh-pages-files/index.css"/>
-    <link rel="stylesheet" href="gh-pages-files/color-main.css"/>
+    <link rel="stylesheet" ng-href="gh-pages-files/color-{{cssName}}.css"/>
     <!-- @license-end -->
   </head>
-  <body ng-app="schemaForm" ng-controller="PageCtrl">
+  <body>
     <a href="https://github.com/Textalk/angular-schema-form" class="github-banner hidden-xs"><img src="gh-pages-files/img/github-banner.png" alt=""/></a>
     <a href="https://github.com/Textalk/angular-schema-form" class="github-bar visible-xs"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> us on GitHub</a>
     <div class="header-wraper">
@@ -69,6 +69,10 @@
           </div>
         </header>
       </div>
+    </div>
+    <div class="container">
+      <br>
+      Color: <a ng-click="cssName = 'main'">Normal</a> / <a ng-click="cssName = 'lowContrast'">Low Contrast</a>
     </div>
 
     <div id="what-is-it" class="container what-is-it">
@@ -297,10 +301,12 @@
   // Actual usage of angular schema form code if you're looking for it.
   hljs.initHighlightingOnLoad();
   angular.module('schemaForm').controller('PageCtrl', function($scope, $http, $location) {
-    if (/\/ex\/([a-z0-9]+)/.test($location.path())) {
-      var match = $location.path().match(/\/ex\/([a-z0-9]+)/);
-      document.location.href = '/examples/bootstrap-example.html#/' + match[1];
-    }
+        if (/\/ex\/([a-z0-9]+)/.test($location.path())) {
+          var match = $location.path().match(/\/ex\/([a-z0-9]+)/);
+          document.location.href = '/examples/bootstrap-example.html#/' + match[1];
+        }
+
+        $scope.cssName = 'main';
 
         $scope.schema = {
           'type': 'object',

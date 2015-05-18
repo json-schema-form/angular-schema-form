@@ -170,3 +170,7 @@ footer small { display: inline-block; margin-top: 20px; font-family:roboto, sans
 	width: 100%;
 	height: 100%;
 }
+
+a {
+  cursor: pointer;
+}

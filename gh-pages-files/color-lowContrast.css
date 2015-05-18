@@ -1,0 +1,53 @@
+body {
+  background-color: #3e3e3e;
+}
+
+p, body { color:#b3b3b3; }
+
+h1 { color:#fff; }
+
+h2 { color: #fff; }
+
+h4 { color:#fff; }
+
+.code h4 { color:#fff; }
+
+a.github-bar { color:#fff; background:#000; }
+
+.slide h3 { color:#fff; }
+.slide p { color:#fff; }
+
+.anchor .circle { color:#fff; background:#00bed5; }
+
+.code { background:#000; }
+
+.code pre { color:#93BA5A; }
+
+.code pre .hljs-attribute { color:#B52C64; }
+
+.code pre .hljs-string,
+.code pre .hljs-number { color:#93BA5A; }
+
+ul.add-ons li:hover { background:#f9f9f9;  }
+
+.demo { background:#f6f6f6; }
+
+.demo a.btn { color:#fff; background:#ffda47; }
+
+pre.model, pre.install { color:#ff5182; }
+
+ul.add-ons h3 { color:#000; }
+ul.add-ons p { color:#474747; }
+ul.add-ons p span { color:#808080; }
+ul.add-ons span.date { color:#808080; }
+ul.add-ons .badge { background:#00bed5;}
+ul.add-ons a.stealth { color: #808080; }
+ul.add-ons .nodesc { color: #808080; }
+
+footer { background:#89265a; }
+footer h5 { color:#00bed5; }
+footer a { color:#000; }
+
+@media screen and (max-width: 767px) {
+  h1 { color:#ff5182; }
+}
