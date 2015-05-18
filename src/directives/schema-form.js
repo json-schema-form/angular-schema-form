@@ -72,7 +72,10 @@ angular.module('schemaForm')
           // they have been removed from the DOM
           // https://github.com/Textalk/angular-schema-form/issues/200
           if (childScope) {
+            // Destroy strategy should not be acted upon
+            scope.externalDestructionInProgress = true;
             childScope.$destroy();
+            scope.externalDestructionInProgress = false;
           }
           childScope = scope.$new();
 
@@ -161,6 +164,15 @@ angular.module('schemaForm')
           }
         });
 
+        scope.$on('$destroy', function() {
+          // Each field listens to the $destroy event so that it can remove any value
+          // from the model if that field is removed from the form. This is the default
+          // destroy strategy. But if the entire form (or at least the part we're on)
+          // gets removed, like when routing away to another page, then we definetly want to
+          // keep the model intact. So therefore we set a flag to tell the others it's time to just
+          // let it be.
+          scope.externalDestructionInProgress = true;
+        });
       }
     };
   }

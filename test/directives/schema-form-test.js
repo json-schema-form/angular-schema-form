@@ -2035,4 +2035,330 @@ describe('directive',function(){
       });
     });
   });
+
+
+  describe('destroy strategy', function() {
+
+    var schema = {
+      "type": "object",
+      "title": "Comment",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "email": {
+          "title": "Email",
+          "type": "string",
+          "pattern": "^\\S+@\\S+$",
+          "description": "Email will be used for evil."
+        },
+        "switch": {
+          "type": "boolean",
+          "title": "Switch it up",
+          "default": true
+        },
+        "deep": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "sub": {
+              "type": "object",
+              "properties": {
+                "prop": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "list": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "sub": {
+                "type": "object",
+                "properties": {
+                  "prop": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "comment": {
+          "title": "Comment",
+          "type": "string",
+          "maxLength": 20,
+          "validationMessage": "Don't be greedy!"
+        }
+      },
+      "required": [
+        "name",
+        "email",
+        "comment"
+      ]
+    };
+
+    var form = [
+      "name",
+      "email",
+      "switch",
+      {
+        "key": "deep",
+        "condition": "model.switch"
+      },
+      {
+        "type": "tabarray",
+        "key": "list",
+        "condition": "model.switch"
+      },
+      {
+        "key": "comment",
+        "type": "textarea",
+        "placeholder": "Make a comment"
+      },
+      {
+        "type": "submit",
+        "style": "btn-info",
+        "title": "OK"
+      }
+    ];
+
+
+
+    it('should default to "remove"', function(done) {
+
+      inject(function($compile,$rootScope) {
+        var scope = $rootScope.$new();
+        scope.person = {
+          "switch": true,
+          "list": [
+            {
+              "sub": {
+                "prop": "subprop"
+              },
+              "name": "Name"
+            }
+          ],
+          "deep": {
+            "name": "deepname",
+            "sub": {
+              "prop": "deepprop"
+            }
+          }
+        };
+
+        scope.schema = schema;
+
+        scope.form = form;
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        scope.person.should.deep.equal({
+          "switch": true,
+          "list": [
+            {
+              "sub": {
+                "prop": "subprop"
+              },
+              "name": "Name"
+            }
+          ],
+          "deep": {
+            "name": "deepname",
+            "sub": {
+              "prop": "deepprop"
+            }
+          }
+        });
+
+        setTimeout(function() {
+          scope.person.switch = false;
+          scope.$apply();
+
+          scope.person.should.deep.equal({
+            "switch": false,
+            "list": [
+              {
+                "sub": {
+                },
+              }
+            ],
+            "deep": {
+              "sub": {
+              }
+            }
+          });
+          done();
+        });
+
+      });
+    });
+
+    it('should not remove anything if $destroy event comes from outside', function(done) {
+
+      inject(function($compile, $rootScope){
+        var scope = $rootScope.$new();
+        scope.person = {
+          "switch": true,
+          "list": [
+            {
+              "sub": {
+                "prop": "subprop"
+              },
+              "name": "Name"
+            }
+          ],
+          "deep": {
+            "name": "deepname",
+            "sub": {
+              "prop": "deepprop"
+            }
+          }
+        };
+
+        scope.schema = schema;
+        scope.outside = true;
+        scope.form = form;
+
+        var tmpl = angular.element('<div ng-if="outside"><form sf-schema="schema" sf-form="form" sf-model="person"></form></div>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        scope.person.should.deep.equal({
+          "switch": true,
+          "list": [
+            {
+              "sub": {
+                "prop": "subprop"
+              },
+              "name": "Name"
+            }
+          ],
+          "deep": {
+            "name": "deepname",
+            "sub": {
+              "prop": "deepprop"
+            }
+          }
+        });
+
+        setTimeout(function() {
+          scope.outside = false;
+          scope.$apply();
+
+          scope.person.should.deep.equal({
+            "switch": true,
+            "list": [
+              {
+                "sub": {
+                  "prop": "subprop"
+                },
+                "name": "Name"
+              }
+            ],
+            "deep": {
+              "name": "deepname",
+              "sub": {
+                "prop": "deepprop"
+              }
+            }
+          });
+          done();
+        });
+      });
+    });
+
+    it('should "retain" model if asked to', function(done) {
+
+      inject(function($compile,$rootScope) {
+        var scope = $rootScope.$new();
+        scope.person = {
+          "switch": true,
+          "list": [
+            {
+              "sub": {
+                "prop": "subprop"
+              },
+              "name": "Name"
+            }
+          ],
+          "deep": {
+            "name": "deepname",
+            "sub": {
+              "prop": "deepprop"
+            }
+          }
+        };
+
+        scope.schema = schema;
+        scope.options = { destroyStrategy: 'retain'};
+        scope.form = form;
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-options="options" sf-form="form" sf-model="person"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        scope.person.should.deep.equal({
+          "switch": true,
+          "list": [
+            {
+              "sub": {
+                "prop": "subprop"
+              },
+              "name": "Name"
+            }
+          ],
+          "deep": {
+            "name": "deepname",
+            "sub": {
+              "prop": "deepprop"
+            }
+          }
+        });
+
+        setTimeout(function() {
+          scope.person.switch = false;
+          scope.$apply();
+          console.log(JSON.stringify(scope.person,undefined,2))
+          scope.person.should.deep.equal({
+            "switch": false,
+            "list": [
+              {
+                "sub": {
+                  "prop": "subprop"
+                },
+                "name": "Name"
+              }
+            ],
+            "deep": {
+              "name": "deepname",
+              "sub": {
+                "prop": "deepprop"
+              }
+            }
+          });
+
+          done();
+        });
+
+      });
+    });
+
+
+  });
+
 });
