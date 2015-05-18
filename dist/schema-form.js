@@ -746,9 +746,16 @@ angular.module('schemaForm').provider('schemaForm',
   //Creates an default titleMap list from an enum, i.e. a list of strings.
   var enumToTitleMap = function(enm) {
     var titleMap = []; //canonical titleMap format is a list.
-    enm.forEach(function(name) {
-      titleMap.push({name: name, value: name});
-    });
+    if (typeof(enm) == 'object') {
+      angular.forEach(enm, function (name, index) {
+        titleMap.push({name: name, value: index});
+      });
+    } else {
+      enm.forEach(function (name) {
+        titleMap.push({name: name, value: name});
+      });
+    }
+
     return titleMap;
   };
 
