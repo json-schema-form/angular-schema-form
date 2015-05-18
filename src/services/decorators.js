@@ -1,32 +1,22 @@
 angular.module('schemaForm').provider('schemaFormDecorators',
 ['$compileProvider', 'sfPathProvider', function($compileProvider, sfPathProvider) {
   var defaultDecorator = '';
-  var directives = {};
+  var decorators = {};
 
+  // Map template after decorator and type.
   var templateUrl = function(name, form) {
     //schemaDecorator is alias for whatever is set as default
     if (name === 'sfDecorator') {
       name = defaultDecorator;
     }
 
-    var directive = directives[name];
-
-    //rules first
-    var rules = directive.rules;
-    for (var i = 0; i < rules.length; i++) {
-      var res = rules[i](form);
-      if (res) {
-        return res;
-      }
-    }
-
-    //then check mapping
-    if (directive.mappings[form.type]) {
-      return directive.mappings[form.type];
+    var decorator = decorators[name];
+    if (decorator[form.type]) {
+      return decorator[form.type].template;
     }
 
     //try default
-    return directive.mappings['default'];
+    return decorator['default'].template;
   };
 
   var createDirective = function(name) {
@@ -371,7 +361,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   /**
-   * Create a decorator directive and its sibling "manual" use directives.
+   * DEPRECATED: use defineDecorator instead.
+   * Create a decorator directive and its sibling "manual" use decorators.
    * The directive can be used to create form fields or other form entities.
    * It can be used in conjunction with <schema-form> directive in which case the decorator is
    * given it's configuration via a the "form" attribute.
@@ -380,19 +371,46 @@ angular.module('schemaForm').provider('schemaFormDecorators',
    *   <sf-decorator form="myform"></sf-decorator>
    **
    * @param {string} name directive name (CamelCased)
-   * @param {Object} mappings, an object that maps "type" => "templateUrl"
-   * @param {Array}  rules (optional) a list of functions, function(form) {}, that are each tried in
-   *                 turn,
-   *                 if they return a string then that is used as the templateUrl. Rules come before
-   *                 mappings.
+   * @param {Object} templates, an object that maps "type" => "templateUrl"
    */
-  this.createDecorator = function(name, mappings, rules) {
-    directives[name] = {
-      mappings: mappings || {},
-      rules:    rules    || []
-    };
+  this.createDecorator = function(name, templates) {
+    console.warn('schemaFormDecorators.createDecorator is DEPRECATED, use defineDecorator instead.');
+    decorators[name] = {'__name': name};
 
-    if (!directives[defaultDecorator]) {
+    angular.forEach(templates, function(url, type) {
+      decorators[name][type] = {template: url, replace: false, builder: angular.noop};
+    });
+
+    if (!decorators[defaultDecorator]) {
+      defaultDecorator = name;
+    }
+    createDirective(name);
+  };
+
+
+  /**
+   * Create a decorator directive and its sibling "manual" use decorators.
+   * The directive can be used to create form fields or other form entities.
+   * It can be used in conjunction with <schema-form> directive in which case the decorator is
+   * given it's configuration via a the "form" attribute.
+   *
+   * ex. Basic usage
+   *   <sf-decorator form="myform"></sf-decorator>
+   **
+   * @param {string} name directive name (CamelCased)
+   * @param {Object} fields, an object that maps "type" => `{ template, builder, replace}`.
+                     attributes `builder` and `replace` are optional, and replace defaults to true.
+   */
+  this.defineDecorator = function(name, fields) {
+    decorators[name] = {'__name': name}; // TODO: this feels like a hack, come up with a better way.
+
+    angular.forEach(fields, function(field, type) {
+      field.builder = field.builder || angular.noop;
+      field.replace = angular.isDefined(field.replace) ? field.replace : true;
+      decorators[name][type] = field;
+    });
+
+    if (!decorators[defaultDecorator]) {
       defaultDecorator = name;
     }
     createDirective(name);
@@ -415,42 +433,48 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   /**
    * Same as createDirective, but takes an object where key is 'type' and value is 'templateUrl'
    * Useful for batching.
-   * @param {Object} mappings
+   * @param {Object} templates
    */
-  this.createDirectives = function(mappings) {
-    angular.forEach(mappings, function(url, type) {
+  this.createDirectives = function(templates) {
+    angular.forEach(templates, function(url, type) {
       createManualDirective(type, url);
     });
   };
 
   /**
-   * Getter for directive mappings
-   * Can be used to override a mapping or add a rule
+   * Getter for decorator settings
    * @param {string} name (optional) defaults to defaultDecorator
-   * @return {Object} rules and mappings { rules: [],mappings: {}}
+   * @return {Object} rules and templates { rules: [],templates: {}}
    */
-  this.directive = function(name) {
+  this.decorator = function(name) {
     name = name || defaultDecorator;
-    return directives[name];
+    return decorators[name];
   };
+
 
   /**
    * Adds a mapping to an existing decorator.
    * @param {String} name Decorator name
    * @param {String} type Form type for the mapping
    * @param {String} url  The template url
+   * @param {Function} builder (optional) builder function
+   * @param {boolean} replace (optional) defaults to false. Replace decorator directive with template.
    */
-  this.addMapping = function(name, type, url) {
-    if (directives[name]) {
-      directives[name].mappings[type] = url;
+  this.addMapping = function(name, type, url, builder, replace) {
+    if (decorators[name]) {
+      decorators[name][type] = {
+        temlpate: url,
+        builder: builder,
+        replace: replace
+      };
     }
   };
 
-  //Service is just a getter for directive mappings and rules
+  //Service is just a getter for directive templates and rules
   this.$get = function() {
     return {
-      directive: function(name) {
-        return directives[name];
+      decorator: function(name) {
+        return decorators[name] || decorators[defaultDecorator];
       },
       defaultDecorator: defaultDecorator
     };
