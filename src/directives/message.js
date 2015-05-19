@@ -25,10 +25,13 @@ angular.module('schemaForm').directive('sfMessage',
             (scope.ngModel && scope.ngModel.$error) || {}
           );
 
+          // Since we use $parsers to hook up our validation we also end up with a "parse" error.
+          // so we remove it.
+          errors = errors.filter(function(e) { return e !== 'parse'; });
+
           // We only show one error.
           // TODO: Make that optional
           var error = errors[0];
-
           if (error) {
             element.html(sfErrorMessage.interpolate(
               error,
