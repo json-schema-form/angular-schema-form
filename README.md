@@ -107,6 +107,8 @@ bower install angular-schema-form
 This will install the latest release and basic dependencies. See
 [dependecies section below](#dependencies).
 
+You can also load the files via [cdnjs.com](https://cdnjs.com/libraries/angular-schema-form).
+
 ### Manual
 
 You can also just download the contents of the `dist/` folder and add dependencies manually.
@@ -138,7 +140,7 @@ The minified files include templates - no need to load additional HTML files.
 ### Script Loading
 
 Schema form is split into two main files, `dist/schema-form.min.js` and
-`dist/boostrap-decorator.min.js` and they need be loaded in that order. AngularJ,
+`dist/boostrap-decorator.min.js` and they need be loaded in that order. AngularJS,
 [tv4](https://github.com/geraintluff/tv4) and [objectpath](https://github.com/mike-marcacci/objectpath)
 also needs to be loaded *before* Schema Form.
 
