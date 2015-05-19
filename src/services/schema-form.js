@@ -182,7 +182,8 @@ angular.module('schemaForm').provider('schemaForm',
             path: path,
             required: required || false,
             lookup: options.lookup,
-            ignore: options.ignore
+            ignore: options.ignore,
+            global: options.global
           });
           if (def) {
             f.items.push(def);
