@@ -52,15 +52,10 @@
         "comments[].name",
         "comments[].email",
         {
-          "type": "conditional",
-          "condition": "model.comments[arrayIndex].email",
-          "items": [
-            {
-              "key": "comments[].spam",
-              "type": "checkbox",
-              "title": "Yes I want spam."
-            }
-          ]
+          "key": "comments[].spam",
+          "type": "checkbox",
+          "title": "Yes I want spam.",
+          "condition": "model.comments[arrayIndex].email"
         },
         {
           "key": "comments[].comment",

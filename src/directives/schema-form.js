@@ -5,16 +5,8 @@ FIXME: real documentation
 
 angular.module('schemaForm')
        .directive('sfSchema',
-['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath',
-  function($compile,  schemaForm,  schemaFormDecorators, sfSelect, sfPath) {
-
-    var SNAKE_CASE_REGEXP = /[A-Z]/g;
-    var snakeCase = function(name, separator) {
-      separator = separator || '_';
-      return name.replace(SNAKE_CASE_REGEXP, function(letter, pos) {
-        return (pos ? separator : '') + letter.toLowerCase();
-      });
-    };
+['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder',
+  function($compile,  schemaForm,  schemaFormDecorators, sfSelect, sfPath, sfBuilder) {
 
     return {
       scope: {
@@ -58,10 +50,66 @@ angular.module('schemaForm')
             }
           }
         });
-        //Since we are dependant on up to three
-        //attributes we'll do a common watch
+
         var lastDigest = {};
         var childScope;
+
+        // Common renderer function, can either be triggered by a watch or by an event.
+        var render = function(schema, form) {
+          var merged = schemaForm.merge(schema, form, ignore, scope.options);
+
+          // Create a new form and destroy the old one.
+          // Not doing keeps old form elements hanging around after
+          // they have been removed from the DOM
+          // https://github.com/Textalk/angular-schema-form/issues/200
+          if (childScope) {
+            // Destroy strategy should not be acted upon
+            scope.externalDestructionInProgress = true;
+            childScope.$destroy();
+            scope.externalDestructionInProgress = false;
+          }
+          childScope = scope.$new();
+
+          //make the form available to decorators
+          childScope.schemaForm  = {form:  merged, schema: schema};
+
+          //clean all but pre existing html.
+          element.children(':not(.schema-form-ignore)').remove();
+
+          // Find all slots.
+          var slots = {};
+          var slotsFound = element[0].querySelectorAll('*[sf-insert-field]');
+
+          for (var i = 0; i < slotsFound.length; i++) {
+            slots[slotsFound[i].getAttribute('sf-insert-field')] = slotsFound[i];
+          }
+
+          // if sfUseDecorator is undefined the default decorator is used.
+          var decorator = schemaFormDecorators.decorator(attrs.sfUseDecorator);
+
+          // Use the builder to build it and append the result
+          element[0].appendChild( sfBuilder.build(merged, decorator, slots) );
+
+          //compile only children
+          $compile(element.children())(childScope);
+
+          //ok, now that that is done let's set any defaults
+          if (!scope.options || scope.options.setSchemaDefaults !== false) {
+            schemaForm.traverseSchema(schema, function(prop, path) {
+              if (angular.isDefined(prop['default'])) {
+                var val = sfSelect(path, scope.model);
+                if (angular.isUndefined(val)) {
+                  sfSelect(path, scope.model, prop['default']);
+                }
+              }
+            });
+          }
+
+          scope.$emit('sf-render-finished', element);
+        };
+
+        //Since we are dependant on up to three
+        //attributes we'll do a common watch
         scope.$watch(function() {
 
           var schema = scope.schema;
@@ -74,71 +122,28 @@ angular.module('schemaForm')
             lastDigest.schema = schema;
             lastDigest.form = form;
 
-            var merged = schemaForm.merge(schema, form, ignore, scope.options);
-            var frag = document.createDocumentFragment();
+            render(schema, form);
+          }
+        });
 
-            // Create a new form and destroy the old one.
-            // Not doing keeps old form elements hanging around after
-            // they have been removed from the DOM
-            // https://github.com/Textalk/angular-schema-form/issues/200
-            if (childScope) {
-              childScope.$destroy();
-            }
-            childScope = scope.$new();
+        // We also listen to the event schemaFormRedraw so you can manually trigger a change if
+        // part of the form or schema is chnaged without it being a new instance.
+        scope.$on('schemaFormRedraw', function() {
+          var schema = scope.schema;
+          var form   = scope.initialForm || ['*'];
+          if (schema) {
+            render(schema, form);
+          }
+        });
 
-            //make the form available to decorators
-            childScope.schemaForm  = {form:  merged, schema: schema};
-
-            //clean all but pre existing html.
-            element.children(':not(.schema-form-ignore)').remove();
-
-            // Find all slots.
-            var slots = {};
-            var slotsFound = element[0].querySelectorAll('*[sf-insert-field]');
-
-            for (var i = 0; i < slotsFound.length; i++) {
-              slots[slotsFound[i].getAttribute('sf-insert-field')] = slotsFound[i];
-            }
-
-            //Create directives from the form definition
-            angular.forEach(merged, function(obj, i) {
-              var n = document.createElement(attrs.sfDecorator ||
-                                             snakeCase(schemaFormDecorators.defaultDecorator, '-'));
-              n.setAttribute('form','schemaForm.form['+i+']');
-
-              // Check if there is a slot to put this in...
-              if (obj.key) {
-                var slot = slots[sfPath.stringify(obj.key)];
-                if (slot) {
-                  while (slot.firstChild) {
-                    slot.removeChild(slot.firstChild);
-                  }
-                  slot.appendChild(n);
-                  return;
-                }
-              }
-
-              // ...otherwise add it to the frag
-              frag.appendChild(n);
-
-            });
-
-            element[0].appendChild(frag);
-
-            //compile only children
-            $compile(element.children())(childScope);
-
-            //ok, now that that is done let's set any defaults
-            schemaForm.traverseSchema(schema, function(prop, path) {
-              if (angular.isDefined(prop['default'])) {
-                var val = sfSelect(path, scope.model);
-                if (angular.isUndefined(val)) {
-                  sfSelect(path, scope.model, prop['default']);
-                }
-              }
-            });
-          };
-          scope.$emit('sf-render-finished', element);
+        scope.$on('$destroy', function() {
+          // Each field listens to the $destroy event so that it can remove any value
+          // from the model if that field is removed from the form. This is the default
+          // destroy strategy. But if the entire form (or at least the part we're on)
+          // gets removed, like when routing away to another page, then we definetly want to
+          // keep the model intact. So therefore we set a flag to tell the others it's time to just
+          // let it be.
+          scope.externalDestructionInProgress = true;
         });
       }
     };

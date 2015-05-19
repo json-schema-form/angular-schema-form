@@ -1,18 +1,20 @@
 {
   "name": "angular-schema-form",
-  "version": "0.7.10",
+  "version": "0.8.2",
   "description": "Create complex forms from a JSON schema with angular.",
   "repository": "Textalk/angular-schema-form",
   "main": "dist/schema-form.min.js",
+  "filename": "dist/schema-form.min.js",
+  "homepage": "http://schemaform.io",
   "scripts": {
     "test": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js"
   },
   "author": "Textalk",
   "contributors": [
     "David Jensen <david.lgj@gmail.com> (https://github.com/davidlgj)",
+    "Denis Dervisevic <denis@dervisevic.se> (https://github.com/Dervisevic)",
     "Cameron Edwards (https://github.com/cameronprattedwards)",
-    "Mike Marcacci (https://github.com/mike-marcacci)",
-    "Denis Dervisevic <denis@dervisevic.se> (https://github.com/Dervisevic)"
+    "Mike Marcacci (https://github.com/mike-marcacci)"
   ],
   "license": "MIT",
   "dependencies": {
@@ -37,8 +39,10 @@
     "gulp-concat": "^2.2.0",
     "gulp-jscs": "^1.1.0",
     "gulp-minify-html": "^0.1.1",
+    "gulp-protractor": "^1.0.0",
     "gulp-rename": "^1.2.0",
     "gulp-uglify": "^0.2.1",
+    "gulp-umd": "^0.1.3",
     "karma": "^0.12.0",
     "karma-chai-sinon": "^0.1.3",
     "karma-coverage": "^0.2.1",
@@ -48,6 +52,7 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "mocha": "^1.18.0",
     "mocha-lcov-reporter": "0.0.1",
+    "protractor": "^2.0.0",
     "sinon": "^1.9.0",
     "sinon-chai": "^2.5.0",
     "streamqueue": "0.0.5"
@@ -57,5 +62,16 @@
       "type": "MIT",
       "url": "https://raw.githubusercontent.com/Textalk/angular-schema-form/master/LICENSE"
     }
-  ]
+  ],
+  "autoupdate": {
+    "source": "git",
+    "target": "git://github.com/Textalk/angular-schema-form.git",
+    "basePath": "/dist/",
+    "files": [
+      "schema-form.min.js",
+      "schema-form.js",
+      "bootstrap-decorator.min.js",
+      "bootstrap-decorator.js"
+    ]
+  }
 }

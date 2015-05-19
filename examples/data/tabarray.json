@@ -43,7 +43,7 @@
 	  "style": {
 		"remove": "btn-danger"
 	  },
-      "title": "value.name || 'Tab '+$index",
+      "title": "{{ value.name || 'Tab '+$index }}",
       "items": [
         "comments[].name",
         "comments[].email",

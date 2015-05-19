@@ -1,17 +1,29 @@
 Angular Schema Form
 ===================
+[![bower version](https://img.shields.io/bower/v/angular-schema-form.svg?style=flat-square)](#bower)
+[![npm version](https://img.shields.io/npm/v/angular-schema-form.svg?style=flat-square)](https://www.npmjs.org/package/angular-schema-form)
+[![npm downloads](https://img.shields.io/npm/dm/angular-schema-form.svg?style=flat-square)](http://npm-stat.com/charts.html?package=angular-schema-form&from=2015-01-01)
+[![Gitter](https://img.shields.io/badge/GITTER-JOIN%20CHAT%20%E2%86%92-ff69b4.svg?style=flat-square)](https://gitter.im/Textalk/angular-schema-form?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://img.shields.io/travis/Textalk/angular-schema-form.svg?style=flat-square)](https://travis-ci.org/Textalk/angular-schema-form)
+[![Build Status](https://img.shields.io/coveralls/jekyll/jekyll.svg?style=flat-square)](https://coveralls.io/r/Textalk/angular-schema-form?branch=development)
 
-[![Build Status](https://travis-ci.org/Textalk/angular-schema-form.svg?branch=master)](https://travis-ci.org/Textalk/angular-schema-form)
-[![Coverage Status](https://coveralls.io/repos/Textalk/angular-schema-form/badge.png?branch=master)](https://coveralls.io/r/Textalk/angular-schema-form?branch=development)
-[![Bower version](https://badge.fury.io/bo/angular-schema-form.svg)](http://badge.fury.io/bo/angular-schema-form)
-[![npm version](https://badge.fury.io/js/angular-schema-form.svg)](http://badge.fury.io/js/angular-schema-form)
+
+
+
 
 Generate forms from JSON schemas using AngularJS!
 
+The Web Site / The Twitter / The Movie
+--------
+[schemaform.io](http://schemaform.io) / [@SchemaFormIO](http://twitter.com/SchemaFormIO) / [Movie](https://www.youtube.com/watch?v=duBFMipRq2o)
+
+If you use ASF in your project/company please let us know! We'd love to feature you on the site.
+
 Demo Time!
 ----------
-[Try out the example page](http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html).
-Try editing the schema or form definition and see what comes out!
+[Try out the example page](http://schemaform.io/examples/bootstrap-example.html). Try editing the schema or form definition and see what comes out!
+
+Now you can save your code and share it!
 
 What is it?
 ----------
@@ -37,7 +49,10 @@ apart from JSON Form?
 
 Documentation
 -------------
-There is one section of documentation covering [defaults and form types](docs/index.md). There is another section for how you [extend angular schema form with your own types](https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md).
+You can find [all documentation here](docs/index.md), it covers all the different field types
+and their options.
+
+It also covers how to [extend angular schema form with your own field types](https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md).
 
 Basic Usage
 -----------
@@ -92,6 +107,8 @@ bower install angular-schema-form
 This will install the latest release and basic dependencies. See
 [dependecies section below](#dependencies).
 
+You can also load the files via [cdnjs.com](https://cdnjs.com/libraries/angular-schema-form).
+
 ### Manual
 
 You can also just download the contents of the `dist/` folder and add dependencies manually.
@@ -123,7 +140,7 @@ The minified files include templates - no need to load additional HTML files.
 ### Script Loading
 
 Schema form is split into two main files, `dist/schema-form.min.js` and
-`dist/boostrap-decorator.min.js` and they need be loaded in that order. AngularJ,
+`dist/boostrap-decorator.min.js` and they need be loaded in that order. AngularJS,
 [tv4](https://github.com/geraintluff/tv4) and [objectpath](https://github.com/mike-marcacci/objectpath)
 also needs to be loaded *before* Schema Form.
 
@@ -146,15 +163,7 @@ angular.module('myModule', ['schemaForm']);
 
 Add-ons
 ------
-There are a couple of add-ons, a date picker, a colorpicker and two wysiwyg editors. 
-They have their own repos and you can find them here with usage instructions:
-
-  * [https://github.com/Textalk/angular-schema-form-datepicker](https://github.com/Textalk/angular-schema-form-datepicker)
-  * [https://github.com/Textalk/angular-schema-form-colorpicker](https://github.com/Textalk/angular-schema-form-colorpicker)
-  * [https://github.com/Textalk/angular-schema-form-tinymce](https://github.com/Textalk/angular-schema-form-tinymce)
-  * [https://github.com/webcanvas/angular-schema-form-ckeditor](https://github.com/webcanvas/angular-schema-form-ckeditor)
-  * [https://github.com/Textalk/angular-schema-form-fontpicker](https://github.com/Textalk/angular-schema-form-fontpicker)
-
+There are several add-ons available, for a full list see the [web page](http://textalk.github.io/angular-schema-form/#third-party-addons).
 Your can also [create your own add-ons!](docs/extending.md)
 
 Contributing
@@ -190,10 +199,10 @@ Unit tests are run with [karma](http://karma-runner.github.io) and written using
 
 To run the tests:
 
-1. Install all dependencies via NPM
+1. Install all dependencies via NPM.
 2. Install dev dependencies with bower.
-3. Install the Karma CLI
-4. Run the tests
+3. Install the Karma CLI.
+4. Run the tests.
 
 ```bash
 $ npm install

@@ -1,3 +1,58 @@
+v0.8.2
+-------
+ * Fix embarrassing typo in package.json 
+
+v0.8.1
+------
+ * Fixed order of error messages, thanks @davidlgj
+ * Added `modelValue` to  variables available in a condition, thanks @dben
+ * UMD wrapping, thanks @dwikle
+ * disableErrorState, disableSuccessState options, thanks @domasx2
+ * Awesome gist integration to example page, thanks @dervisevic
+ * Global option to disable tv4 validation, thanks @maff
+ * Option: labelHtmlClass, thanks @AlexAlbala
+ * Doc fixes and updates, thanks @Minisai, @jdcaballerov, @cjroth, @dervisevic
+ * Bugfixes, thanks @engelfrost, @mqamhieh, @carchrae
+
+
+v0.8.0
+Loads of stuff happened this release, so we're bumping version to 0.8.0.
+Note as well that there is a small change to `tabsarray` type regarding its title, the title is now
+interpolated instead of eval'd. So if you have any problems slap on a `{{ }}` around the tab title.
+See the docs on `tabarray` for an more info.
+
+ * Custom validation via ngModel.$validators and ngModel.$asyncValidators, thanks @davidlgj
+ * Inject errors from backend directly to a field with events, thanks @davidlgj, @burdiuz, @jdgblinq
+ * Icons to `button` type, thanks @maff
+ * Fixed spoiled comment, thanks @mchapman
+ * A new `template` field type, insert a angular template, like a mini add-on.
+ * Support for schema type that allows null, thanks @ulion
+ * Option groups in selects, thanks @DennisHalmstad
+ * input group addons, thanks @quietlyconfident
+ * validationMessages overhaul, nicer validationMessages with interpolation and a new sf-messages
+   directive for add-on to use. thanks @davidlgj
+ * interpolation instead of eval'ing in tabarray title, thanks @coridyn
+ * Lots of bugfixes, most notable checkboxes validation now works, thanks @davidlgj, @coridyn,
+   @ulion, @adamcbuckley
+
+v0.7.13
+-------
+ * Bugfix for condition, it depended on jQuery
+
+v0.7.12
+-------
+ * Error on deleteFromArray task, thanks @bygiro
+ * Fix for copyValueTo on numeric fields, thanks @Anthropic
+ * "condition" option on every form type, thanks @davidlgj
+ * Force redraw "schemaFormRedraw", thanks @davidlgj
+ * Possible fix for "updateOn exception", thanks @plong0
+
+v0.7.11
+-------
+ * New front page with a list of add-on:s based on a bower search! Thanks @unicornforce @Dervisevic @davidlgj
+ * Twitter account, @ngSchemaForm, new releases will be announced here. Thanks @Dervisevic
+ * copyValueTo form option. Thanks @Dervisevic
+
 v0.7.10
 ------
 * Accessability additions, thanks @stramel
