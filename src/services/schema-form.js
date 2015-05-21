@@ -44,7 +44,7 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var defaultFormDefinition = function(name, schema, options) {
-    var rules = defaults[stripNullType(schema.type)];
+    var rules = schema.type ? defaults[stripNullType(schema.type)] : defaults.schema;
     if (rules) {
       var def;
       for (var i = 0; i < rules.length; i++) {
@@ -228,6 +228,46 @@ angular.module('schemaForm').provider('schemaForm',
 
   };
 
+  var anyOf = function(name, schema, options) {
+    if (schema.anyOf && angular.isArray(schema.anyOf)) {
+      var f   = stdFormObj(name, schema, options);
+      f.type  = 'anyOf';
+      f.key   = options.path;
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+
+      var required = schema.required &&
+                     schema.required.indexOf(options.path[options.path.length - 1]) !== -1;
+
+      f.titleMap = [];
+      f.items = [];
+
+      f.selected = 0; // FIXME: directive to choose the correct one
+
+      schema.anyOf.forEach(function(sub, index) {
+        var subPath = options.path.slice();
+        subPath.push('{' + index + '}');
+
+        f.titleMap.push({
+          name: sub.title || f.title + ' ' + index,
+          value: index
+        });
+
+        f.items.push(defaultFormDefinition(name, sub, {
+          path: subPath,
+          required: required || false, //TODO: validate that this is what we want.
+          lookup: options.lookup,
+          ignore: options.ignore,
+          global: options.global
+        }));
+      });
+
+      return f;
+    }
+  };
+
+  var oneOf = function(name, schema, options) {
+  };
+
   //First sorted by schema type then a list.
   //Order has importance. First handler returning an form snippet will be used.
   var defaults = {
@@ -236,7 +276,8 @@ angular.module('schemaForm').provider('schemaForm',
     number:  [number],
     integer: [integer],
     boolean: [checkbox],
-    array:   [checkboxes, array]
+    array:   [checkboxes, array],
+    schema:  [anyOf, oneOf]
   };
 
   var postProcessFn = function(form) { return form; };

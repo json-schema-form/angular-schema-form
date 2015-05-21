@@ -1,0 +1,28 @@
+<div class="panel panel-default {{form.htmlClass}} schema-form-{{form.type}}">
+  <div class="panel-body form-group "
+       ng-class="{'has-error': form.disableErrorState !== true && hasError(), 'has-success': form.disableSuccessState !== true && hasSuccess(), 'has-feedback': form.feedback !== false}">
+    <div class="row">
+      <div class="col-md-4">
+        <h4 class="{{form.labelHtmlClass}}" ng-show="showTitle()">
+          {{form.title}}
+        </h4>
+      </div>
+      <!--
+        this is jus a proof of concept, a directive for choosing correct form to be selected is
+        needed as well.
+      -->
+      <div class="col-md-8">
+        <select ng-model="form.selected"
+                ng-disabled="form.readonly"
+                class="form-control {{form.fieldHtmlClass}}"
+                ng-options="item.value as item.name group by item.group for item in form.titleMap"
+                name="{{form.key.slice(-1)[0]}}">
+        </select>
+      </div>
+    </div>
+    <div class="help-block" sf-message="form.description"></div>
+
+    <hr>
+    <sf-decorator ng-repeat="item in form.items" form="item" ng-if="$index === form.selected"></sf-decorator>
+  </div>
+</div>

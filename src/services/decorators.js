@@ -184,8 +184,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                 templatePromise.then(function(template) {
                   if (form.key) {
-                    var key = form.key ?
-                              sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
+
+                    var key = form.key.filter(function(p) { console.log(p,/\{[0-9]+\}/.test(p)); return !/\{[0-9]+\}/.test(p); });
+                    key = sfPath.stringify(key).replace(/"/g, '&quot;');
+
                     template = template.replace(
                       /\$\$value\$\$/g,
                       'model' + (key[0] !== '[' ? '.' : '') + key

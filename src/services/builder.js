@@ -53,8 +53,10 @@ angular.module('schemaForm').factory('sfBuilder',
         var div = document.createElement('div');
         var template = templateFn(field.template) || templateFn([decorator['default'].template]);
         if (f.key) {
-          var key = f.key ?
-                    sfPath.stringify(f.key).replace(/"/g, '&quot;') : '';
+
+          var key = f.key.filter(function(p) { console.log(p,p.test(/\{[0-9]+\}/)); return !p.test(/\{[0-9]+\}/); });
+          key = sfPath.stringify(key).replace(/"/g, '&quot;');
+
           template = template.replace(
             /\$\$value\$\$/g,
             'model' + (key[0] !== '[' ? '.' : '') + key
@@ -134,7 +136,7 @@ var transclusion = function() {
        * Builds a form from a canonical form definition
        */
       build: function(form, decorator, slots) {
-console.warn(slots)
+console.warn(form)
         return build(form, decorator, function(url) {
           return $templateCache.get(url) || '';
         }, slots);
