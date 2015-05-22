@@ -26,6 +26,8 @@ angular.module('schemaForm').provider('schemaFormDecorators',
       function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage,
                sfPath, sfSelect) {
 
+        var someOfRe = /\{[0-9]+\}/;
+
         return {
           restrict: 'AE',
           replace: false,
@@ -185,7 +187,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 templatePromise.then(function(template) {
                   if (form.key) {
 
-                    var key = form.key.filter(function(p) { console.log(p,/\{[0-9]+\}/.test(p)); return !/\{[0-9]+\}/.test(p); });
+                    var key = form.key.filter(function(p) { return !someOfRe.test(p); });
                     key = sfPath.stringify(key).replace(/"/g, '&quot;');
 
                     template = template.replace(

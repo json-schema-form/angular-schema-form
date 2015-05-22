@@ -26,6 +26,7 @@ angular.module('schemaForm').factory('sfBuilder',
     }
   };
 
+  var someOfRe = /\{[0-9]+\}/;
 
   var build = function(items, decorator, templateFn, slots, path) {
     path = path || 'schemaForm.form';
@@ -54,8 +55,8 @@ angular.module('schemaForm').factory('sfBuilder',
         var template = templateFn(field.template) || templateFn([decorator['default'].template]);
         if (f.key) {
 
-          var key = f.key.filter(function(p) { console.log(p,p.test(/\{[0-9]+\}/)); return !p.test(/\{[0-9]+\}/); });
-          key = sfPath.stringify(key).replace(/"/g, '&quot;');
+          var key = f.key.filter(function(p) { return !someOfRe.test(p); });
+          key = sfPath.stringify(key).replace(/"/g, '&quot;').replace;
 
           template = template.replace(
             /\$\$value\$\$/g,
