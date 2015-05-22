@@ -21,13 +21,20 @@ angular.module('schemaForm').directive('sfMessage',
           element.html(msg);
         } else {
 
-          var errors = Object.keys(
-            (scope.ngModel && scope.ngModel.$error) || {}
-          );
 
-          // Since we use $parsers to hook up our validation we also end up with a "parse" error.
-          // so we remove it.
-          errors = errors.filter(function(e) { return e !== 'parse'; });
+          var errors = [];
+          angular.forEach(((scope.ngModel && scope.ngModel.$error) || {}), function(status, code) {
+            if (status) {
+              // if true then there is an error
+              // Angular 1.3 removes properties, so we will always just have errors.
+              // Angular 1.2 sets them to false.
+              errors.push(code);
+            }
+          });
+
+          // In Angular 1.3 we use one $validator to stop the model value from getting updated.
+          // this means that we always end up with a 'schemaForm' error.
+          errors = errors.filter(function(e) { return e !== 'schemaForm'; });
 
           // We only show one error.
           // TODO: Make that optional

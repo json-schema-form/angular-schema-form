@@ -134,7 +134,6 @@ var transclusion = function() {
        * Builds a form from a canonical form definition
        */
       build: function(form, decorator, slots) {
-console.warn(slots)
         return build(form, decorator, function(url) {
           return $templateCache.get(url) || '';
         }, slots);
