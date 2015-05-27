@@ -463,9 +463,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   this.addMapping = function(name, type, url, builder, replace) {
     if (decorators[name]) {
       decorators[name][type] = {
-        temlpate: url,
+        template: url,
         builder: builder,
-        replace: replace
+        replace: !!replace
       };
     }
   };
