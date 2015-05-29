@@ -9,16 +9,24 @@ angular.module('schemaForm').directive('sfMessage',
       var $sanitize = $injector.has('$sanitize') ?
                       $injector.get('$sanitize') : function(html) { return html; };
 
-      //Prepare and sanitize message, i.e. description in most cases.
-      var msg = '';
+      var message = '';
+
       if (attrs.sfMessage) {
-        msg = scope.$eval(attrs.sfMessage) || '';
-        msg = $sanitize(msg);
+        scope.$watch(attrs.sfMessage, function(msg) {
+          if (msg) {
+            message = $sanitize(msg);
+            if (scope.ngModel) {
+              update(scope.ngModel.$valid);
+            } else {
+              update();
+            }
+          }
+        });
       }
 
       var update = function(valid) {
         if (valid && !scope.hasError()) {
-          element.html(msg);
+          element.html(message);
         } else {
 
 
@@ -48,7 +56,7 @@ angular.module('schemaForm').directive('sfMessage',
               scope.options && scope.options.validationMessage
             ));
           } else {
-            element.html(msg);
+            element.html(message);
           }
         }
       };

@@ -29,6 +29,7 @@ module.exports = function(config) {
       'test/services/decorators-test.js',
       'test/services/messages-test.js',
       'test/directives/schema-form-test.js',
+      'test/directives/sf-messages-test.js',
     ],
 
     // list of files to exclude
