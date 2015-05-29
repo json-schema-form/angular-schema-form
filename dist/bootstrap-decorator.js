@@ -25,7 +25,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
     /*fieldset: {template: base + 'fieldset.html', replace: true, builder: function(args) {
       var children = args.build(args.form.items, args.path + '.items');
       console.log('fieldset children frag', children.childNodes)
-      args.fieldFrag.appendChild(children);
+      args.fieldFrag.childNode.appendChild(children);
     }},*/
     array: {template: base + 'array.html', replace: false},
     tabarray: {template: base + 'tabarray.html', replace: false},
