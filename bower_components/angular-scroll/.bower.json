@@ -1,0 +1,35 @@
+{
+  "name": "angular-scroll",
+  "version": "0.7.0",
+  "main": "angular-scroll.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "package.json",
+    "src",
+    "Gruntfile.js"
+  ],
+  "dependencies": {
+    "angular": "^1.2.16"
+  },
+  "devDependencies": {
+    "angular-mocks": "^1.2.16"
+  },
+  "resolutions": {
+    "angular": "^1.2.16"
+  },
+  "homepage": "https://github.com/oblador/angular-scroll",
+  "_release": "0.7.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.7.0",
+    "commit": "cccd872652502bb169f468e19bb6cc20a469e4cd"
+  },
+  "_source": "git://github.com/oblador/angular-scroll.git",
+  "_target": "~0.7.0",
+  "_originalSource": "angular-scroll",
+  "_direct": true
+}

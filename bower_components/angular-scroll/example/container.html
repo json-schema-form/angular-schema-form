@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <meta charset="UTF-8" />
+  <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <title>Angular.js Container Scroll Example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style type="text/css">
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ebebeb;
+    }
+    body, button {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    h1 {
+      padding-top: 50px;
+    }
+    img {
+      max-width: 100%;
+    }
+    nav {
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      background: rgba(255, 255, 255, 0.8);
+    }
+    nav li, nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      text-align: center
+    }
+    nav li, nav a {
+      display: inline-block;
+    }
+    nav a {
+      padding: 20px;
+      color: #333;
+      text-decoration: none;
+    }
+    a:hover {
+      background: #fff;
+    }
+    a.active {
+      background: #00AC7F;
+      color: #fff;
+    }
+    .wrap {
+      position: relative;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 50px 20px;
+    }
+    section {
+      padding: 20px 0 20px 0;
+      margin-bottom: 30px;
+    }
+    footer {
+      text-align: center;
+    }
+    button {
+      font-size: 18px;
+      border: 0;
+      padding: 15px 30px;
+      background: #00AC7F;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #container {
+      overflow: auto;
+      height: 400px;
+      padding: 0;
+      margin: 10px 0 20px 0;
+    }
+
+  </style>
+</head>
+<body>
+<div class="wrap" ng-controller="MyCtrl">
+  <nav du-scroll-container="container">
+    <ul>
+      <li><a href="#section-1" du-smooth-scroll du-scrollspy>Section 1</a></li>
+      <li><a href="#section-2" du-smooth-scroll du-scrollspy>Section 2</a></li>
+      <li><a href="#section-3" du-smooth-scroll du-scrollspy>Section 3</a></li>
+      <li><a href="http://github.com/oblador/angular-scroll/">Project on Github</a></li>
+    </ul>
+  </nav>
+  <h1>Angular.js Container Scroll Example</h1>
+  <div id="container" du-scroll-container>
+    <section id="section-1">
+      <h2>Section 1</h2>
+      <p><a href="#section-4" du-smooth-scroll>To section 4</a> Bacon ipsum dolor sit amet sausage tail capicola ground round hamburger ham hock. Short ribs pig andouille meatball, pastrami tri-tip fatback ham hock shank kielbasa swine. Rump pancetta jerky kielbasa doner beef ribs tongue hamburger strip steak drumstick andouille shoulder shank flank. Swine drumstick meatball pig beef sausage strip steak.</p>
+
+      <img src="http://lorempixel.com/1000/500/" alt="" />
+    </section>
+
+    <section id="section-2">
+      <h2>Section 2</h2>
+      <p>Bacon strip steak ground round, tongue pastrami short ribs pork chop venison turducken sausage sirloin. Flank chicken pork chop capicola turkey turducken cow pork loin biltong meatball drumstick pancetta filet mignon ground round fatback. Ham hock jerky short ribs brisket. Meatloaf shoulder pork chop capicola, sirloin swine pig pork. Jerky ribeye hamburger pork loin sirloin kevin bresaola boudin chuck flank. Ham hock pork belly chicken jerky rump bresaola.</p>
+    </section>
+
+    <section id="section-3">
+      <h2>Section 3</h2>
+      <p>Shank fatback pastrami short loin, turkey jowl kielbasa ribeye chicken jerky drumstick flank ham. Swine shankle pork belly kielbasa shoulder flank jowl, sirloin doner. Kevin tri-tip bresaola leberkas. Swine ball tip cow strip steak. Ham filet mignon pork chop, pork fatback andouille pork loin shoulder jowl swine strip steak turducken prosciutto rump.</p>
+
+      <img src="http://lorempixel.com/1000/400/" alt="" />
+
+      <p>Tongue tri-tip pastrami, shoulder rump pork belly ground round. Ham hock chuck leberkas doner, strip steak corned beef tri-tip capicola. Rump turkey ham sausage shankle. Flank shankle pork chop ham hock. Shankle venison kielbasa, pancetta swine beef ball tip t-bone bacon hamburger ground round ribeye flank. Turducken bacon bresaola, chicken kevin boudin ball tip strip steak filet mignon pork turkey shank ground round. Kielbasa fatback prosciutto pork chop, jerky ground round leberkas boudin ball tip beef shankle shoulder swine brisket. </p>
+    </section>
+
+    <section id="section-4">
+      <h2>Section 4</h2>
+      <img src="http://lorempixel.com/1000/600/" alt="" />
+
+      <p><a href="#section-1" du-smooth-scroll>To section 1</a> Shoulder cow tenderloin chuck, pork chop jerky doner leberkas. Chuck sausage hamburger, kevin beef pork chop pork shoulder ground round ball tip turducken flank. Bresaola tri-tip meatloaf, salami venison tail pig shank shankle jowl sausage brisket cow biltong turducken. Swine turducken hamburger ball tip short loin prosciutto kevin jowl tri-tip. Doner meatloaf pork brisket.</p>
+    </section>
+  </div>
+  <footer>
+    <button ng-click="toTheTop()">To the top!</button> or <button ng-click="toSection2()">To section 2</button>
+  </footer>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
+<script src="../angular-scroll.js"></script>
+<script>
+angular.module('myApp', ['duScroll']).
+  controller('MyCtrl', function($scope){
+    var container = angular.element(document.getElementById('container'));
+    var section2 = angular.element(document.getElementById('section-2'));
+
+    $scope.toTheTop = function() {
+      container.scrollTop(0, 5000);
+    }
+
+    $scope.toSection2 = function() {
+      container.scrollTo(section2, 0, 1000);
+    }
+  }
+);
+</script>
+</body>
+</html>

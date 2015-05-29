@@ -20,6 +20,8 @@
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:400,700"/>
     <!-- @license-end -->
 
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
     <!-- @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&dn=expat.txt Expat -->
     <link rel="stylesheet" href="gh-pages-files/index.css"/>
     <link rel="stylesheet" href="gh-pages-files/color-main.css"/>
@@ -28,55 +30,31 @@
   <body ng-app="schemaForm" ng-controller="PageCtrl">
     <a href="https://github.com/Textalk/angular-schema-form" class="github-banner hidden-xs"><img src="gh-pages-files/img/github-banner.png" alt=""/></a>
     <a href="https://github.com/Textalk/angular-schema-form" class="github-bar visible-xs"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> us on GitHub</a>
-    <div class="header-wraper">
-      <div class="wrap-my-slide">
-        <div class="slide-a-long hidden-xs">
-          <div class="slide" id="slide1">
-            <div class="container big">
-              <p>Is that a JSON Schema?</p>
-              <p>Here, have a form.</p>
-            </div>
-          </div>
-          <div class="slide" id="slide2">
-            <div class="container">
-              <h3>Reason #1</h3>
-              <p>Stressed? Not any more! Get out and touch some wheat, in a true sepia-colored moment.</p>
-              <p>You can do it!</p>
-            </div>
-          </div>
-          <div class="slide" id="slide3">
-            <div class="container">
-              <h3>Reason #2</h3>
-              <p>Wow, you got so much time on your hands. Become a goat herder. Goats are the coolest animals ever.</p>
-              <p>For realz!</p>
-            </div>
-          </div>
-          <div class="slide" id="slide4">
-            <div class="container">
-              <h3>Reason #3</h3>
-              <p>With time on your side, Find a great place to do awesome poses like reaching your arms to the sky.</p>
-              <p>Nothing says freedom like this.</p>
-            </div>
-          </div>
+
+    <nav>
+      <h1 class="circular"></h1>
+      <ul>
+        <li><a href="#"><i class="fa fa-check-square"></i> Example</a></li>
+        <li><a href="#"><i class="fa fa-bolt"></i> Features</a></li>
+        <li><a href="#"><i class="fa fa-book"></i> Documentation</a></li>
+        <li><a href="#"><i class="fa fa-puzzle-piece"></i> Add-ons</a></li>
+        <li><a href="#"><i class="fa fa-child"></i> Fun stuff</a></li>
+      </ul>
+    </nav>
+    <div class="pusher"></div>
+    <header>
+      <div class="container">
+        <div id="logo">
+          <img src="gh-pages-files/img/logo.png" alt="Angular Schema Form" />
         </div>
-
-        <header>
-          <div class="container">
-            <div id="logo">
-              <img src="gh-pages-files/img/logo.png" alt="Angular Schema Form" />
-            </div>
-            <h1>Generate forms from a JSON schema, with AngularJS!</h1>
-          </div>
-        </header>
+        <h1>Generate forms from a JSON schema, with AngularJS!</h1>
       </div>
-    </div>
-
+    </header>
     <div id="what-is-it" class="container what-is-it">
       <div class="col-sm-12">
-        <h2>What is it?</h2>
         <p>
           Schema Form is a set of AngularJS directives (and a couple of services) to generate
-          Bootstrap 3 ready forms from a JSON Schema.
+          Bootstrap 3 ready forms from a <a href="http://json-schema.org/">JSON Schema</a>.
         </p>
         <p><a href="https://twitter.com/SchemaFormIO" class="twitter-follow-button" data-show-count="false">Follow @SchemaFormIO</a>
            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^https:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script></p>
@@ -204,15 +182,8 @@
     </div>
   </div>
 
-  <div class="container">
-    <h2>The movie</h2>
-    <div class="videoWrapper">
-      <iframe width="1280" height="720" src="https://www.youtube.com/embed/duBFMipRq2o?rel=0" frameborder="0" allowfullscreen></iframe>
-    </div>
-  </div>
-
   <div class="container add-ons">
-    <h2>Add-ons</h2>
+    <h2>Add-ons ({{::addons.length}})</h2>
     <p>
       Schema Form was built to be extended and its easy to create your own form field types that
       suit your specific requirement. Check out
@@ -222,7 +193,6 @@
     <p>
   </div>
   <div id="third-party-addons" class="container third-party">
-    <h2>Third Party Add-ons ({{::addons.length}})</h2>
     <div class="input-group col-xs-11 col-sm-6 col-md-5 col-lg-4">
       <span class="input-group-addon glyphicon glyphicon-search" id="search"></span>
       <input type="text" ng-model="obj.search" class="form-control" aria-describedby="search">
@@ -239,6 +209,49 @@
       </li>
     </ul>
   </div>
+
+
+  <div class="container add-ons">
+    <h2>Fun stuff</h2>
+    <h3>3 reasons</h3>
+    <!-- <div class="slide" id="slide1">
+      <div class="container big">
+        <p>Is that a JSON Schema?</p>
+        <p>Here, have a form.</p>
+      </div>
+    </div> -->
+    <div class="slide" id="slide2">
+      <div class="container">
+        <h3>Reason #1</h3>
+        <p>Stressed? Not any more! Get out and touch some wheat, in a true sepia-colored moment.</p>
+        <p>You can do it!</p>
+      </div>
+    </div>
+    <div class="slide" id="slide3">
+      <div class="container">
+        <h3>Reason #2</h3>
+        <p>Wow, you got so much time on your hands. Become a goat herder. Goats are the coolest animals ever.</p>
+        <p>For realz!</p>
+      </div>
+    </div>
+    <div class="slide" id="slide4">
+      <div class="container">
+        <h3>Reason #3</h3>
+        <p>With time on your side, Find a great place to do awesome poses like reaching your arms to the sky.</p>
+        <p>Nothing says freedom like this.</p>
+      </div>
+    </div>
+
+    <h3>The movie</h3>
+    <div class="videoWrapper">
+      <iframe width="1280" height="720" src="https://www.youtube.com/embed/duBFMipRq2o?rel=0" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </div>
+
+
+
+
+
   <footer>
     <div class="container">
       <h5>Thank you &amp; good bye!</h5>

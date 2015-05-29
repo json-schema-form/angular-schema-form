@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Slabo+27px);
+
 @font-face {
     font-family: 'stumpone';
     src: url('fonts/stump_one.eot');
@@ -47,7 +49,7 @@ a.github-bar { position:fixed; top:0; z-index:200; padding:10px 0; width:100%; d
 .wrap-my-slide { height: 520px; position:relative; }
 .slide-a-long { height:100%; }
 .slide-a-long div { height:100%; }
-.slide { background-size:cover; background-position:center center; padding-top:200px; }
+.slide { background-size:cover; background-position:center center; padding-top:100px; margin-bottom: 50px; }
 
 #slide1 { background-image:url(img/sell.jpg); }
 #slide2 { background-image:url(img/wheat.jpg); }
@@ -59,14 +61,13 @@ a.github-bar { position:fixed; top:0; z-index:200; padding:10px 0; width:100%; d
 
 .slide.big p {font-size:120px; line-height:140px; margin-bottom:40px; }
 
-header { position:absolute; top:60px; width:100%; }
 
 .anchor { position:absolute; bottom:-55px; width:100%; }
 .anchor a { text-decoration:none; }
 .anchor .circle { border-radius:200px; height:110px; width:110px; text-align:center; display:table-cell; vertical-align:middle; font-size:80px; }
 .anchor .circle span { position:relative; bottom: 10px;  }
 
-.what-is-it { padding:40px 0; }
+.what-is-it { padding:15px 0; }
 
 .example { padding:80px 15px; }
 
@@ -99,7 +100,7 @@ header { position:absolute; top:60px; width:100%; }
 .features ul { list-style:none; padding-left:0; }
 .features li { background:url(img/bullet-heart.png) left top 11px no-repeat; padding: 4px 0 4px 20px; }
 
-div.add-ons { padding:80px 15px; }
+div.add-ons { padding:30px 15px; }
 .input-group-addon.glyphicon { position: static; }
 
 ul.add-ons li { border:none; margin-bottom: 8px; }
@@ -169,4 +170,56 @@ footer small { display: inline-block; margin-top: 20px; font-family:roboto, sans
 	left: 0;
 	width: 100%;
 	height: 100%;
+}
+
+
+nav {
+  position: fixed;
+  z-index: 100;
+  width: 100%;
+  height: 84px;
+  border-bottom: 1px solid #CFCFCF;
+  background-color: white;
+}
+
+nav h1 {
+  float: left;
+  margin-left: 10%;
+  margin-right: 2%;
+}
+nav li {
+  float: left;
+  height: 84px;
+  font-family: 'Slabo 27px', serif;
+  vertical-align: middle;
+}
+
+nav li > a {
+  display: block;
+  padding: 30px 30px 0;
+/* padding: 30px 0; */
+  height: 84px;
+  border-right: 1px solid #d8d8d8;
+  overflow: hidden;
+  color: black;
+  font-size: 20px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+div.pusher {
+  position: aboslute;
+  height: 130px;
+}
+
+nav ul {
+  list-style: none;
+}
+
+.circular {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background: url(https://pbs.twimg.com/profile_images/562961631865339904/1X4w8sFX.png) no-repeat;
+  background-size: 50px 50px;
 }
