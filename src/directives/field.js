@@ -11,7 +11,7 @@ angular.module('schemaForm').directive('sfField',
         scope: true,
         require: '?^sfSchema',
         link: {
-          pre: function(scope, element, attrs, sfSchema) {
+          pre: function(scope) {
             //The ngModelController is used in some templates and
             //is needed for error messages,
             scope.$on('schemaFormPropagateNgModelController', function(event, ngModel) {
@@ -140,64 +140,12 @@ angular.module('schemaForm').directive('sfField',
             // Rebind our part of the form to the scope.
             var once = scope.$watch(attrs.sfField, function(form) {
               if (form) {
-                console.warn('got form!!!!', form)
                 // Workaround for 'updateOn' error from ngModelOptions
                 // see https://github.com/Textalk/angular-schema-form/issues/255
                 // and https://github.com/Textalk/angular-schema-form/issues/206
                 form.ngModelOptions = form.ngModelOptions || {};
                 scope.form  = form;
 
-  /*
-                //ok let's replace that template!
-                //We do this manually since we need to bind ng-model properly and also
-                //for fieldsets to recurse properly.
-                var templatePromise;
-
-                // type: "template" is a special case. It can contain a template inline or an url.
-                // otherwise we find out the url to the template and load them.
-                if (form.type === 'template' && form.template) {
-                  templatePromise = $q.when(form.template);
-                } else {
-                  var url = form.type === 'template' ? form.templateUrl : templateUrl(name, form);
-                  templatePromise = $http.get(url, {cache: $templateCache}).then(function(res) {
-                                      return res.data;
-                                    });
-                }
-  */
-  /*
-                templatePromise.then(function(template) {
-                  if (form.key) {
-                    var key = form.key ?
-                              sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
-                    template = template.replace(
-                      /\$\$value\$\$/g,
-                      'model' + (key[0] !== '[' ? '.' : '') + key
-                    );
-                  }
-                  element.html(template);
-  */
-                  // Do we have a condition? Then we slap on an ng-if on all children,
-                  // but be nice to existing ng-if.
-                  /*if (form.condition) {
-
-                    var evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex})';
-                    if (form.key) {
-                      evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "modelValue": model' + sfPath.stringify(form.key) + '})';
-                    }
-
-                    angular.forEach(element.children(), function(child) {
-                      var ngIf = child.getAttribute('ng-if');
-                      child.setAttribute(
-                        'ng-if',
-                        ngIf ?
-                        '(' + ngIf +
-                        ') || (' + evalExpr +')'
-                        : evalExpr
-                      );
-                    });
-                  }*/
-                  //$compile(element.contents())(scope);
-                //});
 
                 // Where there is a key there is probably a ngModel
                 if (form.key) {

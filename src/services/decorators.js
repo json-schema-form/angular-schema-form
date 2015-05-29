@@ -280,7 +280,6 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                         var type = (form.schema && form.schema.type) || '';
 
                         // Empty means '',{} and [] for appropriate types and undefined for the rest
-                        //console.log('destroy', destroyStrategy, form.key, type, obj);
                         if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
                           obj[form.key.slice(-1)] = '';
                         } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
