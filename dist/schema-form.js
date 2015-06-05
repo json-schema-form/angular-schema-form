@@ -512,12 +512,11 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                       }
 
                       if (scope.ngModel && error) {
-                        if (scope.ngModel.$setDirty()) {
-                          scope.ngModel.$setDirty();
-                        } else {
-                          // FIXME: Check that this actually works on 1.2
+                        if (angular.version.major === 1 && angular.version.minor <= 2) {
                           scope.ngModel.$dirty = true;
                           scope.ngModel.$pristine = false;
+                        } else if (scope.ngModel.$setDirty()) {
+                          scope.ngModel.$setDirty();
                         }
 
                         // Set the new validation message if one is supplied
