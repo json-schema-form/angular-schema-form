@@ -159,7 +159,7 @@ angular.module('schemaForm').directive('sfField',
                       }
 
                       if (scope.ngModel && error) {
-                        if (scope.ngModel.$setDirty()) {
+                        if (scope.ngModel.$setDirty) {
                           scope.ngModel.$setDirty();
                         } else {
                           // FIXME: Check that this actually works on 1.2

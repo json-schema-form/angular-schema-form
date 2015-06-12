@@ -512,7 +512,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                       }
 
                       if (scope.ngModel && error) {
-                        if (scope.ngModel.$setDirty()) {
+                        if (scope.ngModel.$setDirty) {
                           scope.ngModel.$setDirty();
                         } else {
                           // FIXME: Check that this actually works on 1.2
@@ -911,7 +911,7 @@ angular.module('schemaForm').provider('schemaForm',
         return type[0];
     }
     return type;
-  }
+  };
 
   //Creates an default titleMap list from an enum, i.e. a list of strings.
   var enumToTitleMap = function(enm) {
@@ -1044,6 +1044,7 @@ angular.module('schemaForm').provider('schemaForm',
       if (!f.titleMap) {
         f.titleMap = enumToTitleMap(schema['enum']);
       }
+      f.trackBy = 'value';
       options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
     }
@@ -1235,6 +1236,10 @@ angular.module('schemaForm').provider('schemaForm',
         //If it has a titleMap make sure it's a list
         if (obj.titleMap) {
           obj.titleMap = canonicalTitleMap(obj.titleMap);
+        }
+
+        if(obj.type === 'select') {
+          obj.trackBy = obj.trackBy || 'value';
         }
 
         //
@@ -1473,7 +1478,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
           // the outside so let's watch for that. We use an ordinary watch since the only case
           // we're really interested in is if its a new instance.
           scope.$watch('model' + sfPath.normalize(form.key), function(value) {
-            scope.modelArray = value;
+            list = scope.modelArray = value;
           });
 
           // Since ng-model happily creates objects in a deep path when setting a
@@ -1874,7 +1879,7 @@ angular.module('schemaForm').directive('sfField',
                       }
 
                       if (scope.ngModel && error) {
-                        if (scope.ngModel.$setDirty()) {
+                        if (scope.ngModel.$setDirty) {
                           scope.ngModel.$setDirty();
                         } else {
                           // FIXME: Check that this actually works on 1.2
