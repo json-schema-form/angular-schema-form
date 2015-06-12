@@ -23,7 +23,7 @@ Demo Time!
 ----------
 [Try out the example page](http://schemaform.io/examples/bootstrap-example.html). Try editing the schema or form definition and see what comes out!
 
-Now you can save your code and share it!
+Hint: By pressing the 'Save to gist' button (top left), you can save your example into a shareable link.
 
 What is it?
 ----------
