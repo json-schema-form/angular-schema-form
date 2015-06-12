@@ -43,7 +43,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
           // the outside so let's watch for that. We use an ordinary watch since the only case
           // we're really interested in is if its a new instance.
           scope.$watch('model' + sfPath.normalize(form.key), function(value) {
-            scope.modelArray = value;
+            list = scope.modelArray = value;
           });
 
           // Since ng-model happily creates objects in a deep path when setting a
