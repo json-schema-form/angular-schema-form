@@ -31,8 +31,8 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
     303: 'Additional properties not allowed',
     304: 'Dependency failed - key must exist',
     // Array errors
-    400: 'Array is too short ({{value.length}}), minimum {{schema.maxItems}}',
-    401: 'Array is too long ({{value.length}}), maximum {{schema.minItems}}',
+    400: 'Array is too short ({{value.length}}), minimum {{schema.minItems}}',
+    401: 'Array is too long ({{value.length}}), maximum {{schema.maxItems}}',
     402: 'Array items are not unique',
     403: 'Additional items not allowed',
     // Format errors
