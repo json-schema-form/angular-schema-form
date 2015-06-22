@@ -247,7 +247,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                         scope.ngModel.$setValidity(error, validity === true);
 
-                        if (validity === true) {
+                        if (validity === true && !scope.ngModel.$valid) {
+                          // Previous the model maybe invalid, then the model value is undefined.
+                          // To make the validation to the tv4 works, we need also re-trigger validators
+                          scope.ngModel.$validate();
                           // Setting or removing a validity can change the field to believe its valid
                           // but its not. So lets trigger its validation as well.
                           scope.$broadcast('schemaFormValidate');
