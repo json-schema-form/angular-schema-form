@@ -50,5 +50,5 @@
         id="{{form.key.slice(-1)[0] + 'Status'}}"
         class="sr-only">{{ hasSuccess() ? '(success)' : '(error)' }}</span>
 
-  <div class="help-block" sf-message="form.description"></div>
+  <div class="help-block {{form.validationHtmlClass}}" sf-message="form.description"></div>
 </div>

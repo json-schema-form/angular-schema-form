@@ -22,7 +22,7 @@
       {{ form.add || 'Add'}}
     </button>
   </div>
-  <div class="help-block"
+  <div class="help-block {{form.validationHtmlClass}}"
        ng-show="(hasError() && errorMessage(schemaError())) || form.description"
        ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
 </div>
