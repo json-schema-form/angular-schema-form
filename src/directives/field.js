@@ -19,6 +19,9 @@ angular.module('schemaForm').directive('sfField',
               event.preventDefault();
               scope.ngModel = ngModel;
             });
+
+            //make sure to overwrite form here so that we don't inherit it by accident
+            scope.form = null;
           },
           post: function(scope, element, attrs, sfSchema) {
 

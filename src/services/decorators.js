@@ -377,7 +377,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
     decorators[name] = {'__name': name};
 
     angular.forEach(templates, function(url, type) {
-      decorators[name][type] = {template: url, replace: false, builder: angular.noop};
+      decorators[name][type] = {template: url, replace: false, builder: []};
     });
 
     if (!decorators[defaultDecorator]) {
@@ -404,7 +404,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
     decorators[name] = {'__name': name}; // TODO: this feels like a hack, come up with a better way.
 
     angular.forEach(fields, function(field, type) {
-      field.builder = field.builder || angular.noop;
+      field.builder = field.builder || [];
       field.replace = angular.isDefined(field.replace) ? field.replace : true;
       decorators[name][type] = field;
     });
