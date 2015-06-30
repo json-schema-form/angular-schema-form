@@ -28,7 +28,6 @@ angular.module('tx-tinymce',[])
           selector: '#'+attrs.id,
           setup: function(ed) {
             tinymce = ed;
-            console.log(tinymce)
             window['focus'+attrs.id] = function(){
               tinymce.execCommand('mceFocus', false, attrs.id);
             };

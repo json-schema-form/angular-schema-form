@@ -1,4 +1,4 @@
-angular.module("schemaForm").run(["$templateCache", function($templateCache) {$templateCache.put("directives/decorators/bootstrap/datepicker/datepicker.html","<div class=\"form-group\" ng-class=\"{\'has-error\': hasError()}\">\n  <label class=\"control-label\" ng-show=\"showTitle()\">{{form.title}}</label>\n\n  <input ng-show=\"form.key\"\n         style=\"background-color: white\"\n         type=\"text\"\n         class=\"form-control\"\n         schema-validate=\"form\"\n         ng-model=\"$$value$$\"\n         pick-a-date\n         min-date=\"form.minDate\"\n         max-date=\"form.maxDate\"\n         format=\"form.format\" />\n\n  <span class=\"help-block\">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>\n</div>\n");}]);
+angular.module("schemaForm").run(["$templateCache", function($templateCache) {$templateCache.put("directives/decorators/bootstrap/datepicker/datepicker.html","<div class=\"form-group {{form.htmlClass}}\" ng-class=\"{\'has-error\': hasError()}\">\n  <label class=\"control-label\" ng-show=\"showTitle()\">{{form.title}}</label>\n  <div ng-class=\"{\'input-group\': (form.fieldAddonLeft || form.fieldAddonRight)}\">\n    <span ng-if=\"form.fieldAddonLeft\"\n          class=\"input-group-addon\"\n          ng-bind-html=\"form.fieldAddonLeft\"></span>\n    <input ng-show=\"form.key\"\n           style=\"background-color: white\"\n           type=\"text\"\n           class=\"form-control {{form.fieldHtmlClass}}\"\n           schema-validate=\"form\"\n           ng-model=\"$$value$$\"\n           ng-disabled=\"form.readonly\"\n           pick-a-date=\"form.pickadate\"\n           min-date=\"form.minDate\"\n           max-date=\"form.maxDate\"\n           name=\"{{form.key.slice(-1)[0]}}\"\n           format=\"form.format\" />\n    <span ng-if=\"form.fieldAddonRight\"\n          class=\"input-group-addon\"\n          ng-bind-html=\"form.fieldAddonRight\"></span>\n  </div>\n  <span class=\"help-block\">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>\n</div>\n");}]);
 angular.module('schemaForm').directive('pickADate', function () {
 
   //String dates for min and max is not supported
@@ -17,6 +17,7 @@ angular.module('schemaForm').directive('pickADate', function () {
     require: 'ngModel',
     scope: {
       ngModel: '=',
+      pickADate: '=',
       minDate: '=',
       maxDate: '=',
       format: '='
@@ -30,12 +31,16 @@ angular.module('schemaForm').directive('pickADate', function () {
       //By setting formatSubmit to null we inhibit the
       //hidden field that pickadate likes to create.
       //We use ngModel formatters instead to format the value.
-      element.pickadate({
+      var opts = {
         onClose: function () {
           element.blur();
         },
         formatSubmit: null
-      });
+      };
+      if (scope.pickADate) {
+        angular.extend(opts, scope.pickADate);
+      }
+      element.pickadate(opts);
 
       //Defaultformat is for json schema date-time is ISO8601
       //i.e.  "yyyy-mm-dd"

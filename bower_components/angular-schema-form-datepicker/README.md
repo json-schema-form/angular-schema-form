@@ -22,7 +22,7 @@ Installation
 The date picker is an add-on to the Bootstrap decorator. To use it, just include
 `bootstrap-datepicker.min.js` *after* `bootstrap-decorator.min.js`.
 
-You'll need to load a few additional files to use pickadate:
+You'll need to load a few additional files to use pickadate **in this order**:
 
 1. jQuery (pickadate depends on it)
 2. The pickadate source files (see the pickadate.js
@@ -60,13 +60,28 @@ The `datepicker` form type takes two date range options: `minDate` and `maxDate`
 
 It is also possible to set the date format using the `format` option, which is used to format the date stored by AngularJS, but note that in doing so you break the standard and other JSON Schema validators might complain. The view date displayed by pickadate is set by the translation files. see [Installation](#installation)
 
-Here's an example:
+Example
+-----------------
+Below is an example. It's written in javascript instead of pure schema and form so the use of the date object is supported.
 
 ```javascript
-{
-  key: "birthDate",
-  minDate: "1900-01-01",
-  maxDate: new Date(),
-  format: "yyyy-mm-dd"
+scope.schema = {
+  "type": "object",
+  "properties": {
+    "birthDate": {
+      "title": "Bday",
+      "type": "string",
+      "format": "date"
+    }
+  }
 }
+
+scope.form = [
+  {
+    "key": "birthDate",
+    "minDate": "1995-09-01",
+    "maxDate": new Date(),
+    "format": "yyyy-mm-dd"
+  }
+]
 ```

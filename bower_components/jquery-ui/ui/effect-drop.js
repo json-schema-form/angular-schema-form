@@ -1,8 +1,8 @@
 /*!
- * jQuery UI Effects Drop 1.11.1
+ * jQuery UI Effects Drop 1.11.4
  * http://jqueryui.com
  *
- * Copyright 2014 jQuery Foundation and other contributors
+ * Copyright jQuery Foundation and other contributors
  * Released under the MIT license.
  * http://jquery.org/license
  *
@@ -42,7 +42,7 @@ return $.effects.effect.drop = function( o, done ) {
 	el.show();
 	$.effects.createWrapper( el );
 
-	distance = o.distance || el[ ref === "top" ? "outerHeight": "outerWidth" ]( true ) / 2;
+	distance = o.distance || el[ ref === "top" ? "outerHeight" : "outerWidth" ]( true ) / 2;
 
 	if ( show ) {
 		el

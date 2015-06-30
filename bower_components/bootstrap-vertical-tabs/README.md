@@ -1,7 +1,7 @@
 Bootstrap Vertical Tabs
 =======================
 
-Vertical tabs component for Bootstrap 3.
+Vertical tabs component for Bootstrap 3. Works with 3.0.0+ to 3.3.0.
 
 ![screenshot](screenshot.png)
 
@@ -10,7 +10,7 @@ Vertical tabs component for Bootstrap 3.
 ```bash  
   bower install bootstrap-vertical-tabs
 ```
-* Or you can just clone, [download (v1.1.0)](https://github.com/dbtek/bootstrap-vertical-tabs/archive/1.1.0.zip) from GitHub.
+* Or you can just clone, [download (v1.1.1)](https://github.com/dbtek/bootstrap-vertical-tabs/archive/1.1.1.zip) from GitHub.
 
 ### Usage
 

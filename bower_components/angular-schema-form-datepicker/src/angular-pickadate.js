@@ -16,6 +16,7 @@ angular.module('schemaForm').directive('pickADate', function () {
     require: 'ngModel',
     scope: {
       ngModel: '=',
+      pickADate: '=',
       minDate: '=',
       maxDate: '=',
       format: '='
@@ -29,12 +30,16 @@ angular.module('schemaForm').directive('pickADate', function () {
       //By setting formatSubmit to null we inhibit the
       //hidden field that pickadate likes to create.
       //We use ngModel formatters instead to format the value.
-      element.pickadate({
+      var opts = {
         onClose: function () {
           element.blur();
         },
         formatSubmit: null
-      });
+      };
+      if (scope.pickADate) {
+        angular.extend(opts, scope.pickADate);
+      }
+      element.pickadate(opts);
 
       //Defaultformat is for json schema date-time is ISO8601
       //i.e.  "yyyy-mm-dd"

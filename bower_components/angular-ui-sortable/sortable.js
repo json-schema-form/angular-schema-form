@@ -1,3 +1,10 @@
+/**
+ * angular-ui-sortable - This directive allows you to jQueryUI Sortable.
+ * @version v0.13.4 - 2015-06-07
+ * @link http://angular-ui.github.com
+ * @license MIT
+ */
+
 (function(window, angular, undefined) {
 'use strict';
 /*
@@ -13,17 +20,17 @@ angular.module('ui.sortable', [])
       return {
         require: '?ngModel',
         scope: {
-          ngModel: '=ngModel',
-          uiSortable: '=uiSortable'
+          ngModel: '=',
+          uiSortable: '='
         },
         link: function(scope, element, attrs, ngModel) {
           var savedNodes;
 
           function combineCallbacks(first,second){
             if(second && (typeof second === 'function')) {
-              return function(e, ui) {
-                first(e, ui);
-                second(e, ui);
+              return function() {
+                first.apply(this, arguments);
+                second.apply(this, arguments);
               };
             }
             return first;
@@ -47,6 +54,18 @@ angular.module('ui.sortable', [])
           // thanks jquery-ui
           function isFloating (item) {
             return (/left|right/).test(item.css('float')) || (/inline|table-cell/).test(item.css('display'));
+          }
+
+          function getElementScope(elementScopes, element) {
+            var result = null;
+            for (var i = 0; i < elementScopes.length; i++) {
+              var x = elementScopes[i];
+              if (x.element[0] === element[0]) {
+                result = x.scope;
+                break;
+              }
+            }
+            return result;
           }
 
           function afterStop(e, ui) {
@@ -128,7 +147,7 @@ angular.module('ui.sortable', [])
               };
             };
 
-            callbacks.activate = function(/*e, ui*/) {
+            callbacks.activate = function(e, ui) {
               // We need to make a copy of the current element's contents so
               // we can restore it after sortable has messed it up.
               // This is inside activate (instead of start) in order to save
@@ -153,10 +172,20 @@ angular.module('ui.sortable', [])
                 // exact match with the placeholder's class attribute to handle
                 // the case that multiple connected sortables exist and
                 // the placehoilder option equals the class of sortable items
-                var excludes = element.find('[class="' + phElement.attr('class') + '"]');
+                var excludes = element.find('[class="' + phElement.attr('class') + '"]:not([ng-repeat], [data-ng-repeat])');
 
                 savedNodes = savedNodes.not(excludes);
               }
+
+              // save the directive's scope so that it is accessible from ui.item.sortable
+              var connectedSortables = ui.item.sortable._connectedSortables || [];
+
+              connectedSortables.push({
+                element: element,
+                scope: scope
+              });
+
+              ui.item.sortable._connectedSortables = connectedSortables;
             };
 
             callbacks.update = function(e, ui) {
@@ -167,8 +196,9 @@ angular.module('ui.sortable', [])
                 ui.item.sortable.dropindex = ui.item.index();
                 var droptarget = ui.item.parent();
                 ui.item.sortable.droptarget = droptarget;
-                var attr = droptarget.attr('ng-model') || droptarget.attr('data-ng-model');
-                ui.item.sortable.droptargetModel = droptarget.scope().$eval(attr);
+
+                var droptargetScope = getElementScope(ui.item.sortable._connectedSortables, droptarget);
+                ui.item.sortable.droptargetModel = droptargetScope.ngModel;
 
                 // Cancel the sort (let ng-repeat do the sort for us)
                 // Don't cancel if this is the received list because it has
@@ -265,7 +295,7 @@ angular.module('ui.sortable', [])
             wrappers.helper = function (inner) {
               if (inner && typeof inner === 'function') {
                 return function (e, item) {
-                  var innerResult = inner(e, item);
+                  var innerResult = inner.apply(this, arguments);
                   item.sortable._isCustomHelperUsed = item !== innerResult;
                   return innerResult;
                 };

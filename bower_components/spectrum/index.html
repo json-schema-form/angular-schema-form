@@ -19,7 +19,7 @@
 <div id='header'>
     <h1><a href='http://bgrins.github.com/spectrum'>Spectrum</a></h1> <h2><em>The No Hassle jQuery Colorpicker</em></h2>
     <div id='links'>
-        <a href='http://github.com/bgrins/spectrum/zipball/1.5.0' class="btn btn-primary">Download Zip</a>
+        <a href='http://github.com/bgrins/spectrum/zipball/1.7.0' class="btn btn-primary">Download Zip</a>
         View the <a href='http://github.com/bgrins/spectrum'>Source code</a>.
         Spectrum is a project by <a href='http://twitter.com/bgrins'>@bgrins</a>.
     </div>
@@ -97,32 +97,6 @@
 
 
         <h2 id="modes">Modes</h2>
-        <h3 id="modes-input" class='point'>input[type=color]</h3>
-
-    <p>
-    If you just want to provide a polyfill for the native color input,
-    the easiest way is to create an input with the type of color.
-    Once a user's browser supports a native color control, it will opt to use their native control instead.
-    </p>
-    <p><strong>Unlike the other modes, your value must be a 6 character hex value starting with a '#'.</strong>  Why?  Because the spec <a href='http://dev.w3.org/html5/markup/input.color.html#input.color.attrs.value'>says so</a>, that's why.
-    </p>
-
-<pre class='prettyprint' id='code-subheading'>
-&lt;input type='color' name='color' /&gt;
-&lt;input type='color' name='color2' value='#3355cc' /&gt;
-</pre>
-    <div class='example'>
-<form method="get">
-    <input type='color' name='color' />
-    <input type='color' name='color2' value='#3355cc' />
-    <input type='color' name='color3' value='#000000' />
-    <input type="submit" />
-</form>
-    </div>
-    <p><strong>That's it!</strong>
-    The field will degrade to a text input if the user does not have JavaScript enabled,
-    so that they will still be able to manually enter a color.  You don't need to add a single line of code.
-    </p>
 
         <h3 id="modes-custom" class='point'>Custom</h3>
     <p>If you want to get more into the functionality, just create a normal input and initialize it as a normal jQuery plugin.
@@ -175,6 +149,33 @@ $("#flatClearable").spectrum({
             <br/>
             <input type='text' id='flatClearable' value="limegreen" />
         </div>
+
+        <h3 id="modes-input" class='point'>input[type=color]</h3>
+
+    <p>
+    If you just want to provide a polyfill for the native color input,
+    the easiest way is to create an input with the type of color.
+    Once a user's browser supports a native color control, it will opt to use their native control instead.
+    </p>
+    <p><strong>Unlike the other modes, your value must be a 6 character hex value starting with a '#'.</strong>  Why?  Because the spec <a href='http://dev.w3.org/html5/markup/input.color.html#input.color.attrs.value'>says so</a>, that's why.
+    </p>
+
+<pre class='prettyprint' id='code-subheading'>
+&lt;input type='color' name='color' /&gt;
+&lt;input type='color' name='color2' value='#3355cc' /&gt;
+</pre>
+    <div class='example'>
+<form method="get">
+    <input type='color' name='color' />
+    <input type='color' name='color2' value='#3355cc' />
+    <input type='color' name='color3' value='#000000' />
+    <input type="submit" />
+</form>
+    </div>
+    <p><strong>That's it!</strong>
+    The field will degrade to a text input if the user does not have JavaScript enabled,
+    so that they will still be able to manually enter a color.  You don't need to add a single line of code.
+    </p>
 
 <!--
 <div class="alert">
@@ -429,7 +430,50 @@ $("#showSelectionPaletteStorage").spectrum({
             </div>
         </div>
 
+        <h3 id="options-selectionPalette">Selection Palette</h3>
+        <div class='option-content'>
+            <div class='description'>
+                <p>The default values inside of the selection palette.  Make sure that <a href="#options-showSelectionPalette">showSelectionPalette</a> and <a href="#options-showPalette">showPalette</a> are both enabled.</p>
+                <p>If a <code>localStorageKey</code> is defined, then this value will be overwritten by it.</p>
+            </div>
 
+            <pre class='prettyprint'>
+$("#selectionPalette").spectrum({
+    showPalette: true,
+    palette: [ ],
+    showSelectionPalette: true, // true by default
+    selectionPalette: ["red", "green", "blue"]
+});
+            </pre>
+
+            <div class='example'>
+                    <span class='label label-info'>This colorpicker has default values in the selection palette:</span><br /><br />
+                    <input type='text' name='selectionPalette' id='selectionPalette' value='orange' />
+            </div>
+        </div>
+
+        <h3 id="options-maxSelectionSize">Max Selection Size</h3>
+        <div class='option-content'>
+            <div class='description'>
+                <p>This is how many elements are allowed in the <a href="#options-selectionPalette">selectionPallete</a> at once.</p>
+                <p>Elements will be removed from the palette in first in - first out order if this limit is reached.</p>
+            </div>
+
+            <pre class='prettyprint'>
+$("#maxSelectionSize").spectrum({
+    showPalette: true,
+    palette: [ ],
+    showSelectionPalette: true, // true by default
+    selectionPalette: ["red", "green", "blue"],
+    maxSelectionSize: 2
+});
+            </pre>
+
+            <div class='example'>
+                    <span class='label label-info'>This colorpicker starts removing selection palette colors older than 2:</span><br /><br />
+                    <input type='text' name='maxSelectionSize' id='maxSelectionSize' value='red' />
+            </div>
+        </div>
 
         <h3 id="options-hideAfterPaletteSelect">Hide After Palette Select</h3>
         <div class='option-content'>
@@ -462,7 +506,7 @@ $("#hideAfterPaletteSelect").spectrum({
         <div class='option-content'>
             <div class='description'>
                 <p>
-                When clicking outside of the colorpicker, you can force it to fire a <code>change</code> event rather than having it revert the change.
+                When clicking outside of the colorpicker, you can force it to fire a <code>change</code> event rather than having it revert the change.  This is <code>true</code> by default.
                 </p>
             </div>
 
@@ -471,7 +515,7 @@ $("#clickoutFiresChange").spectrum({
     clickoutFiresChange: true
 });
 $("#clickoutDoesntChange").spectrum({
-
+    clickoutFiresChange: false
 });
             </pre>
 
@@ -691,15 +735,30 @@ $("#preferredNone").spectrum({
             </div>
         </div>
 
+        <h3 id="options-appendTo">appendTo</h3>
+        <div class='option-content'>
+            <div class='description'>
+                <p>You can choose which element the colorpicker container is appended to (default is <code>"body"</code>). This can be any valid object taken into the jQuery <a href="https://api.jquery.com/appendTo/">appendTo</a> function.</p>
+                <p>Changing this can help resolve issues with opening the colorpicker in a modal dialog or fixed position container, for instance.</p>
+            </div>
+
+</div>
         <h2 id="events">Events</h2>
 
 <pre class='prettyprint'>
+// Events can be bound in the intialization process as options:
 $("#picker").spectrum({
     move: function(tinycolor) { },
     show: function(tinycolor) { },
     hide: function(tinycolor) { },
     beforeShow: function(tinycolor) { },
 });
+
+// Alternatively, they can be added as an event listener:
+$("#picker").on('move.spectrum', function(e, tinycolor) { });
+$("#picker").on('show.spectrum', function(e, tinycolor) { });
+$("#picker").on('hide.spectrum', function(e, tinycolor) { });
+$("#picker").on('beforeShow.spectrum', function(e, tinycolor) { });
 </pre>
 
         <h3 id="events-change">change</h3>

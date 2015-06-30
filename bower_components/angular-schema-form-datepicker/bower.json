@@ -3,7 +3,7 @@
   "main": [
     "bootstrap-datepicker.min.js"
   ],
-  "version": "0.2.1",
+  "version": "0.4.0",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>"
@@ -31,7 +31,7 @@
     "pickadate": "~3.5.3"
   },
   "devDependencies": {
-    "angular-schema-form": ">= 0.7",
+    "angular-schema-form": ">= 0.8",
     "angular-mocks": ">= 1.2"
   }
 }

@@ -17,20 +17,19 @@ $ bower install angular-schema-form-colorpicker
 
 You'll need to load a few additional files to use colorpicker:
 
-*Before loading angular schema form*
+**Be sure to load this projects files after you load angular schema form**
 
 1. jQuery
 2. Angular
-
-*After loading angular schema form*
-
-1. The Spectrum source files (see the
+3. The Spectrum source files (see the
    [GitHub page](https://github.com/amsul/pickadate.js) for documentation)
-2. The Spectrum-angular source files (see the
+4. The Spectrum-angular source files (see the
    [GitHub page](https://github.com/Jimdo/angular-spectrum-colorpicker) for documentation)
-3. The Angular Schema Form Colorpicker files (this project)
-3. The spectrum CSS
-4. Translation files for whatever language you want to use
+5. The spectrum CSS
+6. Translation files for whatever language you want to use (optional)
+7. **Angular Schema Form**
+8. The Angular Schema Form Colorpicker files (this project)
+
 
 Example
 
@@ -38,15 +37,14 @@ Example
 <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
 <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="/bower_components/spectrum/spectrum.js"></script>
+<script type="text/javascript" src="/bower_components/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js"></script>
+
 <script type="text/javascript" src="/bower_components/angular-schema-form/schema-form.min.js"></script>
 <script type="text/javascript" src="/bower_components/angular-schema-form/bootstrap-decorator.min.js"></script>
-
-<script type="text/javascript" src="/bower_components/spectrum/spectrum.js"></script>
-<script type="text/javascript" src="/bower_components/spectrum/i18n/jquery.spectrum-sv.js"></script>
-<script type="text/javascript" src="/bower_components/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js"></script>
 <script type="text/javascript" src="/bower_components/angular-schema-form-colorpicker/bootstrap-colorpicker.min.js"></script>
-
 <link rel="stylesheet" href="/bower_components/spectrum/spectrum.css">
+<script type="text/javascript" src="/bower_components/spectrum/i18n/jquery.spectrum-sv.js"></script>
 ```
 
 
@@ -96,7 +94,6 @@ Here's an example:
   colorFormat: 'hsv',
   spectrumOptions: {
     preferredFormat: 'hex3',
-    flat: true,
     showAlpha: false,
     palette: [['black', 'white'], ['red', 'green']]
   }

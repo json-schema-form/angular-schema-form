@@ -17,14 +17,22 @@ window.window = window;
 window.ace = window;
 
 window.onerror = function(message, file, line, col, err) {
-    console.error("Worker " + (err ? err.stack : message));
+    postMessage({type: "error", data: {
+        message: message,
+        file: file,
+        line: line, 
+        col: col,
+        stack: err.stack
+    }});
 };
 
 window.normalizeModule = function(parentId, moduleName) {
+    // normalize plugin requires
     if (moduleName.indexOf("!") !== -1) {
         var chunks = moduleName.split("!");
         return window.normalizeModule(parentId, chunks[0]) + "!" + window.normalizeModule(parentId, chunks[1]);
     }
+    // normalize relative requires
     if (moduleName.charAt(0) == ".") {
         var base = parentId.split("/").slice(0, -1).join("/");
         moduleName = (base ? base + "/" : "") + moduleName;
@@ -82,13 +90,20 @@ window.define = function(id, deps, factory) {
         deps = [];
         id = window.require.id;
     }
+    
+    if (typeof factory != "function") {
+        window.require.modules[id] = {
+            exports: factory,
+            initialized: true
+        };
+        return;
+    }
 
     if (!deps.length)
+        // If there is no dependencies, we inject 'require', 'exports' and
+        // 'module' as dependencies, to provide CommonJS compatibility.
         deps = ['require', 'exports', 'module'];
 
-    if (id.indexOf("text!") === 0) 
-        return;
-    
     var req = function(childId) {
         return window.require(id, childId);
     };
@@ -99,9 +114,13 @@ window.define = function(id, deps, factory) {
             var module = this;
             var returnExports = factory.apply(this, deps.map(function(dep) {
               switch(dep) {
+                  // Because 'require', 'exports' and 'module' aren't actual
+                  // dependencies, we must handle them seperately.
                   case 'require': return req;
                   case 'exports': return module.exports;
                   case 'module':  return module;
+                  // But for all other dependencies, we can just go ahead and
+                  // require them.
                   default:        return req(dep);
               }
             }));
@@ -173,367 +192,36 @@ window.onmessage = function(e) {
 };
 })(this);
 
-define('ace/document', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/event_emitter', 'ace/range', 'ace/anchor'], function(require, exports, module) {
+define("ace/lib/oop",["require","exports","module"], function(require, exports, module) {
+"use strict";
 
-
-var oop = require("./lib/oop");
-var EventEmitter = require("./lib/event_emitter").EventEmitter;
-var Range = require("./range").Range;
-var Anchor = require("./anchor").Anchor;
-
-var Document = function(text) {
-    this.$lines = [];
-    if (text.length === 0) {
-        this.$lines = [""];
-    } else if (Array.isArray(text)) {
-        this._insertLines(0, text);
-    } else {
-        this.insert({row: 0, column:0}, text);
-    }
+exports.inherits = function(ctor, superCtor) {
+    ctor.super_ = superCtor;
+    ctor.prototype = Object.create(superCtor.prototype, {
+        constructor: {
+            value: ctor,
+            enumerable: false,
+            writable: true,
+            configurable: true
+        }
+    });
 };
 
-(function() {
+exports.mixin = function(obj, mixin) {
+    for (var key in mixin) {
+        obj[key] = mixin[key];
+    }
+    return obj;
+};
 
-    oop.implement(this, EventEmitter);
-    this.setValue = function(text) {
-        var len = this.getLength();
-        this.remove(new Range(0, 0, len, this.getLine(len-1).length));
-        this.insert({row: 0, column:0}, text);
-    };
-    this.getValue = function() {
-        return this.getAllLines().join(this.getNewLineCharacter());
-    };
-    this.createAnchor = function(row, column) {
-        return new Anchor(this, row, column);
-    };
-    if ("aaa".split(/a/).length === 0)
-        this.$split = function(text) {
-            return text.replace(/\r\n|\r/g, "\n").split("\n");
-        };
-    else
-        this.$split = function(text) {
-            return text.split(/\r\n|\r|\n/);
-        };
+exports.implement = function(proto, mixin) {
+    exports.mixin(proto, mixin);
+};
 
-
-    this.$detectNewLine = function(text) {
-        var match = text.match(/^.*?(\r\n|\r|\n)/m);
-        this.$autoNewLine = match ? match[1] : "\n";
-        this._signal("changeNewLineMode");
-    };
-    this.getNewLineCharacter = function() {
-        switch (this.$newLineMode) {
-          case "windows":
-            return "\r\n";
-          case "unix":
-            return "\n";
-          default:
-            return this.$autoNewLine || "\n";
-        }
-    };
-
-    this.$autoNewLine = "";
-    this.$newLineMode = "auto";
-    this.setNewLineMode = function(newLineMode) {
-        if (this.$newLineMode === newLineMode)
-            return;
-
-        this.$newLineMode = newLineMode;
-        this._signal("changeNewLineMode");
-    };
-    this.getNewLineMode = function() {
-        return this.$newLineMode;
-    };
-    this.isNewLine = function(text) {
-        return (text == "\r\n" || text == "\r" || text == "\n");
-    };
-    this.getLine = function(row) {
-        return this.$lines[row] || "";
-    };
-    this.getLines = function(firstRow, lastRow) {
-        return this.$lines.slice(firstRow, lastRow + 1);
-    };
-    this.getAllLines = function() {
-        return this.getLines(0, this.getLength());
-    };
-    this.getLength = function() {
-        return this.$lines.length;
-    };
-    this.getTextRange = function(range) {
-        if (range.start.row == range.end.row) {
-            return this.getLine(range.start.row)
-                .substring(range.start.column, range.end.column);
-        }
-        var lines = this.getLines(range.start.row, range.end.row);
-        lines[0] = (lines[0] || "").substring(range.start.column);
-        var l = lines.length - 1;
-        if (range.end.row - range.start.row == l)
-            lines[l] = lines[l].substring(0, range.end.column);
-        return lines.join(this.getNewLineCharacter());
-    };
-
-    this.$clipPosition = function(position) {
-        var length = this.getLength();
-        if (position.row >= length) {
-            position.row = Math.max(0, length - 1);
-            position.column = this.getLine(length-1).length;
-        } else if (position.row < 0)
-            position.row = 0;
-        return position;
-    };
-    this.insert = function(position, text) {
-        if (!text || text.length === 0)
-            return position;
-
-        position = this.$clipPosition(position);
-        if (this.getLength() <= 1)
-            this.$detectNewLine(text);
-
-        var lines = this.$split(text);
-        var firstLine = lines.splice(0, 1)[0];
-        var lastLine = lines.length == 0 ? null : lines.splice(lines.length - 1, 1)[0];
-
-        position = this.insertInLine(position, firstLine);
-        if (lastLine !== null) {
-            position = this.insertNewLine(position); // terminate first line
-            position = this._insertLines(position.row, lines);
-            position = this.insertInLine(position, lastLine || "");
-        }
-        return position;
-    };
-    this.insertLines = function(row, lines) {
-        if (row >= this.getLength())
-            return this.insert({row: row, column: 0}, "\n" + lines.join("\n"));
-        return this._insertLines(Math.max(row, 0), lines);
-    };
-    this._insertLines = function(row, lines) {
-        if (lines.length == 0)
-            return {row: row, column: 0};
-        while (lines.length > 0xF000) {
-            var end = this._insertLines(row, lines.slice(0, 0xF000));
-            lines = lines.slice(0xF000);
-            row = end.row;
-        }
-
-        var args = [row, 0];
-        args.push.apply(args, lines);
-        this.$lines.splice.apply(this.$lines, args);
-
-        var range = new Range(row, 0, row + lines.length, 0);
-        var delta = {
-            action: "insertLines",
-            range: range,
-            lines: lines
-        };
-        this._signal("change", { data: delta });
-        return range.end;
-    };
-    this.insertNewLine = function(position) {
-        position = this.$clipPosition(position);
-        var line = this.$lines[position.row] || "";
-
-        this.$lines[position.row] = line.substring(0, position.column);
-        this.$lines.splice(position.row + 1, 0, line.substring(position.column, line.length));
-
-        var end = {
-            row : position.row + 1,
-            column : 0
-        };
-
-        var delta = {
-            action: "insertText",
-            range: Range.fromPoints(position, end),
-            text: this.getNewLineCharacter()
-        };
-        this._signal("change", { data: delta });
-
-        return end;
-    };
-    this.insertInLine = function(position, text) {
-        if (text.length == 0)
-            return position;
-
-        var line = this.$lines[position.row] || "";
-
-        this.$lines[position.row] = line.substring(0, position.column) + text
-                + line.substring(position.column);
-
-        var end = {
-            row : position.row,
-            column : position.column + text.length
-        };
-
-        var delta = {
-            action: "insertText",
-            range: Range.fromPoints(position, end),
-            text: text
-        };
-        this._signal("change", { data: delta });
-
-        return end;
-    };
-    this.remove = function(range) {
-        if (!(range instanceof Range))
-            range = Range.fromPoints(range.start, range.end);
-        range.start = this.$clipPosition(range.start);
-        range.end = this.$clipPosition(range.end);
-
-        if (range.isEmpty())
-            return range.start;
-
-        var firstRow = range.start.row;
-        var lastRow = range.end.row;
-
-        if (range.isMultiLine()) {
-            var firstFullRow = range.start.column == 0 ? firstRow : firstRow + 1;
-            var lastFullRow = lastRow - 1;
-
-            if (range.end.column > 0)
-                this.removeInLine(lastRow, 0, range.end.column);
-
-            if (lastFullRow >= firstFullRow)
-                this._removeLines(firstFullRow, lastFullRow);
-
-            if (firstFullRow != firstRow) {
-                this.removeInLine(firstRow, range.start.column, this.getLine(firstRow).length);
-                this.removeNewLine(range.start.row);
-            }
-        }
-        else {
-            this.removeInLine(firstRow, range.start.column, range.end.column);
-        }
-        return range.start;
-    };
-    this.removeInLine = function(row, startColumn, endColumn) {
-        if (startColumn == endColumn)
-            return;
-
-        var range = new Range(row, startColumn, row, endColumn);
-        var line = this.getLine(row);
-        var removed = line.substring(startColumn, endColumn);
-        var newLine = line.substring(0, startColumn) + line.substring(endColumn, line.length);
-        this.$lines.splice(row, 1, newLine);
-
-        var delta = {
-            action: "removeText",
-            range: range,
-            text: removed
-        };
-        this._signal("change", { data: delta });
-        return range.start;
-    };
-    this.removeLines = function(firstRow, lastRow) {
-        if (firstRow < 0 || lastRow >= this.getLength())
-            return this.remove(new Range(firstRow, 0, lastRow + 1, 0));
-        return this._removeLines(firstRow, lastRow);
-    };
-
-    this._removeLines = function(firstRow, lastRow) {
-        var range = new Range(firstRow, 0, lastRow + 1, 0);
-        var removed = this.$lines.splice(firstRow, lastRow - firstRow + 1);
-
-        var delta = {
-            action: "removeLines",
-            range: range,
-            nl: this.getNewLineCharacter(),
-            lines: removed
-        };
-        this._signal("change", { data: delta });
-        return removed;
-    };
-    this.removeNewLine = function(row) {
-        var firstLine = this.getLine(row);
-        var secondLine = this.getLine(row+1);
-
-        var range = new Range(row, firstLine.length, row+1, 0);
-        var line = firstLine + secondLine;
-
-        this.$lines.splice(row, 2, line);
-
-        var delta = {
-            action: "removeText",
-            range: range,
-            text: this.getNewLineCharacter()
-        };
-        this._signal("change", { data: delta });
-    };
-    this.replace = function(range, text) {
-        if (!(range instanceof Range))
-            range = Range.fromPoints(range.start, range.end);
-        if (text.length == 0 && range.isEmpty())
-            return range.start;
-        if (text == this.getTextRange(range))
-            return range.end;
-
-        this.remove(range);
-        if (text) {
-            var end = this.insert(range.start, text);
-        }
-        else {
-            end = range.start;
-        }
-
-        return end;
-    };
-    this.applyDeltas = function(deltas) {
-        for (var i=0; i<deltas.length; i++) {
-            var delta = deltas[i];
-            var range = Range.fromPoints(delta.range.start, delta.range.end);
-
-            if (delta.action == "insertLines")
-                this.insertLines(range.start.row, delta.lines);
-            else if (delta.action == "insertText")
-                this.insert(range.start, delta.text);
-            else if (delta.action == "removeLines")
-                this._removeLines(range.start.row, range.end.row - 1);
-            else if (delta.action == "removeText")
-                this.remove(range);
-        }
-    };
-    this.revertDeltas = function(deltas) {
-        for (var i=deltas.length-1; i>=0; i--) {
-            var delta = deltas[i];
-
-            var range = Range.fromPoints(delta.range.start, delta.range.end);
-
-            if (delta.action == "insertLines")
-                this._removeLines(range.start.row, range.end.row - 1);
-            else if (delta.action == "insertText")
-                this.remove(range);
-            else if (delta.action == "removeLines")
-                this._insertLines(range.start.row, delta.lines);
-            else if (delta.action == "removeText")
-                this.insert(range.start, delta.text);
-        }
-    };
-    this.indexToPosition = function(index, startRow) {
-        var lines = this.$lines || this.getAllLines();
-        var newlineLength = this.getNewLineCharacter().length;
-        for (var i = startRow || 0, l = lines.length; i < l; i++) {
-            index -= lines[i].length + newlineLength;
-            if (index < 0)
-                return {row: i, column: index + lines[i].length + newlineLength};
-        }
-        return {row: l-1, column: lines[l-1].length};
-    };
-    this.positionToIndex = function(pos, startRow) {
-        var lines = this.$lines || this.getAllLines();
-        var newlineLength = this.getNewLineCharacter().length;
-        var index = 0;
-        var row = Math.min(pos.row, lines.length);
-        for (var i = startRow || 0; i < row; ++i)
-            index += lines[i].length + newlineLength;
-
-        return index + pos.column;
-    };
-
-}).call(Document.prototype);
-
-exports.Document = Document;
 });
 
-define('ace/lib/event_emitter', ['require', 'exports', 'module' ], function(require, exports, module) {
-
+define("ace/lib/event_emitter",["require","exports","module"], function(require, exports, module) {
+"use strict";
 
 var EventEmitter = {};
 var stopPropagation = function() { this.propagationStopped = true; };
@@ -658,8 +346,8 @@ exports.EventEmitter = EventEmitter;
 
 });
 
-define('ace/range', ['require', 'exports', 'module' ], function(require, exports, module) {
-
+define("ace/range",["require","exports","module"], function(require, exports, module) {
+"use strict";
 var comparePoints = function(p1, p2) {
     return p1.row - p2.row || p1.column - p2.column;
 };
@@ -896,57 +584,517 @@ Range.comparePoints = function(p1, p2) {
 
 exports.Range = Range;
 });
-define('ace/worker/mirror', ['require', 'exports', 'module' , 'ace/document', 'ace/lib/lang'], function(require, exports, module) {
 
+define("ace/anchor",["require","exports","module","ace/lib/oop","ace/lib/event_emitter"], function(require, exports, module) {
+"use strict";
 
-var Document = require("../document").Document;
-var lang = require("../lib/lang");
+var oop = require("./lib/oop");
+var EventEmitter = require("./lib/event_emitter").EventEmitter;
+
+var Anchor = exports.Anchor = function(doc, row, column) {
+    this.$onChange = this.onChange.bind(this);
+    this.attach(doc);
     
-var Mirror = exports.Mirror = function(sender) {
-    this.sender = sender;
-    var doc = this.doc = new Document("");
-    
-    var deferredUpdate = this.deferredUpdate = lang.delayedCall(this.onUpdate.bind(this));
-    
-    var _self = this;
-    sender.on("change", function(e) {
-        doc.applyDeltas(e.data);
-        if (_self.$timeout)
-            return deferredUpdate.schedule(_self.$timeout);
-        _self.onUpdate();
-    });
+    if (typeof column == "undefined")
+        this.setPosition(row.row, row.column);
+    else
+        this.setPosition(row, column);
 };
 
 (function() {
-    
-    this.$timeout = 500;
-    
-    this.setTimeout = function(timeout) {
-        this.$timeout = timeout;
+
+    oop.implement(this, EventEmitter);
+    this.getPosition = function() {
+        return this.$clipPositionToDocument(this.row, this.column);
     };
-    
-    this.setValue = function(value) {
-        this.doc.setValue(value);
-        this.deferredUpdate.schedule(this.$timeout);
+    this.getDocument = function() {
+        return this.document;
     };
-    
-    this.getValue = function(callbackId) {
-        this.sender.callback(this.doc.getValue(), callbackId);
+    this.$insertRight = false;
+    this.onChange = function(e) {
+        var delta = e.data;
+        var range = delta.range;
+
+        if (range.start.row == range.end.row && range.start.row != this.row)
+            return;
+
+        if (range.start.row > this.row)
+            return;
+
+        if (range.start.row == this.row && range.start.column > this.column)
+            return;
+
+        var row = this.row;
+        var column = this.column;
+        var start = range.start;
+        var end = range.end;
+
+        if (delta.action === "insertText") {
+            if (start.row === row && start.column <= column) {
+                if (start.column === column && this.$insertRight) {
+                } else if (start.row === end.row) {
+                    column += end.column - start.column;
+                } else {
+                    column -= start.column;
+                    row += end.row - start.row;
+                }
+            } else if (start.row !== end.row && start.row < row) {
+                row += end.row - start.row;
+            }
+        } else if (delta.action === "insertLines") {
+            if (start.row === row && column === 0 && this.$insertRight) {
+            }
+            else if (start.row <= row) {
+                row += end.row - start.row;
+            }
+        } else if (delta.action === "removeText") {
+            if (start.row === row && start.column < column) {
+                if (end.column >= column)
+                    column = start.column;
+                else
+                    column = Math.max(0, column - (end.column - start.column));
+
+            } else if (start.row !== end.row && start.row < row) {
+                if (end.row === row)
+                    column = Math.max(0, column - end.column) + start.column;
+                row -= (end.row - start.row);
+            } else if (end.row === row) {
+                row -= end.row - start.row;
+                column = Math.max(0, column - end.column) + start.column;
+            }
+        } else if (delta.action == "removeLines") {
+            if (start.row <= row) {
+                if (end.row <= row)
+                    row -= end.row - start.row;
+                else {
+                    row = start.row;
+                    column = 0;
+                }
+            }
+        }
+
+        this.setPosition(row, column, true);
     };
-    
-    this.onUpdate = function() {
+    this.setPosition = function(row, column, noClip) {
+        var pos;
+        if (noClip) {
+            pos = {
+                row: row,
+                column: column
+            };
+        } else {
+            pos = this.$clipPositionToDocument(row, column);
+        }
+
+        if (this.row == pos.row && this.column == pos.column)
+            return;
+
+        var old = {
+            row: this.row,
+            column: this.column
+        };
+
+        this.row = pos.row;
+        this.column = pos.column;
+        this._signal("change", {
+            old: old,
+            value: pos
+        });
     };
-    
-    this.isPending = function() {
-        return this.deferredUpdate.isPending();
+    this.detach = function() {
+        this.document.removeEventListener("change", this.$onChange);
     };
-    
-}).call(Mirror.prototype);
+    this.attach = function(doc) {
+        this.document = doc || this.document;
+        this.document.on("change", this.$onChange);
+    };
+    this.$clipPositionToDocument = function(row, column) {
+        var pos = {};
+
+        if (row >= this.document.getLength()) {
+            pos.row = Math.max(0, this.document.getLength() - 1);
+            pos.column = this.document.getLine(pos.row).length;
+        }
+        else if (row < 0) {
+            pos.row = 0;
+            pos.column = 0;
+        }
+        else {
+            pos.row = row;
+            pos.column = Math.min(this.document.getLine(pos.row).length, Math.max(0, column));
+        }
+
+        if (column < 0)
+            pos.column = 0;
+
+        return pos;
+    };
+
+}).call(Anchor.prototype);
 
 });
 
-define('ace/lib/lang', ['require', 'exports', 'module' ], function(require, exports, module) {
+define("ace/document",["require","exports","module","ace/lib/oop","ace/lib/event_emitter","ace/range","ace/anchor"], function(require, exports, module) {
+"use strict";
 
+var oop = require("./lib/oop");
+var EventEmitter = require("./lib/event_emitter").EventEmitter;
+var Range = require("./range").Range;
+var Anchor = require("./anchor").Anchor;
+
+var Document = function(text) {
+    this.$lines = [];
+    if (text.length === 0) {
+        this.$lines = [""];
+    } else if (Array.isArray(text)) {
+        this._insertLines(0, text);
+    } else {
+        this.insert({row: 0, column:0}, text);
+    }
+};
+
+(function() {
+
+    oop.implement(this, EventEmitter);
+    this.setValue = function(text) {
+        var len = this.getLength();
+        this.remove(new Range(0, 0, len, this.getLine(len-1).length));
+        this.insert({row: 0, column:0}, text);
+    };
+    this.getValue = function() {
+        return this.getAllLines().join(this.getNewLineCharacter());
+    };
+    this.createAnchor = function(row, column) {
+        return new Anchor(this, row, column);
+    };
+    if ("aaa".split(/a/).length === 0)
+        this.$split = function(text) {
+            return text.replace(/\r\n|\r/g, "\n").split("\n");
+        };
+    else
+        this.$split = function(text) {
+            return text.split(/\r\n|\r|\n/);
+        };
+
+
+    this.$detectNewLine = function(text) {
+        var match = text.match(/^.*?(\r\n|\r|\n)/m);
+        this.$autoNewLine = match ? match[1] : "\n";
+        this._signal("changeNewLineMode");
+    };
+    this.getNewLineCharacter = function() {
+        switch (this.$newLineMode) {
+          case "windows":
+            return "\r\n";
+          case "unix":
+            return "\n";
+          default:
+            return this.$autoNewLine || "\n";
+        }
+    };
+
+    this.$autoNewLine = "";
+    this.$newLineMode = "auto";
+    this.setNewLineMode = function(newLineMode) {
+        if (this.$newLineMode === newLineMode)
+            return;
+
+        this.$newLineMode = newLineMode;
+        this._signal("changeNewLineMode");
+    };
+    this.getNewLineMode = function() {
+        return this.$newLineMode;
+    };
+    this.isNewLine = function(text) {
+        return (text == "\r\n" || text == "\r" || text == "\n");
+    };
+    this.getLine = function(row) {
+        return this.$lines[row] || "";
+    };
+    this.getLines = function(firstRow, lastRow) {
+        return this.$lines.slice(firstRow, lastRow + 1);
+    };
+    this.getAllLines = function() {
+        return this.getLines(0, this.getLength());
+    };
+    this.getLength = function() {
+        return this.$lines.length;
+    };
+    this.getTextRange = function(range) {
+        if (range.start.row == range.end.row) {
+            return this.getLine(range.start.row)
+                .substring(range.start.column, range.end.column);
+        }
+        var lines = this.getLines(range.start.row, range.end.row);
+        lines[0] = (lines[0] || "").substring(range.start.column);
+        var l = lines.length - 1;
+        if (range.end.row - range.start.row == l)
+            lines[l] = lines[l].substring(0, range.end.column);
+        return lines.join(this.getNewLineCharacter());
+    };
+
+    this.$clipPosition = function(position) {
+        var length = this.getLength();
+        if (position.row >= length) {
+            position.row = Math.max(0, length - 1);
+            position.column = this.getLine(length-1).length;
+        } else if (position.row < 0)
+            position.row = 0;
+        return position;
+    };
+    this.insert = function(position, text) {
+        if (!text || text.length === 0)
+            return position;
+
+        position = this.$clipPosition(position);
+        if (this.getLength() <= 1)
+            this.$detectNewLine(text);
+
+        var lines = this.$split(text);
+        var firstLine = lines.splice(0, 1)[0];
+        var lastLine = lines.length == 0 ? null : lines.splice(lines.length - 1, 1)[0];
+
+        position = this.insertInLine(position, firstLine);
+        if (lastLine !== null) {
+            position = this.insertNewLine(position); // terminate first line
+            position = this._insertLines(position.row, lines);
+            position = this.insertInLine(position, lastLine || "");
+        }
+        return position;
+    };
+    this.insertLines = function(row, lines) {
+        if (row >= this.getLength())
+            return this.insert({row: row, column: 0}, "\n" + lines.join("\n"));
+        return this._insertLines(Math.max(row, 0), lines);
+    };
+    this._insertLines = function(row, lines) {
+        if (lines.length == 0)
+            return {row: row, column: 0};
+        while (lines.length > 20000) {
+            var end = this._insertLines(row, lines.slice(0, 20000));
+            lines = lines.slice(20000);
+            row = end.row;
+        }
+
+        var args = [row, 0];
+        args.push.apply(args, lines);
+        this.$lines.splice.apply(this.$lines, args);
+
+        var range = new Range(row, 0, row + lines.length, 0);
+        var delta = {
+            action: "insertLines",
+            range: range,
+            lines: lines
+        };
+        this._signal("change", { data: delta });
+        return range.end;
+    };
+    this.insertNewLine = function(position) {
+        position = this.$clipPosition(position);
+        var line = this.$lines[position.row] || "";
+
+        this.$lines[position.row] = line.substring(0, position.column);
+        this.$lines.splice(position.row + 1, 0, line.substring(position.column, line.length));
+
+        var end = {
+            row : position.row + 1,
+            column : 0
+        };
+
+        var delta = {
+            action: "insertText",
+            range: Range.fromPoints(position, end),
+            text: this.getNewLineCharacter()
+        };
+        this._signal("change", { data: delta });
+
+        return end;
+    };
+    this.insertInLine = function(position, text) {
+        if (text.length == 0)
+            return position;
+
+        var line = this.$lines[position.row] || "";
+
+        this.$lines[position.row] = line.substring(0, position.column) + text
+                + line.substring(position.column);
+
+        var end = {
+            row : position.row,
+            column : position.column + text.length
+        };
+
+        var delta = {
+            action: "insertText",
+            range: Range.fromPoints(position, end),
+            text: text
+        };
+        this._signal("change", { data: delta });
+
+        return end;
+    };
+    this.remove = function(range) {
+        if (!(range instanceof Range))
+            range = Range.fromPoints(range.start, range.end);
+        range.start = this.$clipPosition(range.start);
+        range.end = this.$clipPosition(range.end);
+
+        if (range.isEmpty())
+            return range.start;
+
+        var firstRow = range.start.row;
+        var lastRow = range.end.row;
+
+        if (range.isMultiLine()) {
+            var firstFullRow = range.start.column == 0 ? firstRow : firstRow + 1;
+            var lastFullRow = lastRow - 1;
+
+            if (range.end.column > 0)
+                this.removeInLine(lastRow, 0, range.end.column);
+
+            if (lastFullRow >= firstFullRow)
+                this._removeLines(firstFullRow, lastFullRow);
+
+            if (firstFullRow != firstRow) {
+                this.removeInLine(firstRow, range.start.column, this.getLine(firstRow).length);
+                this.removeNewLine(range.start.row);
+            }
+        }
+        else {
+            this.removeInLine(firstRow, range.start.column, range.end.column);
+        }
+        return range.start;
+    };
+    this.removeInLine = function(row, startColumn, endColumn) {
+        if (startColumn == endColumn)
+            return;
+
+        var range = new Range(row, startColumn, row, endColumn);
+        var line = this.getLine(row);
+        var removed = line.substring(startColumn, endColumn);
+        var newLine = line.substring(0, startColumn) + line.substring(endColumn, line.length);
+        this.$lines.splice(row, 1, newLine);
+
+        var delta = {
+            action: "removeText",
+            range: range,
+            text: removed
+        };
+        this._signal("change", { data: delta });
+        return range.start;
+    };
+    this.removeLines = function(firstRow, lastRow) {
+        if (firstRow < 0 || lastRow >= this.getLength())
+            return this.remove(new Range(firstRow, 0, lastRow + 1, 0));
+        return this._removeLines(firstRow, lastRow);
+    };
+
+    this._removeLines = function(firstRow, lastRow) {
+        var range = new Range(firstRow, 0, lastRow + 1, 0);
+        var removed = this.$lines.splice(firstRow, lastRow - firstRow + 1);
+
+        var delta = {
+            action: "removeLines",
+            range: range,
+            nl: this.getNewLineCharacter(),
+            lines: removed
+        };
+        this._signal("change", { data: delta });
+        return removed;
+    };
+    this.removeNewLine = function(row) {
+        var firstLine = this.getLine(row);
+        var secondLine = this.getLine(row+1);
+
+        var range = new Range(row, firstLine.length, row+1, 0);
+        var line = firstLine + secondLine;
+
+        this.$lines.splice(row, 2, line);
+
+        var delta = {
+            action: "removeText",
+            range: range,
+            text: this.getNewLineCharacter()
+        };
+        this._signal("change", { data: delta });
+    };
+    this.replace = function(range, text) {
+        if (!(range instanceof Range))
+            range = Range.fromPoints(range.start, range.end);
+        if (text.length == 0 && range.isEmpty())
+            return range.start;
+        if (text == this.getTextRange(range))
+            return range.end;
+
+        this.remove(range);
+        if (text) {
+            var end = this.insert(range.start, text);
+        }
+        else {
+            end = range.start;
+        }
+
+        return end;
+    };
+    this.applyDeltas = function(deltas) {
+        for (var i=0; i<deltas.length; i++) {
+            var delta = deltas[i];
+            var range = Range.fromPoints(delta.range.start, delta.range.end);
+
+            if (delta.action == "insertLines")
+                this.insertLines(range.start.row, delta.lines);
+            else if (delta.action == "insertText")
+                this.insert(range.start, delta.text);
+            else if (delta.action == "removeLines")
+                this._removeLines(range.start.row, range.end.row - 1);
+            else if (delta.action == "removeText")
+                this.remove(range);
+        }
+    };
+    this.revertDeltas = function(deltas) {
+        for (var i=deltas.length-1; i>=0; i--) {
+            var delta = deltas[i];
+
+            var range = Range.fromPoints(delta.range.start, delta.range.end);
+
+            if (delta.action == "insertLines")
+                this._removeLines(range.start.row, range.end.row - 1);
+            else if (delta.action == "insertText")
+                this.remove(range);
+            else if (delta.action == "removeLines")
+                this._insertLines(range.start.row, delta.lines);
+            else if (delta.action == "removeText")
+                this.insert(range.start, delta.text);
+        }
+    };
+    this.indexToPosition = function(index, startRow) {
+        var lines = this.$lines || this.getAllLines();
+        var newlineLength = this.getNewLineCharacter().length;
+        for (var i = startRow || 0, l = lines.length; i < l; i++) {
+            index -= lines[i].length + newlineLength;
+            if (index < 0)
+                return {row: i, column: index + lines[i].length + newlineLength};
+        }
+        return {row: l-1, column: lines[l-1].length};
+    };
+    this.positionToIndex = function(pos, startRow) {
+        var lines = this.$lines || this.getAllLines();
+        var newlineLength = this.getNewLineCharacter().length;
+        var index = 0;
+        var row = Math.min(pos.row, lines.length);
+        for (var i = startRow || 0; i < row; ++i)
+            index += lines[i].length + newlineLength;
+
+        return index + pos.column;
+    };
+
+}).call(Document.prototype);
+
+exports.Document = Document;
+});
+
+define("ace/lib/lang",["require","exports","module"], function(require, exports, module) {
+"use strict";
 
 exports.last = function(a) {
     return a[a.length - 1];
@@ -1061,7 +1209,6 @@ exports.getMatchOffsets = function(string, regExp) {
     return matches;
 };
 exports.deferredCall = function(fcn) {
-
     var timer = null;
     var callback = function() {
         timer = null;
@@ -1132,40 +1279,791 @@ exports.delayedCall = function(fcn, defaultTimeout) {
 };
 });
 
-define('ace/mode/coffee/coffee-script', ['require', 'exports', 'module' , 'ace/mode/coffee/lexer', 'ace/mode/coffee/parser', 'ace/mode/coffee/nodes'], function(require, exports, module) {
+define("ace/worker/mirror",["require","exports","module","ace/document","ace/lib/lang"], function(require, exports, module) {
+"use strict";
 
-    var Lexer = require("./lexer").Lexer;
-    var parser = require("./parser");
+var Document = require("../document").Document;
+var lang = require("../lib/lang");
+    
+var Mirror = exports.Mirror = function(sender) {
+    this.sender = sender;
+    var doc = this.doc = new Document("");
+    
+    var deferredUpdate = this.deferredUpdate = lang.delayedCall(this.onUpdate.bind(this));
+    
+    var _self = this;
+    sender.on("change", function(e) {
+        doc.applyDeltas(e.data);
+        if (_self.$timeout)
+            return deferredUpdate.schedule(_self.$timeout);
+        _self.onUpdate();
+    });
+};
 
-    var lexer = new Lexer();
-    parser.lexer = {
-        lex: function() {
-            var tag, token;
-            token = this.tokens[this.pos++];
-            if (token) {
-                tag = token[0], this.yytext = token[1], this.yylloc = token[2];
-                this.yylineno = this.yylloc.first_line;
-            } else {
-                tag = '';
-            }
-            return tag;
-        },
-        setInput: function(tokens) {
-            this.tokens = tokens;
-            return this.pos = 0;
-        },
-        upcomingInput: function() {
-            return "";
-        }
+(function() {
+    
+    this.$timeout = 500;
+    
+    this.setTimeout = function(timeout) {
+        this.$timeout = timeout;
     };
-    parser.yy = require('./nodes');
-
-    exports.parse = function(code) {
-        return parser.parse(lexer.tokenize(code));
+    
+    this.setValue = function(value) {
+        this.doc.setValue(value);
+        this.deferredUpdate.schedule(this.$timeout);
     };
+    
+    this.getValue = function(callbackId) {
+        this.sender.callback(this.doc.getValue(), callbackId);
+    };
+    
+    this.onUpdate = function() {
+    };
+    
+    this.isPending = function() {
+        return this.deferredUpdate.isPending();
+    };
+    
+}).call(Mirror.prototype);
+
 });
 
-define('ace/mode/coffee/lexer', ['require', 'exports', 'module' , 'ace/mode/coffee/rewriter', 'ace/mode/coffee/helpers'], function(require, exports, module) {
+define("ace/mode/coffee/rewriter",["require","exports","module"], function(require, exports, module) {
+
+  var BALANCED_PAIRS, CALL_CLOSERS, EXPRESSION_CLOSE, EXPRESSION_END, EXPRESSION_START, IMPLICIT_CALL, IMPLICIT_END, IMPLICIT_FUNC, IMPLICIT_UNSPACED_CALL, INVERSES, LINEBREAKS, SINGLE_CLOSERS, SINGLE_LINERS, generate, left, rite, _i, _len, _ref,
+    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
+    __slice = [].slice;
+
+  generate = function(tag, value) {
+    var tok;
+    tok = [tag, value];
+    tok.generated = true;
+    return tok;
+  };
+
+  exports.Rewriter = (function() {
+    function Rewriter() {}
+
+    Rewriter.prototype.rewrite = function(tokens) {
+      this.tokens = tokens;
+      this.removeLeadingNewlines();
+      this.closeOpenCalls();
+      this.closeOpenIndexes();
+      this.normalizeLines();
+      this.tagPostfixConditionals();
+      this.addImplicitBracesAndParens();
+      this.addLocationDataToGeneratedTokens();
+      return this.tokens;
+    };
+
+    Rewriter.prototype.scanTokens = function(block) {
+      var i, token, tokens;
+      tokens = this.tokens;
+      i = 0;
+      while (token = tokens[i]) {
+        i += block.call(this, token, i, tokens);
+      }
+      return true;
+    };
+
+    Rewriter.prototype.detectEnd = function(i, condition, action) {
+      var levels, token, tokens, _ref, _ref1;
+      tokens = this.tokens;
+      levels = 0;
+      while (token = tokens[i]) {
+        if (levels === 0 && condition.call(this, token, i)) {
+          return action.call(this, token, i);
+        }
+        if (!token || levels < 0) {
+          return action.call(this, token, i - 1);
+        }
+        if (_ref = token[0], __indexOf.call(EXPRESSION_START, _ref) >= 0) {
+          levels += 1;
+        } else if (_ref1 = token[0], __indexOf.call(EXPRESSION_END, _ref1) >= 0) {
+          levels -= 1;
+        }
+        i += 1;
+      }
+      return i - 1;
+    };
+
+    Rewriter.prototype.removeLeadingNewlines = function() {
+      var i, tag, _i, _len, _ref;
+      _ref = this.tokens;
+      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
+        tag = _ref[i][0];
+        if (tag !== 'TERMINATOR') {
+          break;
+        }
+      }
+      if (i) {
+        return this.tokens.splice(0, i);
+      }
+    };
+
+    Rewriter.prototype.closeOpenCalls = function() {
+      var action, condition;
+      condition = function(token, i) {
+        var _ref;
+        return ((_ref = token[0]) === ')' || _ref === 'CALL_END') || token[0] === 'OUTDENT' && this.tag(i - 1) === ')';
+      };
+      action = function(token, i) {
+        return this.tokens[token[0] === 'OUTDENT' ? i - 1 : i][0] = 'CALL_END';
+      };
+      return this.scanTokens(function(token, i) {
+        if (token[0] === 'CALL_START') {
+          this.detectEnd(i + 1, condition, action);
+        }
+        return 1;
+      });
+    };
+
+    Rewriter.prototype.closeOpenIndexes = function() {
+      var action, condition;
+      condition = function(token, i) {
+        var _ref;
+        return (_ref = token[0]) === ']' || _ref === 'INDEX_END';
+      };
+      action = function(token, i) {
+        return token[0] = 'INDEX_END';
+      };
+      return this.scanTokens(function(token, i) {
+        if (token[0] === 'INDEX_START') {
+          this.detectEnd(i + 1, condition, action);
+        }
+        return 1;
+      });
+    };
+
+    Rewriter.prototype.matchTags = function() {
+      var fuzz, i, j, pattern, _i, _ref, _ref1;
+      i = arguments[0], pattern = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
+      fuzz = 0;
+      for (j = _i = 0, _ref = pattern.length; 0 <= _ref ? _i < _ref : _i > _ref; j = 0 <= _ref ? ++_i : --_i) {
+        while (this.tag(i + j + fuzz) === 'HERECOMMENT') {
+          fuzz += 2;
+        }
+        if (pattern[j] == null) {
+          continue;
+        }
+        if (typeof pattern[j] === 'string') {
+          pattern[j] = [pattern[j]];
+        }
+        if (_ref1 = this.tag(i + j + fuzz), __indexOf.call(pattern[j], _ref1) < 0) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    Rewriter.prototype.looksObjectish = function(j) {
+      return this.matchTags(j, '@', null, ':') || this.matchTags(j, null, ':');
+    };
+
+    Rewriter.prototype.findTagsBackwards = function(i, tags) {
+      var backStack, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+      backStack = [];
+      while (i >= 0 && (backStack.length || (_ref2 = this.tag(i), __indexOf.call(tags, _ref2) < 0) && ((_ref3 = this.tag(i), __indexOf.call(EXPRESSION_START, _ref3) < 0) || this.tokens[i].generated) && (_ref4 = this.tag(i), __indexOf.call(LINEBREAKS, _ref4) < 0))) {
+        if (_ref = this.tag(i), __indexOf.call(EXPRESSION_END, _ref) >= 0) {
+          backStack.push(this.tag(i));
+        }
+        if ((_ref1 = this.tag(i), __indexOf.call(EXPRESSION_START, _ref1) >= 0) && backStack.length) {
+          backStack.pop();
+        }
+        i -= 1;
+      }
+      return _ref5 = this.tag(i), __indexOf.call(tags, _ref5) >= 0;
+    };
+
+    Rewriter.prototype.addImplicitBracesAndParens = function() {
+      var stack;
+      stack = [];
+      return this.scanTokens(function(token, i, tokens) {
+        var endAllImplicitCalls, endImplicitCall, endImplicitObject, forward, inImplicit, inImplicitCall, inImplicitControl, inImplicitObject, nextTag, offset, prevTag, prevToken, s, sameLine, stackIdx, stackTag, stackTop, startIdx, startImplicitCall, startImplicitObject, startsLine, tag, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+        tag = token[0];
+        prevTag = (prevToken = i > 0 ? tokens[i - 1] : [])[0];
+        nextTag = (i < tokens.length - 1 ? tokens[i + 1] : [])[0];
+        stackTop = function() {
+          return stack[stack.length - 1];
+        };
+        startIdx = i;
+        forward = function(n) {
+          return i - startIdx + n;
+        };
+        inImplicit = function() {
+          var _ref, _ref1;
+          return (_ref = stackTop()) != null ? (_ref1 = _ref[2]) != null ? _ref1.ours : void 0 : void 0;
+        };
+        inImplicitCall = function() {
+          var _ref;
+          return inImplicit() && ((_ref = stackTop()) != null ? _ref[0] : void 0) === '(';
+        };
+        inImplicitObject = function() {
+          var _ref;
+          return inImplicit() && ((_ref = stackTop()) != null ? _ref[0] : void 0) === '{';
+        };
+        inImplicitControl = function() {
+          var _ref;
+          return inImplicit && ((_ref = stackTop()) != null ? _ref[0] : void 0) === 'CONTROL';
+        };
+        startImplicitCall = function(j) {
+          var idx;
+          idx = j != null ? j : i;
+          stack.push([
+            '(', idx, {
+              ours: true
+            }
+          ]);
+          tokens.splice(idx, 0, generate('CALL_START', '('));
+          if (j == null) {
+            return i += 1;
+          }
+        };
+        endImplicitCall = function() {
+          stack.pop();
+          tokens.splice(i, 0, generate('CALL_END', ')'));
+          return i += 1;
+        };
+        endAllImplicitCalls = function() {
+          while (inImplicitCall()) {
+            endImplicitCall();
+          }
+        };
+        startImplicitObject = function(j, startsLine) {
+          var idx;
+          if (startsLine == null) {
+            startsLine = true;
+          }
+          idx = j != null ? j : i;
+          stack.push([
+            '{', idx, {
+              sameLine: true,
+              startsLine: startsLine,
+              ours: true
+            }
+          ]);
+          tokens.splice(idx, 0, generate('{', generate(new String('{'))));
+          if (j == null) {
+            return i += 1;
+          }
+        };
+        endImplicitObject = function(j) {
+          j = j != null ? j : i;
+          stack.pop();
+          tokens.splice(j, 0, generate('}', '}'));
+          return i += 1;
+        };
+        if (inImplicitCall() && (tag === 'IF' || tag === 'TRY' || tag === 'FINALLY' || tag === 'CATCH' || tag === 'CLASS' || tag === 'SWITCH')) {
+          stack.push([
+            'CONTROL', i, {
+              ours: true
+            }
+          ]);
+          return forward(1);
+        }
+        if (tag === 'INDENT' && inImplicit()) {
+          if (prevTag !== '=>' && prevTag !== '->' && prevTag !== '[' && prevTag !== '(' && prevTag !== ',' && prevTag !== '{' && prevTag !== 'TRY' && prevTag !== 'ELSE' && prevTag !== '=') {
+            while (inImplicitCall()) {
+              endImplicitCall();
+            }
+          }
+          if (inImplicitControl()) {
+            stack.pop();
+          }
+          stack.push([tag, i]);
+          return forward(1);
+        }
+        if (__indexOf.call(EXPRESSION_START, tag) >= 0) {
+          stack.push([tag, i]);
+          return forward(1);
+        }
+        if (__indexOf.call(EXPRESSION_END, tag) >= 0) {
+          while (inImplicit()) {
+            if (inImplicitCall()) {
+              endImplicitCall();
+            } else if (inImplicitObject()) {
+              endImplicitObject();
+            } else {
+              stack.pop();
+            }
+          }
+          stack.pop();
+        }
+        if ((__indexOf.call(IMPLICIT_FUNC, tag) >= 0 && token.spaced && !token.stringEnd || tag === '?' && i > 0 && !tokens[i - 1].spaced) && (__indexOf.call(IMPLICIT_CALL, nextTag) >= 0 || __indexOf.call(IMPLICIT_UNSPACED_CALL, nextTag) >= 0 && !((_ref = tokens[i + 1]) != null ? _ref.spaced : void 0) && !((_ref1 = tokens[i + 1]) != null ? _ref1.newLine : void 0))) {
+          if (tag === '?') {
+            tag = token[0] = 'FUNC_EXIST';
+          }
+          startImplicitCall(i + 1);
+          return forward(2);
+        }
+        if (__indexOf.call(IMPLICIT_FUNC, tag) >= 0 && this.matchTags(i + 1, 'INDENT', null, ':') && !this.findTagsBackwards(i, ['CLASS', 'EXTENDS', 'IF', 'CATCH', 'SWITCH', 'LEADING_WHEN', 'FOR', 'WHILE', 'UNTIL'])) {
+          startImplicitCall(i + 1);
+          stack.push(['INDENT', i + 2]);
+          return forward(3);
+        }
+        if (tag === ':') {
+          if (this.tag(i - 2) === '@') {
+            s = i - 2;
+          } else {
+            s = i - 1;
+          }
+          while (this.tag(s - 2) === 'HERECOMMENT') {
+            s -= 2;
+          }
+          startsLine = s === 0 || (_ref2 = this.tag(s - 1), __indexOf.call(LINEBREAKS, _ref2) >= 0) || tokens[s - 1].newLine;
+          if (stackTop()) {
+            _ref3 = stackTop(), stackTag = _ref3[0], stackIdx = _ref3[1];
+            if ((stackTag === '{' || stackTag === 'INDENT' && this.tag(stackIdx - 1) === '{') && (startsLine || this.tag(s - 1) === ',' || this.tag(s - 1) === '{')) {
+              return forward(1);
+            }
+          }
+          startImplicitObject(s, !!startsLine);
+          return forward(2);
+        }
+        if (inImplicitCall() && __indexOf.call(CALL_CLOSERS, tag) >= 0) {
+          if (prevTag === 'OUTDENT') {
+            endImplicitCall();
+            return forward(1);
+          }
+          if (prevToken.newLine) {
+            endAllImplicitCalls();
+            return forward(1);
+          }
+        }
+        if (inImplicitObject() && __indexOf.call(LINEBREAKS, tag) >= 0) {
+          stackTop()[2].sameLine = false;
+        }
+        if (__indexOf.call(IMPLICIT_END, tag) >= 0) {
+          while (inImplicit()) {
+            _ref4 = stackTop(), stackTag = _ref4[0], stackIdx = _ref4[1], (_ref5 = _ref4[2], sameLine = _ref5.sameLine, startsLine = _ref5.startsLine);
+            if (inImplicitCall() && prevTag !== ',') {
+              endImplicitCall();
+            } else if (inImplicitObject() && sameLine && !startsLine) {
+              endImplicitObject();
+            } else if (inImplicitObject() && tag === 'TERMINATOR' && prevTag !== ',' && !(startsLine && this.looksObjectish(i + 1))) {
+              endImplicitObject();
+            } else {
+              break;
+            }
+          }
+        }
+        if (tag === ',' && !this.looksObjectish(i + 1) && inImplicitObject() && (nextTag !== 'TERMINATOR' || !this.looksObjectish(i + 2))) {
+          offset = nextTag === 'OUTDENT' ? 1 : 0;
+          while (inImplicitObject()) {
+            endImplicitObject(i + offset);
+          }
+        }
+        return forward(1);
+      });
+    };
+
+    Rewriter.prototype.addLocationDataToGeneratedTokens = function() {
+      return this.scanTokens(function(token, i, tokens) {
+        var column, line, nextLocation, prevLocation, _ref, _ref1;
+        if (token[2]) {
+          return 1;
+        }
+        if (!(token.generated || token.explicit)) {
+          return 1;
+        }
+        if (token[0] === '{' && (nextLocation = (_ref = tokens[i + 1]) != null ? _ref[2] : void 0)) {
+          line = nextLocation.first_line, column = nextLocation.first_column;
+        } else if (prevLocation = (_ref1 = tokens[i - 1]) != null ? _ref1[2] : void 0) {
+          line = prevLocation.last_line, column = prevLocation.last_column;
+        } else {
+          line = column = 0;
+        }
+        token[2] = {
+          first_line: line,
+          first_column: column,
+          last_line: line,
+          last_column: column
+        };
+        return 1;
+      });
+    };
+
+    Rewriter.prototype.normalizeLines = function() {
+      var action, condition, indent, outdent, starter;
+      starter = indent = outdent = null;
+      condition = function(token, i) {
+        var _ref, _ref1, _ref2, _ref3;
+        return token[1] !== ';' && (_ref = token[0], __indexOf.call(SINGLE_CLOSERS, _ref) >= 0) && !(token[0] === 'TERMINATOR' && (_ref1 = this.tag(i + 1), __indexOf.call(EXPRESSION_CLOSE, _ref1) >= 0)) && !(token[0] === 'ELSE' && starter !== 'THEN') && !(((_ref2 = token[0]) === 'CATCH' || _ref2 === 'FINALLY') && (starter === '->' || starter === '=>')) || (_ref3 = token[0], __indexOf.call(CALL_CLOSERS, _ref3) >= 0) && this.tokens[i - 1].newLine;
+      };
+      action = function(token, i) {
+        return this.tokens.splice((this.tag(i - 1) === ',' ? i - 1 : i), 0, outdent);
+      };
+      return this.scanTokens(function(token, i, tokens) {
+        var j, tag, _i, _ref, _ref1, _ref2;
+        tag = token[0];
+        if (tag === 'TERMINATOR') {
+          if (this.tag(i + 1) === 'ELSE' && this.tag(i - 1) !== 'OUTDENT') {
+            tokens.splice.apply(tokens, [i, 1].concat(__slice.call(this.indentation())));
+            return 1;
+          }
+          if (_ref = this.tag(i + 1), __indexOf.call(EXPRESSION_CLOSE, _ref) >= 0) {
+            tokens.splice(i, 1);
+            return 0;
+          }
+        }
+        if (tag === 'CATCH') {
+          for (j = _i = 1; _i <= 2; j = ++_i) {
+            if (!((_ref1 = this.tag(i + j)) === 'OUTDENT' || _ref1 === 'TERMINATOR' || _ref1 === 'FINALLY')) {
+              continue;
+            }
+            tokens.splice.apply(tokens, [i + j, 0].concat(__slice.call(this.indentation())));
+            return 2 + j;
+          }
+        }
+        if (__indexOf.call(SINGLE_LINERS, tag) >= 0 && this.tag(i + 1) !== 'INDENT' && !(tag === 'ELSE' && this.tag(i + 1) === 'IF')) {
+          starter = tag;
+          _ref2 = this.indentation(true), indent = _ref2[0], outdent = _ref2[1];
+          if (starter === 'THEN') {
+            indent.fromThen = true;
+          }
+          tokens.splice(i + 1, 0, indent);
+          this.detectEnd(i + 2, condition, action);
+          if (tag === 'THEN') {
+            tokens.splice(i, 1);
+          }
+          return 1;
+        }
+        return 1;
+      });
+    };
+
+    Rewriter.prototype.tagPostfixConditionals = function() {
+      var action, condition, original;
+      original = null;
+      condition = function(token, i) {
+        var prevTag, tag;
+        tag = token[0];
+        prevTag = this.tokens[i - 1][0];
+        return tag === 'TERMINATOR' || (tag === 'INDENT' && __indexOf.call(SINGLE_LINERS, prevTag) < 0);
+      };
+      action = function(token, i) {
+        if (token[0] !== 'INDENT' || (token.generated && !token.fromThen)) {
+          return original[0] = 'POST_' + original[0];
+        }
+      };
+      return this.scanTokens(function(token, i) {
+        if (token[0] !== 'IF') {
+          return 1;
+        }
+        original = token;
+        this.detectEnd(i + 1, condition, action);
+        return 1;
+      });
+    };
+
+    Rewriter.prototype.indentation = function(implicit) {
+      var indent, outdent;
+      if (implicit == null) {
+        implicit = false;
+      }
+      indent = ['INDENT', 2];
+      outdent = ['OUTDENT', 2];
+      if (implicit) {
+        indent.generated = outdent.generated = true;
+      }
+      if (!implicit) {
+        indent.explicit = outdent.explicit = true;
+      }
+      return [indent, outdent];
+    };
+
+    Rewriter.prototype.generate = generate;
+
+    Rewriter.prototype.tag = function(i) {
+      var _ref;
+      return (_ref = this.tokens[i]) != null ? _ref[0] : void 0;
+    };
+
+    return Rewriter;
+
+  })();
+
+  BALANCED_PAIRS = [['(', ')'], ['[', ']'], ['{', '}'], ['INDENT', 'OUTDENT'], ['CALL_START', 'CALL_END'], ['PARAM_START', 'PARAM_END'], ['INDEX_START', 'INDEX_END']];
+
+  exports.INVERSES = INVERSES = {};
+
+  EXPRESSION_START = [];
+
+  EXPRESSION_END = [];
+
+  for (_i = 0, _len = BALANCED_PAIRS.length; _i < _len; _i++) {
+    _ref = BALANCED_PAIRS[_i], left = _ref[0], rite = _ref[1];
+    EXPRESSION_START.push(INVERSES[rite] = left);
+    EXPRESSION_END.push(INVERSES[left] = rite);
+  }
+
+  EXPRESSION_CLOSE = ['CATCH', 'THEN', 'ELSE', 'FINALLY'].concat(EXPRESSION_END);
+
+  IMPLICIT_FUNC = ['IDENTIFIER', 'SUPER', ')', 'CALL_END', ']', 'INDEX_END', '@', 'THIS'];
+
+  IMPLICIT_CALL = ['IDENTIFIER', 'NUMBER', 'STRING', 'JS', 'REGEX', 'NEW', 'PARAM_START', 'CLASS', 'IF', 'TRY', 'SWITCH', 'THIS', 'BOOL', 'NULL', 'UNDEFINED', 'UNARY', 'SUPER', 'THROW', '@', '->', '=>', '[', '(', '{', '--', '++'];
+
+  IMPLICIT_UNSPACED_CALL = ['+', '-'];
+
+  IMPLICIT_END = ['POST_IF', 'FOR', 'WHILE', 'UNTIL', 'WHEN', 'BY', 'LOOP', 'TERMINATOR'];
+
+  SINGLE_LINERS = ['ELSE', '->', '=>', 'TRY', 'FINALLY', 'THEN'];
+
+  SINGLE_CLOSERS = ['TERMINATOR', 'CATCH', 'FINALLY', 'ELSE', 'OUTDENT', 'LEADING_WHEN'];
+
+  LINEBREAKS = ['TERMINATOR', 'INDENT', 'OUTDENT'];
+
+  CALL_CLOSERS = ['.', '?.', '::', '?::'];
+
+
+});
+
+define("ace/mode/coffee/helpers",["require","exports","module"], function(require, exports, module) {
+
+  var buildLocationData, extend, flatten, last, repeat, syntaxErrorToString, _ref;
+
+  exports.starts = function(string, literal, start) {
+    return literal === string.substr(start, literal.length);
+  };
+
+  exports.ends = function(string, literal, back) {
+    var len;
+    len = literal.length;
+    return literal === string.substr(string.length - len - (back || 0), len);
+  };
+
+  exports.repeat = repeat = function(str, n) {
+    var res;
+    res = '';
+    while (n > 0) {
+      if (n & 1) {
+        res += str;
+      }
+      n >>>= 1;
+      str += str;
+    }
+    return res;
+  };
+
+  exports.compact = function(array) {
+    var item, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = array.length; _i < _len; _i++) {
+      item = array[_i];
+      if (item) {
+        _results.push(item);
+      }
+    }
+    return _results;
+  };
+
+  exports.count = function(string, substr) {
+    var num, pos;
+    num = pos = 0;
+    if (!substr.length) {
+      return 1 / 0;
+    }
+    while (pos = 1 + string.indexOf(substr, pos)) {
+      num++;
+    }
+    return num;
+  };
+
+  exports.merge = function(options, overrides) {
+    return extend(extend({}, options), overrides);
+  };
+
+  extend = exports.extend = function(object, properties) {
+    var key, val;
+    for (key in properties) {
+      val = properties[key];
+      object[key] = val;
+    }
+    return object;
+  };
+
+  exports.flatten = flatten = function(array) {
+    var element, flattened, _i, _len;
+    flattened = [];
+    for (_i = 0, _len = array.length; _i < _len; _i++) {
+      element = array[_i];
+      if (element instanceof Array) {
+        flattened = flattened.concat(flatten(element));
+      } else {
+        flattened.push(element);
+      }
+    }
+    return flattened;
+  };
+
+  exports.del = function(obj, key) {
+    var val;
+    val = obj[key];
+    delete obj[key];
+    return val;
+  };
+
+  exports.last = last = function(array, back) {
+    return array[array.length - (back || 0) - 1];
+  };
+
+  exports.some = (_ref = Array.prototype.some) != null ? _ref : function(fn) {
+    var e, _i, _len;
+    for (_i = 0, _len = this.length; _i < _len; _i++) {
+      e = this[_i];
+      if (fn(e)) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  exports.invertLiterate = function(code) {
+    var line, lines, maybe_code;
+    maybe_code = true;
+    lines = (function() {
+      var _i, _len, _ref1, _results;
+      _ref1 = code.split('\n');
+      _results = [];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        line = _ref1[_i];
+        if (maybe_code && /^([ ]{4}|[ ]{0,3}\t)/.test(line)) {
+          _results.push(line);
+        } else if (maybe_code = /^\s*$/.test(line)) {
+          _results.push(line);
+        } else {
+          _results.push('# ' + line);
+        }
+      }
+      return _results;
+    })();
+    return lines.join('\n');
+  };
+
+  buildLocationData = function(first, last) {
+    if (!last) {
+      return first;
+    } else {
+      return {
+        first_line: first.first_line,
+        first_column: first.first_column,
+        last_line: last.last_line,
+        last_column: last.last_column
+      };
+    }
+  };
+
+  exports.addLocationDataFn = function(first, last) {
+    return function(obj) {
+      if (((typeof obj) === 'object') && (!!obj['updateLocationDataIfMissing'])) {
+        obj.updateLocationDataIfMissing(buildLocationData(first, last));
+      }
+      return obj;
+    };
+  };
+
+  exports.locationDataToString = function(obj) {
+    var locationData;
+    if (("2" in obj) && ("first_line" in obj[2])) {
+      locationData = obj[2];
+    } else if ("first_line" in obj) {
+      locationData = obj;
+    }
+    if (locationData) {
+      return ("" + (locationData.first_line + 1) + ":" + (locationData.first_column + 1) + "-") + ("" + (locationData.last_line + 1) + ":" + (locationData.last_column + 1));
+    } else {
+      return "No location data";
+    }
+  };
+
+  exports.baseFileName = function(file, stripExt, useWinPathSep) {
+    var parts, pathSep;
+    if (stripExt == null) {
+      stripExt = false;
+    }
+    if (useWinPathSep == null) {
+      useWinPathSep = false;
+    }
+    pathSep = useWinPathSep ? /\\|\// : /\//;
+    parts = file.split(pathSep);
+    file = parts[parts.length - 1];
+    if (!(stripExt && file.indexOf('.') >= 0)) {
+      return file;
+    }
+    parts = file.split('.');
+    parts.pop();
+    if (parts[parts.length - 1] === 'coffee' && parts.length > 1) {
+      parts.pop();
+    }
+    return parts.join('.');
+  };
+
+  exports.isCoffee = function(file) {
+    return /\.((lit)?coffee|coffee\.md)$/.test(file);
+  };
+
+  exports.isLiterate = function(file) {
+    return /\.(litcoffee|coffee\.md)$/.test(file);
+  };
+
+  exports.throwSyntaxError = function(message, location) {
+    var error;
+    if (location.last_line == null) {
+      location.last_line = location.first_line;
+    }
+    if (location.last_column == null) {
+      location.last_column = location.first_column;
+    }
+    error = new SyntaxError(message);
+    error.location = location;
+    error.toString = syntaxErrorToString;
+    error.stack = error.toString();
+    throw error;
+  };
+
+  exports.updateSyntaxError = function(error, code, filename) {
+    if (error.toString === syntaxErrorToString) {
+      error.code || (error.code = code);
+      error.filename || (error.filename = filename);
+      error.stack = error.toString();
+    }
+    return error;
+  };
+
+  syntaxErrorToString = function() {
+    var codeLine, colorize, colorsEnabled, end, filename, first_column, first_line, last_column, last_line, marker, start, _ref1, _ref2;
+    if (!(this.code && this.location)) {
+      return Error.prototype.toString.call(this);
+    }
+    _ref1 = this.location, first_line = _ref1.first_line, first_column = _ref1.first_column, last_line = _ref1.last_line, last_column = _ref1.last_column;
+    if (last_line == null) {
+      last_line = first_line;
+    }
+    if (last_column == null) {
+      last_column = first_column;
+    }
+    filename = this.filename || '[stdin]';
+    codeLine = this.code.split('\n')[first_line];
+    start = first_column;
+    end = first_line === last_line ? last_column + 1 : codeLine.length;
+    marker = repeat(' ', start) + repeat('^', end - start);
+    if (typeof process !== "undefined" && process !== null) {
+      colorsEnabled = process.stdout.isTTY && !process.env.NODE_DISABLE_COLORS;
+    }
+    if ((_ref2 = this.colorful) != null ? _ref2 : colorsEnabled) {
+      colorize = function(str) {
+        return "\x1B[1;31m" + str + "\x1B[0m";
+      };
+      codeLine = codeLine.slice(0, start) + colorize(codeLine.slice(start, end)) + codeLine.slice(end);
+      marker = colorize(marker);
+    }
+    return "" + filename + ":" + (first_line + 1) + ":" + (first_column + 1) + ": error: " + this.message + "\n" + codeLine + "\n" + marker;
+  };
+
+
+});
+
+define("ace/mode/coffee/lexer",["require","exports","module","ace/mode/coffee/rewriter","ace/mode/coffee/helpers"], function(require, exports, module) {
 
   var BOM, BOOL, CALLABLE, CODE, COFFEE_ALIASES, COFFEE_ALIAS_MAP, COFFEE_KEYWORDS, COMMENT, COMPARE, COMPOUND_ASSIGN, HEREDOC, HEREDOC_ILLEGAL, HEREDOC_INDENT, HEREGEX, HEREGEX_OMIT, IDENTIFIER, INDEXABLE, INVERSES, JSTOKEN, JS_FORBIDDEN, JS_KEYWORDS, LINE_BREAK, LINE_CONTINUER, LOGIC, Lexer, MATH, MULTILINER, MULTI_DENT, NOT_REGEX, NOT_SPACED_REGEX, NUMBER, OPERATOR, REGEX, RELATION, RESERVED, Rewriter, SHIFT, SIMPLESTR, STRICT_PROSCRIBED, TRAILING_SPACES, UNARY, WHITESPACE, compact, count, invertLiterate, key, last, locationDataToString, repeat, starts, throwSyntaxError, _ref, _ref1,
     __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
@@ -2074,770 +2972,7 @@ define('ace/mode/coffee/lexer', ['require', 'exports', 'module' , 'ace/mode/coff
 
 });
 
-define('ace/mode/coffee/rewriter', ['require', 'exports', 'module' ], function(require, exports, module) {
-
-  var BALANCED_PAIRS, CALL_CLOSERS, EXPRESSION_CLOSE, EXPRESSION_END, EXPRESSION_START, IMPLICIT_CALL, IMPLICIT_END, IMPLICIT_FUNC, IMPLICIT_UNSPACED_CALL, INVERSES, LINEBREAKS, SINGLE_CLOSERS, SINGLE_LINERS, generate, left, rite, _i, _len, _ref,
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; },
-    __slice = [].slice;
-
-  generate = function(tag, value) {
-    var tok;
-    tok = [tag, value];
-    tok.generated = true;
-    return tok;
-  };
-
-  exports.Rewriter = (function() {
-    function Rewriter() {}
-
-    Rewriter.prototype.rewrite = function(tokens) {
-      this.tokens = tokens;
-      this.removeLeadingNewlines();
-      this.closeOpenCalls();
-      this.closeOpenIndexes();
-      this.normalizeLines();
-      this.tagPostfixConditionals();
-      this.addImplicitBracesAndParens();
-      this.addLocationDataToGeneratedTokens();
-      return this.tokens;
-    };
-
-    Rewriter.prototype.scanTokens = function(block) {
-      var i, token, tokens;
-      tokens = this.tokens;
-      i = 0;
-      while (token = tokens[i]) {
-        i += block.call(this, token, i, tokens);
-      }
-      return true;
-    };
-
-    Rewriter.prototype.detectEnd = function(i, condition, action) {
-      var levels, token, tokens, _ref, _ref1;
-      tokens = this.tokens;
-      levels = 0;
-      while (token = tokens[i]) {
-        if (levels === 0 && condition.call(this, token, i)) {
-          return action.call(this, token, i);
-        }
-        if (!token || levels < 0) {
-          return action.call(this, token, i - 1);
-        }
-        if (_ref = token[0], __indexOf.call(EXPRESSION_START, _ref) >= 0) {
-          levels += 1;
-        } else if (_ref1 = token[0], __indexOf.call(EXPRESSION_END, _ref1) >= 0) {
-          levels -= 1;
-        }
-        i += 1;
-      }
-      return i - 1;
-    };
-
-    Rewriter.prototype.removeLeadingNewlines = function() {
-      var i, tag, _i, _len, _ref;
-      _ref = this.tokens;
-      for (i = _i = 0, _len = _ref.length; _i < _len; i = ++_i) {
-        tag = _ref[i][0];
-        if (tag !== 'TERMINATOR') {
-          break;
-        }
-      }
-      if (i) {
-        return this.tokens.splice(0, i);
-      }
-    };
-
-    Rewriter.prototype.closeOpenCalls = function() {
-      var action, condition;
-      condition = function(token, i) {
-        var _ref;
-        return ((_ref = token[0]) === ')' || _ref === 'CALL_END') || token[0] === 'OUTDENT' && this.tag(i - 1) === ')';
-      };
-      action = function(token, i) {
-        return this.tokens[token[0] === 'OUTDENT' ? i - 1 : i][0] = 'CALL_END';
-      };
-      return this.scanTokens(function(token, i) {
-        if (token[0] === 'CALL_START') {
-          this.detectEnd(i + 1, condition, action);
-        }
-        return 1;
-      });
-    };
-
-    Rewriter.prototype.closeOpenIndexes = function() {
-      var action, condition;
-      condition = function(token, i) {
-        var _ref;
-        return (_ref = token[0]) === ']' || _ref === 'INDEX_END';
-      };
-      action = function(token, i) {
-        return token[0] = 'INDEX_END';
-      };
-      return this.scanTokens(function(token, i) {
-        if (token[0] === 'INDEX_START') {
-          this.detectEnd(i + 1, condition, action);
-        }
-        return 1;
-      });
-    };
-
-    Rewriter.prototype.matchTags = function() {
-      var fuzz, i, j, pattern, _i, _ref, _ref1;
-      i = arguments[0], pattern = 2 <= arguments.length ? __slice.call(arguments, 1) : [];
-      fuzz = 0;
-      for (j = _i = 0, _ref = pattern.length; 0 <= _ref ? _i < _ref : _i > _ref; j = 0 <= _ref ? ++_i : --_i) {
-        while (this.tag(i + j + fuzz) === 'HERECOMMENT') {
-          fuzz += 2;
-        }
-        if (pattern[j] == null) {
-          continue;
-        }
-        if (typeof pattern[j] === 'string') {
-          pattern[j] = [pattern[j]];
-        }
-        if (_ref1 = this.tag(i + j + fuzz), __indexOf.call(pattern[j], _ref1) < 0) {
-          return false;
-        }
-      }
-      return true;
-    };
-
-    Rewriter.prototype.looksObjectish = function(j) {
-      return this.matchTags(j, '@', null, ':') || this.matchTags(j, null, ':');
-    };
-
-    Rewriter.prototype.findTagsBackwards = function(i, tags) {
-      var backStack, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
-      backStack = [];
-      while (i >= 0 && (backStack.length || (_ref2 = this.tag(i), __indexOf.call(tags, _ref2) < 0) && ((_ref3 = this.tag(i), __indexOf.call(EXPRESSION_START, _ref3) < 0) || this.tokens[i].generated) && (_ref4 = this.tag(i), __indexOf.call(LINEBREAKS, _ref4) < 0))) {
-        if (_ref = this.tag(i), __indexOf.call(EXPRESSION_END, _ref) >= 0) {
-          backStack.push(this.tag(i));
-        }
-        if ((_ref1 = this.tag(i), __indexOf.call(EXPRESSION_START, _ref1) >= 0) && backStack.length) {
-          backStack.pop();
-        }
-        i -= 1;
-      }
-      return _ref5 = this.tag(i), __indexOf.call(tags, _ref5) >= 0;
-    };
-
-    Rewriter.prototype.addImplicitBracesAndParens = function() {
-      var stack;
-      stack = [];
-      return this.scanTokens(function(token, i, tokens) {
-        var endAllImplicitCalls, endImplicitCall, endImplicitObject, forward, inImplicit, inImplicitCall, inImplicitControl, inImplicitObject, nextTag, offset, prevTag, prevToken, s, sameLine, stackIdx, stackTag, stackTop, startIdx, startImplicitCall, startImplicitObject, startsLine, tag, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
-        tag = token[0];
-        prevTag = (prevToken = i > 0 ? tokens[i - 1] : [])[0];
-        nextTag = (i < tokens.length - 1 ? tokens[i + 1] : [])[0];
-        stackTop = function() {
-          return stack[stack.length - 1];
-        };
-        startIdx = i;
-        forward = function(n) {
-          return i - startIdx + n;
-        };
-        inImplicit = function() {
-          var _ref, _ref1;
-          return (_ref = stackTop()) != null ? (_ref1 = _ref[2]) != null ? _ref1.ours : void 0 : void 0;
-        };
-        inImplicitCall = function() {
-          var _ref;
-          return inImplicit() && ((_ref = stackTop()) != null ? _ref[0] : void 0) === '(';
-        };
-        inImplicitObject = function() {
-          var _ref;
-          return inImplicit() && ((_ref = stackTop()) != null ? _ref[0] : void 0) === '{';
-        };
-        inImplicitControl = function() {
-          var _ref;
-          return inImplicit && ((_ref = stackTop()) != null ? _ref[0] : void 0) === 'CONTROL';
-        };
-        startImplicitCall = function(j) {
-          var idx;
-          idx = j != null ? j : i;
-          stack.push([
-            '(', idx, {
-              ours: true
-            }
-          ]);
-          tokens.splice(idx, 0, generate('CALL_START', '('));
-          if (j == null) {
-            return i += 1;
-          }
-        };
-        endImplicitCall = function() {
-          stack.pop();
-          tokens.splice(i, 0, generate('CALL_END', ')'));
-          return i += 1;
-        };
-        endAllImplicitCalls = function() {
-          while (inImplicitCall()) {
-            endImplicitCall();
-          }
-        };
-        startImplicitObject = function(j, startsLine) {
-          var idx;
-          if (startsLine == null) {
-            startsLine = true;
-          }
-          idx = j != null ? j : i;
-          stack.push([
-            '{', idx, {
-              sameLine: true,
-              startsLine: startsLine,
-              ours: true
-            }
-          ]);
-          tokens.splice(idx, 0, generate('{', generate(new String('{'))));
-          if (j == null) {
-            return i += 1;
-          }
-        };
-        endImplicitObject = function(j) {
-          j = j != null ? j : i;
-          stack.pop();
-          tokens.splice(j, 0, generate('}', '}'));
-          return i += 1;
-        };
-        if (inImplicitCall() && (tag === 'IF' || tag === 'TRY' || tag === 'FINALLY' || tag === 'CATCH' || tag === 'CLASS' || tag === 'SWITCH')) {
-          stack.push([
-            'CONTROL', i, {
-              ours: true
-            }
-          ]);
-          return forward(1);
-        }
-        if (tag === 'INDENT' && inImplicit()) {
-          if (prevTag !== '=>' && prevTag !== '->' && prevTag !== '[' && prevTag !== '(' && prevTag !== ',' && prevTag !== '{' && prevTag !== 'TRY' && prevTag !== 'ELSE' && prevTag !== '=') {
-            while (inImplicitCall()) {
-              endImplicitCall();
-            }
-          }
-          if (inImplicitControl()) {
-            stack.pop();
-          }
-          stack.push([tag, i]);
-          return forward(1);
-        }
-        if (__indexOf.call(EXPRESSION_START, tag) >= 0) {
-          stack.push([tag, i]);
-          return forward(1);
-        }
-        if (__indexOf.call(EXPRESSION_END, tag) >= 0) {
-          while (inImplicit()) {
-            if (inImplicitCall()) {
-              endImplicitCall();
-            } else if (inImplicitObject()) {
-              endImplicitObject();
-            } else {
-              stack.pop();
-            }
-          }
-          stack.pop();
-        }
-        if ((__indexOf.call(IMPLICIT_FUNC, tag) >= 0 && token.spaced && !token.stringEnd || tag === '?' && i > 0 && !tokens[i - 1].spaced) && (__indexOf.call(IMPLICIT_CALL, nextTag) >= 0 || __indexOf.call(IMPLICIT_UNSPACED_CALL, nextTag) >= 0 && !((_ref = tokens[i + 1]) != null ? _ref.spaced : void 0) && !((_ref1 = tokens[i + 1]) != null ? _ref1.newLine : void 0))) {
-          if (tag === '?') {
-            tag = token[0] = 'FUNC_EXIST';
-          }
-          startImplicitCall(i + 1);
-          return forward(2);
-        }
-        if (__indexOf.call(IMPLICIT_FUNC, tag) >= 0 && this.matchTags(i + 1, 'INDENT', null, ':') && !this.findTagsBackwards(i, ['CLASS', 'EXTENDS', 'IF', 'CATCH', 'SWITCH', 'LEADING_WHEN', 'FOR', 'WHILE', 'UNTIL'])) {
-          startImplicitCall(i + 1);
-          stack.push(['INDENT', i + 2]);
-          return forward(3);
-        }
-        if (tag === ':') {
-          if (this.tag(i - 2) === '@') {
-            s = i - 2;
-          } else {
-            s = i - 1;
-          }
-          while (this.tag(s - 2) === 'HERECOMMENT') {
-            s -= 2;
-          }
-          startsLine = s === 0 || (_ref2 = this.tag(s - 1), __indexOf.call(LINEBREAKS, _ref2) >= 0) || tokens[s - 1].newLine;
-          if (stackTop()) {
-            _ref3 = stackTop(), stackTag = _ref3[0], stackIdx = _ref3[1];
-            if ((stackTag === '{' || stackTag === 'INDENT' && this.tag(stackIdx - 1) === '{') && (startsLine || this.tag(s - 1) === ',' || this.tag(s - 1) === '{')) {
-              return forward(1);
-            }
-          }
-          startImplicitObject(s, !!startsLine);
-          return forward(2);
-        }
-        if (inImplicitCall() && __indexOf.call(CALL_CLOSERS, tag) >= 0) {
-          if (prevTag === 'OUTDENT') {
-            endImplicitCall();
-            return forward(1);
-          }
-          if (prevToken.newLine) {
-            endAllImplicitCalls();
-            return forward(1);
-          }
-        }
-        if (inImplicitObject() && __indexOf.call(LINEBREAKS, tag) >= 0) {
-          stackTop()[2].sameLine = false;
-        }
-        if (__indexOf.call(IMPLICIT_END, tag) >= 0) {
-          while (inImplicit()) {
-            _ref4 = stackTop(), stackTag = _ref4[0], stackIdx = _ref4[1], (_ref5 = _ref4[2], sameLine = _ref5.sameLine, startsLine = _ref5.startsLine);
-            if (inImplicitCall() && prevTag !== ',') {
-              endImplicitCall();
-            } else if (inImplicitObject() && sameLine && !startsLine) {
-              endImplicitObject();
-            } else if (inImplicitObject() && tag === 'TERMINATOR' && prevTag !== ',' && !(startsLine && this.looksObjectish(i + 1))) {
-              endImplicitObject();
-            } else {
-              break;
-            }
-          }
-        }
-        if (tag === ',' && !this.looksObjectish(i + 1) && inImplicitObject() && (nextTag !== 'TERMINATOR' || !this.looksObjectish(i + 2))) {
-          offset = nextTag === 'OUTDENT' ? 1 : 0;
-          while (inImplicitObject()) {
-            endImplicitObject(i + offset);
-          }
-        }
-        return forward(1);
-      });
-    };
-
-    Rewriter.prototype.addLocationDataToGeneratedTokens = function() {
-      return this.scanTokens(function(token, i, tokens) {
-        var column, line, nextLocation, prevLocation, _ref, _ref1;
-        if (token[2]) {
-          return 1;
-        }
-        if (!(token.generated || token.explicit)) {
-          return 1;
-        }
-        if (token[0] === '{' && (nextLocation = (_ref = tokens[i + 1]) != null ? _ref[2] : void 0)) {
-          line = nextLocation.first_line, column = nextLocation.first_column;
-        } else if (prevLocation = (_ref1 = tokens[i - 1]) != null ? _ref1[2] : void 0) {
-          line = prevLocation.last_line, column = prevLocation.last_column;
-        } else {
-          line = column = 0;
-        }
-        token[2] = {
-          first_line: line,
-          first_column: column,
-          last_line: line,
-          last_column: column
-        };
-        return 1;
-      });
-    };
-
-    Rewriter.prototype.normalizeLines = function() {
-      var action, condition, indent, outdent, starter;
-      starter = indent = outdent = null;
-      condition = function(token, i) {
-        var _ref, _ref1, _ref2, _ref3;
-        return token[1] !== ';' && (_ref = token[0], __indexOf.call(SINGLE_CLOSERS, _ref) >= 0) && !(token[0] === 'TERMINATOR' && (_ref1 = this.tag(i + 1), __indexOf.call(EXPRESSION_CLOSE, _ref1) >= 0)) && !(token[0] === 'ELSE' && starter !== 'THEN') && !(((_ref2 = token[0]) === 'CATCH' || _ref2 === 'FINALLY') && (starter === '->' || starter === '=>')) || (_ref3 = token[0], __indexOf.call(CALL_CLOSERS, _ref3) >= 0) && this.tokens[i - 1].newLine;
-      };
-      action = function(token, i) {
-        return this.tokens.splice((this.tag(i - 1) === ',' ? i - 1 : i), 0, outdent);
-      };
-      return this.scanTokens(function(token, i, tokens) {
-        var j, tag, _i, _ref, _ref1, _ref2;
-        tag = token[0];
-        if (tag === 'TERMINATOR') {
-          if (this.tag(i + 1) === 'ELSE' && this.tag(i - 1) !== 'OUTDENT') {
-            tokens.splice.apply(tokens, [i, 1].concat(__slice.call(this.indentation())));
-            return 1;
-          }
-          if (_ref = this.tag(i + 1), __indexOf.call(EXPRESSION_CLOSE, _ref) >= 0) {
-            tokens.splice(i, 1);
-            return 0;
-          }
-        }
-        if (tag === 'CATCH') {
-          for (j = _i = 1; _i <= 2; j = ++_i) {
-            if (!((_ref1 = this.tag(i + j)) === 'OUTDENT' || _ref1 === 'TERMINATOR' || _ref1 === 'FINALLY')) {
-              continue;
-            }
-            tokens.splice.apply(tokens, [i + j, 0].concat(__slice.call(this.indentation())));
-            return 2 + j;
-          }
-        }
-        if (__indexOf.call(SINGLE_LINERS, tag) >= 0 && this.tag(i + 1) !== 'INDENT' && !(tag === 'ELSE' && this.tag(i + 1) === 'IF')) {
-          starter = tag;
-          _ref2 = this.indentation(true), indent = _ref2[0], outdent = _ref2[1];
-          if (starter === 'THEN') {
-            indent.fromThen = true;
-          }
-          tokens.splice(i + 1, 0, indent);
-          this.detectEnd(i + 2, condition, action);
-          if (tag === 'THEN') {
-            tokens.splice(i, 1);
-          }
-          return 1;
-        }
-        return 1;
-      });
-    };
-
-    Rewriter.prototype.tagPostfixConditionals = function() {
-      var action, condition, original;
-      original = null;
-      condition = function(token, i) {
-        var prevTag, tag;
-        tag = token[0];
-        prevTag = this.tokens[i - 1][0];
-        return tag === 'TERMINATOR' || (tag === 'INDENT' && __indexOf.call(SINGLE_LINERS, prevTag) < 0);
-      };
-      action = function(token, i) {
-        if (token[0] !== 'INDENT' || (token.generated && !token.fromThen)) {
-          return original[0] = 'POST_' + original[0];
-        }
-      };
-      return this.scanTokens(function(token, i) {
-        if (token[0] !== 'IF') {
-          return 1;
-        }
-        original = token;
-        this.detectEnd(i + 1, condition, action);
-        return 1;
-      });
-    };
-
-    Rewriter.prototype.indentation = function(implicit) {
-      var indent, outdent;
-      if (implicit == null) {
-        implicit = false;
-      }
-      indent = ['INDENT', 2];
-      outdent = ['OUTDENT', 2];
-      if (implicit) {
-        indent.generated = outdent.generated = true;
-      }
-      if (!implicit) {
-        indent.explicit = outdent.explicit = true;
-      }
-      return [indent, outdent];
-    };
-
-    Rewriter.prototype.generate = generate;
-
-    Rewriter.prototype.tag = function(i) {
-      var _ref;
-      return (_ref = this.tokens[i]) != null ? _ref[0] : void 0;
-    };
-
-    return Rewriter;
-
-  })();
-
-  BALANCED_PAIRS = [['(', ')'], ['[', ']'], ['{', '}'], ['INDENT', 'OUTDENT'], ['CALL_START', 'CALL_END'], ['PARAM_START', 'PARAM_END'], ['INDEX_START', 'INDEX_END']];
-
-  exports.INVERSES = INVERSES = {};
-
-  EXPRESSION_START = [];
-
-  EXPRESSION_END = [];
-
-  for (_i = 0, _len = BALANCED_PAIRS.length; _i < _len; _i++) {
-    _ref = BALANCED_PAIRS[_i], left = _ref[0], rite = _ref[1];
-    EXPRESSION_START.push(INVERSES[rite] = left);
-    EXPRESSION_END.push(INVERSES[left] = rite);
-  }
-
-  EXPRESSION_CLOSE = ['CATCH', 'THEN', 'ELSE', 'FINALLY'].concat(EXPRESSION_END);
-
-  IMPLICIT_FUNC = ['IDENTIFIER', 'SUPER', ')', 'CALL_END', ']', 'INDEX_END', '@', 'THIS'];
-
-  IMPLICIT_CALL = ['IDENTIFIER', 'NUMBER', 'STRING', 'JS', 'REGEX', 'NEW', 'PARAM_START', 'CLASS', 'IF', 'TRY', 'SWITCH', 'THIS', 'BOOL', 'NULL', 'UNDEFINED', 'UNARY', 'SUPER', 'THROW', '@', '->', '=>', '[', '(', '{', '--', '++'];
-
-  IMPLICIT_UNSPACED_CALL = ['+', '-'];
-
-  IMPLICIT_END = ['POST_IF', 'FOR', 'WHILE', 'UNTIL', 'WHEN', 'BY', 'LOOP', 'TERMINATOR'];
-
-  SINGLE_LINERS = ['ELSE', '->', '=>', 'TRY', 'FINALLY', 'THEN'];
-
-  SINGLE_CLOSERS = ['TERMINATOR', 'CATCH', 'FINALLY', 'ELSE', 'OUTDENT', 'LEADING_WHEN'];
-
-  LINEBREAKS = ['TERMINATOR', 'INDENT', 'OUTDENT'];
-
-  CALL_CLOSERS = ['.', '?.', '::', '?::'];
-
-
-});
-
-define('ace/mode/coffee/helpers', ['require', 'exports', 'module' ], function(require, exports, module) {
-
-  var buildLocationData, extend, flatten, last, repeat, syntaxErrorToString, _ref;
-
-  exports.starts = function(string, literal, start) {
-    return literal === string.substr(start, literal.length);
-  };
-
-  exports.ends = function(string, literal, back) {
-    var len;
-    len = literal.length;
-    return literal === string.substr(string.length - len - (back || 0), len);
-  };
-
-  exports.repeat = repeat = function(str, n) {
-    var res;
-    res = '';
-    while (n > 0) {
-      if (n & 1) {
-        res += str;
-      }
-      n >>>= 1;
-      str += str;
-    }
-    return res;
-  };
-
-  exports.compact = function(array) {
-    var item, _i, _len, _results;
-    _results = [];
-    for (_i = 0, _len = array.length; _i < _len; _i++) {
-      item = array[_i];
-      if (item) {
-        _results.push(item);
-      }
-    }
-    return _results;
-  };
-
-  exports.count = function(string, substr) {
-    var num, pos;
-    num = pos = 0;
-    if (!substr.length) {
-      return 1 / 0;
-    }
-    while (pos = 1 + string.indexOf(substr, pos)) {
-      num++;
-    }
-    return num;
-  };
-
-  exports.merge = function(options, overrides) {
-    return extend(extend({}, options), overrides);
-  };
-
-  extend = exports.extend = function(object, properties) {
-    var key, val;
-    for (key in properties) {
-      val = properties[key];
-      object[key] = val;
-    }
-    return object;
-  };
-
-  exports.flatten = flatten = function(array) {
-    var element, flattened, _i, _len;
-    flattened = [];
-    for (_i = 0, _len = array.length; _i < _len; _i++) {
-      element = array[_i];
-      if (element instanceof Array) {
-        flattened = flattened.concat(flatten(element));
-      } else {
-        flattened.push(element);
-      }
-    }
-    return flattened;
-  };
-
-  exports.del = function(obj, key) {
-    var val;
-    val = obj[key];
-    delete obj[key];
-    return val;
-  };
-
-  exports.last = last = function(array, back) {
-    return array[array.length - (back || 0) - 1];
-  };
-
-  exports.some = (_ref = Array.prototype.some) != null ? _ref : function(fn) {
-    var e, _i, _len;
-    for (_i = 0, _len = this.length; _i < _len; _i++) {
-      e = this[_i];
-      if (fn(e)) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  exports.invertLiterate = function(code) {
-    var line, lines, maybe_code;
-    maybe_code = true;
-    lines = (function() {
-      var _i, _len, _ref1, _results;
-      _ref1 = code.split('\n');
-      _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        line = _ref1[_i];
-        if (maybe_code && /^([ ]{4}|[ ]{0,3}\t)/.test(line)) {
-          _results.push(line);
-        } else if (maybe_code = /^\s*$/.test(line)) {
-          _results.push(line);
-        } else {
-          _results.push('# ' + line);
-        }
-      }
-      return _results;
-    })();
-    return lines.join('\n');
-  };
-
-  buildLocationData = function(first, last) {
-    if (!last) {
-      return first;
-    } else {
-      return {
-        first_line: first.first_line,
-        first_column: first.first_column,
-        last_line: last.last_line,
-        last_column: last.last_column
-      };
-    }
-  };
-
-  exports.addLocationDataFn = function(first, last) {
-    return function(obj) {
-      if (((typeof obj) === 'object') && (!!obj['updateLocationDataIfMissing'])) {
-        obj.updateLocationDataIfMissing(buildLocationData(first, last));
-      }
-      return obj;
-    };
-  };
-
-  exports.locationDataToString = function(obj) {
-    var locationData;
-    if (("2" in obj) && ("first_line" in obj[2])) {
-      locationData = obj[2];
-    } else if ("first_line" in obj) {
-      locationData = obj;
-    }
-    if (locationData) {
-      return ("" + (locationData.first_line + 1) + ":" + (locationData.first_column + 1) + "-") + ("" + (locationData.last_line + 1) + ":" + (locationData.last_column + 1));
-    } else {
-      return "No location data";
-    }
-  };
-
-  exports.baseFileName = function(file, stripExt, useWinPathSep) {
-    var parts, pathSep;
-    if (stripExt == null) {
-      stripExt = false;
-    }
-    if (useWinPathSep == null) {
-      useWinPathSep = false;
-    }
-    pathSep = useWinPathSep ? /\\|\// : /\//;
-    parts = file.split(pathSep);
-    file = parts[parts.length - 1];
-    if (!(stripExt && file.indexOf('.') >= 0)) {
-      return file;
-    }
-    parts = file.split('.');
-    parts.pop();
-    if (parts[parts.length - 1] === 'coffee' && parts.length > 1) {
-      parts.pop();
-    }
-    return parts.join('.');
-  };
-
-  exports.isCoffee = function(file) {
-    return /\.((lit)?coffee|coffee\.md)$/.test(file);
-  };
-
-  exports.isLiterate = function(file) {
-    return /\.(litcoffee|coffee\.md)$/.test(file);
-  };
-
-  exports.throwSyntaxError = function(message, location) {
-    var error;
-    if (location.last_line == null) {
-      location.last_line = location.first_line;
-    }
-    if (location.last_column == null) {
-      location.last_column = location.first_column;
-    }
-    error = new SyntaxError(message);
-    error.location = location;
-    error.toString = syntaxErrorToString;
-    error.stack = error.toString();
-    throw error;
-  };
-
-  exports.updateSyntaxError = function(error, code, filename) {
-    if (error.toString === syntaxErrorToString) {
-      error.code || (error.code = code);
-      error.filename || (error.filename = filename);
-      error.stack = error.toString();
-    }
-    return error;
-  };
-
-  syntaxErrorToString = function() {
-    var codeLine, colorize, colorsEnabled, end, filename, first_column, first_line, last_column, last_line, marker, start, _ref1, _ref2;
-    if (!(this.code && this.location)) {
-      return Error.prototype.toString.call(this);
-    }
-    _ref1 = this.location, first_line = _ref1.first_line, first_column = _ref1.first_column, last_line = _ref1.last_line, last_column = _ref1.last_column;
-    if (last_line == null) {
-      last_line = first_line;
-    }
-    if (last_column == null) {
-      last_column = first_column;
-    }
-    filename = this.filename || '[stdin]';
-    codeLine = this.code.split('\n')[first_line];
-    start = first_column;
-    end = first_line === last_line ? last_column + 1 : codeLine.length;
-    marker = repeat(' ', start) + repeat('^', end - start);
-    if (typeof process !== "undefined" && process !== null) {
-      colorsEnabled = process.stdout.isTTY && !process.env.NODE_DISABLE_COLORS;
-    }
-    if ((_ref2 = this.colorful) != null ? _ref2 : colorsEnabled) {
-      colorize = function(str) {
-        return "\x1B[1;31m" + str + "\x1B[0m";
-      };
-      codeLine = codeLine.slice(0, start) + colorize(codeLine.slice(start, end)) + codeLine.slice(end);
-      marker = colorize(marker);
-    }
-    return "" + filename + ":" + (first_line + 1) + ":" + (first_column + 1) + ": error: " + this.message + "\n" + codeLine + "\n" + marker;
-  };
-
-
-});
-
-define('ace/lib/oop', ['require', 'exports', 'module' ], function(require, exports, module) {
-
-
-exports.inherits = function(ctor, superCtor) {
-    ctor.super_ = superCtor;
-    ctor.prototype = Object.create(superCtor.prototype, {
-        constructor: {
-            value: ctor,
-            enumerable: false,
-            writable: true,
-            configurable: true
-        }
-    });
-};
-
-exports.mixin = function(obj, mixin) {
-    for (var key in mixin) {
-        obj[key] = mixin[key];
-    }
-    return obj;
-};
-
-exports.implement = function(proto, mixin) {
-    exports.mixin(proto, mixin);
-};
-
-});
-
-define('ace/mode/coffee/parser', ['require', 'exports', 'module' ], function(require, exports, module) {
+define("ace/mode/coffee/parser",["require","exports","module"], function(require, exports, module) {
 
 var parser = {trace: function trace() { },
 yy: {},
@@ -3460,52 +3595,155 @@ module.exports = new Parser;
 
 });
 
-define('ace/mode/coffee_worker', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/worker/mirror', 'ace/mode/coffee/coffee-script'], function(require, exports, module) {
+define("ace/mode/coffee/scope",["require","exports","module","ace/mode/coffee/helpers"], function(require, exports, module) {
 
+  var Scope, extend, last, _ref;
 
-var oop = require("../lib/oop");
-var Mirror = require("../worker/mirror").Mirror;
-var coffee = require("../mode/coffee/coffee-script");
+  _ref = require('./helpers'), extend = _ref.extend, last = _ref.last;
 
-window.addEventListener = function() {};
+  exports.Scope = Scope = (function() {
+    Scope.root = null;
 
-
-var Worker = exports.Worker = function(sender) {
-    Mirror.call(this, sender);
-    this.setTimeout(250);
-};
-
-oop.inherits(Worker, Mirror);
-
-(function() {
-
-    this.onUpdate = function() {
-        var value = this.doc.getValue();
-
-        try {
-            coffee.parse(value).compile();
-        } catch(e) {
-            var loc = e.location;
-            if (loc) {
-                this.sender.emit("error", {
-                    row: loc.first_line,
-                    column: loc.first_column,
-                    endRow: loc.last_line,
-                    endColumn: loc.last_column,
-                    text: e.message,
-                    type: "error"
-                });
-            }
-            return;
+    function Scope(parent, expressions, method) {
+      this.parent = parent;
+      this.expressions = expressions;
+      this.method = method;
+      this.variables = [
+        {
+          name: 'arguments',
+          type: 'arguments'
         }
-        this.sender.emit("ok");
+      ];
+      this.positions = {};
+      if (!this.parent) {
+        Scope.root = this;
+      }
+    }
+
+    Scope.prototype.add = function(name, type, immediate) {
+      if (this.shared && !immediate) {
+        return this.parent.add(name, type, immediate);
+      }
+      if (Object.prototype.hasOwnProperty.call(this.positions, name)) {
+        return this.variables[this.positions[name]].type = type;
+      } else {
+        return this.positions[name] = this.variables.push({
+          name: name,
+          type: type
+        }) - 1;
+      }
     };
 
-}).call(Worker.prototype);
+    Scope.prototype.namedMethod = function() {
+      var _ref1;
+      if (((_ref1 = this.method) != null ? _ref1.name : void 0) || !this.parent) {
+        return this.method;
+      }
+      return this.parent.namedMethod();
+    };
+
+    Scope.prototype.find = function(name) {
+      if (this.check(name)) {
+        return true;
+      }
+      this.add(name, 'var');
+      return false;
+    };
+
+    Scope.prototype.parameter = function(name) {
+      if (this.shared && this.parent.check(name, true)) {
+        return;
+      }
+      return this.add(name, 'param');
+    };
+
+    Scope.prototype.check = function(name) {
+      var _ref1;
+      return !!(this.type(name) || ((_ref1 = this.parent) != null ? _ref1.check(name) : void 0));
+    };
+
+    Scope.prototype.temporary = function(name, index) {
+      if (name.length > 1) {
+        return '_' + name + (index > 1 ? index - 1 : '');
+      } else {
+        return '_' + (index + parseInt(name, 36)).toString(36).replace(/\d/g, 'a');
+      }
+    };
+
+    Scope.prototype.type = function(name) {
+      var v, _i, _len, _ref1;
+      _ref1 = this.variables;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        v = _ref1[_i];
+        if (v.name === name) {
+          return v.type;
+        }
+      }
+      return null;
+    };
+
+    Scope.prototype.freeVariable = function(name, reserve) {
+      var index, temp;
+      if (reserve == null) {
+        reserve = true;
+      }
+      index = 0;
+      while (this.check((temp = this.temporary(name, index)))) {
+        index++;
+      }
+      if (reserve) {
+        this.add(temp, 'var', true);
+      }
+      return temp;
+    };
+
+    Scope.prototype.assign = function(name, value) {
+      this.add(name, {
+        value: value,
+        assigned: true
+      }, true);
+      return this.hasAssignments = true;
+    };
+
+    Scope.prototype.hasDeclarations = function() {
+      return !!this.declaredVariables().length;
+    };
+
+    Scope.prototype.declaredVariables = function() {
+      var realVars, tempVars, v, _i, _len, _ref1;
+      realVars = [];
+      tempVars = [];
+      _ref1 = this.variables;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        v = _ref1[_i];
+        if (v.type === 'var') {
+          (v.name.charAt(0) === '_' ? tempVars : realVars).push(v.name);
+        }
+      }
+      return realVars.sort().concat(tempVars.sort());
+    };
+
+    Scope.prototype.assignedVariables = function() {
+      var v, _i, _len, _ref1, _results;
+      _ref1 = this.variables;
+      _results = [];
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        v = _ref1[_i];
+        if (v.type.assigned) {
+          _results.push("" + v.name + " = " + v.type.value);
+        }
+      }
+      return _results;
+    };
+
+    return Scope;
+
+  })();
+
 
 });
 
-define('ace/mode/coffee/nodes', ['require', 'exports', 'module' , 'ace/mode/coffee/scope', 'ace/mode/coffee/lexer', 'ace/mode/coffee/helpers'], function(require, exports, module) {
+define("ace/mode/coffee/nodes",["require","exports","module","ace/mode/coffee/scope","ace/mode/coffee/lexer","ace/mode/coffee/helpers"], function(require, exports, module) {
 
   var Access, Arr, Assign, Base, Block, Call, Class, Code, CodeFragment, Comment, Existence, Extends, For, HEXNUM, IDENTIFIER, IDENTIFIER_STR, IS_REGEX, IS_STRING, If, In, Index, LEVEL_ACCESS, LEVEL_COND, LEVEL_LIST, LEVEL_OP, LEVEL_PAREN, LEVEL_TOP, Literal, METHOD_DEF, NEGATE, NO, NUMBER, Obj, Op, Param, Parens, RESERVED, Range, Return, SIMPLENUM, STRICT_PROSCRIBED, Scope, Slice, Splat, Switch, TAB, THIS, Throw, Try, UTILITIES, Value, While, YES, addLocationDataFn, compact, del, ends, extend, flatten, fragmentsToText, isLiteralArguments, isLiteralThis, last, locationDataToString, merge, multident, parseNum, some, starts, throwSyntaxError, unfoldSoak, utility, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
@@ -6583,9 +6821,86 @@ define('ace/mode/coffee/nodes', ['require', 'exports', 'module' , 'ace/mode/coff
   };
 
 
-});// https://github.com/kriskowal/es5-shim
+});
 
-define('ace/lib/es5-shim', ['require', 'exports', 'module' ], function(require, exports, module) {
+define("ace/mode/coffee/coffee-script",["require","exports","module","ace/mode/coffee/lexer","ace/mode/coffee/parser","ace/mode/coffee/nodes"], function(require, exports, module) {
+
+    var Lexer = require("./lexer").Lexer;
+    var parser = require("./parser");
+
+    var lexer = new Lexer();
+    parser.lexer = {
+        lex: function() {
+            var tag, token;
+            token = this.tokens[this.pos++];
+            if (token) {
+                tag = token[0], this.yytext = token[1], this.yylloc = token[2];
+                this.yylineno = this.yylloc.first_line;
+            } else {
+                tag = '';
+            }
+            return tag;
+        },
+        setInput: function(tokens) {
+            this.tokens = tokens;
+            return this.pos = 0;
+        },
+        upcomingInput: function() {
+            return "";
+        }
+    };
+    parser.yy = require('./nodes');
+
+    exports.parse = function(code) {
+        return parser.parse(lexer.tokenize(code));
+    };
+});
+
+define("ace/mode/coffee_worker",["require","exports","module","ace/lib/oop","ace/worker/mirror","ace/mode/coffee/coffee-script"], function(require, exports, module) {
+"use strict";
+
+var oop = require("../lib/oop");
+var Mirror = require("../worker/mirror").Mirror;
+var coffee = require("../mode/coffee/coffee-script");
+
+window.addEventListener = function() {};
+
+
+var Worker = exports.Worker = function(sender) {
+    Mirror.call(this, sender);
+    this.setTimeout(250);
+};
+
+oop.inherits(Worker, Mirror);
+
+(function() {
+
+    this.onUpdate = function() {
+        var value = this.doc.getValue();
+        var errors = [];
+        try {
+            coffee.parse(value).compile();
+        } catch(e) {
+            var loc = e.location;
+            if (loc) {
+                errors.push({
+                    row: loc.first_line,
+                    column: loc.first_column,
+                    endRow: loc.last_line,
+                    endColumn: loc.last_column,
+                    text: e.message,
+                    type: "error"
+                });
+            }
+        }
+        this.sender.emit("annotate", errors);
+    };
+
+}).call(Worker.prototype);
+
+});
+
+define("ace/lib/es5-shim",["require","exports","module"], function(require, exports, module) {
 
 function Empty() {}
 
@@ -7279,300 +7594,5 @@ var toObject = function (o) {
     }
     return Object(o);
 };
-
-});
-
-define('ace/mode/coffee/scope', ['require', 'exports', 'module' , 'ace/mode/coffee/helpers'], function(require, exports, module) {
-
-  var Scope, extend, last, _ref;
-
-  _ref = require('./helpers'), extend = _ref.extend, last = _ref.last;
-
-  exports.Scope = Scope = (function() {
-    Scope.root = null;
-
-    function Scope(parent, expressions, method) {
-      this.parent = parent;
-      this.expressions = expressions;
-      this.method = method;
-      this.variables = [
-        {
-          name: 'arguments',
-          type: 'arguments'
-        }
-      ];
-      this.positions = {};
-      if (!this.parent) {
-        Scope.root = this;
-      }
-    }
-
-    Scope.prototype.add = function(name, type, immediate) {
-      if (this.shared && !immediate) {
-        return this.parent.add(name, type, immediate);
-      }
-      if (Object.prototype.hasOwnProperty.call(this.positions, name)) {
-        return this.variables[this.positions[name]].type = type;
-      } else {
-        return this.positions[name] = this.variables.push({
-          name: name,
-          type: type
-        }) - 1;
-      }
-    };
-
-    Scope.prototype.namedMethod = function() {
-      var _ref1;
-      if (((_ref1 = this.method) != null ? _ref1.name : void 0) || !this.parent) {
-        return this.method;
-      }
-      return this.parent.namedMethod();
-    };
-
-    Scope.prototype.find = function(name) {
-      if (this.check(name)) {
-        return true;
-      }
-      this.add(name, 'var');
-      return false;
-    };
-
-    Scope.prototype.parameter = function(name) {
-      if (this.shared && this.parent.check(name, true)) {
-        return;
-      }
-      return this.add(name, 'param');
-    };
-
-    Scope.prototype.check = function(name) {
-      var _ref1;
-      return !!(this.type(name) || ((_ref1 = this.parent) != null ? _ref1.check(name) : void 0));
-    };
-
-    Scope.prototype.temporary = function(name, index) {
-      if (name.length > 1) {
-        return '_' + name + (index > 1 ? index - 1 : '');
-      } else {
-        return '_' + (index + parseInt(name, 36)).toString(36).replace(/\d/g, 'a');
-      }
-    };
-
-    Scope.prototype.type = function(name) {
-      var v, _i, _len, _ref1;
-      _ref1 = this.variables;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        v = _ref1[_i];
-        if (v.name === name) {
-          return v.type;
-        }
-      }
-      return null;
-    };
-
-    Scope.prototype.freeVariable = function(name, reserve) {
-      var index, temp;
-      if (reserve == null) {
-        reserve = true;
-      }
-      index = 0;
-      while (this.check((temp = this.temporary(name, index)))) {
-        index++;
-      }
-      if (reserve) {
-        this.add(temp, 'var', true);
-      }
-      return temp;
-    };
-
-    Scope.prototype.assign = function(name, value) {
-      this.add(name, {
-        value: value,
-        assigned: true
-      }, true);
-      return this.hasAssignments = true;
-    };
-
-    Scope.prototype.hasDeclarations = function() {
-      return !!this.declaredVariables().length;
-    };
-
-    Scope.prototype.declaredVariables = function() {
-      var realVars, tempVars, v, _i, _len, _ref1;
-      realVars = [];
-      tempVars = [];
-      _ref1 = this.variables;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        v = _ref1[_i];
-        if (v.type === 'var') {
-          (v.name.charAt(0) === '_' ? tempVars : realVars).push(v.name);
-        }
-      }
-      return realVars.sort().concat(tempVars.sort());
-    };
-
-    Scope.prototype.assignedVariables = function() {
-      var v, _i, _len, _ref1, _results;
-      _ref1 = this.variables;
-      _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        v = _ref1[_i];
-        if (v.type.assigned) {
-          _results.push("" + v.name + " = " + v.type.value);
-        }
-      }
-      return _results;
-    };
-
-    return Scope;
-
-  })();
-
-
-});
-
-define('ace/anchor', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/event_emitter'], function(require, exports, module) {
-
-
-var oop = require("./lib/oop");
-var EventEmitter = require("./lib/event_emitter").EventEmitter;
-
-var Anchor = exports.Anchor = function(doc, row, column) {
-    this.$onChange = this.onChange.bind(this);
-    this.attach(doc);
-    
-    if (typeof column == "undefined")
-        this.setPosition(row.row, row.column);
-    else
-        this.setPosition(row, column);
-};
-
-(function() {
-
-    oop.implement(this, EventEmitter);
-    this.getPosition = function() {
-        return this.$clipPositionToDocument(this.row, this.column);
-    };
-    this.getDocument = function() {
-        return this.document;
-    };
-    this.$insertRight = false;
-    this.onChange = function(e) {
-        var delta = e.data;
-        var range = delta.range;
-
-        if (range.start.row == range.end.row && range.start.row != this.row)
-            return;
-
-        if (range.start.row > this.row)
-            return;
-
-        if (range.start.row == this.row && range.start.column > this.column)
-            return;
-
-        var row = this.row;
-        var column = this.column;
-        var start = range.start;
-        var end = range.end;
-
-        if (delta.action === "insertText") {
-            if (start.row === row && start.column <= column) {
-                if (start.column === column && this.$insertRight) {
-                } else if (start.row === end.row) {
-                    column += end.column - start.column;
-                } else {
-                    column -= start.column;
-                    row += end.row - start.row;
-                }
-            } else if (start.row !== end.row && start.row < row) {
-                row += end.row - start.row;
-            }
-        } else if (delta.action === "insertLines") {
-            if (start.row <= row) {
-                row += end.row - start.row;
-            }
-        } else if (delta.action === "removeText") {
-            if (start.row === row && start.column < column) {
-                if (end.column >= column)
-                    column = start.column;
-                else
-                    column = Math.max(0, column - (end.column - start.column));
-
-            } else if (start.row !== end.row && start.row < row) {
-                if (end.row === row)
-                    column = Math.max(0, column - end.column) + start.column;
-                row -= (end.row - start.row);
-            } else if (end.row === row) {
-                row -= end.row - start.row;
-                column = Math.max(0, column - end.column) + start.column;
-            }
-        } else if (delta.action == "removeLines") {
-            if (start.row <= row) {
-                if (end.row <= row)
-                    row -= end.row - start.row;
-                else {
-                    row = start.row;
-                    column = 0;
-                }
-            }
-        }
-
-        this.setPosition(row, column, true);
-    };
-    this.setPosition = function(row, column, noClip) {
-        var pos;
-        if (noClip) {
-            pos = {
-                row: row,
-                column: column
-            };
-        } else {
-            pos = this.$clipPositionToDocument(row, column);
-        }
-
-        if (this.row == pos.row && this.column == pos.column)
-            return;
-
-        var old = {
-            row: this.row,
-            column: this.column
-        };
-
-        this.row = pos.row;
-        this.column = pos.column;
-        this._signal("change", {
-            old: old,
-            value: pos
-        });
-    };
-    this.detach = function() {
-        this.document.removeEventListener("change", this.$onChange);
-    };
-    this.attach = function(doc) {
-        this.document = doc || this.document;
-        this.document.on("change", this.$onChange);
-    };
-    this.$clipPositionToDocument = function(row, column) {
-        var pos = {};
-
-        if (row >= this.document.getLength()) {
-            pos.row = Math.max(0, this.document.getLength() - 1);
-            pos.column = this.document.getLine(pos.row).length;
-        }
-        else if (row < 0) {
-            pos.row = 0;
-            pos.column = 0;
-        }
-        else {
-            pos.row = row;
-            pos.column = Math.min(this.document.getLine(pos.row).length, Math.max(0, column));
-        }
-
-        if (column < 0)
-            pos.column = 0;
-
-        return pos;
-    };
-
-}).call(Anchor.prototype);
 
 });

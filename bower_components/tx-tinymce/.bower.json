@@ -1,6 +1,6 @@
 {
   "name": "tx-tinymce",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "authors": [
     "David Jensen <david.lgj@gmail.com>"
   ],
@@ -28,11 +28,11 @@
     "angular": ">= 1.2.0"
   },
   "homepage": "https://github.com/Textalk/tx-tinymce",
-  "_release": "0.0.6",
+  "_release": "0.0.8",
   "_resolution": {
     "type": "version",
-    "tag": "0.0.6",
-    "commit": "21451d30634d0f29cf6cb3603b09ce108fcc0131"
+    "tag": "0.0.8",
+    "commit": "5aa9a2993ec0c9898fc72d8d035a7c274c2955b4"
   },
   "_source": "git://github.com/Textalk/tx-tinymce.git",
   "_target": ">= 0.0.5",

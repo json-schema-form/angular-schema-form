@@ -1,9 +1,17 @@
 {
-    "name": "spectrum",
-    "version": "1.5.0",
+    "name": "spectrum-colorpicker",
+    "description": "Spectrum: the no hassle jQuery colorpicker",
+    "version": "1.7.0",
+    "keywords": ["jquery-plugin", "ecosystem:jquery", "color", "colorpicker", "ui"],
+    "homepage": "http://bgrins.github.com/spectrum",
     "repository": {
         "type": "git",
         "url": "https://bgrins.github.com/spectrum"
+    },
+    "author": {
+        "name" : "Brian Grinstead",
+        "email" : "briangrinstead@gmail.com",
+        "url" : "http://briangrinstead.com/"
     },
     "devDependencies": {
         "grunt": "~0.4.0",

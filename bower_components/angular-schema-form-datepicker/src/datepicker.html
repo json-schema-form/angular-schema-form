@@ -1,16 +1,24 @@
-<div class="form-group" ng-class="{'has-error': hasError()}">
+<div class="form-group {{form.htmlClass}}" ng-class="{'has-error': hasError()}">
   <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
-
-  <input ng-show="form.key"
-         style="background-color: white"
-         type="text"
-         class="form-control"
-         schema-validate="form"
-         ng-model="$$value$$"
-         pick-a-date
-         min-date="form.minDate"
-         max-date="form.maxDate"
-         format="form.format" />
-
+  <div ng-class="{'input-group': (form.fieldAddonLeft || form.fieldAddonRight)}">
+    <span ng-if="form.fieldAddonLeft"
+          class="input-group-addon"
+          ng-bind-html="form.fieldAddonLeft"></span>
+    <input ng-show="form.key"
+           style="background-color: white"
+           type="text"
+           class="form-control {{form.fieldHtmlClass}}"
+           schema-validate="form"
+           ng-model="$$value$$"
+           ng-disabled="form.readonly"
+           pick-a-date="form.pickadate"
+           min-date="form.minDate"
+           max-date="form.maxDate"
+           name="{{form.key.slice(-1)[0]}}"
+           format="form.format" />
+    <span ng-if="form.fieldAddonRight"
+          class="input-group-addon"
+          ng-bind-html="form.fieldAddonRight"></span>
+  </div>
   <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
 </div>

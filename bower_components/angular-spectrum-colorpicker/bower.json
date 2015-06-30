@@ -1,11 +1,27 @@
 {
   "name": "angular-spectrum-colorpicker",
-  "version": "1.2.0",
+  "version": "1.4.1",
   "authors": [
-    "Jimdo GmbH"
+    "Jimdo GmbH",
+    "Joscha Feth <joscha@feth.com>",
+    "Hannes Diercks <hannes.diercks@jimdo.com>",
+    "Hendrike Heydenreich <hendrike@jimdo.com>",
+    "Sasha Mile Rudan <mprinc@gmail.com>",
+    "Hauke Stange <hauke@jimdo.com>",
+    "luto <m@luto.at>",
+    "tkrym <tomasz.krym@kodegenix.pl>",
+    "Dorian Manning <dmnn@users.noreply.github.com>",
+    "Fernando Pasik <fernando@pasik.com.ar>",
+    "asilberschneider <asilberschneider@users.noreply.github.com>",
+    "Matthew Davies <daviesgeek@users.noreply.github.com>",
+    "Robbie Trencheny <me@robbiet.us>",
+    "Erik Dykema <erik@caserails.com>",
+    "Denis Dervisevic <dervisevic@textalk.se>",
+    "Elan Perach <elanperach@gmail.com>",
+    "Lasse Diercks <lasse@jimdo.com>"
   ],
   "description": "Angular directive for a colorpicker, that bases on the spectrum colorpicker",
-  "main": "dist/angular-spectrum-colorpicker.js",
+  "main": "dist/angular-spectrum-colorpicker.min.js",
   "keywords": [
     "directive",
     "colorpicker",
@@ -14,13 +30,14 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "angular": "~1.2.21",
-    "angular-mocks": "~1.2.21",
-    "jquery": "~2.1.1"
+    "angular": "^1.2.21",
+    "angular-mocks": "^1.2.21",
+    "jquery": "~2.1.1",
+    "jasmine-moar-matchers": "~0.0.2"
   },
   "dependencies": {
-    "spectrum": "1.5.0",
-    "angular": "~1.2.8"
+    "spectrum": "1.7.0",
+    "angular": "^1.2.8"
   },
   "ignore": [
     "**/.*",

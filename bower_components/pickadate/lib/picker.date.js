@@ -1,6 +1,5 @@
-
 /*!
- * Date picker for pickadate.js v3.5.3
+ * Date picker for pickadate.js v3.5.6
  * http://amsul.github.io/pickadate.js/date.htm
  */
 
@@ -8,7 +7,7 @@
 
     // AMD.
     if ( typeof define == 'function' && define.amd )
-        define( ['picker','jquery'], factory )
+        define( ['picker', 'jquery'], factory )
 
     // Node.js/browserify.
     else if ( typeof exports == 'object' )
@@ -83,7 +82,10 @@ function DatePicker( picker, settings ) {
     // When there’s a value, set the `select`, which in turn
     // also sets the `highlight` and `view`.
     if ( valueString ) {
-        calendar.set( 'select', valueString, { format: formatString })
+        calendar.set( 'select', valueString, {
+            format: formatString,
+            defaultValue: true
+        })
     }
 
     // If there’s no value, default to highlighting “today”.
@@ -105,7 +107,7 @@ function DatePicker( picker, settings ) {
                 targetDate = new Date( highlightedObject.year, highlightedObject.month, highlightedObject.date + timeChange )
             calendar.set(
                 'highlight',
-                [ targetDate.getFullYear(), targetDate.getMonth(), targetDate.getDate() ],
+                targetDate,
                 { interval: timeChange }
             )
             this.render()
@@ -476,7 +478,7 @@ DatePicker.prototype.validate = function( type, dateObject, options ) {
     // • Not inverted and date enabled.
     // • Inverted and all dates disabled.
     // • ..and anything else.
-    if ( !options || !options.nav ) if (
+    if ( !options || (!options.nav && !options.defaultValue) ) if (
         /* 1 */ ( !isFlippedBase && calendar.disabled( dateObject ) ) ||
         /* 2 */ ( isFlippedBase && calendar.disabled( dateObject ) && ( hasEnabledWeekdays || hasEnabledBeforeTarget || hasEnabledAfterTarget ) ) ||
         /* 3 */ ( !isFlippedBase && (dateObject.pick <= minLimitObject.pick || dateObject.pick >= maxLimitObject.pick) )
@@ -645,7 +647,8 @@ DatePicker.prototype.formats = (function() {
     function getWordLengthFromCollection( string, collection, dateObject ) {
 
         // Grab the first word from the string.
-        var word = string.match( /\w+/ )[ 0 ]
+        // Regex pattern from http://stackoverflow.com/q/150033
+        var word = string.match( /[^\x00-\x7F]+|\w+/ )[ 0 ]
 
         // If there's no month index, add it to the date object
         if ( !dateObject.mm && !dateObject.m ) {
@@ -1185,7 +1188,8 @@ DatePicker.prototype.nodes = function( isOpen ) {
 
                                 var isSelected = selectedObject && selectedObject.pick == targetDate.pick,
                                     isHighlighted = highlightedObject && highlightedObject.pick == targetDate.pick,
-                                    isDisabled = disabledCollection && calendar.disabled( targetDate ) || targetDate.pick < minLimitObject.pick || targetDate.pick > maxLimitObject.pick
+                                    isDisabled = disabledCollection && calendar.disabled( targetDate ) || targetDate.pick < minLimitObject.pick || targetDate.pick > maxLimitObject.pick,
+                                    formattedDate = _.trigger( calendar.formats.toString, calendar, [ settings.format, targetDate ] )
 
                                 return [
                                     _.node(
@@ -1220,11 +1224,8 @@ DatePicker.prototype.nodes = function( isOpen ) {
                                         })([ settings.klass.day ]),
                                         'data-pick=' + targetDate.pick + ' ' + _.ariaAttr({
                                             role: 'gridcell',
-                                            selected: isSelected && calendar.$node.val() === _.trigger(
-                                                    calendar.formats.toString,
-                                                    calendar,
-                                                    [ settings.format, targetDate ]
-                                                ) ? true : null,
+                                            label: formattedDate,
+                                            selected: isSelected && calendar.$node.val() === formattedDate ? true : null,
                                             activedescendant: isHighlighted ? true : null,
                                             disabled: isDisabled ? true : null
                                         })
@@ -1293,6 +1294,10 @@ DatePicker.defaults = (function( prefix ) {
         today: 'Today',
         clear: 'Clear',
         close: 'Close',
+
+        // Picker close behavior
+        closeOnSelect: true,
+        closeOnClear: true,
 
         // The format to show on the `input` element
         format: 'd mmmm, yyyy',
