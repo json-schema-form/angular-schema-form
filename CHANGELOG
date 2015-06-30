@@ -1,6 +1,18 @@
+v0.8.3
+------
+ * "destroyStrategy" support, thanks @jbsaff! This means that `condition` can now remove values
+   from the model when their fields are hidden.
+ * Bugfix for global option propagation, thanks @golfmat1
+ * `notitle` now works on fieldset as well, thanks @stramel
+ * `trackBy` on selects, thanks @Fridus
+ * update list variable when watching for array changes, thanks @lukebennet
+ * doc changes for the "save to gist" feature, thanks @niklasb
+ * validation error message mixups, thanks @leipert
+ * ObjectPath, deps and browserify fixes, thanks @saller, @LoicMahieu, @thardyman, @davidlgj
+
 v0.8.2
 -------
- * Fix embarrassing typo in package.json 
+ * Fix embarrassing typo in package.json
 
 v0.8.1
 ------
