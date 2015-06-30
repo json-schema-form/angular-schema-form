@@ -9,7 +9,7 @@
           sf-changed="form"
           class="form-control {{form.fieldHtmlClass}}"
           schema-validate="form"
-          ng-options="item.value as item.name group by item.group for item in form.titleMap"
+          ng-options="item.value as item.name group by item.group for item in form.titleMap track by item[form.trackBy]"
           name="{{form.key.slice(-1)[0]}}">
   </select>
   <div class="help-block" sf-message="form.description"></div>
