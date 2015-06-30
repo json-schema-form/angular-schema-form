@@ -1,6 +1,11 @@
 angular.module('schemaForm').provider('sfPath',
 [function() {
-  var sfPath = {parse: objectpath.parse};
+
+  // When building with browserify it's objectpath,
+  // otherwise it's just objectpath.
+  var ObjectPath = window.ObjectPath || objectpath;
+
+  var sfPath = {parse: ObjectPath.parse};
 
   // if we're on Angular 1.2.x, we need to continue using dot notation
   if (angular.version.major === 1 && angular.version.minor < 3) {
@@ -8,7 +13,7 @@ angular.module('schemaForm').provider('sfPath',
       return Array.isArray(arr) ? arr.join('.') : arr.toString();
     };
   } else {
-    sfPath.stringify = objectpath.stringify;
+    sfPath.stringify = ObjectPath.stringify;
   }
 
   // We want this to use whichever stringify method is defined above,
