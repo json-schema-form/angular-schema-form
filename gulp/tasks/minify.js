@@ -1,7 +1,7 @@
 var gulp = require('gulp'),
   concat = require('gulp-concat'),
   rename = require('gulp-rename'),
-  umd = require('gulp-umd'),
+  umd    = require('gulp-umd'),
   uglify = require('gulp-uglify');
 
 gulp.task('minify', function() {
@@ -16,9 +16,9 @@ gulp.task('minify', function() {
     dependencies: function() {
       return [
         {name: 'angular'},
-        {name: 'ObjectPath'},
+        {name: 'objectpath'},
         {name: 'tv4'},
-      ]
+      ];
     },
     exports: function() {return 'schemaForm';},
     namespace: function() {return 'schemaForm';}

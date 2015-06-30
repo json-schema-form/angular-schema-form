@@ -192,6 +192,8 @@ attribute which should be placed along side `sf-schema`.
 | supressPropertyTitles | by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
 | formDefaults | an object that will be used as a default for all form definitions |
 | validationMessage | an object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
+| setSchemaDefaults | boolean, set to false an no defaults from the schema will be set on the model. |
+| destroyStrategy | the default strategy to use for cleaning the model when a form element is removed. see [destroyStrategy](#destroyStrategy) below |
 
 *formDefaults* is mostly useful for setting global [ngModelOptions](#ngmodeloptions)
 i.e. changing the entire form to validate on blur.
@@ -624,7 +626,7 @@ General options most field types can handle:
   onChange: "valueChanged(form.key,modelValue)", // onChange event handler, expression or function
   feedback: false,             // Inline feedback icons
   disableSuccessState: false,  // Set true to NOT apply 'has-success' class to a field that was validated successfully
-  disableErrorState: false,    // Set true to NOT apply 'has-error' class to a field that failed validation 
+  disableErrorState: false,    // Set true to NOT apply 'has-error' class to a field that failed validation
   placeholder: "Input...",     // placeholder on inputs and textarea
   ngModelOptions: { ... },     // Passed along to ng-model-options
   readonly: true,              // Same effect as readOnly in schema. Put on a fieldset or array
@@ -634,6 +636,7 @@ General options most field types can handle:
   labelHtmlClass: "street"     // CSS Class(es) to be added to the label of the field (or similar)
   copyValueTo: ["address.street"],     // Copy values to these schema keys.
   condition: "person.age < 18" // Show or hide field depending on an angular expression
+  destroyStrategy: "remove"    // One of "null", "empty" , "remove", or 'retain'. Changes model on $destroy event. default is "remove".
 }
 ```
 
@@ -823,6 +826,24 @@ function FormCtrl($scope) {
 Note that arrays inside arrays won't work with conditions.
 
 
+### destroyStrategy
+By default, when a field is removed from the DOM and the `$destroy` event is broadcast, this happens
+if you use the `condition` option, the schema-validate directive will update the model to set the
+field value to `undefined`. This can be overridden by setting the destroyStrategy on a field, or as a
+global option, to one of the strings `"null"`, `"empty"` , `"remove"`, or `"retain"`.
+
+`"null"` means that model values will be set to `null` instead of being removed.
+
+`"empty"` means empty strings, `""`, for model values that has the `string` type, `{}` for model
+  values with `object` type and `[]` for `array` type. All other types will be treated as `"remove"`.
+
+`"remove"` deletes the property. This is the default.
+
+`"retain"` keeps the value of the property event though the field is no longer in the form or being
+vaidated before submit.
+
+If you'd like to set the destroyStrategy for
+an entire form, add it to the [globalOptions](#global-options)
 
 
 Specific options and types
@@ -863,7 +884,7 @@ They do need a list of ```items``` to have as children.
 
 ### select and checkboxes
 
-*select* and *checkboxes* can take an attribute, `titleMap`, wich defines a name
+*select* and *checkboxes* can take an attribute, `titleMap`, which defines a name
 and a value. The value is bound to the model while the name is used for display.
 In the case of *checkboxes* the names of the titleMap can be HTML.
 
@@ -1205,8 +1226,8 @@ need the reordering.
 In the form definition you can refer to properties of an array item by the empty
 bracket notation. In the `key` simply end the name of the array with `[]`
 
-By default the array will start with one *undefined* value so that the user is presented with one a
-form, to supress this the attribute `startEmpty` to `true`
+By default the array will start with one *undefined* value so that the user is presented with one
+form element. To suppress this behaviour, set the attribute `startEmpty` to `true`.
 
 Given the schema:
 ```json
@@ -1569,7 +1590,7 @@ function FormCtrl($scope) {
     "eligible",
     {
         type: "conditional",
-        condition: "person.eligible", //or "model.eligable"
+        condition: "model.person.eligible",
         items: [
           "code"
         ]

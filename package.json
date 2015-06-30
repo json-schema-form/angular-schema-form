@@ -1,10 +1,11 @@
 {
   "name": "angular-schema-form",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Create complex forms from a JSON schema with angular.",
   "repository": "Textalk/angular-schema-form",
   "main": "dist/schema-form.min.js",
-  "homepage": "http://textalk.github.io/angular-schema-form/",
+  "filename": "dist/schema-form.min.js",
+  "homepage": "http://schemaform.io",
   "scripts": {
     "test": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js"
   },
@@ -20,7 +21,7 @@
     "angular": ">= 1.2",
     "tv4": "~1.0.15",
     "angular-sanitize": ">= 1.2",
-    "objectpath": "~1.1.0"
+    "objectpath": "^1.2.1"
   },
   "keywords": [
     "angular",
@@ -51,7 +52,7 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "mocha": "^1.18.0",
     "mocha-lcov-reporter": "0.0.1",
-    "protractor": "^2.0.0",
+    "protractor": "^2.1.0",
     "sinon": "^1.9.0",
     "sinon-chai": "^2.5.0",
     "streamqueue": "0.0.5"
@@ -61,5 +62,16 @@
       "type": "MIT",
       "url": "https://raw.githubusercontent.com/Textalk/angular-schema-form/master/LICENSE"
     }
-  ]
+  ],
+  "autoupdate": {
+    "source": "git",
+    "target": "git://github.com/Textalk/angular-schema-form.git",
+    "basePath": "/dist/",
+    "files": [
+      "schema-form.min.js",
+      "schema-form.js",
+      "bootstrap-decorator.min.js",
+      "bootstrap-decorator.js"
+    ]
+  }
 }
