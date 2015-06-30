@@ -52,7 +52,7 @@
     "karma-phantomjs-launcher": "^0.1.4",
     "mocha": "^1.18.0",
     "mocha-lcov-reporter": "0.0.1",
-    "protractor": "^2.0.0",
+    "protractor": "^2.1.0",
     "sinon": "^1.9.0",
     "sinon-chai": "^2.5.0",
     "streamqueue": "0.0.5"
