@@ -1,5 +1,10 @@
 angular.module('schemaForm').provider('sfPath',
 [function() {
+
+  // When building with browserify it's objectpath,
+  // otherwise it's just objectpath.
+  var ObjectPath = window.ObjectPath || objectpath;
+
   var sfPath = {parse: ObjectPath.parse};
 
   // if we're on Angular 1.2.x, we need to continue using dot notation
