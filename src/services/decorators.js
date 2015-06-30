@@ -373,7 +373,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
    * @param {Object} templates, an object that maps "type" => "templateUrl"
    */
   this.createDecorator = function(name, templates) {
-    console.warn('schemaFormDecorators.createDecorator is DEPRECATED, use defineDecorator instead.');
+    //console.warn('schemaFormDecorators.createDecorator is DEPRECATED, use defineDecorator instead.');
     decorators[name] = {'__name': name};
 
     angular.forEach(templates, function(url, type) {

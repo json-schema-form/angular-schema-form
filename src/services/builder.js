@@ -34,7 +34,6 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
         }
       } else {
         // Another builder, i.e. array has overriden the modelValue
-        console.log('overriding modelValue');
         modelValue = args.state.modelValue;
       }
 
@@ -66,7 +65,6 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       }
     },
     simpleTransclusion: function(args) {
-      console.warn('doing simple transclusion', args);
       var children = args.build(args.form.items, args.path + '.items', args.state);
       args.fieldFrag.firstChild.appendChild(children);
     },
@@ -187,7 +185,6 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
          * Builds a form from a canonical form definition
          */
         build: function(form, decorator, slots) {
-          console.log('Buidling with form', form)
           return build(form, decorator, function(url) {
             return $templateCache.get(url);
           }, slots);
