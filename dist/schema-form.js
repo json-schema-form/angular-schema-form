@@ -34,8 +34,8 @@ var schemaForm = angular.module('schemaForm', deps);
 angular.module('schemaForm').provider('sfPath',
 [function() {
 
-  // When building with browserify it's objectpath,
-  // otherwise it's just objectpath.
+  // When building with browserify ObjectPath is available as `objectpath` but othwerwise
+  // it's called `ObjectPath`.
   var ObjectPath = window.ObjectPath || objectpath;
 
   var sfPath = {parse: ObjectPath.parse};
