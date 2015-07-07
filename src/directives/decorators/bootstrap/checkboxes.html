@@ -9,7 +9,7 @@
              sf-changed="form"
              class="{{form.fieldHtmlClass}}"
              ng-model="titleMapValues[$index]"
-             name="{{form.key.slice(-1)[0]}}">
+             name="{{form.key.join('.')}}">
       <span ng-bind-html="form.titleMap[$index].name"></span>
     </label>
 
