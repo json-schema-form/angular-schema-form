@@ -1,6 +1,6 @@
 <div class="form-group schema-form-{{form.type}} {{form.htmlClass}}"
      ng-class="{'has-error': form.disableErrorState !== true && hasError(), 'has-success': form.disableSuccessState !== true && hasSuccess(), 'has-feedback': form.feedback !== false }">
-  <label class="control-label {{form.labelHtmlClass}}" ng-class="{'sr-only': !showTitle()}" for="{{form.key.slice(-1)[0]}}">{{form.title}}</label>
+  <label class="control-label {{form.labelHtmlClass}}" ng-class="{'sr-only': !showTitle()}" for="{{form.key.join('-')}}">{{form.title}}</label>
 
   <input ng-if="!form.fieldAddonLeft && !form.fieldAddonRight"
          ng-show="form.key"
@@ -9,13 +9,13 @@
          sf-changed="form"
          placeholder="{{form.placeholder}}"
          class="form-control {{form.fieldHtmlClass}}"
-         id="{{form.key.slice(-1)[0]}}"
+         id="{{form.key.join('-')}}"
          ng-model-options="form.ngModelOptions"
          ng-model="$$value$$"
          ng-disabled="form.readonly"
          schema-validate="form"
-         name="{{form.key.slice(-1)[0]}}"
-         aria-describedby="{{form.key.slice(-1)[0] + 'Status'}}">
+         name="{{form.key.join('.')}}"
+         aria-describedby="{{form.key.join('-') + 'Status'}}">
 
   <div ng-if="form.fieldAddonLeft || form.fieldAddonRight"
        ng-class="{'input-group': (form.fieldAddonLeft || form.fieldAddonRight)}">
@@ -28,13 +28,13 @@
            sf-changed="form"
            placeholder="{{form.placeholder}}"
            class="form-control {{form.fieldHtmlClass}}"
-           id="{{form.key.slice(-1)[0]}}"
+           id="{{form.key.join('-')}}"
            ng-model-options="form.ngModelOptions"
            ng-model="$$value$$"
            ng-disabled="form.readonly"
            schema-validate="form"
-           name="{{form.key.slice(-1)[0]}}"
-           aria-describedby="{{form.key.slice(-1)[0] + 'Status'}}">
+           name="{{form.key.join('.')}}"
+           aria-describedby="{{form.key.join('-') + 'Status'}}">
 
     <span ng-if="form.fieldAddonRight"
           class="input-group-addon"
@@ -47,7 +47,7 @@
         aria-hidden="true"></span>
 
   <span ng-if="hasError() || hasSuccess()"
-        id="{{form.key.slice(-1)[0] + 'Status'}}"
+        id="{{form.key.join('-') + 'Status'}}"
         class="sr-only">{{ hasSuccess() ? '(success)' : '(error)' }}</span>
 
   <div class="help-block" sf-message="form.description"></div>

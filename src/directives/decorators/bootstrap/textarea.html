@@ -1,16 +1,16 @@
 <div class="form-group has-feedback {{form.htmlClass}} schema-form-textarea" ng-class="{'has-error': form.disableErrorState !== true && hasError(), 'has-success': form.disableSuccessState !== true &&  hasSuccess()}">
-  <label class="{{form.labelHtmlClass}}" ng-class="{'sr-only': !showTitle()}" for="{{form.key.slice(-1)[0]}}">{{form.title}}</label>
+  <label class="{{form.labelHtmlClass}}" ng-class="{'sr-only': !showTitle()}" for="{{form.key.join('-')}}">{{form.title}}</label>
 
   <textarea ng-if="!form.fieldAddonLeft && !form.fieldAddonRight"
             class="form-control {{form.fieldHtmlClass}}"
-            id="{{form.key.slice(-1)[0]}}"
+            id="{{form.key.join('-')}}"
             sf-changed="form"
             placeholder="{{form.placeholder}}"
             ng-disabled="form.readonly"
             ng-model="$$value$$"
             ng-model-options="form.ngModelOptions"
             schema-validate="form"
-            name="{{form.key.slice(-1)[0]}}"></textarea>
+            name="{{form.key.join('.')}}"></textarea>
 
   <div ng-if="form.fieldAddonLeft || form.fieldAddonRight"
        ng-class="{'input-group': (form.fieldAddonLeft || form.fieldAddonRight)}">
@@ -18,14 +18,14 @@
           class="input-group-addon"
           ng-bind-html="form.fieldAddonLeft"></span>
     <textarea class="form-control {{form.fieldHtmlClass}}"
-              id="{{form.key.slice(-1)[0]}}"
+              id="{{form.key.join('-')}}"
               sf-changed="form"
               placeholder="{{form.placeholder}}"
               ng-disabled="form.readonly"
               ng-model="$$value$$"
               ng-model-options="form.ngModelOptions"
               schema-validate="form"
-              name="{{form.key.slice(-1)[0]}}"></textarea>
+              name="{{form.key.join('.')}}"></textarea>
     <span ng-if="form.fieldAddonRight"
           class="input-group-addon"
           ng-bind-html="form.fieldAddonRight"></span>
