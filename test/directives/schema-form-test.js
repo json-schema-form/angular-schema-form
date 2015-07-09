@@ -56,6 +56,32 @@ describe('directive',function(){
     });
   });
 
+  it('should generate html and compile when no form is provided, using the default',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = exampleSchema;
+
+      scope.form = undefined;
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().length.should.be.equal(2);
+      tmpl.children().eq(0).is('bootstrap-decorator').should.be.true;
+      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
+      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
+
+    });
+  });
+
   it('should generate html and compile it, deep structure',function(){
 
     inject(function($compile,$rootScope){

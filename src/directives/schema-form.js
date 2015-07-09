@@ -108,12 +108,14 @@ angular.module('schemaForm')
           scope.$emit('sf-render-finished', element);
         };
 
+        var defaultForm = ['*'];
+
         //Since we are dependant on up to three
         //attributes we'll do a common watch
         scope.$watch(function() {
 
           var schema = scope.schema;
-          var form   = scope.initialForm || ['*'];
+          var form   = scope.initialForm || defaultForm;
 
           //The check for schema.type is to ensure that schema is not {}
           if (form && schema && schema.type &&
