@@ -91,8 +91,7 @@ describe('schemaForm', function() {
                 "name": "NaN",
                 "value": "NaN"
               }
-            ],
-            "trackBy": "value"
+            ]
           },
           {
             "title": "Are you over 18 years old?",
