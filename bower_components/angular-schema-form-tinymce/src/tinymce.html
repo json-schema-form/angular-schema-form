@@ -1,0 +1,10 @@
+<div class="form-group" ng-class="{'has-error': hasError()}">
+  <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
+  <textarea
+    tx-tinymce="form.tinymceOptions"
+    ng-model="$$value$$"
+    style="background-color: white"
+    schema-validate="form"
+  ></textarea>
+  <span class="help-block">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span>
+</div>

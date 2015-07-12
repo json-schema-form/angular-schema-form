@@ -1,0 +1,49 @@
+{
+  "name": "angular-schema-form-tinymce",
+  "main": [
+    "bootstrap-tinymce.min.js"
+  ],
+  "version": "0.1.0",
+  "authors": [
+    "Textalk",
+    "Denis Dervisevic <denis@dervisevic.se>"
+  ],
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "angular-schema-form",
+    "schema-form",
+    "form",
+    "json",
+    "json-schema",
+    "schema"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "coverage"
+  ],
+  "dependencies": {
+    "tx-tinymce": ">= 0.0.5",
+    "tinymce": ">= 4.0.0"
+  },
+  "devDependencies": {
+    "angular-schema-form": ">= 0.7",
+    "angular-mocks": ">= 1.2"
+  },
+  "homepage": "https://github.com/Textalk/angular-schema-form-tinymce",
+  "_release": "0.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.0",
+    "commit": "e267357d1ebd1192e4ec1a3919b30244b4f50b6f"
+  },
+  "_source": "git://github.com/Textalk/angular-schema-form-tinymce.git",
+  "_target": "~0.1.0",
+  "_originalSource": "angular-schema-form-tinymce",
+  "_direct": true
+}
