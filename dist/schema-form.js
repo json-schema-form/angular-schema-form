@@ -34,8 +34,8 @@ var schemaForm = angular.module('schemaForm', deps);
 angular.module('schemaForm').provider('sfPath',
 [function() {
 
-  // When building with browserify it's objectpath,
-  // otherwise it's just objectpath.
+  // When building with browserify ObjectPath is available as `objectpath` but othwerwise
+  // it's called `ObjectPath`.
   var ObjectPath = window.ObjectPath || objectpath;
 
   var sfPath = {parse: ObjectPath.parse};
@@ -968,7 +968,7 @@ angular.module('schemaForm').provider('schemaForm',
         return type[0];
     }
     return type;
-  };
+  }
 
   //Creates an default titleMap list from an enum, i.e. a list of strings.
   var enumToTitleMap = function(enm) {
@@ -1101,7 +1101,6 @@ angular.module('schemaForm').provider('schemaForm',
       if (!f.titleMap) {
         f.titleMap = enumToTitleMap(schema['enum']);
       }
-      f.trackBy = 'value';
       options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
     }
@@ -1293,10 +1292,6 @@ angular.module('schemaForm').provider('schemaForm',
         //If it has a titleMap make sure it's a list
         if (obj.titleMap) {
           obj.titleMap = canonicalTitleMap(obj.titleMap);
-        }
-
-        if(obj.type === 'select') {
-          obj.trackBy = obj.trackBy || 'value';
         }
 
         //

@@ -1,3 +1,8 @@
+v0.8.4
+------
+ * Reverted `trackBy`. Fixes #458, #462, #471
+
+
 v0.8.3
 ------
  * "destroyStrategy" support, thanks @jbsaff! This means that `condition` can now remove values
