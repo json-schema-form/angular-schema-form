@@ -82,6 +82,14 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
 
           }
 
+          var onChangeHandler = !form.onChange ? angular.noop : function(list) {
+            if (angular.isFunction(form.onChange)) {
+              form.onChange(list, form);
+            } else {
+              scope.$parent.evalExpr(form.onChange, {'modelValue': list, form: form});
+            }
+          }
+
           // We ceate copies of the form on demand, caching them for
           // later requests
           scope.copyWithIndex = function(index) {
@@ -132,6 +140,9 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
 
             // Trigger validation.
             scope.validateArray();
+
+            onChangeHandler(list);
+
             return list;
           };
 
@@ -140,6 +151,8 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
 
             // Trigger validation.
             scope.validateArray();
+
+            onChangeHandler(list);
 
             // Angular 1.2 lacks setDirty
             if (ngModel && ngModel.$setDirty) {
