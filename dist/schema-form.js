@@ -153,6 +153,9 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
   };
 
   var builders = {
+    sfField: function(args) {
+      args.fieldFrag.firstChild.setAttribute('sf-field', args.path);
+    },
     ngModel: function(args) {
       if (!args.form.key) {
         return;
@@ -288,9 +291,6 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           while (div.childNodes.length > 0) {
             tmpl.appendChild(div.childNodes[0]);
           }
-
-
-          tmpl.firstChild.setAttribute('sf-field',path + '[' + index + ']');
 
           // Possible builder, often a noop
           var args = {
@@ -742,7 +742,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                      attributes `builder` and `replace` are optional, and replace defaults to true.
    */
   this.defineDecorator = function(name, fields) {
-    decorators[name] = {'__name': name}; // TODO: this feels like a hack, come up with a better way.
+    decorators[name] = {'__name': name}; // TODO: this feels like a hack, come up with a better way. (ES6 Symbols would be a nice fit.)
 
     angular.forEach(fields, function(field, type) {
       field.builder = field.builder || [];
@@ -816,7 +816,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
       decorator: function(name) {
         return decorators[name] || decorators[defaultDecorator];
       },
-      defaultDecorator: defaultDecorator
+      defaultDecorator: defaultDecorator,
     };
   };
 
@@ -2066,6 +2066,7 @@ angular.module('schemaForm').directive('sfMessage',
           // We only show one error.
           // TODO: Make that optional
           var error = errors[0];
+
           if (error) {
             element.html(sfErrorMessage.interpolate(
               error,
@@ -2079,7 +2080,15 @@ angular.module('schemaForm').directive('sfMessage',
           }
         }
       };
-      update();
+
+      // When link occurs we might not have form with the new builder.
+      var once = scope.$watch('form', function(form) {
+        if (form) {
+          update();
+          once();
+        }
+      });
+
 
       scope.$watchCollection('ngModel.$error', function() {
         if (scope.ngModel) {
@@ -2284,7 +2293,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
             if (!form) {
               return viewValue;
             }
-
+            
             // Omit TV4 validation
             if (scope.options && scope.options.tv4Validation === false) {
               return viewValue;
@@ -2348,12 +2357,23 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
           if (ngModel.$validators) {
             ngModel.$validators.schemaForm = function() {
               // Any error and we're out of here!
-              return !Object.keys(ngModel.$error).some(function(e) { return e !== 'schemaForm'});
-            }
+              return !Object.keys(ngModel.$error).some(function(e) { return e !== 'schemaForm';});
+            };
           }
 
-          // Listen to an event so we can validate the input on request
-          scope.$on('schemaFormValidate', function() {
+          var schema = form.schema;
+
+          // A bit ugly but useful.
+          scope.validateField =  function() {
+
+            // Special case: arrays
+            // TODO: Can this be generalized in a way that works consistently?
+            // Just setting the viewValue isn't enough to trigger validation
+            // since it's the same value. This will be better when we drop
+            // 1.2 support.
+            if (schema && schema.type.indexOf('array') !== -1) {
+              validate(ngModel.$modelValue);
+            }
 
             // We set the viewValue to trigger parsers,
             // since modelValue might be empty and validating just that
@@ -2377,8 +2397,10 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
               // hence required works.
               ngModel.$setViewValue(ngModel.$viewValue);
             }
+          }
 
-          });
+          // Listen to an event so we can validate the input on request
+          scope.$on('schemaFormValidate', scope.validateField);
 
           scope.schemaError = function() {
             return error;
