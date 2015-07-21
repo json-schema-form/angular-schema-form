@@ -47,6 +47,7 @@ angular.module('schemaForm').directive('sfMessage',
           // We only show one error.
           // TODO: Make that optional
           var error = errors[0];
+
           if (error) {
             element.html(sfErrorMessage.interpolate(
               error,
@@ -60,7 +61,15 @@ angular.module('schemaForm').directive('sfMessage',
           }
         }
       };
-      update();
+
+      // When link occurs we might not have form with the new builder.
+      var once = scope.$watch('form', function(form) {
+        if (form) {
+          update();
+          once();
+        }
+      });
+
 
       scope.$watchCollection('ngModel.$error', function() {
         if (scope.ngModel) {
