@@ -11,6 +11,9 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
   };
 
   var builders = {
+    sfField: function(args) {
+      args.fieldFrag.firstChild.setAttribute('sf-field', args.path);
+    },
     ngModel: function(args) {
       if (!args.form.key) {
         return;
@@ -146,9 +149,6 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           while (div.childNodes.length > 0) {
             tmpl.appendChild(div.childNodes[0]);
           }
-
-
-          tmpl.firstChild.setAttribute('sf-field',path + '[' + index + ']');
 
           // Possible builder, often a noop
           var args = {
