@@ -194,7 +194,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           n.setAttribute('ng-model', modelValue);
         } else if (conf === 'replaceAll') {
           var attributes = n.attributes;
-          for (var j = 0; attributes.length; j++) {
+          for (var j = 0; j < attributes.length; j++) {
             if (attributes[j].value && attributes[j].value.indexOf('$$value') !== -1) {
               attributes[j].value = attributes[j].value.replace(/\$\$value\$\$/g, modelValue);
             }
@@ -742,7 +742,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                      attributes `builder` and `replace` are optional, and replace defaults to true.
    */
   this.defineDecorator = function(name, fields) {
-    decorators[name] = {'__name': name}; // TODO: this feels like a hack, come up with a better way. (ES6 Symbols would be a nice fit.)
+    decorators[name] = {'__name': name}; // TODO: this feels like a hack, come up with a better way.
 
     angular.forEach(fields, function(field, type) {
       field.builder = field.builder || [];
@@ -816,7 +816,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
       decorator: function(name) {
         return decorators[name] || decorators[defaultDecorator];
       },
-      defaultDecorator: defaultDecorator,
+      defaultDecorator: defaultDecorator
     };
   };
 
