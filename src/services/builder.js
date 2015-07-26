@@ -52,7 +52,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           n.setAttribute('ng-model', modelValue);
         } else if (conf === 'replaceAll') {
           var attributes = n.attributes;
-          for (var j = 0; attributes.length; j++) {
+          for (var j = 0; j < attributes.length; j++) {
             if (attributes[j].value && attributes[j].value.indexOf('$$value') !== -1) {
               attributes[j].value = attributes[j].value.replace(/\$\$value\$\$/g, modelValue);
             }
