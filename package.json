@@ -3,7 +3,7 @@
   "version": "0.8.4",
   "description": "Create complex forms from a JSON schema with angular.",
   "repository": "Textalk/angular-schema-form",
-  "main": "dist/schema-form.min.js",
+  "main": "index.js",
   "filename": "dist/schema-form.min.js",
   "homepage": "http://schemaform.io",
   "scripts": {
