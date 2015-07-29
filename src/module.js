@@ -1,7 +1,7 @@
 // Deps is sort of a problem for us, maybe in the future we will ask the user to depend
 // on modules for add-ons
 
-var deps = ['ObjectPath'];
+var deps = [];
 try {
   //This throws an expection if module does not exist.
   angular.module('ngSanitize');
@@ -20,4 +20,4 @@ try {
   deps.push('angularSpectrumColorpicker');
 } catch (e) {}
 
-angular.module('schemaForm', deps);
+var schemaForm = angular.module('schemaForm', deps);

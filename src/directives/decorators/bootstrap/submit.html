@@ -1,10 +1,15 @@
-<div class="form-group">
+<div class="form-group schema-form-submit {{form.htmlClass}}">
   <input type="submit"
-         class="btn {{ form.style || 'btn-primary' }}"
+         class="btn {{ form.style || 'btn-primary' }} {{form.fieldHtmlClass}}"
          value="{{form.title}}"
+         ng-disabled="form.readonly"
          ng-if="form.type === 'submit'">
   <button class="btn {{ form.style || 'btn-default' }}"
           type="button"
           ng-click="buttonClick($event,form)"
-          ng-if="form.type !== 'submit'">{{form.title}}</button>
+          ng-disabled="form.readonly"
+          ng-if="form.type !== 'submit'">
+      <span ng-if="form.icon" class="{{form.icon}}"></span>
+      {{form.title}}
+  </button>
 </div>

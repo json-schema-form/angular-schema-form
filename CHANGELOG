@@ -1,3 +1,134 @@
+v0.8.4
+------
+ * Reverted `trackBy`. Fixes #458, #462, #471
+
+
+v0.8.3
+------
+ * "destroyStrategy" support, thanks @jbsaff! This means that `condition` can now remove values
+   from the model when their fields are hidden.
+ * Bugfix for global option propagation, thanks @golfmat1
+ * `notitle` now works on fieldset as well, thanks @stramel
+ * `trackBy` on selects, thanks @Fridus
+ * update list variable when watching for array changes, thanks @lukebennet
+ * doc changes for the "save to gist" feature, thanks @niklasb
+ * validation error message mixups, thanks @leipert
+ * ObjectPath, deps and browserify fixes, thanks @saller, @LoicMahieu, @thardyman, @davidlgj
+
+v0.8.2
+-------
+ * Fix embarrassing typo in package.json
+
+v0.8.1
+------
+ * Fixed order of error messages, thanks @davidlgj
+ * Added `modelValue` to  variables available in a condition, thanks @dben
+ * UMD wrapping, thanks @dwikle
+ * disableErrorState, disableSuccessState options, thanks @domasx2
+ * Awesome gist integration to example page, thanks @dervisevic
+ * Global option to disable tv4 validation, thanks @maff
+ * Option: labelHtmlClass, thanks @AlexAlbala
+ * Doc fixes and updates, thanks @Minisai, @jdcaballerov, @cjroth, @dervisevic
+ * Bugfixes, thanks @engelfrost, @mqamhieh, @carchrae
+
+
+v0.8.0
+Loads of stuff happened this release, so we're bumping version to 0.8.0.
+Note as well that there is a small change to `tabsarray` type regarding its title, the title is now
+interpolated instead of eval'd. So if you have any problems slap on a `{{ }}` around the tab title.
+See the docs on `tabarray` for an more info.
+
+ * Custom validation via ngModel.$validators and ngModel.$asyncValidators, thanks @davidlgj
+ * Inject errors from backend directly to a field with events, thanks @davidlgj, @burdiuz, @jdgblinq
+ * Icons to `button` type, thanks @maff
+ * Fixed spoiled comment, thanks @mchapman
+ * A new `template` field type, insert a angular template, like a mini add-on.
+ * Support for schema type that allows null, thanks @ulion
+ * Option groups in selects, thanks @DennisHalmstad
+ * input group addons, thanks @quietlyconfident
+ * validationMessages overhaul, nicer validationMessages with interpolation and a new sf-messages
+   directive for add-on to use. thanks @davidlgj
+ * interpolation instead of eval'ing in tabarray title, thanks @coridyn
+ * Lots of bugfixes, most notable checkboxes validation now works, thanks @davidlgj, @coridyn,
+   @ulion, @adamcbuckley
+
+v0.7.13
+-------
+ * Bugfix for condition, it depended on jQuery
+
+v0.7.12
+-------
+ * Error on deleteFromArray task, thanks @bygiro
+ * Fix for copyValueTo on numeric fields, thanks @Anthropic
+ * "condition" option on every form type, thanks @davidlgj
+ * Force redraw "schemaFormRedraw", thanks @davidlgj
+ * Possible fix for "updateOn exception", thanks @plong0
+
+v0.7.11
+-------
+ * New front page with a list of add-on:s based on a bower search! Thanks @unicornforce @Dervisevic @davidlgj
+ * Twitter account, @ngSchemaForm, new releases will be announced here. Thanks @Dervisevic
+ * copyValueTo form option. Thanks @Dervisevic
+
+v0.7.10
+------
+* Accessability additions, thanks @stramel
+* Updates to the gulp tasks, thanks @stramel
+* Updated to bower, thanks @Dervisevic
+* Updates to documentation & README & Contributing.md, thanks @davidlgj @Dervisevic
+* Speed optimization, thanks @stramel
+* Call ngModel.$setDirty() when deleting from array, thanks @qstrahl
+* Don't override readonly if specified on items individually, thanks @qstrahl
+* Update to the examples, thanks @mike-marcacci
+
+v0.7.9
+------
+* Fixed a wrongful glob in bower.json that caused files to be missing in the bower install. Thanks, @mohsen1 for reporting it.
+
+v0.7.8
+------
+* Thanks to @burdiuz for finding a memory leak issue and finding a solution. And thanks to @davidlgj for implementing that solution.
+* Post render event, thanks @mrijken
+* Events documentation, thanks @Dervisevic
+* startEmpty documentation, thanks @davidlj
+* npm and bower updates, thanks @Dervisevic
+* x-schema-form attribute, thanks @davidlgj
+* htmlClass and fieldHtmlClass form options, thanks @davidlgj
+
+v0.7.7
+------
+ * Array ref changes in model updates form, thanks @Sandreu
+ * Tabarray & array fixes, thanks @Sandreu, @davidlgj
+ * Use objectpath more generically to fix requirejs issues, thanks @mike-marcacci
+ * README and documentation updates, thanks @davidlgj, @engelfrost, @Dervisevic, @stramel, @Sandreu
+ * Expanded documentation on custom validation messages, thanks @Dervisevic
+ * Deep structure tests, thanks @Sandreu
+ * SF-insert-field documentation, thanks @davidlgj
+ * Array model watch & array defaults, thanks @Sandreu
+
+v0.7.6
+------
+ * Fixed broken bower specification.
+ * Updated README and documentation.
+
+v0.7.5
+------
+ * Bracket notation for reserved words to make IE8 happier,thanks @jibwa
+ * Clarification of module loading in docs, thanks @CoderAjay
+
+v0.7.4
+------
+ * bower.json fixes, thanks @mike-marcacci, @morrislaptop
+ * Updated docs with a part on extending angular schema form.
+ * The example now includes the tinymce add on (https://github.com/Textalk/angular-schema-form-tinymce)
+ * @cameronprattedwards split the gulp tasks and tests into manageble files.
+ * Fixed validation bugs with numbers and dates, this also got validation working in Angular 1.3.0
+ * Placeholder on textarea
+ * step="any" so a HTML5 input doesn't default to 1 and break float validation
+ * Allow for a pre-existing layout where fields will be inserted, thanks @ebrehault
+   Docs are missing but lock at PR #112.
+ * Better "readonly" support, thanks @mike-marcacci!
+
 v0.7.3
 ------
  * Fix for regression in enum order in selects, thanks @adamschwartz

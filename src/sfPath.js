@@ -1,26 +1,33 @@
 angular.module('schemaForm').provider('sfPath',
-['ObjectPathProvider', function(ObjectPathProvider) {
-  var ObjectPath = {parse: ObjectPathProvider.parse};
+[function() {
+
+  // When building with browserify ObjectPath is available as `objectpath` but othwerwise
+  // it's called `ObjectPath`.
+  var ObjectPath = window.ObjectPath || objectpath;
+
+  var sfPath = {parse: ObjectPath.parse};
 
   // if we're on Angular 1.2.x, we need to continue using dot notation
   if (angular.version.major === 1 && angular.version.minor < 3) {
-    ObjectPath.stringify = function(arr) {
+    sfPath.stringify = function(arr) {
       return Array.isArray(arr) ? arr.join('.') : arr.toString();
     };
   } else {
-    ObjectPath.stringify = ObjectPathProvider.stringify;
+    sfPath.stringify = ObjectPath.stringify;
   }
 
   // We want this to use whichever stringify method is defined above,
   // so we have to copy the code here.
-  ObjectPath.normalize = function(data, quote) {
-    return ObjectPath.stringify(Array.isArray(data) ? data : ObjectPath.parse(data), quote);
+  sfPath.normalize = function(data, quote) {
+    return sfPath.stringify(Array.isArray(data) ? data : sfPath.parse(data), quote);
   };
 
-  this.parse = ObjectPath.parse;
-  this.stringify = ObjectPath.stringify;
-  this.normalize = ObjectPath.normalize;
-  this.$get = function () {
-    return ObjectPath;
+  // expose the methods in sfPathProvider
+  this.parse = sfPath.parse;
+  this.stringify = sfPath.stringify;
+  this.normalize = sfPath.normalize;
+
+  this.$get = function() {
+    return sfPath;
   };
 }]);

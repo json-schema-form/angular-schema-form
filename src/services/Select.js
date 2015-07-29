@@ -4,7 +4,7 @@
  * @kind function
  *
  */
-angular.module('schemaForm').factory('sfSelect', ['sfPath', function (sfPath) {
+angular.module('schemaForm').factory('sfSelect', ['sfPath', function(sfPath) {
   var numRe = /^\d+$/;
 
   /**
