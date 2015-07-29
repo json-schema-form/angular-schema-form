@@ -14,6 +14,7 @@ gulp.task('minify', function() {
       './src/services/*.js',
       './src/directives/*.js'
       ])
+    .pipe(concat('schema-form.js'))
     .pipe(umd({
       dependencies: function() {
         return [
