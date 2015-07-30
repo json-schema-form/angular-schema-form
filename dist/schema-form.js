@@ -44,6 +44,18 @@ angular.module('schemaForm').provider('sfPath',
   };
 }]);
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 /**
  * @ngdoc service
  * @name sfSelect
@@ -119,6 +131,18 @@ angular.module('schemaForm').factory('sfSelect', ['sfPath', function(sfPath) {
   };
 }]);
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 
 // FIXME: type template (using custom builder)
 angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(sfPathProvider) {
@@ -318,6 +342,18 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
 
 }]);
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 angular.module('schemaForm').provider('schemaFormDecorators',
 ['$compileProvider', 'sfPathProvider', function($compileProvider, sfPathProvider) {
   var defaultDecorator = '';
@@ -804,6 +840,18 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
 }]);
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 angular.module('schemaForm').provider('sfErrorMessage', function() {
 
   // The codes are tv4 error codes.
@@ -932,6 +980,18 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
 
 });
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 /**
  * Schema form service.
  * This service is not that useful outside of schema form directive
@@ -1405,6 +1465,18 @@ angular.module('schemaForm').provider('schemaForm',
 
 }]);
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 /*  Common code for validating a value against its form and schema definition */
 /* global tv4 */
 angular.module('schemaForm').factory('sfValidator', [function() {
@@ -1464,6 +1536,18 @@ angular.module('schemaForm').factory('sfValidator', [function() {
   return validator;
 }]);
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 /**
  * Directive that handles the model arrays
  */
@@ -1725,6 +1809,18 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
   }
 ]);
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 /**
  * A version of ng-changed that only listens if
  * there is actually a onChange defined on the form
@@ -1754,6 +1850,18 @@ angular.module('schemaForm').directive('sfChanged', function() {
   };
 });
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 angular.module('schemaForm').directive('sfField',
     ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
      'sfPath','sfSelect',
@@ -1996,6 +2104,18 @@ angular.module('schemaForm').directive('sfField',
     }
   ]);
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 angular.module('schemaForm').directive('sfMessage',
 ['$injector', 'sfErrorMessage', function($injector, sfErrorMessage) {
   return {
@@ -2079,6 +2199,18 @@ angular.module('schemaForm').directive('sfMessage',
   };
 }]);
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 /*
 FIXME: real documentation
 <form sf-form="form"  sf-schema="schema" sf-decorator="foobar"></form>
@@ -2231,6 +2363,18 @@ angular.module('schemaForm')
   }
 ]);
 
+return schemaForm;
+}));
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['angular', 'objectpath', 'tv4'], factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory(require('angular'), require('objectpath'), require('tv4'));
+  } else {
+    root.schemaForm = factory(root.angular, root.objectpath, root.tv4);
+  }
+}(this, function(angular, objectpath, tv4) {
 angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse', 'sfSelect',
   function(sfValidator, $parse, sfSelect) {
 
