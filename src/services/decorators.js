@@ -174,6 +174,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 form.ngModelOptions = form.ngModelOptions || {};
                 scope.form  = form;
 
+                // append the field-id to the htmlClass
+                if(!scope.form.htmlClass){ scope.form.htmlClass = ''; }
+                scope.form.htmlClass += ' '+scope.fieldId();
+
                 //ok let's replace that template!
                 //We do this manually since we need to bind ng-model properly and also
                 //for fieldsets to recurse properly.
