@@ -372,8 +372,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
           replace: false,
           transclude: false,
           scope: true,
-          require: '?^sfSchema',
-          link: function(scope, element, attrs, sfSchema) {
+          require: ['?^sfSchema', '?^form'],
+          link: function(scope, element, attrs, Ctrl) {
+            var sfSchema = Ctrl[0];
+            var formCtrl = Ctrl[1];
 
             //The ngModelController is used in some templates and
             //is needed for error messages,
@@ -480,6 +482,12 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 return false;
               }
               return scope.ngModel.$invalid && !scope.ngModel.$pristine;
+            };
+
+            scope.fieldId = function(prependFormName) {
+              if(scope.form.key){
+                return ((prependFormName && formCtrl && formCtrl.$name)?formCtrl.$name+'-':'')+scope.form.key.join('-');
+              }
             };
 
             /**
