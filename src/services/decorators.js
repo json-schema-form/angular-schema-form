@@ -143,9 +143,15 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return scope.ngModel.$invalid && !scope.ngModel.$pristine;
             };
 
-            scope.fieldId = function(prependFormName) {
+            scope.fieldId = function(prependFormName, omitNumbers) {
               if(scope.form.key){
-                return ((prependFormName && formCtrl && formCtrl.$name)?formCtrl.$name+'-':'')+scope.form.key.join('-');
+                var fieldKey = scope.form.key;
+                if(omitNumbers){
+                  fieldKey = fieldKey.filter(function(key){
+                    return !angular.isNumber(key);
+                  });
+                }
+                return ((prependFormName && formCtrl && formCtrl.$name)?formCtrl.$name+'-':'')+fieldKey.join('-');
               }
             };
 
@@ -176,7 +182,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                 // append the field-id to the htmlClass
                 if(!scope.form.htmlClass){ scope.form.htmlClass = ''; }
-                scope.form.htmlClass += ' '+scope.fieldId();
+                scope.form.htmlClass += (scope.form.htmlClass?' ':'')+scope.fieldId(false, true);
 
                 //ok let's replace that template!
                 //We do this manually since we need to bind ng-model properly and also
