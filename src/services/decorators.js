@@ -153,6 +153,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 }
                 return ((prependFormName && formCtrl && formCtrl.$name)?formCtrl.$name+'-':'')+fieldKey.join('-');
               }
+              return '';
             };
 
             /**
