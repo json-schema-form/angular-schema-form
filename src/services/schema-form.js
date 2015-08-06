@@ -434,7 +434,6 @@ angular.module('schemaForm').provider('schemaForm',
       path = path || [];
 
       var traverse = function(schema, fn, path) {
-        fn(schema, path);
         angular.forEach(schema.properties, function(prop, name) {
           var currentPath = path.slice();
           currentPath.push(name);
@@ -446,9 +445,103 @@ angular.module('schemaForm').provider('schemaForm',
           var arrPath = path.slice(); arrPath.push('');
           traverse(schema.items, fn, arrPath);
         }
+        if (schema.dependencies) {
+          angular.forEach(schema.dependencies, function(value, key) {
+            if(typeof value === "object" && !(Array.isArray(value))) {
+              traverse(value, fn, path);
+            }
+          });
+        }
+        if (schema.not) {
+          traverse(schema.not, fn, path)
+        }
+        angular.forEach(['allOf', 'oneOf', 'anyOf'], function(prop) {
+          if (schema[prop]) {
+            angular.forEach(schema[prop], function(value) {
+              traverse(value, fn, path);
+            })
+          }
+        });
+        fn(schema, path);
       };
 
       traverse(schema, fn, path || []);
+    };
+
+    service.expandSchema = function(schema) {
+
+      service.traverseSchema(schema, function(schema) {
+        // allOf schemas should be merged into the parent
+        if(schema.allOf) {
+          for(i=0; i<schema.allOf.length; i++) {
+            angular.extend(schema, service.extendSchemas(schema, schema.allOf[i]));
+          }
+          delete schema.allOf;
+        }
+      });
+    };
+
+    service.extendSchemas = function(obj1, obj2) {
+      obj1 = angular.extend({}, obj1);
+      obj2 = angular.extend({}, obj2);
+
+      var self = this;
+      var extended = {};
+      angular.forEach(obj1, function(val,prop) {
+        // If this key is also defined in obj2, merge them
+        if(typeof obj2[prop] !== 'undefined') {
+          // Required arrays should be unioned together
+          if(prop === 'required' && typeof val === 'object' && Array.isArray(val)) {
+            // Union arrays and unique
+            extended.required = val.concat(obj2[prop]).reduce(function(p, c) {
+              if (p.indexOf(c) < 0) p.push(c);
+              return p;
+            }, []);
+          }
+          // Type should be intersected and is either an array or string
+          else if(prop === 'type' && (typeof val === 'string' || Array.isArray(val))) {
+            // Make sure we're dealing with arrays
+            if(typeof val === 'string') val = [val];
+            if(typeof obj2.type === 'string') obj2.type = [obj2.type];
+
+
+            extended.type = val.filter(function(n) {
+              return obj2.type.indexOf(n) !== -1;
+            });
+
+            // If there's only 1 type, use a string instead of array
+            if(extended.type.length === 1) {
+              extended.type = extended.type[0];
+            }
+          }
+          // All other arrays should be intersected (enum, etc.)
+          else if(typeof val === 'object' && Array.isArray(val)){
+            extended[prop] = val.filter(function(n) {
+              return obj2[prop].indexOf(n) !== -1;
+            });
+          }
+          // Objects should be recursively merged
+          else if(typeof val === 'object' && val !== null) {
+            extended[prop] = self.extendSchemas(val, obj2[prop]);
+          }
+          // Otherwise, use the first value
+          else {
+            extended[prop] = val;
+          }
+        }
+        // Otherwise, just use the one in obj1
+        else {
+          extended[prop] = val;
+        }
+      });
+      // Properties in obj2 that aren't in obj1
+      angular.forEach(obj2, function(val, prop) {
+        if(typeof obj1[prop] === 'undefined') {
+          extended[prop] = val;
+        }
+      });
+
+      return extended;
     };
 
     service.traverseForm = function(form, fn) {
