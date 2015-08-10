@@ -1,0 +1,10 @@
+<fieldset ng-disabled="form.readonly" class="schema-form-fieldset {{form.htmlClass}}">
+  <legend ng-class="{'sr-only': !showTitle() }">{{ form.title }}</legend>
+  <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
+  <select ng-model="selected"
+          ng-disabled="form.readonly"
+          class="form-control {{form.fieldHtmlClass}}"
+          ng-options="item.title for item in form.items">
+  </select>
+  <sf-decorator ng-repeat="item in form.items" form="item"></sf-decorator>
+</fieldset>
