@@ -147,6 +147,18 @@ angular.module('schemaForm')
           // let it be.
           scope.externalDestructionInProgress = true;
         });
+
+        /**
+         * Evaluate an expression, i.e. scope.$eval
+         * but do it in parent scope
+         *
+         * @param {String} expression
+         * @param {Object} locals (optional)
+         * @return {Any} the result of the expression
+         */
+        scope.evalExpr = function(expression, locals) {
+          return $scope.$parent.$eval(expression, locals);
+        };
       }
     };
   }
