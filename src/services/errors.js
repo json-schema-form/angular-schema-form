@@ -14,7 +14,7 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
     12: 'Data is valid against more than one schema from "oneOf"',
     13: 'Data matches schema from "not"',
     // Numeric errors
-    100: 'Value is not a multiple of {{schema.divisibleBy}}',
+    100: 'Value is not a multiple of {{schema.multipleOf}}',
     101: '{{viewValue}} is less than the allowed minimum of {{schema.minimum}}',
     102: '{{viewValue}} is equal to the exclusive minimum {{schema.minimum}}',
     103: '{{viewValue}} is greater than the allowed maximum of {{schema.maximum}}',
