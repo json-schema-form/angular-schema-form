@@ -361,7 +361,7 @@ scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken','The username is
 This will invalidate the field and therefore the form and show the error message where it normally
 pops up, under the field for instance.
 
-There is a catch though, schema form can't now when this field is valid s you have to tell it by
+There is a catch though, schema form can't know when this field is valid so you have to tell it by
 sending an event again, this time switch out the validation message for validity of the field,
 i.e. `true`.
 
