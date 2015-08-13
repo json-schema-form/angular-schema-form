@@ -314,8 +314,9 @@ angular.module('schemaForm').provider('schemaForm',
     }
     f.items = [];
     angular.forEach(schemas, function(s) {
-      // TODO: Set condition for each of these forms based on selection
-      f.items.push(defaultFormDefinition(name, s, options));
+      var subForm = defaultFormDefinition(name, s, options);
+      subForm.notitle = true;
+      f.items.push(subForm);
     });
 
     return f;
@@ -561,21 +562,6 @@ angular.module('schemaForm').provider('schemaForm',
 
       traverse(schema, fn, path || []);
     };
-
-    service.expandSchema = function(schema) {
-
-      service.traverseSchema(schema, function(schema) {
-        // allOf schemas should be merged into the parent
-        if(schema.allOf) {
-          for(i=0; i<schema.allOf.length; i++) {
-            angular.extend(schema, service.extendSchemas(schema, schema.allOf[i]));
-          }
-          delete schema.allOf;
-        }
-      });
-    };
-
-
 
     service.traverseForm = function(form, fn) {
       fn(form);
