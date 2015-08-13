@@ -13,6 +13,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
   var builders = {
     sfField: function(args) {
       args.fieldFrag.firstChild.setAttribute('sf-field', args.path);
+      angular.element.data(args.fieldFrag.firstChild, 'sfForm', args.form);
     },
     ngModel: function(args) {
       if (!args.form.key) {
