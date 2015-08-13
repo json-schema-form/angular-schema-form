@@ -1,16 +1,16 @@
 angular.module('schemaForm').directive('sfMessage',
 ['$injector', 'sfErrorMessage', function($injector, sfErrorMessage) {
+
+  //Inject sanitizer if it exists
+  var $sanitize = $injector.has('$sanitize') ?
+                  $injector.get('$sanitize') : function(html) { return html; };
+
   return {
     scope: false,
     restrict: 'EA',
     link: function(scope, element, attrs) {
 
-      //Inject sanitizer if it exists
-      var $sanitize = $injector.has('$sanitize') ?
-                      $injector.get('$sanitize') : function(html) { return html; };
-
       var message = '';
-
       if (attrs.sfMessage) {
         scope.$watch(attrs.sfMessage, function(msg) {
           if (msg) {
@@ -28,8 +28,6 @@ angular.module('schemaForm').directive('sfMessage',
         if (valid && !scope.hasError()) {
           element.html(message);
         } else {
-
-
           var errors = [];
           angular.forEach(((scope.ngModel && scope.ngModel.$error) || {}), function(status, code) {
             if (status) {
@@ -62,14 +60,8 @@ angular.module('schemaForm').directive('sfMessage',
         }
       };
 
-      // When link occurs we might not have form with the new builder.
-      var once = scope.$watch('form', function(form) {
-        if (form) {
-          update();
-          once();
-        }
-      });
-
+      // Update once.
+      update();
 
       scope.$watchCollection('ngModel.$error', function() {
         if (scope.ngModel) {
