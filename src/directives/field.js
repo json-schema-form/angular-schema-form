@@ -9,9 +9,9 @@ angular.module('schemaForm').directive('sfField',
         replace: false,
         transclude: false,
         scope: true,
-        require: '?^sfSchema',
+        require: '^sfSchema',
         link: {
-          pre: function(scope, element, attrs) {
+          pre: function(scope, element, attrs, sfSchema) {
             //The ngModelController is used in some templates and
             //is needed for error messages,
             scope.$on('schemaFormPropagateNgModelController', function(event, ngModel) {
@@ -21,7 +21,7 @@ angular.module('schemaForm').directive('sfField',
             });
 
             // Fetch our form.
-            scope.form = element.data('sfForm');
+            scope.form = sfSchema.lookup['f' + attrs.sfField];
           },
           post: function(scope, element, attrs, sfSchema) {
             //Keep error prone logic from the template
