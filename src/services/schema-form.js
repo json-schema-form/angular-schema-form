@@ -296,9 +296,9 @@ angular.module('schemaForm').provider('schemaForm',
   var formselect = function(name, schema, options) {
     var types = stripNullType(schema.type);
     if (!(schema.oneOf || schema.anyOf || angular.isArray(types))) return;
-    schemas = [];
     var f   = stdFormObj(name, schema, options);
     f.type  = 'formselect';
+    var schemas = [];
     // TODO: What if there are more than one of these keys in the same schema?
     if (angular.isArray(types)) {
       angular.forEach(types, function(type) {
@@ -322,10 +322,22 @@ angular.module('schemaForm').provider('schemaForm',
     return f;
   };
 
+  var allof = function(name, schema, options) {
+    if (schema.allOf) {
+      var extended = schema;
+      var allOf = schema.allOf;
+      delete schema.allOf;
+      angular.forEach(allOf, function(s) {
+        extended = extendSchemas(s, extended);
+      });
+      return defaultFormDefinition(name, extended, options);
+    }
+  };
+
   //First sorted by schema type then a list.
   //Order has importance. First handler returning an form snippet will be used.
   var defaults = {
-    any:     [formselect],
+    any:     [allof, formselect],
     string:  [select, text],
     object:  [fieldset],
     number:  [number],
