@@ -1,3 +1,6 @@
+v0.8.6
+ * Removed left over console.timeEnd
+
 v0.8.5
 ------
  * UMD wrapping for bootstrap-decorator, thanks @angelaharalson
