@@ -9,8 +9,16 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       return (pos ? separator : '') + letter.toLowerCase();
     });
   };
+  var formId = 0;
 
   var builders = {
+    sfField: function(args) {
+      args.fieldFrag.firstChild.setAttribute('sf-field', formId);
+
+      // We use a lookup table for easy access to our form.
+      args.lookup['f' + formId] = args.form;
+      formId++;
+    },
     ngModel: function(args) {
       if (!args.form.key) {
         return;
@@ -49,7 +57,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           n.setAttribute('ng-model', modelValue);
         } else if (conf === 'replaceAll') {
           var attributes = n.attributes;
-          for (var j = 0; attributes.length; j++) {
+          for (var j = 0; j < attributes.length; j++) {
             if (attributes[j].value && attributes[j].value.indexOf('$$value') !== -1) {
               attributes[j].value = attributes[j].value.replace(/\$\$value\$\$/g, modelValue);
             }
@@ -113,8 +121,9 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       }
     };
 
-    var build = function(items, decorator, templateFn, slots, path, state) {
+    var build = function(items, decorator, templateFn, slots, path, state, lookup) {
       state = state || {};
+      lookup = lookup || Object.create(null);
       path = path || 'schemaForm.form';
       var container = document.createDocumentFragment();
       items.reduce(function(frag, f, index) {
@@ -147,19 +156,17 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
             tmpl.appendChild(div.childNodes[0]);
           }
 
-
-          tmpl.firstChild.setAttribute('sf-field',path + '[' + index + ']');
-
           // Possible builder, often a noop
           var args = {
             fieldFrag: tmpl,
             form: f,
+            lookup: lookup,
             state: state,
             path: path + '[' + index + ']',
 
             // Recursive build fn
             build: function(items, path, state) {
-              return build(items, decorator, templateFn, slots, path, state);
+              return build(items, decorator, templateFn, slots, path, state, lookup);
             },
 
           };
@@ -184,10 +191,10 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
         /**
          * Builds a form from a canonical form definition
          */
-        build: function(form, decorator, slots) {
+        build: function(form, decorator, slots, lookup) {
           return build(form, decorator, function(url) {
             return $templateCache.get(url);
-          }, slots);
+          }, slots, undefined, undefined, lookup);
 
         },
         builder: builders,

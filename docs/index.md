@@ -417,7 +417,7 @@ error code, so to specify a error message you also need to use.
 [
   {
     key: 'name',
-    validationMessages: {
+    validationMessage: {
       'noBob': 'Bob is not OK! You here me?'
     },
     $validators: {
@@ -441,7 +441,7 @@ a promise that resolves or rejects.
 [
   {
     key: 'name',
-    validationMessages: {
+    validationMessage: {
       'noBob': 'Bob is not OK! You here me?'
     },
     $asyncValidators: {
@@ -467,7 +467,7 @@ Form defaults in schema
 Its recommended to split presentation and validation into a form definition and a json schema. But
 if you for some reason can't do this, but *do* have the power to change the schema, you can supply form
 default values within the schema using the custom attribute `x-schema-form`. `x-schema-form` should
-be a form object and acts as form definition defaults for that field.  
+be a form object and acts as form definition defaults for that field.
 
 Example schema.
 ```js

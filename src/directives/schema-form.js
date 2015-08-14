@@ -19,6 +19,15 @@ angular.module('schemaForm')
         this.evalInParentScope = function(expr, locals) {
           return $scope.$parent.$eval(expr, locals);
         };
+
+        // Set up form lookup map
+        var that  = this;
+        $scope.lookup = function(lookup) {
+          if (lookup) {
+            that.lookup = lookup;
+          }
+          return that.lookup;
+        };
       }],
       replace: false,
       restrict: 'A',
@@ -86,13 +95,13 @@ angular.module('schemaForm')
 
           // if sfUseDecorator is undefined the default decorator is used.
           var decorator = schemaFormDecorators.decorator(attrs.sfUseDecorator);
-
           // Use the builder to build it and append the result
-          element[0].appendChild( sfBuilder.build(merged, decorator, slots) );
-
+          var lookup = Object.create(null);
+          scope.lookup(lookup); // give the new lookup to the controller.
+          element[0].appendChild(sfBuilder.build(merged, decorator, slots, lookup));
           //compile only children
           $compile(element.children())(childScope);
-
+          
           //ok, now that that is done let's set any defaults
           if (!scope.options || scope.options.setSchemaDefaults !== false) {
             schemaForm.traverseSchema(schema, function(prop, path) {
@@ -106,14 +115,17 @@ angular.module('schemaForm')
           }
 
           scope.$emit('sf-render-finished', element);
+console.timeEnd('render')
         };
+
+        var defaultForm = ['*'];
 
         //Since we are dependant on up to three
         //attributes we'll do a common watch
         scope.$watch(function() {
 
           var schema = scope.schema;
-          var form   = scope.initialForm || ['*'];
+          var form   = scope.initialForm || defaultForm;
 
           //The check for schema.type is to ensure that schema is not {}
           if (form && schema && schema.type &&
@@ -145,6 +157,18 @@ angular.module('schemaForm')
           // let it be.
           scope.externalDestructionInProgress = true;
         });
+
+        /**
+         * Evaluate an expression, i.e. scope.$eval
+         * but do it in parent scope
+         *
+         * @param {String} expression
+         * @param {Object} locals (optional)
+         * @return {Any} the result of the expression
+         */
+        scope.evalExpr = function(expression, locals) {
+          return $scope.$parent.$eval(expression, locals);
+        };
       }
     };
   }
