@@ -44,6 +44,7 @@
     },
     {
       "key": "comments",
+      "onChange" : "say(modelValue.length)",
   	  "add": "New",
   	  "style": {
   		"add": "btn-success"

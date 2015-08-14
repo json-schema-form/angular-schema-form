@@ -278,9 +278,9 @@ describe('directive',function(){
       tmpl.children().eq(2).children().eq(0).find('button').length.should.be.equal(1);
       tmpl.children().eq(2).children().eq(0).find('button').text().should.include('Okidoki');
 
-      scope.form[1].onClick.should.not.have.beenCalled;
+      scope.form[1].onClick.should.not.have.been.called;
       tmpl.children().eq(2).children().eq(0).find('button').click();
-      scope.form[1].onClick.should.have.beenCalledOnce;
+      scope.form[1].onClick.should.have.been.calledOnce;
     });
   });
 
@@ -1853,6 +1853,49 @@ describe('directive',function(){
     });
   });
 
+  it('should handle onChange for array type', function () {
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.obj = {};
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "arr" : {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "Name"
+                }
+              }
+            }
+          }
+        }
+      };
+
+      scope.form = [{key : "arr", startEmpty : true, onChange: sinon.spy()}];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+
+      scope.form[0].onChange.should.not.have.been.called;
+
+
+      tmpl.find('button.btn-default').click();
+      scope.form[0].onChange.should.have.been.calledWith([{name : "Name"}]);
+
+      tmpl.find('button.close').click();
+      scope.form[0].onChange.should.have.been.calledWith([]);
+
+    });
+  });
+
   it('should load template by templateUrl, with template field type',function() {
 
     inject(function($compile, $rootScope, $httpBackend){
@@ -2383,7 +2426,6 @@ describe('directive',function(){
 
       });
     });
-
 
   });
 
