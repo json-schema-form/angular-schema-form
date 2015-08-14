@@ -4,6 +4,7 @@ var gulp = require('gulp'),
   templateCache = require('gulp-angular-templatecache'),
   concat = require('gulp-concat'),
   rename = require('gulp-rename'),
+  umd    = require('gulp-umd'),
   uglify = require('gulp-uglify');
 
 gulp.task('bootstrap', function() {
@@ -24,6 +25,15 @@ gulp.task('bootstrap', function() {
 
   stream.done()
   .pipe(concat('bootstrap-decorator.js'))
+  .pipe(umd({
+    dependencies: function() {
+      return [
+        {name: 'schemaForm'},
+      ];
+    },
+    exports: function() {return 'schemaForm';},
+    namespace: function() {return 'bootstrapDecorator';}
+    }))
   .pipe(gulp.dest('./dist/'))
   .pipe(uglify())
   .pipe(rename('bootstrap-decorator.min.js'))
