@@ -1,3 +1,13 @@
+v0.8.5
+------
+ * UMD wrapping for bootstrap-decorator, thanks @angelaharalson
+ * label instead of h3 in array title, whic is more consistent. Thanks @prettymuchbryce
+ * doc typos, thanks @zerofifteen
+ * multipleOf validation message fix, thanks @leipert
+ * infinite digest bugfix, thanks @israelshirk
+ * minLength validation message bugfix, thanks @iamdarrenhall
+ * bugfix for Angular 1.2 and arrays watching, thanks @davidlgj
+
 v0.8.4
 ------
  * Reverted `trackBy`. Fixes #458, #462, #471
