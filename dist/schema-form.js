@@ -151,10 +151,15 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       return (pos ? separator : '') + letter.toLowerCase();
     });
   };
+  var formId = 0;
 
   var builders = {
     sfField: function(args) {
-      args.fieldFrag.firstChild.setAttribute('sf-field', args.path);
+      args.fieldFrag.firstChild.setAttribute('sf-field', formId);
+
+      // We use a lookup table for easy access to our form.
+      args.lookup['f' + formId] = args.form;
+      formId++;
     },
     ngModel: function(args) {
       if (!args.form.key) {
@@ -258,8 +263,9 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       }
     };
 
-    var build = function(items, decorator, templateFn, slots, path, state) {
+    var build = function(items, decorator, templateFn, slots, path, state, lookup) {
       state = state || {};
+      lookup = lookup || Object.create(null);
       path = path || 'schemaForm.form';
       var container = document.createDocumentFragment();
       items.reduce(function(frag, f, index) {
@@ -296,12 +302,13 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           var args = {
             fieldFrag: tmpl,
             form: f,
+            lookup: lookup,
             state: state,
             path: path + '[' + index + ']',
 
             // Recursive build fn
             build: function(items, path, state) {
-              return build(items, decorator, templateFn, slots, path, state);
+              return build(items, decorator, templateFn, slots, path, state, lookup);
             },
 
           };
@@ -326,10 +333,10 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
         /**
          * Builds a form from a canonical form definition
          */
-        build: function(form, decorator, slots) {
+        build: function(form, decorator, slots, lookup) {
           return build(form, decorator, function(url) {
             return $templateCache.get(url);
-          }, slots);
+          }, slots, undefined, undefined, lookup);
 
         },
         builder: builders,
@@ -841,7 +848,7 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
     12: 'Data is valid against more than one schema from "oneOf"',
     13: 'Data matches schema from "not"',
     // Numeric errors
-    100: 'Value is not a multiple of {{schema.divisibleBy}}',
+    100: 'Value is not a multiple of {{schema.multipleOf}}',
     101: '{{viewValue}} is less than the allowed minimum of {{schema.minimum}}',
     102: '{{viewValue}} is equal to the exclusive minimum {{schema.minimum}}',
     103: '{{viewValue}} is greater than the allowed maximum of {{schema.maximum}}',
@@ -1033,7 +1040,7 @@ angular.module('schemaForm').provider('schemaForm',
     if (schema.description) { f.description = schema.description; }
     if (options.required === true || schema.required === true) { f.required = true; }
     if (schema.maxLength) { f.maxlength = schema.maxLength; }
-    if (schema.minLength) { f.minlength = schema.maxLength; }
+    if (schema.minLength) { f.minlength = schema.minLength; }
     if (schema.readOnly || schema.readonly) { f.readonly  = true; }
     if (schema.minimum) { f.minimum = schema.minimum + (schema.exclusiveMinimum ? 1 : 0); }
     if (schema.maximum) { f.maximum = schema.maximum - (schema.exclusiveMaximum ? 1 : 0); }
@@ -1786,9 +1793,9 @@ angular.module('schemaForm').directive('sfField',
         replace: false,
         transclude: false,
         scope: true,
-        require: '?^sfSchema',
+        require: '^sfSchema',
         link: {
-          pre: function(scope) {
+          pre: function(scope, element, attrs, sfSchema) {
             //The ngModelController is used in some templates and
             //is needed for error messages,
             scope.$on('schemaFormPropagateNgModelController', function(event, ngModel) {
@@ -1797,11 +1804,10 @@ angular.module('schemaForm').directive('sfField',
               scope.ngModel = ngModel;
             });
 
-            //make sure to overwrite form here so that we don't inherit it by accident
-            scope.form = null;
+            // Fetch our form.
+            scope.form = sfSchema.lookup['f' + attrs.sfField];
           },
           post: function(scope, element, attrs, sfSchema) {
-
             //Keep error prone logic from the template
             scope.showTitle = function() {
               return scope.form && scope.form.notitle !== true && scope.form.title;
@@ -1917,100 +1923,89 @@ angular.module('schemaForm').directive('sfField',
               );
             };
 
-            // Rebind our part of the form to the scope.
-            var once = scope.$watch(attrs.sfField, function(form) {
-              if (form) {
-                // Workaround for 'updateOn' error from ngModelOptions
-                // see https://github.com/Textalk/angular-schema-form/issues/255
-                // and https://github.com/Textalk/angular-schema-form/issues/206
-                form.ngModelOptions = form.ngModelOptions || {};
-                scope.form  = form;
+            var form = scope.form;
 
+            // Where there is a key there is probably a ngModel
+            if (form.key) {
+              // It looks better with dot notation.
+              scope.$on(
+                'schemaForm.error.' + form.key.join('.'),
+                function(event, error, validationMessage, validity) {
+                  if (validationMessage === true || validationMessage === false) {
+                    validity = validationMessage;
+                    validationMessage = undefined;
+                  }
 
-                // Where there is a key there is probably a ngModel
-                if (form.key) {
-                  // It looks better with dot notation.
-                  scope.$on(
-                    'schemaForm.error.' + form.key.join('.'),
-                    function(event, error, validationMessage, validity) {
-                      if (validationMessage === true || validationMessage === false) {
-                        validity = validationMessage;
-                        validationMessage = undefined;
-                      }
-
-                      if (scope.ngModel && error) {
-                        if (scope.ngModel.$setDirty) {
-                          scope.ngModel.$setDirty();
-                        } else {
-                          // FIXME: Check that this actually works on 1.2
-                          scope.ngModel.$dirty = true;
-                          scope.ngModel.$pristine = false;
-                        }
-
-                        // Set the new validation message if one is supplied
-                        // Does not work when validationMessage is just a string.
-                        if (validationMessage) {
-                          if (!form.validationMessage) {
-                            form.validationMessage = {};
-                          }
-                          form.validationMessage[error] = validationMessage;
-                        }
-
-                        scope.ngModel.$setValidity(error, validity === true);
-
-                        if (validity === true) {
-                          // Setting or removing a validity can change the field to believe its valid
-                          // but its not. So lets trigger its validation as well.
-                          scope.$broadcast('schemaFormValidate');
-                        }
-                      }
-                  });
-
-                  // Clean up the model when the corresponding form field is $destroy-ed.
-                  // Default behavior can be supplied as a globalOption, and behavior can be overridden in the form definition.
-                  scope.$on('$destroy', function() {
-                    // If the entire schema form is destroyed we don't touch the model
-                    if (!scope.externalDestructionInProgress) {
-                      var destroyStrategy = form.destroyStrategy ||
-                                            (scope.options && scope.options.destroyStrategy) || 'remove';
-                      // No key no model, and we might have strategy 'retain'
-                      if (form.key && destroyStrategy !== 'retain') {
-
-                        // Get the object that has the property we wan't to clear.
-                        var obj = scope.model;
-                        if (form.key.length > 1) {
-                          obj = sfSelect(form.key.slice(0, form.key.length - 1), obj);
-                        }
-
-                        // We can get undefined here if the form hasn't been filled out entirely
-                        if (obj === undefined) {
-                          return;
-                        }
-
-                        // Type can also be a list in JSON Schema
-                        var type = (form.schema && form.schema.type) || '';
-
-                        // Empty means '',{} and [] for appropriate types and undefined for the rest
-                        //console.log('destroy', destroyStrategy, form.key, type, obj);
-                        if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
-                          obj[form.key.slice(-1)] = '';
-                        } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
-                          obj[form.key.slice(-1)] = {};
-                        } else if (destroyStrategy === 'empty' && type.indexOf('array') !== -1) {
-                          obj[form.key.slice(-1)] = [];
-                        } else if (destroyStrategy === 'null') {
-                          obj[form.key.slice(-1)] = null;
-                        } else {
-                          delete obj[form.key.slice(-1)];
-                        }
-                      }
+                  if (scope.ngModel && error) {
+                    if (scope.ngModel.$setDirty) {
+                      scope.ngModel.$setDirty();
+                    } else {
+                      // FIXME: Check that this actually works on 1.2
+                      scope.ngModel.$dirty = true;
+                      scope.ngModel.$pristine = false;
                     }
-                  });
-                }
 
-                once();
-              }
-            });
+                    // Set the new validation message if one is supplied
+                    // Does not work when validationMessage is just a string.
+                    if (validationMessage) {
+                      if (!form.validationMessage) {
+                        form.validationMessage = {};
+                      }
+                      form.validationMessage[error] = validationMessage;
+                    }
+
+                    scope.ngModel.$setValidity(error, validity === true);
+
+                    if (validity === true) {
+                      // Setting or removing a validity can change the field to believe its valid
+                      // but its not. So lets trigger its validation as well.
+                      scope.$broadcast('schemaFormValidate');
+                    }
+                  }
+              });
+
+              // Clean up the model when the corresponding form field is $destroy-ed.
+              // Default behavior can be supplied as a globalOption, and behavior can be overridden
+              // in the form definition.
+              scope.$on('$destroy', function() {
+                // If the entire schema form is destroyed we don't touch the model
+                if (!scope.externalDestructionInProgress) {
+                  var destroyStrategy = form.destroyStrategy ||
+                                        (scope.options && scope.options.destroyStrategy) || 'remove';
+                  // No key no model, and we might have strategy 'retain'
+                  if (form.key && destroyStrategy !== 'retain') {
+
+                    // Get the object that has the property we wan't to clear.
+                    var obj = scope.model;
+                    if (form.key.length > 1) {
+                      obj = sfSelect(form.key.slice(0, form.key.length - 1), obj);
+                    }
+
+                    // We can get undefined here if the form hasn't been filled out entirely
+                    if (obj === undefined) {
+                      return;
+                    }
+
+                    // Type can also be a list in JSON Schema
+                    var type = (form.schema && form.schema.type) || '';
+
+                    // Empty means '',{} and [] for appropriate types and undefined for the rest
+                    //console.log('destroy', destroyStrategy, form.key, type, obj);
+                    if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
+                      obj[form.key.slice(-1)] = '';
+                    } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
+                      obj[form.key.slice(-1)] = {};
+                    } else if (destroyStrategy === 'empty' && type.indexOf('array') !== -1) {
+                      obj[form.key.slice(-1)] = [];
+                    } else if (destroyStrategy === 'null') {
+                      obj[form.key.slice(-1)] = null;
+                    } else {
+                      delete obj[form.key.slice(-1)];
+                    }
+                  }
+                }
+              });
+            }
           }
         }
       };
@@ -2019,17 +2014,17 @@ angular.module('schemaForm').directive('sfField',
 
 angular.module('schemaForm').directive('sfMessage',
 ['$injector', 'sfErrorMessage', function($injector, sfErrorMessage) {
+
+  //Inject sanitizer if it exists
+  var $sanitize = $injector.has('$sanitize') ?
+                  $injector.get('$sanitize') : function(html) { return html; };
+
   return {
     scope: false,
     restrict: 'EA',
     link: function(scope, element, attrs) {
 
-      //Inject sanitizer if it exists
-      var $sanitize = $injector.has('$sanitize') ?
-                      $injector.get('$sanitize') : function(html) { return html; };
-
       var message = '';
-
       if (attrs.sfMessage) {
         scope.$watch(attrs.sfMessage, function(msg) {
           if (msg) {
@@ -2047,8 +2042,6 @@ angular.module('schemaForm').directive('sfMessage',
         if (valid && !scope.hasError()) {
           element.html(message);
         } else {
-
-
           var errors = [];
           angular.forEach(((scope.ngModel && scope.ngModel.$error) || {}), function(status, code) {
             if (status) {
@@ -2081,14 +2074,8 @@ angular.module('schemaForm').directive('sfMessage',
         }
       };
 
-      // When link occurs we might not have form with the new builder.
-      var once = scope.$watch('form', function(form) {
-        if (form) {
-          update();
-          once();
-        }
-      });
-
+      // Update once.
+      update();
 
       scope.$watchCollection('ngModel.$error', function() {
         if (scope.ngModel) {
@@ -2120,6 +2107,15 @@ angular.module('schemaForm')
       controller: ['$scope', function($scope) {
         this.evalInParentScope = function(expr, locals) {
           return $scope.$parent.$eval(expr, locals);
+        };
+
+        // Set up form lookup map
+        var that  = this;
+        $scope.lookup = function(lookup) {
+          if (lookup) {
+            that.lookup = lookup;
+          }
+          return that.lookup;
         };
       }],
       replace: false,
@@ -2188,13 +2184,13 @@ angular.module('schemaForm')
 
           // if sfUseDecorator is undefined the default decorator is used.
           var decorator = schemaFormDecorators.decorator(attrs.sfUseDecorator);
-
           // Use the builder to build it and append the result
-          element[0].appendChild( sfBuilder.build(merged, decorator, slots) );
-
+          var lookup = Object.create(null);
+          scope.lookup(lookup); // give the new lookup to the controller.
+          element[0].appendChild(sfBuilder.build(merged, decorator, slots, lookup));
           //compile only children
           $compile(element.children())(childScope);
-
+          
           //ok, now that that is done let's set any defaults
           if (!scope.options || scope.options.setSchemaDefaults !== false) {
             schemaForm.traverseSchema(schema, function(prop, path) {
@@ -2208,14 +2204,17 @@ angular.module('schemaForm')
           }
 
           scope.$emit('sf-render-finished', element);
+console.timeEnd('render')
         };
+
+        var defaultForm = ['*'];
 
         //Since we are dependant on up to three
         //attributes we'll do a common watch
         scope.$watch(function() {
 
           var schema = scope.schema;
-          var form   = scope.initialForm || ['*'];
+          var form   = scope.initialForm || defaultForm;
 
           //The check for schema.type is to ensure that schema is not {}
           if (form && schema && schema.type &&
@@ -2247,6 +2246,18 @@ angular.module('schemaForm')
           // let it be.
           scope.externalDestructionInProgress = true;
         });
+
+        /**
+         * Evaluate an expression, i.e. scope.$eval
+         * but do it in parent scope
+         *
+         * @param {String} expression
+         * @param {Object} locals (optional)
+         * @return {Any} the result of the expression
+         */
+        scope.evalExpr = function(expression, locals) {
+          return $scope.$parent.$eval(expression, locals);
+        };
       }
     };
   }
@@ -2263,152 +2274,141 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
       priority: 500,
       require: 'ngModel',
       link: function(scope, element, attrs, ngModel) {
-
         // We need the ngModelController on several places,
         // most notably for errors.
         // So we emit it up to the decorator directive so it can put it on scope.
         scope.$emit('schemaFormPropagateNgModelController', ngModel);
 
         var error = null;
+        var form = scope.$eval(attrs.schemaValidate);
 
-        // When using the new builder we might not have form just yet
-        var once = scope.$watch(attrs.schemaValidate, function(form) {
+        if (form.copyValueTo) {
+          ngModel.$viewChangeListeners.push(function() {
+            var paths = form.copyValueTo;
+            angular.forEach(paths, function(path) {
+              sfSelect(path, scope.model, ngModel.$modelValue);
+            });
+          });
+        }
+
+        // Validate against the schema.
+
+        var validate = function(viewValue) {
+          //Still might be undefined
           if (!form) {
-            return;
+            return viewValue;
           }
 
-          if (form.copyValueTo) {
-            ngModel.$viewChangeListeners.push(function() {
-              var paths = form.copyValueTo;
-              angular.forEach(paths, function(path) {
-                sfSelect(path, scope.model, ngModel.$modelValue);
-              });
+          // Omit TV4 validation
+          if (scope.options && scope.options.tv4Validation === false) {
+            return viewValue;
+          }
+
+          var result =  sfValidator.validate(form, viewValue);
+
+          // Since we might have different tv4 errors we must clear all
+          // errors that start with tv4-
+          Object.keys(ngModel.$error)
+              .filter(function(k) { return k.indexOf('tv4-') === 0; })
+              .forEach(function(k) { ngModel.$setValidity(k, true); });
+
+          if (!result.valid) {
+            // it is invalid, return undefined (no model update)
+            ngModel.$setValidity('tv4-' + result.error.code, false);
+            error = result.error;
+
+            // In Angular 1.3+ return the viewValue, otherwise we inadvertenly
+            // will trigger a 'parse' error.
+            // we will stop the model value from updating with our own $validator
+            // later.
+            if (ngModel.$validators) {
+              return viewValue;
+            }
+            // Angular 1.2 on the other hand lacks $validators and don't add a 'parse' error.
+            return undefined;
+          }
+          return viewValue;
+        };
+
+        // Custom validators, parsers, formatters etc
+        if (typeof form.ngModel === 'function') {
+          form.ngModel(ngModel);
+        }
+
+        ['$parsers', '$viewChangeListeners', '$formatters'].forEach(function(attr) {
+          if (form[attr] && ngModel[attr]) {
+            form[attr].forEach(function(fn) {
+              ngModel[attr].push(fn);
             });
           }
-
-          // Validate against the schema.
-
-          var validate = function(viewValue) {
-            //Still might be undefined
-            if (!form) {
-              return viewValue;
-            }
-            
-            // Omit TV4 validation
-            if (scope.options && scope.options.tv4Validation === false) {
-              return viewValue;
-            }
-
-            var result =  sfValidator.validate(form, viewValue);
-
-
-            // Since we might have different tv4 errors we must clear all
-            // errors that start with tv4-
-            Object.keys(ngModel.$error)
-                .filter(function(k) { return k.indexOf('tv4-') === 0; })
-                .forEach(function(k) { ngModel.$setValidity(k, true); });
-
-            if (!result.valid) {
-              // it is invalid, return undefined (no model update)
-              ngModel.$setValidity('tv4-' + result.error.code, false);
-              error = result.error;
-
-              // In Angular 1.3+ return the viewValue, otherwise we inadvertenly
-              // will trigger a 'parse' error.
-              // we will stop the model value from updating with our own $validator
-              // later.
-              if (ngModel.$validators) {
-                return viewValue;
-              }
-              // Angular 1.2 on the other hand lacks $validators and don't add a 'parse' error.
-              return undefined;
-            }
-            return viewValue;
-          };
-
-          // Custom validators, parsers, formatters etc
-          if (typeof form.ngModel === 'function') {
-            form.ngModel(ngModel);
-          }
-
-          ['$parsers', '$viewChangeListeners', '$formatters'].forEach(function(attr) {
-            if (form[attr] && ngModel[attr]) {
-              form[attr].forEach(function(fn) {
-                ngModel[attr].push(fn);
-              });
-            }
-          });
-
-          ['$validators', '$asyncValidators'].forEach(function(attr) {
-            // Check if our version of angular has validators, i.e. 1.3+
-            if (form[attr] && ngModel[attr]) {
-              angular.forEach(form[attr], function(fn, name) {
-                ngModel[attr][name] = fn;
-              });
-            }
-          });
-
-          // Get in last of the parses so the parsed value has the correct type.
-          // We don't use $validators since we like to set different errors depending tv4 error codes
-          ngModel.$parsers.push(validate);
-
-          // But we do use one custom validator in the case of Angular 1.3 to stop the model from
-          // updating if we've found an error.
-          if (ngModel.$validators) {
-            ngModel.$validators.schemaForm = function() {
-              // Any error and we're out of here!
-              return !Object.keys(ngModel.$error).some(function(e) { return e !== 'schemaForm';});
-            };
-          }
-
-          var schema = form.schema;
-
-          // A bit ugly but useful.
-          scope.validateField =  function() {
-
-            // Special case: arrays
-            // TODO: Can this be generalized in a way that works consistently?
-            // Just setting the viewValue isn't enough to trigger validation
-            // since it's the same value. This will be better when we drop
-            // 1.2 support.
-            if (schema && schema.type.indexOf('array') !== -1) {
-              validate(ngModel.$modelValue);
-            }
-
-            // We set the viewValue to trigger parsers,
-            // since modelValue might be empty and validating just that
-            // might change an existing error to a "required" error message.
-            if (ngModel.$setDirty) {
-
-              // Angular 1.3+
-              ngModel.$setDirty();
-              ngModel.$setViewValue(ngModel.$viewValue);
-              ngModel.$commitViewValue();
-
-              // In Angular 1.3 setting undefined as a viewValue does not trigger parsers
-              // so we need to do a special required check. Fortunately we have $isEmpty
-              if (form.required && ngModel.$isEmpty(ngModel.$modelValue)) {
-                ngModel.$setValidity('tv4-302', false);
-              }
-
-            } else {
-              // Angular 1.2
-              // In angular 1.2 setting a viewValue of undefined will trigger the parser.
-              // hence required works.
-              ngModel.$setViewValue(ngModel.$viewValue);
-            }
-          }
-
-          // Listen to an event so we can validate the input on request
-          scope.$on('schemaFormValidate', scope.validateField);
-
-          scope.schemaError = function() {
-            return error;
-          };
-
-          // Just watch once.
-          once();
         });
+
+        ['$validators', '$asyncValidators'].forEach(function(attr) {
+          // Check if our version of angular has validators, i.e. 1.3+
+          if (form[attr] && ngModel[attr]) {
+            angular.forEach(form[attr], function(fn, name) {
+              ngModel[attr][name] = fn;
+            });
+          }
+        });
+
+        // Get in last of the parses so the parsed value has the correct type.
+        // We don't use $validators since we like to set different errors depending tv4 error codes
+        ngModel.$parsers.push(validate);
+
+        // But we do use one custom validator in the case of Angular 1.3 to stop the model from
+        // updating if we've found an error.
+        if (ngModel.$validators) {
+          ngModel.$validators.schemaForm = function() {
+            // Any error and we're out of here!
+            return !Object.keys(ngModel.$error).some(function(e) { return e !== 'schemaForm';});
+          };
+        }
+
+        var schema = form.schema;
+
+        // A bit ugly but useful.
+        scope.validateField =  function() {
+
+          // Special case: arrays
+          // TODO: Can this be generalized in a way that works consistently?
+          // Just setting the viewValue isn't enough to trigger validation
+          // since it's the same value. This will be better when we drop
+          // 1.2 support.
+          if (schema && schema.type.indexOf('array') !== -1) {
+            validate(ngModel.$modelValue);
+          }
+
+          // We set the viewValue to trigger parsers,
+          // since modelValue might be empty and validating just that
+          // might change an existing error to a "required" error message.
+          if (ngModel.$setDirty) {
+
+            // Angular 1.3+
+            ngModel.$setDirty();
+            ngModel.$setViewValue(ngModel.$viewValue);
+            ngModel.$commitViewValue();
+
+            // In Angular 1.3 setting undefined as a viewValue does not trigger parsers
+            // so we need to do a special required check. Fortunately we have $isEmpty
+            if (form.required && ngModel.$isEmpty(ngModel.$modelValue)) {
+              ngModel.$setValidity('tv4-302', false);
+            }
+
+          } else {
+            // Angular 1.2
+            // In angular 1.2 setting a viewValue of undefined will trigger the parser.
+            // hence required works.
+            ngModel.$setViewValue(ngModel.$viewValue);
+          }
+        };
+
+        // Listen to an event so we can validate the input on request
+        scope.$on('schemaFormValidate', scope.validateField);
+
+        scope.schemaError = function() {
+          return error;
+        };
       }
     };
   }]);
