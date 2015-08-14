@@ -2190,7 +2190,7 @@ angular.module('schemaForm')
           element[0].appendChild(sfBuilder.build(merged, decorator, slots, lookup));
           //compile only children
           $compile(element.children())(childScope);
-          
+
           //ok, now that that is done let's set any defaults
           if (!scope.options || scope.options.setSchemaDefaults !== false) {
             schemaForm.traverseSchema(schema, function(prop, path) {
@@ -2204,7 +2204,6 @@ angular.module('schemaForm')
           }
 
           scope.$emit('sf-render-finished', element);
-console.timeEnd('render')
         };
 
         var defaultForm = ['*'];
@@ -2256,7 +2255,7 @@ console.timeEnd('render')
          * @return {Any} the result of the expression
          */
         scope.evalExpr = function(expression, locals) {
-          return $scope.$parent.$eval(expression, locals);
+          return scope.$parent.$eval(expression, locals);
         };
       }
     };
