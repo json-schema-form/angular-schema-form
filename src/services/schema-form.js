@@ -298,6 +298,7 @@ angular.module('schemaForm').provider('schemaForm',
     if (!(schema.oneOf || schema.anyOf || angular.isArray(types))) return;
     var f   = stdFormObj(name, schema, options);
     f.type  = 'formselect';
+    f.key   = options.path;
     var schemas = [];
     // TODO: What if there are more than one of these keys in the same schema?
     if (angular.isArray(types)) {
