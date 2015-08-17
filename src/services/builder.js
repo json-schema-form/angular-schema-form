@@ -146,6 +146,11 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           state.modelName = 'item';
         }
 
+        // Flag to the builder that where in an array.
+        // This is needed for compatabiliy if a "old" add-on is used that
+        // hasn't been transitioned to the new builder.
+        state.arrayCompatFlag = true;
+
         var childFrag = args.build(args.form.items, args.path + '.items', state);
         items.appendChild(childFrag);
       }
@@ -186,11 +191,19 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
         if (!field.replace) {
           // Backwards compatability build
           var n = document.createElement(snakeCase(decorator.__name, '-'));
-          n.setAttribute('form', path + '[' + index + ']');
+          if (state.arrayCompatFlag) {
+            n.setAttribute('form','copyWithIndex($index)');
+          } else {
+            n.setAttribute('form', path + '[' + index + ']');
+          }
+
           (checkForSlot(f, slots) || frag).appendChild(n);
 
         } else {
           var tmpl;
+
+          // Reset arrayCompatFlag, it's only valid for direct children of the array.
+          state.arrayCompatFlag = false;
 
           // TODO: Create a couple fo testcases, small and large and
           //       measure optmization. A good start is probably a cache of DOM nodes for a particular
