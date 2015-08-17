@@ -100,6 +100,55 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           }
         }
       }
+    },
+    condition: function(args) {
+      // Do we have a condition? Then we slap on an ng-if on all children,
+      // but be nice to existing ng-if.
+      if (args.form.condition) {
+        var evalExpr = 'evalExpr(' + args.path +
+                       '.contidion, { model: model, "arrayIndex": $index})';
+        if (args.form.key) {
+          var strKey = sfPathProvider.stringify(args.form.key);
+          evalExpr = 'evalExpr(' + args.path + '.condition,{ model: model, "arrayIndex": $index, ' +
+                     '"modelValue": model' + (strKey[0] === '[' ? '' : '.') + strKey + '})';
+        }
+
+        var children = args.fieldFrag.children;
+        for (var i = 0; i < children.length; i++) {
+          var child = children[i];
+          var ngIf = child.getAttribute('ng-if');
+          child.setAttribute(
+            'ng-if',
+            ngIf ?
+            '(' + ngIf +
+            ') || (' + evalExpr + ')'
+            : evalExpr
+          );
+        }
+      }
+    },
+    array: function(args) {
+      var items = args.fieldFrag.querySelector('[schema-form-array-items]');
+      if (items) {
+        state = angular.copy(args.state);
+        state.keyRedaction = state.keyRedaction || 0;
+        state.keyRedaction += args.form.key.length + 1;
+
+        // Special case, an array with just one item in it that is not an object.
+        // So then we just override the modelValue
+        if (args.form.schema && args.form.schema.items &&
+            args.form.schema.items.type &&
+            args.form.schema.items.type.indexOf('object') === -1 &&
+            args.form.schema.items.type.indexOf('array') === -1) {
+          var strKey = sfPathProvider.stringify(args.form.key).replace(/"/g, '&quot;') + '[$index]';
+          state.modelValue = 'modelArray[$index]';
+        } else {
+          state.modelName = 'item';
+        }
+
+        var childFrag = args.build(args.form.items, args.path + '.items', state);
+        items.appendChild(childFrag);
+      }
     }
   };
   this.builders = builders;
@@ -188,17 +237,17 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
     };
 
     return {
-        /**
-         * Builds a form from a canonical form definition
-         */
-        build: function(form, decorator, slots, lookup) {
-          return build(form, decorator, function(url) {
-            return $templateCache.get(url);
-          }, slots, undefined, undefined, lookup);
+      /**
+       * Builds a form from a canonical form definition
+       */
+      build: function(form, decorator, slots, lookup) {
+        return build(form, decorator, function(url) {
+          return $templateCache.get(url);
+        }, slots, undefined, undefined, lookup);
 
-        },
-        builder: builders,
-        internalBuild: build
+      },
+      builder: builders,
+      internalBuild: build
     };
   }];
 
