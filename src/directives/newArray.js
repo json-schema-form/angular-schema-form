@@ -1,7 +1,8 @@
 /**
  * Directive that handles the model arrays
  */
-angular.module('schemaForm').directive('sfNewArray', ['sfSelect', 'sfPath', function(sel, sfPath) {
+angular.module('schemaForm').directive('sfNewArray', ['sfSelect', 'sfPath', 'schemaForm',
+function(sel, sfPath, schemaForm) {
   return {
     scope: false,
     link: function(scope, element, attrs) {
@@ -24,10 +25,10 @@ angular.module('schemaForm').directive('sfNewArray', ['sfSelect', 'sfPath', func
 
       var onChangeFn =  function() {
         if (scope.form && scope.form.onChange) {
-          if (angular.isFunction(form.onChange)) {
-            form.onChange(ctrl.$modelValue, form);
+          if (angular.isFunction(scope.form.onChange)) {
+            scope.form.onChange(scope.modelArray, scope.form);
           } else {
-            scope.evalExpr(form.onChange, {'modelValue': ctrl.$modelValue, form: form});
+            scope.evalExpr(scope.form.onChange, {'modelValue': scope.modelArray, form: scope.form});
           }
         }
       };
@@ -162,6 +163,49 @@ angular.module('schemaForm').directive('sfNewArray', ['sfSelect', 'sfPath', func
         }
         return model;
       };
+
+      // For backwards compatability, i.e. when a bootstrap-decorator tag is used
+      // as child to the array.
+      var setIndex = function(index) {
+        return function(form) {
+          if (form.key) {
+            form.key[form.key.indexOf('')] = index;
+          }
+        };
+      };
+      var formDefCache = {};
+      scope.copyWithIndex = function(index) {
+        var form = scope.form;
+        if (!formDefCache[index]) {
+
+          // To be more compatible with JSON Form we support an array of items
+          // in the form definition of "array" (the schema just a value).
+          // for the subforms code to work this means we wrap everything in a
+          // section. Unless there is just one.
+          var subForm = form.items[0];
+          if (form.items.length > 1) {
+            subForm = {
+              type: 'section',
+              items: form.items.map(function(item) {
+                item.ngModelOptions = form.ngModelOptions;
+                if (angular.isUndefined(item.readonly)) {
+                  item.readonly = form.readonly;
+                }
+                return item;
+              })
+            };
+          }
+
+          if (subForm) {
+            var copy = angular.copy(subForm);
+            copy.arrayIndex = index;
+            schemaForm.traverseForm(copy, setIndex(index));
+            formDefCache[index] = copy;
+          }
+        }
+        return formDefCache[index];
+      };
+
     }
   };
 }]);
