@@ -1,4 +1,10 @@
+v0.8.7
+------
+ * Moved common builder functions from angular-schema-form-bootstrap decorator.
+ * Bugfx for the new builder.
+
 v0.8.6
+------
  * Removed left over console.timeEnd
 
 v0.8.5
