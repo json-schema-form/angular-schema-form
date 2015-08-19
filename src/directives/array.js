@@ -1,5 +1,6 @@
 /**
  * Directive that handles the model arrays
+ * DEPRECATED with the new builder use the sfNewArray instead.
  */
 angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sfValidator', 'sfPath',
   function(sfSelect, schemaForm, sfValidator, sfPath) {
