@@ -1,0 +1,10 @@
+<div sf-form-select="form" class="schema-form-form-select {{form.htmlClass}}">
+  <legend ng-class="{'sr-only': !showTitle() }">{{ form.title }}</legend>
+  <div class="help-block" ng-show="form.description" ng-bind-html="form.description"></div>
+  <select ng-model="selectedForm"
+          ng-disabled="form.readonly"
+          class="form-control {{form.fieldHtmlClass}}"
+          ng-options="form.items.indexOf(item) as item.title for item in form.items">
+  </select>
+  <sf-decorator ng-repeat="item in form.items" form="item" ng-show="selectedForm == $index"></sf-decorator>
+</div>

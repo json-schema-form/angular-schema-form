@@ -9,6 +9,7 @@ angular.module('schemaForm').config(['schemaFormDecoratorsProvider', function(de
       console.log('fieldset children frag', children.childNodes)
       args.fieldFrag.childNode.appendChild(children);
     }},*/
+    formselect: {template: base + 'formselect.html', replace: false},
     array: {template: base + 'array.html', replace: false},
     tabarray: {template: base + 'tabarray.html', replace: false},
     tabs: {template: base + 'tabs.html', replace: false},
