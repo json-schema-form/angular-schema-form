@@ -429,8 +429,16 @@ angular.module('schemaForm').provider('schemaFormDecorators',
     return decorator['default'].template;
   };
 
-  var createDirective = function(name) {
-    $compileProvider.directive(name,
+  /**************************************************
+   * DEPRECATED                                     *
+   * The new builder and sf-field is preferred, but *
+   * we keep this in during a transitional period   *
+   * so that add-ons that don't use the new builder *
+   * works.                                         *
+   **************************************************/
+   //TODO: Move to a compatability extra script.
+   var createDirective = function(name) {
+     $compileProvider.directive(name,
       ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
        'sfPath','sfSelect',
       function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage,
