@@ -1,11 +1,17 @@
+v0.8.8
+------
+ * Don't rely on documentFragment.children @davidlgj
+ * Restored "template" type support with the builder. @davidlgj
+ * Fixed defaults in array items. @davidlgj
+
 v0.8.7
 ------
- * Moved common builder functions from angular-schema-form-bootstrap decorator.
- * Bugfx for the new builder.
+ * Moved common builder functions from angular-schema-form-bootstrap decorator. @davidlgj
+ * Bugfx for the new builder. @davidlgj
 
 v0.8.6
 ------
- * Removed left over console.timeEnd
+ * Removed left over console.timeEnd @davidlgj
 
 v0.8.5
 ------
