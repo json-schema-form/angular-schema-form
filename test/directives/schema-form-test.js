@@ -1768,7 +1768,7 @@ describe('directive',function(){
     });
   });
 
-  it.skip('should use supplied template with template field type',function() {
+  it('should use supplied template with template field type',function() {
 
     inject(function($compile, $rootScope){
       var scope = $rootScope.$new();
@@ -1793,12 +1793,12 @@ describe('directive',function(){
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
-      tmpl.children().eq(0).html().should.be.eq('<div class="ng-binding ng-scope">Hello World</div>')
+      tmpl.html().should.be.eq('<div sf-field="0" class="ng-scope ng-binding">Hello World</div>')
 
     });
   });
 
-  it.skip('should load template by templateUrl, with template field type',function() {
+  it('should load template by templateUrl, with template field type',function() {
 
     inject(function($compile, $rootScope, $httpBackend){
 
@@ -1831,7 +1831,7 @@ describe('directive',function(){
       $httpBackend.verifyNoOutstandingExpectation();
       $httpBackend.verifyNoOutstandingRequest();
 
-      tmpl.children().eq(0).html().should.be.eq('<div class="ng-binding ng-scope">Hello World</div>')
+      tmpl.html().should.be.eq('<div sf-field="0" class="ng-scope ng-binding">Hello World</div>');
 
     });
   });
