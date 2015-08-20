@@ -23,8 +23,7 @@ module.exports = function(config) {
       'src/sfPath.js',
       'src/services/*.js',
       'src/directives/*.js',
-      'src/directives/decorators/bootstrap/*.js',
-      'src/**/*.html',
+      'bower_components/angular-schema-form-bootstrap/bootstrap-decorator.js',
       'test/services/schema-form-test.js',
       'test/services/decorators-test.js',
       'test/services/messages-test.js',
@@ -43,8 +42,7 @@ module.exports = function(config) {
     reporters: ['progress','coverage','growler'],
 
     preprocessors: {
-      'src/**/*.js': ['coverage'],
-      'src/**/*.html': ['ng-html2js']
+      'src/**/*.js': ['coverage']
     },
 
     // optionally, configure the reporter
@@ -52,15 +50,6 @@ module.exports = function(config) {
       type : 'lcov',
       dir : 'coverage/'
     },
-
-
-    ngHtml2JsPreprocessor: {
-      cacheIdFromPath: function(filepath) {
-        return filepath.substr(4);
-      },
-      moduleName: 'templates'
-    },
-
 
     // web server port
     port: 9876,

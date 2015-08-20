@@ -48,7 +48,6 @@
     "karma-coverage": "^0.2.1",
     "karma-growler-reporter": "0.0.1",
     "karma-mocha": "^0.1.3",
-    "karma-ng-html2js-preprocessor": "^0.1.0",
     "karma-phantomjs-launcher": "^0.1.4",
     "mocha": "^1.18.0",
     "mocha-lcov-reporter": "0.0.1",
