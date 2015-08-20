@@ -255,7 +255,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
                      '"modelValue": model' + (strKey[0] === '[' ? '' : '.') + strKey + '})';
         }
 
-        var children = args.fieldFrag.children;
+        var children = args.fieldFrag.children || args.fieldFrag.childNodes;
         for (var i = 0; i < children.length; i++) {
           var child = children[i];
           var ngIf = child.getAttribute('ng-if');
@@ -351,7 +351,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           //       measure optmization. A good start is probably a cache of DOM nodes for a particular
           //       template that can be cloned instead of using innerHTML
           var div = document.createElement('div');
-          var template = templateFn(field.template) || templateFn([decorator['default'].template]);
+          var template = templateFn(f, field) || templateFn(f, decorator['default']);
           div.innerHTML = template;
 
           // Move node to a document fragment, we don't want the div.
@@ -375,11 +375,14 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
 
           };
 
+          // Let the form definiton override builders if it wants to.
+          var builderFn = f.builder || field.builder;
+
           // Builders are either a function or a list of functions.
-          if (typeof field.builder === 'function') {
-            field.builder(args);
+          if (typeof builderFn === 'function') {
+            builderFn(args);
           } else {
-            field.builder.forEach(function(fn) { fn(args); });
+            builderFn.forEach(function(fn) { fn(args); });
           }
 
           // Append
@@ -396,8 +399,11 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
        * Builds a form from a canonical form definition
        */
       build: function(form, decorator, slots, lookup) {
-        return build(form, decorator, function(url) {
-          return $templateCache.get(url);
+        return build(form, decorator, function(form, field) {
+          if (form.type === 'template') {
+            return form.template;
+          }
+          return $templateCache.get(field.template);
         }, slots, undefined, undefined, lookup);
 
       },
@@ -1332,7 +1338,7 @@ angular.module('schemaForm').provider('schemaForm',
 
     var service = {};
 
-    service.merge = function(schema, form, ignore, options, readonly) {
+    service.merge = function(schema, form, ignore, options, readonly, asyncTemplates) {
       form  = form || ['*'];
       options = options || {};
 
@@ -1403,13 +1409,13 @@ angular.module('schemaForm').provider('schemaForm',
 
         //if it's a type with items, merge 'em!
         if (obj.items) {
-          obj.items = service.merge(schema, obj.items, ignore, options, obj.readonly);
+          obj.items = service.merge(schema, obj.items, ignore, options, obj.readonly, asyncTemplates);
         }
 
         //if its has tabs, merge them also!
         if (obj.tabs) {
           angular.forEach(obj.tabs, function(tab) {
-            tab.items = service.merge(schema, tab.items, ignore, options, obj.readonly);
+            tab.items = service.merge(schema, tab.items, ignore, options, obj.readonly, asyncTemplates);
           });
         }
 
@@ -1417,6 +1423,13 @@ angular.module('schemaForm').provider('schemaForm',
         // Since have to ternary state we need a default
         if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
           obj.schema['default'] = false;
+        }
+        
+        // Special case: template type with tempplateUrl that's needs to be loaded before rendering
+        // TODO: this is not a clean solution. Maybe something cleaner can be made when $ref support
+        // is introduced since we need to go async then anyway
+        if (asyncTemplates && obj.type === 'template' && !obj.template && obj.templateUrl) {
+          asyncTemplates.push(obj);
         }
 
         return obj;
@@ -2289,27 +2302,51 @@ function(sel, sfPath, schemaForm) {
       });
 
       scope.appendToArray = function() {
-
         var empty;
 
-        // Same old add empty things to the array hack :(
-        if (scope.form && scope.form.schema) {
-          if (scope.form.schema.items) {
-            if (scope.form.schema.items.type === 'object') {
-              empty = {};
-            } else if (scope.form.schema.items.type === 'array') {
-              empty = [];
-            }
-          }
-        }
-
+        // Create and set an array if needed.
         var model = scope.modelArray;
         if (!model) {
-          // Create and set an array if needed.
           var selection = sfPath.parse(attrs.sfNewArray);
           model = [];
           sel(selection, scope, model);
           scope.modelArray = model;
+        }
+
+        // Same old add empty things to the array hack :(
+        if (scope.form && scope.form.schema && scope.form.schema.items) {
+
+          var items = scope.form.schema.items;
+          if (items.type && items.type.indexOf('object') !== -1) {
+            empty = {};
+
+            // Check for possible defaults
+            if (!scope.options || scope.options.setSchemaDefaults !== false) {
+              empty = angular.isDefined(items['default']) ? items['default'] : empty;
+
+              // Check for defaults further down in the schema.
+              // If the default instance sets the new array item to something falsy, i.e. null
+              // then there is no need to go further down.
+              if (empty) {
+                schemaForm.traverseSchema(items, function(prop, path) {
+                  if (angular.isDefined(prop['default'])) {
+                    sel(path, empty, prop['default']);
+                  }
+                });
+              }
+            }
+
+          } else if (items.type && items.type.indexOf('array') !== -1) {
+            empty = [];
+            if (!scope.options || scope.options.setSchemaDefaults !== false) {
+              empty = items['default'] || empty;
+            }
+          } else {
+            // No type? could still have defaults.
+            if (!scope.options || scope.options.setSchemaDefaults !== false) {
+              empty = items['default'] || empty;
+            }
+          }
         }
         model.push(empty);
 
@@ -2377,8 +2414,8 @@ FIXME: real documentation
 
 angular.module('schemaForm')
        .directive('sfSchema',
-['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder',
-  function($compile,  schemaForm,  schemaFormDecorators, sfSelect, sfPath, sfBuilder) {
+['$compile', '$http', '$templateCache', '$q','schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder',
+  function($compile, $http, $templateCache, $q, schemaForm,  schemaFormDecorators, sfSelect, sfPath, sfBuilder) {
 
     return {
       scope: {
@@ -2437,8 +2474,27 @@ angular.module('schemaForm')
 
         // Common renderer function, can either be triggered by a watch or by an event.
         var render = function(schema, form) {
-          var merged = schemaForm.merge(schema, form, ignore, scope.options);
+          var asyncTemplates = [];
+          var merged = schemaForm.merge(schema, form, ignore, scope.options, undefined, asyncTemplates);
 
+          if (asyncTemplates.length > 0) {
+            // Pre load all async templates and put them on the form for the builder to use.
+            $q.all(asyncTemplates.map(function(form) {
+              return $http.get(form.templateUrl, {cache: $templateCache}).then(function(res) {
+                                  form.template = res.data;
+                                });
+            })).then(function() {
+              internalRender(schema, form, merged);
+            });
+
+          } else {
+            internalRender(schema, form, merged);
+          }
+
+
+        };
+
+        var internalRender = function(schema, form, merged) {
           // Create a new form and destroy the old one.
           // Not doing keeps old form elements hanging around after
           // they have been removed from the DOM

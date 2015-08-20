@@ -113,7 +113,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
                      '"modelValue": model' + (strKey[0] === '[' ? '' : '.') + strKey + '})';
         }
 
-        var children = args.fieldFrag.children;
+        var children = args.fieldFrag.children || args.fieldFrag.childNodes;
         for (var i = 0; i < children.length; i++) {
           var child = children[i];
           var ngIf = child.getAttribute('ng-if');
@@ -209,7 +209,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           //       measure optmization. A good start is probably a cache of DOM nodes for a particular
           //       template that can be cloned instead of using innerHTML
           var div = document.createElement('div');
-          var template = templateFn(field.template) || templateFn([decorator['default'].template]);
+          var template = templateFn(f, field) || templateFn(f, decorator['default']);
           div.innerHTML = template;
 
           // Move node to a document fragment, we don't want the div.
@@ -233,11 +233,14 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
 
           };
 
+          // Let the form definiton override builders if it wants to.
+          var builderFn = f.builder || field.builder;
+
           // Builders are either a function or a list of functions.
-          if (typeof field.builder === 'function') {
-            field.builder(args);
+          if (typeof builderFn === 'function') {
+            builderFn(args);
           } else {
-            field.builder.forEach(function(fn) { fn(args); });
+            builderFn.forEach(function(fn) { fn(args); });
           }
 
           // Append
@@ -254,8 +257,11 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
        * Builds a form from a canonical form definition
        */
       build: function(form, decorator, slots, lookup) {
-        return build(form, decorator, function(url) {
-          return $templateCache.get(url);
+        return build(form, decorator, function(form, field) {
+          if (form.type === 'template') {
+            return form.template;
+          }
+          return $templateCache.get(field.template);
         }, slots, undefined, undefined, lookup);
 
       },
