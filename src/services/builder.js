@@ -113,7 +113,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
                      '"modelValue": model' + (strKey[0] === '[' ? '' : '.') + strKey + '})';
         }
 
-        var children = args.fieldFrag.children;
+        var children = args.fieldFrag.children || args.fieldFrag.childNodes;
         for (var i = 0; i < children.length; i++) {
           var child = children[i];
           var ngIf = child.getAttribute('ng-if');
