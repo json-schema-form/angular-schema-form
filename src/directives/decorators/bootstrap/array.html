@@ -1,7 +1,7 @@
 <div sf-array="form" class="schema-form-array {{form.htmlClass}}"
      ng-model="$$value$$" ng-model-options="form.ngModelOptions">
   <label class="control-label" ng-show="showTitle()">{{ form.title }}</label>
-  <ol class="list-group" ng-model="modelArray" ui-sortable>
+  <ol class="list-group" ng-model="modelArray" ui-sortable="{{form.sortOptions}}">
     <li class="list-group-item {{form.fieldHtmlClass}}"
         ng-repeat="item in modelArray track by $index">
       <button ng-hide="form.readonly || form.remove === null"
