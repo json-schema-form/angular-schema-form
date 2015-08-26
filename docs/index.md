@@ -1231,8 +1231,9 @@ could be changed using attribute `add`, see example below.
 If you like to have drag and drop reordering of arrays you also need
 [ui-sortable](https://github.com/angular-ui/ui-sortable) and its dependencies
 [jQueryUI](http://jqueryui.com/), see *ui-sortable* documentation for details of
-what parts of jQueryUI that is needed. You can safely ignore these if you don't
-need the reordering.
+what parts of jQueryUI that is needed. You can also pass options to the *ui-sortable* directive 
+by including a `sortOptions` key on the form object. Check the *ui-sortable* documentation
+for a complete list of available options. You can safely ignore these if you don't need the reordering.
 
 In the form definition you can refer to properties of an array item by the empty
 bracket notation. In the `key` simply end the name of the array with `[]`
