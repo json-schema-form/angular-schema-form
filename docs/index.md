@@ -5,7 +5,7 @@ IMPORTANT
 **Angular Schema Form is undergoing a refactoring and the "bootstrap decorator", i.e. the part with
 all the HTML has been moved to [github.com/Textalk/angular-schema-form-bootstrap](https://github.com/Textalk/angular-schema-form-bootstrap).**
 
-The documentation below, especially form options is therefore somwhat bootstrap decorator
+The documentation below, especially form options is therefore somewhat bootstrap decorator
 specific. The docs is undergoing updating.
 
 
@@ -110,7 +110,7 @@ Example with custom submit buttons:
 Handling Submit
 ---------------
 Schema Form does not care what you do with your data, to handle form submit
-the recomended way is to use the `ng-submit` directive. It's also recomended
+the recommended way is to use the `ng-submit` directive. It's also recommended
 to use a `name` attribute on your form so you can access the
 [FormController](https://code.angularjs.org/1.3.0-beta.15/docs/api/ng/type/form.FormController)
 and check if the form is valid or not.
@@ -172,7 +172,7 @@ Updating Form
 -------------
 
 Schema Form watches `sf-form` and `sf-schema` and will redraw the form if one or both changes, but
-only if they change completly, i.e. not the same object and/or form instance. For performance
+only if they change completely, i.e. not the same object and/or form instance. For performance
 reasons we have opted to not watch schema and form deeply. So if you have updated a part of the
 schema or the form definition you can trigger a redraw by issuing the event `schemaFormRedraw`.
 
