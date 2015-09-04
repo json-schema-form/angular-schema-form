@@ -1,5 +1,8 @@
 <div class="form-group schema-form-radios {{form.htmlClass}}" ng-class="{'has-error': form.disableErrorState !== true &&  hasError(), 'has-success': form.disableSuccessState !== true && hasSuccess()}">
-  <label class="control-label {{form.labelHtmlClass}}" ng-show="showTitle()">{{form.title}}</label>
+  <label  ng-model="$$value$$"
+          ng-model-options="form.ngModelOptions"
+          schema-validate="form"
+          class="control-label {{form.labelHtmlClass}}" ng-show="showTitle()">{{form.title}}</label>
   <div class="radio" ng-repeat="item in form.titleMap" >
     <label>
       <input type="radio"
@@ -8,7 +11,6 @@
              ng-disabled="form.readonly"
              ng-model="$$value$$"
              ng-model-options="form.ngModelOptions"
-             schema-validate="form"
              ng-value="item.value"
              name="{{form.key.join('.')}}">
       <span ng-bind-html="item.name"></span>
