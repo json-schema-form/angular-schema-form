@@ -467,6 +467,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
 
   /**
+   * DEPRECATED use defineAddOn() instead.
    * Adds a mapping to an existing decorator.
    * @param {String} name Decorator name
    * @param {String} type Form type for the mapping
@@ -483,6 +484,25 @@ angular.module('schemaForm').provider('schemaFormDecorators',
       };
     }
   };
+
+  /**
+   * Adds an add-on to an existing decorator.
+   * @param {String} name Decorator name
+   * @param {String} type Form type for the mapping
+   * @param {String} url  The template url
+   * @param {Function|Array} builder (optional) builder function(s),
+   */
+  this.defineAddOn = function(name, type, url, builder) {
+    if (decorators[name]) {
+      decorators[name][type] = {
+        template: url,
+        builder: builder,
+        replace: true
+      };
+    }
+  };
+
+
 
   //Service is just a getter for directive templates and rules
   this.$get = function() {
