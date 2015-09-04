@@ -102,6 +102,14 @@ Basic template example:
 </div>
 ```
 
+**BIG FAT CAVEAT**
+Ok, so currently there is something really ugly here. The bootstrap (and material) decorator uses
+a build step (gulp-angular-templatecache) to "compile" the template into a javascript file that
+basically chucks the template into `$templateCache`. Currently schema form does *not* support
+loading the templates any other way. They need to be in `$templateCache` when rendering.
+
+This is really ugly and will be fixed. But you have been warned!
+
 
 Defining a decorator
 --------------------
@@ -187,4 +195,4 @@ TODO: API docs for each builder
 
 Useful directives
 -----------------
-TODO: more indepth about schema-validate and sf-messages
+TODO: more in depth about schema-validate and sf-messages
