@@ -125,20 +125,35 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return (expression && $interpolate(expression)(locals));
             };
 
-            //This works since we ot the ngModel from the array or the schema-validate directive.
+            //This works since we get the ngModel from the array or the schema-validate directive.
             scope.hasSuccess = function() {
               if (!scope.ngModel) {
                 return false;
               }
-              return scope.ngModel.$valid &&
+              if (scope.options && scope.options.pristine &&
+                  scope.options.pristine.success === false) {
+                return scope.ngModel.$valid &&
+                    !scope.ngModel.$pristine && !scope.ngModel.$isEmpty(scope.ngModel.$modelValue);
+              } else {
+                return scope.ngModel.$valid &&
                   (!scope.ngModel.$pristine || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
+              }
             };
 
             scope.hasError = function() {
               if (!scope.ngModel) {
                 return false;
               }
-              return scope.ngModel.$invalid && !scope.ngModel.$pristine;
+              if (!scope.options || !scope.options.pristine || scope.options.pristine.errors !== false) {
+                // Show errors in pristine forms. The default.
+                // Note that "validateOnRender" option defaults to *not* validate initial form.
+                // so as a default there won't be any error anyway, but if the model is modified
+                // from the outside the error will show even if the field is pristine.
+                return scope.ngModel.$invalid;
+              } else {
+                // Don't show errors in pristine forms.
+                return scope.ngModel.$invalid && !scope.ngModel.$pristine;
+              }
             };
 
             /**
