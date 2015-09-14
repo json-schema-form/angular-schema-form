@@ -1030,7 +1030,7 @@ function FormCtrl($scope) {
       type: "radiobuttons",
       titleMap: [
         { value: "one", name: "One" },
-        { value, "two", name: "More..." }
+        { value: "two", name: "More..." }
       ]
     }
   ];
