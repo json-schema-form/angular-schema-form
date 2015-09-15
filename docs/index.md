@@ -44,7 +44,7 @@ Basic Usage
 -----------
 
 First, expose your schema, form, and model to the $scope.
-Don't forget to load the ``schemaForm` module.
+Don't forget to load the `schemaForm` module.
 
 ```javascript
 angular.module('myModule', ['schemaForm'])
