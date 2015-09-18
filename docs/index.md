@@ -99,7 +99,7 @@ Example with custom submit buttons:
 Handling Submit
 ---------------
 Schema Form does not care what you do with your data, to handle form submit
-the recomended way is to use the `ng-submit` directive. It's also recomended
+the recommended way is to use the `ng-submit` directive. It's also recommended
 to use a `name` attribute on your form so you can access the
 [FormController](https://code.angularjs.org/1.3.0-beta.15/docs/api/ng/type/form.FormController)
 and check if the form is valid or not.
@@ -161,7 +161,7 @@ Updating Form
 -------------
 
 Schema Form watches `sf-form` and `sf-schema` and will redraw the form if one or both changes, but
-only if they change completly, i.e. not the same object and/or form instance. For performance
+only if they change completely, i.e. not the same object and/or form instance. For performance
 reasons we have opted to not watch schema and form deeply. So if you have updated a part of the
 schema or the form definition you can trigger a redraw by issuing the event `schemaFormRedraw`.
 
@@ -187,15 +187,13 @@ attribute which should be placed along side `sf-schema`.
 `sf-options` takes an object with the following possible attributes.
 
 
-| Attribute     |  Type |                    |
-|:--------------|:------|:-------------------|
-| supressPropertyTitles | boolean  |by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
-| formDefaults | object | an object that will be used as a default for all form definitions |
-| validationMessage | object or function | Object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
-| setSchemaDefaults | boolean | Should schema defaults be set on model. |
-| destroyStrategy | string | the default strategy to use for cleaning the model when a form element is removed. see [destroyStrategy](#destroyStrategy) below |
-| pristine  | Object `{errors ,success}` | Sets if errors and success states should be visible when form field are `$pristine`. Default is `{errors: true, success: true}` |
-| validateOnRender | boolean | Should form be validated on initial render? Default `false` |
+| Attribute     |                         |
+|:--------------|:------------------------|
+| supressPropertyTitles | by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
+| formDefaults | an object that will be used as a default for all form definitions |
+| validationMessage | an object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
+| setSchemaDefaults | boolean, set to false an no defaults from the schema will be set on the model. |
+| destroyStrategy | the default strategy to use for cleaning the model when a form element is removed. see [destroyStrategy](#destroyStrategy) below |
 
 *formDefaults* is mostly useful for setting global [ngModelOptions](#ngmodeloptions)
 i.e. changing the entire form to validate on blur.
