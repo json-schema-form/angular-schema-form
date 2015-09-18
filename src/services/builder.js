@@ -157,6 +157,13 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
     }
   };
   this.builders = builders;
+  var stdBuilders = [
+    builders.sfField,
+    builders.ngModel,
+    builders.ngModelOptions,
+    builders.condition
+  ];
+  this.stdBuilders = stdBuilders;
 
   this.$get = ['$templateCache', 'schemaFormDecorators', 'sfPath', function($templateCache, schemaFormDecorators, sfPath) {
 
@@ -184,7 +191,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
 
         // Sanity check.
         if (!f.type) {
-          return;
+          return frag;
         }
 
         var field = decorator[f.type] || decorator['default'];
@@ -266,6 +273,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
 
       },
       builder: builders,
+      stdBuilders: stdBuilders,
       internalBuild: build
     };
   }];

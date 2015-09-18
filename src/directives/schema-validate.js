@@ -24,11 +24,13 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
               sfSelect(path, scope.model, ngModel.$modelValue);
             });
           });
-        }
+        };
+
 
         // Validate against the schema.
 
         var validate = function(viewValue) {
+          //console.log('validate called', viewValue)
           //Still might be undefined
           if (!form) {
             return viewValue;
@@ -40,7 +42,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
           }
 
           var result =  sfValidator.validate(form, viewValue);
-
+          //console.log('result is', result)
           // Since we might have different tv4 errors we must clear all
           // errors that start with tv4-
           Object.keys(ngModel.$error)
@@ -95,6 +97,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
         // updating if we've found an error.
         if (ngModel.$validators) {
           ngModel.$validators.schemaForm = function() {
+            //console.log('validators called.')
             // Any error and we're out of here!
             return !Object.keys(ngModel.$error).some(function(e) { return e !== 'schemaForm';});
           };
@@ -137,6 +140,20 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
             ngModel.$setViewValue(ngModel.$viewValue);
           }
         };
+
+        var first = true;
+        ngModel.$formatters.push(function(val) {
+
+          // When a form first loads this will be called for each field.
+          // we usually don't want that.
+          if (ngModel.$pristine  && first &&
+              (!scope.options || scope.options.validateOnRender !== true))  {
+            first = false;
+            return val;
+          }
+          validate(ngModel.$modelValue);
+          return val;
+        });
 
         // Listen to an event so we can validate the input on request
         scope.$on('schemaFormValidate', scope.validateField);

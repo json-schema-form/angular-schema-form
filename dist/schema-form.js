@@ -299,6 +299,13 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
     }
   };
   this.builders = builders;
+  var stdBuilders = [
+    builders.sfField,
+    builders.ngModel,
+    builders.ngModelOptions,
+    builders.condition
+  ];
+  this.stdBuilders = stdBuilders;
 
   this.$get = ['$templateCache', 'schemaFormDecorators', 'sfPath', function($templateCache, schemaFormDecorators, sfPath) {
 
@@ -326,7 +333,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
 
         // Sanity check.
         if (!f.type) {
-          return;
+          return frag;
         }
 
         var field = decorator[f.type] || decorator['default'];
@@ -408,6 +415,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
 
       },
       builder: builders,
+      stdBuilders: stdBuilders,
       internalBuild: build
     };
   }];
@@ -812,17 +820,22 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
 
   /**
-   * Create a decorator directive and its sibling "manual" use decorators.
-   * The directive can be used to create form fields or other form entities.
-   * It can be used in conjunction with <schema-form> directive in which case the decorator is
-   * given it's configuration via a the "form" attribute.
+   * Define a decorator. A decorator is a set of form types with templates and builder functions
+   * that help set up the form.
    *
-   * ex. Basic usage
-   *   <sf-decorator form="myform"></sf-decorator>
-   **
    * @param {string} name directive name (CamelCased)
    * @param {Object} fields, an object that maps "type" => `{ template, builder, replace}`.
                      attributes `builder` and `replace` are optional, and replace defaults to true.
+
+                     `template` should be the key of the template to load and it should be pre-loaded
+                     in `$templateCache`.
+
+                     `builder` can be a function or an array of functions. They will be called in
+                     the order they are supplied.
+
+                     `replace` (DEPRECATED) is for backwards compatability. If false the builder
+                     will use the "old" way of building that form field using a <sf-decorator>
+                     directive.
    */
   this.defineDecorator = function(name, fields) {
     decorators[name] = {'__name': name}; // TODO: this feels like a hack, come up with a better way.
@@ -840,6 +853,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   /**
+   * DEPRECATED
    * Creates a directive of a decorator
    * Usable when you want to use the decorators without using <schema-form> directive.
    * Specifically when you need to reuse styling.
@@ -854,6 +868,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   this.createDirective = createManualDirective;
 
   /**
+   * DEPRECATED
    * Same as createDirective, but takes an object where key is 'type' and value is 'templateUrl'
    * Useful for batching.
    * @param {Object} templates
@@ -876,6 +891,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
 
   /**
+   * DEPRECATED use defineAddOn() instead.
    * Adds a mapping to an existing decorator.
    * @param {String} name Decorator name
    * @param {String} type Form type for the mapping
@@ -892,6 +908,25 @@ angular.module('schemaForm').provider('schemaFormDecorators',
       };
     }
   };
+
+  /**
+   * Adds an add-on to an existing decorator.
+   * @param {String} name Decorator name
+   * @param {String} type Form type for the mapping
+   * @param {String} url  The template url
+   * @param {Function|Array} builder (optional) builder function(s),
+   */
+  this.defineAddOn = function(name, type, url, builder) {
+    if (decorators[name]) {
+      decorators[name][type] = {
+        template: url,
+        builder: builder,
+        replace: true
+      };
+    }
+  };
+
+
 
   //Service is just a getter for directive templates and rules
   this.$get = function() {
@@ -1817,11 +1852,27 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             scope.$on('schemaFormValidate', scope.validateArray);
 
             scope.hasSuccess = function() {
-              return ngModel.$valid && !ngModel.$pristine;
+              if (scope.options && scope.options.pristine &&
+                  scope.options.pristine.success === false) {
+                return ngModel.$valid &&
+                    !ngModel.$pristine && !ngModel.$isEmpty(ngModel.$modelValue);
+              } else {
+                return ngModel.$valid &&
+                  (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue));
+              }
             };
 
             scope.hasError = function() {
-              return ngModel.$invalid;
+              if (!scope.options || !scope.options.pristine || scope.options.pristine.errors !== false) {
+                // Show errors in pristine forms. The default.
+                // Note that "validateOnRender" option defaults to *not* validate initial form.
+                // so as a default there won't be any error anyway, but if the model is modified
+                // from the outside the error will show even if the field is pristine.
+                return ngModel.$invalid;
+              } else {
+                // Don't show errors in pristine forms.
+                return ngModel.$invalid && !ngModel.$pristine;
+              }
             };
 
             scope.schemaError = function() {
@@ -1975,20 +2026,35 @@ angular.module('schemaForm').directive('sfField',
               return (expression && $interpolate(expression)(locals));
             };
 
-            //This works since we ot the ngModel from the array or the schema-validate directive.
+            //This works since we get the ngModel from the array or the schema-validate directive.
             scope.hasSuccess = function() {
               if (!scope.ngModel) {
                 return false;
               }
-              return scope.ngModel.$valid &&
+              if (scope.options && scope.options.pristine &&
+                  scope.options.pristine.success === false) {
+                return scope.ngModel.$valid &&
+                    !scope.ngModel.$pristine && !scope.ngModel.$isEmpty(scope.ngModel.$modelValue);
+              } else {
+                return scope.ngModel.$valid &&
                   (!scope.ngModel.$pristine || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
+              }
             };
 
             scope.hasError = function() {
               if (!scope.ngModel) {
                 return false;
               }
-              return scope.ngModel.$invalid && !scope.ngModel.$pristine;
+              if (!scope.options || !scope.options.pristine || scope.options.pristine.errors !== false) {
+                // Show errors in pristine forms. The default.
+                // Note that "validateOnRender" option defaults to *not* validate initial form.
+                // so as a default there won't be any error anyway, but if the model is modified
+                // from the outside the error will show even if the field is pristine.
+                return scope.ngModel.$invalid;
+              } else {
+                // Don't show errors in pristine forms.
+                return scope.ngModel.$invalid && !scope.ngModel.$pristine;
+              }
             };
 
             /**
@@ -2046,7 +2112,8 @@ angular.module('schemaForm').directive('sfField',
                       scope.$broadcast('schemaFormValidate');
                     }
                   }
-              });
+                }
+              );
 
               // Clean up the model when the corresponding form field is $destroy-ed.
               // Default behavior can be supplied as a globalOption, and behavior can be overridden
@@ -2113,58 +2180,78 @@ angular.module('schemaForm').directive('sfMessage',
         scope.$watch(attrs.sfMessage, function(msg) {
           if (msg) {
             message = $sanitize(msg);
-            if (scope.ngModel) {
-              update(scope.ngModel.$valid);
-            } else {
-              update();
-            }
+            update(!!scope.ngModel);
           }
         });
       }
 
-      var update = function(valid) {
-        if (valid && !scope.hasError()) {
-          element.html(message);
-        } else {
-          var errors = [];
-          angular.forEach(((scope.ngModel && scope.ngModel.$error) || {}), function(status, code) {
-            if (status) {
-              // if true then there is an error
-              // Angular 1.3 removes properties, so we will always just have errors.
-              // Angular 1.2 sets them to false.
-              errors.push(code);
-            }
-          });
+      var currentMessage;
+      // Only call html() if needed.
+      var setMessage = function(msg) {
+        if (msg !== currentMessage) {
+          element.html(msg);
+          currentMessage = msg;
+        }
+      };
 
-          // In Angular 1.3 we use one $validator to stop the model value from getting updated.
-          // this means that we always end up with a 'schemaForm' error.
-          errors = errors.filter(function(e) { return e !== 'schemaForm'; });
-
-          // We only show one error.
-          // TODO: Make that optional
-          var error = errors[0];
-
-          if (error) {
-            element.html(sfErrorMessage.interpolate(
-              error,
-              scope.ngModel.$modelValue,
-              scope.ngModel.$viewValue,
-              scope.form,
-              scope.options && scope.options.validationMessage
-            ));
+      var update = function(checkForErrors) {
+        if (checkForErrors) {
+          if (!scope.hasError()) {
+            setMessage(message);
           } else {
-            element.html(message);
+            var errors = [];
+            angular.forEach(scope.ngModel && scope.ngModel.$error, function(status, code) {
+              if (status) {
+                // if true then there is an error
+                // Angular 1.3 removes properties, so we will always just have errors.
+                // Angular 1.2 sets them to false.
+                errors.push(code);
+              }
+            });
+
+            // In Angular 1.3 we use one $validator to stop the model value from getting updated.
+            // this means that we always end up with a 'schemaForm' error.
+            errors = errors.filter(function(e) { return e !== 'schemaForm'; });
+
+            // We only show one error.
+            // TODO: Make that optional
+            var error = errors[0];
+
+            if (error) {
+              setMessage(sfErrorMessage.interpolate(
+                error,
+                scope.ngModel.$modelValue,
+                scope.ngModel.$viewValue,
+                scope.form,
+                scope.options && scope.options.validationMessage
+              ));
+            } else {
+              setMessage(message);
+            }
           }
+        } else {
+          setMessage(message);
         }
       };
 
       // Update once.
       update();
 
-      scope.$watchCollection('ngModel.$error', function() {
-        if (scope.ngModel) {
-          update(scope.ngModel.$valid);
+      var once = scope.$watch('ngModel',function(ngModel) {
+        if (ngModel) {
+          // We also listen to changes of the model via parsers and formatters.
+          // This is since both the error message can change and given a pristine
+          // option to not show errors the ngModel.$error might not have changed
+          // but we're not pristine any more so we should change!
+          ngModel.$parsers.push(function(val) { update(true); return val; });
+          ngModel.$formatters.push(function(val) { update(true); return val; });
+          once();
         }
+      });
+
+      // We watch for changes in $error
+      scope.$watchCollection('ngModel.$error', function() {
+        update(!!scope.ngModel);
       });
 
     }
@@ -2627,11 +2714,13 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
               sfSelect(path, scope.model, ngModel.$modelValue);
             });
           });
-        }
+        };
+
 
         // Validate against the schema.
 
         var validate = function(viewValue) {
+          //console.log('validate called', viewValue)
           //Still might be undefined
           if (!form) {
             return viewValue;
@@ -2643,7 +2732,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
           }
 
           var result =  sfValidator.validate(form, viewValue);
-
+          //console.log('result is', result)
           // Since we might have different tv4 errors we must clear all
           // errors that start with tv4-
           Object.keys(ngModel.$error)
@@ -2698,6 +2787,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
         // updating if we've found an error.
         if (ngModel.$validators) {
           ngModel.$validators.schemaForm = function() {
+            //console.log('validators called.')
             // Any error and we're out of here!
             return !Object.keys(ngModel.$error).some(function(e) { return e !== 'schemaForm';});
           };
@@ -2740,6 +2830,20 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
             ngModel.$setViewValue(ngModel.$viewValue);
           }
         };
+
+        var first = true;
+        ngModel.$formatters.push(function(val) {
+
+          // When a form first loads this will be called for each field.
+          // we usually don't want that.
+          if (ngModel.$pristine  && first &&
+              (!scope.options || scope.options.validateOnRender !== true))  {
+            first = false;
+            return val;
+          }
+          validate(ngModel.$modelValue);
+          return val;
+        });
 
         // Listen to an event so we can validate the input on request
         scope.$on('schemaFormValidate', scope.validateField);

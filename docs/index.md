@@ -198,13 +198,15 @@ attribute which should be placed along side `sf-schema`.
 `sf-options` takes an object with the following possible attributes.
 
 
-| Attribute     |                         |
-|:--------------|:------------------------|
-| supressPropertyTitles | by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
-| formDefaults | an object that will be used as a default for all form definitions |
-| validationMessage | an object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
-| setSchemaDefaults | boolean, set to false an no defaults from the schema will be set on the model. |
-| destroyStrategy | the default strategy to use for cleaning the model when a form element is removed. see [destroyStrategy](#destroyStrategy) below |
+| Attribute     |  Type |                    |
+|:--------------|:------|:-------------------|
+| supressPropertyTitles | boolean  |by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
+| formDefaults | object | an object that will be used as a default for all form definitions |
+| validationMessage | object or function | Object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
+| setSchemaDefaults | boolean | Should schema defaults be set on model. |
+| destroyStrategy | string | the default strategy to use for cleaning the model when a form element is removed. see [destroyStrategy](#destroyStrategy) below |
+| pristine  | Object `{errors ,success}` | Sets if errors and success states should be visible when form field are `$pristine`. Default is `{errors: true, success: true}` |
+| validateOnRender | boolean | Should form be validated on initial render? Default `false` |
 
 *formDefaults* is mostly useful for setting global [ngModelOptions](#ngmodeloptions)
 i.e. changing the entire form to validate on blur.
