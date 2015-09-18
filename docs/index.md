@@ -5,7 +5,7 @@ IMPORTANT
 **Angular Schema Form is undergoing a refactoring and the "bootstrap decorator", i.e. the part with
 all the HTML has been moved to [github.com/Textalk/angular-schema-form-bootstrap](https://github.com/Textalk/angular-schema-form-bootstrap).**
 
-The documentation below, especially form options is therefore somwhat bootstrap decorator
+The documentation below, especially form options is therefore somewhat bootstrap decorator
 specific. The docs is undergoing updating.
 
 
