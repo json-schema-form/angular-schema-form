@@ -1,6 +1,6 @@
 <div sf-array="form" class="schema-form-array {{form.htmlClass}}"
      ng-model="$$value$$" ng-model-options="form.ngModelOptions">
-  <h3 ng-show="form.title && form.notitle !== true">{{ form.title }}</h3>
+  <label class="control-label" ng-show="showTitle()">{{ form.title }}</label>
   <ol class="list-group" ng-model="modelArray" ui-sortable>
     <li class="list-group-item {{form.fieldHtmlClass}}"
         ng-repeat="item in modelArray track by $index">

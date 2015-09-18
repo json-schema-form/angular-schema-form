@@ -56,6 +56,32 @@ describe('directive',function(){
     });
   });
 
+  it('should generate html and compile when no form is provided, using the default',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = exampleSchema;
+
+      scope.form = undefined;
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().length.should.be.equal(2);
+      tmpl.children().eq(0).is('bootstrap-decorator').should.be.true;
+      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
+      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
+      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
+
+    });
+  });
+
   it('should generate html and compile it, deep structure',function(){
 
     inject(function($compile,$rootScope){
@@ -1918,46 +1944,6 @@ describe('directive',function(){
       }
     },
     {
-      name: 'radios inline',
-      property: {
-        type: 'boolean',
-      },
-      form: {
-        key: ["field"],
-        type: "radios-inline",
-        titleMap: [
-          {
-            "value": false,
-            "name": "No way"
-          },
-          {
-            "value": true,
-            "name": "OK"
-          }
-        ]
-      }
-    },
-    {
-      name: 'radios',
-      property: {
-        type: 'boolean',
-      },
-      form: {
-        key: ["field"],
-        type: "radios",
-        titleMap: [
-          {
-            "value": false,
-            "name": "No way"
-          },
-          {
-            "value": true,
-            "name": "OK"
-          }
-        ]
-      }
-    },
-    {
       name: 'select',
       property: {
         type: 'boolean',
@@ -2035,6 +2021,210 @@ describe('directive',function(){
       });
     });
   });
+
+
+
+
+  it('should not add "has-success" class to radios field if a correct value is entered, but disableSuccessState is set on form', function () {
+
+    var field = {
+      name: 'radios',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    };
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.model = {}
+      scope.schema = {
+        type: 'object',
+        properties: {
+          field: field.property
+        }
+      };
+      scope.form = [field.form];
+
+      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      ngModelCtrl.$valid = true;
+      ngModelCtrl.$pristine = false;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.true;
+      scope.form[0].disableSuccessState = true;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.false;
+    });
+  });
+
+  it('should not add "has-error" class to radios field if invalid value is entered, but disableErrorState is set on form', function () {
+
+    var field = {
+      name: 'radios',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    };
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.model = {
+        field: field.errorValue
+      }
+      scope.schema = {
+        type: 'object',
+        properties: {
+          field: field.property
+        }
+      };
+      scope.form = [field.form];
+
+      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      ngModelCtrl.$invalid = true;
+      ngModelCtrl.$pristine = false;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.true;
+      scope.form[0].disableErrorState = true;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.false;
+    });
+  });
+
+  it('should not add "has-success" class to radios-inline field if a correct value is entered, but disableSuccessState is set on form', function () {
+
+    var field = {
+      name: 'radios',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    };
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.model = {}
+      scope.schema = {
+        type: 'object',
+        properties: {
+          field: field.property
+        }
+      };
+      scope.form = [field.form];
+
+      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      ngModelCtrl.$valid = true;
+      ngModelCtrl.$pristine = false;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.true;
+      scope.form[0].disableSuccessState = true;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.false;
+    });
+  });
+
+  it('should not add "has-error" class to radios-inline field if invalid value is entered, but disableErrorState is set on form', function () {
+
+    var field = {
+      name: 'radios',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    };
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.model = {
+        field: field.errorValue
+      }
+      scope.schema = {
+        type: 'object',
+        properties: {
+          field: field.property
+        }
+      };
+      scope.form = [field.form];
+
+      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      ngModelCtrl.$invalid = true;
+      ngModelCtrl.$pristine = false;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.true;
+      scope.form[0].disableErrorState = true;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.false;
+    });
+  });
+
+
+
+
+
 
 
   describe('destroy strategy', function() {

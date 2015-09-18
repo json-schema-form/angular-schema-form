@@ -5,8 +5,8 @@ FIXME: real documentation
 
 angular.module('schemaForm')
        .directive('sfSchema',
-['$compile', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder',
-  function($compile,  schemaForm,  schemaFormDecorators, sfSelect, sfPath, sfBuilder) {
+['$compile', '$http', '$templateCache', '$q','schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder',
+  function($compile, $http, $templateCache, $q, schemaForm,  schemaFormDecorators, sfSelect, sfPath, sfBuilder) {
 
     return {
       scope: {
@@ -18,6 +18,15 @@ angular.module('schemaForm')
       controller: ['$scope', function($scope) {
         this.evalInParentScope = function(expr, locals) {
           return $scope.$parent.$eval(expr, locals);
+        };
+
+        // Set up form lookup map
+        var that  = this;
+        $scope.lookup = function(lookup) {
+          if (lookup) {
+            that.lookup = lookup;
+          }
+          return that.lookup;
         };
       }],
       replace: false,
@@ -56,8 +65,27 @@ angular.module('schemaForm')
 
         // Common renderer function, can either be triggered by a watch or by an event.
         var render = function(schema, form) {
-          var merged = schemaForm.merge(schema, form, ignore, scope.options);
+          var asyncTemplates = [];
+          var merged = schemaForm.merge(schema, form, ignore, scope.options, undefined, asyncTemplates);
 
+          if (asyncTemplates.length > 0) {
+            // Pre load all async templates and put them on the form for the builder to use.
+            $q.all(asyncTemplates.map(function(form) {
+              return $http.get(form.templateUrl, {cache: $templateCache}).then(function(res) {
+                                  form.template = res.data;
+                                });
+            })).then(function() {
+              internalRender(schema, form, merged);
+            });
+
+          } else {
+            internalRender(schema, form, merged);
+          }
+
+
+        };
+
+        var internalRender = function(schema, form, merged) {
           // Create a new form and destroy the old one.
           // Not doing keeps old form elements hanging around after
           // they have been removed from the DOM
@@ -86,10 +114,10 @@ angular.module('schemaForm')
 
           // if sfUseDecorator is undefined the default decorator is used.
           var decorator = schemaFormDecorators.decorator(attrs.sfUseDecorator);
-
           // Use the builder to build it and append the result
-          element[0].appendChild( sfBuilder.build(merged, decorator, slots) );
-
+          var lookup = Object.create(null);
+          scope.lookup(lookup); // give the new lookup to the controller.
+          element[0].appendChild(sfBuilder.build(merged, decorator, slots, lookup));
           //compile only children
           $compile(element.children())(childScope);
 
@@ -108,12 +136,14 @@ angular.module('schemaForm')
           scope.$emit('sf-render-finished', element);
         };
 
+        var defaultForm = ['*'];
+
         //Since we are dependant on up to three
         //attributes we'll do a common watch
         scope.$watch(function() {
 
           var schema = scope.schema;
-          var form   = scope.initialForm || ['*'];
+          var form   = scope.initialForm || defaultForm;
 
           //The check for schema.type is to ensure that schema is not {}
           if (form && schema && schema.type &&
@@ -145,6 +175,18 @@ angular.module('schemaForm')
           // let it be.
           scope.externalDestructionInProgress = true;
         });
+
+        /**
+         * Evaluate an expression, i.e. scope.$eval
+         * but do it in parent scope
+         *
+         * @param {String} expression
+         * @param {Object} locals (optional)
+         * @return {Any} the result of the expression
+         */
+        scope.evalExpr = function(expression, locals) {
+          return scope.$parent.$eval(expression, locals);
+        };
       }
     };
   }

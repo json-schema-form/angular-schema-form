@@ -9,8 +9,16 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       return (pos ? separator : '') + letter.toLowerCase();
     });
   };
+  var formId = 0;
 
   var builders = {
+    sfField: function(args) {
+      args.fieldFrag.firstChild.setAttribute('sf-field', formId);
+
+      // We use a lookup table for easy access to our form.
+      args.lookup['f' + formId] = args.form;
+      formId++;
+    },
     ngModel: function(args) {
       if (!args.form.key) {
         return;
@@ -49,7 +57,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           n.setAttribute('ng-model', modelValue);
         } else if (conf === 'replaceAll') {
           var attributes = n.attributes;
-          for (var j = 0; attributes.length; j++) {
+          for (var j = 0; j < attributes.length; j++) {
             if (attributes[j].value && attributes[j].value.indexOf('$$value') !== -1) {
               attributes[j].value = attributes[j].value.replace(/\$\$value\$\$/g, modelValue);
             }
@@ -92,9 +100,70 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           }
         }
       }
+    },
+    condition: function(args) {
+      // Do we have a condition? Then we slap on an ng-if on all children,
+      // but be nice to existing ng-if.
+      if (args.form.condition) {
+        var evalExpr = 'evalExpr(' + args.path +
+                       '.contidion, { model: model, "arrayIndex": $index})';
+        if (args.form.key) {
+          var strKey = sfPathProvider.stringify(args.form.key);
+          evalExpr = 'evalExpr(' + args.path + '.condition,{ model: model, "arrayIndex": $index, ' +
+                     '"modelValue": model' + (strKey[0] === '[' ? '' : '.') + strKey + '})';
+        }
+
+        var children = args.fieldFrag.children || args.fieldFrag.childNodes;
+        for (var i = 0; i < children.length; i++) {
+          var child = children[i];
+          var ngIf = child.getAttribute('ng-if');
+          child.setAttribute(
+            'ng-if',
+            ngIf ?
+            '(' + ngIf +
+            ') || (' + evalExpr + ')'
+            : evalExpr
+          );
+        }
+      }
+    },
+    array: function(args) {
+      var items = args.fieldFrag.querySelector('[schema-form-array-items]');
+      if (items) {
+        state = angular.copy(args.state);
+        state.keyRedaction = state.keyRedaction || 0;
+        state.keyRedaction += args.form.key.length + 1;
+
+        // Special case, an array with just one item in it that is not an object.
+        // So then we just override the modelValue
+        if (args.form.schema && args.form.schema.items &&
+            args.form.schema.items.type &&
+            args.form.schema.items.type.indexOf('object') === -1 &&
+            args.form.schema.items.type.indexOf('array') === -1) {
+          var strKey = sfPathProvider.stringify(args.form.key).replace(/"/g, '&quot;') + '[$index]';
+          state.modelValue = 'modelArray[$index]';
+        } else {
+          state.modelName = 'item';
+        }
+
+        // Flag to the builder that where in an array.
+        // This is needed for compatabiliy if a "old" add-on is used that
+        // hasn't been transitioned to the new builder.
+        state.arrayCompatFlag = true;
+
+        var childFrag = args.build(args.form.items, args.path + '.items', state);
+        items.appendChild(childFrag);
+      }
     }
   };
   this.builders = builders;
+  var stdBuilders = [
+    builders.sfField,
+    builders.ngModel,
+    builders.ngModelOptions,
+    builders.condition
+  ];
+  this.stdBuilders = stdBuilders;
 
   this.$get = ['$templateCache', 'schemaFormDecorators', 'sfPath', function($templateCache, schemaFormDecorators, sfPath) {
 
@@ -113,32 +182,41 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       }
     };
 
-    var build = function(items, decorator, templateFn, slots, path, state) {
+    var build = function(items, decorator, templateFn, slots, path, state, lookup) {
       state = state || {};
+      lookup = lookup || Object.create(null);
       path = path || 'schemaForm.form';
       var container = document.createDocumentFragment();
       items.reduce(function(frag, f, index) {
 
         // Sanity check.
         if (!f.type) {
-          return;
+          return frag;
         }
 
         var field = decorator[f.type] || decorator['default'];
         if (!field.replace) {
           // Backwards compatability build
           var n = document.createElement(snakeCase(decorator.__name, '-'));
-          n.setAttribute('form', path + '[' + index + ']');
+          if (state.arrayCompatFlag) {
+            n.setAttribute('form','copyWithIndex($index)');
+          } else {
+            n.setAttribute('form', path + '[' + index + ']');
+          }
+
           (checkForSlot(f, slots) || frag).appendChild(n);
 
         } else {
           var tmpl;
 
+          // Reset arrayCompatFlag, it's only valid for direct children of the array.
+          state.arrayCompatFlag = false;
+
           // TODO: Create a couple fo testcases, small and large and
           //       measure optmization. A good start is probably a cache of DOM nodes for a particular
           //       template that can be cloned instead of using innerHTML
           var div = document.createElement('div');
-          var template = templateFn(field.template) || templateFn([decorator['default'].template]);
+          var template = templateFn(f, field) || templateFn(f, decorator['default']);
           div.innerHTML = template;
 
           // Move node to a document fragment, we don't want the div.
@@ -147,28 +225,29 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
             tmpl.appendChild(div.childNodes[0]);
           }
 
-
-          tmpl.firstChild.setAttribute('sf-field',path + '[' + index + ']');
-
           // Possible builder, often a noop
           var args = {
             fieldFrag: tmpl,
             form: f,
+            lookup: lookup,
             state: state,
             path: path + '[' + index + ']',
 
             // Recursive build fn
             build: function(items, path, state) {
-              return build(items, decorator, templateFn, slots, path, state);
+              return build(items, decorator, templateFn, slots, path, state, lookup);
             },
 
           };
 
+          // Let the form definiton override builders if it wants to.
+          var builderFn = f.builder || field.builder;
+
           // Builders are either a function or a list of functions.
-          if (typeof field.builder === 'function') {
-            field.builder(args);
+          if (typeof builderFn === 'function') {
+            builderFn(args);
           } else {
-            field.builder.forEach(function(fn) { fn(args); });
+            builderFn.forEach(function(fn) { fn(args); });
           }
 
           // Append
@@ -181,17 +260,21 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
     };
 
     return {
-        /**
-         * Builds a form from a canonical form definition
-         */
-        build: function(form, decorator, slots) {
-          return build(form, decorator, function(url) {
-            return $templateCache.get(url);
-          }, slots);
+      /**
+       * Builds a form from a canonical form definition
+       */
+      build: function(form, decorator, slots, lookup) {
+        return build(form, decorator, function(form, field) {
+          if (form.type === 'template') {
+            return form.template;
+          }
+          return $templateCache.get(field.template);
+        }, slots, undefined, undefined, lookup);
 
-        },
-        builder: builders,
-        internalBuild: build
+      },
+      builder: builders,
+      stdBuilders: stdBuilders,
+      internalBuild: build
     };
   }];
 
