@@ -1,3 +1,10 @@
+v0.8.9
+------
+ * Bugfix for radios and radios-inline. Validation should now work.
+ * Bugfix so model changes from outside the form trigger validation.
+ * New global option `pristine`.  Sets if errors and success states
+   should be visible when form field are `$pristine`. Default is `{errors: true, success: true}`
+
 v0.8.8
 ------
  * Don't rely on documentFragment.children @davidlgj
