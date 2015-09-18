@@ -299,6 +299,13 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
     }
   };
   this.builders = builders;
+  var stdBuilders = [
+    builders.sfField,
+    builders.ngModel,
+    builders.ngModelOptions,
+    builders.condition
+  ];
+  this.stdBuilders = stdBuilders;
 
   this.$get = ['$templateCache', 'schemaFormDecorators', 'sfPath', function($templateCache, schemaFormDecorators, sfPath) {
 
@@ -408,6 +415,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
 
       },
       builder: builders,
+      stdBuilders: stdBuilders,
       internalBuild: build
     };
   }];
@@ -435,8 +443,16 @@ angular.module('schemaForm').provider('schemaFormDecorators',
     return decorator['default'].template;
   };
 
-  var createDirective = function(name) {
-    $compileProvider.directive(name,
+  /**************************************************
+   * DEPRECATED                                     *
+   * The new builder and sf-field is preferred, but *
+   * we keep this in during a transitional period   *
+   * so that add-ons that don't use the new builder *
+   * works.                                         *
+   **************************************************/
+   //TODO: Move to a compatability extra script.
+   var createDirective = function(name) {
+     $compileProvider.directive(name,
       ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
        'sfPath','sfSelect',
       function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage,
@@ -541,35 +557,20 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               return (expression && $interpolate(expression)(locals));
             };
 
-            //This works since we get the ngModel from the array or the schema-validate directive.
+            //This works since we ot the ngModel from the array or the schema-validate directive.
             scope.hasSuccess = function() {
               if (!scope.ngModel) {
                 return false;
               }
-              if (scope.options && scope.options.pristine &&
-                  scope.options.pristine.success === false) {
-                return scope.ngModel.$valid &&
-                    !scope.ngModel.$pristine && !scope.ngModel.$isEmpty(scope.ngModel.$modelValue);
-              } else {
-                return scope.ngModel.$valid &&
+              return scope.ngModel.$valid &&
                   (!scope.ngModel.$pristine || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
-              }
             };
 
             scope.hasError = function() {
               if (!scope.ngModel) {
                 return false;
               }
-              if (!scope.options || !scope.options.pristine || scope.options.pristine.errors !== false) {
-                // Show errors in pristine forms. The default.
-                // Note that "validateOnRender" option defaults to *not* validate initial form.
-                // so as a default there won't be any error anyway, but if the model is modified
-                // from the outside the error will show even if the field is pristine.
-                return scope.ngModel.$invalid;
-              } else {
-                // Don't show errors in pristine forms.
-                return scope.ngModel.$invalid && !scope.ngModel.$pristine;
-              }
+              return scope.ngModel.$invalid && !scope.ngModel.$pristine;
             };
 
             /**
@@ -819,17 +820,22 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
 
   /**
-   * Create a decorator directive and its sibling "manual" use decorators.
-   * The directive can be used to create form fields or other form entities.
-   * It can be used in conjunction with <schema-form> directive in which case the decorator is
-   * given it's configuration via a the "form" attribute.
+   * Define a decorator. A decorator is a set of form types with templates and builder functions
+   * that help set up the form.
    *
-   * ex. Basic usage
-   *   <sf-decorator form="myform"></sf-decorator>
-   **
    * @param {string} name directive name (CamelCased)
    * @param {Object} fields, an object that maps "type" => `{ template, builder, replace}`.
                      attributes `builder` and `replace` are optional, and replace defaults to true.
+
+                     `template` should be the key of the template to load and it should be pre-loaded
+                     in `$templateCache`.
+
+                     `builder` can be a function or an array of functions. They will be called in
+                     the order they are supplied.
+
+                     `replace` (DEPRECATED) is for backwards compatability. If false the builder
+                     will use the "old" way of building that form field using a <sf-decorator>
+                     directive.
    */
   this.defineDecorator = function(name, fields) {
     decorators[name] = {'__name': name}; // TODO: this feels like a hack, come up with a better way.
@@ -847,6 +853,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   };
 
   /**
+   * DEPRECATED
    * Creates a directive of a decorator
    * Usable when you want to use the decorators without using <schema-form> directive.
    * Specifically when you need to reuse styling.
@@ -861,6 +868,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   this.createDirective = createManualDirective;
 
   /**
+   * DEPRECATED
    * Same as createDirective, but takes an object where key is 'type' and value is 'templateUrl'
    * Useful for batching.
    * @param {Object} templates
@@ -883,6 +891,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
 
   /**
+   * DEPRECATED use defineAddOn() instead.
    * Adds a mapping to an existing decorator.
    * @param {String} name Decorator name
    * @param {String} type Form type for the mapping
@@ -899,6 +908,25 @@ angular.module('schemaForm').provider('schemaFormDecorators',
       };
     }
   };
+
+  /**
+   * Adds an add-on to an existing decorator.
+   * @param {String} name Decorator name
+   * @param {String} type Form type for the mapping
+   * @param {String} url  The template url
+   * @param {Function|Array} builder (optional) builder function(s),
+   */
+  this.defineAddOn = function(name, type, url, builder) {
+    if (decorators[name]) {
+      decorators[name][type] = {
+        template: url,
+        builder: builder,
+        replace: true
+      };
+    }
+  };
+
+
 
   //Service is just a getter for directive templates and rules
   this.$get = function() {
