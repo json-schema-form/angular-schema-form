@@ -71,7 +71,7 @@ Ex.
 ```js  
 angular.module('myAddOnModule', ['schemaForm']).config(function(schemaFormDecoratorsProvider, sfBuilderProvider) {
 
-  schemaFormProvider.defineAddOn(
+  schemaFormDecoratorsProvider.defineAddOn(
     'bootstrapDecorator',         // Name of the decorator you want to add to.
     'awesome',                    // Form type that should render this add-on
     'templates/my/addon.html',    // Template name in $templateCache
