@@ -333,7 +333,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
 
         // Sanity check.
         if (!f.type) {
-          return;
+          return frag;
         }
 
         var field = decorator[f.type] || decorator['default'];
