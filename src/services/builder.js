@@ -191,6 +191,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
 
         // Sanity check.
         if (!f.type) {
+          console.warn('Form has no type. Skipping it.', f);
           return frag;
         }
 
@@ -264,6 +265,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
        * Builds a form from a canonical form definition
        */
       build: function(form, decorator, slots, lookup) {
+        console.log(form)
         return build(form, decorator, function(form, field) {
           if (form.type === 'template') {
             return form.template;
