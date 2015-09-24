@@ -1,3 +1,7 @@
+v0.8.10
+-------
+ * Bugfix for checkboxes when model array is undefined.
+
 v0.8.9
 ------
  * Bugfix for radios and radios-inline. Validation should now work.
