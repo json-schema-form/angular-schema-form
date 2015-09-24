@@ -33,6 +33,18 @@ function(sel, sfPath, schemaForm) {
         }
       };
 
+      // If model is undefined make sure it gets set.
+      var getOrCreateModel = function() {
+        var model = scope.modelArray;
+        if (!model) {
+          var selection = sfPath.parse(attrs.sfNewArray);
+          model = [];
+          sel(selection, scope, model);
+          scope.modelArray = model;
+        }
+        return model;
+      };
+
       // We need the form definition to make a decision on how we should listen.
       var once = scope.$watch('form', function(form) {
         if (!form) {
@@ -103,7 +115,7 @@ function(sel, sfPath, schemaForm) {
           //To get two way binding we also watch our titleMapValues
           scope.$watchCollection('titleMapValues', function(vals, old) {
             if (vals && vals !== old) {
-              var arr = scope.modelArray;
+              var arr = getOrCreateModel();
 
               // Apparently the fastest way to clear an array, readable too.
               // http://jsperf.com/array-destroy/32
@@ -132,13 +144,7 @@ function(sel, sfPath, schemaForm) {
         var empty;
 
         // Create and set an array if needed.
-        var model = scope.modelArray;
-        if (!model) {
-          var selection = sfPath.parse(attrs.sfNewArray);
-          model = [];
-          sel(selection, scope, model);
-          scope.modelArray = model;
-        }
+        var model = getOrCreateModel();
 
         // Same old add empty things to the array hack :(
         if (scope.form && scope.form.schema && scope.form.schema.items) {
