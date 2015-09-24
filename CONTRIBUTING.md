@@ -12,7 +12,7 @@ Please avoid including anything from the `dist/` directory as that can make merg
 always generate these files when we make a new release.
 
 ** We're currently in transitioning where a large part of the code, i.e. the bootstrap decorator,
-has been moved to it's own repo. It's here [github.com/Textalk/angular-schema-form-bootstrap](https://github.com/Textalk/angular-schema-form-bootstrap)*
+has been moved to it's own repo. It's here [github.com/Textalk/angular-schema-form-bootstrap](https://github.com/Textalk/angular-schema-form-bootstrap)**
 
 Feel free to submit issues on the main repo anyway though.
 
