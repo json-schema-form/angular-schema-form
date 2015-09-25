@@ -1,3 +1,7 @@
+v0.8.11
+-------
+ * Bugfix for checkboxes validation in the new builder.
+
 v0.8.10
 -------
  * Bugfix for checkboxes when model array is undefined.
