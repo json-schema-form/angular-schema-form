@@ -118,6 +118,16 @@ angular.module('schemaForm')
           var lookup = Object.create(null);
           scope.lookup(lookup); // give the new lookup to the controller.
           element[0].appendChild(sfBuilder.build(merged, decorator, slots, lookup));
+
+          // We need to know if we're in the first digest looping
+          // I.e. just rendered the form so we know not to validate
+          // empty fields.
+          childScope.firstDigest = true;
+          // We use a ordinary timeout since we don't need a digest after this.
+          setTimeout(function() {
+            childScope.firstDigest = false;
+          }, 0);
+
           //compile only children
           $compile(element.children())(childScope);
 
