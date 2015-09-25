@@ -141,14 +141,11 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
           }
         };
 
-        var first = true;
         ngModel.$formatters.push(function(val) {
-
           // When a form first loads this will be called for each field.
           // we usually don't want that.
-          if (ngModel.$pristine  && first &&
+          if (ngModel.$pristine  && scope.firstDigest &&
               (!scope.options || scope.options.validateOnRender !== true))  {
-            first = false;
             return val;
           }
           validate(ngModel.$modelValue);

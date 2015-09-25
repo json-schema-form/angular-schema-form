@@ -2278,7 +2278,11 @@ function(sel, sfPath, schemaForm) {
         //scope.modelArray = modelArray;
         scope.modelArray = scope.$eval(attrs.sfNewArray);
         // validateField method is exported by schema-validate
-        if (scope.validateField) {
+        console.warn('first! watchFn ', scope.firstDigest)
+        if (scope.ngModel && scope.ngModel.$pristine && scope.firstDigest &&
+            (!scope.options || scope.options.validateOnRender !== true)) {
+          return;
+        } else if (scope.validateField) {
           scope.validateField();
         }
       };
@@ -2620,6 +2624,16 @@ angular.module('schemaForm')
           var lookup = Object.create(null);
           scope.lookup(lookup); // give the new lookup to the controller.
           element[0].appendChild(sfBuilder.build(merged, decorator, slots, lookup));
+
+          // We need to know if we're in the first digest looping
+          // I.e. just rendered the form so we know not to validate
+          // empty fields.
+          childScope.firstDigest = true;
+          // We use a ordinary timeout since we don't need a digest after this.
+          setTimeout(function() {
+            childScope.firstDigest = false;
+          }, 0);
+
           //compile only children
           $compile(element.children())(childScope);
 
@@ -2837,14 +2851,13 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
           }
         };
 
-        var first = true;
         ngModel.$formatters.push(function(val) {
 
           // When a form first loads this will be called for each field.
           // we usually don't want that.
-          if (ngModel.$pristine  && first &&
+
+          if (ngModel.$pristine  && scope.firstDigest &&
               (!scope.options || scope.options.validateOnRender !== true))  {
-            first = false;
             return val;
           }
           validate(ngModel.$modelValue);
