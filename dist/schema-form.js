@@ -2278,7 +2278,6 @@ function(sel, sfPath, schemaForm) {
         //scope.modelArray = modelArray;
         scope.modelArray = scope.$eval(attrs.sfNewArray);
         // validateField method is exported by schema-validate
-        console.warn('first! watchFn ', scope.firstDigest)
         if (scope.ngModel && scope.ngModel.$pristine && scope.firstDigest &&
             (!scope.options || scope.options.validateOnRender !== true)) {
           return;
@@ -2852,10 +2851,8 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
         };
 
         ngModel.$formatters.push(function(val) {
-
           // When a form first loads this will be called for each field.
           // we usually don't want that.
-
           if (ngModel.$pristine  && scope.firstDigest &&
               (!scope.options || scope.options.validateOnRender !== true))  {
             return val;
