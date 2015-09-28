@@ -95,7 +95,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           var sub = args.form[n.getAttribute('sf-field-transclude')];
           if (sub) {
             sub = Array.isArray(sub) ? sub : [sub];
-            var childFrag = args.build(sub, args.path + '.' + sub, args.state);
+            var childFrag = args.build(sub, args.path + '.' + n.getAttribute('sf-field-transclude'), args.state);
             n.appendChild(childFrag);
           }
         }
