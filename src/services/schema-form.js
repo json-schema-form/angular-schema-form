@@ -325,13 +325,9 @@ angular.module('schemaForm').provider('schemaForm',
         value: index
       });
 
-      var required = schema.required &&
-                     schema.required.indexOf(options.path[options.path.length - 1]) !== -1;
-
-
       var subForm = defaultFormDefinition(name, s, {
         path: subPath,
-        required: required || false, //TODO: validate that this is what we want.
+        required: options.required || false,
         lookup: options.lookup,
         ignore: options.ignore,
         global: options.global
