@@ -26,7 +26,10 @@ angular.module('schemaForm').directive('sfField',
             // Fetch our form.
             scope.form = sfSchema.lookup['f' + attrs.sfField];
           },
-          post: function(scope, element, attrs, sfSchema) {
+          post: function(scope, element, attrs, Ctrl) {
+            var sfSchema = Ctrl[0];
+            var formCtrl = Ctrl[1];
+            
             //Keep error prone logic from the template
             scope.showTitle = function() {
               return scope.form && scope.form.notitle !== true && scope.form.title;
