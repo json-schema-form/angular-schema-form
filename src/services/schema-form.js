@@ -521,6 +521,10 @@ angular.module('schemaForm').provider('schemaForm',
           asyncTemplates.push(obj);
         }
 
+        // After merge, we don't want the formselect indexes in the keys anymore
+        if (obj.key) {
+          obj.key = obj.key.filter(function(keypart) {return keypart.indexOf('{') != 0;});
+        }
         return obj;
       }));
     };
