@@ -463,8 +463,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
           replace: false,
           transclude: false,
           scope: true,
-          require: '?^sfSchema',
-          link: function(scope, element, attrs, sfSchema) {
+          require: ['?^sfSchema', '?^form'],
+          link: function(scope, element, attrs, Ctrl) {
+            var sfSchema = Ctrl[0];
+            var formCtrl = Ctrl[1];
 
             //The ngModelController is used in some templates and
             //is needed for error messages,
@@ -589,6 +591,19 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               );
             };
 
+            scope.fieldId = function(prependFormName, omitNumbers) {
+              if(scope.form.key){
+                var fieldKey = scope.form.key;
+                if(omitNumbers){
+                  fieldKey = fieldKey.filter(function(key){
+                    return !angular.isNumber(key);
+                  });
+                }
+                return ((prependFormName && formCtrl && formCtrl.$name)?formCtrl.$name+'-':'')+fieldKey.join('-');
+              }
+              return '';
+            };
+
             // Rebind our part of the form to the scope.
             var once = scope.$watch(attrs.form, function(form) {
               if (form) {
@@ -597,6 +612,10 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 // and https://github.com/Textalk/angular-schema-form/issues/206
                 form.ngModelOptions = form.ngModelOptions || {};
                 scope.form  = form;
+
+                // append the field-id to the htmlClass
+                if(!scope.form.htmlClass){ scope.form.htmlClass = ''; }
+                scope.form.htmlClass += (scope.form.htmlClass?' ':'')+scope.fieldId(false, true);
 
                 //ok let's replace that template!
                 //We do this manually since we need to bind ng-model properly and also
@@ -1928,9 +1947,12 @@ angular.module('schemaForm').directive('sfField',
         replace: false,
         transclude: false,
         scope: true,
-        require: '^sfSchema',
+        require: ['^sfSchema', '?^form'],
         link: {
-          pre: function(scope, element, attrs, sfSchema) {
+          pre: function(scope, element, attrs, Ctrl) {
+            var sfSchema = Ctrl[0];
+            var formCtrl = Ctrl[1];
+
             //The ngModelController is used in some templates and
             //is needed for error messages,
             scope.$on('schemaFormPropagateNgModelController', function(event, ngModel) {
@@ -1942,11 +1964,15 @@ angular.module('schemaForm').directive('sfField',
             // Fetch our form.
             scope.form = sfSchema.lookup['f' + attrs.sfField];
           },
-          post: function(scope, element, attrs, sfSchema) {
+          post: function(scope, element, attrs, Ctrl) {
+            var sfSchema = Ctrl[0];
+            var formCtrl = Ctrl[1];
+
             //Keep error prone logic from the template
             scope.showTitle = function() {
               return scope.form && scope.form.notitle !== true && scope.form.title;
             };
+
 
             scope.listToCheckboxValues = function(list) {
               var values = {};
@@ -2072,6 +2098,23 @@ angular.module('schemaForm').directive('sfField',
                 scope.options && scope.options.validationMessage
               );
             };
+
+            scope.fieldId = function(prependFormName, omitNumbers) {
+              if(scope.form.key){
+                var fieldKey = scope.form.key;
+                if(omitNumbers){
+                  fieldKey = fieldKey.filter(function(key){
+                    return !angular.isNumber(key);
+                  });
+                }
+                return ((prependFormName && formCtrl && formCtrl.$name)?formCtrl.$name+'-':'')+fieldKey.join('-');
+              }
+              return '';
+            };
+
+            // append the field-id to the htmlClass
+            if(!scope.form.htmlClass){ scope.form.htmlClass = ''; }
+            scope.form.htmlClass += (scope.form.htmlClass?' ':'')+scope.fieldId(false, true);
 
             var form = scope.form;
 

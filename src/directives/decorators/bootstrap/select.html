@@ -10,7 +10,7 @@
           class="form-control {{form.fieldHtmlClass}}"
           schema-validate="form"
           ng-options="item.value as item.name group by item.group for item in form.titleMap"
-          name="{{form.key.slice(-1)[0]}}">
+          name="{{fieldId()}}">
   </select>
   <div class="help-block" sf-message="form.description"></div>
 </div>

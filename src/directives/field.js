@@ -9,9 +9,12 @@ angular.module('schemaForm').directive('sfField',
         replace: false,
         transclude: false,
         scope: true,
-        require: '^sfSchema',
+        require: ['^sfSchema', '?^form'],
         link: {
-          pre: function(scope, element, attrs, sfSchema) {
+          pre: function(scope, element, attrs, Ctrl) {
+            var sfSchema = Ctrl[0];
+            var formCtrl = Ctrl[1];
+
             //The ngModelController is used in some templates and
             //is needed for error messages,
             scope.$on('schemaFormPropagateNgModelController', function(event, ngModel) {
@@ -153,6 +156,23 @@ angular.module('schemaForm').directive('sfField',
                 scope.options && scope.options.validationMessage
               );
             };
+
+            scope.fieldId = function(prependFormName, omitNumbers) {
+              if(scope.form.key){
+                var fieldKey = scope.form.key;
+                if(omitNumbers){
+                  fieldKey = fieldKey.filter(function(key){
+                    return !angular.isNumber(key);
+                  });
+                }
+                return ((prependFormName && formCtrl && formCtrl.$name)?formCtrl.$name+'-':'')+fieldKey.join('-');
+              }
+              return '';
+            };
+
+            // append the field-id to the htmlClass
+            if(!scope.form.htmlClass){ scope.form.htmlClass = ''; }
+            scope.form.htmlClass += (scope.form.htmlClass?' ':'')+scope.fieldId(false, true);
 
             var form = scope.form;
 
