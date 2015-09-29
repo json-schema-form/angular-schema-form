@@ -455,6 +455,10 @@ angular.module('schemaForm').provider('schemaForm',
           obj = {key: obj};
         }
 
+        if (Array.isArray(obj)) {
+          obj = {type: 'fieldset', items: obj};
+        }
+
         if (obj.key) {
           if (typeof obj.key === 'string') {
             obj.key = sfPathProvider.parse(obj.key);
