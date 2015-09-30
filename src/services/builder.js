@@ -90,12 +90,14 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
         for (var i = 0; i < transclusions.length; i++) {
           var n = transclusions[i];
 
-          // The sf-transclude attribute is not a directive, but has the name of what we're supposed to
-          // traverse.
-          var sub = args.form[n.getAttribute('sf-field-transclude')];
-          if (sub) {
-            sub = Array.isArray(sub) ? sub : [sub];
-            var childFrag = args.build(sub, args.path + '.' + sub, args.state);
+          // The sf-transclude attribute is not a directive,
+          // but has the name of what we're supposed to
+          // traverse. Default to `items`
+          var sub = n.getAttribute('sf-field-transclude') || 'items';
+          var items = args.form[sub];
+
+          if (items) {
+            var childFrag = args.build(items, args.path + '.' + sub, args.state);
             n.appendChild(childFrag);
           }
         }
