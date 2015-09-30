@@ -1,3 +1,9 @@
+v0.8.12
+-------
+ * Bugfix for `condition` builder. It had a typo that broke it.
+ * Bugfix for `transclusion` builder.
+
+
 v0.8.11
 -------
  * Bugfix for checkboxes validation in the new builder.
