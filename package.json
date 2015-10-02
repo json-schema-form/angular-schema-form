@@ -68,9 +68,7 @@
     "basePath": "/dist/",
     "files": [
       "schema-form.min.js",
-      "schema-form.js",
-      "bootstrap-decorator.min.js",
-      "bootstrap-decorator.js"
+      "schema-form.js"
     ]
   }
 }

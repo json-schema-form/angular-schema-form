@@ -333,6 +333,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
 
         // Sanity check.
         if (!f.type) {
+          console.warn('Form has no type. Skipping it.', f);
           return frag;
         }
 
@@ -406,6 +407,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
        * Builds a form from a canonical form definition
        */
       build: function(form, decorator, slots, lookup) {
+        console.log(form)
         return build(form, decorator, function(form, field) {
           if (form.type === 'template') {
             return form.template;
@@ -1079,14 +1081,16 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
 angular.module('schemaForm').provider('schemaForm',
 ['sfPathProvider', function(sfPathProvider) {
   var stripNullType = function(type) {
-    if (Array.isArray(type) && type.length == 2) {
-      if (type[0] === 'null')
-        return type[1];
-      if (type[1] === 'null')
-        return type[0];
+    if (Array.isArray(type) && type.length > 1) {
+      var filtered = type.filter(function (type) {
+        return type !== 'null'
+      });
+      if (filtered.length == 1)
+        return filtered[0];
+      return filtered;
     }
     return type;
-  }
+  };
 
   //Creates an default titleMap list from an enum, i.e. a list of strings.
   var enumToTitleMap = function(enm) {
@@ -1116,8 +1120,71 @@ angular.module('schemaForm').provider('schemaForm',
     return titleMap;
   };
 
+  var extendSchemas = function(obj1, obj2) {
+      obj1 = angular.extend({}, obj1);
+      obj2 = angular.extend({}, obj2);
+
+      var self = this;
+      var extended = {};
+      angular.forEach(obj1, function(val,prop) {
+        // If this key is also defined in obj2, merge them
+        if(typeof obj2[prop] !== 'undefined') {
+          // Required arrays should be unioned together
+          if(prop === 'required' && typeof val === 'object' && Array.isArray(val)) {
+            // Union arrays and unique
+            extended.required = val.concat(obj2[prop]).reduce(function(p, c) {
+              if (p.indexOf(c) < 0) p.push(c);
+              return p;
+            }, []);
+          }
+          // Type should be intersected and is either an array or string
+          else if(prop === 'type' && (typeof val === 'string' || Array.isArray(val))) {
+            // Make sure we're dealing with arrays
+            if(typeof val === 'string') val = [val];
+            if(typeof obj2.type === 'string') obj2.type = [obj2.type];
+
+
+            extended.type = val.filter(function(n) {
+              return obj2.type.indexOf(n) !== -1;
+            });
+
+            // If there's only 1 type, use a string instead of array
+            if(extended.type.length === 1) {
+              extended.type = extended.type[0];
+            }
+          }
+          // All other arrays should be intersected (enum, etc.)
+          else if(typeof val === 'object' && Array.isArray(val)){
+            extended[prop] = val.filter(function(n) {
+              return obj2[prop].indexOf(n) !== -1;
+            });
+          }
+          // Objects should be recursively merged
+          else if(typeof val === 'object' && val !== null) {
+            extended[prop] = extendSchemas(val, obj2[prop]);
+          }
+          // Otherwise, use the first value
+          else {
+            extended[prop] = val;
+          }
+        }
+        // Otherwise, just use the one in obj1
+        else {
+          extended[prop] = val;
+        }
+      });
+      // Properties in obj2 that aren't in obj1
+      angular.forEach(obj2, function(val, prop) {
+        if(typeof obj1[prop] === 'undefined') {
+          extended[prop] = val;
+        }
+      });
+
+      return extended;
+    };
+
   var defaultFormDefinition = function(name, schema, options) {
-    var rules = defaults[stripNullType(schema.type)];
+    var rules = defaults['any'].concat(defaults[stripNullType(schema.type)]);
     if (rules) {
       var def;
       for (var i = 0; i < rules.length; i++) {
@@ -1301,9 +1368,75 @@ angular.module('schemaForm').provider('schemaForm',
 
   };
 
+  var formselect = function(name, schema, options) {
+    var types = stripNullType(schema.type);
+    if (!(schema.oneOf || schema.anyOf || angular.isArray(types))) { return; }
+    var f   = stdFormObj(name, schema, options);
+    f.type  = 'formselect';
+    f.key   = options.path;
+    var schemas = [];
+    // TODO: What if there are more than one of these keys in the same schema?
+    if (angular.isArray(types)) {
+      angular.forEach(types, function(type) {
+        schemas.push(extendSchemas({type: type}, schema));
+      });
+    } else {
+      angular.forEach(schema.anyOf || schema.oneOf, function(value) {
+        var extended = extendSchemas(value, schema);
+        delete extended.oneOf;
+        delete extended.anyOf;
+        schemas.push(extended);
+      });
+    }
+
+    f.titleMap = [];
+    f.items = [];
+    angular.forEach(schemas, function(s, index) {
+      var subPath = options.path.slice();
+      subPath.push('{' + index + '}');
+
+      f.titleMap.push({
+        name: s.title || f.title + ' ' + index,
+        value: index
+      });
+
+      var required = schema.required &&
+                     schema.required.indexOf(options.path[options.path.length - 1]) !== -1;
+
+
+      var subForm = defaultFormDefinition(name, s, {
+        path: subPath,
+        required: required || false, //TODO: validate that this is what we want.
+        lookup: options.lookup,
+        ignore: options.ignore,
+        global: options.global
+      });
+
+      // FIXME: I'm not sure if the title should be on top of the select or not /d
+      subForm.notitle = true;
+      f.items.push(subForm);
+    });
+
+    options.lookup[sfPathProvider.stringify(options.path)] = f;
+    return f;
+  };
+
+  var allof = function(name, schema, options) {
+    if (schema.allOf) {
+      var extended = schema;
+      var allOf = schema.allOf;
+      delete schema.allOf;
+      angular.forEach(allOf, function(s) {
+        extended = extendSchemas(s, extended);
+      });
+      return defaultFormDefinition(name, extended, options);
+    }
+  };
+
   //First sorted by schema type then a list.
   //Order has importance. First handler returning an form snippet will be used.
   var defaults = {
+    any:     [allof, formselect],
     string:  [select, text],
     object:  [fieldset],
     number:  [number],
@@ -1459,7 +1592,7 @@ angular.module('schemaForm').provider('schemaForm',
         if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
           obj.schema['default'] = false;
         }
-        
+
         // Special case: template type with tempplateUrl that's needs to be loaded before rendering
         // TODO: this is not a clean solution. Maybe something cleaner can be made when $ref support
         // is introduced since we need to go async then anyway
@@ -1514,7 +1647,6 @@ angular.module('schemaForm').provider('schemaForm',
       path = path || [];
 
       var traverse = function(schema, fn, path) {
-        fn(schema, path);
         angular.forEach(schema.properties, function(prop, name) {
           var currentPath = path.slice();
           currentPath.push(name);
@@ -1526,6 +1658,24 @@ angular.module('schemaForm').provider('schemaForm',
           var arrPath = path.slice(); arrPath.push('');
           traverse(schema.items, fn, arrPath);
         }
+        if (schema.dependencies) {
+          angular.forEach(schema.dependencies, function(value, key) {
+            if(typeof value === "object" && !(Array.isArray(value))) {
+              traverse(value, fn, path);
+            }
+          });
+        }
+        if (schema.not) {
+          traverse(schema.not, fn, path)
+        }
+        angular.forEach(['allOf', 'oneOf', 'anyOf'], function(prop) {
+          if (schema[prop]) {
+            angular.forEach(schema[prop], function(value) {
+              traverse(value, fn, path);
+            })
+          }
+        });
+        fn(schema, path);
       };
 
       traverse(schema, fn, path || []);
@@ -2162,6 +2312,63 @@ angular.module('schemaForm').directive('sfField',
       };
     }
   ]);
+
+/**
+ * Directive that handles the model arrays
+ */
+angular.module('schemaForm').directive('sfFormSelect', ['sfSelect', 'schemaForm', 'sfValidator', 'sfPath',
+  function(sfSelect, schemaForm, sfValidator, sfPath) {
+
+    return {
+      restrict: 'A',
+      scope: false,
+      link: function(scope, element, attrs) {
+        scope.selectedForm = {value: 0};
+        // Keeps the model data for each form
+        var formData = [];
+        // TODO: Watch the model value and pick a form to match it
+        var once = scope.$parent.$watch(attrs.sfFormSelect, function(form) {
+          if (!form) {
+            return;
+          }
+          once();
+
+          var model = sfSelect(form.key, scope.model);
+
+          // Watch the model value and change to a form that matches it
+          var key = sfPath.normalize(form.key);
+          scope.$parent.$watch('model' + key, function(value) {
+            model = scope.modelData = value;
+            // If the selected form still validates, make sure we don't change it
+            if (angular.isNumber(scope.selectedForm.value)) {
+              var r = sfValidator.validate(form.items[scope.selectedForm.value], model);
+              if (r.valid) {
+                return;
+              }
+            }
+            //Search for a form that is valid for the given model data
+            for (var i = 0; i < form.items.length; i++) {
+              var result = sfValidator.validate(form.items[i], model);
+              if (result.valid) {
+                scope.selectedForm.value = i;
+                break;
+              }
+            }
+          });
+
+          // Restore data associated with selected form
+          scope.$watch('selectedForm.value', function(selected, oldForm) {
+            formData[oldForm] = model;
+            if (formData[selected]) {
+              sfSelect(form.key, scope.model, formData[selected]);
+            }
+            // TODO: Fill defaults if we don't have data for this form
+          });
+        });
+      }
+    };
+  }
+]);
 
 angular.module('schemaForm').directive('sfMessage',
 ['$injector', 'sfErrorMessage', function($injector, sfErrorMessage) {
