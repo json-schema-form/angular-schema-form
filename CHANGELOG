@@ -1,3 +1,17 @@
+v0.8.12
+-------
+ * Bugfix for `condition` builder. It had a typo that broke it.
+ * Bugfix for `transclusion` builder.
+
+
+v0.8.11
+-------
+ * Bugfix for checkboxes validation in the new builder.
+
+v0.8.10
+-------
+ * Bugfix for checkboxes when model array is undefined.
+
 v0.8.9
 ------
  * Bugfix for radios and radios-inline. Validation should now work.

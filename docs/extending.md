@@ -190,9 +190,131 @@ So [make a bower package](http://bower.io/docs/creating-packages/), add the keyw
 
 The builders
 ------------
-TODO: API docs for each builder
+A collection of useful builders that cover most cases are in the `sfBuilder` service and is accessable 
+both from the provider and the service on the property `builders`. There is also a list of "standard" 
+builders, when in doubt use those. 
+
+```js
+angular.module('myMod').config(function(sfBuildersProvider) {
+
+  // Standard builders
+  sfBuildersProvider.stdBuilders;
+  
+  // All builders 
+  sfBuildersProvider.builder.sfField;
+  sfBuildersProvider.builder.condition;
+   sfBuildersProvider.builder.ngModel;
+  sfBuildersProvider.builder.ngModelOptions;
+  sfBuildersProvider.builder.simpleTransclusion;
+  sfBuildersProvider.builder.transclusion;
+  sfBuildersProvider.builder.array;
+ 
+});
+```
+
+Currently the standard builders are:
+```js
+var stdBuilders = [
+  builders.sfField,
+  builders.ngModel,
+  builders.ngModelOptions,
+  builders.condition
+];
+```
+
+
+### builders.sfField
+The `sfField` builder adds the `sf-field="..."` directive to *the first child element* in the template, 
+giving it a correct value. The value is an id number that identifies that specific form object.
+
+The `sf-field` directive exports the form definition object as `form` on scope and as a lot of useful functions. 
+
+As a rule of thumb you always want this builder. 
+
+### builders.condition
+The `condition` builder checks the form definition for the option `condition`. If it's present it adds a 
+`ng-if` to all top level elements in the template.
+
+You usually want this as well.
+
+### builder.ngModel 
+The `ngModel` builder is maybe the most important builder. It makes sure you get a proper binding to
+your model value. 
+
+The `ngModel` builder queries the DOM of the template for all elements that have the attribute `sf-field-model`. Your template may have several of them. `sf-field-model` is *not* a directive, 
+but depending on it's value the `ngModel` builder will take three different actions.
+
+
+#### sf-field-model 
+Just `sf-field-model` or `sf-field-model=""` tells the builder to add a `ng-model` directive to this element. 
+This is a common use case.
+
+Ex: 
+DOM before `ngModel` builder:
+```html
+<div>
+  <input sf-field-model type="text">
+</div>
+```
+DOM after `ngModel` builder:
+```html
+<div>
+  <input sf-field-model ng-model="model['name']" type="text">
+</div>
+```
+
+#### sf-field-model="<attribute name>"
+Given a value the `ngModel` builder will treat that value as a *attribute name* and instead of slapping 
+on a `ng-model` set the specified attributes value. It sets it to the same value as the `ng-model` would have gotten.
+
+Ex: 
+DOM before `ngModel` builder:
+```html
+<div sf-field-model="my-directive">
+  <input sf-field-model type="text">
+</div>
+```
+DOM after `ngModel` builder:
+```html
+<div my-directive="model['name']">
+  <input sf-field-model ng-model="model['name']" type="text">
+</div>
+```
+
+#### sf-field-model="replaceAll"
+With the special value *replaceAll* the `ngModel` builder will instead loop over every attribute on the
+element and do a string replacement of `"$$value$$"` with the proper model value. 
+
+Ex: 
+DOM before `ngModel` builder:
+```html
+<div>
+  <input sf-field-model="replaceAll" 
+         ng-model="$$value$$"
+         ng-class="{'large': $$value$$.length > 10}"
+         type="text">
+</div>
+```
+DOM after `ngModel` builder:
+```html
+<div>
+  <input sf-field-model="replaceAll" 
+         ng-model="model['name']"
+         ng-class="{'large': model[name].length > 10}"
+         type="text">
+</div>
+```
+
+### builders.ngModelOptions
+If the form definition has a `ngModelOptions` option specified this builder will slap on a `ng-model-options`
+attribute to *the first child element* in the template. 
+
+
+### builder.simpleTransclusion
+The `simpleTransclusion` builder will recurse and build form items, useful for fieldsets etc. This builder
+is simple because it only appends children to the first child element and only checks `form.items`.
 
 
 Useful directives
 -----------------
-TODO: more in depth about schema-validate and sf-messages
+TODO: more in depth about schema-validate, sf-messages and sf-field
