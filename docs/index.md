@@ -99,7 +99,7 @@ Example with custom submit buttons:
 Handling Submit
 ---------------
 Schema Form does not care what you do with your data, to handle form submit
-the recomended way is to use the `ng-submit` directive. It's also recomended
+the recommended way is to use the `ng-submit` directive. It's also recommended
 to use a `name` attribute on your form so you can access the
 [FormController](https://code.angularjs.org/1.3.0-beta.15/docs/api/ng/type/form.FormController)
 and check if the form is valid or not.
@@ -161,7 +161,7 @@ Updating Form
 -------------
 
 Schema Form watches `sf-form` and `sf-schema` and will redraw the form if one or both changes, but
-only if they change completly, i.e. not the same object and/or form instance. For performance
+only if they change completely, i.e. not the same object and/or form instance. For performance
 reasons we have opted to not watch schema and form deeply. So if you have updated a part of the
 schema or the form definition you can trigger a redraw by issuing the event `schemaFormRedraw`.
 
@@ -181,8 +181,8 @@ function Ctrl($scope) {
 
 Global Options
 --------------
-Schema Form also have two options you can set globally via the `sf-options`
-attribute which should be placed along side `sf-schema`.
+Schema Form also has two options you can set globally via the `sf-options`
+attribute which should be placed alongside `sf-schema`.
 
 `sf-options` takes an object with the following possible attributes.
 
@@ -322,7 +322,7 @@ Custom Validation
 Sometimes the validation you want is tricky to express in a JSON Schema
 or Schema Form does not support it (yet), like `anyOf` and `oneOf`.
 
-Other times you really need to ask the backend, maybe to check that the a username is not already
+Other times you really need to ask the backend, maybe to check that a username is not already
 taken or some other constraint that only the backend can know about.
 
 ### Inject errors into form aka backend validation
@@ -619,7 +619,7 @@ Standard Options
 General options most field types can handle:
 ```javascript
 {
-  key: "address.street",      // The dot notatin to the attribute on the model
+  key: "address.street",      // The dot notation to the attribute on the model
   type: "text",               // Type of field
   title: "Street",            // Title of field, taken from schema if available
   notitle: false,             // Set to true to hide title
@@ -702,7 +702,7 @@ Useful things in the decorators scope are
 Angular 1.3 introduces a new directive, *ngModelOptions*, which let's you set
 a couple of options that change how the directive *ng-model* works. Schema Form
 uses *ng-model* to bind against fields and therefore changing theses options
-might be usefule for you.
+might be useful for you.
 
 One thing you can do is to change the update behavior of *ng-model*, this is how
 you get form fields that validate on blur instead of directly on change.
@@ -719,7 +719,7 @@ See [Global Options](#global-options) for an example how you set entire form
 to validate on blur.
 
 ### copyValueTo
-This option has a very specific use case. Imagine you have the same option in several places, but you want them to be controlled from just one field. You specify what keys the value should be copied to, and the *viewValue* will be copied to these keys on the model. **Note: changing the model directly will not copy the value, it's intended for copying user input**. The recieving fields can be shown, but the intent for them is to be hidden.
+This option has a very specific use case. Imagine you have the same option in several places, but you want them to be controlled from just one field. You specify what keys the value should be copied to, and the *viewValue* will be copied to these keys on the model. **Note: changing the model directly will not copy the value, it's intended for copying user input**. The receiving fields can be shown, but the intent for them is to be hidden.
 
 Ex.
 ```javascript
@@ -773,7 +773,7 @@ function FormCtrl($scope) {
   ]
 }
 ```
-Note that angulars two-way binding automatically will update the conditional field, no need for
+Note that angulars two-way binding will automatically update the conditional field, no need for
 event handlers and such. The condition need not reference a model value it could be anything on
 scope.
 
@@ -871,7 +871,7 @@ of html.
 
 ### fieldset and section
 
-*fieldset* and *section* doesn't need a key. You can create generic groups with them.
+*fieldset* and *section* don't need a key. You can create generic groups with them.
 They do need a list of ```items``` to have as children.
 ```javascript
 {
@@ -892,7 +892,7 @@ In the case of *checkboxes* the names of the titleMap can be HTML.
 
 A `titleMap` can be specified as either an object (same as in JSON Form), where
 the propery is the value and the value of that property is the name, or as
-a list of name-value objects. The latter is used internally and is the recomended
+a list of name-value objects. The latter is used internally and is the recommended
 format to use. Note that when defining a `titleMap` as an object the value is
 restricted to strings since property names of objects always is a string.
 
@@ -961,7 +961,7 @@ We can change this with ```style``` attribute:
 
 ### button and submit
 
-*button* and *submit* can have a ```onClick``` attribute that either a function *or* a
+*button* and *submit* can have a ```onClick``` attribute that's either a function *or* a
 string with an angular expression, as with ng-click. The expression is evaluated in the parent scope of
 the ```sf-schema``` directive.
 
