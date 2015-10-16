@@ -13,6 +13,9 @@
       <sf-decorator ng-init="arrayIndex = $index" form="copyWithIndex($index)"></sf-decorator>
     </li>
   </ol>
+  <div ng-class="{'has-error': form.disableErrorState !== true && hasError(), 'has-success': form.disableSuccessState !== true && hasSuccess(), 'has-feedback': form.feedback !== false }">
+    <div class="help-block" sf-message="form.description"></div>
+  </div>
   <div class="clearfix" style="padding: 15px;">
     <button ng-hide="form.readonly || form.add === null"
             ng-click="appendToArray()"
@@ -22,7 +25,4 @@
       {{ form.add || 'Add'}}
     </button>
   </div>
-  <div class="help-block"
-       ng-show="(hasError() && errorMessage(schemaError())) || form.description"
-       ng-bind-html="(hasError() && errorMessage(schemaError())) || form.description"></div>
 </div>
