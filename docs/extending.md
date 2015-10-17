@@ -201,13 +201,13 @@ angular.module('myMod').config(function(sfBuildersProvider) {
   sfBuildersProvider.stdBuilders;
   
   // All builders 
-  sfBuildersProvider.builder.sfField;
-  sfBuildersProvider.builder.condition;
-   sfBuildersProvider.builder.ngModel;
-  sfBuildersProvider.builder.ngModelOptions;
-  sfBuildersProvider.builder.simpleTransclusion;
-  sfBuildersProvider.builder.transclusion;
-  sfBuildersProvider.builder.array;
+  sfBuildersProvider.builders.sfField;
+  sfBuildersProvider.builders.condition;
+   sfBuildersProvider.builders.ngModel;
+  sfBuildersProvider.builders.ngModelOptions;
+  sfBuildersProvider.builders.simpleTransclusion;
+  sfBuildersProvider.builders.transclusion;
+  sfBuildersProvider.builders.array;
  
 });
 ```
