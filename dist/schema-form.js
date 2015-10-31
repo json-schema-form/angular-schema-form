@@ -456,6 +456,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               event.stopPropagation();
               event.preventDefault();
               scope.ngModel = ngModel;
+              scope.$emit('schemaFormPropagateScope', scope);
             });
 
             //Keep error prone logic from the template
@@ -1652,7 +1653,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
 
           }
 
-          // We ceate copies of the form on demand, caching them for
+          // We create copies of the form on demand, caching them for
           // later requests
           scope.copyWithIndex = function(index) {
             if (!formDefCache[index]) {

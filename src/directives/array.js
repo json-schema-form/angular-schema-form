@@ -83,7 +83,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
 
           }
 
-          // We ceate copies of the form on demand, caching them for
+          // We create copies of the form on demand, caching them for
           // later requests
           scope.copyWithIndex = function(index) {
             if (!formDefCache[index]) {

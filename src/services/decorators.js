@@ -40,6 +40,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               event.stopPropagation();
               event.preventDefault();
               scope.ngModel = ngModel;
+              scope.$emit('schemaFormPropagateScope', scope);
             });
 
             //Keep error prone logic from the template
