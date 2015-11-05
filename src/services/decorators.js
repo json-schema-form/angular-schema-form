@@ -159,7 +159,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             // Rebind our part of the form to the scope.
-            var once = scope.$watch(attrs.form, function(form) {
+            var once = scope.$watch(attrs.form, bindForm);
+
+            function bindForm(form) {
               if (form) {
                 // Workaround for 'updateOn' error from ngModelOptions
                 // see https://github.com/Textalk/angular-schema-form/issues/255
@@ -179,17 +181,24 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 } else {
                   var url = form.type === 'template' ? form.templateUrl : templateUrl(name, form);
                   templatePromise = $http.get(url, {cache: $templateCache}).then(function(res) {
-                                      return res.data;
-                                    });
+                    return res.data;
+                  });
                 }
 
                 templatePromise.then(function(template) {
+                  form.redraw = form.redraw || function() {
+                    processTemplate(template);
+                  };
+                  form.redraw(template);
+                });
+
+                function processTemplate(template) {
                   if (form.key) {
                     var key = form.key ?
-                              sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
+                        sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
                     template = template.replace(
-                      /\$\$value\$\$/g,
-                      'model' + (key[0] !== '[' ? '.' : '') + key
+                        /\$\$value\$\$/g,
+                        'model' + (key[0] !== '[' ? '.' : '') + key
                     );
                   }
                   element.html(template);
@@ -206,55 +215,55 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                     angular.forEach(element.children(), function(child) {
                       var ngIf = child.getAttribute('ng-if');
                       child.setAttribute(
-                        'ng-if',
-                        ngIf ?
-                        '(' + ngIf +
-                        ') || (' + evalExpr +')'
-                        : evalExpr
+                          'ng-if',
+                          ngIf ?
+                          '(' + ngIf +
+                          ') || (' + evalExpr +')'
+                              : evalExpr
                       );
                     });
                   }
                   $compile(element.contents())(scope);
-                });
+                }
 
                 // Where there is a key there is probably a ngModel
                 if (form.key) {
                   // It looks better with dot notation.
                   scope.$on(
-                    'schemaForm.error.' + form.key.join('.'),
-                    function(event, error, validationMessage, validity) {
-                      if (validationMessage === true || validationMessage === false) {
-                        validity = validationMessage;
-                        validationMessage = undefined;
-                      }
-
-                      if (scope.ngModel && error) {
-                        if (scope.ngModel.$setDirty) {
-                          scope.ngModel.$setDirty();
-                        } else {
-                          // FIXME: Check that this actually works on 1.2
-                          scope.ngModel.$dirty = true;
-                          scope.ngModel.$pristine = false;
+                      'schemaForm.error.' + form.key.join('.'),
+                      function(event, error, validationMessage, validity) {
+                        if (validationMessage === true || validationMessage === false) {
+                          validity = validationMessage;
+                          validationMessage = undefined;
                         }
 
-                        // Set the new validation message if one is supplied
-                        // Does not work when validationMessage is just a string.
-                        if (validationMessage) {
-                          if (!form.validationMessage) {
-                            form.validationMessage = {};
+                        if (scope.ngModel && error) {
+                          if (scope.ngModel.$setDirty) {
+                            scope.ngModel.$setDirty();
+                          } else {
+                            // FIXME: Check that this actually works on 1.2
+                            scope.ngModel.$dirty = true;
+                            scope.ngModel.$pristine = false;
                           }
-                          form.validationMessage[error] = validationMessage;
-                        }
 
-                        scope.ngModel.$setValidity(error, validity === true);
+                          // Set the new validation message if one is supplied
+                          // Does not work when validationMessage is just a string.
+                          if (validationMessage) {
+                            if (!form.validationMessage) {
+                              form.validationMessage = {};
+                            }
+                            form.validationMessage[error] = validationMessage;
+                          }
 
-                        if (validity === true) {
-                          // Setting or removing a validity can change the field to believe its valid
-                          // but its not. So lets trigger its validation as well.
-                          scope.$broadcast('schemaFormValidate');
+                          scope.ngModel.$setValidity(error, validity === true);
+
+                          if (validity === true) {
+                            // Setting or removing a validity can change the field to believe its valid
+                            // but its not. So lets trigger its validation as well.
+                            scope.$broadcast('schemaFormValidate');
+                          }
                         }
-                      }
-                  });
+                      });
 
                   // Clean up the model when the corresponding form field is $destroy-ed.
                   // Default behavior can be supplied as a globalOption, and behavior can be overridden in the form definition.
@@ -262,7 +271,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                     // If the entire schema form is destroyed we don't touch the model
                     if (!scope.externalDestructionInProgress) {
                       var destroyStrategy = form.destroyStrategy ||
-                                            (scope.options && scope.options.destroyStrategy) || 'remove';
+                          (scope.options && scope.options.destroyStrategy) || 'remove';
                       // No key no model, and we might have strategy 'retain'
                       if (form.key && destroyStrategy !== 'retain') {
 
@@ -297,9 +306,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   });
                 }
 
-                once();
+                once && once();
               }
-            });
+            }
           }
         };
       }
