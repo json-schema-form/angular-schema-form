@@ -186,45 +186,42 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                 }
 
                 templatePromise.then(function(template) {
-                  form.redraw = form.redraw || function() {
-                    processTemplate(template);
-                  };
-                  form.redraw(template);
-                });
-
-                function processTemplate(template) {
-                  if (form.key) {
-                    var key = form.key ?
-                        sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
-                    template = template.replace(
-                        /\$\$value\$\$/g,
-                        'model' + (key[0] !== '[' ? '.' : '') + key
-                    );
-                  }
-                  element.html(template);
-
-                  // Do we have a condition? Then we slap on an ng-if on all children,
-                  // but be nice to existing ng-if.
-                  if (form.condition) {
-
-                    var evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex})';
+                  form.redraw = function() {
                     if (form.key) {
-                      evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "modelValue": model' + sfPath.stringify(form.key) + '})';
-                    }
-
-                    angular.forEach(element.children(), function(child) {
-                      var ngIf = child.getAttribute('ng-if');
-                      child.setAttribute(
-                          'ng-if',
-                          ngIf ?
-                          '(' + ngIf +
-                          ') || (' + evalExpr +')'
-                              : evalExpr
+                      var key = form.key ?
+                          sfPathProvider.stringify(form.key).replace(/"/g, '&quot;') : '';
+                      template = template.replace(
+                          /\$\$value\$\$/g,
+                          'model' + (key[0] !== '[' ? '.' : '') + key
                       );
-                    });
-                  }
-                  $compile(element.contents())(scope);
-                }
+                    }
+                    element.html(template);
+
+                    // Do we have a condition? Then we slap on an ng-if on all children,
+                    // but be nice to existing ng-if.
+                    if (form.condition) {
+
+                      var evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex})';
+                      if (form.key) {
+                        evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "modelValue": model' + sfPath.stringify(form.key) + '})';
+                      }
+
+                      angular.forEach(element.children(), function(child) {
+                        var ngIf = child.getAttribute('ng-if');
+                        child.setAttribute(
+                            'ng-if',
+                            ngIf ?
+                            '(' + ngIf +
+                            ') || (' + evalExpr +')'
+                                : evalExpr
+                        );
+                      });
+                    }
+                    $compile(element.contents())(scope);
+                  };
+
+                  form.redraw();
+                });
 
                 // Where there is a key there is probably a ngModel
                 if (form.key) {
@@ -306,7 +303,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   });
                 }
 
-                once && once();
+                once();
               }
             }
           }
