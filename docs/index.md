@@ -941,7 +941,7 @@ element to the select.
 {
   type: "actions",
   items: [
-    { type: 'submit', title: 'Ok' }
+    { type: 'submit', title: 'Ok' },
     { type: 'button', title: 'Cancel', onClick: "cancel()" }
   ]
 }
@@ -953,7 +953,7 @@ We can change this with ```style``` attribute:
 {
   type: "actions",
   items: [
-    { type: 'submit', style: 'btn-success', title: 'Ok' }
+    { type: 'submit', style: 'btn-success', title: 'Ok' },
     { type: 'button', style: 'btn-info', title: 'Cancel', onClick: "cancel()" }
   ]
 }
@@ -967,7 +967,7 @@ the ```sf-schema``` directive.
 
 ```javascript
 [
-  { type: 'submit', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'submit', title: 'Ok', onClick: function(){ ...  } },
   { type: 'button', title: 'Cancel', onClick: "cancel()" }
 [
 ```
@@ -976,7 +976,7 @@ The submit and other buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 [
-  { type: 'submit', style: 'btn-warning', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'submit', style: 'btn-warning', title: 'Ok', onClick: function(){ ...  } },
   { type: 'button', style: 'btn-danger', title: 'Cancel', onClick: "cancel()" }
 [
 ```
