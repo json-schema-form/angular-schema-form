@@ -37,7 +37,7 @@ angular.module('schemaForm').factory('sfSelect', ['sfPath', function(sfPath) {
     }
 
     if (typeof valueToSet !== 'undefined' &&
-        (typeof obj[parts[0]] === 'undefined' || obj[parts[0] === null])) {
+        (typeof obj[parts[0]] === 'undefined' || obj[parts[0]] === null)) {
        // We need to look ahead to check if array is appropriate
       obj[parts[0]] = parts.length > 2 && numRe.test(parts[1]) ? [] : {};
     }
