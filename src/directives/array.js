@@ -54,7 +54,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
 
           // Since ng-model happily creates objects in a deep path when setting a
           // a value but not arrays we need to create the array.
-          if (angular.isUndefined(list)) {
+          if (angular.isUndefined(list) || list === null) {
             list = [];
             sfSelect(form.key, scope.model, list);
           }
