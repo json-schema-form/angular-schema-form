@@ -44,7 +44,7 @@ Basic Usage
 -----------
 
 First, expose your schema, form, and model to the $scope.
-Don't forget to load the ``schemaForm` module.
+Don't forget to load the `schemaForm` module.
 
 ```javascript
 angular.module('myModule', ['schemaForm'])
@@ -187,13 +187,15 @@ attribute which should be placed along side `sf-schema`.
 `sf-options` takes an object with the following possible attributes.
 
 
-| Attribute     |                         |
-|:--------------|:------------------------|
-| supressPropertyTitles | by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
-| formDefaults | an object that will be used as a default for all form definitions |
-| validationMessage | an object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
-| setSchemaDefaults | boolean, set to false an no defaults from the schema will be set on the model. |
-| destroyStrategy | the default strategy to use for cleaning the model when a form element is removed. see [destroyStrategy](#destroyStrategy) below |
+| Attribute     |  Type |                    |
+|:--------------|:------|:-------------------|
+| supressPropertyTitles | boolean  |by default schema form uses the property name in the schema as a title if none is specified, set this to true to disable that behavior |
+| formDefaults | object | an object that will be used as a default for all form definitions |
+| validationMessage | object or function | Object or a function that will be used as default validation message for all fields. See [Validation Messages](#validation-messages) for details. |
+| setSchemaDefaults | boolean | Should schema defaults be set on model. |
+| destroyStrategy | string | the default strategy to use for cleaning the model when a form element is removed. see [destroyStrategy](#destroyStrategy) below |
+| pristine  | Object `{errors ,success}` | Sets if errors and success states should be visible when form field are `$pristine`. Default is `{errors: true, success: true}` |
+| validateOnRender | boolean | Should form be validated on initial render? Default `false` |
 
 *formDefaults* is mostly useful for setting global [ngModelOptions](#ngmodeloptions)
 i.e. changing the entire form to validate on blur.
@@ -361,7 +363,7 @@ scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken','The username is
 This will invalidate the field and therefore the form and show the error message where it normally
 pops up, under the field for instance.
 
-There is a catch though, schema form can't now when this field is valid s you have to tell it by
+There is a catch though, schema form can't know when this field is valid so you have to tell it by
 sending an event again, this time switch out the validation message for validity of the field,
 i.e. `true`.
 
@@ -417,7 +419,7 @@ error code, so to specify a error message you also need to use.
 [
   {
     key: 'name',
-    validationMessages: {
+    validationMessage: {
       'noBob': 'Bob is not OK! You here me?'
     },
     $validators: {
@@ -441,7 +443,7 @@ a promise that resolves or rejects.
 [
   {
     key: 'name',
-    validationMessages: {
+    validationMessage: {
       'noBob': 'Bob is not OK! You here me?'
     },
     $asyncValidators: {
@@ -467,7 +469,7 @@ Form defaults in schema
 Its recommended to split presentation and validation into a form definition and a json schema. But
 if you for some reason can't do this, but *do* have the power to change the schema, you can supply form
 default values within the schema using the custom attribute `x-schema-form`. `x-schema-form` should
-be a form object and acts as form definition defaults for that field.  
+be a form object and acts as form definition defaults for that field.
 
 Example schema.
 ```js

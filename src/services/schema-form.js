@@ -13,7 +13,7 @@ angular.module('schemaForm').provider('schemaForm',
         return type[0];
     }
     return type;
-  };
+  }
 
   //Creates an default titleMap list from an enum, i.e. a list of strings.
   var enumToTitleMap = function(enm) {
@@ -78,7 +78,7 @@ angular.module('schemaForm').provider('schemaForm',
     if (schema.description) { f.description = schema.description; }
     if (options.required === true || schema.required === true) { f.required = true; }
     if (schema.maxLength) { f.maxlength = schema.maxLength; }
-    if (schema.minLength) { f.minlength = schema.maxLength; }
+    if (schema.minLength) { f.minlength = schema.minLength; }
     if (schema.readOnly || schema.readonly) { f.readonly  = true; }
     if (schema.minimum) { f.minimum = schema.minimum + (schema.exclusiveMinimum ? 1 : 0); }
     if (schema.maximum) { f.maximum = schema.maximum - (schema.exclusiveMaximum ? 1 : 0); }
@@ -146,7 +146,6 @@ angular.module('schemaForm').provider('schemaForm',
       if (!f.titleMap) {
         f.titleMap = enumToTitleMap(schema['enum']);
       }
-      f.trackBy = 'value';
       options.lookup[sfPathProvider.stringify(options.path)] = f;
       return f;
     }
@@ -301,7 +300,7 @@ angular.module('schemaForm').provider('schemaForm',
 
     var service = {};
 
-    service.merge = function(schema, form, ignore, options, readonly) {
+    service.merge = function(schema, form, ignore, options, readonly, asyncTemplates) {
       form  = form || ['*'];
       options = options || {};
 
@@ -340,10 +339,6 @@ angular.module('schemaForm').provider('schemaForm',
           obj.titleMap = canonicalTitleMap(obj.titleMap);
         }
 
-        if(obj.type === 'select') {
-          obj.trackBy = obj.trackBy || 'value';
-        }
-
         //
         if (obj.itemForm) {
           obj.items = [];
@@ -376,13 +371,13 @@ angular.module('schemaForm').provider('schemaForm',
 
         //if it's a type with items, merge 'em!
         if (obj.items) {
-          obj.items = service.merge(schema, obj.items, ignore, options, obj.readonly);
+          obj.items = service.merge(schema, obj.items, ignore, options, obj.readonly, asyncTemplates);
         }
 
         //if its has tabs, merge them also!
         if (obj.tabs) {
           angular.forEach(obj.tabs, function(tab) {
-            tab.items = service.merge(schema, tab.items, ignore, options, obj.readonly);
+            tab.items = service.merge(schema, tab.items, ignore, options, obj.readonly, asyncTemplates);
           });
         }
 
@@ -390,6 +385,13 @@ angular.module('schemaForm').provider('schemaForm',
         // Since have to ternary state we need a default
         if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
           obj.schema['default'] = false;
+        }
+        
+        // Special case: template type with tempplateUrl that's needs to be loaded before rendering
+        // TODO: this is not a clean solution. Maybe something cleaner can be made when $ref support
+        // is introduced since we need to go async then anyway
+        if (asyncTemplates && obj.type === 'template' && !obj.template && obj.templateUrl) {
+          asyncTemplates.push(obj);
         }
 
         return obj;
