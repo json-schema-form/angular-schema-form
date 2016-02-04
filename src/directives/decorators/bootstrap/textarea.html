@@ -10,7 +10,7 @@
             ng-model="$$value$$"
             ng-model-options="form.ngModelOptions"
             schema-validate="form"
-            name="{{::form.key.join('.')}}"></textarea>
+            name="{{form.key.join('.')}}"></textarea>
 
   <div ng-if="::(form.fieldAddonLeft || form.fieldAddonRight)"
        ng-class="::{'input-group': (form.fieldAddonLeft || form.fieldAddonRight)}">
@@ -25,11 +25,11 @@
               ng-model="$$value$$"
               ng-model-options="form.ngModelOptions"
               schema-validate="form"
-              name="{{::form.key.join('.')}}"></textarea>
+              name="{{form.key.join('.')}}"></textarea>
     <span ng-if="::form.fieldAddonRight"
           class="input-group-addon"
           ng-bind-html="form.fieldAddonRight"></span>
   </div>
 
-  <span class="help-block" sf-message="::form.description"></span>
+  <span class="help-block" sf-message="form.description"></span>
 </div>

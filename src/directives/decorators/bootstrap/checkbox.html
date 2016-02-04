@@ -8,7 +8,7 @@
            ng-model-options="form.ngModelOptions"
            schema-validate="form"
            class="{{::form.fieldHtmlClass}}"
-           name="{{::form.key.join('.')}}">
+           name="{{form.key.join('.')}}">
     <span ng-bind-html="::form.title"></span>
   </label>
   <div class="help-block" sf-message="form.description"></div>

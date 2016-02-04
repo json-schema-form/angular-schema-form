@@ -11,10 +11,10 @@
          class="form-control {{::form.fieldHtmlClass}}"
          id="{{::form.key.join('-')}}"
          ng-model-options="::form.ngModelOptions"
-         ng-model="::$$value$$"
+         ng-model="$$value$$"
          ng-disabled="::form.readonly"
          schema-validate="form"
-         name="{{::form.key.join('.')}}"
+         name="{{form.key.join('.')}}"
          aria-describedby="{{::form.key.join('-') + 'Status'}}">
 
   <div ng-if="::(form.fieldAddonLeft || form.fieldAddonRight)"
@@ -33,7 +33,7 @@
            ng-model="$$value$$"
            ng-disabled="::form.readonly"
            schema-validate="form"
-           name="{{::form.key.join('.')}}"
+           name="{{form.key.join('.')}}"
            aria-describedby="{{::form.key.join('-') + 'Status'}}">
 
     <span ng-if="::form.fieldAddonRight"
@@ -50,5 +50,5 @@
         id="{{::form.key.join('-') + 'Status'}}"
         class="sr-only">{{ hasSuccess() ? '(success)' : '(error)' }}</span>
 
-  <div class="help-block" sf-message="::form.description"></div>
+  <div class="help-block" sf-message="form.description"></div>
 </div>

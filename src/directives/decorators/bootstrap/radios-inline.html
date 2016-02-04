@@ -12,9 +12,9 @@
                ng-disabled="::form.readonly"
                ng-model="$$value$$"
                ng-value="item.value"
-               name="{{::form.key.join('.')}}">
+               name="{{form.key.join('.')}}">
         <span ng-bind-html="::item.name"></span>
     </label>
   </div>
-  <div class="help-block" sf-message="::form.description"></div>
+  <div class="help-block" sf-message="form.description"></div>
 </div>
