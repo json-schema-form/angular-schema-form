@@ -1,14 +1,16 @@
 <div ng-init="selected = { tab: 0 }" class="clearfix schema-form-tabs schema-form-tabs-{{::form.tabType || 'top'}} {{::form.htmlClass}}">
-  <ul class="nav nav-tabs"
-      ng-if="::(!form.tabType || form.tabType !== 'right')"
-      ng-class="::{'tabs-left col-xs-3 col-sm-2': form.tabType === 'left'}">
-    <li ng-repeat="tab in form.tabs"
-        ng-disabled="::form.readonly"
-        ng-click="$event.preventDefault() || (selected.tab = $index)"
-        ng-class="{active: selected.tab === $index}">
-        <a href="#">{{ tab.title }}</a>
-    </li>
-  </ul>
+  <div ng-if="::(!form.tabType || form.tabType !== 'right')"
+       ng-class="::{'col-xs-3 col-sm-2': form.tabType === 'left'}">
+    <ul class="nav nav-tabs"
+        ng-class="::{'tabs-left': form.tabType === 'left'}">
+      <li ng-repeat="tab in form.tabs"
+          ng-disabled="::form.readonly"
+          ng-click="$event.preventDefault() || (selected.tab = $index)"
+          ng-class="{active: selected.tab === $index}">
+          <a href="#">{{ tab.title }}</a>
+      </li>
+    </ul>
+  </div>
 
   <div class="tab-content {{::form.fieldHtmlClass}}"
        ng-class="::{'col-xs-9 col-sm-10': form.tabType === 'left' || form.tabType === 'right'}">
@@ -22,13 +24,14 @@
     </div>
   </div>
 
-  <ul class="nav nav-tabs tabs-right col-xs-3 col-sm-2"
-      ng-if="::form.tabType === 'right'">
-    <li ng-repeat="tab in form.tabs"
-        ng-disabled="::form.readonly"
-        ng-click="$event.preventDefault() || (selected.tab = $index)"
-        ng-class="{active: selected.tab === $index}">
-        <a href="#">{{ tab.title }}</a>
-    </li>
-  </ul>
+  <div class="col-xs-3 col-sm-2" ng-if="::form.tabType === 'right'">
+    <ul class="nav nav-tabs tabs-right">
+      <li ng-repeat="tab in form.tabs"
+          ng-disabled="::form.readonly"
+          ng-click="$event.preventDefault() || (selected.tab = $index)"
+          ng-class="{active: selected.tab === $index}">
+          <a href="#">{{ tab.title }}</a>
+      </li>
+    </ul>
+  </div>
 </div>
