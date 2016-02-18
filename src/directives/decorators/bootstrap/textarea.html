@@ -1,32 +1,32 @@
-<div class="form-group has-feedback {{::form.htmlClass}} schema-form-textarea" ng-class="{'has-error': form.disableErrorState !== true && hasError(), 'has-success': form.disableSuccessState !== true &&  hasSuccess()}">
-  <label class="{{::form.labelHtmlClass}}" ng-class="{'sr-only': !showTitle()}" for="{{::form.key.join('-')}}">{{::form.title}}</label>
+<div class="form-group has-feedback {{form.htmlClass}} schema-form-textarea" ng-class="{'has-error': form.disableErrorState !== true && hasError(), 'has-success': form.disableSuccessState !== true &&  hasSuccess()}">
+  <label class="{{form.labelHtmlClass}}" ng-class="{'sr-only': !showTitle()}" for="{{form.key.join('-')}}">{{form.title}}</label>
 
   <textarea ng-if="!form.fieldAddonLeft && !form.fieldAddonRight"
-            class="form-control {{::form.fieldHtmlClass}}"
-            id="{{::form.key.join('-')}}"
+            class="form-control {{form.fieldHtmlClass}}"
+            id="{{form.key.join('-')}}"
             sf-changed="form"
-            placeholder="{{::form.placeholder}}"
-            ng-disabled="::form.readonly"
+            placeholder="{{form.placeholder}}"
+            ng-disabled="form.readonly"
             ng-model="$$value$$"
             ng-model-options="form.ngModelOptions"
             schema-validate="form"
             name="{{form.key.join('.')}}"></textarea>
 
-  <div ng-if="::(form.fieldAddonLeft || form.fieldAddonRight)"
-       ng-class="::{'input-group': (form.fieldAddonLeft || form.fieldAddonRight)}">
-    <span ng-if="::form.fieldAddonLeft"
+  <div ng-if="(form.fieldAddonLeft || form.fieldAddonRight)"
+       ng-class="{'input-group': (form.fieldAddonLeft || form.fieldAddonRight)}">
+    <span ng-if="form.fieldAddonLeft"
           class="input-group-addon"
           ng-bind-html="form.fieldAddonLeft"></span>
-    <textarea class="form-control {{::form.fieldHtmlClass}}"
-              id="{{::form.key.join('-')}}"
+    <textarea class="form-control {{form.fieldHtmlClass}}"
+              id="{{form.key.join('-')}}"
               sf-changed="form"
-              placeholder="{{::form.placeholder}}"
-              ng-disabled="::form.readonly"
+              placeholder="{{form.placeholder}}"
+              ng-disabled="form.readonly"
               ng-model="$$value$$"
               ng-model-options="form.ngModelOptions"
               schema-validate="form"
               name="{{form.key.join('.')}}"></textarea>
-    <span ng-if="::form.fieldAddonRight"
+    <span ng-if="form.fieldAddonRight"
           class="input-group-addon"
           ng-bind-html="form.fieldAddonRight"></span>
   </div>
