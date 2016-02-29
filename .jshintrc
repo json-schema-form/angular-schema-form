@@ -3,10 +3,7 @@
   "unused": true,
   "browser": true,
   "globals": {
-    "ObjectPath": false,
     "console":false,
-    "jQuery": false,
-    "$":false,
     "assertEquals": false,
     "jstestdriver": false,
     "assertTrue": false,
@@ -17,7 +14,6 @@
     "sinon":false,
     "beforeEach": false,
     "afterEach": false,
-    "angular": false,
     "module": false,
     "inject": false,
     "chai": false,

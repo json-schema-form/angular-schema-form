@@ -1,6 +1,6 @@
 
 // FIXME: type template (using custom builder)
-angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(sfPathProvider) {
+export default function(sfPathProvider) {
 
   var SNAKE_CASE_REGEXP = /[A-Z]/g;
   var snakeCase = function(name, separator) {
@@ -279,5 +279,4 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       internalBuild: build
     };
   }];
-
-}]);
+}

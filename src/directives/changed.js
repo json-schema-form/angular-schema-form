@@ -1,3 +1,5 @@
+import angular from 'angular';
+
 /**
  * A version of ng-changed that only listens if
  * there is actually a onChange defined on the form
@@ -5,7 +7,7 @@
  * Takes the form definition as argument.
  * If the form definition has a "onChange" defined as either a function or
  */
-angular.module('schemaForm').directive('sfChanged', function() {
+export default function() {
   return {
     require: 'ngModel',
     restrict: 'AC',
@@ -25,4 +27,4 @@ angular.module('schemaForm').directive('sfChanged', function() {
       }
     }
   };
-});
+}

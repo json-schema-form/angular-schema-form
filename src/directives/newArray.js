@@ -1,8 +1,9 @@
+import angular from 'angular';
+
 /**
  * Directive that handles the model arrays
  */
-angular.module('schemaForm').directive('sfNewArray', ['sfSelect', 'sfPath', 'schemaForm',
-function(sel, sfPath, schemaForm) {
+export default function(sel, sfPath, schemaForm) {
   return {
     scope: false,
     link: function(scope, element, attrs) {
@@ -241,4 +242,4 @@ function(sel, sfPath, schemaForm) {
 
     }
   };
-}]);
+}

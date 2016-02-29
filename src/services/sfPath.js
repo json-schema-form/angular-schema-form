@@ -1,9 +1,7 @@
-angular.module('schemaForm').provider('sfPath',
-[function() {
+import angular from 'angular';
+import ObjectPath from 'objectpath';
 
-  // When building with browserify ObjectPath is available as `objectpath` but othwerwise
-  // it's called `ObjectPath`.
-  var ObjectPath = window.ObjectPath || objectpath;
+export default function() {
 
   var sfPath = {parse: ObjectPath.parse};
 
@@ -30,4 +28,4 @@ angular.module('schemaForm').provider('sfPath',
   this.$get = function() {
     return sfPath;
   };
-}]);
+}

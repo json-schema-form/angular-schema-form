@@ -1,5 +1,6 @@
-angular.module('schemaForm').directive('sfMessage',
-['$injector', 'sfErrorMessage', function($injector, sfErrorMessage) {
+import angular from 'angular';
+
+export default function($injector, sfErrorMessage) {
 
   //Inject sanitizer if it exists
   var $sanitize = $injector.has('$sanitize') ?
@@ -91,4 +92,4 @@ angular.module('schemaForm').directive('sfMessage',
 
     }
   };
-}]);
+}

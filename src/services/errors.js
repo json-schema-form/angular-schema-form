@@ -1,4 +1,6 @@
-angular.module('schemaForm').provider('sfErrorMessage', function() {
+import angular from 'angular';
+
+export default function() {
 
   // The codes are tv4 error codes.
   // Not all of these can actually happen in a field, but for
@@ -123,5 +125,4 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
 
     return service;
   }];
-
-});
+}

@@ -1,6 +1,8 @@
 /*  Common code for validating a value against its form and schema definition */
-/* global tv4 */
-angular.module('schemaForm').factory('sfValidator', [function() {
+import tv4 from 'tv4';
+import angular from 'angular';
+
+export default function() {
 
   var validator = {};
 
@@ -55,4 +57,4 @@ angular.module('schemaForm').factory('sfValidator', [function() {
   };
 
   return validator;
-}]);
+}

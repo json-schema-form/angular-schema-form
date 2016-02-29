@@ -1,5 +1,7 @@
-angular.module('schemaForm').provider('schemaFormDecorators',
-['$compileProvider', 'sfPathProvider', function($compileProvider, sfPathProvider) {
+import angular from 'angular';
+
+
+export default function($compileProvider, sfPathProvider) {
   var defaultDecorator = '';
   var decorators = {};
 
@@ -517,4 +519,4 @@ angular.module('schemaForm').provider('schemaFormDecorators',
   //Create a default directive
   createDirective('sfDecorator');
 
-}]);
+}
