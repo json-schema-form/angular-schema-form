@@ -137,6 +137,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
           };
 
           scope.deleteFromArray = function(index) {
+            console.log('deleteFromArray:', index, list);
             list.splice(index, 1);
 
             // Trigger validation.

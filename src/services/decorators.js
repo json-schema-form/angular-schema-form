@@ -43,6 +43,12 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               scope.$emit('schemaFormPropagateScope', scope);
             });
 
+            scope.$on('schemaFormDeleteFromArray', function(event, scope, index) {
+              event.stopPropagation();
+              event.preventDefault();
+              scope.$emit('schemaFormDeleteScope', scope, index);
+            });
+
             //Keep error prone logic from the template
             scope.showTitle = function() {
               return scope.form && scope.form.notitle !== true && scope.form.title;

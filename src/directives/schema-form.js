@@ -34,6 +34,7 @@ angular.module('schemaForm')
       transclude: true,
       require: '?form',
       link: function(scope, element, attrs, formCtrl, transclude) {
+        console.log('link:', scope);
 
         //expose form controller on scope so that we don't force authors to use name on form
         scope.formCtrl = formCtrl;

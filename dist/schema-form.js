@@ -459,6 +459,12 @@ angular.module('schemaForm').provider('schemaFormDecorators',
               scope.$emit('schemaFormPropagateScope', scope);
             });
 
+            scope.$on('schemaFormDeleteFromArray', function(event, scope, index) {
+              event.stopPropagation();
+              event.preventDefault();
+              scope.$emit('schemaFormDeleteScope', scope, index);
+            });
+
             //Keep error prone logic from the template
             scope.showTitle = function() {
               return scope.form && scope.form.notitle !== true && scope.form.title;
@@ -1713,6 +1719,7 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
           };
 
           scope.deleteFromArray = function(index) {
+            console.log('deleteFromArray:', index, list);
             list.splice(index, 1);
 
             // Trigger validation.
@@ -2442,6 +2449,7 @@ angular.module('schemaForm')
       transclude: true,
       require: '?form',
       link: function(scope, element, attrs, formCtrl, transclude) {
+        console.log('link:', scope);
 
         //expose form controller on scope so that we don't force authors to use name on form
         scope.formCtrl = formCtrl;
