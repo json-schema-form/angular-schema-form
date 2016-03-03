@@ -1768,6 +1768,59 @@ describe('directive',function(){
     });
   });
 
+  it('should redraw form with proper defaults on schemaFormRedraw event',function(done) {
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [{
+        key: 'name',
+        type: 'text'
+      }];
+
+      scope.options = {formDefaults: {}};
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-options="options"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      expect(tmpl.find('input').attr('disabled')).to.be.undefined;
+
+      var disable, enable;
+      disable = function () {
+        // form element should be disabled
+        scope.options.formDefaults.readonly = true;
+        scope.$broadcast('schemaFormRedraw');
+        $rootScope.$apply();
+        expect(tmpl.find('input').attr('disabled')).eq('disabled');
+
+        // try to re-enable it by modifying global option
+        setTimeout(enable, 0);
+      };
+
+      enable = function () {
+        // form element should be back to enabled
+        scope.options.formDefaults.readonly = false;
+        scope.$broadcast('schemaFormRedraw');
+        $rootScope.$apply();
+        expect(tmpl.find('input').attr('disabled')).to.be.undefined;
+
+        done();
+      }
+
+      setTimeout(disable, 0);
+    });
+  });
+
   it('should use supplied template with template field type',function() {
 
     inject(function($compile, $rootScope){
