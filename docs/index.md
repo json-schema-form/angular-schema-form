@@ -54,8 +54,13 @@ Documentation
 Basic Usage
 -----------
 
-First, expose your schema, form, and model to the $scope.
-Don't forget to load the `schemaForm` module.
+After installing, load the `schemaForm` module in your module definition.
+
+Then, in your controller, expose your [schema](http://json-schema.org/), 
+form, and [model](https://docs.angularjs.org/guide/databinding) to the $scope.
+Your schema defines your data structure, the form definition
+draws on this definition to define the user interface, and the
+model binds the user input to the controller.
 
 ```javascript
 angular.module('myModule', ['schemaForm'])
@@ -83,7 +88,8 @@ angular.module('myModule', ['schemaForm'])
 }
 ```
 
-Then load them into Schema Form using the `sfSchema`, `sfForm`, and `sfModel` directives.
+Then, in your template, load them into Schema Form using the 
+`sfSchema`, `sfForm`, and `sfModel` directives.
 
 ```html
 <div ng-controller="FormController">
