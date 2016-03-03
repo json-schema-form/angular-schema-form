@@ -10,7 +10,7 @@ Angular Schema Form
 
 Are you there?
 ----------------
-We're still here, in fact we're planning our future right now (2016-02-24) with a group of over 15 **eager contributors**! You may have noticed recent changes to the project GitHub location? Well that is so we can start a discussion in Gitter about how to move forward in a more **open** and **inclusive** way so the burden of development is not all down to David and the good folk at **Textalk**. So please get in touch with the **json-schema-form** org if you want to get involved, otherwise, **get ready for some long overdue progress** soon.
+We're still here, in fact we're planning our future right now (2016-03) with a group of **eager contributors**! You may have noticed recent changes to the project GitHub location? Well that is so we can start a discussion in Gitter about how to move forward in a more **open** and **inclusive** way so the burden of development is not all down to David and the good folk at **Textalk**. So please get in touch with the **json-schema-form** org if you want to get involved, otherwise, **get ready for some long overdue progress** soon.
 
 
 Generate forms from JSON schemas using AngularJS!
