@@ -188,6 +188,9 @@ angular.module('schemaForm').directive('sfField',
                     scope.ngModel.$setValidity(error, validity === true);
 
                     if (validity === true) {
+                      // Re-trigger model validator, that model itself would be re-validated
+                      scope.ngModel.$validate();
+
                       // Setting or removing a validity can change the field to believe its valid
                       // but its not. So lets trigger its validation as well.
                       scope.$broadcast('schemaFormValidate');
