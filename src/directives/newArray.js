@@ -1,4 +1,4 @@
-/**
+/*
  * Directive that handles the model arrays
  */
 angular.module('schemaForm').directive('sfNewArray', ['sfSelect', 'sfPath', 'schemaForm',
@@ -192,7 +192,11 @@ function(sel, sfPath, schemaForm) {
       scope.deleteFromArray = function(index) {
         var model = scope.modelArray;
         if (model) {
-          model.splice(index, 1);
+          if (model[index]._id) {
+            model[index]._destroy = true;
+          } else {
+            model.splice(index, 1);
+          }
         }
         return model;
       };

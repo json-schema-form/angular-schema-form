@@ -1751,7 +1751,11 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
           };
 
           scope.deleteFromArray = function(index) {
-            list.splice(index, 1);
+            if (list[index]._id) {
+              list[index]._destroy = true;
+            } else {
+              list.splice(index, 1);
+            }
 
             // Trigger validation.
             scope.validateArray();
@@ -2260,7 +2264,7 @@ angular.module('schemaForm').directive('sfMessage',
   };
 }]);
 
-/**
+/*
  * Directive that handles the model arrays
  */
 angular.module('schemaForm').directive('sfNewArray', ['sfSelect', 'sfPath', 'schemaForm',
@@ -2454,7 +2458,11 @@ function(sel, sfPath, schemaForm) {
       scope.deleteFromArray = function(index) {
         var model = scope.modelArray;
         if (model) {
-          model.splice(index, 1);
+          if (model[index]._id) {
+            model[index]._destroy = true;
+          } else {
+            model.splice(index, 1);
+          }
         }
         return model;
       };
