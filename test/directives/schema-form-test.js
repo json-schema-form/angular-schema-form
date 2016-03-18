@@ -2537,6 +2537,126 @@ describe('directive',function(){
     });
 
 
+    it('should remove or add fields in an array depending on conditions using arrayIndices', function (done) {
+
+      inject(function ($compile, $rootScope) {
+        var scope = $rootScope.$new();
+        scope.model = {
+          "transportCategory": [
+            {
+              "mode": "Car",
+              "transportOption": [
+                {
+                  "name": "Bertie",
+                  "forSale": "yes",
+                  "price": 100
+                },
+                {
+                  "name": "Lightning McQueen",
+                  "forSale": "no"
+                }
+              ]
+            },
+            {
+              "mode": "Horse",
+              "transportOption": [
+                {
+                  "name": "Phar Lap",
+                  "forSale": "no"
+                },
+                {
+                  "name": "Greyhound",
+                  "forSale": "yes",
+                  "price": 1000
+                }
+              ]
+            }
+          ]
+        };
+
+        scope.schema = {
+          type: "object",
+          properties: {
+            transportCategory: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  mode: { type: "string", enum: ["Car", "Motorbike", "Horse"] },
+                  transportOption: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        name: { type: "string" },
+                        numberOfWheels: { type: "number" },
+                        forSale: { type: "string", enum: ["yes", "no"] },
+                        price: { type: "number" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        scope.form = [
+          {
+            key: "transportCategory",
+            items: [
+              "transportCategory[].mode",
+              {
+                key: "transportCategory[].transportOption",
+                items: [
+                  "transportCategory[].transportOption[].name",
+                  {
+                    key: "transportCategory[].transportOption[].numberOfWheels",
+                    condition: "model.transportCategory[arrayIndices[0]].mode != 'Horse'"
+                  },
+                  "transportCategory[].transportOption[].forSale",
+                  {
+                    key: "transportCategory[].transportOption[].price",
+                    condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].forSale == 'yes'"
+                  }
+                ]
+              }
+            ]
+          }
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="model"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        /*** numberOfWheels condition tests ***/
+        tmpl.children().eq(0).children().eq(1).children().eq(0).find('input[name="numberOfWheels"]').length.should.be.eq(2);
+        tmpl.children().eq(0).children().eq(1).children().eq(1).find('input[name="numberOfWheels"]').length.should.be.eq(0);
+        //numberOfWheels [0][0]
+        tmpl.children().eq(0).children().eq(1).children().eq(0).children().eq(2).children().eq(1).children().eq(0).children().eq(2).children().eq(0).text().should.be.equal('numberOfWheels');
+        //numberOfWheels [0][1]
+        tmpl.children().eq(0).children().eq(1).children().eq(0).children().eq(2).children().eq(1).children().eq(1).children().eq(2).children().eq(0).text().should.be.equal('numberOfWheels');
+        //numberOfWheels [1][0]
+        tmpl.children().eq(0).children().eq(1).children().eq(1).children().eq(2).children().eq(1).children().eq(0).children().eq(2).children().eq(0).text().should.be.equal('forSale');
+        //numberOfWheels [1][1]
+        tmpl.children().eq(0).children().eq(1).children().eq(1).children().eq(2).children().eq(1).children().eq(1).children().eq(2).children().eq(0).text().should.be.equal('forSale');
+
+        /*** price field condition tests ***/
+        tmpl.children().eq(0).children().eq(1).children().find('input[name="price"]').length.should.be.eq(2);
+
+        //price [0][0]
+        tmpl.children().eq(0).children().eq(1).children().eq(0).children().eq(2).children().eq(1).children().eq(0).find('input[name="price"]').length.should.be.eq(1);
+        //price [0][1]
+        tmpl.children().eq(0).children().eq(1).children().eq(0).children().eq(2).children().eq(1).children().eq(1).find('input[name="price"]').length.should.be.eq(0);
+        //price [1][0]
+        tmpl.children().eq(0).children().eq(1).children().eq(1).children().eq(2).children().eq(1).children().eq(0).find('input[name="price"]').length.should.be.eq(0);
+        //price [1][1]
+        tmpl.children().eq(0).children().eq(1).children().eq(1).children().eq(2).children().eq(1).children().eq(1).find('input[name="price"]').length.should.be.eq(1);
+
+        done();
+      });
+    });
   });
 
 });

@@ -207,7 +207,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                     var evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex})';
                     if (form.key) {
-                      evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "modelValue": model' + sfPath.stringify(form.key) + '})';
+                      evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "arrayIndices": [' + form.key.filter(function(e) { return e === parseInt(e, 10)}).toString() + '], "modelValue": model' + sfPath.stringify(form.key) + '})';
                     }
 
                     angular.forEach(element.children(), function(child) {
