@@ -24,8 +24,7 @@
   "dependencies": {
     "angular": ">= 1.2",
     "tv4": "~1.0.15",
-    "angular-sanitize": ">= 1.2",
-    "json-schema-form-core": "git+https://github.com/json-schema-form/json-schema-form-core.git#master"
+    "angular-sanitize": ">= 1.2"
   },
   "keywords": [
     "angular",
@@ -36,6 +35,7 @@
     "schema"
   ],
   "devDependencies": {
+    "json-schema-form-core": "git+https://github.com/json-schema-form/json-schema-form-core.git#develop",
     "babel-core": "^6.5.2",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.5.0",
