@@ -1,5 +1,5 @@
 /* global __dirname */
-var webpack = require('webpack');
+// var webpack = require('webpack');
 var path = require('path');
 
 module.exports = {
@@ -20,8 +20,7 @@ module.exports = {
     ]
   },
   externals: {
-      'angular': 'angular',
-      'tv4': 'tv4',
-      'objectpath': 'objectpath'
+    'angular': 'var angular',
+    'tv4': 'var tv4',
   }
 };

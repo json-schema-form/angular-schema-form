@@ -25,7 +25,7 @@
     "angular": ">= 1.2",
     "tv4": "~1.0.15",
     "angular-sanitize": ">= 1.2",
-    "objectpath": "^1.2.1"
+    "json-schema-form-core": "git+https://github.com/json-schema-form/json-schema-form-core.git#master"
   },
   "keywords": [
     "angular",

@@ -2,11 +2,12 @@ import angular from 'angular';
 
 import sfBuilder from './services/builder';
 import decorators from './services/decorators';
-import errors from './services/errors';
 import schemaForm from './services/schemaForm';
-import select from './services/select';
-import sfPath from './services/sfPath';
+import {select} from 'json-schema-form-core';
 import validator from './services/validator';
+import errors from './services/errors';
+import sfPath from './services/sfPath';
+
 
 import array from './directives/array';
 import changed from './directives/changed';
@@ -41,11 +42,11 @@ try {
 angular.module('schemaForm', deps)
 // Providers and services
 .provider('sfPath', sfPath)
-.provider('sfBuilder', ['sfPathProvider', builder])
+.provider('sfBuilder', ['sfPathProvider', sfBuilder])
 .provider('schemaFormDecorators', ['$compileProvider', 'sfPathProvider', decorators])
 .provider('sfErrorMessage', errors)
 .provider('schemaForm', ['sfPathProvider', schemaForm])
-.factory('sfSelect', ['sfPath', select])
+.factory('sfSelect',() => select)
 .factory('sfValidator', validator)
 
 // Directives

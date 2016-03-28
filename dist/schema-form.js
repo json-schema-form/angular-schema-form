@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("angular"), require("objectpath"), require("tv4"));
+		module.exports = factory(require("angular"), require("tv4"));
 	else if(typeof define === 'function' && define.amd)
-		define(["angular", "objectpath", "tv4"], factory);
+		define(["angular", "tv4"], factory);
 	else {
-		var a = typeof exports === 'object' ? factory(require("angular"), require("objectpath"), require("tv4")) : factory(root["angular"], root["objectpath"], root["tv4"]);
+		var a = typeof exports === 'object' ? factory(require("angular"), require("tv4")) : factory(root["angular"], root["tv4"]);
 		for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
 	}
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_9__, __WEBPACK_EXTERNAL_MODULE_11__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_8__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -75,51 +75,49 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _decorators2 = _interopRequireDefault(_decorators);
 
-	var _errors = __webpack_require__(5);
-
-	var _errors2 = _interopRequireDefault(_errors);
-
-	var _schemaForm = __webpack_require__(6);
+	var _schemaForm = __webpack_require__(5);
 
 	var _schemaForm2 = _interopRequireDefault(_schemaForm);
 
-	var _select = __webpack_require__(7);
+	var _jsonSchemaFormCore = __webpack_require__(6);
 
-	var _select2 = _interopRequireDefault(_select);
-
-	var _sfPath = __webpack_require__(8);
-
-	var _sfPath2 = _interopRequireDefault(_sfPath);
-
-	var _validator = __webpack_require__(10);
+	var _validator = __webpack_require__(7);
 
 	var _validator2 = _interopRequireDefault(_validator);
 
-	var _array = __webpack_require__(12);
+	var _errors = __webpack_require__(9);
+
+	var _errors2 = _interopRequireDefault(_errors);
+
+	var _sfPath = __webpack_require__(10);
+
+	var _sfPath2 = _interopRequireDefault(_sfPath);
+
+	var _array = __webpack_require__(11);
 
 	var _array2 = _interopRequireDefault(_array);
 
-	var _changed = __webpack_require__(13);
+	var _changed = __webpack_require__(12);
 
 	var _changed2 = _interopRequireDefault(_changed);
 
-	var _field = __webpack_require__(14);
+	var _field = __webpack_require__(13);
 
 	var _field2 = _interopRequireDefault(_field);
 
-	var _message = __webpack_require__(15);
+	var _message = __webpack_require__(14);
 
 	var _message2 = _interopRequireDefault(_message);
 
-	var _newArray = __webpack_require__(16);
+	var _newArray = __webpack_require__(15);
 
 	var _newArray2 = _interopRequireDefault(_newArray);
 
-	var _schemaForm3 = __webpack_require__(17);
+	var _schemaForm3 = __webpack_require__(16);
 
 	var _schemaForm4 = _interopRequireDefault(_schemaForm3);
 
-	var _schemaValidate = __webpack_require__(18);
+	var _schemaValidate = __webpack_require__(17);
 
 	var _schemaValidate2 = _interopRequireDefault(_schemaValidate);
 
@@ -149,7 +147,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	_angular2.default.module('schemaForm', deps)
 	// Providers and services
-	.provider('sfPath', _sfPath2.default).provider('sfBuilder', ['sfPathProvider', builder]).provider('schemaFormDecorators', ['$compileProvider', 'sfPathProvider', _decorators2.default]).provider('sfErrorMessage', _errors2.default).provider('schemaForm', ['sfPathProvider', _schemaForm2.default]).factory('sfSelect', ['sfPath', _select2.default]).factory('sfValidator', _validator2.default)
+	.provider('sfPath', _sfPath2.default).provider('sfBuilder', ['sfPathProvider', _builder2.default]).provider('schemaFormDecorators', ['$compileProvider', 'sfPathProvider', _decorators2.default]).provider('sfErrorMessage', _errors2.default).provider('schemaForm', ['sfPathProvider', _schemaForm2.default]).factory('sfSelect', function () {
+	  return _jsonSchemaFormCore.select;
+	}).factory('sfValidator', _validator2.default)
 
 	// Directives
 	.directive('sfArray', ['sfSelect', 'schemaForm', 'sfValidator', 'sfPath', _array2.default]).directive('sfChanged', _changed2.default).directive('sfField', ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage', 'sfPath', 'sfSelect', _field2.default]).directive('sfMessage', ['$injector', 'sfErrorMessage', _message2.default]).directive('sfNewArray', ['sfSelect', 'sfPath', 'schemaForm', _newArray2.default]).directive('sfSchema', ['$compile', '$http', '$templateCache', '$q', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder', _schemaForm4.default]).directive('schemaValidate', ['sfValidator', '$parse', 'sfSelect', _schemaValidate2.default]);
@@ -158,7 +158,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 2 */
 /***/ function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
+	module.exports = angular;
 
 /***/ },
 /* 3 */
@@ -950,6 +950,1082 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = function () {
 
+	  var postProcessFn = function postProcessFn(form) {
+	    return form;
+	  };
+	  var defaults = _jsonSchemaFormCore.schemaDefaults.createDefaults();
+
+	  /**
+	   * Provider API
+	   */
+	  this.defaults = defaults;
+	  this.stdFormObj = _jsonSchemaFormCore.schemaDefaults.stdFormObj;
+	  this.defaultFormDefinition = _jsonSchemaFormCore.schemaDefaults.defaultFormDefinition;
+
+	  /**
+	   * Register a post process function.
+	   * This function is called with the fully merged
+	   * form definition (i.e. after merging with schema)
+	   * and whatever it returns is used as form.
+	   */
+	  this.postProcess = function (fn) {
+	    postProcessFn = fn;
+	  };
+
+	  /**
+	   * Append default form rule
+	   *
+	   * @param {string}   type json schema type
+	   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form
+	   *                        definition or undefined
+	   */
+	  this.appendRule = function (type, rule) {
+	    if (!defaults[type]) {
+	      defaults[type] = [];
+	    }
+	    defaults[type].push(rule);
+	  };
+
+	  /**
+	   * Prepend default form rule
+	   *
+	   * @param {string}   type json schema type
+	   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form
+	   *                        definition or undefined
+	   */
+	  this.prependRule = function (type, rule) {
+	    if (!defaults[type]) {
+	      defaults[type] = [];
+	    }
+	    defaults[type].unshift(rule);
+	  };
+
+	  /**
+	   * Utility function to create a standard form object.
+	   * This does *not* set the type of the form but rather all shared attributes.
+	   * You probably want to start your rule with creating the form with this method
+	   * then setting type and any other values you need.
+	   * @param {Object} schema
+	   * @param {Object} options
+	   * @return {Object} a form field defintion
+	   */
+	  this.createStandardForm = _jsonSchemaFormCore.schemaDefaults.stdFormObj;
+	  /* End Provider API */
+
+	  this.$get = function () {
+
+	    var service = {};
+
+	    service.merge = function (schema, form, ignore, options, readonly, asyncTemplates) {
+	      form = form || ['*'];
+	      options = options || {};
+
+	      // Get readonly from root object
+	      readonly = readonly || schema.readonly || schema.readOnly;
+
+	      var stdForm = _jsonSchemaFormCore.schemaDefaults.defaultForm(schema, defaults, ignore, options);
+
+	      //simple case, we have a "*", just put the stdForm there
+	      var idx = form.indexOf('*');
+	      if (idx !== -1) {
+	        form = form.slice(0, idx).concat(stdForm.form).concat(form.slice(idx + 1));
+	      }
+
+	      //ok let's merge!
+	      //We look at the supplied form and extend it with schema standards
+	      var canonical = (0, _jsonSchemaFormCore.merge)(stdForm.lookup, form, options, readonly, asyncTemplates);
+	      return postProcessFn(canonical);
+	    };
+
+	    /**
+	     * Create form defaults from schema
+	     */
+	    service.defaults = _jsonSchemaFormCore.schemaDefaults.defaultForm;
+	    //Utility functions
+	    /**
+	     * Traverse a schema, applying a function(schema,path) on every sub schema
+	     * i.e. every property of an object.
+	     */
+	    service.traverseSchema = _jsonSchemaFormCore.traverseSchema;
+
+	    service.traverseForm = _jsonSchemaFormCore.traverseForm;
+
+	    return service;
+	  };
+	};
+
+	var _angular = __webpack_require__(2);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	var _jsonSchemaFormCore = __webpack_require__(6);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	(function webpackUniversalModuleDefinition(root, factory) {
+		if(true)
+			module.exports = factory();
+		else if(typeof define === 'function' && define.amd)
+			define([], factory);
+		else {
+			var a = factory();
+			for(var i in a) (typeof exports === 'object' ? exports : root)[i] = a[i];
+		}
+	})(this, function() {
+	return /******/ (function(modules) { // webpackBootstrap
+	/******/ 	// The module cache
+	/******/ 	var installedModules = {};
+
+	/******/ 	// The require function
+	/******/ 	function __webpack_require__(moduleId) {
+
+	/******/ 		// Check if module is in cache
+	/******/ 		if(installedModules[moduleId])
+	/******/ 			return installedModules[moduleId].exports;
+
+	/******/ 		// Create a new module (and put it into the cache)
+	/******/ 		var module = installedModules[moduleId] = {
+	/******/ 			exports: {},
+	/******/ 			id: moduleId,
+	/******/ 			loaded: false
+	/******/ 		};
+
+	/******/ 		// Execute the module function
+	/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+
+	/******/ 		// Flag the module as loaded
+	/******/ 		module.loaded = true;
+
+	/******/ 		// Return the exports of the module
+	/******/ 		return module.exports;
+	/******/ 	}
+
+
+	/******/ 	// expose the modules object (__webpack_modules__)
+	/******/ 	__webpack_require__.m = modules;
+
+	/******/ 	// expose the module cache
+	/******/ 	__webpack_require__.c = installedModules;
+
+	/******/ 	// __webpack_public_path__
+	/******/ 	__webpack_require__.p = "";
+
+	/******/ 	// Load entry module and return exports
+	/******/ 	return __webpack_require__(0);
+	/******/ })
+	/************************************************************************/
+	/******/ ([
+	/* 0 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		module.exports = __webpack_require__(1);
+
+
+	/***/ },
+	/* 1 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		'use strict';
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.canonicalTitleMap = exports.schemaDefaults = exports.sfPath = undefined;
+
+		var _merge = __webpack_require__(2);
+
+		Object.keys(_merge).forEach(function (key) {
+		  if (key === "default") return;
+		  Object.defineProperty(exports, key, {
+		    enumerable: true,
+		    get: function get() {
+		      return _merge[key];
+		    }
+		  });
+		});
+
+		var _select = __webpack_require__(7);
+
+		Object.keys(_select).forEach(function (key) {
+		  if (key === "default") return;
+		  Object.defineProperty(exports, key, {
+		    enumerable: true,
+		    get: function get() {
+		      return _select[key];
+		    }
+		  });
+		});
+
+		var _traverse = __webpack_require__(8);
+
+		Object.keys(_traverse).forEach(function (key) {
+		  if (key === "default") return;
+		  Object.defineProperty(exports, key, {
+		    enumerable: true,
+		    get: function get() {
+		      return _traverse[key];
+		    }
+		  });
+		});
+
+		var _schemaDefaults = __webpack_require__(9);
+
+		var schemaDefaultsImp = _interopRequireWildcard(_schemaDefaults);
+
+		var _sfPath = __webpack_require__(3);
+
+		var sfPathImp = _interopRequireWildcard(_sfPath);
+
+		var _canonicalTitleMap = __webpack_require__(6);
+
+		var _canonicalTitleMap2 = _interopRequireDefault(_canonicalTitleMap);
+
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+		function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+		var sfPath = exports.sfPath = sfPathImp;
+		var schemaDefaults = exports.schemaDefaults = schemaDefaultsImp;
+		var canonicalTitleMap = exports.canonicalTitleMap = _canonicalTitleMap2.default;
+
+	/***/ },
+	/* 2 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		'use strict';
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.merge = merge;
+
+		var _sfPath = __webpack_require__(3);
+
+		var _canonicalTitleMap = __webpack_require__(6);
+
+		var _canonicalTitleMap2 = _interopRequireDefault(_canonicalTitleMap);
+
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+		//export function merge(schema, form, schemaDefaultTypes, ignore, options, readonly, asyncTemplates) {
+		function merge(lookup, form, options, readonly, asyncTemplates) {
+		  form = form || [];
+		  options = options || {};
+
+		  //ok let's merge!
+		  //We look at the supplied form and extend it with schema standards
+		  return form.map(function (obj) {
+
+		    //handle the shortcut with just a name
+		    if (typeof obj === 'string') {
+		      obj = { key: obj };
+		    }
+
+		    if (obj.key) {
+		      if (typeof obj.key === 'string') {
+		        obj.key = (0, _sfPath.parse)(obj.key);
+		      }
+		    }
+
+		    //If it has a titleMap make sure it's a list
+		    if (obj.titleMap) {
+		      obj.titleMap = (0, _canonicalTitleMap2.default)(obj.titleMap);
+		    }
+
+		    //extend with std form from schema.
+		    if (obj.key) {
+		      var strid = (0, _sfPath.stringify)(obj.key);
+		      if (lookup[strid]) {
+		        (function () {
+		          var schemaDefaults = lookup[strid];
+		          if (schemaDefaults) {
+		            Object.keys(schemaDefaults).forEach(function (attr) {
+		              if (obj[attr] === undefined) {
+		                obj[attr] = schemaDefaults[attr];
+		              }
+		            });
+		          }
+		        })();
+		      }
+		    }
+
+		    // Are we inheriting readonly?
+		    if (readonly === true) {
+		      // Inheriting false is not cool.
+		      obj.readonly = true;
+		    }
+
+		    //if it's a type with items, merge 'em!
+		    if (obj.items) {
+		      obj.items = merge(lookup, obj.items, options, obj.readonly, asyncTemplates);
+		    }
+
+		    //if its has tabs, merge them also!
+		    if (obj.tabs) {
+		      obj.tabs.forEach(function (tab) {
+		        if (tab.items) {
+		          tab.items = merge(lookup, tab.items, options, obj.readonly, asyncTemplates);
+		        }
+		      });
+		    }
+
+		    // Special case: checkbox
+		    // Since have to ternary state we need a default
+		    if (obj.type === 'checkbox' && obj.schema['default'] === undefined) {
+		      obj.schema['default'] = false;
+		    }
+
+		    // Special case: template type with tempplateUrl that's needs to be loaded before rendering
+		    // TODO: this is not a clean solution. Maybe something cleaner can be made when $ref support
+		    // is introduced since we need to go async then anyway
+		    if (asyncTemplates && obj.type === 'template' && !obj.template && obj.templateUrl) {
+		      asyncTemplates.push(obj);
+		    }
+
+		    return obj;
+		  });
+		}
+
+	/***/ },
+	/* 3 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		'use strict';
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+
+		var _objectpath = __webpack_require__(4);
+
+		Object.defineProperty(exports, 'parse', {
+		  enumerable: true,
+		  get: function get() {
+		    return _objectpath.parse;
+		  }
+		});
+		Object.defineProperty(exports, 'stringify', {
+		  enumerable: true,
+		  get: function get() {
+		    return _objectpath.stringify;
+		  }
+		});
+		Object.defineProperty(exports, 'normalize', {
+		  enumerable: true,
+		  get: function get() {
+		    return _objectpath.normalize;
+		  }
+		});
+
+	/***/ },
+	/* 4 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		'use strict';
+
+		module.exports = __webpack_require__(5).ObjectPath;
+
+	/***/ },
+	/* 5 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		var __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+
+		var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+		;!function (undefined) {
+
+			var ObjectPath = {
+				parse: function parse(str) {
+					if (typeof str !== 'string') {
+						throw new TypeError('ObjectPath.parse must be passed a string');
+					}
+
+					var i = 0;
+					var parts = [];
+					var d, b, q, c;
+					while (i < str.length) {
+						d = str.indexOf('.', i);
+						b = str.indexOf('[', i);
+
+						// we've reached the end
+						if (d === -1 && b === -1) {
+							parts.push(str.slice(i, str.length));
+							i = str.length;
+						}
+
+						// dots
+						else if (b === -1 || d !== -1 && d < b) {
+								parts.push(str.slice(i, d));
+								i = d + 1;
+							}
+
+							// brackets
+							else {
+									if (b > i) {
+										parts.push(str.slice(i, b));
+										i = b;
+									}
+									q = str.slice(b + 1, b + 2);
+									if (q !== '"' && q !== '\'') {
+										c = str.indexOf(']', b);
+										if (c === -1) c = str.length;
+										parts.push(str.slice(i + 1, c));
+										i = str.slice(c + 1, c + 2) === '.' ? c + 2 : c + 1;
+									} else {
+										c = str.indexOf(q + ']', b);
+										if (c === -1) c = str.length;
+										while (str.slice(c - 1, c) === '\\' && b < str.length) {
+											b++;
+											c = str.indexOf(q + ']', b);
+										}
+										parts.push(str.slice(i + 2, c).replace(new RegExp('\\' + q, 'g'), q));
+										i = str.slice(c + 2, c + 3) === '.' ? c + 3 : c + 2;
+									}
+								}
+					}
+					return parts;
+				},
+
+				// root === true : auto calculate root; must be dot-notation friendly
+				// root String : the string to use as root
+				stringify: function stringify(arr, quote) {
+
+					if (!Array.isArray(arr)) arr = [arr.toString()];
+
+					quote = quote === '"' ? '"' : '\'';
+
+					return arr.map(function (n) {
+						return '[' + quote + n.toString().replace(new RegExp(quote, 'g'), '\\' + quote) + quote + ']';
+					}).join('');
+				},
+
+				normalize: function normalize(data, quote) {
+					return ObjectPath.stringify(Array.isArray(data) ? data : ObjectPath.parse(data), quote);
+				},
+
+				// Angular
+				registerModule: function registerModule(angular) {
+					angular.module('ObjectPath', []).provider('ObjectPath', function () {
+						this.parse = ObjectPath.parse;
+						this.stringify = ObjectPath.stringify;
+						this.normalize = ObjectPath.normalize;
+						this.$get = function () {
+							return ObjectPath;
+						};
+					});
+				}
+			};
+
+			// AMD
+			if (true) {
+				!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {
+					return { ObjectPath: ObjectPath };
+				}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+			}
+
+			// CommonJS
+			else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
+					exports.ObjectPath = ObjectPath;
+				}
+
+				// Browser global
+				else {
+						window.ObjectPath = ObjectPath;
+					}
+		}();
+
+	/***/ },
+	/* 6 */
+	/***/ function(module, exports) {
+
+		"use strict";
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+
+		var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; }; // Takes a titleMap in either object or list format and returns one in
+		// in the list format.
+
+
+		exports.default = function (titleMap, originalEnum) {
+		  if (!Array.isArray(titleMap)) {
+		    var _ret = function () {
+		      var canonical = [];
+		      if (originalEnum) {
+		        originalEnum.forEach(function (value) {
+		          canonical.push({ name: titleMap[value], value: value });
+		        });
+		      } else {
+		        Object.keys(titleMap).forEach(function (value) {
+		          canonical.push({ name: titleMap[value], value: value });
+		        });
+		      }
+		      return {
+		        v: canonical
+		      };
+		    }();
+
+		    if ((typeof _ret === "undefined" ? "undefined" : _typeof(_ret)) === "object") return _ret.v;
+		  }
+		  return titleMap;
+		};
+
+	/***/ },
+	/* 7 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		'use strict';
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.select = select;
+
+		var _sfPath = __webpack_require__(3);
+
+		var _sfPath2 = _interopRequireDefault(_sfPath);
+
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+		var numRe = /^\d+$/;
+
+		/**
+		  * @description
+		  * Utility method to access deep properties without
+		  * throwing errors when things are not defined.
+		  * Can also set a value in a deep structure, creating objects when missing
+		  * ex.
+		  * var foo = Select('address.contact.name',obj)
+		  * Select('address.contact.name',obj,'Leeroy')
+		  *
+		  * @param {string} projection A dot path to the property you want to get/set
+		  * @param {object} obj   (optional) The object to project on, defaults to 'this'
+		  * @param {Any}    valueToSet (opional)  The value to set, if parts of the path of
+		  *                 the projection is missing empty objects will be created.
+		  * @returns {Any|undefined} returns the value at the end of the projection path
+		  *                          or undefined if there is none.
+		  */
+		function select(projection, obj, valueToSet) {
+		  if (!obj) {
+		    obj = this;
+		  }
+		  //Support [] array syntax
+		  var parts = typeof projection === 'string' ? _sfPath2.default.parse(projection) : projection;
+
+		  if (typeof valueToSet !== 'undefined' && parts.length === 1) {
+		    //special case, just setting one variable
+		    obj[parts[0]] = valueToSet;
+		    return obj;
+		  }
+
+		  if (typeof valueToSet !== 'undefined' && typeof obj[parts[0]] === 'undefined') {
+		    // We need to look ahead to check if array is appropriate
+		    obj[parts[0]] = parts.length > 2 && numRe.test(parts[1]) ? [] : {};
+		  }
+
+		  var value = obj[parts[0]];
+		  for (var i = 1; i < parts.length; i++) {
+		    // Special case: We allow JSON Form syntax for arrays using empty brackets
+		    // These will of course not work here so we exit if they are found.
+		    if (parts[i] === '') {
+		      return undefined;
+		    }
+		    if (typeof valueToSet !== 'undefined') {
+		      if (i === parts.length - 1) {
+		        //last step. Let's set the value
+		        value[parts[i]] = valueToSet;
+		        return valueToSet;
+		      } else {
+		        // Make sure to create new objects on the way if they are not there.
+		        // We need to look ahead to check if array is appropriate
+		        var tmp = value[parts[i]];
+		        if (typeof tmp === 'undefined' || tmp === null) {
+		          tmp = numRe.test(parts[i + 1]) ? [] : {};
+		          value[parts[i]] = tmp;
+		        }
+		        value = tmp;
+		      }
+		    } else if (value) {
+		      //Just get nex value.
+		      value = value[parts[i]];
+		    }
+		  }
+		  return value;
+		}
+
+	/***/ },
+	/* 8 */
+	/***/ function(module, exports) {
+
+		'use strict';
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+		exports.traverseSchema = traverseSchema;
+		exports.traverseForm = traverseForm;
+		/**
+		 * Traverse a schema, applying a function(schema,path) on every sub schema
+		 * i.e. every property of an object.
+		 */
+		function traverseSchema(schema, fn, path, ignoreArrays) {
+		  ignoreArrays = ignoreArrays === undefined ? true : ignoreArrays;
+
+		  path = path || [];
+
+		  var traverse = function traverse(schema, fn, path) {
+		    fn(schema, path);
+		    if (schema.properties) {
+		      Object.keys(schema.properties).forEach(function (name) {
+		        var currentPath = path.slice();
+		        currentPath.push(name);
+		        traverse(schema.properties[name], fn, currentPath);
+		      });
+		    }
+
+		    //Only support type "array" which have a schema as "items".
+		    if (!ignoreArrays && schema.items) {
+		      var arrPath = path.slice();arrPath.push('');
+		      traverse(schema.items, fn, arrPath);
+		    }
+		  };
+
+		  traverse(schema, fn, path || []);
+		}
+
+		function traverseForm(form, fn) {
+		  fn(form);
+		  if (form.items) {
+		    form.items.forEach(function (f) {
+		      traverseForm(f, fn);
+		    });
+		  }
+
+		  if (form.tabs) {
+		    form.tabs.forEach(function (tab) {
+		      if (tab.items) {
+		        tab.items.forEach(function (f) {
+		          traverseForm(f, fn);
+		        });
+		      }
+		    });
+		  }
+		}
+
+	/***/ },
+	/* 9 */
+	/***/ function(module, exports, __webpack_require__) {
+
+		'use strict';
+
+		Object.defineProperty(exports, "__esModule", {
+		  value: true
+		});
+
+		var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+
+		exports.defaultFormDefinition = defaultFormDefinition;
+		exports.stdFormObj = stdFormObj;
+		exports.text = text;
+		exports.number = number;
+		exports.integer = integer;
+		exports.checkbox = checkbox;
+		exports.select = select;
+		exports.checkboxes = checkboxes;
+		exports.fieldset = fieldset;
+		exports.array = array;
+		exports.createDefaults = createDefaults;
+		exports.defaultForm = defaultForm;
+
+		var _sfPath = __webpack_require__(3);
+
+		var _canonicalTitleMap = __webpack_require__(6);
+
+		var _canonicalTitleMap2 = _interopRequireDefault(_canonicalTitleMap);
+
+		function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+		/* Utils */
+		var stripNullType = function stripNullType(type) {
+		  if (Array.isArray(type) && type.length == 2) {
+		    if (type[0] === 'null') return type[1];
+		    if (type[1] === 'null') return type[0];
+		  }
+		  return type;
+		};
+
+		//Creates an default titleMap list from an enum, i.e. a list of strings.
+		var enumToTitleMap = function enumToTitleMap(enm) {
+		  var titleMap = []; //canonical titleMap format is a list.
+		  enm.forEach(function (name) {
+		    titleMap.push({ name: name, value: name });
+		  });
+		  return titleMap;
+		};
+
+		/**
+		 * Creates a default form definition from a schema.
+		 */
+		function defaultFormDefinition(schemaTypes, name, schema, options) {
+		  var rules = schemaTypes[stripNullType(schema.type)];
+		  if (rules) {
+		    var def = void 0;
+		    for (var i = 0; i < rules.length; i++) {
+		      def = rules[i](name, schema, options);
+
+		      //first handler in list that actually returns something is our handler!
+		      if (def) {
+
+		        // Do we have form defaults in the schema under the x-schema-form-attribute?
+		        if (def.schema['x-schema-form']) {
+		          Object.assign(def, def.schema['x-schema-form']);
+		        }
+
+		        return def;
+		      }
+		    }
+		  }
+		}
+
+		/**
+		 * Creates a form object with all common properties
+		 */
+		function stdFormObj(name, schema, options) {
+		  options = options || {};
+
+		  // The Object.assign used to be a angular.copy. Should work though.
+		  var f = options.global && options.global.formDefaults ? Object.assign({}, options.global.formDefaults) : {};
+		  if (options.global && options.global.supressPropertyTitles === true) {
+		    f.title = schema.title;
+		  } else {
+		    f.title = schema.title || name;
+		  }
+
+		  if (schema.description) {
+		    f.description = schema.description;
+		  }
+		  if (options.required === true || schema.required === true) {
+		    f.required = true;
+		  }
+		  if (schema.maxLength) {
+		    f.maxlength = schema.maxLength;
+		  }
+		  if (schema.minLength) {
+		    f.minlength = schema.minLength;
+		  }
+		  if (schema.readOnly || schema.readonly) {
+		    f.readonly = true;
+		  }
+		  if (schema.minimum) {
+		    f.minimum = schema.minimum + (schema.exclusiveMinimum ? 1 : 0);
+		  }
+		  if (schema.maximum) {
+		    f.maximum = schema.maximum - (schema.exclusiveMaximum ? 1 : 0);
+		  }
+
+		  // Non standard attributes (DONT USE DEPRECATED)
+		  // If you must set stuff like this in the schema use the x-schema-form attribute
+		  if (schema.validationMessage) {
+		    f.validationMessage = schema.validationMessage;
+		  }
+		  if (schema.enumNames) {
+		    f.titleMap = (0, _canonicalTitleMap2.default)(schema.enumNames, schema['enum']);
+		  }
+		  f.schema = schema;
+
+		  // Ng model options doesn't play nice with undefined, might be defined
+		  // globally though
+		  f.ngModelOptions = f.ngModelOptions || {};
+
+		  return f;
+		}
+
+		/*** Schema types to form type mappings, with defaults ***/
+		function text(name, schema, options) {
+		  if (stripNullType(schema.type) === 'string' && !schema['enum']) {
+		    var f = stdFormObj(name, schema, options);
+		    f.key = options.path;
+		    f.type = 'text';
+		    options.lookup[(0, _sfPath.stringify)(options.path)] = f;
+		    return f;
+		  }
+		}
+
+		//default in json form for number and integer is a text field
+		//input type="number" would be more suitable don't ya think?
+		function number(name, schema, options) {
+		  if (stripNullType(schema.type) === 'number') {
+		    var f = stdFormObj(name, schema, options);
+		    f.key = options.path;
+		    f.type = 'number';
+		    options.lookup[(0, _sfPath.stringify)(options.path)] = f;
+		    return f;
+		  }
+		}
+
+		function integer(name, schema, options) {
+		  if (stripNullType(schema.type) === 'integer') {
+		    var f = stdFormObj(name, schema, options);
+		    f.key = options.path;
+		    f.type = 'number';
+		    options.lookup[(0, _sfPath.stringify)(options.path)] = f;
+		    return f;
+		  }
+		}
+
+		function checkbox(name, schema, options) {
+		  if (stripNullType(schema.type) === 'boolean') {
+		    var f = stdFormObj(name, schema, options);
+		    f.key = options.path;
+		    f.type = 'checkbox';
+		    options.lookup[(0, _sfPath.stringify)(options.path)] = f;
+		    return f;
+		  }
+		}
+
+		function select(name, schema, options) {
+		  if (stripNullType(schema.type) === 'string' && schema['enum']) {
+		    var f = stdFormObj(name, schema, options);
+		    f.key = options.path;
+		    f.type = 'select';
+		    if (!f.titleMap) {
+		      f.titleMap = enumToTitleMap(schema['enum']);
+		    }
+		    options.lookup[(0, _sfPath.stringify)(options.path)] = f;
+		    return f;
+		  }
+		}
+
+		function checkboxes(name, schema, options) {
+		  if (stripNullType(schema.type) === 'array' && schema.items && schema.items['enum']) {
+		    var f = stdFormObj(name, schema, options);
+		    f.key = options.path;
+		    f.type = 'checkboxes';
+		    if (!f.titleMap) {
+		      f.titleMap = enumToTitleMap(schema.items['enum']);
+		    }
+		    options.lookup[(0, _sfPath.stringify)(options.path)] = f;
+		    return f;
+		  }
+		}
+
+		function fieldset(name, schema, options) {
+		  if (stripNullType(schema.type) === 'object') {
+		    var _ret = function () {
+		      var f = stdFormObj(name, schema, options);
+		      f.type = 'fieldset';
+		      f.items = [];
+		      options.lookup[(0, _sfPath.stringify)(options.path)] = f;
+
+		      //recurse down into properties
+		      if (schema.properties) {
+		        Object.keys(schema.properties).forEach(function (key) {
+		          var value = schema.properties[key];
+		          var path = options.path.slice();
+		          path.push(key);
+		          if (options.ignore[(0, _sfPath.stringify)(path)] !== true) {
+		            var required = schema.required && schema.required.indexOf(key) !== -1;
+
+		            var def = defaultFormDefinition(key, value, {
+		              path: path,
+		              required: required || false,
+		              lookup: options.lookup,
+		              ignore: options.ignore,
+		              global: options.global
+		            });
+		            if (def) {
+		              f.items.push(def);
+		            }
+		          }
+		        });
+		      }
+		      return {
+		        v: f
+		      };
+		    }();
+
+		    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+		  }
+		}
+
+		function array(name, schema, options) {
+		  if (stripNullType(schema.type) === 'array') {
+		    var f = stdFormObj(name, schema, options);
+		    f.type = 'array';
+		    f.key = options.path;
+		    options.lookup[(0, _sfPath.stringify)(options.path)] = f;
+
+		    var required = schema.required && schema.required.indexOf(options.path[options.path.length - 1]) !== -1;
+
+		    // The default is to always just create one child. This works since if the
+		    // schemas items declaration is of type: "object" then we get a fieldset.
+		    // We also follow json form notatation, adding empty brackets "[]" to
+		    // signify arrays.
+
+		    var arrPath = options.path.slice();
+		    arrPath.push('');
+
+		    f.items = [defaultFormDefinition(name, schema.items, {
+		      path: arrPath,
+		      required: required || false,
+		      lookup: options.lookup,
+		      ignore: options.ignore,
+		      global: options.global
+		    })];
+
+		    return f;
+		  }
+		}
+
+		function createDefaults() {
+		  //First sorted by schema type then a list.
+		  //Order has importance. First handler returning an form snippet will be used.
+		  return {
+		    string: [select, text],
+		    object: [fieldset],
+		    number: [number],
+		    integer: [integer],
+		    boolean: [checkbox],
+		    array: [checkboxes, array]
+		  };
+		}
+
+		/**
+		 * Create form defaults from schema
+		 */
+		function defaultForm(schema, defaultSchemaTypes, ignore, globalOptions) {
+		  var form = [];
+		  var lookup = {}; //Map path => form obj for fast lookup in merging
+		  ignore = ignore || {};
+		  globalOptions = globalOptions || {};
+
+		  if (schema.properties) {
+		    Object.keys(schema.properties).forEach(function (key) {
+		      if (ignore[key] !== true) {
+		        var required = schema.required && schema.required.indexOf(key) !== -1;
+		        var def = defaultFormDefinition(defaultSchemaTypes, key, schema.properties[key], {
+		          path: [key], // Path to this property in bracket notation.
+		          lookup: lookup, // Extra map to register with. Optimization for merger.
+		          ignore: ignore, // The ignore list of paths (sans root level name)
+		          required: required, // Is it required? (v4 json schema style)
+		          global: globalOptions // Global options, including form defaults
+		        });
+		        if (def) {
+		          form.push(def);
+		        }
+		      }
+		    });
+		  } else {
+		    throw new Error('Not implemented. Only type "object" allowed at root level of schema.');
+		  }
+		  return { form: form, lookup: lookup };
+		}
+
+	/***/ }
+	/******/ ])
+	});
+	;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports.default = function () {
+
+	  var validator = {};
+
+	  /**
+	   * Validate a value against its form definition and schema.
+	   * The value should either be of proper type or a string, some type
+	   * coercion is applied.
+	   *
+	   * @param {Object} form A merged form definition, i.e. one with a schema.
+	   * @param {Any} value the value to validate.
+	   * @return a tv4js result object.
+	   */
+	  validator.validate = function (form, value) {
+	    if (!form) {
+	      return { valid: true };
+	    }
+	    var schema = form.schema;
+
+	    if (!schema) {
+	      return { valid: true };
+	    }
+
+	    // Input of type text and textareas will give us a viewValue of ''
+	    // when empty, this is a valid value in a schema and does not count as something
+	    // that breaks validation of 'required'. But for our own sanity an empty field should
+	    // not validate if it's required.
+	    if (value === '') {
+	      value = undefined;
+	    }
+
+	    // Numbers fields will give a null value, which also means empty field
+	    if (form.type === 'number' && value === null) {
+	      value = undefined;
+	    }
+
+	    // Version 4 of JSON Schema has the required property not on the
+	    // property itself but on the wrapping object. Since we like to test
+	    // only this property we wrap it in a fake object.
+	    var wrap = { type: 'object', 'properties': {} };
+	    var propName = form.key[form.key.length - 1];
+	    wrap.properties[propName] = schema;
+
+	    if (form.required) {
+	      wrap.required = [propName];
+	    }
+	    var valueWrap = {};
+	    if (_angular2.default.isDefined(value)) {
+	      valueWrap[propName] = value;
+	    }
+	    return _tv2.default.validateResult(valueWrap, wrap);
+	  };
+
+	  return validator;
+	};
+
+	var _tv = __webpack_require__(8);
+
+	var _tv2 = _interopRequireDefault(_tv);
+
+	var _angular = __webpack_require__(2);
+
+	var _angular2 = _interopRequireDefault(_angular);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	module.exports = tv4;
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	exports.default = function () {
+
 	  // The codes are tv4 error codes.
 	  // Not all of these can actually happen in a field, but for
 	  // we never know when one might pop up so it's best to cover them all.
@@ -1082,642 +2158,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports.default = function (sfPathProvider) {
-	  var stripNullType = function stripNullType(type) {
-	    if (Array.isArray(type) && type.length == 2) {
-	      if (type[0] === 'null') return type[1];
-	      if (type[1] === 'null') return type[0];
-	    }
-	    return type;
-	  };
-
-	  //Creates an default titleMap list from an enum, i.e. a list of strings.
-	  var enumToTitleMap = function enumToTitleMap(enm) {
-	    var titleMap = []; //canonical titleMap format is a list.
-	    enm.forEach(function (name) {
-	      titleMap.push({ name: name, value: name });
-	    });
-	    return titleMap;
-	  };
-
-	  // Takes a titleMap in either object or list format and returns one in
-	  // in the list format.
-	  var canonicalTitleMap = function canonicalTitleMap(titleMap, originalEnum) {
-	    if (!_angular2.default.isArray(titleMap)) {
-	      var canonical = [];
-	      if (originalEnum) {
-	        _angular2.default.forEach(originalEnum, function (value, index) {
-	          canonical.push({ name: titleMap[value], value: value });
-	        });
-	      } else {
-	        _angular2.default.forEach(titleMap, function (name, value) {
-	          canonical.push({ name: name, value: value });
-	        });
-	      }
-	      return canonical;
-	    }
-	    return titleMap;
-	  };
-
-	  var defaultFormDefinition = function defaultFormDefinition(name, schema, options) {
-	    var rules = defaults[stripNullType(schema.type)];
-	    if (rules) {
-	      var def;
-	      for (var i = 0; i < rules.length; i++) {
-	        def = rules[i](name, schema, options);
-
-	        //first handler in list that actually returns something is our handler!
-	        if (def) {
-
-	          // Do we have form defaults in the schema under the x-schema-form-attribute?
-	          if (def.schema['x-schema-form'] && _angular2.default.isObject(def.schema['x-schema-form'])) {
-	            def = _angular2.default.extend(def, def.schema['x-schema-form']);
-	          }
-
-	          return def;
-	        }
-	      }
-	    }
-	  };
-
-	  //Creates a form object with all common properties
-	  var stdFormObj = function stdFormObj(name, schema, options) {
-	    options = options || {};
-	    var f = options.global && options.global.formDefaults ? _angular2.default.copy(options.global.formDefaults) : {};
-	    if (options.global && options.global.supressPropertyTitles === true) {
-	      f.title = schema.title;
-	    } else {
-	      f.title = schema.title || name;
-	    }
-
-	    if (schema.description) {
-	      f.description = schema.description;
-	    }
-	    if (options.required === true || schema.required === true) {
-	      f.required = true;
-	    }
-	    if (schema.maxLength) {
-	      f.maxlength = schema.maxLength;
-	    }
-	    if (schema.minLength) {
-	      f.minlength = schema.minLength;
-	    }
-	    if (schema.readOnly || schema.readonly) {
-	      f.readonly = true;
-	    }
-	    if (schema.minimum) {
-	      f.minimum = schema.minimum + (schema.exclusiveMinimum ? 1 : 0);
-	    }
-	    if (schema.maximum) {
-	      f.maximum = schema.maximum - (schema.exclusiveMaximum ? 1 : 0);
-	    }
-
-	    // Non standard attributes (DONT USE DEPRECATED)
-	    // If you must set stuff like this in the schema use the x-schema-form attribute
-	    if (schema.validationMessage) {
-	      f.validationMessage = schema.validationMessage;
-	    }
-	    if (schema.enumNames) {
-	      f.titleMap = canonicalTitleMap(schema.enumNames, schema['enum']);
-	    }
-	    f.schema = schema;
-
-	    // Ng model options doesn't play nice with undefined, might be defined
-	    // globally though
-	    f.ngModelOptions = f.ngModelOptions || {};
-
-	    return f;
-	  };
-
-	  var text = function text(name, schema, options) {
-	    if (stripNullType(schema.type) === 'string' && !schema['enum']) {
-	      var f = stdFormObj(name, schema, options);
-	      f.key = options.path;
-	      f.type = 'text';
-	      options.lookup[sfPathProvider.stringify(options.path)] = f;
-	      return f;
-	    }
-	  };
-
-	  //default in json form for number and integer is a text field
-	  //input type="number" would be more suitable don't ya think?
-	  var number = function number(name, schema, options) {
-	    if (stripNullType(schema.type) === 'number') {
-	      var f = stdFormObj(name, schema, options);
-	      f.key = options.path;
-	      f.type = 'number';
-	      options.lookup[sfPathProvider.stringify(options.path)] = f;
-	      return f;
-	    }
-	  };
-
-	  var integer = function integer(name, schema, options) {
-	    if (stripNullType(schema.type) === 'integer') {
-	      var f = stdFormObj(name, schema, options);
-	      f.key = options.path;
-	      f.type = 'number';
-	      options.lookup[sfPathProvider.stringify(options.path)] = f;
-	      return f;
-	    }
-	  };
-
-	  var checkbox = function checkbox(name, schema, options) {
-	    if (stripNullType(schema.type) === 'boolean') {
-	      var f = stdFormObj(name, schema, options);
-	      f.key = options.path;
-	      f.type = 'checkbox';
-	      options.lookup[sfPathProvider.stringify(options.path)] = f;
-	      return f;
-	    }
-	  };
-
-	  var select = function select(name, schema, options) {
-	    if (stripNullType(schema.type) === 'string' && schema['enum']) {
-	      var f = stdFormObj(name, schema, options);
-	      f.key = options.path;
-	      f.type = 'select';
-	      if (!f.titleMap) {
-	        f.titleMap = enumToTitleMap(schema['enum']);
-	      }
-	      options.lookup[sfPathProvider.stringify(options.path)] = f;
-	      return f;
-	    }
-	  };
-
-	  var checkboxes = function checkboxes(name, schema, options) {
-	    if (stripNullType(schema.type) === 'array' && schema.items && schema.items['enum']) {
-	      var f = stdFormObj(name, schema, options);
-	      f.key = options.path;
-	      f.type = 'checkboxes';
-	      if (!f.titleMap) {
-	        f.titleMap = enumToTitleMap(schema.items['enum']);
-	      }
-	      options.lookup[sfPathProvider.stringify(options.path)] = f;
-	      return f;
-	    }
-	  };
-
-	  var fieldset = function fieldset(name, schema, options) {
-	    if (stripNullType(schema.type) === 'object') {
-	      var f = stdFormObj(name, schema, options);
-	      f.type = 'fieldset';
-	      f.items = [];
-	      options.lookup[sfPathProvider.stringify(options.path)] = f;
-
-	      //recurse down into properties
-	      _angular2.default.forEach(schema.properties, function (v, k) {
-	        var path = options.path.slice();
-	        path.push(k);
-	        if (options.ignore[sfPathProvider.stringify(path)] !== true) {
-	          var required = schema.required && schema.required.indexOf(k) !== -1;
-
-	          var def = defaultFormDefinition(k, v, {
-	            path: path,
-	            required: required || false,
-	            lookup: options.lookup,
-	            ignore: options.ignore,
-	            global: options.global
-	          });
-	          if (def) {
-	            f.items.push(def);
-	          }
-	        }
-	      });
-
-	      return f;
-	    }
-	  };
-
-	  var array = function array(name, schema, options) {
-
-	    if (stripNullType(schema.type) === 'array') {
-	      var f = stdFormObj(name, schema, options);
-	      f.type = 'array';
-	      f.key = options.path;
-	      options.lookup[sfPathProvider.stringify(options.path)] = f;
-
-	      var required = schema.required && schema.required.indexOf(options.path[options.path.length - 1]) !== -1;
-
-	      // The default is to always just create one child. This works since if the
-	      // schemas items declaration is of type: "object" then we get a fieldset.
-	      // We also follow json form notatation, adding empty brackets "[]" to
-	      // signify arrays.
-
-	      var arrPath = options.path.slice();
-	      arrPath.push('');
-
-	      f.items = [defaultFormDefinition(name, schema.items, {
-	        path: arrPath,
-	        required: required || false,
-	        lookup: options.lookup,
-	        ignore: options.ignore,
-	        global: options.global
-	      })];
-
-	      return f;
-	    }
-	  };
-
-	  //First sorted by schema type then a list.
-	  //Order has importance. First handler returning an form snippet will be used.
-	  var defaults = {
-	    string: [select, text],
-	    object: [fieldset],
-	    number: [number],
-	    integer: [integer],
-	    boolean: [checkbox],
-	    array: [checkboxes, array]
-	  };
-
-	  var postProcessFn = function postProcessFn(form) {
-	    return form;
-	  };
-
-	  /**
-	   * Provider API
-	   */
-	  this.defaults = defaults;
-	  this.stdFormObj = stdFormObj;
-	  this.defaultFormDefinition = defaultFormDefinition;
-
-	  /**
-	   * Register a post process function.
-	   * This function is called with the fully merged
-	   * form definition (i.e. after merging with schema)
-	   * and whatever it returns is used as form.
-	   */
-	  this.postProcess = function (fn) {
-	    postProcessFn = fn;
-	  };
-
-	  /**
-	   * Append default form rule
-	   * @param {string}   type json schema type
-	   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form
-	   *                        definition or undefined
-	   */
-	  this.appendRule = function (type, rule) {
-	    if (!defaults[type]) {
-	      defaults[type] = [];
-	    }
-	    defaults[type].push(rule);
-	  };
-
-	  /**
-	   * Prepend default form rule
-	   * @param {string}   type json schema type
-	   * @param {Function} rule a function(propertyName,propertySchema,options) that returns a form
-	   *                        definition or undefined
-	   */
-	  this.prependRule = function (type, rule) {
-	    if (!defaults[type]) {
-	      defaults[type] = [];
-	    }
-	    defaults[type].unshift(rule);
-	  };
-
-	  /**
-	   * Utility function to create a standard form object.
-	   * This does *not* set the type of the form but rather all shared attributes.
-	   * You probably want to start your rule with creating the form with this method
-	   * then setting type and any other values you need.
-	   * @param {Object} schema
-	   * @param {Object} options
-	   * @return {Object} a form field defintion
-	   */
-	  this.createStandardForm = stdFormObj;
-	  /* End Provider API */
-
-	  this.$get = function () {
-
-	    var service = {};
-
-	    service.merge = function (schema, form, ignore, options, readonly, asyncTemplates) {
-	      form = form || ['*'];
-	      options = options || {};
-
-	      // Get readonly from root object
-	      readonly = readonly || schema.readonly || schema.readOnly;
-
-	      var stdForm = service.defaults(schema, ignore, options);
-
-	      //simple case, we have a "*", just put the stdForm there
-	      var idx = form.indexOf('*');
-	      if (idx !== -1) {
-	        form = form.slice(0, idx).concat(stdForm.form).concat(form.slice(idx + 1));
-	      }
-
-	      //ok let's merge!
-	      //We look at the supplied form and extend it with schema standards
-	      var lookup = stdForm.lookup;
-
-	      return postProcessFn(form.map(function (obj) {
-
-	        //handle the shortcut with just a name
-	        if (typeof obj === 'string') {
-	          obj = { key: obj };
-	        }
-
-	        if (obj.key) {
-	          if (typeof obj.key === 'string') {
-	            obj.key = sfPathProvider.parse(obj.key);
-	          }
-	        }
-
-	        //If it has a titleMap make sure it's a list
-	        if (obj.titleMap) {
-	          obj.titleMap = canonicalTitleMap(obj.titleMap);
-	        }
-
-	        //
-	        if (obj.itemForm) {
-	          obj.items = [];
-	          var str = sfPathProvider.stringify(obj.key);
-	          var stdForm = lookup[str];
-	          _angular2.default.forEach(stdForm.items, function (item) {
-	            var o = _angular2.default.copy(obj.itemForm);
-	            o.key = item.key;
-	            obj.items.push(o);
-	          });
-	        }
-
-	        //extend with std form from schema.
-	        if (obj.key) {
-	          var strid = sfPathProvider.stringify(obj.key);
-	          if (lookup[strid]) {
-	            var schemaDefaults = lookup[strid];
-	            _angular2.default.forEach(schemaDefaults, function (value, attr) {
-	              if (obj[attr] === undefined) {
-	                obj[attr] = schemaDefaults[attr];
-	              }
-	            });
-	          }
-	        }
-
-	        // Are we inheriting readonly?
-	        if (readonly === true) {
-	          // Inheriting false is not cool.
-	          obj.readonly = true;
-	        }
-
-	        //if it's a type with items, merge 'em!
-	        if (obj.items) {
-	          obj.items = service.merge(schema, obj.items, ignore, options, obj.readonly, asyncTemplates);
-	        }
-
-	        //if its has tabs, merge them also!
-	        if (obj.tabs) {
-	          _angular2.default.forEach(obj.tabs, function (tab) {
-	            tab.items = service.merge(schema, tab.items, ignore, options, obj.readonly, asyncTemplates);
-	          });
-	        }
-
-	        // Special case: checkbox
-	        // Since have to ternary state we need a default
-	        if (obj.type === 'checkbox' && _angular2.default.isUndefined(obj.schema['default'])) {
-	          obj.schema['default'] = false;
-	        }
-
-	        // Special case: template type with tempplateUrl that's needs to be loaded before rendering
-	        // TODO: this is not a clean solution. Maybe something cleaner can be made when $ref support
-	        // is introduced since we need to go async then anyway
-	        if (asyncTemplates && obj.type === 'template' && !obj.template && obj.templateUrl) {
-	          asyncTemplates.push(obj);
-	        }
-
-	        return obj;
-	      }));
-	    };
-
-	    /**
-	     * Create form defaults from schema
-	     */
-	    service.defaults = function (schema, ignore, globalOptions) {
-	      var form = [];
-	      var lookup = {}; //Map path => form obj for fast lookup in merging
-	      ignore = ignore || {};
-	      globalOptions = globalOptions || {};
-
-	      if (stripNullType(schema.type) === 'object') {
-	        _angular2.default.forEach(schema.properties, function (v, k) {
-	          if (ignore[k] !== true) {
-	            var required = schema.required && schema.required.indexOf(k) !== -1;
-	            var def = defaultFormDefinition(k, v, {
-	              path: [k], // Path to this property in bracket notation.
-	              lookup: lookup, // Extra map to register with. Optimization for merger.
-	              ignore: ignore, // The ignore list of paths (sans root level name)
-	              required: required, // Is it required? (v4 json schema style)
-	              global: globalOptions // Global options, including form defaults
-	            });
-	            if (def) {
-	              form.push(def);
-	            }
-	          }
-	        });
-	      } else {
-	        throw new Error('Not implemented. Only type "object" allowed at root level of schema.');
-	      }
-	      return { form: form, lookup: lookup };
-	    };
-
-	    //Utility functions
-	    /**
-	     * Traverse a schema, applying a function(schema,path) on every sub schema
-	     * i.e. every property of an object.
-	     */
-	    service.traverseSchema = function (schema, fn, path, ignoreArrays) {
-	      ignoreArrays = _angular2.default.isDefined(ignoreArrays) ? ignoreArrays : true;
-
-	      path = path || [];
-
-	      var traverse = function traverse(schema, fn, path) {
-	        fn(schema, path);
-	        _angular2.default.forEach(schema.properties, function (prop, name) {
-	          var currentPath = path.slice();
-	          currentPath.push(name);
-	          traverse(prop, fn, currentPath);
-	        });
-
-	        //Only support type "array" which have a schema as "items".
-	        if (!ignoreArrays && schema.items) {
-	          var arrPath = path.slice();arrPath.push('');
-	          traverse(schema.items, fn, arrPath);
-	        }
-	      };
-
-	      traverse(schema, fn, path || []);
-	    };
-
-	    service.traverseForm = function (form, fn) {
-	      fn(form);
-	      _angular2.default.forEach(form.items, function (f) {
-	        service.traverseForm(f, fn);
-	      });
-
-	      if (form.tabs) {
-	        _angular2.default.forEach(form.tabs, function (tab) {
-	          _angular2.default.forEach(tab.items, function (f) {
-	            service.traverseForm(f, fn);
-	          });
-	        });
-	      }
-	    };
-
-	    return service;
-	  };
-	};
-
-	var _angular = __webpack_require__(2);
-
-	var _angular2 = _interopRequireDefault(_angular);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	/**
-	 * @ngdoc service
-	 * @name sfSelect
-	 * @kind function
-	 *
-	 */
-	angular.module('schemaForm').factory('sfSelect', ['sfPath', function (sfPath) {
-	  var numRe = /^\d+$/;
-
-	  /**
-	    * @description
-	    * Utility method to access deep properties without
-	    * throwing errors when things are not defined.
-	    * Can also set a value in a deep structure, creating objects when missing
-	    * ex.
-	    * var foo = Select('address.contact.name',obj)
-	    * Select('address.contact.name',obj,'Leeroy')
-	    *
-	    * @param {string} projection A dot path to the property you want to get/set
-	    * @param {object} obj   (optional) The object to project on, defaults to 'this'
-	    * @param {Any}    valueToSet (opional)  The value to set, if parts of the path of
-	    *                 the projection is missing empty objects will be created.
-	    * @returns {Any|undefined} returns the value at the end of the projection path
-	    *                          or undefined if there is none.
-	    */
-	  return function (projection, obj, valueToSet) {
-	    if (!obj) {
-	      obj = this;
-	    }
-	    //Support [] array syntax
-	    var parts = typeof projection === 'string' ? sfPath.parse(projection) : projection;
-
-	    if (typeof valueToSet !== 'undefined' && parts.length === 1) {
-	      //special case, just setting one variable
-	      obj[parts[0]] = valueToSet;
-	      return obj;
-	    }
-
-	    if (typeof valueToSet !== 'undefined' && typeof obj[parts[0]] === 'undefined') {
-	      // We need to look ahead to check if array is appropriate
-	      obj[parts[0]] = parts.length > 2 && numRe.test(parts[1]) ? [] : {};
-	    }
-
-	    var value = obj[parts[0]];
-	    for (var i = 1; i < parts.length; i++) {
-	      // Special case: We allow JSON Form syntax for arrays using empty brackets
-	      // These will of course not work here so we exit if they are found.
-	      if (parts[i] === '') {
-	        return undefined;
-	      }
-	      if (typeof valueToSet !== 'undefined') {
-	        if (i === parts.length - 1) {
-	          //last step. Let's set the value
-	          value[parts[i]] = valueToSet;
-	          return valueToSet;
-	        } else {
-	          // Make sure to create new objects on the way if they are not there.
-	          // We need to look ahead to check if array is appropriate
-	          var tmp = value[parts[i]];
-	          if (typeof tmp === 'undefined' || tmp === null) {
-	            tmp = numRe.test(parts[i + 1]) ? [] : {};
-	            value[parts[i]] = tmp;
-	          }
-	          value = tmp;
-	        }
-	      } else if (value) {
-	        //Just get nex value.
-	        value = value[parts[i]];
-	      }
-	    }
-	    return value;
-	  };
-	}]);
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports.default = function () {
-
-	  var sfPath = { parse: _objectpath2.default.parse };
-
-	  // if we're on Angular 1.2.x, we need to continue using dot notation
-	  if (_angular2.default.version.major === 1 && _angular2.default.version.minor < 3) {
-	    sfPath.stringify = function (arr) {
-	      return Array.isArray(arr) ? arr.join('.') : arr.toString();
-	    };
-	  } else {
-	    sfPath.stringify = _objectpath2.default.stringify;
-	  }
-
-	  // We want this to use whichever stringify method is defined above,
-	  // so we have to copy the code here.
-	  sfPath.normalize = function (data, quote) {
-	    return sfPath.stringify(Array.isArray(data) ? data : sfPath.parse(data), quote);
-	  };
-
-	  // expose the methods in sfPathProvider
-	  this.parse = sfPath.parse;
-	  this.stringify = sfPath.stringify;
-	  this.normalize = sfPath.normalize;
-
-	  this.$get = function () {
-	    return sfPath;
-	  };
-	};
-
-	var _angular = __webpack_require__(2);
-
-	var _angular2 = _interopRequireDefault(_angular);
-
-	var _objectpath = __webpack_require__(9);
-
-	var _objectpath2 = _interopRequireDefault(_objectpath);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_9__;
-
-/***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -1729,78 +2169,26 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.default = function () {
 
-	  var validator = {};
+	  // expose the methods in sfPathProvider
+	  this.parse = _jsonSchemaFormCore.sfPath.parse;
+	  this.stringify = _jsonSchemaFormCore.sfPath.stringify;
+	  this.normalize = _jsonSchemaFormCore.sfPath.normalize;
 
-	  /**
-	   * Validate a value against its form definition and schema.
-	   * The value should either be of proper type or a string, some type
-	   * coercion is applied.
-	   *
-	   * @param {Object} form A merged form definition, i.e. one with a schema.
-	   * @param {Any} value the value to validate.
-	   * @return a tv4js result object.
-	   */
-	  validator.validate = function (form, value) {
-	    if (!form) {
-	      return { valid: true };
-	    }
-	    var schema = form.schema;
-
-	    if (!schema) {
-	      return { valid: true };
-	    }
-
-	    // Input of type text and textareas will give us a viewValue of ''
-	    // when empty, this is a valid value in a schema and does not count as something
-	    // that breaks validation of 'required'. But for our own sanity an empty field should
-	    // not validate if it's required.
-	    if (value === '') {
-	      value = undefined;
-	    }
-
-	    // Numbers fields will give a null value, which also means empty field
-	    if (form.type === 'number' && value === null) {
-	      value = undefined;
-	    }
-
-	    // Version 4 of JSON Schema has the required property not on the
-	    // property itself but on the wrapping object. Since we like to test
-	    // only this property we wrap it in a fake object.
-	    var wrap = { type: 'object', 'properties': {} };
-	    var propName = form.key[form.key.length - 1];
-	    wrap.properties[propName] = schema;
-
-	    if (form.required) {
-	      wrap.required = [propName];
-	    }
-	    var valueWrap = {};
-	    if (_angular2.default.isDefined(value)) {
-	      valueWrap[propName] = value;
-	    }
-	    return _tv2.default.validateResult(valueWrap, wrap);
+	  this.$get = function () {
+	    return _jsonSchemaFormCore.sfPath;
 	  };
-
-	  return validator;
 	};
-
-	var _tv = __webpack_require__(11);
-
-	var _tv2 = _interopRequireDefault(_tv);
 
 	var _angular = __webpack_require__(2);
 
 	var _angular2 = _interopRequireDefault(_angular);
 
+	var _jsonSchemaFormCore = __webpack_require__(6);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
 /* 11 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_11__;
-
-/***/ },
-/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2076,7 +2464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 13 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2114,7 +2502,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 14 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2358,7 +2746,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 15 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2468,7 +2856,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2721,7 +3109,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2927,7 +3315,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

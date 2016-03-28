@@ -2,6 +2,7 @@
   "undef": true,
   "unused": true,
   "browser": true,
+  "esnext":true, 
   "globals": {
     "console":false,
     "assertEquals": false,
