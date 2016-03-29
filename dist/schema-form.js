@@ -1616,8 +1616,8 @@ angular.module('schemaForm').factory('sfValidator', [function() {
  * Directive that handles the model arrays
  * DEPRECATED with the new builder use the sfNewArray instead.
  */
-angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sfValidator', 'sfPath',
-  function(sfSelect, schemaForm, sfValidator, sfPath) {
+angular.module('schemaForm').directive('sfArray', ['$timeout', 'sfSelect', 'schemaForm', 'sfValidator', 'sfPath',
+  function($timeout, sfSelect, schemaForm, sfValidator, sfPath) {
 
     var setIndex = function(index) {
       return function(form) {
@@ -1750,12 +1750,30 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             return list;
           };
 
+          function destroyArrayItem(item) {
+            item._destroy = true;
+
+            Object.keys(item).filter(function(key) {
+              return !/^_(destroy|id)$/.test(key);
+            }).forEach(function(key) {
+              delete item[key];
+            });
+
+            return item;
+          }
+
           scope.deleteFromArray = function(index) {
             if (list[index]._id) {
-              list[index]._destroy = true;
+              destroyArrayItem(list[index]);
+
+              $timeout(function() {
+                destroyArrayItem(list[index]);
+              });
             } else {
               list.splice(index, 1);
             }
+
+            scope.$emit('setCapco');
 
             // Trigger validation.
             scope.validateArray();
@@ -2455,15 +2473,34 @@ function(sel, sfPath, schemaForm) {
         return model;
       };
 
+      function destroyArrayItem(item) {
+        item._destroy = true;
+
+        Object.keys(item).filter(function(key) {
+          return !/^_(destroy|id)$/.test(key);
+        }).forEach(function(key) {
+          delete item[key];
+        });
+
+        return item;
+      }
+
       scope.deleteFromArray = function(index) {
         var model = scope.modelArray;
         if (model) {
           if (model[index]._id) {
-            model[index]._destroy = true;
+            destroyArrayItem(model[index]);
+
+            $timeout(function() {
+              destroyArrayItem(model[index]);
+            });
           } else {
             model.splice(index, 1);
           }
         }
+
+        scope.$emit('setCapco');
+
         return model;
       };
 

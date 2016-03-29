@@ -189,15 +189,34 @@ function(sel, sfPath, schemaForm) {
         return model;
       };
 
+      function destroyArrayItem(item) {
+        item._destroy = true;
+
+        Object.keys(item).filter(function(key) {
+          return !/^_(destroy|id)$/.test(key);
+        }).forEach(function(key) {
+          delete item[key];
+        });
+
+        return item;
+      }
+
       scope.deleteFromArray = function(index) {
         var model = scope.modelArray;
         if (model) {
           if (model[index]._id) {
-            model[index]._destroy = true;
+            destroyArrayItem(model[index]);
+
+            $timeout(function() {
+              destroyArrayItem(model[index]);
+            });
           } else {
             model.splice(index, 1);
           }
         }
+
+        scope.$emit('setCapco');
+
         return model;
       };
 
