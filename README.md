@@ -7,28 +7,80 @@ Angular Schema Form
 [![Build Status](https://img.shields.io/travis/Textalk/angular-schema-form.svg?style=flat-square)](https://travis-ci.org/Textalk/angular-schema-form)
 [![Build Status](https://img.shields.io/coveralls/jekyll/jekyll.svg?style=flat-square)](https://coveralls.io/r/Textalk/angular-schema-form?branch=development)
 
-
-Are you there?
-----------------
-We're still here, in fact we're planning our future right now (2016-03) with a group of **eager contributors**! You may have noticed recent changes to the project GitHub location? Well that is so we can start a discussion in Gitter about how to move forward in a more **open** and **inclusive** way so the burden of development is not all down to David and the good folk at **Textalk**. So please get in touch with the **json-schema-form** org if you want to get involved, otherwise, **get ready for some long overdue progress** soon.
-
-
 Generate forms from JSON schemas using AngularJS!
 
+Recent developments
+===================
+First, as there has been a rather intensive period of planning and change for this project, there have been important new developments for the project.
+Lets get into those first(the normal front page continues below):
+
+The json-schema-form standard
+-----------------------------
+A standard, json-schema-form, is being created. 
+
+The reason is that the concept of combining data, JSON Schema and a form definition is something that isn't just usable in a javascript angular web application, but in any framework, on any platform.
+Currently, there ports are [angular-schema-form](https://github.com/json-schema-form/angular-schema-form) and [react-schema-form](https://github.com/networknt/react-schema-form), but delphi-schema-form and laravel-schema-form are planned as well.
+To make these ports easier to do, and for everything to work in harmony, a common ground has to be established, a [standard](https://github.com/json-schema-form/json-schema-form). 
+
+Organisational
+--------------
+
+ASF has changed into using a more open governance model. This basically means that ASF is now governed by more people.
+Also, an umbrella organisaton, json-schema-form, has been formed. As you can see, this repo is now a part of that organisation, not Textalk.
+
+Projects
+--------
+After a phase of planning, the following list of projects has been decided upon: https://github.com/json-schema-form/json-schema-form/wiki/Current-projects
+
+Release 1.0
+-----------
+The next major release of ASF will be 1.0. 
+
+The goal for that version is to include the breaking changes that is needed for future developents, like *Of and local $refs:
+
+* Break out the non-framework specific parts of ASF into a vanilla ES6 module
+* Remove the built-in bootstrap decorator, and in doing that require that users wanting to use that load that separately. The reason obviously being the material decorator.
+
+The reason for the core break out is for all javascript-based ports of the json-schema-form concept to be able to share the same central code base. 
+Work in that direction is being done in the [json-schema-form-core](https://github.com/json-schema-form/json-schema-form-core) repository.
+
+Schema builder UI
+-----------------
+There is now a UI for building schemas and forms being developed at [json-schema-builder repository](https://github.com/json-schema-form/json-schema-builder).
+Ralphael Owino (main author), has a [demo up already](http://ralphowino.github.io/schema-form-builder/#/builder).
+
+Schema and form repository
+--------------------------
+This is now a [repository with template schemas and forms](https://github.com/json-schema-form/json-schema-form-repository).
+So far all the schema.org types has been converted to JSON schema approximations, and also some has been further resolved and had (huge) forms generated. Schema.org is *big*.
+
+Documentation
+-------------
+The documentation is evolving, and it is happening mostly on the wiki:
+* [The ASF wiki](https://github.com/json-schema-form/angular-schema-form/wiki)
+* [The wiki of the json-schema-form organisation](https://github.com/json-schema-form/json-schema-form/wiki)
+
+New gitter rooms
+----------------
+These are just started.
+* Discussion on the [general json-schema-form project being carried out](https://gitter.im/json-schema-form/json-schema-form-projects)
+* Discussions on the [angular-specific ASF projects](https://gitter.im/json-schema-form/angular-schema-form-projects)
+
+
 The Blog / The Web Site / The Twitter / The Movie
-------------------------------------------------
+=================================================
 [medium.com/@SchemaFormIO](https://medium.com/@SchemaFormIO) / [schemaform.io](http://schemaform.io) / [@SchemaFormIO](http://twitter.com/SchemaFormIO) / [Movie](https://www.youtube.com/watch?v=duBFMipRq2o)
 
 If you use ASF in your project/company please let us know! We'd love to feature you on the site.
 
 Demo Time!
-----------
+==========
 [Try out the example page](http://schemaform.io/examples/bootstrap-example.html). Try editing the schema or form definition and see what comes out!
 
 Hint: By pressing the 'Save to gist' button (top left), you can save your example into a shareable link.
 
 What is it?
-----------
+===========
 
 Schema Form is a set of AngularJS directives (and a couple of services). It can do two things to
 make life easier:
