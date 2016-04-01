@@ -25,12 +25,13 @@ To make these ports easier to do, and for everything to work in harmony, a commo
 Organisational
 --------------
 
-ASF has changed into using a more open governance model. This basically means that ASF is now governed by more people.
-Also, an umbrella organisaton, json-schema-form, has been formed. As you can see, this repo is now a part of that organisation, not Textalk.
+1. ASF has changed into using a more open governance model. This basically means that ASF is now governed by more people.
+2. An umbrella organisaton, json-schema-form, has been formed. As you can see, this repo is now a part of that Github organisation, not Textalk.
 
 Projects
 --------
-After a phase of planning, the following list of projects has been decided upon: https://github.com/json-schema-form/json-schema-form/wiki/Current-projects
+After a phase of planning, the following list of projects has been decided upon: 
+https://github.com/json-schema-form/json-schema-form/wiki/Current-projects
 
 Release 1.0
 -----------
@@ -47,12 +48,13 @@ Work in that direction is being done in the [json-schema-form-core](https://gith
 Schema builder UI
 -----------------
 There is now a UI for building schemas and forms being developed at [json-schema-builder repository](https://github.com/json-schema-form/json-schema-builder).
+
 Ralphael Owino (main author), has a [demo up already](http://ralphowino.github.io/schema-form-builder/#/builder).
 
 Schema and form repository
 --------------------------
 This is now a [repository with template schemas and forms](https://github.com/json-schema-form/json-schema-form-repository).
-So far all the schema.org types has been converted to JSON schema approximations, and also some has been further resolved and had (huge) forms generated. Schema.org is *big*.
+So far all the [schema.org types](http://schema.org/docs/full.html) has been converted to JSON schema approximations, and also some has been further resolved and had (huge) forms generated. Schema.org is *big*.
 
 Documentation
 -------------
@@ -63,7 +65,7 @@ The documentation is evolving, and it is happening mostly on the wiki:
 New gitter rooms
 ----------------
 These are just started.
-* Discussion on the [general json-schema-form project being carried out](https://gitter.im/json-schema-form/json-schema-form-projects)
+* Discussions on the [general json-schema-form projects being carried out](https://gitter.im/json-schema-form/json-schema-form-projects)
 * Discussions on the [angular-specific ASF projects](https://gitter.im/json-schema-form/angular-schema-form-projects)
 
 
