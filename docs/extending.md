@@ -1,120 +1,139 @@
 Extending Schema Form
 =====================
-Schema Form is designed to be easily extended and there are two basic ways to do it:
 
-1. Add a new type of field
-2. Add a new decorator
+Schema Form is designed to be easily extended. You can add your own custom fields or completely
+change the how the entire form is rendered.
 
-Adding a Field
---------------
-To add a new field to Schema Form you need to create a new form type and match that form type with
-a template snippet. To do this you use the `schemaFormDecoratorsProvider.addMapping()` function.
+A custom field is called an **add-on** and you can find community add-ons listed over at
+[schemaform.io](http://schemaform.io).
 
-Ex. from the [datepicker add-on](https://github.com/Textalk/angular-schema-form-datepicker/blob/master/src/bootstrap-datepicker.js#L18)
-```javascript
- schemaFormDecoratorsProvider.addMapping(
-  'bootstrapDecorator',
-  'datepicker',
-  'directives/decorators/bootstrap/datepicker/datepicker.html'
-);
-```
+To completely change how the entire field is rendered you need to create what we call a **decorator**.
+A decorator is actually a collection of add-ons that at least cover the basic field types
+that a schema can default to, but usually a lot more.
 
-The second argument is the name of your new form type, in this case `datepicker`, and the third is
-the template we bind to it (the first is the decorator, use `bootstrapDecorator` unless you know
-what you are doing).
+But before we get into the details of how you define a decorator or an add-on, let's take a look at how schema form builds forms.
 
-What this means is that a form definition like this:
-```javascript
-$scope.form = [
+How the form is built
+----------------------
+Schema Form uses the [sfBuilder](https://github.com/Textalk/angular-schema-form/blob/development/src/services/builder.js)
+service to recursively build the DOM elements of the form from a *canonical form definition*, that
+is our fancy word for an internal representation of a merge between the schema and the form.
+
+It's always an array of object and each object at least have the property `type`. If a `type` was
+not set in the form definition given to `sf-form` the schema is used to get a default.
+
+Example canonical form def.
+```js
+[
   {
-    key: "birthday",
-    type: "datepicker"
+    type: 'text'
+    key: 'name'
+  },
+  {
+    type: 'fieldset',
+    item: [
+      {
+        type: 'textarea',
+        key: 'comment'
+      }
+    ]
   }
-];
+]
 ```
-...will result in the `datepicker.html` template to be used to render that field in the form.
 
-But wait, where is all the code? Basically it's then up to the template to use directives to
-implement whatever it likes to do. It does have some help though, lets look at template example and
-go through the basics.
+#### The actual building
+So to build a form from a canonical form definition as in the example above the builder service loops
+over and for each type asks the decorator for a template, it adds it to a document fragment.
 
-This is sort of the template for the datepicker:
+After adding the template it also asks the decorator if that type has a *builder*
+function (actually it's usually a list of functions). If so it calls it with the DOM of its template,
+the form definition for that field and other useful stuff. This way the builder can modify and
+prepare the template depending on options in that fields form object.
+
+Nested fields, as with the fieldset above in the example above, builds it's children with such a
+*builder* function.
+
+This all happens in one large swoop and the finished document fragment is popped inside the form
+and then `$compile` is used to kick start it's directives.
+
+
+Creating an add-on
+------------------
+
+So to create an add-on you need two things, a template and some *builder functions*. Fortunately
+schema form got you covered with a couple of standard builders so most of the time you will only
+need a template.
+
+To register your template to be used when the form definition has a specific type you use the
+`schemaFormDecoratorsProvider.defineAddOn`.
+
+Ex.
+```js  
+angular.module('myAddOnModule', ['schemaForm']).config(function(schemaFormDecoratorsProvider, sfBuilderProvider) {
+
+  schemaFormDecoratorsProvider.defineAddOn(
+    'bootstrapDecorator',         // Name of the decorator you want to add to.
+    'awesome',                    // Form type that should render this add-on
+    'templates/my/addon.html',    // Template name in $templateCache
+    sfBuilderProvider.stdBuilders // List of builder functions to apply.
+  );
+
+});
+```
+
+The standards builders are `[sfField, ngModel, ngModelOptions, condition]`, see usage details below.
+
+#### The Template
+So whats in a template? You usually need a couple of things:
+
+  1. Usually a top level element that surrounds your template is a good idea. The `sfField` builder
+     slaps on a `sfField` directive that exposes the current form object on scope as `form`.
+  1. A `sf-field-model` somewhere so that the `ngModel` builder can add a proper `ngModel` to bind
+      your model value to.
+  1. A `schema-validate="form"` directive on the same element to enable schema validation.
+  1. A `<div sf-message="form.description"></div>` to display description or error messages.
+
+Basic template example:
 ```html
-<div class="form-group" ng-class="{'has-error': hasError()}">
-  <label class="control-label" ng-show="showTitle()">{{form.title}}</label>
-
-  <input ng-show="form.key"
-         style="background-color: white"
-         type="text"
-         class="form-control"
-         schema-validate="form"
-         ng-model="$$value$$"
-         pick-a-date
-         min-date="form.minDate"
-         max-date="form.maxDate"
-         format="form.format" />
-
-  <span class="help-block" sf-message="form.description"></span>
+<div> <!-- Surrounding DIV for sfField builder to add a sfField directive to. -->
+  <label>{{form.title}}</div>
+  <input sf-field-model schema-validate="form" type="text">
+  <div sf-message="form.description"></div>
 </div>
 ```
 
-### What's on the scope?
-Each form field will be rendered inside a decorator directive, created by the
-`schemaFormDecorators` factory service, *do*
-[check the source](https://github.com/Textalk/angular-schema-form/blob/master/src/services/decorators.js#L33).
+**BIG FAT CAVEAT**
+Ok, so currently there is something really ugly here. The bootstrap (and material) decorator uses
+a build step (gulp-angular-templatecache) to "compile" the template into a javascript file that
+basically chucks the template into `$templateCache`. Currently schema form does *not* support
+loading the templates any other way. They need to be in `$templateCache` when rendering.
 
-This means you have several helper functions and values on scope, most important of this `form`. The
-`form` variable contains the merged form definition for that field, i.e. your supplied form object +
-the defaults from the schema (it also has its part of the schema under *form.schema*).
-This is how you define and use new form field options, whatever is set on the form object is
-available here for you to act on.
-
-| Name     |  What it does  |
-|----------|----------------|
-| form      | Form definition object |
-| showTitle() | Shorthand for `form && form.notitle !== true && form.title` |
-| ngModel   | The ngModel controller, this will be on scope if you use either the directive `schema-validate` or `sf-array` |
-| evalInScope(expr, locals) | Eval supplied expression, ie scope.$eval |
-| evalExpr(expr, locals) | Eval an expression in the parent scope of the main `sf-schema` directive. |
-| interp(expr, locals) | Interpolate an expression which may or may not contain expression `{{ }}` sequences |
-| buttonClick($event, form)  | Use this with ng-click to execute form.onClick |
-| hasSuccess() | Shorthand for `ngModel.$valid && (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue))` |
-| hasError() | Shorthand for `ngModel.$invalid && !ngModel.$pristine` |
-
-#### Deprecation warning
-There is still a `errorMessage` function on scope but it's been deprecated. Please use the
-`sf-message` directive instead.
+This is really ugly and will be fixed. But you have been warned!
 
 
-### The magic $$value$$
-Schema Form wants to play nice with the built in Angular directives for form. Especially `ng-model`
-which we want to handle the two way binding against our model value. Also by using `ng-model` we
-get all the nice validation states from the `ngModelController` and `FormController` that we all
-know and love.
+Defining a decorator
+--------------------
+Defining a decorator is basically the same as defining a lot of add-ons. As with add-ons you use
+the `schemaFormDecoratorsProvider` again. This time its
+`schemaFormDecoratorsProvider.defineDecorator`.
 
-To get that working properly we had to resort to a bit of trickery, right before we let Angular
-compile the field template we do a simple string replacement of `$$value$$` and replace that
-with the path to the current form field on the model, i.e. `form.key`.
+Ex.
+```js
+angular.module('myDecoratorModule', ['schemaForm']).config(function(schemaFormDecoratorsProvider, sfBuilderProvider) {
 
-So `ng-model="$$value$$"` becomes something like `ng-model="model['person']['address']['street']"`,
-you can see this if you inspect the final form in the browser.
+  schemaFormDecoratorsProvider.defineDecorator('awesomeDecorator', {
+    textarea: {template: base + 'textarea.html', builder: sfBuilderProvider.stdBuilders},
+    button: {template: base + 'submit.html', builder: sfBuilderProvider.stdBuilders},
+    text: {template: base + 'text.html', builder: sfBuilderProvider.stdBuilders},
 
-So basically always have a `ng-model="$$value$$"` (Pro tip: ng-model is fine on any element, put
-  it on the same div as your custom directive and require the ngModelController for full control).
-
-### schema-validate directive
-`schema-validate` is a directive that you should put on the same element as your `ng-model`. It is
-responsible for validating the value against the schema using [tv4js](https://github.com/geraintluff/tv4)
-It takes the form definition as an argument.
-
-
-### sf-message directive
-Error messages are nice, and the best way to get them is via the `sf-message` directive. It usually
-takes `form.description` as an argument so it can show that until an error occurs.
-
+    // The default is special, if the builder can't find a match it uses the default template.
+    'default': {template: base + 'default.html', builder: sfBuilderProvider.stdBuilders}
+  }, []);
+});
+```
 
 ### Setting up schema defaults
-So you got this shiny new add-on that adds a fancy field type, but feel a bit bummed out that you
+So you got this shiny new add-on or decorator that adds a fancy field type, but feel a bit bummed out that you
 need to specify it in the form definition all the time? Fear not because you can also add a "rule"
 to map certain types and conditions in the schema to default to your type.
 
@@ -166,49 +185,136 @@ there can be a delay of a day or so.
 So [make a bower package](http://bower.io/docs/creating-packages/), add the keyword
 `angular-schema-form-add-on` and [register it](http://bower.io/docs/creating-packages/#register)!
 
-Decorators
-----------
-Decorators are a second way to extend Schema Form, the thought being that you should easily be able
-to change *every* field. Maybe you like it old school and want to use bootstrap 2. Or maybe you like
-to generate a table with the data instead? Right now there are no other decorators than bootstrap 3.
 
-Basically a *decorator* sets up all the mappings between form types and their respective templates
-using the `schemaFormDecoratorsProvider.createDecorator()` function.
 
-```javascript
-var base = 'directives/decorators/bootstrap/';
 
-schemaFormDecoratorsProvider.createDecorator('bootstrapDecorator', {
-  textarea: base + 'textarea.html',
-  fieldset: base + 'fieldset.html',
-  array: base + 'array.html',
-  tabarray: base + 'tabarray.html',
-  tabs: base + 'tabs.html',
-  section: base + 'section.html',
-  conditional: base + 'section.html',
-  actions: base + 'actions.html',
-  select: base + 'select.html',
-  checkbox: base + 'checkbox.html',
-  checkboxes: base + 'checkboxes.html',
-  number: base + 'default.html',
-  password: base + 'default.html',
-  submit: base + 'submit.html',
-  button: base + 'submit.html',
-  radios: base + 'radios.html',
-  'radios-inline': base + 'radios-inline.html',
-  radiobuttons: base + 'radio-buttons.html',
-  help: base + 'help.html',
-  'default': base + 'default.html'
-}, [
-  function(form) {
-    if (form.readonly && form.key && form.type !== 'fieldset') {
-      return base + 'readonly.html';
-    }
-  }
-]);
+The builders
+------------
+A collection of useful builders that cover most cases are in the `sfBuilder` service and is accessable 
+both from the provider and the service on the property `builders`. There is also a list of "standard" 
+builders, when in doubt use those. 
+
+```js
+angular.module('myMod').config(function(sfBuildersProvider) {
+
+  // Standard builders
+  sfBuildersProvider.stdBuilders;
+  
+  // All builders 
+  sfBuildersProvider.builders.sfField;
+  sfBuildersProvider.builders.condition;
+   sfBuildersProvider.builders.ngModel;
+  sfBuildersProvider.builders.ngModelOptions;
+  sfBuildersProvider.builders.simpleTransclusion;
+  sfBuildersProvider.builders.transclusion;
+  sfBuildersProvider.builders.array;
+ 
+});
 ```
-`schemaFormDecoratorsProvider.createDecorator(name, mapping, rules)` takes a name argument, a mapping object
-(type -> template) and an optional list of rule functions.
 
-When the decorator is trying to match a form type against a tempate it first executes all the rules
-in order. If one returns that is used as template, otherwise it checks the mappings.
+Currently the standard builders are:
+```js
+var stdBuilders = [
+  builders.sfField,
+  builders.ngModel,
+  builders.ngModelOptions,
+  builders.condition
+];
+```
+
+
+### builders.sfField
+The `sfField` builder adds the `sf-field="..."` directive to *the first child element* in the template, 
+giving it a correct value. The value is an id number that identifies that specific form object.
+
+The `sf-field` directive exports the form definition object as `form` on scope and as a lot of useful functions. 
+
+As a rule of thumb you always want this builder. 
+
+### builders.condition
+The `condition` builder checks the form definition for the option `condition`. If it's present it adds a 
+`ng-if` to all top level elements in the template.
+
+You usually want this as well.
+
+### builder.ngModel 
+The `ngModel` builder is maybe the most important builder. It makes sure you get a proper binding to
+your model value. 
+
+The `ngModel` builder queries the DOM of the template for all elements that have the attribute `sf-field-model`. Your template may have several of them. `sf-field-model` is *not* a directive, 
+but depending on it's value the `ngModel` builder will take three different actions.
+
+
+#### sf-field-model 
+Just `sf-field-model` or `sf-field-model=""` tells the builder to add a `ng-model` directive to this element. 
+This is a common use case.
+
+Ex: 
+DOM before `ngModel` builder:
+```html
+<div>
+  <input sf-field-model type="text">
+</div>
+```
+DOM after `ngModel` builder:
+```html
+<div>
+  <input sf-field-model ng-model="model['name']" type="text">
+</div>
+```
+
+#### sf-field-model="<attribute name>"
+Given a value the `ngModel` builder will treat that value as a *attribute name* and instead of slapping 
+on a `ng-model` set the specified attributes value. It sets it to the same value as the `ng-model` would have gotten.
+
+Ex: 
+DOM before `ngModel` builder:
+```html
+<div sf-field-model="my-directive">
+  <input sf-field-model type="text">
+</div>
+```
+DOM after `ngModel` builder:
+```html
+<div my-directive="model['name']">
+  <input sf-field-model ng-model="model['name']" type="text">
+</div>
+```
+
+#### sf-field-model="replaceAll"
+With the special value *replaceAll* the `ngModel` builder will instead loop over every attribute on the
+element and do a string replacement of `"$$value$$"` with the proper model value. 
+
+Ex: 
+DOM before `ngModel` builder:
+```html
+<div>
+  <input sf-field-model="replaceAll" 
+         ng-model="$$value$$"
+         ng-class="{'large': $$value$$.length > 10}"
+         type="text">
+</div>
+```
+DOM after `ngModel` builder:
+```html
+<div>
+  <input sf-field-model="replaceAll" 
+         ng-model="model['name']"
+         ng-class="{'large': model[name].length > 10}"
+         type="text">
+</div>
+```
+
+### builders.ngModelOptions
+If the form definition has a `ngModelOptions` option specified this builder will slap on a `ng-model-options`
+attribute to *the first child element* in the template. 
+
+
+### builder.simpleTransclusion
+The `simpleTransclusion` builder will recurse and build form items, useful for fieldsets etc. This builder
+is simple because it only appends children to the first child element and only checks `form.items`.
+
+
+Useful directives
+-----------------
+TODO: more in depth about schema-validate, sf-messages and sf-field

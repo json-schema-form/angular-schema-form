@@ -8,13 +8,13 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
   var defaultMessages = {
     'default': 'Field does not validate',
     0: 'Invalid type, expected {{schema.type}}',
-    1: 'No enum match for: {{value}}',
+    1: 'No enum match for: {{viewValue}}',
     10: 'Data does not match any schemas from "anyOf"',
     11: 'Data does not match any schemas from "oneOf"',
     12: 'Data is valid against more than one schema from "oneOf"',
     13: 'Data matches schema from "not"',
     // Numeric errors
-    100: 'Value is not a multiple of {{schema.divisibleBy}}',
+    100: 'Value is not a multiple of {{schema.multipleOf}}',
     101: '{{viewValue}} is less than the allowed minimum of {{schema.minimum}}',
     102: '{{viewValue}} is equal to the exclusive minimum {{schema.minimum}}',
     103: '{{viewValue}} is greater than the allowed maximum of {{schema.maximum}}',
@@ -31,8 +31,8 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
     303: 'Additional properties not allowed',
     304: 'Dependency failed - key must exist',
     // Array errors
-    400: 'Array is too short ({{value.length}}), minimum {{schema.maxItems}}',
-    401: 'Array is too long ({{value.length}}), maximum {{schema.minItems}}',
+    400: 'Array is too short ({{value.length}}), minimum {{schema.minItems}}',
+    401: 'Array is too long ({{value.length}}), maximum {{schema.maxItems}}',
     402: 'Array items are not unique',
     403: 'Additional items not allowed',
     // Format errors

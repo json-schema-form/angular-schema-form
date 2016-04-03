@@ -1,5 +1,6 @@
 /**
  * Directive that handles the model arrays
+ * DEPRECATED with the new builder use the sfNewArray instead.
  */
 angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sfValidator', 'sfPath',
   function(sfSelect, schemaForm, sfValidator, sfPath) {
@@ -33,6 +34,10 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
         // It's the (first) array part of the key, '[]' that needs a number
         // corresponding to an index of the form.
         var once = scope.$watch(attrs.sfArray, function(form) {
+          if (!form) {
+            return;
+          }
+
 
           // An array model always needs a key so we know what part of the model
           // to look at. This makes us a bit incompatible with JSON Form, on the
@@ -42,8 +47,9 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
           // We only modify the same array instance but someone might change the array from
           // the outside so let's watch for that. We use an ordinary watch since the only case
           // we're really interested in is if its a new instance.
-          scope.$watch('model' + sfPath.normalize(form.key), function(value) {
-            scope.modelArray = value;
+          var key = sfPath.normalize(form.key);
+          scope.$watch('model' + (key[0] !== '[' ? '.' : '') + key, function(value) {
+            list = scope.modelArray = value;
           });
 
           // Since ng-model happily creates objects in a deep path when setting a
@@ -234,11 +240,27 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
             scope.$on('schemaFormValidate', scope.validateArray);
 
             scope.hasSuccess = function() {
-              return ngModel.$valid && !ngModel.$pristine;
+              if (scope.options && scope.options.pristine &&
+                  scope.options.pristine.success === false) {
+                return ngModel.$valid &&
+                    !ngModel.$pristine && !ngModel.$isEmpty(ngModel.$modelValue);
+              } else {
+                return ngModel.$valid &&
+                  (!ngModel.$pristine || !ngModel.$isEmpty(ngModel.$modelValue));
+              }
             };
 
             scope.hasError = function() {
-              return ngModel.$invalid;
+              if (!scope.options || !scope.options.pristine || scope.options.pristine.errors !== false) {
+                // Show errors in pristine forms. The default.
+                // Note that "validateOnRender" option defaults to *not* validate initial form.
+                // so as a default there won't be any error anyway, but if the model is modified
+                // from the outside the error will show even if the field is pristine.
+                return ngModel.$invalid;
+              } else {
+                // Don't show errors in pristine forms.
+                return ngModel.$invalid && !ngModel.$pristine;
+              }
             };
 
             scope.schemaError = function() {

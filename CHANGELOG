@@ -1,6 +1,69 @@
+v0.8.12
+-------
+ * Bugfix for `condition` builder. It had a typo that broke it.
+ * Bugfix for `transclusion` builder.
+
+
+v0.8.11
+-------
+ * Bugfix for checkboxes validation in the new builder.
+
+v0.8.10
+-------
+ * Bugfix for checkboxes when model array is undefined.
+
+v0.8.9
+------
+ * Bugfix for radios and radios-inline. Validation should now work.
+ * Bugfix so model changes from outside the form trigger validation.
+ * New global option `pristine`.  Sets if errors and success states
+   should be visible when form field are `$pristine`. Default is `{errors: true, success: true}`
+
+v0.8.8
+------
+ * Don't rely on documentFragment.children @davidlgj
+ * Restored "template" type support with the builder. @davidlgj
+ * Fixed defaults in array items. @davidlgj
+
+v0.8.7
+------
+ * Moved common builder functions from angular-schema-form-bootstrap decorator. @davidlgj
+ * Bugfx for the new builder. @davidlgj
+
+v0.8.6
+------
+ * Removed left over console.timeEnd @davidlgj
+
+v0.8.5
+------
+ * UMD wrapping for bootstrap-decorator, thanks @angelaharalson
+ * label instead of h3 in array title, whic is more consistent. Thanks @prettymuchbryce
+ * doc typos, thanks @zerofifteen
+ * multipleOf validation message fix, thanks @leipert
+ * infinite digest bugfix, thanks @israelshirk
+ * minLength validation message bugfix, thanks @iamdarrenhall
+ * bugfix for Angular 1.2 and arrays watching, thanks @davidlgj
+
+v0.8.4
+------
+ * Reverted `trackBy`. Fixes #458, #462, #471
+
+
+v0.8.3
+------
+ * "destroyStrategy" support, thanks @jbsaff! This means that `condition` can now remove values
+   from the model when their fields are hidden.
+ * Bugfix for global option propagation, thanks @golfmat1
+ * `notitle` now works on fieldset as well, thanks @stramel
+ * `trackBy` on selects, thanks @Fridus
+ * update list variable when watching for array changes, thanks @lukebennet
+ * doc changes for the "save to gist" feature, thanks @niklasb
+ * validation error message mixups, thanks @leipert
+ * ObjectPath, deps and browserify fixes, thanks @saller, @LoicMahieu, @thardyman, @davidlgj
+
 v0.8.2
 -------
- * Fix embarrassing typo in package.json 
+ * Fix embarrassing typo in package.json
 
 v0.8.1
 ------

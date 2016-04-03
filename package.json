@@ -1,6 +1,6 @@
 {
   "name": "angular-schema-form",
-  "version": "0.8.2",
+  "version": "0.8.12",
   "description": "Create complex forms from a JSON schema with angular.",
   "repository": "Textalk/angular-schema-form",
   "main": "dist/schema-form.min.js",
@@ -21,7 +21,7 @@
     "angular": ">= 1.2",
     "tv4": "~1.0.15",
     "angular-sanitize": ">= 1.2",
-    "objectpath": "~1.1.0"
+    "objectpath": "^1.2.1"
   },
   "keywords": [
     "angular",
@@ -48,11 +48,10 @@
     "karma-coverage": "^0.2.1",
     "karma-growler-reporter": "0.0.1",
     "karma-mocha": "^0.1.3",
-    "karma-ng-html2js-preprocessor": "^0.1.0",
     "karma-phantomjs-launcher": "^0.1.4",
     "mocha": "^1.18.0",
     "mocha-lcov-reporter": "0.0.1",
-    "protractor": "^2.0.0",
+    "protractor": "^2.1.0",
     "sinon": "^1.9.0",
     "sinon-chai": "^2.5.0",
     "streamqueue": "0.0.5"

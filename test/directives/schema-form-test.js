@@ -1,7 +1,6 @@
 chai.should();
 
 describe('directive',function(){
-  beforeEach(module('templates'));
   beforeEach(module('schemaForm'));
   beforeEach(
     //We don't need no sanitation. We don't need no thought control.
@@ -46,12 +45,36 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).is('bootstrap-decorator').should.be.true;
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
+      tmpl.children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+      tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
+      tmpl.children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(1).children('select').length.should.equal(1);
+
+    });
+  });
+
+  it('should generate html and compile when no form is provided, using the default',function(){
+
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = exampleSchema;
+
+      scope.form = undefined;
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.children().length.should.be.equal(2);
+      tmpl.children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+      tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
+      tmpl.children().eq(1).is('div.form-group').should.be.true;
+      tmpl.children().eq(1).children('select').length.should.equal(1);
 
     });
   });
@@ -72,11 +95,11 @@ describe('directive',function(){
           },
           'ianal': {
             'type': 'boolean',
-            'title':'IANAL'
+            'title': 'IANAL'
           },
           'age': {
             'type': 'integer',
-            'title':'Age',
+            'title': 'Age',
             'minimum': 0
           },
           'sum': {
@@ -121,30 +144,30 @@ describe('directive',function(){
 
 
       tmpl.children().length.should.be.equal(6);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
+      tmpl.children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+      tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
 
-      tmpl.children().eq(1).children().eq(0).is('div.checkbox').should.be.true;
-      tmpl.children().eq(1).children().eq(0).find('input[type="checkbox"]').length.should.be.eq(1);
+      tmpl.children().eq(1).is('div.checkbox').should.be.true;
+      tmpl.children().eq(1).find('input[type="checkbox"]').length.should.be.eq(1);
 
-      tmpl.children().eq(2).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(2).children().eq(0).find('input[type="number"]').length.should.be.eq(1);
+      tmpl.children().eq(2).is('div.form-group').should.be.true;
+      tmpl.children().eq(2).find('input[type="number"]').length.should.be.eq(1);
 
-      tmpl.children().eq(3).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(3).children().eq(0).find('input[type="number"]').length.should.be.eq(1);
+      tmpl.children().eq(3).is('div.form-group').should.be.true;
+      tmpl.children().eq(3).find('input[type="number"]').length.should.be.eq(1);
 
-      tmpl.children().eq(4).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(4).children().eq(0).find('select').length.should.be.eq(1);
+      tmpl.children().eq(4).is('div.form-group').should.be.true;
+      tmpl.children().eq(4).find('select').length.should.be.eq(1);
 
-      tmpl.children().eq(5).children().eq(0).is('fieldset').should.be.true;
-      tmpl.children().eq(5).children().eq(0).children().eq(0).is('legend').should.be.true;
-      tmpl.children().eq(5).children().eq(0).children().eq(3).is('sf-decorator').should.be.true;
+      tmpl.children().eq(5).is('fieldset').should.be.true;
+      tmpl.children().eq(5).children().eq(0).is('legend').should.be.true;
 
-      tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).is('fieldset').should.be.true;
-      tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).children().length.should.be.eq(4);
-      tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'left\']"]').length.should.be.eq(1);
-      tmpl.children().eq(5).children().eq(0).children().eq(4).children().eq(0).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'right\']"]').length.should.be.eq(1);
+      tmpl.children().eq(5).children().eq(4).is('fieldset').should.be.true;
+      tmpl.children().eq(5).children().eq(4).children().length.should.be.eq(4);
+
+      tmpl.children().eq(5).children().eq(4).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'left\']"]').length.should.be.eq(1);
+      tmpl.children().eq(5).children().eq(4).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'right\']"]').length.should.be.eq(1);
 
     });
   });
@@ -163,12 +186,12 @@ describe('directive',function(){
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
+
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).is('input[type="text"]').should.be.true;
       tmpl.children().eq(0).attr('ng-model').should.be.equal('person.name');
-      tmpl.children().eq(1).is('bootstrap-decorator').should.be.true;
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
+      tmpl.children().eq(1).is('div.form-group').should.be.true;
+      tmpl.children().eq(1).children('select').length.should.equal(1);
 
     });
   });
@@ -220,12 +243,12 @@ describe('directive',function(){
       $compile(tmpl)(scope);
       $rootScope.$apply();
       tmpl.children().length.should.be.equal(3);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
-      tmpl.children().eq(2).children().eq(0).find('input').is('input[type=submit]').should.be.true;
-      tmpl.children().eq(2).children().eq(0).find('input').val().should.be.equal('Okidoki');
+      tmpl.children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+      tmpl.children().eq(1).is('div.form-group').should.be.true;
+      tmpl.children().eq(1).children('select').length.should.equal(1);
+      tmpl.children().eq(2).find('input').is('input[type=submit]').should.be.true;
+      tmpl.children().eq(2).find('input').val().should.be.equal('Okidoki');
     });
   });
 
@@ -245,12 +268,12 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(3);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('select').length.should.equal(1);
-      tmpl.children().eq(2).children().eq(0).find('button').length.should.be.equal(1);
-      tmpl.children().eq(2).children().eq(0).find('button').text().should.include('Okidoki');
+      tmpl.children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+      tmpl.children().eq(1).is('div.form-group').should.be.true;
+      tmpl.children().eq(1).children('select').length.should.equal(1);
+      tmpl.children().eq(2).find('button').length.should.be.equal(1);
+      tmpl.children().eq(2).find('button').text().should.include('Okidoki');
 
       scope.form[1].onClick.should.not.have.beenCalled;
       tmpl.children().eq(2).children().eq(0).find('button').click();
@@ -330,12 +353,12 @@ describe('directive',function(){
       $compile(tmpl)(scope);
       $rootScope.$apply();
       tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
-      expect(tmpl.children().eq(1).children().eq(0).children('input').attr('disabled')).to.be.undefined;
+      tmpl.children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+      tmpl.children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
+      tmpl.children().eq(1).is('div.form-group').should.be.true;
+      tmpl.children().eq(1).children('input').length.should.equal(1);
+      expect(tmpl.children().eq(1).children('input').attr('disabled')).to.be.undefined;
     });
   });
 
@@ -361,12 +384,12 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
-      expect(tmpl.children().eq(1).children().eq(0).children('input').attr('disabled')).to.be.undefined;
+      tmpl.children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+      tmpl.children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
+      tmpl.children().eq(1).is('div.form-group').should.be.true;
+      tmpl.children().eq(1).children('input').length.should.equal(1);
+      expect(tmpl.children().eq(1).children('input').attr('disabled')).to.be.undefined;
     });
   });
 
@@ -395,12 +418,12 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').is('input[type="text"]').should.be.true;
-      tmpl.children().eq(0).children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
-      tmpl.children().eq(1).children().eq(0).is('div.form-group').should.be.true;
-      tmpl.children().eq(1).children().eq(0).children('input').length.should.equal(1);
-      expect(tmpl.children().eq(1).children().eq(0).children('input').attr('disabled')).to.be.undefined;
+      tmpl.children().eq(0).is('div.form-group').should.be.true;
+      tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
+      tmpl.children().eq(0).find('input').attr('disabled').should.be.equal('disabled');
+      tmpl.children().eq(1).is('div.form-group').should.be.true;
+      tmpl.children().eq(1).children('input').length.should.equal(1);
+      expect(tmpl.children().eq(1).children('input').attr('disabled')).to.be.undefined;
     });
   });
 
@@ -642,7 +665,7 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.eq(1);
-      var labels = tmpl.children().children().find('label');
+      var labels = tmpl.children().find('label');
       labels.eq(0).text().should.equal('Nick');
       labels.eq(1).text().should.equal('Name');
       labels.eq(2).text().should.equal('Alias');
@@ -692,7 +715,6 @@ describe('directive',function(){
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
-
       scope.person.arr[0].name.should.be.equal('Name');
       scope.person.arr[0].nick.should.be.equal('Nick');
       expect(scope.person.arr[0].alias).to.be.undefined;
@@ -722,8 +744,8 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).find('label').hasClass('sr-only').should.be.true;
-      tmpl.children().eq(1).children().eq(0).find('label').hasClass('ng-hide').should.be.true;
+      tmpl.children().eq(0).eq(0).find('label').hasClass('sr-only').should.be.true;
+      tmpl.children().eq(1).eq(0).find('label').hasClass('ng-hide').should.be.true;
     });
   });
 
@@ -757,7 +779,7 @@ describe('directive',function(){
 
       //TODO: more asserts
       tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).find('input[type=checkbox]').length.should.be.eq(2);
+      tmpl.children().eq(0).find('input[type=checkbox]').length.should.be.eq(2);
     });
   });
 
@@ -827,10 +849,10 @@ describe('directive',function(){
       //TODO: more asserts
 
       tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).find('input[type=radio]').length.should.be.eq(2);
-      tmpl.children().eq(0).children().eq(0).find('.radio').length.should.be.eq(2);
-      tmpl.children().eq(1).children().eq(0).find('input[type=radio]').length.should.be.eq(2);
-      tmpl.children().eq(1).children().eq(0).find('.btn').length.should.be.eq(2);
+      tmpl.children().eq(0).find('input[type=radio]').length.should.be.eq(2);
+      tmpl.children().eq(0).find('.radio').length.should.be.eq(2);
+      tmpl.children().eq(1).find('input[type=radio]').length.should.be.eq(2);
+      tmpl.children().eq(1).find('.btn').length.should.be.eq(2);
 
     });
   });
@@ -1057,54 +1079,9 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
-      tmpl.children().eq(0).children().eq(0).hasClass('btn-group').should.be.false;
-      tmpl.children().eq(0).children().eq(0).children().length.should.be.eq(2);
-    });
-  });
-
-  it('should handle a simple div with a condition if "conditional" is specified',function(done){
-
-    inject(function($compile,$rootScope){
-      var scope = $rootScope.$new();
-      scope.person = { show: false };
-
-      scope.schema = exampleSchema;
-
-      scope.form = [{
-        type: "conditional",
-        condition: "person.show",
-        items: [
-          {
-            key: 'name',
-            notitle: true
-          },
-          {
-            key: 'gender',
-            notitle: true
-          }
-        ]
-      }];
-
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
-
-      $compile(tmpl)(scope);
-      $rootScope.$apply();
-
-      tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).children().length.should.be.equal(0);
-
-      //Do a setTimeout so we kan do another $apply
-      setTimeout(function(){
-        scope.person.show = true;
-        scope.$apply();
-        tmpl.children().length.should.be.equal(1);
-        tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
-        tmpl.children().eq(0).children().eq(0).hasClass('btn-group').should.be.false;
-        tmpl.children().eq(0).children().eq(0).children().length.should.be.eq(2);
-        done();
-      },10);
-
+      tmpl.children().eq(0).is('div').should.be.true;
+      tmpl.children().eq(0).hasClass('btn-group').should.be.false;
+      tmpl.children().eq(0).children().length.should.be.eq(2);
     });
   });
 
@@ -1136,11 +1113,11 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
-      tmpl.children().eq(0).children().eq(0).hasClass('btn-group').should.be.true;
-      tmpl.children().eq(0).children().eq(0).children().length.should.be.eq(2);
-      tmpl.children().eq(0).children().eq(0).children().eq(0).is('input').should.be.true;
-      tmpl.children().eq(0).children().eq(0).children().eq(1).is('button').should.be.true;
+      tmpl.children().eq(0).is('div').should.be.true;
+      tmpl.children().eq(0).hasClass('btn-group').should.be.true;
+      tmpl.children().eq(0).children().length.should.be.eq(2);
+      tmpl.children().eq(0).children().eq(0).is('input').should.be.true;
+      tmpl.children().eq(0).children().eq(1).is('button').should.be.true;
     });
   });
 
@@ -1182,14 +1159,13 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.be.equal(1);
-      tmpl.children().eq(0).children().length.should.be.equal(1);
-      tmpl.children().eq(0).children().eq(0).children().length.should.be.eq(4);
-      tmpl.children().eq(0).children().eq(0).children().eq(0).hasClass('btn-success').should.be.false;
-      tmpl.children().eq(0).children().eq(0).children().eq(1).hasClass('btn-default').should.be.true;
-      tmpl.children().eq(0).children().eq(0).children().eq(1).hasClass('btn-danger').should.be.false;
-      tmpl.children().eq(0).children().eq(0).children().eq(2).hasClass('btn-success').should.be.true;
-      tmpl.children().eq(0).children().eq(0).children().eq(3).hasClass('btn-default').should.be.false;
-      tmpl.children().eq(0).children().eq(0).children().eq(3).hasClass('btn-danger').should.be.true;
+      tmpl.children().eq(0).children().length.should.be.eq(4);
+      tmpl.children().eq(0).children().eq(0).hasClass('btn-success').should.be.false;
+      tmpl.children().eq(0).children().eq(1).hasClass('btn-default').should.be.true;
+      tmpl.children().eq(0).children().eq(1).hasClass('btn-danger').should.be.false;
+      tmpl.children().eq(0).children().eq(2).hasClass('btn-success').should.be.true;
+      tmpl.children().eq(0).children().eq(3).hasClass('btn-default').should.be.false;
+      tmpl.children().eq(0).children().eq(3).hasClass('btn-danger').should.be.true;
 
     });
   });
@@ -1229,9 +1205,9 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.eq(2);
-      tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
-      tmpl.children().eq(0).children().eq(0).children().length.should.eq(1);
-      tmpl.children().eq(0).children().eq(0).children().html().should.be.eq("Yo Ninja!");
+      tmpl.children().eq(0).is('div').should.be.true;
+      tmpl.children().eq(0).children().length.should.eq(1);
+      tmpl.children().eq(0).children().html().should.be.eq("Yo Ninja!");
 
     });
   });
@@ -1280,8 +1256,8 @@ describe('directive',function(){
       $rootScope.$apply();
 
       tmpl.children().length.should.eq(1);
-      var tabs  = tmpl.children().children().eq(0).children().eq(0);
-      var panes = tmpl.children().children().eq(0).children().eq(1);
+      var tabs  = tmpl.children().children().eq(0);
+      var panes = tmpl.children().children().eq(1);
 
       tabs.is('ul').should.be.true;
       tabs.children().length.should.be.eq(2);
@@ -1368,19 +1344,19 @@ describe('directive',function(){
 
       //TODO: more asserts
       tmpl.children().length.should.be.equal(3);
-      tmpl.children().eq(0).children().eq(0).find('input').length.should.be.eq(1);
-      tmpl.children().eq(0).children().eq(0).find('button').length.should.be.eq(2);
-      tmpl.children().eq(0).children().eq(0).find('button').eq(1).text().trim().should.be.eq('Add');
+      tmpl.children().eq(0).find('input').length.should.be.eq(1);
+      tmpl.children().eq(0).find('button').length.should.be.eq(2);
+      tmpl.children().eq(0).find('button').eq(1).text().trim().should.be.eq('Add');
 
-      tmpl.children().eq(1).children().eq(0).find('input').length.should.be.eq(1);
-      tmpl.children().eq(1).children().eq(0).find('fieldset').length.should.be.eq(0);
-      tmpl.children().eq(1).children().eq(0).find('button').length.should.be.eq(2);
-      tmpl.children().eq(1).children().eq(0).find('button').eq(1).text().trim().should.be.eq('Add');
+      tmpl.children().eq(1).find('input').length.should.be.eq(1);
+      tmpl.children().eq(1).find('fieldset').length.should.be.eq(0);
+      tmpl.children().eq(1).find('button').length.should.be.eq(2);
+      tmpl.children().eq(1).find('button').eq(1).text().trim().should.be.eq('Add');
 
-      tmpl.children().eq(2).children().eq(0).find('input').length.should.be.eq(2);
-      tmpl.children().eq(2).children().eq(0).find('fieldset').length.should.be.eq(1);
-      tmpl.children().eq(2).children().eq(0).find('button').length.should.be.eq(4);
-      tmpl.children().eq(2).children().eq(0).find('button').eq(3).text().trim().should.be.eq('Add');
+      tmpl.children().eq(2).find('input').length.should.be.eq(2);
+      tmpl.children().eq(2).find('fieldset').length.should.be.eq(1);
+      tmpl.children().eq(2).find('button').length.should.be.eq(4);
+      tmpl.children().eq(2).find('button').eq(3).text().trim().should.be.eq('Add');
 
 
     });
@@ -1520,21 +1496,17 @@ describe('directive',function(){
 
       //TODO: more asserts
       tmpl.children().length.should.be.equal(2);
-      tmpl.children().eq(0).children().eq(0).find('input').length.should.be.eq(3);
-      tmpl.children().eq(0).children().eq(0).find('button').length.should.be.eq(3);
-      tmpl.children().eq(0).children().eq(0).find('button').eq(0).text().trim().should.be.eq('Remove');
-      tmpl.children().eq(0).children().eq(0).is('div').should.be.true;
-      tmpl.children().eq(0).children().eq(0).attr('sf-array').should.be.thruthy;
-      tmpl.children().eq(0).children().eq(0).find('.tabs-left').length.should.be.eq(1);
+      tmpl.children().eq(0).find('input').length.should.be.eq(3);
+      tmpl.children().eq(0).find('button').length.should.be.eq(3);
+      tmpl.children().eq(0).find('button').eq(0).text().trim().should.be.eq('Remove');
+      tmpl.children().eq(0).is('div').should.be.true;
+      tmpl.children().eq(0).find('.tabs-left').length.should.be.eq(1);
 
-      tmpl.children().eq(1).children().eq(0).find('input').length.should.be.eq(1);
-      tmpl.children().eq(1).children().eq(0).find('fieldset').length.should.be.eq(0);
-      tmpl.children().eq(1).children().eq(0).find('button').length.should.be.eq(1);
-      tmpl.children().eq(1).children().eq(0).find('button').text().trim().should.be.eq('Remove');
-      tmpl.children().eq(1).children().eq(0).attr('sf-array').should.be.thruthy;
-      tmpl.children().eq(1).children().eq(0).find('.tabs-left').length.should.be.eq(0);
-      tmpl.children().eq(1).children().eq(0).find('.tabs-right').length.should.be.eq(1);
-
+      tmpl.children().eq(1).find('input').length.should.be.eq(1);
+      tmpl.children().eq(1).find('fieldset').length.should.be.eq(0);
+      tmpl.children().eq(1).find('button').length.should.be.eq(1);
+      tmpl.children().eq(1).find('button').text().trim().should.be.eq('Remove');
+      tmpl.children().eq(1).find('.tabs-left').length.should.be.eq(0);
     });
   });
 
@@ -1602,7 +1574,7 @@ describe('directive',function(){
       tmpl.children().eq(1).find('button').text().trim().should.be.eq('Delete');
       tmpl.children().eq(1).find('button').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(1).find('button').eq(0).hasClass('btn-danger').should.be.false;
-      tmpl.children().eq(1).find('li:not([ng-repeat]) > a').text().trim().should.be.eq('Add');
+
 
     });
   });
@@ -1746,13 +1718,13 @@ describe('directive',function(){
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
-
-      tmpl.children().find('.schema-form-text').length.should.be.equal(1);
+      tmpl.find('.schema-form-text').length.should.be.equal(1);
 
       setTimeout(function() {
+
         scope.person.flag = false;
         $rootScope.$apply();
-        tmpl.children().find('.schema-form-text').length.should.be.equal(0);
+        tmpl.find('.schema-form-text').length.should.be.equal(0);
         done();
       }, 0);
 
@@ -1782,17 +1754,70 @@ describe('directive',function(){
       $compile(tmpl)(scope);
       $rootScope.$apply();
 
-      tmpl.children().find('.schema-form-text').length.should.be.equal(1);
-      tmpl.children().find('.schema-form-textarea').length.should.be.equal(0);
+      tmpl.find('.schema-form-text').length.should.be.equal(1);
+      tmpl.find('.schema-form-textarea').length.should.be.equal(0);
 
       setTimeout(function() {
         scope.form[0].type = 'textarea';
         scope.$broadcast('schemaFormRedraw');
         $rootScope.$apply();
-        tmpl.children().find('.schema-form-text').length.should.be.equal(0);
+        tmpl.find('.schema-form-text').length.should.be.equal(0);
         done();
       }, 0);
 
+    });
+  });
+
+  it('should redraw form with proper defaults on schemaFormRedraw event',function(done) {
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [{
+        key: 'name',
+        type: 'text'
+      }];
+
+      scope.options = {formDefaults: {}};
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-options="options"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      expect(tmpl.find('input').attr('disabled')).to.be.undefined;
+
+      var disable, enable;
+      disable = function () {
+        // form element should be disabled
+        scope.options.formDefaults.readonly = true;
+        scope.$broadcast('schemaFormRedraw');
+        $rootScope.$apply();
+        expect(tmpl.find('input').attr('disabled')).eq('disabled');
+
+        // try to re-enable it by modifying global option
+        setTimeout(enable, 0);
+      };
+
+      enable = function () {
+        // form element should be back to enabled
+        scope.options.formDefaults.readonly = false;
+        scope.$broadcast('schemaFormRedraw');
+        $rootScope.$apply();
+        expect(tmpl.find('input').attr('disabled')).to.be.undefined;
+
+        done();
+      }
+
+      setTimeout(disable, 0);
     });
   });
 
@@ -1821,8 +1846,7 @@ describe('directive',function(){
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
-
-      tmpl.children().eq(0).html().should.be.eq('<div class="ng-binding ng-scope">Hello World</div>')
+      tmpl.html().should.be.eq('<div sf-field="0" class="ng-scope ng-binding">Hello World</div>')
 
     });
   });
@@ -1860,7 +1884,7 @@ describe('directive',function(){
       $httpBackend.verifyNoOutstandingExpectation();
       $httpBackend.verifyNoOutstandingRequest();
 
-      tmpl.children().eq(0).html().should.be.eq('<div class="ng-binding ng-scope">Hello World</div>')
+      tmpl.html().should.be.eq('<div sf-field="0" class="ng-scope ng-binding">Hello World</div>');
 
     });
   });
@@ -1918,46 +1942,6 @@ describe('directive',function(){
       }
     },
     {
-      name: 'radios inline',
-      property: {
-        type: 'boolean',
-      },
-      form: {
-        key: ["field"],
-        type: "radios-inline",
-        titleMap: [
-          {
-            "value": false,
-            "name": "No way"
-          },
-          {
-            "value": true,
-            "name": "OK"
-          }
-        ]
-      }
-    },
-    {
-      name: 'radios',
-      property: {
-        type: 'boolean',
-      },
-      form: {
-        key: ["field"],
-        type: "radios",
-        titleMap: [
-          {
-            "value": false,
-            "name": "No way"
-          },
-          {
-            "value": true,
-            "name": "OK"
-          }
-        ]
-      }
-    },
-    {
       name: 'select',
       property: {
         type: 'boolean',
@@ -2000,10 +1984,10 @@ describe('directive',function(){
         ngModelCtrl.$valid = true;
         ngModelCtrl.$pristine = false;
         $rootScope.$apply();
-        tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.true;
+        tmpl.children().eq(0).hasClass('has-success').should.be.true;
         scope.form[0].disableSuccessState = true;
         $rootScope.$apply();
-        tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.false;
+        tmpl.children().eq(0).hasClass('has-success').should.be.false;
       });
     });
 
@@ -2028,13 +2012,217 @@ describe('directive',function(){
         ngModelCtrl.$invalid = true;
         ngModelCtrl.$pristine = false;
         $rootScope.$apply();
-        tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.true;
+        tmpl.children().eq(0).hasClass('has-error').should.be.true;
         scope.form[0].disableErrorState = true;
         $rootScope.$apply();
-        tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.false;
+        tmpl.children().eq(0).hasClass('has-error').should.be.false;
       });
     });
   });
+
+
+
+
+  it('should not add "has-success" class to radios field if a correct value is entered, but disableSuccessState is set on form', function () {
+
+    var field = {
+      name: 'radios',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    };
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.model = {}
+      scope.schema = {
+        type: 'object',
+        properties: {
+          field: field.property
+        }
+      };
+      scope.form = [field.form];
+
+      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      ngModelCtrl.$valid = true;
+      ngModelCtrl.$pristine = false;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.true;
+      scope.form[0].disableSuccessState = true;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.false;
+    });
+  });
+
+  it('should not add "has-error" class to radios field if invalid value is entered, but disableErrorState is set on form', function () {
+
+    var field = {
+      name: 'radios',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    };
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.model = {
+        field: field.errorValue
+      }
+      scope.schema = {
+        type: 'object',
+        properties: {
+          field: field.property
+        }
+      };
+      scope.form = [field.form];
+
+      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      ngModelCtrl.$invalid = true;
+      ngModelCtrl.$pristine = false;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.true;
+      scope.form[0].disableErrorState = true;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.false;
+    });
+  });
+
+  it('should not add "has-success" class to radios-inline field if a correct value is entered, but disableSuccessState is set on form', function () {
+
+    var field = {
+      name: 'radios',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    };
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.model = {}
+      scope.schema = {
+        type: 'object',
+        properties: {
+          field: field.property
+        }
+      };
+      scope.form = [field.form];
+
+      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      ngModelCtrl.$valid = true;
+      ngModelCtrl.$pristine = false;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.true;
+      scope.form[0].disableSuccessState = true;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.false;
+    });
+  });
+
+  it('should not add "has-error" class to radios-inline field if invalid value is entered, but disableErrorState is set on form', function () {
+
+    var field = {
+      name: 'radios',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    };
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.model = {
+        field: field.errorValue
+      }
+      scope.schema = {
+        type: 'object',
+        properties: {
+          field: field.property
+        }
+      };
+      scope.form = [field.form];
+
+      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      ngModelCtrl.$invalid = true;
+      ngModelCtrl.$pristine = false;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.true;
+      scope.form[0].disableErrorState = true;
+      $rootScope.$apply();
+      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.false;
+    });
+  });
+
+
+
+
+
 
 
   describe('destroy strategy', function() {
@@ -2183,22 +2371,13 @@ describe('directive',function(){
           }
         });
 
+
+
         setTimeout(function() {
           scope.person.switch = false;
           scope.$apply();
-
           scope.person.should.deep.equal({
-            "switch": false,
-            "list": [
-              {
-                "sub": {
-                },
-              }
-            ],
-            "deep": {
-              "sub": {
-              }
-            }
+            "switch": false
           });
           done();
         });
@@ -2333,7 +2512,6 @@ describe('directive',function(){
         setTimeout(function() {
           scope.person.switch = false;
           scope.$apply();
-          console.log(JSON.stringify(scope.person,undefined,2))
           scope.person.should.deep.equal({
             "switch": false,
             "list": [
