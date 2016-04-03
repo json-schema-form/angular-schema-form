@@ -1,5 +1,5 @@
-var gulp = require('gulp'),
-  jscs = require('gulp-jscs');
+var gulp = require('gulp');
+var jscs = require('gulp-jscs');
 
 gulp.task('jscs', function() {
   gulp.src('./src/**/*.js')
