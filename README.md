@@ -16,33 +16,32 @@ Lets get into those first(the normal front page continues below):
 
 The json-schema-form standard
 -----------------------------
-A standard, json-schema-form, is being created. 
+A standard, json-schema-form, is being created.
 
-The reason is that the concept of combining data, JSON Schema and a form definition is something that isn't just usable in a javascript angular web application, but in any framework, on any platform.
-Currently, there ports are [angular-schema-form](https://github.com/json-schema-form/angular-schema-form) and [react-schema-form](https://github.com/networknt/react-schema-form), but delphi-schema-form and laravel-schema-form are planned as well.
-To make these ports easier to do, and for everything to work in harmony, a common ground has to be established, a [standard](https://github.com/json-schema-form/json-schema-form). 
+The concept of combining data, JSON Schema and a form definition, is something that isn't just usable in a JavaScript Angular web application, but in any framework, on any platform.
+Current ports are [angular-schema-form](https://github.com/json-schema-form/angular-schema-form) and [react-schema-form](https://github.com/networknt/react-schema-form), but delphi-schema-form and laravel-schema-form are planned as well.
+To make these ports easier to do, and for everything to work in harmony, a common ground has to be established, a [standard](https://github.com/json-schema-form/json-schema-form).
 
 Organisational
 --------------
-
 1. ASF has changed into using a more open governance model. This basically means that ASF is now governed by more people.
 2. An umbrella organisaton, json-schema-form, has been formed. As you can see, this repo is now a part of that Github organisation, not Textalk.
 
 Projects
 --------
-After a phase of planning, the following list of projects has been decided upon: 
+After a phase of planning, the following list of projects has been decided upon:
 https://github.com/json-schema-form/json-schema-form/wiki/Current-projects
 
 Release 1.0
 -----------
-The next major release of ASF will be 1.0. 
+The next major release of ASF will be 1.0.
 
-The goal for that version is to include the breaking changes that is needed for future developents, like *Of and local $refs:
+The goal for that version is to include the breaking changes that is needed for future developments, like *Of and local $refs:
 
 * Break out the non-framework specific parts of ASF into a vanilla ES6 module
 * Remove the built-in bootstrap decorator, and in doing that require that users wanting to use that load that separately. The reason obviously being the material decorator.
 
-The reason for the core break out is for all javascript-based ports of the json-schema-form concept to be able to share the same central code base. 
+The reason for the core break out is for all javascript-based ports of the json-schema-form concept to be able to share the same central code base.
 Work in that direction is being done in the [json-schema-form-core](https://github.com/json-schema-form/json-schema-form-core) repository.
 
 Schema builder UI
@@ -62,7 +61,7 @@ The documentation is evolving, and it is happening mostly on the wiki:
 * [The ASF wiki](https://github.com/json-schema-form/angular-schema-form/wiki)
 * [The wiki of the json-schema-form organisation](https://github.com/json-schema-form/json-schema-form/wiki)
 
-New gitter rooms
+New Gitter rooms
 ----------------
 These are just started.
 * Discussions on the [general json-schema-form projects being carried out](https://gitter.im/json-schema-form/json-schema-form-projects)
