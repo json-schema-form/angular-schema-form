@@ -1,3 +1,9 @@
+v0.8.13
+-------
+ * Bugfix copy the initial form default on form redraw @stanimoto
+ * Bugfix for revalidating the model after custom validation event is broadcast @cepauskas
+ * New event value. The form name is now passed in validate and error events @tomsowerby & @LeonardoGentile
+
 v0.8.12
 -------
  * Bugfix for `condition` builder. It had a typo that broke it.
@@ -118,14 +124,14 @@ v0.7.11
 
 v0.7.10
 ------
-* Accessability additions, thanks @stramel
-* Updates to the gulp tasks, thanks @stramel
-* Updated to bower, thanks @Dervisevic
-* Updates to documentation & README & Contributing.md, thanks @davidlgj @Dervisevic
-* Speed optimization, thanks @stramel
-* Call ngModel.$setDirty() when deleting from array, thanks @qstrahl
-* Don't override readonly if specified on items individually, thanks @qstrahl
-* Update to the examples, thanks @mike-marcacci
+ * Accessability additions, thanks @stramel
+ * Updates to the gulp tasks, thanks @stramel
+ * Updated to bower, thanks @Dervisevic
+ * Updates to documentation & README & Contributing.md, thanks @davidlgj @Dervisevic
+ * Speed optimization, thanks @stramel
+ * Call ngModel.$setDirty() when deleting from array, thanks @qstrahl
+ * Don't override readonly if specified on items individually, thanks @qstrahl
+ * Update to the examples, thanks @mike-marcacci
 
 v0.7.9
 ------
@@ -264,7 +270,7 @@ We're celebrating actual useful functionality by bumping minor version, yay!
 
 v0.0.4
 ------
-* Fieldsets now properly merge schema defaults.
-* Directives for "manual" decorator usage.
-* Basic support for buttons.
-* Basic support for custom validation error messages.
+ * Fieldsets now properly merge schema defaults.
+ * Directives for "manual" decorator usage.
+ * Basic support for buttons.
+ * Basic support for custom validation error messages.
