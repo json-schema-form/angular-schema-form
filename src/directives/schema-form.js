@@ -170,7 +170,7 @@ angular.module('schemaForm')
         // part of the form or schema is chnaged without it being a new instance.
         scope.$on('schemaFormRedraw', function() {
           var schema = scope.schema;
-          var form   = scope.initialForm || ['*'];
+          var form   = scope.initialForm ? angular.copy(scope.initialForm) : ['*'];
           if (schema) {
             render(schema, form);
           }

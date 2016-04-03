@@ -11,6 +11,10 @@ request heck of a lot easier for us.
 Please avoid including anything from the `dist/` directory as that can make merging harder, and we
 always generate these files when we make a new release.
 
+**We're currently in transitioning where a large part of the code, i.e. the bootstrap decorator, has been moved to it's own repo. It's here [github.com/Textalk/angular-schema-form-bootstrap](https://github.com/Textalk/angular-schema-form-bootstrap)**
+
+Feel free to submit issues on the main repo anyway though.
+
 If its a new field type consider making it an add-on instead,
 especially if it has external dependencies. See [extending Schema Form documentation.](docs/extending.md)
 
