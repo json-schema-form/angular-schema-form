@@ -347,11 +347,22 @@ To support validation outside of the form, most commonly on the backend, schema 
 injecting arbitrary validationMessages to any field and setting it's validity.
 
 This is done via an event that starts with `schemaForm.error.` and ends with the key to the field.
-It also takes two arguments, the first being the error code, the second being either a
+It also takes two mandatory and an optional arguments, the first being the error code, the second being _either_ a
 validation message or a boolean that sets validity, specifying a validation message automatically
-sets the field to invalid.
+sets the field to invalid. The third and last one is optional and it represents the form name. If the form name is not specified then the event is broadcasted for all the schema forms contained in the controller that is broacasting the event. In case there are multiple forms for a specific controller it could be useful to specify the form name in order to let only the interested form capture the error event.
 
 So lets do an example, say you have a form with a text field `name`:
+
+Html
+```html
+<form
+    name="myForm"
+    sf-schema="schema"
+    sf-form="form"
+    sf-model="formData"
+    ng-submit="onSubmit(myForm)">
+</form>
+```
 
 Schema
 ```json
@@ -376,6 +387,8 @@ optional validation message.
 
 ```js
 scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken','The username is already taken');
+// or with the optional form name 
+scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken','The username is already taken', 'myForm');
 ```
 This will invalidate the field and therefore the form and show the error message where it normally
 pops up, under the field for instance.
@@ -386,6 +399,8 @@ i.e. `true`.
 
 ```js
 scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken',true);
+// or with the optional form name 
+scope.$broadcast('schemaForm.error.name','usernameAlreadyTaken',true, 'myForm');
 ```
 
 You can also pre-populate the validation messages if you don't want to send them in the event.
@@ -1094,10 +1109,10 @@ function FormCtrl($scope) {
       key: "choice",
       type: "radiobuttons",
       style: {
-		selected: "btn-success",
-		unselected: "btn-default"
-	  },
-	  titleMap: [
+        selected: "btn-success",
+        unselected: "btn-default"
+      },
+      titleMap: [
      { value: "one", name: "One" },
      { value, "two", name: "More..." }
    ]
@@ -1333,8 +1348,8 @@ function FormCtrl($scope) {
       key: "subforms",
       add: "Add person",
       style: {
-		add: "btn-success"
-	  },
+        add: "btn-success"
+      },
       items: [
         "subforms[].nick",
         "subforms[].name",
@@ -1355,8 +1370,8 @@ function FormCtrl($scope) {
       add: null,
       remove: null,
       style: {
-		add: "btn-success"
-	  },
+        add: "btn-success"
+      },
       items: [
         "subforms[].nick",
         "subforms[].name",
@@ -1473,9 +1488,9 @@ function FormCtrl($scope) {
       key: "subforms",
       remove: "Delete",
       style: {
-		remove: "btn-danger"
-	  },
-	  add: "Add person",
+        remove: "btn-danger"
+      },
+      add: "Add person",
       items: [
         "subforms[].nick",
         "subforms[].name",
