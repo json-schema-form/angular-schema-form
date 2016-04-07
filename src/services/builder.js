@@ -114,7 +114,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
           var arrayDepth = args.form.key.filter(function(e) { return e === '' }).length;
           var arrayIndices = '$index';
           for (var i = 1; i < arrayDepth; i++) {
-            arrayIndices = Array(i + 1).join('$parent.') + '$index,' + arrayIndices;
+            arrayIndices = Array(i + 1).join('$parent.$parent.') + '$index,' + arrayIndices;
           }
 
           evalExpr = 'evalExpr(' + args.path + '.condition,{ model: model, "arrayIndex": $index, ' +
