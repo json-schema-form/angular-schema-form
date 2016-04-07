@@ -2549,11 +2549,25 @@ describe('directive',function(){
                 {
                   "name": "Bertie",
                   "forSale": "yes",
-                  "price": 100
+                  "price": 100,
+                  "history": {
+                      "historyKnown": "no"
+                  }
                 },
                 {
                   "name": "Lightning McQueen",
-                  "forSale": "no"
+                  "forSale": "no",
+                  "history": {
+                    "historyKnown": "yes",
+                    "previousOwners": [
+                      {
+                        "ownerName": ""
+                      },
+                      {
+                        "ownerName": "Ben"
+                      }
+                    ]
+                  }
                 }
               ]
             },
@@ -2567,7 +2581,15 @@ describe('directive',function(){
                 {
                   "name": "Greyhound",
                   "forSale": "yes",
-                  "price": 1000
+                  "price": 1000,
+                  "history": {
+                    "historyKnown": "yes",
+                    "previousOwners": [
+                      {
+                        "ownerName": "Tom"
+                      }
+                    ]
+                  }
                 }
               ]
             }
@@ -2591,7 +2613,24 @@ describe('directive',function(){
                         name: { type: "string" },
                         numberOfWheels: { type: "number" },
                         forSale: { type: "string", enum: ["yes", "no"] },
-                        price: { type: "number" }
+                        price: { type: "number" },
+                        history: {
+                          type: "object",
+                          properties: {
+                            historyKnown: { type: "string", enum: ["yes", "no"] },
+                            previousOwners: {
+                              type: "array",
+                              items: {
+                                type: "object",
+                                properties: {
+                                  ownerName: { type: "string" },
+                                  purchaseDate: { type: "string" },
+                                  logBookProvided: { type: "string", enum: ["yes", "no"] }
+                                }
+                              }
+                            }
+                          }
+                        }
                       }
                     }
                   }
@@ -2618,6 +2657,22 @@ describe('directive',function(){
                   {
                     key: "transportCategory[].transportOption[].price",
                     condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].forSale == 'yes'"
+                  },
+                  "transportCategory[].transportOption[].history.historyKnown",
+                  {
+                    key: "transportCategory[].transportOption[].history.previousOwners",
+                    condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.historyKnown == 'yes'",
+                    items: [
+                      "transportCategory[].transportOption[].history.previousOwners[].ownerName",
+                      {
+                        key: "transportCategory[].transportOption[].history.previousOwners[].purchaseDate",
+                        condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].ownerName.length > 2",
+                      },
+                      {
+                        key: "transportCategory[].transportOption[].history.previousOwners[].logBookProvided",
+                        condition: "model.transportCategory[arrayIndices[0]].mode != 'Horse' && model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].ownerName.length > 2"
+                      }
+                    ]
                   }
                 ]
               }
@@ -2630,29 +2685,74 @@ describe('directive',function(){
         $compile(tmpl)(scope);
         $rootScope.$apply();
 
-        /*** numberOfWheels condition tests ***/
-        tmpl.children().eq(0).children().eq(1).children().eq(0).find('input[name="numberOfWheels"]').length.should.be.eq(2);
-        tmpl.children().eq(0).children().eq(1).children().eq(1).find('input[name="numberOfWheels"]').length.should.be.eq(0);
-        //numberOfWheels [0][0]
-        tmpl.children().eq(0).children().eq(1).children().eq(0).children().eq(2).children().eq(1).children().eq(0).children().eq(2).children().eq(0).text().should.be.equal('numberOfWheels');
-        //numberOfWheels [0][1]
-        tmpl.children().eq(0).children().eq(1).children().eq(0).children().eq(2).children().eq(1).children().eq(1).children().eq(2).children().eq(0).text().should.be.equal('numberOfWheels');
-        //numberOfWheels [1][0]
-        tmpl.children().eq(0).children().eq(1).children().eq(1).children().eq(2).children().eq(1).children().eq(0).children().eq(2).children().eq(0).text().should.be.equal('forSale');
-        //numberOfWheels [1][1]
-        tmpl.children().eq(0).children().eq(1).children().eq(1).children().eq(2).children().eq(1).children().eq(1).children().eq(2).children().eq(0).text().should.be.equal('forSale');
+        //References to sections of the rendered form to make the test more readable
+        var renderedForm = {
+          node: tmpl.children().eq(0).children().eq(1),
+          transportCategory: [
+            {
+              node: tmpl.children().eq(0).children().eq(1).children().eq(0),
+            },
+            {
+              node: tmpl.children().eq(0).children().eq(1).children().eq(1),
+            }
+          ]
+        };
 
-        /*** price field condition tests ***/
-        tmpl.children().eq(0).children().eq(1).children().find('input[name="price"]').length.should.be.eq(2);
+        renderedForm.transportCategory[0]['transportOption'] = [
+          { node: renderedForm.transportCategory[0].node.children().eq(2).children().eq(1).children().eq(0) },
+          { node: renderedForm.transportCategory[0].node.children().eq(2).children().eq(1).children().eq(1) }
+        ];
 
-        //price [0][0]
-        tmpl.children().eq(0).children().eq(1).children().eq(0).children().eq(2).children().eq(1).children().eq(0).find('input[name="price"]').length.should.be.eq(1);
-        //price [0][1]
-        tmpl.children().eq(0).children().eq(1).children().eq(0).children().eq(2).children().eq(1).children().eq(1).find('input[name="price"]').length.should.be.eq(0);
-        //price [1][0]
-        tmpl.children().eq(0).children().eq(1).children().eq(1).children().eq(2).children().eq(1).children().eq(0).find('input[name="price"]').length.should.be.eq(0);
-        //price [1][1]
-        tmpl.children().eq(0).children().eq(1).children().eq(1).children().eq(2).children().eq(1).children().eq(1).find('input[name="price"]').length.should.be.eq(1);
+        renderedForm.transportCategory[1]['transportOption'] = [
+          { node: renderedForm.transportCategory[1].node.children().eq(2).children().eq(1).children().eq(0) },
+          { node: renderedForm.transportCategory[1].node.children().eq(2).children().eq(1).children().eq(1) }
+        ];
+
+        renderedForm.transportCategory[0].transportOption[1]['history'] = {
+          previousOwners: [
+            renderedForm.transportCategory[0].transportOption[1].node.children().eq(5).children().eq(0),
+            renderedForm.transportCategory[0].transportOption[1].node.children().eq(5).children().eq(1)
+          ]
+        };
+
+        /*** transportCategory[].transportOption[].numberOfWheels condition tests ***/
+        renderedForm.transportCategory[0].node.find('input[name="numberOfWheels"]').length.should.be.eq(2);
+        renderedForm.transportCategory[1].node.find('input[name="numberOfWheels"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[0].node.find('input[name="numberOfWheels"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].node.find('input[name="numberOfWheels"]').length.should.be.eq(1);
+        renderedForm.transportCategory[1].transportOption[0].node.find('input[name="numberOfWheels"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[1].node.find('input[name="numberOfWheels"]').length.should.be.eq(0);
+
+        /*** transportCategory[].transportOption[].price field condition tests ***/
+        renderedForm.node.children().find('input[name="price"]').length.should.be.eq(2);
+        renderedForm.transportCategory[0].transportOption[0].node.find('input[name="price"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].node.find('input[name="price"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[0].node.find('input[name="price"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[1].node.find('input[name="price"]').length.should.be.eq(1);
+
+        /*** transportCategory[].transportOption[].history.previousOwners.ownerName field condition tests ***/
+        renderedForm.transportCategory[0].transportOption[0].node.find('input[name="ownerName"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].node.find('input[name="ownerName"]').length.should.be.eq(2);
+        renderedForm.transportCategory[1].transportOption[0].node.find('input[name="ownerName"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[1].node.find('input[name="ownerName"]').length.should.be.eq(1);
+
+        /*** transportCategory[].transportOption[].history.previousOwners[].purchaseDate field condition tests ***/
+        renderedForm.transportCategory[0].transportOption[0].node.find('input[name="purchaseDate"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].node.find('input[name="purchaseDate"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[0].find('input[name="purchaseDate"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].find('input[name="purchaseDate"]').length.should.be.eq(1);
+
+        renderedForm.transportCategory[1].transportOption[0].node.find('input[name="purchaseDate"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[1].node.find('input[name="purchaseDate"]').length.should.be.eq(1);
+
+        /*** transportCategory[].transportOption[].history.previousOwners[].logBookProvided field condition tests ***/
+        renderedForm.transportCategory[0].transportOption[0].node.find('select[name="logBookProvided"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].node.find('select[name="logBookProvided"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[0].find('select[name="logBookProvided"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].find('select[name="logBookProvided"]').length.should.be.eq(1);
+
+        renderedForm.transportCategory[1].transportOption[0].node.find('select[name="logBookProvided"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[1].node.find('select[name="logBookProvided"]').length.should.be.eq(0);
 
         done();
       });
