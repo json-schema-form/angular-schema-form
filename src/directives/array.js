@@ -151,10 +151,6 @@ angular.module('schemaForm').directive('sfArray', ['$timeout', 'sfSelect', 'sche
           scope.deleteFromArray = function(index) {
             if (list[index]._id) {
               destroyArrayItem(list[index]);
-
-              $timeout(function() {
-                destroyArrayItem(list[index]);
-              });
             } else {
               list.splice(index, 1);
             }
