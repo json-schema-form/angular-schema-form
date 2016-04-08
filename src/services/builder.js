@@ -133,7 +133,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       var items = args.fieldFrag.querySelector('[schema-form-array-items]');
       if (items) {
         state = angular.copy(args.state);
-        state.keyRedaction = state.keyRedaction || 0;
+        state.keyRedaction = 0;
         state.keyRedaction += args.form.key.length + 1;
 
         // Special case, an array with just one item in it that is not an object.
