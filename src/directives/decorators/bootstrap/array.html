@@ -3,7 +3,7 @@
   <label class="control-label" ng-show="showTitle()">{{ form.title }}</label>
   <ol class="list-group" ng-model="modelArray" ui-sortable>
     <li class="list-group-item {{form.fieldHtmlClass}}"
-        ng-show="item._destroy === true"
+        ng-hide="item._destroy === true"
         ng-repeat="item in modelArray track by $index">
       <button ng-hide="(form.readonly || form.remove === null)"
               ng-click="deleteFromArray($index)"
