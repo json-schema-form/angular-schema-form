@@ -384,8 +384,14 @@ angular.module('schemaForm').provider('schemaForm',
 
         // Special case: checkbox
         // Since have to ternary state we need a default
-        if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
-          obj.schema['default'] = false;
+        if (obj.type === 'checkbox') {
+          // Check for schema property, as the checkbox may be part of the explicitly defined form
+          if (angular.isUndefined(obj.schema)) {
+            obj.schema = { default: false };
+          }
+          else if (angular.isUndefined(obj.schema['default'])) {
+            obj.schema['default'] = false;
+          }
         }
 
         // Special case: template type with tempplateUrl that's needs to be loaded before rendering
