@@ -1,7 +1,7 @@
 <div sf-array="form" class="schema-form-array {{form.htmlClass}}"
      ng-model="$$value$$" ng-model-options="form.ngModelOptions">
   <label class="control-label" ng-show="showTitle()">{{ form.title }}</label>
-  <ol class="list-group" ng-model="modelArray" ui-sortable="{{form.sortOptions}}">
+  <ol class="list-group" ng-model="modelArray" ui-sortable="form.sortOptions">
     <li class="list-group-item {{form.fieldHtmlClass}}"
         ng-repeat="item in modelArray track by $index">
       <button ng-hide="form.readonly || form.remove === null"
@@ -16,12 +16,12 @@
   <div ng-class="{'has-error': form.disableErrorState !== true && hasError(), 'has-success': form.disableSuccessState !== true && hasSuccess(), 'has-feedback': form.feedback !== false }">
     <div class="help-block" sf-message="form.description"></div>
   </div>
-  <div class="clearfix" style="padding: 15px;">
+  <div class="clearfix">
     <button ng-hide="form.readonly || form.add === null"
             ng-click="appendToArray()"
             type="button"
             class="btn {{ form.style.add || 'btn-default' }} pull-right">
-      <i class="glyphicon glyphicon-plus"></i>
+      <i class="fa fa-plus"></i>
       {{ form.add || 'Add'}}
     </button>
   </div>
