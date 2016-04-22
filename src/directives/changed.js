@@ -17,7 +17,7 @@ angular.module('schemaForm').directive('sfChanged', function() {
       if (form && form.onChange) {
         ctrl.$viewChangeListeners.push(function() {
           if (angular.isFunction(form.onChange)) {
-            form.onChange(ctrl.$modelValue, form);
+            form.onChange(ctrl.$modelValue, form, scope);
           } else {
             scope.evalExpr(form.onChange, {'modelValue': ctrl.$modelValue, form: form});
           }
