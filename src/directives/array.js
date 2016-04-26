@@ -215,7 +215,8 @@ angular.module('schemaForm').directive('sfArray', ['sfSelect', 'schemaForm', 'sf
               // Thats why we check the length.
               var result = sfValidator.validate(
                 form,
-                scope.modelArray.length > 0 ? scope.modelArray : undefined
+                //scope.modelArray.length > 0 ? scope.modelArray : undefined
+                  scope.modelArray
               );
 
               // TODO: DRY this up, it has a lot of similarities with schema-validate
