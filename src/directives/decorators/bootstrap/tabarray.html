@@ -6,6 +6,7 @@
     <ul class="nav nav-tabs"
         ng-class="{'tabs-left': !form.tabType || form.tabType === 'left'}">
       <li ng-repeat="item in modelArray track by $index"
+          ng-hide="item._destroy === true"
           ng-click="$event.preventDefault() || (selected.tab = $index)"
           ng-class="{active: selected.tab === $index}">
           <a href="#">{{interp(form.title,{'$index':$index, value: item}) || $index}}</a>
@@ -22,7 +23,6 @@
   <div ng-class="{'col-xs-9': !form.tabType || form.tabType === 'left' || form.tabType === 'right'}">
     <div class="tab-content {{form.fieldHtmlClass}}">
       <div class="tab-pane clearfix"
-           ng-hide="item._destroy === true"
            ng-repeat="item in modelArray track by $index"
            ng-show="selected.tab === $index"
            ng-class="{active: selected.tab === $index}">
