@@ -10,7 +10,8 @@
             ng-model="$$value$$"
             ng-model-options="form.ngModelOptions"
             schema-validate="form"
-            name="{{form.key.slice(-1)[0]}}"></textarea>
+            name="{{form.key.slice(-1)[0]}}"
+            ng-trim="{{!form.noTrim}}"></textarea>
 
   <div ng-if="form.fieldAddonLeft || form.fieldAddonRight"
        ng-class="{'input-group': (form.fieldAddonLeft || form.fieldAddonRight)}">

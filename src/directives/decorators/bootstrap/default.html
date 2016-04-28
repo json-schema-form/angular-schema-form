@@ -14,6 +14,7 @@
          ng-model="$$value$$"
          ng-disabled="form.readonly"
          schema-validate="form"
+         ng-trim="{{!form.noTrim}}"
          name="{{form.key.slice(-1)[0]}}"
          aria-describedby="{{form.key.slice(-1)[0] + 'Status'}}">
 
