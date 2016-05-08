@@ -1,6 +1,6 @@
 {
   "name": "angular-schema-form",
-  "version": "0.8.12",
+  "version": "1.0.0-alpha.1",
   "description": "Create complex forms from a JSON schema with angular.",
   "repository": "Textalk/angular-schema-form",
   "main": "dist/schema-form.es5.js",
@@ -69,7 +69,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://raw.githubusercontent.com/Textalk/angular-schema-form/master/LICENSE"
+      "url": "https://raw.githubusercontent.com/json-schema-form/angular-schema-form/master/LICENSE"
     }
   ],
   "autoupdate": {
