@@ -115,7 +115,7 @@ export default function(sfPathProvider) {
           var strKey = sfPathProvider.stringify(args.form.key);
           evalExpr = 'evalExpr(' + args.path + '.condition,{ model: model, "arrayIndex": $index, ' +
                      '"modelValue": model' + (strKey[0] === '[' ? '' : '.') + strKey + '})';
-        }
+        };
 
         var children = args.fieldFrag.children || args.fieldFrag.childNodes;
         for (var i = 0; i < children.length; i++) {
@@ -134,7 +134,7 @@ export default function(sfPathProvider) {
     array: function(args) {
       var items = args.fieldFrag.querySelector('[schema-form-array-items]');
       if (items) {
-        state = angular.copy(args.state);
+        var state = angular.copy(args.state);
         state.keyRedaction = 0;
         state.keyRedaction += args.form.key.length + 1;
 

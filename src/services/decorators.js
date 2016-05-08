@@ -28,12 +28,12 @@ export default function($compileProvider, sfPathProvider) {
    * so that add-ons that don't use the new builder *
    * works.                                         *
    **************************************************/
-   //TODO: Move to a compatability extra script.
-   var createDirective = function(name) {
-     $compileProvider.directive(name,
+  //TODO: Move to a compatability extra script.
+  var createDirective = function(name) {
+    $compileProvider.directive(name,
       ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
        'sfPath','sfSelect',
-      function($parse,  $compile,  $http,  $templateCache, $interpolate, $q, sfErrorMessage,
+      function($parse, $compile, $http, $templateCache, $interpolate, $q, sfErrorMessage,
                sfPath, sfSelect) {
 
         return {
