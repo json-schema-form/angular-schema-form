@@ -80,7 +80,9 @@ export default function(sfPathProvider) {
     // Patch on ngModelOptions, since it doesn't like waiting for its value.
     ngModelOptions: function(args) {
       if (args.form.ngModelOptions && Object.keys(args.form.ngModelOptions).length > 0) {
-        args.fieldFrag.firstChild.setAttribute('ng-model-options', JSON.stringify(args.form.ngModelOptions));
+        args.fieldFrag
+          .firstChild
+          .setAttribute('ng-model-options', JSON.stringify(args.form.ngModelOptions));
       }
     },
     transclusion: function(args) {
@@ -167,9 +169,8 @@ export default function(sfPathProvider) {
   ];
   this.stdBuilders = stdBuilders;
 
-  this.$get = ['$templateCache', 'schemaFormDecorators', 'sfPath', function($templateCache, schemaFormDecorators, sfPath) {
-
-
+  this.$get = ['$templateCache', 'schemaFormDecorators', 'sfPath',
+      function($templateCache, schemaFormDecorators, sfPath) {
     var checkForSlot = function(form, slots) {
       // Finally append this field to the frag.
       // Check for slots
@@ -215,8 +216,9 @@ export default function(sfPathProvider) {
           state.arrayCompatFlag = false;
 
           // TODO: Create a couple fo testcases, small and large and
-          //       measure optmization. A good start is probably a cache of DOM nodes for a particular
-          //       template that can be cloned instead of using innerHTML
+          //       measure optmization. A good start is probably a
+          //       cache of DOM nodes for a particular template
+          //       that can be cloned instead of using innerHTML
           var div = document.createElement('div');
           var template = templateFn(f, field) || templateFn(f, decorator['default']);
           div.innerHTML = template;
