@@ -107,7 +107,12 @@ export default function(sfValidator, $parse, sfSelect) {
       var schema = form.schema;
 
       // A bit ugly but useful.
-      scope.validateField =  function() {
+      scope.validateField =  function(formName) {
+        // If we have specified a form name, and this model is not within
+        // that form, then leave things be.
+        if (formName != undefined && ngModel.$$parentForm.$name !== formName) {
+          return;
+        }
 
         // Special case: arrays
         // TODO: Can this be generalized in a way that works consistently?
@@ -162,7 +167,9 @@ export default function(sfValidator, $parse, sfSelect) {
       });
 
       // Listen to an event so we can validate the input on request
-      scope.$on('schemaFormValidate', scope.validateField);
+      scope.$on('schemaFormValidate', function(event, formName) {
+        scope.validateField(formName);
+      });
 
       scope.schemaError = function() {
         return error;
