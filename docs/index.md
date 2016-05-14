@@ -768,7 +768,7 @@ function FormCtrl($scope) {
         "title": "Eligible for awesome things"
       },
       "code": {
-        "type":"string"
+        "type":"string",
         "title": "The Code"
       }
     }
@@ -811,7 +811,7 @@ function FormCtrl($scope) {
               "title": "Eligible for awesome things"
             },
             "code": {
-              "type":"string"
+              "type":"string",
               "title": "The Code"
             }
           }
@@ -938,7 +938,7 @@ element to the select.
   titleMap: [
     { value: "yes", name: "Yes I do", group: "Boolean" },
     { value: "no", name: "Hell no" , group: "Boolean" },
-    { value: "no", name: "File Not Found", group: "Other" },
+    { value: "no", name: "File Not Found", group: "Other" }
   ]
 }
 ```
@@ -952,7 +952,7 @@ element to the select.
 {
   type: "actions",
   items: [
-    { type: 'submit', title: 'Ok' }
+    { type: 'submit', title: 'Ok' },
     { type: 'button', title: 'Cancel', onClick: "cancel()" }
   ]
 }
@@ -964,7 +964,7 @@ We can change this with ```style``` attribute:
 {
   type: "actions",
   items: [
-    { type: 'submit', style: 'btn-success', title: 'Ok' }
+    { type: 'submit', style: 'btn-success', title: 'Ok' },
     { type: 'button', style: 'btn-info', title: 'Cancel', onClick: "cancel()" }
   ]
 }
@@ -978,7 +978,7 @@ the ```sf-schema``` directive.
 
 ```javascript
 [
-  { type: 'submit', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'submit', title: 'Ok', onClick: function(){ ...  } },
   { type: 'button', title: 'Cancel', onClick: "cancel()" }
 [
 ```
@@ -987,7 +987,7 @@ The submit and other buttons have btn-default as default.
 We can change this with ```style``` attribute:
 ```javascript
 [
-  { type: 'submit', style: 'btn-warning', title: 'Ok', onClick: function(){ ...  } }
+  { type: 'submit', style: 'btn-warning', title: 'Ok', onClick: function(){ ...  } },
   { type: 'button', style: 'btn-danger', title: 'Cancel', onClick: "cancel()" }
 [
 ```
@@ -1233,7 +1233,7 @@ could be changed using attribute `add`, see example below.
 If you like to have drag and drop reordering of arrays you also need
 [ui-sortable](https://github.com/angular-ui/ui-sortable) and its dependencies
 [jQueryUI](http://jqueryui.com/), see *ui-sortable* documentation for details of
-what parts of jQueryUI that is needed. You can also pass options to the *ui-sortable* directive 
+what parts of jQueryUI that is needed. You can also pass options to the *ui-sortable* directive
 by including a `sortOptions` key on the form object. Check the *ui-sortable* documentation
 for a complete list of available options. You can safely ignore these if you don't need the reordering.
 
@@ -1593,7 +1593,7 @@ function FormCtrl($scope) {
         "title": "Eligible for awesome things"
       },
       "code": {
-        "type":"string"
+        "type":"string",
         "title": "The Code"
       }
     }
@@ -1639,7 +1639,7 @@ function FormCtrl($scope) {
               "title": "Eligible for awesome things"
             },
             "code": {
-              "type":"string"
+              "type":"string",
               "title": "The Code"
             }
           }
