@@ -231,20 +231,29 @@ export default function($compileProvider, sfPathProvider) {
                   // It looks better with dot notation.
                   scope.$on(
                     'schemaForm.error.' + form.key.join('.'),
-                    function(event, error, validationMessage, validity) {
+                    function(event, error, validationMessage, validity, formName) {
+                      // validationMessage and validity are mutually exclusive
+                      formName = validity;
                       if (validationMessage === true || validationMessage === false) {
                         validity = validationMessage;
                         validationMessage = undefined;
-                      }
+                      };
+
+                      // If we have specified a form name, and this model is not within
+                      // that form, then leave things be.
+                      if (formName != undefined && scope.ngModel.$$parentForm.$name !== formName) {
+                        return;
+                      };
 
                       if (scope.ngModel && error) {
                         if (scope.ngModel.$setDirty) {
                           scope.ngModel.$setDirty();
-                        } else {
+                        }
+                        else{
                           // FIXME: Check that this actually works on 1.2
                           scope.ngModel.$dirty = true;
                           scope.ngModel.$pristine = false;
-                        }
+                        };
 
                         // Set the new validation message if one is supplied
                         // Does not work when validationMessage is just a string.

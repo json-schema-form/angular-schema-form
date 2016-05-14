@@ -52,9 +52,9 @@ sfPath, sfSelect) {
           } else if (angular.isString(form.onClick)) {
             if (sfSchema) {
               //evaluating in scope outside of sfSchemas isolated scope
-              sfSchema.evalInParentScope(form.onClick, {'$event': $event, form: form});
+              sfSchema.evalInParentScope(form.onClick, { '$event': $event, form: form });
             } else {
-              scope.$eval(form.onClick, {'$event': $event, form: form});
+              scope.$eval(form.onClick, { '$event': $event, form: form });
             }
           }
         };
@@ -62,6 +62,7 @@ sfPath, sfSelect) {
         /**
          * Evaluate an expression, i.e. scope.$eval
          * but do it in sfSchemas parent scope sf-schema directive is used
+         *
          * @param {string} expression
          * @param {Object} locals (optional)
          * @return {Any} the result of the expression
@@ -160,16 +161,25 @@ sfPath, sfSelect) {
           // It looks better with dot notation.
           scope.$on(
             'schemaForm.error.' + form.key.join('.'),
-            function(event, error, validationMessage, validity) {
+            function(event, error, validationMessage, validity, formName) {
+              // validationMessage and validity are mutually exclusive
+              formName = validity;
               if (validationMessage === true || validationMessage === false) {
                 validity = validationMessage;
                 validationMessage = undefined;
-              }
+              };
+
+              // If we have specified a form name, and this model is not within
+              // that form, then leave things be.
+              if (formName != undefined && scope.ngModel.$$parentForm.$name !== formName) {
+                return;
+              };
 
               if (scope.ngModel && error) {
                 if (scope.ngModel.$setDirty) {
                   scope.ngModel.$setDirty();
-                } else {
+                }
+                else {
                   // FIXME: Check that this actually works on 1.2
                   scope.ngModel.$dirty = true;
                   scope.ngModel.$pristine = false;
