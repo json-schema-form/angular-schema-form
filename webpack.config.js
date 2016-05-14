@@ -26,6 +26,12 @@ module.exports = {
     'tv4': 'var tv4',
   },
   plugins: [
-    new webpack.BannerPlugin('angular-schema-form\n@version ' + pjson.version + '\nCopyright (c) 2016 JSON Schema Form')
+    new webpack.BannerPlugin(
+      'angular-schema-form\n' +
+      '@version ' +
+      pjson.version + '\n' +
+      '@link https://github.com/json-schema-form/angular-schema-form\n' +
+      '@license MIT\n' +
+      'Copyright (c) 2016 JSON Schema Form')
   ]
 };

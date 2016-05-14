@@ -9,13 +9,14 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
-    "minify": "uglifyjs dist/schema-form.js --output=dist/schema-form.min.js",
+    "minify": "uglifyjs dist/schema-form.js --comments --output=dist/schema-form.min.js",
     "dist": "npm run build && npm run minify",
     "test": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js"
   },
   "author": "Textalk",
   "contributors": [
     "David Jensen <david.lgj@gmail.com> (https://github.com/davidlgj)",
+    "Marcel J Bennett <iamanthropic@gmail.com> (https://github.com/Anthropic)",
     "Denis Dervisevic <denis@dervisevic.se> (https://github.com/Dervisevic)",
     "Cameron Edwards (https://github.com/cameronprattedwards)",
     "Mike Marcacci (https://github.com/mike-marcacci)"
@@ -35,7 +36,6 @@
     "schema"
   ],
   "devDependencies": {
-    "json-schema-form-core": "git+https://github.com/json-schema-form/json-schema-form-core.git#develop",
     "babel-core": "^6.5.2",
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.5.0",
@@ -50,6 +50,7 @@
     "gulp-rename": "^1.2.0",
     "gulp-uglify": "^0.2.1",
     "gulp-umd": "^0.1.3",
+    "json-schema-form-core": "git+https://github.com/json-schema-form/json-schema-form-core.git#develop",
     "karma": "^0.12.0",
     "karma-chai-sinon": "^0.1.3",
     "karma-coverage": "^0.2.1",
@@ -74,7 +75,7 @@
   ],
   "autoupdate": {
     "source": "git",
-    "target": "git://github.com/Textalk/angular-schema-form.git",
+    "target": "git://github.com/json-schema-form/angular-schema-form.git",
     "basePath": "/dist/",
     "files": [
       "schema-form.min.js",

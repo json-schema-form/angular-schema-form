@@ -169,7 +169,7 @@ export default function(sfPathProvider) {
   ];
   this.stdBuilders = stdBuilders;
 
-  this.$get = ['$templateCache', 'schemaFormDecorators', 'sfPath',
+  this.$get = [ '$templateCache', 'schemaFormDecorators', 'sfPath',
       function($templateCache, schemaFormDecorators, sfPath) {
     var checkForSlot = function(form, slots) {
       // Finally append this field to the frag.
@@ -202,7 +202,7 @@ export default function(sfPathProvider) {
           // Backwards compatability build
           var n = document.createElement(snakeCase(decorator.__name, '-'));
           if (state.arrayCompatFlag) {
-            n.setAttribute('form','copyWithIndex($index)');
+            n.setAttribute('form', 'copyWithIndex($index)');
           } else {
             n.setAttribute('form', path + '[' + index + ']');
           }
