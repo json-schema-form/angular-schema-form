@@ -78,14 +78,16 @@ export default function($compileProvider, sfPathProvider) {
             scope.buttonClick = function($event, form) {
               if (angular.isFunction(form.onClick)) {
                 form.onClick($event, form);
-              } else if (angular.isString(form.onClick)) {
+              }
+              else if (angular.isString(form.onClick)) {
                 if (sfSchema) {
                   //evaluating in scope outside of sfSchemas isolated scope
                   sfSchema.evalInParentScope(form.onClick, {'$event': $event, form: form});
-                } else {
-                  scope.$eval(form.onClick, {'$event': $event, form: form});
                 }
-              }
+                else{
+                  scope.$eval(form.onClick, {'$event': $event, form: form});
+                };
+              };
             };
 
             /**
@@ -267,6 +269,9 @@ export default function($compileProvider, sfPathProvider) {
                         scope.ngModel.$setValidity(error, validity === true);
 
                         if (validity === true) {
+                          // Re-trigger model validator, that model itself would be re-validated
+                          scope.ngModel.$validate();
+
                           // Setting or removing a validity can change the field to believe its valid
                           // but its not. So lets trigger its validation as well.
                           scope.$broadcast('schemaFormValidate');
