@@ -1,5 +1,15 @@
 {
   "preset": "google",
-  "maximumLineLength": 100,
-  "disallowMultipleLineBreaks": false
+  "disallowSpacesInsideObjectBrackets": null,
+  "requireSpacesInsideObjectBrackets": {
+    "allExcept": [ "[", "]", "{", "}" ]
+  },
+  "disallowSpacesInsideArrayBrackets": null,
+  "requireSpacesInsideArrayBrackets": {
+    "allExcept": [ "[", "]", "{", "}" ]
+  },
+  "disallowKeywordsOnNewLine": [ ],
+  "disallowMultipleVarDecl": null,
+  "maximumLineLength": 120,
+  "requireSemicolons": true
 }
