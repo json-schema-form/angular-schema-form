@@ -204,14 +204,14 @@ function(sel, sfPath, schemaForm) {
       scope.deleteFromArray = function(index) {
         var model = scope.modelArray;
         if (model) {
-          if (model[index]._id) {
+          if (model[index].$$new || !model[index]._id) {
+            model.splice(index, 1);
+          } else {
             destroyArrayItem(model[index]);
 
             $timeout(function() {
               destroyArrayItem(model[index]);
             });
-          } else {
-            model.splice(index, 1);
           }
         }
 
