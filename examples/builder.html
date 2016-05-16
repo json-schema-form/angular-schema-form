@@ -9,6 +9,7 @@
     <div custom-build></div>
 
     <script src="../bower_components/angular/angular.js" charset="utf-8"></script>
+    <script src="../bower_components/tv4/tv4.js" charset="utf-8"></script>
     <script src="../dist/schema-form.js" charset="utf-8"></script>
     <script src="../bower_components/objectpath/lib/ObjectPath.js"></script>
 
@@ -26,7 +27,7 @@
                    // First a "canonical form definition", usually this is created by merging form
                    // definition from user and a schema.
                    var formDef = [
-                     {type: 'example'}
+                     { type: 'example' }
                    ];
 
                    // A decorator is just an object that matches form `type` to a metadata object
@@ -35,7 +36,7 @@
                    // `builder` is a function or a list of helper functions to manipulate the DOM during the build.
                    // For example to set proper ng-model value, or include child items
                    var decorator = {
-                     example: {template: 'example-template.html', replace: true, builder: []}
+                     example: { template: 'example-template.html', replace: true, builder: [] }
                    };
 
                    // The builder creates a nice document fragment for you to place in the form.

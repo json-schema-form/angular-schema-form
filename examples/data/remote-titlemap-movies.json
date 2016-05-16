@@ -1,0 +1,10 @@
+{
+  "titleMap": [
+    { "value": "ss1", "name": "Demolition Man", "group": "Stallone" },
+    { "value": "ss2", "name": "Rocky", "group": "Stallone" },
+    { "value": "ss3", "name": "Rambo", "group": "Stallone" },
+    { "value": "jcvd1", "name": "Double Impact", "group": "Van Damme" },
+    { "value": "jcvd2", "name": "Bloodsport", "group": "Van Damme" },
+    { "value": "jcvd3", "name": "Kickboxer", "group": "Van Damme" }
+  ]
+}

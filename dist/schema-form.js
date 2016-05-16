@@ -1,3 +1,9 @@
+/*!
+ * angular-schema-form
+ * @version 1.0.0-alpha.1
+ * @license MIT
+ * Copyright (c) 2016 JSON Schema Form
+ */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("angular"), require("tv4"));
@@ -282,7 +288,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (args.form.key) {
 	          var strKey = sfPathProvider.stringify(args.form.key);
 	          evalExpr = 'evalExpr(' + args.path + '.condition,{ model: model, "arrayIndex": $index, ' + '"modelValue": model' + (strKey[0] === '[' ? '' : '.') + strKey + '})';
-	        }
+	        };
 
 	        var children = args.fieldFrag.children || args.fieldFrag.childNodes;
 	        for (var i = 0; i < children.length; i++) {
@@ -295,8 +301,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    array: function array(args) {
 	      var items = args.fieldFrag.querySelector('[schema-form-array-items]');
 	      if (items) {
-	        state = angular.copy(args.state);
-	        state.keyRedaction = state.keyRedaction || 0;
+	        var state = angular.copy(args.state);
+	        state.keyRedaction = 0;
 	        state.keyRedaction += args.form.key.length + 1;
 
 	        // Special case, an array with just one item in it that is not an object.
@@ -323,7 +329,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.stdBuilders = stdBuilders;
 
 	  this.$get = ['$templateCache', 'schemaFormDecorators', 'sfPath', function ($templateCache, schemaFormDecorators, sfPath) {
-
 	    var checkForSlot = function checkForSlot(form, slots) {
 	      // Finally append this field to the frag.
 	      // Check for slots
@@ -368,8 +373,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          state.arrayCompatFlag = false;
 
 	          // TODO: Create a couple fo testcases, small and large and
-	          //       measure optmization. A good start is probably a cache of DOM nodes for a particular
-	          //       template that can be cloned instead of using innerHTML
+	          //       measure optmization. A good start is probably a
+	          //       cache of DOM nodes for a particular template
+	          //       that can be cloned instead of using innerHTML
 	          var div = document.createElement('div');
 	          var template = templateFn(f, field) || templateFn(f, decorator['default']);
 	          div.innerHTML = template;
@@ -822,11 +828,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @param {string} name directive name (CamelCased)
 	   * @param {Object} fields, an object that maps "type" => `{ template, builder, replace}`.
 	                     attributes `builder` and `replace` are optional, and replace defaults to true.
-	                      `template` should be the key of the template to load and it should be pre-loaded
+	                       `template` should be the key of the template to load and it should be pre-loaded
 	                     in `$templateCache`.
-	                      `builder` can be a function or an array of functions. They will be called in
+	                       `builder` can be a function or an array of functions. They will be called in
 	                     the order they are supplied.
-	                      `replace` (DEPRECATED) is for backwards compatability. If false the builder
+	                       `replace` (DEPRECATED) is for backwards compatability. If false the builder
 	                     will use the "old" way of building that form field using a <sf-decorator>
 	                     directive.
 	   */
@@ -1066,6 +1072,12 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/*!
+	 * json-schema-form
+	 * @version 1.0.0-alpha.1
+	 * @license MIT
+	 * Copyright 2016 JSON Schema Form
+	 */
 	(function webpackUniversalModuleDefinition(root, factory) {
 		if(true)
 			module.exports = factory();
@@ -1277,7 +1289,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		    // Since have to ternary state we need a default
 		    if (obj.type === 'checkbox' && obj.schema['default'] === undefined) {
 		      obj.schema['default'] = false;
-		    }
+		    };
 
 		    // Special case: template type with tempplateUrl that's needs to be loaded before rendering
 		    // TODO: this is not a clean solution. Maybe something cleaner can be made when $ref support
@@ -1654,9 +1666,13 @@ return /******/ (function(modules) { // webpackBootstrap
 		/* Utils */
 		var stripNullType = function stripNullType(type) {
 		  if (Array.isArray(type) && type.length == 2) {
-		    if (type[0] === 'null') return type[1];
-		    if (type[1] === 'null') return type[0];
-		  }
+		    if (type[0] === 'null') {
+		      return type[1];
+		    };
+		    if (type[1] === 'null') {
+		      return type[0];
+		    };
+		  };
 		  return type;
 		};
 
@@ -1676,8 +1692,12 @@ return /******/ (function(modules) { // webpackBootstrap
 		  var rules = schemaTypes[stripNullType(schema.type)];
 		  if (rules) {
 		    var def = void 0;
+		    // We give each rule a possibility to recurse it's children.
+		    var innerDefaultFormDefinition = function innerDefaultFormDefinition(childName, childSchema, childOptions) {
+		      return defaultFormDefinition(schemaTypes, childName, childSchema, childOptions);
+		    };
 		    for (var i = 0; i < rules.length; i++) {
-		      def = rules[i](name, schema, options);
+		      def = rules[i](name, schema, options, innerDefaultFormDefinition);
 
 		      //first handler in list that actually returns something is our handler!
 		      if (def) {
@@ -1744,7 +1764,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		  f.ngModelOptions = f.ngModelOptions || {};
 
 		  return f;
-		}
+		};
 
 		/*** Schema types to form type mappings, with defaults ***/
 		function text(name, schema, options) {
@@ -1815,7 +1835,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		  }
 		}
 
-		function fieldset(name, schema, options) {
+		function fieldset(name, schema, options, defaultFormDef) {
 		  if (stripNullType(schema.type) === 'object') {
 		    var _ret = function () {
 		      var f = stdFormObj(name, schema, options);
@@ -1823,6 +1843,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		      f.items = [];
 		      options.lookup[(0, _sfPath.stringify)(options.path)] = f;
 
+		      console.log('fieldset', f, schema);
 		      //recurse down into properties
 		      if (schema.properties) {
 		        Object.keys(schema.properties).forEach(function (key) {
@@ -1832,7 +1853,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		          if (options.ignore[(0, _sfPath.stringify)(path)] !== true) {
 		            var required = schema.required && schema.required.indexOf(key) !== -1;
 
-		            var def = defaultFormDefinition(key, value, {
+		            var def = defaultFormDef(key, value, {
 		              path: path,
 		              required: required || false,
 		              lookup: options.lookup,
@@ -1854,7 +1875,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		  }
 		}
 
-		function array(name, schema, options) {
+		function array(name, schema, options, defaultFormDef) {
 		  if (stripNullType(schema.type) === 'array') {
 		    var f = stdFormObj(name, schema, options);
 		    f.type = 'array';
@@ -1871,7 +1892,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		    var arrPath = options.path.slice();
 		    arrPath.push('');
 
-		    f.items = [defaultFormDefinition(name, schema.items, {
+		    f.items = [defaultFormDef(name, schema.items, {
 		      path: arrPath,
 		      required: required || false,
 		      lookup: options.lookup,
@@ -1892,9 +1913,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		    number: [number],
 		    integer: [integer],
 		    boolean: [checkbox],
-		    array: [checkboxes, array]
+		    array: [array],
+		    defaultForm: defaultForm
 		  };
-		}
+		};
 
 		/**
 		 * Create form defaults from schema
@@ -3474,10 +3496,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 	      };
 
+	      var first = true;
 	      ngModel.$formatters.push(function (val) {
 	        // When a form first loads this will be called for each field.
 	        // we usually don't want that.
-	        if (ngModel.$pristine && scope.firstDigest && (!scope.options || scope.options.validateOnRender !== true)) {
+	        if (ngModel.$pristine && first && (!scope.options || scope.options.validateOnRender !== true)) {
+	          first = false;
 	          return val;
 	        }
 	        validate(ngModel.$modelValue);

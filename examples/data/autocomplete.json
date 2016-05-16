@@ -1,0 +1,43 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Arnold Schwarzenegger",
+    "properties": {
+      "first": {
+        "title": "What is your favourite Schwarzenegger movie?",
+        "type": "object"
+      },
+      "second": {
+        "title": "What is your favourite Schwarzenegger movie?",
+        "type": "object"
+      }
+    }
+  },
+  "form": [
+    {
+      "key": "first",
+      "type": "autocomplete",
+      "optionFilter": "querySearch"
+    },
+    {
+      "type": "help",
+      "helpvalue": "I only need at least 1 character"
+    },
+    {
+      "title": "What is your second favourite Schwarzenegger movie?",
+      "key": "second",
+      "type": "autocomplete",
+      "optionFilter": "querySearch",
+      "minLength": 4
+    },
+    {
+      "type": "help",
+      "helpvalue": "I need at least 4 non-space characters"
+    },
+    {
+      "type": "submit",
+      "style": "btn-info",
+      "title": "OK"
+    }
+  ]
+}

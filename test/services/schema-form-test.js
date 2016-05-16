@@ -4,8 +4,8 @@ describe('schemaForm', function() {
   beforeEach(module('schemaForm'));
 
   describe('#defaults()', function() {
-    it('should generate default form def from a schema',function(){
-      inject(function(schemaForm){
+    it('should generate default form def from a schema', function() {
+      inject(function(schemaForm) {
         var schema = {
           "type": "object",
           "properties": {

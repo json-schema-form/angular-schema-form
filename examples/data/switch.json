@@ -1,0 +1,21 @@
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "live":  {
+        "title": "Mode",
+        "type": "string",
+        "titleMap": {
+          "true": "'Yes I do'",
+          "false": "'Hell no'"
+        }
+      }
+    }
+  },
+  "form": [
+    {
+      "key":"live",
+      "type":"switch"
+    }
+  ]
+}
