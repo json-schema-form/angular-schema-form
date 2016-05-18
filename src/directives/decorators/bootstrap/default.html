@@ -16,6 +16,8 @@
          schema-validate="form"
          ng-trim="{{!form.noTrim}}"
          name="{{form.key.slice(-1)[0]}}"
+         max="{{form.schema.max}}"
+         min="{{form.schema.min}}"
          aria-describedby="{{form.key.slice(-1)[0] + 'Status'}}">
 
   <div ng-if="form.fieldAddonLeft || form.fieldAddonRight"
@@ -35,6 +37,8 @@
            ng-disabled="form.readonly"
            schema-validate="form"
            name="{{form.key.slice(-1)[0]}}"
+           max="{{form.schema.max}}"
+           min="{{form.schema.min}}"
            aria-describedby="{{form.key.slice(-1)[0] + 'Status'}}">
 
     <span ng-if="form.fieldAddonRight"
