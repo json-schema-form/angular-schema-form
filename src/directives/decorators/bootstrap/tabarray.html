@@ -13,7 +13,7 @@
       </li>
       <li ng-hide="form.readonly" ng-click="$event.preventDefault() || (selected.tab = appendToArray().length - 1)">
         <a href="#">
-          <i class="glyphicon glyphicon-plus"></i>
+          <i class="fa fa-plus"></i>
           {{ form.add || 'Add'}}
           </a>
       </li>
@@ -33,7 +33,7 @@
                    ng-click="selected.tab = deleteFromArray($index).length - 1"
                    type="button"
                    class="btn {{ form.style.remove || 'btn-default' }} pull-right">
-             <i class="glyphicon glyphicon-trash"></i>
+             <i class="fa fa-trash"></i>
              {{ form.remove || 'Remove'}}
            </button>
       </div>
@@ -49,7 +49,7 @@
       </li>
       <li ng-hide="form.readonly" ng-click="$event.preventDefault() || appendToArray()">
         <a href="#">
-          <i class="glyphicon glyphicon-plus"></i>
+          <i class="fa fa-plus"></i>
           {{ form.add || 'Add'}}
           </a>
       </li>
