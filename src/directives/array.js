@@ -149,13 +149,29 @@ angular.module('schemaForm').directive('sfArray', ['$timeout', 'sfSelect', 'sche
           }
 
           scope.deleteFromArray = function(index) {
+            var hasAcm;
+
+            if (angular.isObject(list[index])) {
+              // Check to see if this object has ACM, anywhere.
+              angular.forEach(list[index], function fn(value, key) {
+                if (hasAcm || (hasAcm = key === 'acm')) {
+                  // If we've already found ACM, then no need to continue.
+                } else if (angular.isObject(value)) {
+                  angular.forEach(value, fn);
+                }
+              });
+            }
+
             if (list[index].$$new || !list[index]._id) {
               list.splice(index, 1);
             } else {
               destroyArrayItem(list[index]);
             }
 
-            scope.$emit('setCapco');
+            // Only emit the 'setCapco' event if the deleted object had CAPCO.
+            if (hasAcm) {
+              scope.$emit('setCapco');
+            }
 
             // Trigger validation.
             scope.validateArray();
