@@ -2564,7 +2564,17 @@ describe('directive',function(){
                         "ownerName": ""
                       },
                       {
-                        "ownerName": "Ben"
+                        "ownerName": "Arlo",
+                        "logBookProvided": "yes",
+                        "logBookEntry": [
+                          {
+                            "entryId": 2,
+                            "entryDate": "2015-06-23"
+                          },
+                          {
+                            "entryId": 4
+                          }
+                        ]
                       }
                     ]
                   }
@@ -2625,7 +2635,18 @@ describe('directive',function(){
                                 properties: {
                                   ownerName: { type: "string" },
                                   purchaseDate: { type: "string" },
-                                  logBookProvided: { type: "string", enum: ["yes", "no"] }
+                                  logBookProvided: { type: "string", enum: ["yes", "no"] },
+                                  logBookEntry: {
+                                    type: "array",
+                                    items: {
+                                      type: "object",
+                                      properties: {
+                                        entryId: { type: "number" },
+                                        entryDate: { type: "string" },
+                                        entryNote: { type: "string" }
+                                      }
+                                    } 
+                                  }
                                 }
                               }
                             }
@@ -2671,7 +2692,19 @@ describe('directive',function(){
                       {
                         key: "transportCategory[].transportOption[].history.previousOwners[].logBookProvided",
                         condition: "model.transportCategory[arrayIndices[0]].mode != 'Horse' && model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].ownerName.length > 2"
-                      }
+                      },
+                      {
+                        key: "transportCategory[].transportOption[].history.previousOwners[].logBookEntry",
+                        condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].logBookProvided == 'yes'",
+                        items: [
+                          "transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryId",
+                          "transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryDate",
+                          {
+                            key: "transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryNote",
+                            condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].logBookEntry[arrayIndices[3]].entryDate.length > 2"
+                          }
+                        ]
+                      } 
                     ]
                   }
                 ]
@@ -2710,10 +2743,15 @@ describe('directive',function(){
 
         renderedForm.transportCategory[0].transportOption[1]['history'] = {
           previousOwners: [
-            renderedForm.transportCategory[0].transportOption[1].node.children().eq(5).children().eq(0),
-            renderedForm.transportCategory[0].transportOption[1].node.children().eq(5).children().eq(1)
+            { node: renderedForm.transportCategory[0].transportOption[1].node.children().eq(5).children().eq(0) },
+            { node: renderedForm.transportCategory[0].transportOption[1].node.children().eq(5).children().eq(1) }
           ]
         };
+        
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1]['logBookEntry'] = [
+          { node: renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].node.children().eq(1).children().eq(4).children().eq(1).children().eq(0) },
+          { node: renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].node.children().eq(1).children().eq(4).children().eq(1).children().eq(1) }
+        ];
 
         /*** transportCategory[].transportOption[].numberOfWheels condition tests ***/
         renderedForm.transportCategory[0].node.find('input[name="numberOfWheels"]').length.should.be.eq(2);
@@ -2739,8 +2777,8 @@ describe('directive',function(){
         /*** transportCategory[].transportOption[].history.previousOwners[].purchaseDate field condition tests ***/
         renderedForm.transportCategory[0].transportOption[0].node.find('input[name="purchaseDate"]').length.should.be.eq(0);
         renderedForm.transportCategory[0].transportOption[1].node.find('input[name="purchaseDate"]').length.should.be.eq(1);
-        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[0].find('input[name="purchaseDate"]').length.should.be.eq(0);
-        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].find('input[name="purchaseDate"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[0].node.find('input[name="purchaseDate"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].node.find('input[name="purchaseDate"]').length.should.be.eq(1);
 
         renderedForm.transportCategory[1].transportOption[0].node.find('input[name="purchaseDate"]').length.should.be.eq(0);
         renderedForm.transportCategory[1].transportOption[1].node.find('input[name="purchaseDate"]').length.should.be.eq(1);
@@ -2748,12 +2786,16 @@ describe('directive',function(){
         /*** transportCategory[].transportOption[].history.previousOwners[].logBookProvided field condition tests ***/
         renderedForm.transportCategory[0].transportOption[0].node.find('select[name="logBookProvided"]').length.should.be.eq(0);
         renderedForm.transportCategory[0].transportOption[1].node.find('select[name="logBookProvided"]').length.should.be.eq(1);
-        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[0].find('select[name="logBookProvided"]').length.should.be.eq(0);
-        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].find('select[name="logBookProvided"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[0].node.find('select[name="logBookProvided"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].node.find('select[name="logBookProvided"]').length.should.be.eq(1);
 
         renderedForm.transportCategory[1].transportOption[0].node.find('select[name="logBookProvided"]').length.should.be.eq(0);
         renderedForm.transportCategory[1].transportOption[1].node.find('select[name="logBookProvided"]').length.should.be.eq(0);
 
+        /*** transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryNote  field condition tests ***/
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].logBookEntry[0].node.find('input[name="entryNote"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].logBookEntry[1].node.find('input[name="entryNote"]').length.should.be.eq(0);
+        
         done();
       });
     });
