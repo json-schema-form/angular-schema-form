@@ -62,12 +62,12 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://raw.githubusercontent.com/Textalk/angular-schema-form/master/LICENSE"
+      "url": "https://raw.githubusercontent.com/json-schema-form/angular-schema-form/master/LICENSE"
     }
   ],
   "autoupdate": {
     "source": "git",
-    "target": "git://github.com/Textalk/angular-schema-form.git",
+    "target": "git://github.com/json-schema-form/angular-schema-form.git",
     "basePath": "/dist/",
     "files": [
       "schema-form.min.js",
