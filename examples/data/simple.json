@@ -12,6 +12,15 @@
         "type": "string",
         "format":"date"
       },
+      "age":  {
+        "title": "Age",
+        "type": "number",
+        "minimum": 17,
+        "maximum": 66,
+        "step": 1,
+        "exclusiveMinimum": true,
+        "exclusiveMaximum": true
+      },
       "email":  {
         "title": "Email",
         "type": "string",
@@ -30,6 +39,7 @@
   "form": [
     "name",
     "date",
+    "age",
     "email",
     {
       "key": "comment",

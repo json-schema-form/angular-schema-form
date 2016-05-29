@@ -1,6 +1,7 @@
 /*!
  * angular-schema-form
- * @version 1.0.0-alpha.1
+ * @version 1.0.0-alpha.2
+ * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2016 JSON Schema Form
  */
@@ -322,6 +323,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var childFrag = args.build(args.form.items, args.path + '.items', state);
 	        items.appendChild(childFrag);
 	      }
+	    },
+	    numeric: function numeric(args) {
+	      var inputFrag = args.fieldFrag.querySelector('input');
+	      var maximum = args.form.maximum || false;
+	      var exclusiveMaximum = args.form.exclusiveMaximum || false;
+	      var minimum = args.form.minimum || false;
+	      var exclusiveMinimum = args.form.exclusiveMinimum || false;
+	      var multipleOf = args.form.multipleOf || false;
+	      if (inputFrag) {
+	        if (multipleOf !== false) {
+	          inputFrag.setAttribute('step', multipleOf);
+	        };
+
+	        if (maximum !== false) {
+	          if (exclusiveMaximum !== false && multipleOf !== false) {
+	            maximum = maximum - multipleOf;
+	          };
+	          inputFrag.setAttribute('max', maximum);
+	        };
+
+	        if (minimum !== false) {
+	          if (exclusiveMinimum !== false && multipleOf !== false) {
+	            minimum = minimum + multipleOf;
+	          };
+	          inputFrag.setAttribute('min', minimum);
+	        };
+	      };
 	    }
 	  };
 	  this.builders = builders;
@@ -372,7 +400,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          // Reset arrayCompatFlag, it's only valid for direct children of the array.
 	          state.arrayCompatFlag = false;
 
-	          // TODO: Create a couple fo testcases, small and large and
+	          // TODO: Create a couple of testcases, small and large and
 	          //       measure optmization. A good start is probably a
 	          //       cache of DOM nodes for a particular template
 	          //       that can be cloned instead of using innerHTML
@@ -530,8 +558,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                sfSchema.evalInParentScope(form.onClick, { '$event': $event, form: form });
 	              } else {
 	                scope.$eval(form.onClick, { '$event': $event, form: form });
-	              }
-	            }
+	              };
+	            };
 	          };
 
 	          /**
@@ -658,11 +686,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	              // Where there is a key there is probably a ngModel
 	              if (form.key) {
 	                // It looks better with dot notation.
-	                scope.$on('schemaForm.error.' + form.key.join('.'), function (event, error, validationMessage, validity) {
+	                scope.$on('schemaForm.error.' + form.key.join('.'), function (event, error, validationMessage, validity, formName) {
+	                  // validationMessage and validity are mutually exclusive
+	                  formName = validity;
 	                  if (validationMessage === true || validationMessage === false) {
 	                    validity = validationMessage;
 	                    validationMessage = undefined;
-	                  }
+	                  };
+
+	                  // If we have specified a form name, and this model is not within
+	                  // that form, then leave things be.
+	                  if (formName != undefined && scope.ngModel.$$parentForm.$name !== formName) {
+	                    return;
+	                  };
 
 	                  if (scope.ngModel && error) {
 	                    if (scope.ngModel.$setDirty) {
@@ -671,7 +707,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                      // FIXME: Check that this actually works on 1.2
 	                      scope.ngModel.$dirty = true;
 	                      scope.ngModel.$pristine = false;
-	                    }
+	                    };
 
 	                    // Set the new validation message if one is supplied
 	                    // Does not work when validationMessage is just a string.
@@ -685,6 +721,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    scope.ngModel.$setValidity(error, validity === true);
 
 	                    if (validity === true) {
+	                      // Re-trigger model validator, that model itself would be re-validated
+	                      scope.ngModel.$validate();
+
 	                      // Setting or removing a validity can change the field to believe its valid
 	                      // but its not. So lets trigger its validation as well.
 	                      scope.$broadcast('schemaFormValidate');
@@ -2594,6 +2633,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * Evaluate an expression, i.e. scope.$eval
 	         * but do it in sfSchemas parent scope sf-schema directive is used
+	         *
 	         * @param {string} expression
 	         * @param {Object} locals (optional)
 	         * @return {Any} the result of the expression
@@ -2681,11 +2721,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // Where there is a key there is probably a ngModel
 	        if (form.key) {
 	          // It looks better with dot notation.
-	          scope.$on('schemaForm.error.' + form.key.join('.'), function (event, error, validationMessage, validity) {
+	          scope.$on('schemaForm.error.' + form.key.join('.'), function (event, error, validationMessage, validity, formName) {
+	            // validationMessage and validity are mutually exclusive
+	            formName = validity;
 	            if (validationMessage === true || validationMessage === false) {
 	              validity = validationMessage;
 	              validationMessage = undefined;
-	            }
+	            };
+
+	            // If we have specified a form name, and this model is not within
+	            // that form, then leave things be.
+	            if (formName != undefined && scope.ngModel.$$parentForm.$name !== formName) {
+	              return;
+	            };
 
 	            if (scope.ngModel && error) {
 	              if (scope.ngModel.$setDirty) {
@@ -2708,6 +2756,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	              scope.ngModel.$setValidity(error, validity === true);
 
 	              if (validity === true) {
+	                // Re-trigger model validator, that model itself would be re-validated
+	                scope.ngModel.$validate();
+
 	                // Setting or removing a validity can change the field to believe its valid
 	                // but its not. So lets trigger its validation as well.
 	                scope.$broadcast('schemaFormValidate');
@@ -3299,7 +3350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // part of the form or schema is chnaged without it being a new instance.
 	      scope.$on('schemaFormRedraw', function () {
 	        var schema = scope.schema;
-	        var form = scope.initialForm || ['*'];
+	        var form = scope.initialForm ? _angular2.default.copy(scope.initialForm) : ['*'];
 	        if (schema) {
 	          render(schema, form);
 	        }
@@ -3456,7 +3507,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var schema = form.schema;
 
 	      // A bit ugly but useful.
-	      scope.validateField = function () {
+	      scope.validateField = function (formName) {
+	        // If we have specified a form name, and this model is not within
+	        // that form, then leave things be.
+	        if (formName != undefined && ngModel.$$parentForm.$name !== formName) {
+	          return;
+	        }
 
 	        // Special case: arrays
 	        // TODO: Can this be generalized in a way that works consistently?
@@ -3509,7 +3565,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      });
 
 	      // Listen to an event so we can validate the input on request
-	      scope.$on('schemaFormValidate', scope.validateField);
+	      scope.$on('schemaFormValidate', function (event, formName) {
+	        scope.validateField(formName);
+	      });
 
 	      scope.schemaError = function () {
 	        return error;

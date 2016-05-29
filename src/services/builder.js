@@ -158,6 +158,34 @@ export default function(sfPathProvider) {
         var childFrag = args.build(args.form.items, args.path + '.items', state);
         items.appendChild(childFrag);
       }
+    },
+    numeric: function(args) {
+      var inputFrag = args.fieldFrag.querySelector('input');
+      var maximum = args.form.maximum || false;
+      var exclusiveMaximum = args.form.exclusiveMaximum || false;
+      var minimum = args.form.minimum || false;
+      var exclusiveMinimum = args.form.exclusiveMinimum || false;
+      var multipleOf = args.form.multipleOf || false;
+      if (inputFrag) {
+        if (multipleOf !== false) {
+          inputFrag.setAttribute('step', multipleOf);
+        };
+
+        if (maximum !== false) {
+          if (exclusiveMaximum !== false && multipleOf !== false) {
+            maximum = maximum-multipleOf;
+          };
+          inputFrag.setAttribute('max', maximum);
+        };
+
+        if (minimum !== false) {
+          if (exclusiveMinimum !== false && multipleOf !== false) {
+            minimum = minimum+multipleOf;
+          };
+          inputFrag.setAttribute('min', minimum);
+        };
+
+      };
     }
   };
   this.builders = builders;
@@ -215,7 +243,7 @@ export default function(sfPathProvider) {
           // Reset arrayCompatFlag, it's only valid for direct children of the array.
           state.arrayCompatFlag = false;
 
-          // TODO: Create a couple fo testcases, small and large and
+          // TODO: Create a couple of testcases, small and large and
           //       measure optmization. A good start is probably a
           //       cache of DOM nodes for a particular template
           //       that can be cloned instead of using innerHTML
