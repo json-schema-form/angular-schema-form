@@ -1,5 +1,38 @@
 Extending Schema Form
 =====================
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Overview](#overview)
+- [How the form is built](#how-the-form-is-built)
+    - [The actual building](#the-actual-building)
+- [Creating an add-on](#creating-an-add-on)
+    - [The Template](#the-template)
+    - [Compile template](#compile-template)
+    - [Builder functions](#builder-functions)
+    - [Application of builder functions](#application-of-builder-functions)
+- [Defining a decorator](#defining-a-decorator)
+  - [Setting up schema defaults](#setting-up-schema-defaults)
+  - [Sharing your add-on with the world](#sharing-your-add-on-with-the-world)
+- [The builders](#the-builders)
+  - [builders.sfField](#builderssffield)
+  - [builders.condition](#builderscondition)
+  - [builder.ngModel](#builderngmodel)
+    - [sf-field-model](#sf-field-model)
+    - [sf-field-model="attribute name"](#sf-field-modelattribute-name)
+    - [sf-field-model="replaceAll"](#sf-field-modelreplaceall)
+  - [builders.ngModelOptions](#buildersngmodeloptions)
+  - [builder.simpleTransclusion](#buildersimpletransclusion)
+- [Useful directives](#useful-directives)
+  - [sf-field](#sf-field)
+    - [What's on the scope?](#whats-on-the-scope)
+    - [Deprecation warning](#deprecation-warning)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+Overview
+--------
 
 Schema Form is designed to be easily extended. You can add your own custom fields or completely
 change the how the entire form is rendered.
@@ -102,14 +135,55 @@ Basic template example:
 </div>
 ```
 
-**BIG FAT CAVEAT**
-Ok, so currently there is something really ugly here. The bootstrap (and material) decorator uses
+#### Compile template
+Currently there is something of a nuisance here. The bootstrap (and material) decorator use
 a build step (gulp-angular-templatecache) to "compile" the template into a javascript file that
-basically chucks the template into `$templateCache`. Currently schema form does *not* support
-loading the templates any other way. They need to be in `$templateCache` when rendering.
+adds the template into `$templateCache`. Currently schema form does *not* support
+loading the templates any other way. **They need to be in `$templateCache` when rendering**.
 
-This is really ugly and will be fixed. But you have been warned!
+We strongly recommend using the yeoman generator for creating add-ons https://github.com/json-schema-form/generator-angular-schema-form-add-on
 
+#### Builder functions
+A more detailed description of the built in builders can be found below, however this section
+describes how you can add your own builder to process your template as it is inserted into the
+schema-form output.
+
+A builder function takes an `args` object containing
+- fieldFrag - a document fragment for manipulating prior to its insertion into the form
+- form - The currently processing form definition
+- lookup - A reference list for items added already
+- state - Any behaviour or defaults being passed from parents
+- path - The path to the form definition
+- build - A build function used for building child elements from a form definition
+
+The below builder looks up a `textarea` element and sets a md-maxlength attribute
+```javascript
+function textareaBuilder(args) {
+  var textareaFrag = args.fieldFrag.querySelector('textarea');
+  var maxLength = args.form.maxlength || false;
+  if (textareaFrag && maxLength) {
+    textareaFrag.setAttribute('md-maxlength', maxLength);
+  };
+};
+```
+
+#### Application of builder functions
+To make your add-on use the builder it must be in the array of builders in the decorator definition.
+
+To update the previous example to add my builder, since `sfBuilderProvider.stdBuilders` is an
+array I can simply add `.concat(textarea)` as below:
+```js  
+angular.module('myAddOnModule', ['schemaForm']).config(function(schemaFormDecoratorsProvider, sfBuilderProvider) {
+
+  schemaFormDecoratorsProvider.defineAddOn(
+    'bootstrapDecorator',         // Name of the decorator you want to add to.
+    'awesome',                    // Form type that should render this add-on
+    'templates/my/addon.html',    // Template name in $templateCache
+    sfBuilderProvider.stdBuilders.concat(textarea) // List of builder functions to apply.
+  );
+
+});
+```
 
 Defining a decorator
 --------------------
@@ -190,25 +264,25 @@ So [make a bower package](http://bower.io/docs/creating-packages/), add the keyw
 
 The builders
 ------------
-A collection of useful builders that cover most cases are in the `sfBuilder` service and is accessable 
-both from the provider and the service on the property `builders`. There is also a list of "standard" 
-builders, when in doubt use those. 
+A collection of useful builders that cover most cases are in the `sfBuilder` service and is accessable
+both from the provider and the service on the property `builders`. There is also a list of "standard"
+builders, when in doubt use those.
 
 ```js
 angular.module('myMod').config(function(sfBuildersProvider) {
 
   // Standard builders
   sfBuildersProvider.stdBuilders;
-  
-  // All builders 
+
+  // All builders
   sfBuildersProvider.builders.sfField;
   sfBuildersProvider.builders.condition;
-   sfBuildersProvider.builders.ngModel;
+  sfBuildersProvider.builders.ngModel;
   sfBuildersProvider.builders.ngModelOptions;
   sfBuildersProvider.builders.simpleTransclusion;
   sfBuildersProvider.builders.transclusion;
   sfBuildersProvider.builders.array;
- 
+
 });
 ```
 
@@ -224,32 +298,31 @@ var stdBuilders = [
 
 
 ### builders.sfField
-The `sfField` builder adds the `sf-field="..."` directive to *the first child element* in the template, 
+The `sfField` builder adds the `sf-field="..."` directive to *the first child element* in the template,
 giving it a correct value. The value is an id number that identifies that specific form object.
 
-The `sf-field` directive exports the form definition object as `form` on scope and as a lot of useful functions. 
+The `sf-field` directive exports the form definition object as `form` on scope and as a lot of useful functions.
 
-As a rule of thumb you always want this builder. 
+As a rule of thumb you always want this builder.
 
 ### builders.condition
-The `condition` builder checks the form definition for the option `condition`. If it's present it adds a 
+The `condition` builder checks the form definition for the option `condition`. If it's present it adds a
 `ng-if` to all top level elements in the template.
 
 You usually want this as well.
 
-### builder.ngModel 
+### builder.ngModel
 The `ngModel` builder is maybe the most important builder. It makes sure you get a proper binding to
-your model value. 
+your model value.
 
-The `ngModel` builder queries the DOM of the template for all elements that have the attribute `sf-field-model`. Your template may have several of them. `sf-field-model` is *not* a directive, 
+The `ngModel` builder queries the DOM of the template for all elements that have the attribute `sf-field-model`. Your template may have several of them. `sf-field-model` is *not* a directive,
 but depending on it's value the `ngModel` builder will take three different actions.
 
-
-#### sf-field-model 
-Just `sf-field-model` or `sf-field-model=""` tells the builder to add a `ng-model` directive to this element. 
+#### sf-field-model
+Just `sf-field-model` or `sf-field-model=""` tells the builder to add a `ng-model` directive to this element.
 This is a common use case.
 
-Ex: 
+Ex:
 DOM before `ngModel` builder:
 ```html
 <div>
@@ -263,11 +336,11 @@ DOM after `ngModel` builder:
 </div>
 ```
 
-#### sf-field-model="<attribute name>"
-Given a value the `ngModel` builder will treat that value as a *attribute name* and instead of slapping 
+#### sf-field-model="attribute name"
+Given a value the `ngModel` builder will treat that value as a *attribute name* and instead of slapping
 on a `ng-model` set the specified attributes value. It sets it to the same value as the `ng-model` would have gotten.
 
-Ex: 
+Ex:
 DOM before `ngModel` builder:
 ```html
 <div sf-field-model="my-directive">
@@ -283,13 +356,13 @@ DOM after `ngModel` builder:
 
 #### sf-field-model="replaceAll"
 With the special value *replaceAll* the `ngModel` builder will instead loop over every attribute on the
-element and do a string replacement of `"$$value$$"` with the proper model value. 
+element and do a string replacement of `"$$value$$"` with the proper model value.
 
-Ex: 
+Ex:
 DOM before `ngModel` builder:
 ```html
 <div>
-  <input sf-field-model="replaceAll" 
+  <input sf-field-model="replaceAll"
          ng-model="$$value$$"
          ng-class="{'large': $$value$$.length > 10}"
          type="text">
@@ -298,7 +371,7 @@ DOM before `ngModel` builder:
 DOM after `ngModel` builder:
 ```html
 <div>
-  <input sf-field-model="replaceAll" 
+  <input sf-field-model="replaceAll"
          ng-model="model['name']"
          ng-class="{'large': model[name].length > 10}"
          type="text">
@@ -307,7 +380,7 @@ DOM after `ngModel` builder:
 
 ### builders.ngModelOptions
 If the form definition has a `ngModelOptions` option specified this builder will slap on a `ng-model-options`
-attribute to *the first child element* in the template. 
+attribute to *the first child element* in the template.
 
 
 ### builder.simpleTransclusion
@@ -317,4 +390,31 @@ is simple because it only appends children to the first child element and only c
 
 Useful directives
 -----------------
-TODO: more in depth about schema-validate, sf-messages and sf-field
+
+### sf-field
+sfField is the directive that adds scope to the template
+
+#### What's on the scope?
+You have several helper functions and values on the scope, most important of this `form`. The
+`form` variable contains the merged form definition for that field, i.e. your supplied form object +
+the defaults from the schema (it also has its part of the schema under *form.schema*).
+This is how you define and use new form field options, whatever is set on the form object is
+available here for you to act on.
+
+| Name     |  What it does  |
+|----------|----------------|
+| form      | Form definition object |
+| showTitle() | Shorthand for `form && form.notitle !== true && form.title` |
+| ngModel   | The ngModel controller, this will be on scope if you use either the directive `schema-validate` or `sf-array` |
+| evalInScope(expr, locals) | Eval supplied expression, ie scope.$eval |
+| evalExpr(expr, locals) | Eval an expression in the parent scope of the main `sf-schema` directive. |
+| interp(expr, locals) | Interpolate an expression which may or may not contain expression `{{ }}` sequences |
+| buttonClick($event, form)  | Use this with ng-click to execute form.onClick |
+| hasSuccess() | Shorthand for is valid and either not pristine or the model value is not empty |
+| hasError() | Shorthand for is invalid and not pristine |
+
+#### Deprecation warning
+There is still a `errorMessage` function on scope but it's been deprecated. Please use the
+`sf-message` directive instead.
+
+TODO: more in depth about schema-validate and sf-messages
