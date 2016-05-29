@@ -1,36 +1,38 @@
+Extending Schema Form
+=====================
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Extending Schema Form](#extending-schema-form)
-  - [How the form is built](#how-the-form-is-built)
-      - [The actual building](#the-actual-building)
-  - [Creating an add-on](#creating-an-add-on)
-      - [The Template](#the-template)
-      - [Compile template](#compile-template)
-      - [Builder functions](#builder-functions)
-      - [Application of builder functions](#application-of-builder-functions)
-  - [Defining a decorator](#defining-a-decorator)
-    - [Setting up schema defaults](#setting-up-schema-defaults)
-    - [Sharing your add-on with the world](#sharing-your-add-on-with-the-world)
-  - [The builders](#the-builders)
-    - [builders.sfField](#builderssffield)
-    - [builders.condition](#builderscondition)
-    - [builder.ngModel](#builderngmodel)
-      - [sf-field-model](#sf-field-model)
-      - [sf-field-model="attribute name"](#sf-field-modelattribute-name)
-      - [sf-field-model="replaceAll"](#sf-field-modelreplaceall)
-    - [builders.ngModelOptions](#buildersngmodeloptions)
-    - [builder.simpleTransclusion](#buildersimpletransclusion)
-  - [Useful directives](#useful-directives)
-    - [sf-field](#sf-field)
-      - [What's on the scope?](#whats-on-the-scope)
-      - [Deprecation warning](#deprecation-warning)
+
+- [Overview](#overview)
+- [How the form is built](#how-the-form-is-built)
+    - [The actual building](#the-actual-building)
+- [Creating an add-on](#creating-an-add-on)
+    - [The Template](#the-template)
+    - [Compile template](#compile-template)
+    - [Builder functions](#builder-functions)
+    - [Application of builder functions](#application-of-builder-functions)
+- [Defining a decorator](#defining-a-decorator)
+  - [Setting up schema defaults](#setting-up-schema-defaults)
+  - [Sharing your add-on with the world](#sharing-your-add-on-with-the-world)
+- [The builders](#the-builders)
+  - [builders.sfField](#builderssffield)
+  - [builders.condition](#builderscondition)
+  - [builder.ngModel](#builderngmodel)
+    - [sf-field-model](#sf-field-model)
+    - [sf-field-model="attribute name"](#sf-field-modelattribute-name)
+    - [sf-field-model="replaceAll"](#sf-field-modelreplaceall)
+  - [builders.ngModelOptions](#buildersngmodeloptions)
+  - [builder.simpleTransclusion](#buildersimpletransclusion)
+- [Useful directives](#useful-directives)
+  - [sf-field](#sf-field)
+    - [What's on the scope?](#whats-on-the-scope)
+    - [Deprecation warning](#deprecation-warning)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-Extending Schema Form
-=====================
+Overview
+--------
 
 Schema Form is designed to be easily extended. You can add your own custom fields or completely
 change the how the entire form is rendered.
