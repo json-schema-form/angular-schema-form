@@ -48,14 +48,23 @@ angular.module('schemaForm').directive('sfField',
             };
 
             scope.buttonClick = function($event, form) {
+              var arrayDepth = form.key.filter(function(e) { return e === '' }).length;
+              var arrayIndices = (arrayDepth > 1 ? Array(arrayDepth - 1).join('$parent.$parent.$parent.') + '$parent.$parent.$index,' : '');
+              for (var i = arrayDepth; i > 2; i--) {
+                  arrayIndices += Array(i - 1).join('$parent.$parent.$parent.') + '$index,';
+              }
+              arrayIndices += '$index';
+              arrayIndices = scope.$eval('[' + arrayIndices + ']');
+              
               if (angular.isFunction(form.onClick)) {
-                form.onClick($event, form);
+                
+                form.onClick($event, form, arrayIndices[arrayDepth-1], arrayIndices);
               } else if (angular.isString(form.onClick)) {
                 if (sfSchema) {
                   //evaluating in scope outside of sfSchemas isolated scope
-                  sfSchema.evalInParentScope(form.onClick, {'$event': $event, form: form});
+                  sfSchema.evalInParentScope(form.onClick, {'$event': $event, form: form, arrayIndex: arrayIndices[arrayDepth-1], arrayIndices: arrayIndices});
                 } else {
-                  scope.$eval(form.onClick, {'$event': $event, form: form});
+                  scope.$eval(form.onClick, {'$event': $event, form: form, arrayIndex: '$index', arrayIndices: '[' + arrayIndices + ']'});
                 }
               }
             };
