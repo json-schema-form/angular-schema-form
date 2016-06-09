@@ -76,6 +76,7 @@ export default function() {
   this.$get = function() {
 
     var service = {};
+    var typeDefault = this.defaults;
 
     service.merge = function(schema, form, ignore, options, readonly, asyncTemplates) {
       form  = form || ['*'];
@@ -84,7 +85,7 @@ export default function() {
       // Get readonly from root object
       readonly = readonly || schema.readonly || schema.readOnly;
 
-      const stdForm = schemaDefaults.defaultForm(schema, defaults ,ignore, options);
+      const stdForm = schemaDefaults.defaultForm(schema, typeDefault ,ignore, options);
 
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf('*');
@@ -104,7 +105,14 @@ export default function() {
      * Create form defaults from schema
      */
     service.defaults = schemaDefaults.defaultForm;
+
     //Utility functions
+    /**
+     * Form defaults for schema by type
+     * As a form is generated from a schema these are the definitions of each json-schema type
+     */
+    service.typeDefault = typeDefault;
+
     /**
      * Traverse a schema, applying a function(schema,path) on every sub schema
      * i.e. every property of an object.
