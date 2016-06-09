@@ -1060,6 +1060,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  this.$get = function () {
 
 	    var service = {};
+	    var typeDefault = this.defaults;
 
 	    service.merge = function (schema, form, ignore, options, readonly, asyncTemplates) {
 	      form = form || ['*'];
@@ -1068,7 +1069,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      // Get readonly from root object
 	      readonly = readonly || schema.readonly || schema.readOnly;
 
-	      var stdForm = _jsonSchemaFormCore.schemaDefaults.defaultForm(schema, defaults, ignore, options);
+	      var stdForm = _jsonSchemaFormCore.schemaDefaults.defaultForm(schema, typeDefault, ignore, options);
 
 	      //simple case, we have a "*", just put the stdForm there
 	      var idx = form.indexOf('*');
@@ -1086,7 +1087,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Create form defaults from schema
 	     */
 	    service.defaults = _jsonSchemaFormCore.schemaDefaults.defaultForm;
+
 	    //Utility functions
+	    /**
+	     * Form defaults for schema by type
+	     * As a form is generated from a schema these are the definitions of each json-schema type
+	     */
+	    service.typeDefault = typeDefault;
+
 	    /**
 	     * Traverse a schema, applying a function(schema,path) on every sub schema
 	     * i.e. every property of an object.
@@ -1114,8 +1122,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	/*!
 	 * json-schema-form
 	 * @version 1.0.0-alpha.1
+	 * @link https://github.com/json-schema-form/json-schema-form-core
 	 * @license MIT
-	 * Copyright 2016 JSON Schema Form
+	 * Copyright (c) 2016 JSON Schema Form
 	 */
 	(function webpackUniversalModuleDefinition(root, factory) {
 		if(true)
@@ -1879,10 +1888,10 @@ return /******/ (function(modules) { // webpackBootstrap
 		    var _ret = function () {
 		      var f = stdFormObj(name, schema, options);
 		      f.type = 'fieldset';
+		      f.key = options.path;
 		      f.items = [];
 		      options.lookup[(0, _sfPath.stringify)(options.path)] = f;
 
-		      console.log('fieldset', f, schema);
 		      //recurse down into properties
 		      if (schema.properties) {
 		        Object.keys(schema.properties).forEach(function (key) {
@@ -1952,8 +1961,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		    number: [number],
 		    integer: [integer],
 		    boolean: [checkbox],
-		    array: [array],
-		    defaultForm: defaultForm
+		    array: [checkboxes, array]
 		  };
 		};
 
@@ -1965,6 +1973,7 @@ return /******/ (function(modules) { // webpackBootstrap
 		  var lookup = {}; //Map path => form obj for fast lookup in merging
 		  ignore = ignore || {};
 		  globalOptions = globalOptions || {};
+		  defaultSchemaTypes = defaultSchemaTypes || createDefaults();
 
 		  if (schema.properties) {
 		    Object.keys(schema.properties).forEach(function (key) {
