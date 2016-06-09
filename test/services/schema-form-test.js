@@ -358,9 +358,6 @@ describe('schemaForm', function() {
 
         //no form is implicitly ['*']
         var defaults = schemaForm.defaults(schema).form;
-        console.log('defaults');
-        console.log(JSON.stringify(defaults));
-        //console.log(JSON.stringify(form));
         defaults[0].type.should.be.equal('foobar');
         defaults[0].title.should.be.equal('Name');
         defaults[1].type.should.be.equal('select');

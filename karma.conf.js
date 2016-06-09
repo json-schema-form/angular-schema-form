@@ -18,10 +18,10 @@ module.exports = function(config) {
       'dist/schema-form.js',
       'dist/bootstrap-decorator.js',
       'test/services/schema-form-test.js',
-//      'test/services/decorators-test.js',
-//      'test/services/messages-test.js',
-//      'test/directives/schema-form-test.js',
-//      'test/directives/sf-messages-test.js',
+      'test/services/decorators-test.js',
+      'test/services/messages-test.js',
+      'test/directives/schema-form-test.js',
+      'test/directives/sf-messages-test.js',
     ],
 
     // list of files to exclude
@@ -51,7 +51,7 @@ module.exports = function(config) {
     // possible values:
     // config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN ||
     // config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_ERROR,
+    logLevel: config.LOG_DEBUG,
 
     loggers: [{type: 'console'}],
 
