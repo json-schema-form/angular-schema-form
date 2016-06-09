@@ -10,21 +10,18 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'node_modules/babel-polyfill/dist/polyfill.js',
       'bower_components/jquery/dist/jquery.min.js',
       'test/lib/angular.js',
       'test/lib/angular-mocks.js',
       'bower_components/tv4/tv4.js',
-      'bower_components/objectpath/lib/ObjectPath.js',
-      'src/module.js',
-      'src/sfPath.js',
-      'src/services/*.js',
-      'src/directives/*.js',
-      'bower_components/angular-schema-form-bootstrap/bootstrap-decorator.js',
+      'dist/schema-form.js',
+      'dist/bootstrap-decorator.js',
       'test/services/schema-form-test.js',
-      'test/services/decorators-test.js',
-      'test/services/messages-test.js',
-      'test/directives/schema-form-test.js',
-      'test/directives/sf-messages-test.js',
+//      'test/services/decorators-test.js',
+//      'test/services/messages-test.js',
+//      'test/directives/schema-form-test.js',
+//      'test/directives/sf-messages-test.js',
     ],
 
     // list of files to exclude
@@ -54,7 +51,9 @@ module.exports = function(config) {
     // possible values:
     // config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN ||
     // config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_ERROR,
+
+    loggers: [{type: 'console'}],
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
@@ -72,6 +71,9 @@ module.exports = function(config) {
     // If browser does not capture in given timeout [ms], kill it
     captureTimeout: 60000,
 
+    client: {
+      captureConsole: true
+    },
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
     singleRun: false
