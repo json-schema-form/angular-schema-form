@@ -65,6 +65,81 @@ angular.module('schemaForm').provider('sfPath',
   };
 }]);
 
+/**
+ * @ngdoc service
+ * @name sfSelect
+ * @kind function
+ *
+ */
+angular.module('schemaForm').factory('sfSelect', ['sfPath', function(sfPath) {
+  var numRe = /^\d+$/;
+
+  /**
+    * @description
+    * Utility method to access deep properties without
+    * throwing errors when things are not defined.
+    * Can also set a value in a deep structure, creating objects when missing
+    * ex.
+    * var foo = Select('address.contact.name',obj)
+    * Select('address.contact.name',obj,'Leeroy')
+    *
+    * @param {string} projection A dot path to the property you want to get/set
+    * @param {object} obj   (optional) The object to project on, defaults to 'this'
+    * @param {Any}    valueToSet (opional)  The value to set, if parts of the path of
+    *                 the projection is missing empty objects will be created.
+    * @returns {Any|undefined} returns the value at the end of the projection path
+    *                          or undefined if there is none.
+    */
+  return function(projection, obj, valueToSet) {
+    if (!obj) {
+      obj = this;
+    }
+    //Support [] array syntax
+    var parts = typeof projection === 'string' ? sfPath.parse(projection) : projection;
+
+    if (typeof valueToSet !== 'undefined' && parts.length === 1) {
+      //special case, just setting one variable
+      obj[parts[0]] = valueToSet;
+      return obj;
+    }
+
+    if (typeof valueToSet !== 'undefined' &&
+        typeof obj[parts[0]] === 'undefined') {
+       // We need to look ahead to check if array is appropriate
+      obj[parts[0]] = parts.length > 2 && numRe.test(parts[1]) ? [] : {};
+    }
+
+    var value = obj[parts[0]];
+    for (var i = 1; i < parts.length; i++) {
+      // Special case: We allow JSON Form syntax for arrays using empty brackets
+      // These will of course not work here so we exit if they are found.
+      if (parts[i] === '') {
+        return undefined;
+      }
+      if (typeof valueToSet !== 'undefined') {
+        if (i === parts.length - 1) {
+          //last step. Let's set the value
+          value[parts[i]] = valueToSet;
+          return valueToSet;
+        } else {
+          // Make sure to create new objects on the way if they are not there.
+          // We need to look ahead to check if array is appropriate
+          var tmp = value[parts[i]];
+          if (typeof tmp === 'undefined' || tmp === null) {
+            tmp = numRe.test(parts[i + 1]) ? [] : {};
+            value[parts[i]] = tmp;
+          }
+          value = tmp;
+        }
+      } else if (value) {
+        //Just get nex value.
+        value = value[parts[i]];
+      }
+    }
+    return value;
+  };
+}]);
+
 
 // FIXME: type template (using custom builder)
 angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(sfPathProvider) {
@@ -200,7 +275,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       var items = args.fieldFrag.querySelector('[schema-form-array-items]');
       if (items) {
         state = angular.copy(args.state);
-        state.keyRedaction = state.keyRedaction || 0;
+        state.keyRedaction = 0;
         state.keyRedaction += args.form.key.length + 1;
 
         // Special case, an array with just one item in it that is not an object.
@@ -580,10 +655,18 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   // It looks better with dot notation.
                   scope.$on(
                     'schemaForm.error.' + form.key.join('.'),
-                    function(event, error, validationMessage, validity) {
+                    function(event, error, validationMessage, validity, formName) {
+                      // validationMessage and validity are mutually exclusive
+                      formName = validity;
                       if (validationMessage === true || validationMessage === false) {
                         validity = validationMessage;
                         validationMessage = undefined;
+                      }
+
+                      // If we have specified a form name, and this model is not within
+                      // that form, then leave things be.
+                      if(formName != undefined && scope.ngModel.$$parentForm.$name !== formName) {
+                        return;
                       }
 
                       if (scope.ngModel && error) {
@@ -608,7 +691,9 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                         if (validity === true) {
                           // Re-trigger model validator, that model itself would be re-validated
-                          scope.ngModel.$validate();
+                          if (typeof scope.ngModel.$validate === 'function') {
+                            scope.ngModel.$validate();
+                          }
 
                           // Setting or removing a validity can change the field to believe its valid
                           // but its not. So lets trigger its validation as well.
@@ -1171,6 +1256,7 @@ angular.module('schemaForm').provider('schemaForm',
     if (stripNullType(schema.type) === 'object') {
       var f   = stdFormObj(name, schema, options);
       f.type  = 'fieldset';
+      f.key   = options.path;
       f.items = [];
       options.lookup[sfPathProvider.stringify(options.path)] = f;
 
@@ -1389,7 +1475,7 @@ angular.module('schemaForm').provider('schemaForm',
         if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
           obj.schema['default'] = false;
         }
-        
+
         // Special case: template type with tempplateUrl that's needs to be loaded before rendering
         // TODO: this is not a clean solution. Maybe something cleaner can be made when $ref support
         // is introduced since we need to go async then anyway
@@ -1479,81 +1565,6 @@ angular.module('schemaForm').provider('schemaForm',
     return service;
   };
 
-}]);
-
-/**
- * @ngdoc service
- * @name sfSelect
- * @kind function
- *
- */
-angular.module('schemaForm').factory('sfSelect', ['sfPath', function(sfPath) {
-  var numRe = /^\d+$/;
-
-  /**
-    * @description
-    * Utility method to access deep properties without
-    * throwing errors when things are not defined.
-    * Can also set a value in a deep structure, creating objects when missing
-    * ex.
-    * var foo = Select('address.contact.name',obj)
-    * Select('address.contact.name',obj,'Leeroy')
-    *
-    * @param {string} projection A dot path to the property you want to get/set
-    * @param {object} obj   (optional) The object to project on, defaults to 'this'
-    * @param {Any}    valueToSet (opional)  The value to set, if parts of the path of
-    *                 the projection is missing empty objects will be created.
-    * @returns {Any|undefined} returns the value at the end of the projection path
-    *                          or undefined if there is none.
-    */
-  return function(projection, obj, valueToSet) {
-    if (!obj) {
-      obj = this;
-    }
-    //Support [] array syntax
-    var parts = typeof projection === 'string' ? sfPath.parse(projection) : projection;
-
-    if (typeof valueToSet !== 'undefined' && parts.length === 1) {
-      //special case, just setting one variable
-      obj[parts[0]] = valueToSet;
-      return obj;
-    }
-
-    if (typeof valueToSet !== 'undefined' &&
-        typeof obj[parts[0]] === 'undefined') {
-       // We need to look ahead to check if array is appropriate
-      obj[parts[0]] = parts.length > 2 && numRe.test(parts[1]) ? [] : {};
-    }
-
-    var value = obj[parts[0]];
-    for (var i = 1; i < parts.length; i++) {
-      // Special case: We allow JSON Form syntax for arrays using empty brackets
-      // These will of course not work here so we exit if they are found.
-      if (parts[i] === '') {
-        return undefined;
-      }
-      if (typeof valueToSet !== 'undefined') {
-        if (i === parts.length - 1) {
-          //last step. Let's set the value
-          value[parts[i]] = valueToSet;
-          return valueToSet;
-        } else {
-          // Make sure to create new objects on the way if they are not there.
-          // We need to look ahead to check if array is appropriate
-          var tmp = value[parts[i]];
-          if (typeof tmp === 'undefined' || tmp === null) {
-            tmp = numRe.test(parts[i + 1]) ? [] : {};
-            value[parts[i]] = tmp;
-          }
-          value = tmp;
-        }
-      } else if (value) {
-        //Just get nex value.
-        value = value[parts[i]];
-      }
-    }
-    return value;
-  };
 }]);
 
 /*  Common code for validating a value against its form and schema definition */
@@ -2085,10 +2096,18 @@ angular.module('schemaForm').directive('sfField',
               // It looks better with dot notation.
               scope.$on(
                 'schemaForm.error.' + form.key.join('.'),
-                function(event, error, validationMessage, validity) {
+                function(event, error, validationMessage, validity, formName) {
+                  // validationMessage and validity are mutually exclusive
+                  formName = validity;
                   if (validationMessage === true || validationMessage === false) {
                     validity = validationMessage;
                     validationMessage = undefined;
+                  }
+
+                  // If we have specified a form name, and this model is not within
+                  // that form, then leave things be.
+                  if(formName != undefined && scope.ngModel.$$parentForm.$name !== formName) {
+                    return;
                   }
 
                   if (scope.ngModel && error) {
@@ -2113,7 +2132,9 @@ angular.module('schemaForm').directive('sfField',
 
                     if (validity === true) {
                       // Re-trigger model validator, that model itself would be re-validated
-                      scope.ngModel.$validate();
+                      if (typeof scope.ngModel.$validate === 'function') {
+                        scope.ngModel.$validate();
+                      }
 
                       // Setting or removing a validity can change the field to believe its valid
                       // but its not. So lets trigger its validation as well.
