@@ -2801,7 +2801,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
           // Check if our version of angular has validators, i.e. 1.3+
           if (form[attr] && ngModel[attr]) {
             angular.forEach(form[attr], function(fn, name) {
-              ngModel[attr][name] = fn;
+              ngModel[attr][name] = fn.bind(scope);
             });
           }
         });
