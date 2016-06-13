@@ -817,6 +817,57 @@ describe('directive',function(){
     });
   });
 
+  it('should not clear the model when using multiple checkboxes targeting the same model array', function () {
+
+      inject(function ($compile, $rootScope) {
+          var scope = $rootScope.$new();
+          scope.person = {
+              "names": ["foo"]
+          };
+
+          scope.schema = {
+              "type": "object",
+              "properties": {
+                  "names": {
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "enum": ["foo", "bar"]
+                      }
+                  }
+              }
+          };
+
+          scope.form = [
+            'names',
+            'names',
+            { key: "names", type: "checkboxes", titleMap: { 'foo': 'Foo', 'bar': 'Bar' } },
+            { key: "names", type: "checkboxes", titleMap: { 'foo': 'Foo', 'bar': 'Bar' } }
+          ];
+
+          var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+          $compile(tmpl)(scope);
+          $rootScope.$apply();
+
+          var foo = tmpl.children().eq(0).find('input[type=checkbox]').eq(0);
+          var bar = tmpl.children().eq(3).find('input[type=checkbox]').eq(1);
+
+          foo.prop('checked').should.be.true;
+          bar.prop('checked').should.be.false;
+          scope.person.names.length.should.be.equal(1);
+          scope.person.names.join(',').should.be.equal('foo');
+
+          bar.click()
+          scope.person.names.length.should.be.equal(2);
+          scope.person.names.join(',').should.be.equal('foo,bar');
+
+          foo.click();
+          scope.person.names.length.should.be.equal(1);
+          scope.person.names.join(',').should.be.equal('bar');
+      });
+  });
+
   it('should use radio buttons when they are wanted',function(){
 
     inject(function($compile,$rootScope){
