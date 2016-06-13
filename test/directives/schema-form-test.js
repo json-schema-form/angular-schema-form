@@ -1,10 +1,10 @@
 chai.should();
 
-describe('directive',function(){
+describe('directive', function() {
   beforeEach(module('schemaForm'));
   beforeEach(
     //We don't need no sanitation. We don't need no thought control.
-    module(function($sceProvider){
+    module(function($sceProvider) {
       $sceProvider.enabled(false);
     })
   );
@@ -29,9 +29,8 @@ describe('directive',function(){
     }
   };
 
-  it('should generate html and compile it',function(){
-
-    inject(function($compile,$rootScope){
+  it('should generate html and compile it', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -54,9 +53,8 @@ describe('directive',function(){
     });
   });
 
-  it('should generate html and compile when no form is provided, using the default',function(){
-
-    inject(function($compile,$rootScope){
+  it('should generate html and compile when no form is provided, using the default', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -79,9 +77,8 @@ describe('directive',function(){
     });
   });
 
-  it('should generate html and compile it, deep structure',function(){
-
-    inject(function($compile,$rootScope){
+  it('should generate html and compile it, deep structure', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -172,9 +169,8 @@ describe('directive',function(){
     });
   });
 
-  it('should generate html and compile it, leaving existing inputs intact',function(){
-
-    inject(function($compile,$rootScope){
+  it('should generate html and compile it, leaving existing inputs intact', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -198,7 +194,7 @@ describe('directive',function(){
 
   it('should preserve existing html and insert fields in matching slots', function() {
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -217,9 +213,8 @@ describe('directive',function(){
   });
 
 
-  it('should handle submit buttons',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle submit buttons', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.obj = {};
 
@@ -252,9 +247,8 @@ describe('directive',function(){
     });
   });
 
-  it('should handle buttons',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle buttons', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.obj = {};
 
@@ -281,9 +275,8 @@ describe('directive',function(){
     });
   });
 
-  it('should style submit buttons',function(){
-
-    inject(function($compile,$rootScope){
+  it('should style submit buttons', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.obj = {};
 
@@ -332,9 +325,8 @@ describe('directive',function(){
     });
   });
 
-  it('should use disable readonly input fields, v3 style',function(){
-
-    inject(function($compile,$rootScope){
+  it('should use disable readonly input fields, v3 style', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -362,9 +354,8 @@ describe('directive',function(){
     });
   });
 
-  it('should use disable readonly input fields, v4 style',function(){
-
-    inject(function($compile,$rootScope){
+  it('should use disable readonly input fields, v4 style', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -393,9 +384,8 @@ describe('directive',function(){
     });
   });
 
-  it('should use disable readonly input fields, form override',function(){
-
-    inject(function($compile,$rootScope){
+  it('should use disable readonly input fields, form override', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -427,9 +417,9 @@ describe('directive',function(){
     });
   });
 
-  it('should display custom validationMessages when specified',function(done){
+  it('should display custom validationMessages when specified',function(done) {
 
-    inject(function($compile,$rootScope){
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -460,14 +450,14 @@ describe('directive',function(){
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
-      tmpl.find('input').each(function(){
+      tmpl.find('input').each(function() {
         $(this).scope().ngModel.$setViewValue('AÖ');
       });
 
       var errors = tmpl.find('.help-block');
 
       //timeout so we can do a second $apply
-      setTimeout(function(){
+      setTimeout(function() {
         $rootScope.$apply(); //this actually updates the view with error messages
         errors.eq(0).text().should.be.equal("You are only allowed lower case letters in name.");
         errors.eq(1).text().should.be.equal("Foobar");
@@ -478,9 +468,8 @@ describe('directive',function(){
   });
 
 
-  it('should honor defaults in schema',function(){
-
-    inject(function($compile,$rootScope){
+  it('should honor defaults in schema', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         name: 'Foobar'
@@ -517,9 +506,8 @@ describe('directive',function(){
     });
   });
 
-  it('should honor defaults in schema unless told not to',function(){
-
-    inject(function($compile,$rootScope){
+  it('should honor defaults in schema unless told not to', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         name: 'Foobar'
@@ -559,9 +547,8 @@ describe('directive',function(){
   });
 
 
-  it('should handle schema form default in deep structure',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle schema form default in deep structure', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         name: 'Foobar'
@@ -615,9 +602,8 @@ describe('directive',function(){
   });
 
 
-  it('should handle schema form titles in deep structure',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle schema form titles in deep structure', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         name: 'Foobar'
@@ -673,9 +659,8 @@ describe('directive',function(){
     });
   });
 
-  it('should handle schema form default in deep structure with array',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle schema form default in deep structure with array', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         "arr":[]
@@ -718,13 +703,11 @@ describe('directive',function(){
       scope.person.arr[0].name.should.be.equal('Name');
       scope.person.arr[0].nick.should.be.equal('Nick');
       expect(scope.person.arr[0].alias).to.be.undefined;
-
     });
   });
 
-  it('should skip title if form says "notitle"',function(){
-
-    inject(function($compile,$rootScope){
+  it('should skip title if form says "notitle"', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -749,9 +732,8 @@ describe('directive',function(){
     });
   });
 
-  it('should generate checkboxes for arrays with enums',function(){
-
-    inject(function($compile,$rootScope){
+  it('should generate checkboxes for arrays with enums', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -783,9 +765,8 @@ describe('directive',function(){
     });
   });
 
-  it('should initialize checkboxes to the model values',function(){
-
-    inject(function($compile,$rootScope){
+  it('should initialize checkboxes to the model values', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         "names": ["foo"]
@@ -817,9 +798,58 @@ describe('directive',function(){
     });
   });
 
-  it('should use radio buttons when they are wanted',function(){
+  it('should not clear model when multiple checkboxes target the same model array', function () {
+      inject(function ($compile, $rootScope) {
+          var scope = $rootScope.$new();
+          scope.person = {
+              "names": ["foo"]
+          };
 
-    inject(function($compile,$rootScope){
+          scope.schema = {
+              "type": "object",
+              "properties": {
+                  "names": {
+                      "type": "array",
+                      "items": {
+                          "type": "string",
+                          "enum": ["foo", "bar"]
+                      }
+                  }
+              }
+          };
+
+          scope.form = [
+            'names',
+            'names',
+            { key: "names", type: "checkboxes", titleMap: { 'foo': 'Foo', 'bar': 'Bar' } },
+            { key: "names", type: "checkboxes", titleMap: { 'foo': 'Foo', 'bar': 'Bar' } }
+          ];
+
+          var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+          $compile(tmpl)(scope);
+          $rootScope.$apply();
+
+          var foo = tmpl.children().eq(0).find('input[type=checkbox]').eq(0);
+          var bar = tmpl.children().eq(3).find('input[type=checkbox]').eq(1);
+
+          foo.prop('checked').should.be.true;
+          bar.prop('checked').should.be.false;
+          scope.person.names.length.should.be.equal(1);
+          scope.person.names.join(',').should.be.equal('foo');
+
+          bar.click()
+          scope.person.names.length.should.be.equal(2);
+          scope.person.names.join(',').should.be.equal('foo,bar');
+
+          foo.click();
+          scope.person.names.length.should.be.equal(1);
+          scope.person.names.join(',').should.be.equal('bar');
+      });
+  });
+
+  it('should use radio buttons when they are wanted', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -857,9 +887,8 @@ describe('directive',function(){
     });
   });
 
-  it('should use radio buttons with HTML',function(){
-
-    inject(function($compile,$rootScope){
+  it('should use radio buttons with HTML', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -903,9 +932,8 @@ describe('directive',function(){
     });
   });
 
-  it('should style radio buttons',function(){
-
-    inject(function($compile,$rootScope){
+  it('should style radio buttons', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1051,9 +1079,8 @@ describe('directive',function(){
     });
   });
 
-  it('should handle a simple div when type "section" is specified',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle a simple div when type "section" is specified', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1085,9 +1112,8 @@ describe('directive',function(){
     });
   });
 
-  it('should handle "action" groups, same as "section" but with a bootstrap class "btn-group"',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle "action" groups, same as "section" but with a bootstrap class "btn-group"', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1121,9 +1147,8 @@ describe('directive',function(){
     });
   });
 
-  it('should style "action" groups',function(){
-
-    inject(function($compile,$rootScope){
+  it('should style "action" groups', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1170,14 +1195,14 @@ describe('directive',function(){
     });
   });
 
-  it('should render custom html when type "help" is specified',function(){
+  it('should render custom html when type "help" is specified', function() {
 
     //We don't need no sanitation. We don't need no though control.
-    module(function($sceProvider){
+    module(function($sceProvider) {
       $sceProvider.enabled(false);
     });
 
-    inject(function($compile,$rootScope){
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = { };
 
@@ -1212,9 +1237,8 @@ describe('directive',function(){
     });
   });
 
-  it('should render tabs with items in them when specified',function(){
-
-    inject(function($compile,$rootScope){
+  it('should render tabs with items in them when specified', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = { };
 
@@ -1278,9 +1302,8 @@ describe('directive',function(){
     });
   });
 
-  it('should render a list of subforms when schema type is array',function(){
-
-    inject(function($compile,$rootScope){
+  it('should render a list of subforms when schema type is array', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1362,9 +1385,8 @@ describe('directive',function(){
     });
   });
 
-  it('should style an array',function(){
-
-    inject(function($compile,$rootScope){
+  it('should style an array', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1445,9 +1467,8 @@ describe('directive',function(){
     });
   });
 
-  it('should render a tabarray of subforms when asked',function(){
-
-    inject(function($compile,$rootScope){
+  it('should render a tabarray of subforms when asked', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         names: ['me','you','another']
@@ -1510,9 +1531,8 @@ describe('directive',function(){
     });
   });
 
-  it('should style a tabarray',function(){
-
-    inject(function($compile,$rootScope){
+  it('should style a tabarray', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         names: ['me','you','another']
@@ -1574,14 +1594,11 @@ describe('directive',function(){
       tmpl.children().eq(1).find('button').text().trim().should.be.eq('Delete');
       tmpl.children().eq(1).find('button').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(1).find('button').eq(0).hasClass('btn-danger').should.be.false;
-
-
     });
   });
 
-  it('should sort select options by enum',function(){
-
-    inject(function($compile,$rootScope){
+  it('should sort select options by enum', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1621,9 +1638,8 @@ describe('directive',function(){
   });
 
 
-  it('should update array form on model array ref change',function(){
-
-    inject(function($compile,$rootScope){
+  it('should update array form on model array ref change', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         names:[
@@ -1694,7 +1710,7 @@ describe('directive',function(){
 
   it('should remove or add fields depending on condition',function(done) {
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         flag: true
@@ -1721,19 +1737,17 @@ describe('directive',function(){
       tmpl.find('.schema-form-text').length.should.be.equal(1);
 
       setTimeout(function() {
-
         scope.person.flag = false;
         $rootScope.$apply();
         tmpl.find('.schema-form-text').length.should.be.equal(0);
         done();
       }, 0);
-
     });
   });
 
   it('should redraw form on schemaFormRedraw event',function(done) {
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1764,13 +1778,12 @@ describe('directive',function(){
         tmpl.find('.schema-form-text').length.should.be.equal(0);
         done();
       }, 0);
-
     });
   });
 
   it('should redraw form with proper defaults on schemaFormRedraw event',function(done) {
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1823,7 +1836,7 @@ describe('directive',function(){
 
   it('should use supplied template with template field type',function() {
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1853,7 +1866,7 @@ describe('directive',function(){
 
   it('should load template by templateUrl, with template field type',function() {
 
-    inject(function($compile, $rootScope, $httpBackend){
+    inject(function($compile, $rootScope, $httpBackend) {
 
       $httpBackend.when('GET', '/template.html')
                   .respond("<div>{{form.foo}}</div>");
@@ -1963,10 +1976,54 @@ describe('directive',function(){
     }
   ];
 
-  fields.forEach(function (field) {
+/*
+  Removed while debugging the failure for the tests to complete below
+    ,
+    {
+      name: 'radios',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    },
+    {
+      name: 'radios-inline',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios-inline",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    }
+ */
 
+  fields.forEach(function (field) {
     it('should not add "has-success" class to ' + field.name + " field if a correct value is entered, but disableSuccessState is set on form", function () {
-      inject(function($compile, $rootScope){
+      inject(function($compile, $rootScope) {
         var scope = $rootScope.$new();
         scope.model = {}
         scope.schema = {
@@ -1992,7 +2049,7 @@ describe('directive',function(){
     });
 
     it('should not add "has-error" class to ' + field.name + " field if invalid value is entered, but disableErrorState is set on form", function () {
-      inject(function($compile, $rootScope){
+      inject(function($compile, $rootScope) {
         var scope = $rootScope.$new();
         scope.model = {
           field: field.errorValue
@@ -2020,11 +2077,7 @@ describe('directive',function(){
     });
   });
 
-
-
-
   it('should not add "has-success" class to radios field if a correct value is entered, but disableSuccessState is set on form', function () {
-
     var field = {
       name: 'radios',
       property: {
@@ -2046,7 +2099,7 @@ describe('directive',function(){
       }
     };
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.model = {}
       scope.schema = {
@@ -2072,7 +2125,6 @@ describe('directive',function(){
   });
 
   it('should not add "has-error" class to radios field if invalid value is entered, but disableErrorState is set on form', function () {
-
     var field = {
       name: 'radios',
       property: {
@@ -2094,7 +2146,7 @@ describe('directive',function(){
       }
     };
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.model = {
         field: field.errorValue
@@ -2122,7 +2174,6 @@ describe('directive',function(){
   });
 
   it('should not add "has-success" class to radios-inline field if a correct value is entered, but disableSuccessState is set on form', function () {
-
     var field = {
       name: 'radios',
       property: {
@@ -2144,7 +2195,7 @@ describe('directive',function(){
       }
     };
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.model = {}
       scope.schema = {
@@ -2170,7 +2221,6 @@ describe('directive',function(){
   });
 
   it('should not add "has-error" class to radios-inline field if invalid value is entered, but disableErrorState is set on form', function () {
-
     var field = {
       name: 'radios',
       property: {
@@ -2192,7 +2242,7 @@ describe('directive',function(){
       }
     };
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.model = {
         field: field.errorValue
@@ -2219,14 +2269,7 @@ describe('directive',function(){
     });
   });
 
-
-
-
-
-
-
   describe('destroy strategy', function() {
-
     var schema = {
       "type": "object",
       "title": "Comment",
@@ -2387,7 +2430,7 @@ describe('directive',function(){
 
     it('should not remove anything if $destroy event comes from outside', function(done) {
 
-      inject(function($compile, $rootScope){
+      inject(function($compile, $rootScope) {
         var scope = $rootScope.$new();
         scope.person = {
           "switch": true,

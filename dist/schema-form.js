@@ -3063,17 +3063,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	            if (vals && vals !== old) {
 	              var arr = getOrCreateModel();
 
-	              // Apparently the fastest way to clear an array, readable too.
-	              // http://jsperf.com/array-destroy/32
-	              while (arr.length > 0) {
-	                arr.pop();
-	              }
 	              form.titleMap.forEach(function (item, index) {
-	                if (vals[index]) {
-	                  arr.push(item.value);
-	                }
+	                var arrIndex = arr.indexOf(item.value);
+	                if (arrIndex === -1 && vals[index]) arr.push(item.value);
+	                if (arrIndex !== -1 && !vals[index]) arr.splice(arrIndex, 1);
 	              });
-
 	              // Time to validate the rebuilt array.
 	              // validateField method is exported by schema-validate
 	              if (scope.validateField) {

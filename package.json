@@ -12,7 +12,7 @@
     "minify": "uglifyjs dist/schema-form.js --comments --output=dist/schema-form.min.js",
     "dist": "npm run build && npm run minify",
     "testlinux": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js",
-    "test": "karma start --single-run --browsers PhantomJS karma.conf.js --log-level debug"
+    "test": "karma start --single-run --browsers PhantomJS karma.conf.js --log-level info"
   },
   "author": "json-schema-form",
   "contributors": [
