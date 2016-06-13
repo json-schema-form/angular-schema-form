@@ -268,7 +268,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                           if (typeof scope.ngModel.$validate === 'function') {
                             scope.ngModel.$validate();
                         } else {
-                            scope.ngModel.setViewValue(scope.ngModel.$viewValue);
+                            scope.ngModel.$setViewValue(scope.ngModel.$viewValue);
                         }
 
                           // Setting or removing a validity can change the field to believe its valid
