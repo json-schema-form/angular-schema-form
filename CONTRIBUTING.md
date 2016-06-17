@@ -22,5 +22,5 @@ With new features we love to see updates to the docs as well as tests, that make
 easy and fast for us to merge it!
 
 Also consider running any code through the code style checker [jscs](https://github.com/mdevils/node-jscs)
-(or even better use it in your editor) with preset set to `google`. You can also us `gulp jscs` to
+(or even better use it in your editor) with preset set to `google`. You can also use `gulp jscs` to
 check your code.
