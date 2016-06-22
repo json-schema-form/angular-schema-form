@@ -11,9 +11,19 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
   };
   var formId = 0;
 
+  if (!("firstElementChild" in document.createDocumentFragment())) {
+    Object.defineProperty(DocumentFragment.prototype, "firstElementChild", {
+      get: function () {
+        for (var nodes = this.childNodes, n, i = 0, l = nodes.length; i < l; ++i)
+          if (n = nodes[i], 1 === n.nodeType) return n;
+        return null;
+      }
+    });
+  }
+
   var builders = {
     sfField: function(args) {
-      args.fieldFrag.firstChild.setAttribute('sf-field', formId);
+      args.fieldFrag.firstElementChild.setAttribute('sf-field', formId);
 
       // We use a lookup table for easy access to our form.
       args.lookup['f' + formId] = args.form;
