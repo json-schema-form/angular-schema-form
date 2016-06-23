@@ -48,7 +48,7 @@ But before we get into the details of how you define a decorator or an add-on, l
 
 How the form is built
 ----------------------
-Schema Form uses the [sfBuilder](https://github.com/Textalk/angular-schema-form/blob/development/src/services/builder.js)
+Schema Form uses the [sfBuilder](https://github.com/json-schema-form/angular-schema-form/blob/development/src/services/builder.js)
 service to recursively build the DOM elements of the form from a *canonical form definition*, that
 is our fancy word for an internal representation of a merge between the schema and the form.
 
@@ -248,7 +248,7 @@ schemaFormProvider.defaults.string.unshift(datepicker);
 
 ### Sharing your add-on with the world
 So you made an add-on, why not share it with us? On the front page,
-[http://textalk.github.io/angular-schema-form/](http://textalk.github.io/angular-schema-form/#third-party-addons), we
+[http://schemaform.io/#/third-party-addons](http://schemaform.io/#/third-party-addons), we
 maintain a list of add ons based on a query of the bower register, and we love to see your add-on
 there.
 
