@@ -3,7 +3,7 @@
   "version": "1.0.0-alpha.2",
   "description": "Create complex forms from a JSON schema with angular.",
   "repository": "json-schema-form/angular-schema-form",
-  "main": "dist/schema-form.es5.js",
+  "main": "dist/schema-form.js",
   "filename": "dist/schema-form.min.js",
   "homepage": "http://schemaform.io",
   "scripts": {
