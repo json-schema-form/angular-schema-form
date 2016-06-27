@@ -138,6 +138,9 @@ describe('schemaForm', function() {
             },
             "ngModelOptions": {},
             "type": "fieldset",
+            "key": [
+              "attributes"
+            ],
             "items": [
               {
                 "title": "Eye color",
@@ -182,6 +185,10 @@ describe('schemaForm', function() {
                 },
                 "ngModelOptions": {},
                 "type": "fieldset",
+                "key": [
+                  "attributes",
+                  "shoulders"
+                ],
                 "items": [
                   {
                     "title": "left",
