@@ -3,11 +3,9 @@ Angular Schema Form
 [![bower version](https://img.shields.io/bower/v/angular-schema-form.svg?style=flat-square)](#bower)
 [![npm version](https://img.shields.io/npm/v/angular-schema-form.svg?style=flat-square)](https://www.npmjs.org/package/angular-schema-form)
 [![npm downloads](https://img.shields.io/npm/dm/angular-schema-form.svg?style=flat-square)](http://npm-stat.com/charts.html?package=angular-schema-form&from=2015-01-01)
-[![Gitter](https://img.shields.io/badge/GITTER-JOIN%20CHAT%20%E2%86%92-ff69b4.svg?style=flat-square)](https://gitter.im/Textalk/angular-schema-form?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://img.shields.io/travis/Textalk/angular-schema-form.svg?style=flat-square)](https://travis-ci.org/Textalk/angular-schema-form)
-[![Build Status](https://img.shields.io/coveralls/jekyll/jekyll.svg?style=flat-square)](https://coveralls.io/r/Textalk/angular-schema-form?branch=development)
-
-
+[![Gitter](https://img.shields.io/badge/GITTER-JOIN%20CHAT%20%E2%86%92-ff69b4.svg?style=flat-square)](https://gitter.im/json-schema-form/angular-schema-form?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Build Status](https://img.shields.io/travis/json-schema-form/angular-schema-form.svg?style=flat-square)](https://travis-ci.org/json-schema-form/angular-schema-form)
+[![Code Coverage](https://img.shields.io/coveralls/json-schema-form/angular-schema-form.svg?style=flat-square)](https://coveralls.io/github/json-schema-form/angular-schema-form?branch=development)
 
 
 
@@ -52,7 +50,7 @@ Documentation
 You can find [all documentation here](docs/index.md), it covers all the different field types
 and their options.
 
-It also covers how to [extend angular schema form with your own field types](https://github.com/Textalk/angular-schema-form/blob/master/docs/extending.md).
+It also covers how to [extend angular schema form with your own field types](docs/extending.md).
 
 Basic Usage
 -----------
@@ -163,7 +161,7 @@ angular.module('myModule', ['schemaForm']);
 
 Add-ons
 ------
-There are several add-ons available, for a full list see the [web page](http://textalk.github.io/angular-schema-form/#third-party-addons).
+There are several add-ons available, for a full list see the [web page](http://schemaform.io/#/third-party-addons).
 Your can also [create your own add-ons!](docs/extending.md)
 
 Contributing

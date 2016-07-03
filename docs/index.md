@@ -3,7 +3,7 @@ IMPORTANT
 =========
 
 **Angular Schema Form is undergoing a refactoring and the "bootstrap decorator", i.e. the part with
-all the HTML has been moved to [github.com/Textalk/angular-schema-form-bootstrap](https://github.com/Textalk/angular-schema-form-bootstrap).**
+all the HTML has been moved to [github.com/json-schema-form/angular-schema-form-bootstrap](https://github.com/json-schema-form/angular-schema-form-bootstrap).**
 
 The documentation below, especially form options is therefore somewhat bootstrap decorator
 specific. The docs is undergoing updating.
@@ -551,8 +551,8 @@ Schema Form currently supports the following form field types out of the box:
 | tabarray      |  a tabbed version of array |
 
 More field types can be added, for instance a "datepicker" type can be added by
-including the [datepicker addon](https://github.com/Textalk/angular-schema-form-datepicker), see
-the [front page](http://textalk.github.io/angular-schema-form/#third-party-addons) for an updated
+including the [datepicker addon](https://github.com/json-schema-form/angular-schema-form-datepicker), see
+the [front page](http://schemaform.io/#/third-party-addons) for an updated
 list.
 
 
