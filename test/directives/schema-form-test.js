@@ -1902,6 +1902,35 @@ describe('directive',function(){
     });
   });
 
+  it('should use supplied template with leading whitespace in template field',function() {
+
+    inject(function($compile, $rootScope){
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [
+        {
+          type: 'template',
+          template: '  <div>{{form.foo}}</div>',
+          foo: "Hello World"
+        }
+      ];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+      tmpl.html().should.be.eq('  <div sf-field="0" class="ng-scope ng-binding">Hello World</div>');
+    });
+  });
+
   it('should load template by templateUrl, with template field type',function() {
 
     inject(function($compile, $rootScope, $httpBackend){
