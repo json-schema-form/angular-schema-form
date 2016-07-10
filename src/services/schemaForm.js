@@ -11,8 +11,6 @@ import {
  * Schema form service.
  */
 export default function() {
-
-
   let postProcessFn = (form) => form;
   const defaults = schemaDefaults.createDefaults();
 
@@ -79,13 +77,13 @@ export default function() {
     var typeDefault = this.defaults;
 
     service.merge = function(schema, form, ignore, options, readonly, asyncTemplates) {
-      form  = form || ['*'];
+      form  = form || [ '*' ];
       options = options || {};
 
       // Get readonly from root object
       readonly = readonly || schema.readonly || schema.readOnly;
 
-      const stdForm = schemaDefaults.defaultForm(schema, typeDefault ,ignore, options);
+      const stdForm = schemaDefaults.defaultForm(schema, typeDefault, ignore, options);
 
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf('*');

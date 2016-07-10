@@ -28,8 +28,7 @@ export default function(sfSelect, schemaForm, sfValidator, sfPath) {
         // most notably for errors.
         // So we emit it up to the decorator directive so it can put it on scope.
         scope.$emit('schemaFormPropagateNgModelController', ngModel);
-      }
-
+      };
 
       // Watch for the form definition and then rewrite it.
       // It's the (first) array part of the key, '[]' that needs a number
@@ -37,8 +36,7 @@ export default function(sfSelect, schemaForm, sfValidator, sfPath) {
       var once = scope.$watch(attrs.sfArray, function(form) {
         if (!form) {
           return;
-        }
-
+        };
 
         // An array model always needs a key so we know what part of the model
         // to look at. This makes us a bit incompatible with JSON Form, on the

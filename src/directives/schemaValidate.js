@@ -27,7 +27,6 @@ export default function(sfValidator, $parse, sfSelect) {
         });
       };
 
-
       // Validate against the schema.
 
       var validate = function(viewValue) {
@@ -73,7 +72,7 @@ export default function(sfValidator, $parse, sfSelect) {
         form.ngModel(ngModel);
       }
 
-      ['$parsers', '$viewChangeListeners', '$formatters'].forEach(function(attr) {
+      [ '$parsers', '$viewChangeListeners', '$formatters' ].forEach(function(attr) {
         if (form[attr] && ngModel[attr]) {
           form[attr].forEach(function(fn) {
             ngModel[attr].push(fn);
@@ -81,7 +80,7 @@ export default function(sfValidator, $parse, sfSelect) {
         }
       });
 
-      ['$validators', '$asyncValidators'].forEach(function(attr) {
+      [ '$validators', '$asyncValidators' ].forEach(function(attr) {
         // Check if our version of angular has validators, i.e. 1.3+
         if (form[attr] && ngModel[attr]) {
           angular.forEach(form[attr], function(fn, name) {

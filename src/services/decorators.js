@@ -1,6 +1,5 @@
 import angular from 'angular';
 
-
 export default function($compileProvider, sfPathProvider) {
   var defaultDecorator = '';
   var decorators = {};
@@ -31,7 +30,7 @@ export default function($compileProvider, sfPathProvider) {
   //TODO: Move to a compatability extra script.
   var createDirective = function(name) {
     $compileProvider.directive(name,
-      ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
+      [ '$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage',
        'sfPath','sfSelect',
       function($parse, $compile, $http, $templateCache, $interpolate, $q, sfErrorMessage,
                sfPath, sfSelect) {
@@ -82,10 +81,10 @@ export default function($compileProvider, sfPathProvider) {
               else if (angular.isString(form.onClick)) {
                 if (sfSchema) {
                   //evaluating in scope outside of sfSchemas isolated scope
-                  sfSchema.evalInParentScope(form.onClick, {'$event': $event, form: form});
+                  sfSchema.evalInParentScope(form.onClick, { '$event': $event, form: form });
                 }
-                else{
-                  scope.$eval(form.onClick, {'$event': $event, form: form});
+                else {
+                  scope.$eval(form.onClick, { '$event': $event, form: form });
                 };
               };
             };
@@ -93,6 +92,7 @@ export default function($compileProvider, sfPathProvider) {
             /**
              * Evaluate an expression, i.e. scope.$eval
              * but do it in sfSchemas parent scope sf-schema directive is used
+             *
              * @param {string} expression
              * @param {Object} locals (optional)
              * @return {Any} the result of the expression
@@ -109,6 +109,7 @@ export default function($compileProvider, sfPathProvider) {
             /**
              * Evaluate an expression, i.e. scope.$eval
              * in this decorators scope
+             *
              * @param {string} expression
              * @param {Object} locals (optional)
              * @return {Any} the result of the expression
@@ -128,7 +129,7 @@ export default function($compileProvider, sfPathProvider) {
              * Use the Angular `{{ interpolation }}`
              * braces to access properties on `locals`.
              *
-             * @param  {string} content The string to interpolate.
+             * @param  {string} expression The string to interpolate.
              * @param  {Object} locals (optional) Properties that may be accessed in the
              *                         `expression` string.
              * @return {Any} The result of the expression or `undefined`.
@@ -189,7 +190,7 @@ export default function($compileProvider, sfPathProvider) {
                   templatePromise = $q.when(form.template);
                 } else {
                   var url = form.type === 'template' ? form.templateUrl : templateUrl(name, form);
-                  templatePromise = $http.get(url, {cache: $templateCache}).then(function(res) {
+                  templatePromise = $http.get(url, { cache: $templateCache }).then(function(res) {
                                       return res.data;
                                     });
                 }
@@ -211,7 +212,9 @@ export default function($compileProvider, sfPathProvider) {
 
                     var evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex})';
                     if (form.key) {
-                      evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "modelValue": model' + sfPath.stringify(form.key) + '})';
+                      evalExpr = 'evalExpr(form.condition, {' +
+                        'model: model, "arrayIndex": arrayIndex, "modelValue": model' + sfPath.stringify(form.key) +
+                      '})';
                     }
 
                     angular.forEach(element.children(), function(child) {
@@ -220,7 +223,7 @@ export default function($compileProvider, sfPathProvider) {
                         'ng-if',
                         ngIf ?
                         '(' + ngIf +
-                        ') || (' + evalExpr +')'
+                        ') || (' + evalExpr + ')'
                         : evalExpr
                       );
                     });
@@ -251,7 +254,7 @@ export default function($compileProvider, sfPathProvider) {
                         if (scope.ngModel.$setDirty) {
                           scope.ngModel.$setDirty();
                         }
-                        else{
+                        else {
                           // FIXME: Check that this actually works on 1.2
                           scope.ngModel.$dirty = true;
                           scope.ngModel.$pristine = false;
@@ -277,10 +280,12 @@ export default function($compileProvider, sfPathProvider) {
                           scope.$broadcast('schemaFormValidate');
                         }
                       }
-                  });
+                    }
+                  );
 
                   // Clean up the model when the corresponding form field is $destroy-ed.
-                  // Default behavior can be supplied as a globalOption, and behavior can be overridden in the form definition.
+                  // Default behavior can be supplied as a globalOption, and behavior can be overridden
+                  // in the form definition.
                   scope.$on('$destroy', function() {
                     // If the entire schema form is destroyed we don't touch the model
                     if (!scope.externalDestructionInProgress) {
@@ -344,7 +349,7 @@ export default function($compileProvider, sfPathProvider) {
             'titleMap': 'c',
             'schema': 'c'
           };
-          var form = {type: type};
+          var form = { type: type };
           var once = true;
           angular.forEach(attrs, function(value, name) {
             if (name[0] !== '$' && name.indexOf('ng') !== 0 && name !== 'sfField') {
@@ -398,10 +403,10 @@ export default function($compileProvider, sfPathProvider) {
    */
   this.createDecorator = function(name, templates) {
     //console.warn('schemaFormDecorators.createDecorator is DEPRECATED, use defineDecorator instead.');
-    decorators[name] = {'__name': name};
+    decorators[name] = { '__name': name };
 
     angular.forEach(templates, function(url, type) {
-      decorators[name][type] = {template: url, replace: false, builder: []};
+      decorators[name][type] = { template: url, replace: false, builder: []};
     });
 
     if (!decorators[defaultDecorator]) {
@@ -409,7 +414,6 @@ export default function($compileProvider, sfPathProvider) {
     }
     createDirective(name);
   };
-
 
   /**
    * Define a decorator. A decorator is a set of form types with templates and builder functions
@@ -430,7 +434,7 @@ export default function($compileProvider, sfPathProvider) {
                      directive.
    */
   this.defineDecorator = function(name, fields) {
-    decorators[name] = {'__name': name}; // TODO: this feels like a hack, come up with a better way.
+    decorators[name] = { '__name': name }; // TODO: this feels like a hack, come up with a better way.
 
     angular.forEach(fields, function(field, type) {
       field.builder = field.builder || [];
@@ -463,6 +467,7 @@ export default function($compileProvider, sfPathProvider) {
    * DEPRECATED
    * Same as createDirective, but takes an object where key is 'type' and value is 'templateUrl'
    * Useful for batching.
+   *
    * @param {Object} templates
    */
   this.createDirectives = function(templates) {
@@ -473,6 +478,7 @@ export default function($compileProvider, sfPathProvider) {
 
   /**
    * Getter for decorator settings
+   *
    * @param {string} name (optional) defaults to defaultDecorator
    * @return {Object} rules and templates { rules: [],templates: {}}
    */
@@ -481,10 +487,10 @@ export default function($compileProvider, sfPathProvider) {
     return decorators[name];
   };
 
-
   /**
    * DEPRECATED use defineAddOn() instead.
    * Adds a mapping to an existing decorator.
+   *
    * @param {String} name Decorator name
    * @param {String} type Form type for the mapping
    * @param {String} url  The template url
@@ -503,6 +509,7 @@ export default function($compileProvider, sfPathProvider) {
 
   /**
    * Adds an add-on to an existing decorator.
+   *
    * @param {String} name Decorator name
    * @param {String} type Form type for the mapping
    * @param {String} url  The template url
@@ -518,8 +525,6 @@ export default function($compileProvider, sfPathProvider) {
     }
   };
 
-
-
   //Service is just a getter for directive templates and rules
   this.$get = function() {
     return {
@@ -532,5 +537,4 @@ export default function($compileProvider, sfPathProvider) {
 
   //Create a default directive
   createDirective('sfDecorator');
-
-}
+};

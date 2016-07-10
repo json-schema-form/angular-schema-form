@@ -173,14 +173,14 @@ export default function(sfPathProvider) {
 
         if (maximum !== false) {
           if (exclusiveMaximum !== false && multipleOf !== false) {
-            maximum = maximum-multipleOf;
+            maximum = maximum - multipleOf;
           };
           inputFrag.setAttribute('max', maximum);
         };
 
         if (minimum !== false) {
           if (exclusiveMinimum !== false && multipleOf !== false) {
-            minimum = minimum+multipleOf;
+            minimum = minimum + multipleOf;
           };
           inputFrag.setAttribute('min', minimum);
         };

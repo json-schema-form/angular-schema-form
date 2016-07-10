@@ -73,7 +73,7 @@ export default function($injector, sfErrorMessage) {
       // Update once.
       update();
 
-      var once = scope.$watch('ngModel',function(ngModel) {
+      var once = scope.$watch('ngModel', function(ngModel) {
         if (ngModel) {
           // We also listen to changes of the model via parsers and formatters.
           // This is since both the error message can change and given a pristine

@@ -21,7 +21,7 @@ export default function() {
           if (angular.isFunction(form.onChange)) {
             form.onChange(ctrl.$modelValue, form);
           } else {
-            scope.evalExpr(form.onChange, {'modelValue': ctrl.$modelValue, form: form});
+            scope.evalExpr(form.onChange, { 'modelValue': ctrl.$modelValue, form: form });
           }
         });
       }

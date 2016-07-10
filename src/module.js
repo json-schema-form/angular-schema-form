@@ -8,7 +8,6 @@ import validator from './services/validator';
 import errors from './services/errors';
 import sfPath from './services/sfPath';
 
-
 import array from './directives/array';
 import changed from './directives/changed';
 import field from './directives/field';
@@ -42,21 +41,21 @@ try {
 angular.module('schemaForm', deps)
 // Providers and services
 .provider('sfPath', sfPath)
-.provider('sfBuilder', ['sfPathProvider', sfBuilder])
-.provider('schemaFormDecorators', ['$compileProvider', 'sfPathProvider', decorators])
+.provider('sfBuilder', [ 'sfPathProvider', sfBuilder ])
+.provider('schemaFormDecorators', [ '$compileProvider', 'sfPathProvider', decorators ])
 .provider('sfErrorMessage', errors)
-.provider('schemaForm', ['sfPathProvider', schemaForm])
-.factory('sfSelect',() => select)
+.provider('schemaForm', [ 'sfPathProvider', schemaForm ])
+.factory('sfSelect', () => select)
 .factory('sfValidator', validator)
 
 // Directives
-.directive('sfArray', ['sfSelect', 'schemaForm', 'sfValidator', 'sfPath', array])
+.directive('sfArray', [ 'sfSelect', 'schemaForm', 'sfValidator', 'sfPath', array ])
 .directive('sfChanged', changed)
-.directive('sfField', ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q',
-                       'sfErrorMessage','sfPath','sfSelect', field])
-.directive('sfMessage', ['$injector', 'sfErrorMessage', message])
-.directive('sfNewArray', ['sfSelect', 'sfPath', 'schemaForm', newArray])
-.directive('sfSchema', ['$compile', '$http', '$templateCache', '$q', 'schemaForm',
+.directive('sfField', [ '$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q',
+                       'sfErrorMessage','sfPath','sfSelect', field ])
+.directive('sfMessage', [ '$injector', 'sfErrorMessage', message ])
+.directive('sfNewArray', [ 'sfSelect', 'sfPath', 'schemaForm', newArray ])
+.directive('sfSchema', [ '$compile', '$http', '$templateCache', '$q', 'schemaForm',
                         'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder',
-                        schemaFormDirective])
-.directive('schemaValidate', ['sfValidator', '$parse', 'sfSelect', schemaValidate]);
+                        schemaFormDirective ])
+.directive('schemaValidate', [ 'sfValidator', '$parse', 'sfSelect', schemaValidate ]);

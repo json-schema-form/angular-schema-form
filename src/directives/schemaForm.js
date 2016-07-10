@@ -5,7 +5,7 @@ FIXME: real documentation
 <form sf-form="form"  sf-schema="schema" sf-decorator="foobar"></form>
 */
 
-export default function($compile, $http, $templateCache, $q, schemaForm,  schemaFormDecorators,
+export default function($compile, $http, $templateCache, $q, schemaForm, schemaFormDecorators,
 sfSelect, sfPath, sfBuilder) {
 
   return {
@@ -15,7 +15,7 @@ sfSelect, sfPath, sfBuilder) {
       model: '=sfModel',
       options: '=sfOptions'
     },
-    controller: ['$scope', function($scope) {
+    controller: [ '$scope', function($scope) {
       this.evalInParentScope = function(expr, locals) {
         return $scope.$parent.$eval(expr, locals);
       };
@@ -71,7 +71,7 @@ sfSelect, sfPath, sfBuilder) {
         if (asyncTemplates.length > 0) {
           // Pre load all async templates and put them on the form for the builder to use.
           $q.all(asyncTemplates.map(function(form) {
-            return $http.get(form.templateUrl, {cache: $templateCache}).then(function(res) {
+            return $http.get(form.templateUrl, { cache: $templateCache }).then(function(res) {
                                 form.template = res.data;
                               });
           })).then(function() {
@@ -80,9 +80,7 @@ sfSelect, sfPath, sfBuilder) {
 
         } else {
           internalRender(schema, form, merged);
-        }
-
-
+        };
       };
 
       var internalRender = function(schema, form, merged) {
@@ -95,11 +93,11 @@ sfSelect, sfPath, sfBuilder) {
           scope.externalDestructionInProgress = true;
           childScope.$destroy();
           scope.externalDestructionInProgress = false;
-        }
+        };
         childScope = scope.$new();
 
         //make the form available to decorators
-        childScope.schemaForm  = {form:  merged, schema: schema};
+        childScope.schemaForm  = { form:  merged, schema: schema };
 
         //clean all but pre existing html.
         element.children(':not(.schema-form-ignore)').remove();
@@ -146,7 +144,7 @@ sfSelect, sfPath, sfBuilder) {
         scope.$emit('sf-render-finished', element);
       };
 
-      var defaultForm = ['*'];
+      var defaultForm = [ '*' ];
 
       //Since we are dependant on up to three
       //attributes we'll do a common watch
@@ -170,7 +168,7 @@ sfSelect, sfPath, sfBuilder) {
       // part of the form or schema is chnaged without it being a new instance.
       scope.$on('schemaFormRedraw', function() {
         var schema = scope.schema;
-        var form   = scope.initialForm ? angular.copy(scope.initialForm) : ['*'];
+        var form   = scope.initialForm ? angular.copy(scope.initialForm) : [ '*' ];
         if (schema) {
           render(schema, form);
         }

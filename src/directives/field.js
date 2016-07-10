@@ -79,6 +79,7 @@ sfPath, sfSelect) {
         /**
          * Evaluate an expression, i.e. scope.$eval
          * in this decorators scope
+         *
          * @param {string} expression
          * @param {Object} locals (optional)
          * @return {Any} the result of the expression
@@ -98,7 +99,7 @@ sfPath, sfSelect) {
          * Use the Angular `{{ interpolation }}`
          * braces to access properties on `locals`.
          *
-         * @param  {string} content The string to interpolate.
+         * @param  {string} expression The string to interpolate.
          * @param  {Object} locals (optional) Properties that may be accessed in the
          *                         `expression` string.
          * @return {Any} The result of the expression or `undefined`.

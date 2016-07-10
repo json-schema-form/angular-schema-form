@@ -32,7 +32,7 @@ export default function(sel, sfPath, schemaForm) {
           if (angular.isFunction(scope.form.onChange)) {
             scope.form.onChange(scope.modelArray, scope.form);
           } else {
-            scope.evalExpr(scope.form.onChange, {'modelValue': scope.modelArray, form: scope.form});
+            scope.evalExpr(scope.form.onChange, { 'modelValue': scope.modelArray, form: scope.form });
           }
         }
       };
@@ -66,13 +66,13 @@ export default function(sel, sfPath, schemaForm) {
           scope.$watch(attrs.sfNewArray, watchFn, true);
 
           // We still need to trigger onChange though.
-          scope.$watch([attrs.sfNewArray, attrs.sfNewArray + '.length'], onChangeFn);
+          scope.$watch([ attrs.sfNewArray, attrs.sfNewArray + '.length' ], onChangeFn);
 
         } else {
           // Otherwise we like to check if the instance of the array has changed, or if something
           // has been added/removed.
           if (scope.$watchGroup) {
-            scope.$watchGroup([attrs.sfNewArray, attrs.sfNewArray + '.length'], function() {
+            scope.$watchGroup([ attrs.sfNewArray, attrs.sfNewArray + '.length' ], function() {
               watchFn();
               onChangeFn();
             });
@@ -121,12 +121,15 @@ export default function(sel, sfPath, schemaForm) {
             if (vals && vals !== old) {
               var arr = getOrCreateModel();
 
-              form.titleMap.forEach(function (item, index) {
+              form.titleMap.forEach(function(item, index) {
                 var arrIndex = arr.indexOf(item.value);
-                if (arrIndex === -1 && vals[index])
+                if (arrIndex === -1 && vals[index]) {
                   arr.push(item.value);
-                if (arrIndex !== -1 && !vals[index])
+                };
+
+                if (arrIndex !== -1 && !vals[index]) {
                   arr.splice(arrIndex, 1);
+                };
               });
               // Time to validate the rebuilt array.
               // validateField method is exported by schema-validate
