@@ -24,6 +24,14 @@ angular.module('schemaForm').provider('schemaForm',
     return titleMap;
   };
 
+  var oneOfToTitleMap = function(ones) {
+    var titleMap = [];
+    ones.forEach(function(one) {
+      titleMap.push({name: one.title, value: one.title})
+    })
+    return titleMap;
+  }
+
   // Takes a titleMap in either object or list format and returns one in
   // in the list format.
   var canonicalTitleMap = function(titleMap, originalEnum) {
@@ -96,6 +104,52 @@ angular.module('schemaForm').provider('schemaForm',
     return f;
   };
 
+  var combinePropertyDependencies = function(schema) {
+    if (schema.hasOwnProperty('dependencies')) {
+      var deps = {};
+      angular.forEach(schema.dependencies, function(v, k) {
+        /*
+         * BigCommerce specific JSON Schema logic -
+         * A field with `_attr_*` will always be dependent on some other field,
+         * so do not make it a key for creating row objects.
+         */
+        if (k.indexOf('_attr_') === -1 && !deps.hasOwnProperty(v)) {
+          deps[k] = v;
+        }
+      })
+
+      angular.forEach(schema.properties, function(v, k) {
+        if (deps.hasOwnProperty(k)) {
+          var props       = 'properties'; 
+          var propertyKey = k.concat('Group');
+          var gatheredProperties = {};
+
+          gatheredProperties[k] = schema[props][k];
+          delete schema[props][k];
+
+          if (deps[k] && Array === deps[k].constructor) {
+            for (var dep = 0; dep < deps[k].length; dep++) {
+              gatheredProperties[deps[k][dep]] = schema[props][deps[k][dep]]
+              delete schema[props][deps[k]]
+            }
+          }
+          else {
+            gatheredProperties[deps[k]] = schema[propers[deps[k]]]
+            delete schema[props][deps[k]]
+          }
+
+          schema[props][propertyKey] = {
+            id: propertyKey,
+            type: 'row',
+            properties: gatheredProperties
+          };  
+        }
+      });
+    }    
+
+    return schema.properties;  
+  };
+
   var text = function(name, schema, options) {
     if (stripNullType(schema.type) === 'string' && !schema['enum']) {
       var f = stdFormObj(name, schema, options);
@@ -164,6 +218,77 @@ angular.module('schemaForm').provider('schemaForm',
     }
   };
 
+  var row = function(name, schema, options) {
+    if (stripNullType(schema.type) === 'row') {
+      var f   = stdFormObj(name, schema, options);
+      f.type  = 'row';
+      f.key   = options.path;
+      f.items = [];
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+
+      var required = schema.required &&
+                     schema.required.indexOf(options.path[options.path.length - 1]) !== -1;
+
+      angular.forEach(schema.properties, function(v, k) {
+        var rowPath = options.path.slice();
+        rowPath.push(k);
+
+        if (options.ignore[sfPathProvider.stringify(rowPath)] !== true) {
+          var required = schema.required && schema.required.indexOf(k) !== -1;
+
+          var def = defaultFormDefinition(k, v, {
+            path: rowPath,
+            required: required || false,
+            lookup: options.lookup,
+            ignore: options.ignore,
+            global: options.global
+          });
+          if (def) {
+            f.items.push(def);
+          }
+        }
+      });
+
+      return f;
+    }
+  };
+
+  var fieldselect = function(name, schema, options) {
+    if (stripNullType(schema.type) === 'object' && schema.hasOwnProperty('oneOf')) {
+      var f   = stdFormObj(name, schema, options);
+      f.type  = 'fieldselect';
+      f.items = [];
+      f.key   = options.path;
+      if (!f.titleMap) {
+        f.titleMap = oneOfToTitleMap(schema['oneOf']);
+      }
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+
+      //recurse down into properties
+      angular.forEach(schema.properties, function(v, k) {
+        var path = options.path.slice();
+        path.push(k);
+
+        if (options.ignore[sfPathProvider.stringify(path)] !== true) {
+          var required = schema.required && schema.required.indexOf(k) !== -1;
+
+          var def = defaultFormDefinition(k, v, {
+            path: path,
+            required: required || false,
+            lookup: options.lookup,
+            ignore: options.ignore,
+            global: options.global
+          });
+          if (def) {
+            f.items.push(def);
+          }
+        }
+      });
+
+      return f;
+    }
+  };
+
   var fieldset = function(name, schema, options) {
     if (stripNullType(schema.type) === 'object') {
       var f   = stdFormObj(name, schema, options);
@@ -172,8 +297,13 @@ angular.module('schemaForm').provider('schemaForm',
       f.items = [];
       options.lookup[sfPathProvider.stringify(options.path)] = f;
 
+      var modifiedProperties = combinePropertyDependencies;
+      if (schema.hasOwnProperty('dependencies')) {
+        f.dependencies = schema.dependencies;
+      }
+
       //recurse down into properties
-      angular.forEach(schema.properties, function(v, k) {
+      angular.forEach(modifiedProperties, function(v, k) {
         var path = options.path.slice();
         path.push(k);
         if (options.ignore[sfPathProvider.stringify(path)] !== true) {
@@ -198,7 +328,6 @@ angular.module('schemaForm').provider('schemaForm',
   };
 
   var array = function(name, schema, options) {
-
     if (stripNullType(schema.type) === 'array') {
       var f   = stdFormObj(name, schema, options);
       f.type  = 'array';
@@ -233,11 +362,12 @@ angular.module('schemaForm').provider('schemaForm',
   //Order has importance. First handler returning an form snippet will be used.
   var defaults = {
     string:  [select, text],
-    object:  [fieldset],
+    object:  [fieldselect, fieldset],
     number:  [number],
     integer: [integer],
     boolean: [checkbox],
-    array:   [checkboxes, array]
+    array:   [checkboxes, array],
+    row:     [row],
   };
 
   var postProcessFn = function(form) { return form; };
@@ -385,7 +515,7 @@ angular.module('schemaForm').provider('schemaForm',
         // Special case: checkbox
         // Since have to ternary state we need a default
         if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
-          obj.schema['default'] = false;
+          obj.schema['default'] = undefined;
         }
 
         // Special case: template type with tempplateUrl that's needs to be loaded before rendering
@@ -409,22 +539,34 @@ angular.module('schemaForm').provider('schemaForm',
       globalOptions = globalOptions || {};
 
       if (stripNullType(schema.type) === 'object') {
-        angular.forEach(schema.properties, function(v, k) {
+        var modifiedProperties = combinePropertyDependencies(schema);
+
+        angular.forEach(modifiedProperties, function(v, k) {
           if (ignore[k] !== true) {
             var required = schema.required && schema.required.indexOf(k) !== -1;
             var def = defaultFormDefinition(k, v, {
-              path: [k],         // Path to this property in bracket notation.
-              lookup: lookup,    // Extra map to register with. Optimization for merger.
-              ignore: ignore,    // The ignore list of paths (sans root level name)
-              required: required, // Is it required? (v4 json schema style)
+              path: [k],            // Path to this property in bracket notation.
+              lookup: lookup,       // Extra map to register with. Optimization for merger.
+              ignore: ignore,       // The ignore list of paths (sans root level name)
+              required: required,   // Is it required? (v4 json schema style)
               global: globalOptions // Global options, including form defaults
             });
+
             if (def) {
               form.push(def);
             }
           }
         });
 
+        if (schema.required && Array === schema.required.constructor) {
+          for (var req = schema.required.length-1; req >= 0; --req) {
+            var requiredIndex = form.findIndex(function(item) {
+              return item.title === schema['required'][req]; 
+            });
+            var splicedElem = form.splice(requiredIndex, 1);
+            form.unshift(splicedElem[0]);
+          }
+        }
       } else {
         throw new Error('Not implemented. Only type "object" allowed at root level of schema.');
       }
