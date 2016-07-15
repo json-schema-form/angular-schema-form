@@ -120,34 +120,91 @@ angular.module('schemaForm').provider('schemaForm',
 
       angular.forEach(schema.properties, function(v, k) {
         if (deps.hasOwnProperty(k)) {
-          var props       = 'properties'; 
-          var propertyKey = k.concat('Group');
-          var gatheredProperties = {};
+          var props         = 'properties'; 
+          var propertyKey   = k.concat('Group');
+          var required      = schema.required && schema.required.indexOf(k) != -1;
+          var gatheredReqs  = [];
+          var gatheredProps = {};
 
-          gatheredProperties[k] = schema[props][k];
+
+          gatheredProps[k] = schema[props][k];
           delete schema[props][k];
 
           if (deps[k] && Array === deps[k].constructor) {
             for (var dep = 0; dep < deps[k].length; dep++) {
-              gatheredProperties[deps[k][dep]] = schema[props][deps[k][dep]]
+              gatheredProps[deps[k][dep]] = schema[props][deps[k][dep]]
               delete schema[props][deps[k]]
+
+              if (required && gatheredReqs.indexOf(deps[k][dep]) === -1) {
+                gatheredReqs.push(deps[k][dep]);
+              }
             }
           }
           else {
-            gatheredProperties[deps[k]] = schema[propers[deps[k]]]
+            gatheredProps[deps[k]] = schema[propers[deps[k]]]
             delete schema[props][deps[k]]
           }
+
+          if (required && gatheredReqs.indexOf(k) === -1) {
+            gatheredReqs.push(k);
+          }
+
+          console.log(gatheredReqs);
 
           schema[props][propertyKey] = {
             id: propertyKey,
             type: 'row',
-            properties: gatheredProperties
+            properties: gatheredProps,
+            required: gatheredReqs,
           };  
         }
       });
     }    
 
     return schema.properties;  
+  };
+
+  var sortRequiredObjectsDesc = function(required, objectFieldNames, form) {
+    return form.sort(function(curr, next) {
+      var isCurrObject = objectFieldNames.indexOf(curr.type) != -1;
+      var isNextObject = objectFieldNames.indexOf(next.type) != -1;
+      var isCurrRequired = required.indexOf(curr.title) != -1;
+      var isNextRequired = required.indexOf(next.title) != -1;
+
+      if (isCurrObject && isCurrRequired) {
+        if (isNextObject && isNextRequired) {
+          return 0;
+        }
+        return -1;
+      }
+
+      if (isCurrObject && !isCurrRequired) {
+        if (isNextRequired) {
+          return 1;
+        }
+        if (isNextObject) {
+          return 0;
+        }
+        return -1;
+      }
+
+      if (!isCurrObject && isCurrRequired) {
+        if (!isNextRequired) {
+          return -1;
+        }
+        if (isNextObject) {
+          return 1;
+        }
+        return 0;
+      }
+
+      if (!isCurrObject && !isCurrRequired) {
+        if (!isNextObject && !isNextRequired) {
+          return 0;
+        }
+        return -1;
+      }   
+    })   
   };
 
   var text = function(name, schema, options) {
@@ -226,11 +283,9 @@ angular.module('schemaForm').provider('schemaForm',
       f.items = [];
       options.lookup[sfPathProvider.stringify(options.path)] = f;
 
-      var required = schema.required &&
-                     schema.required.indexOf(options.path[options.path.length - 1]) !== -1;
-
       angular.forEach(schema.properties, function(v, k) {
         var rowPath = options.path.slice();
+        rowPath.pop(); //get rid of modifier not part of schema
         rowPath.push(k);
 
         if (options.ignore[sfPathProvider.stringify(rowPath)] !== true) {
@@ -297,7 +352,7 @@ angular.module('schemaForm').provider('schemaForm',
       f.items = [];
       options.lookup[sfPathProvider.stringify(options.path)] = f;
 
-      var modifiedProperties = combinePropertyDependencies;
+      var modifiedProperties = combinePropertyDependencies(schema);
       if (schema.hasOwnProperty('dependencies')) {
         f.dependencies = schema.dependencies;
       }
@@ -324,7 +379,6 @@ angular.module('schemaForm').provider('schemaForm',
 
       return f;
     }
-
   };
 
   var array = function(name, schema, options) {
@@ -559,13 +613,12 @@ angular.module('schemaForm').provider('schemaForm',
         });
 
         if (schema.required && Array === schema.required.constructor) {
-          for (var req = schema.required.length-1; req >= 0; --req) {
-            var requiredIndex = form.findIndex(function(item) {
-              return item.title === schema['required'][req]; 
-            });
-            var splicedElem = form.splice(requiredIndex, 1);
-            form.unshift(splicedElem[0]);
+          var fields = [];
+          for (var i = 0; i < defaults.object.length; i++) {
+            fields.push(defaults.object[i]['name']);
           }
+          
+          form = sortRequiredObjectsDesc(schema.required, fields, form);
         }
       } else {
         throw new Error('Not implemented. Only type "object" allowed at root level of schema.');
