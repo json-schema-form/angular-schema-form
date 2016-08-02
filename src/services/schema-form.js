@@ -313,8 +313,25 @@ angular.module('schemaForm').provider('schemaForm',
       //simple case, we have a "*", just put the stdForm there
       var idx = form.indexOf('*');
       if (idx !== -1) {
-        form  = form.slice(0, idx)
-                    .concat(stdForm.form)
+        var formKeys = form.map(function(obj) {
+          if (obj.key) {
+            return obj.key;
+          }
+        }).filter(function(element) {
+          return element !== undefined;
+        });
+
+        var stdFormRemains = stdForm.form.map(function(obj) {
+          isInside = formKeys.indexOf(obj.key[0]) !== -1;
+          if (!isInside) {
+            return obj;
+          }
+        }).filter(function(element) {
+          return element !== undefined;
+        });
+
+        form = form.slice(0, idx)
+                    .concat(stdFormRemains)
                     .concat(form.slice(idx + 1));
       }
 
