@@ -413,8 +413,8 @@ Form
 [
   {
     "key": "name",
-    "validationMessages": {
-      "userNameAlreadyTaken"
+    "validationMessage": {
+      "userNameAlreadyTaken": "Username is already taken"
     }
   }
 ]
