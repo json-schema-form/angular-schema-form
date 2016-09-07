@@ -1097,10 +1097,11 @@ function FormCtrl($scope) {
 		selected: "btn-success",
 		unselected: "btn-default"
 	  },
-	  titleMap: [
-     { value: "one", name: "One" },
-     { value, "two", name: "More..." }
-   ]
+      titleMap: [
+        { value: "one", name: "One" },
+        { value: "two", name: "More..." }
+      ]
+    }
   ];
 }
 ```
