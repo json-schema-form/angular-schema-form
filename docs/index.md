@@ -1112,13 +1112,14 @@ function FormCtrl($scope) {
       key: "choice",
       type: "radiobuttons",
       style: {
-      selected: "btn-success",
-      unselected: "btn-default"
-	  },
-	  titleMap: [
-      { value: "one", name: "One" },
-      { value, "two", name: "More..." }
-    ]
+        selected: "btn-success",
+        unselected: "btn-default"
+      },
+      titleMap: [
+        { value: "one", name: "One" },
+        { value, "two", name: "More..." }
+      ]
+    }
   ];
 }
 ```
