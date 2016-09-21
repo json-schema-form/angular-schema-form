@@ -2578,7 +2578,269 @@ describe('directive', function() {
 
       });
     });
+    
+    it('should remove or add fields in an array depending on conditions using arrayIndices', function (done) {
 
+      inject(function ($compile, $rootScope) {
+        var scope = $rootScope.$new();
+        scope.model = {
+          "transportCategory": [
+            {
+              "mode": "Car",
+              "transportOption": [
+                {
+                  "name": "Bertie",
+                  "forSale": "yes",
+                  "price": 100,
+                  "history": {
+                      "historyKnown": "no"
+                  }
+                },
+                {
+                  "name": "Lightning McQueen",
+                  "forSale": "no",
+                  "history": {
+                    "historyKnown": "yes",
+                    "previousOwners": [
+                      {
+                        "ownerName": ""
+                      },
+                      {
+                        "ownerName": "Arlo",
+                        "logBookProvided": "yes",
+                        "logBookEntry": [
+                          {
+                            "entryId": 2,
+                            "entryDate": "2015-06-23"
+                          },
+                          {
+                            "entryId": 4
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "mode": "Horse",
+              "transportOption": [
+                {
+                  "name": "Phar Lap",
+                  "forSale": "no"
+                },
+                {
+                  "name": "Greyhound",
+                  "forSale": "yes",
+                  "price": 1000,
+                  "history": {
+                    "historyKnown": "yes",
+                    "previousOwners": [
+                      {
+                        "ownerName": "Tom"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        };
+
+        scope.schema = {
+          type: "object",
+          properties: {
+            transportCategory: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  mode: { type: "string", enum: ["Car", "Motorbike", "Horse"] },
+                  transportOption: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        name: { type: "string" },
+                        numberOfWheels: { type: "number" },
+                        forSale: { type: "string", enum: ["yes", "no"] },
+                        price: { type: "number" },
+                        history: {
+                          type: "object",
+                          properties: {
+                            historyKnown: { type: "string", enum: ["yes", "no"] },
+                            previousOwners: {
+                              type: "array",
+                              items: {
+                                type: "object",
+                                properties: {
+                                  ownerName: { type: "string" },
+                                  purchaseDate: { type: "string" },
+                                  logBookProvided: { type: "string", enum: ["yes", "no"] },
+                                  logBookEntry: {
+                                    type: "array",
+                                    items: {
+                                      type: "object",
+                                      properties: {
+                                        entryId: { type: "number" },
+                                        entryDate: { type: "string" },
+                                        entryNote: { type: "string" }
+                                      }
+                                    } 
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        };
+
+        scope.form = [
+          {
+            key: "transportCategory",
+            items: [
+              "transportCategory[].mode",
+              {
+                key: "transportCategory[].transportOption",
+                items: [
+                  "transportCategory[].transportOption[].name",
+                  {
+                    key: "transportCategory[].transportOption[].numberOfWheels",
+                    condition: "model.transportCategory[arrayIndices[0]].mode != 'Horse'"
+                  },
+                  "transportCategory[].transportOption[].forSale",
+                  {
+                    key: "transportCategory[].transportOption[].price",
+                    condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].forSale == 'yes'"
+                  },
+                  "transportCategory[].transportOption[].history.historyKnown",
+                  {
+                    key: "transportCategory[].transportOption[].history.previousOwners",
+                    condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.historyKnown == 'yes'",
+                    items: [
+                      "transportCategory[].transportOption[].history.previousOwners[].ownerName",
+                      {
+                        key: "transportCategory[].transportOption[].history.previousOwners[].purchaseDate",
+                        condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].ownerName.length > 2",
+                      },
+                      {
+                        key: "transportCategory[].transportOption[].history.previousOwners[].logBookProvided",
+                        condition: "model.transportCategory[arrayIndices[0]].mode != 'Horse' && model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].ownerName.length > 2"
+                      },
+                      {
+                        key: "transportCategory[].transportOption[].history.previousOwners[].logBookEntry",
+                        condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].logBookProvided == 'yes'",
+                        items: [
+                          "transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryId",
+                          "transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryDate",
+                          {
+                            key: "transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryNote",
+                            condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].logBookEntry[arrayIndices[3]].entryDate.length > 2"
+                          }
+                        ]
+                      } 
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ];
+
+        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="model"></form>');
+
+        $compile(tmpl)(scope);
+        $rootScope.$apply();
+
+        //References to sections of the rendered form to make the test more readable
+        var renderedForm = {
+          node: tmpl.children().eq(0).children().eq(1),
+          transportCategory: [
+            {
+              node: tmpl.children().eq(0).children().eq(1).children().eq(0),
+            },
+            {
+              node: tmpl.children().eq(0).children().eq(1).children().eq(1),
+            }
+          ]
+        };
+
+        renderedForm.transportCategory[0]['transportOption'] = [
+          { node: renderedForm.transportCategory[0].node.children().eq(2).children().eq(1).children().eq(0) },
+          { node: renderedForm.transportCategory[0].node.children().eq(2).children().eq(1).children().eq(1) }
+        ];
+
+        renderedForm.transportCategory[1]['transportOption'] = [
+          { node: renderedForm.transportCategory[1].node.children().eq(2).children().eq(1).children().eq(0) },
+          { node: renderedForm.transportCategory[1].node.children().eq(2).children().eq(1).children().eq(1) }
+        ];
+
+        renderedForm.transportCategory[0].transportOption[1]['history'] = {
+          previousOwners: [
+            { node: renderedForm.transportCategory[0].transportOption[1].node.children().eq(5).children().eq(0) },
+            { node: renderedForm.transportCategory[0].transportOption[1].node.children().eq(5).children().eq(1) }
+          ]
+        };
+        
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1]['logBookEntry'] = [
+          { node: renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].node.children().eq(1).children().eq(4).children().eq(1).children().eq(0) },
+          { node: renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].node.children().eq(1).children().eq(4).children().eq(1).children().eq(1) }
+        ];
+
+        /*** transportCategory[].transportOption[].numberOfWheels condition tests ***/
+        renderedForm.transportCategory[0].node.find('input[name="numberOfWheels"]').length.should.be.eq(2);
+        renderedForm.transportCategory[1].node.find('input[name="numberOfWheels"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[0].node.find('input[name="numberOfWheels"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].node.find('input[name="numberOfWheels"]').length.should.be.eq(1);
+        renderedForm.transportCategory[1].transportOption[0].node.find('input[name="numberOfWheels"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[1].node.find('input[name="numberOfWheels"]').length.should.be.eq(0);
+
+        /*** transportCategory[].transportOption[].price field condition tests ***/
+        renderedForm.node.children().find('input[name="price"]').length.should.be.eq(2);
+        renderedForm.transportCategory[0].transportOption[0].node.find('input[name="price"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].node.find('input[name="price"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[0].node.find('input[name="price"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[1].node.find('input[name="price"]').length.should.be.eq(1);
+
+        /*** transportCategory[].transportOption[].history.previousOwners.ownerName field condition tests ***/
+        renderedForm.transportCategory[0].transportOption[0].node.find('input[name="ownerName"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].node.find('input[name="ownerName"]').length.should.be.eq(2);
+        renderedForm.transportCategory[1].transportOption[0].node.find('input[name="ownerName"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[1].node.find('input[name="ownerName"]').length.should.be.eq(1);
+
+        /*** transportCategory[].transportOption[].history.previousOwners[].purchaseDate field condition tests ***/
+        renderedForm.transportCategory[0].transportOption[0].node.find('input[name="purchaseDate"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].node.find('input[name="purchaseDate"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[0].node.find('input[name="purchaseDate"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].node.find('input[name="purchaseDate"]').length.should.be.eq(1);
+
+        renderedForm.transportCategory[1].transportOption[0].node.find('input[name="purchaseDate"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[1].node.find('input[name="purchaseDate"]').length.should.be.eq(1);
+
+        /*** transportCategory[].transportOption[].history.previousOwners[].logBookProvided field condition tests ***/
+        renderedForm.transportCategory[0].transportOption[0].node.find('select[name="logBookProvided"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].node.find('select[name="logBookProvided"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[0].node.find('select[name="logBookProvided"]').length.should.be.eq(0);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].node.find('select[name="logBookProvided"]').length.should.be.eq(1);
+
+        renderedForm.transportCategory[1].transportOption[0].node.find('select[name="logBookProvided"]').length.should.be.eq(0);
+        renderedForm.transportCategory[1].transportOption[1].node.find('select[name="logBookProvided"]').length.should.be.eq(0);
+
+        /*** transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryNote  field condition tests ***/
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].logBookEntry[0].node.find('input[name="entryNote"]').length.should.be.eq(1);
+        renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].logBookEntry[1].node.find('input[name="entryNote"]').length.should.be.eq(0);
+        
+        done();
+      });
+    });
 
   });
 
