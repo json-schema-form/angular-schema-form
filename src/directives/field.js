@@ -221,7 +221,17 @@ angular.module('schemaForm').directive('sfField',
                     // Get the object that has the property we wan't to clear.
                     var obj = scope.model;
                     if (form.key.length > 1) {
-                      obj = sfSelect(form.key.slice(0, form.key.length - 1), obj);
+
+                      // If form.key is an element of an Array, update it with the ArrayIndex so that sfSelect
+                      // works correctly
+                      if (form.key.indexOf('') !== -1) {
+                        var updatedFormKey = form.key.map(function(v) {
+                          return v === '' ? scope.$index : v;
+                        });
+                        obj = sfSelect(updatedFormKey.slice(0, form.key.length - 1), obj);
+                      } else {
+                        obj = sfSelect(form.key.slice(0, form.key.length - 1), obj);
+                      }
                     }
 
                     // We can get undefined here if the form hasn't been filled out entirely
