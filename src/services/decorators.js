@@ -143,8 +143,14 @@ export default function($compileProvider, sfPathProvider) {
               if (!scope.ngModel) {
                 return false;
               }
-              return scope.ngModel.$valid &&
-                  (!scope.ngModel.$pristine || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
+              if (scope.options && scope.options.pristine &&
+                  scope.options.pristine.success === false) {
+                return scope.ngModel.$valid &&
+                (!scope.ngModel.$pristine && !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
+              } else {
+                return scope.ngModel.$valid &&
+                (!scope.ngModel.$pristine || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
+              }
             };
 
             scope.hasError = function() {
