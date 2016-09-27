@@ -310,9 +310,9 @@ angular.module('schemaForm').provider('schemaForm',
 
       var stdForm = service.defaults(schema, ignore, options);
 
-      //simple case, we have a "*", just put the stdForm there
-      var idx = form.indexOf('*');
-      if (idx !== -1) {
+      //simple case, we have a "...", just put the stdFormRemains there
+      var idRest = form.indexOf('...');
+      if (idRest !== -1) {
         var formKeys = form.map(function(obj) {
           if (obj.key) {
             return obj.key;
@@ -330,8 +330,16 @@ angular.module('schemaForm').provider('schemaForm',
           return element !== undefined;
         });
 
-        form = form.slice(0, idx)
+        form = form.slice(0, idRest)
                     .concat(stdFormRemains)
+                    .concat(form.slice(idRest + 1));
+      }
+
+      //simple case, we have a "*", just put the stdForm there
+      var idx = form.indexOf('*');
+      if (idx !== -1) {
+        form  = form.slice(0, idx)
+                    .concat(stdForm.form)
                     .concat(form.slice(idx + 1));
       }
 
