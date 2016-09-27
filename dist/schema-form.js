@@ -256,6 +256,9 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       lookup = lookup || Object.create(null);
       path = path || 'schemaForm.form';
       var container = document.createDocumentFragment();
+      if(items === undefined) {
+        return container;
+      }
       items.reduce(function(frag, f, index) {
 
         // Sanity check.
