@@ -197,7 +197,7 @@ angular.module('schemaForm').directive('sfField',
                         form.validationMessage['defaultMessage'] = defaultMessage;
                       }
                       form.validationMessage[error] = validationMessage;
-                    } else if (form.validationMessage['defaultMessage'] != undefined) {
+                    } else if (form.validationMessage !== undefined && form.validationMessage['defaultMessage'] != undefined) {
                       var defaultMessage = form.validationMessage['defaultMessage'];
                       form.validationMessage = defaultMessage;
                     }
