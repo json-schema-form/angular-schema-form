@@ -314,7 +314,9 @@ angular.module('schemaForm').provider('schemaForm',
       var idRest = form.indexOf('...');
       if (idRest !== -1) {
         var formKeys = form.map(function(obj) {
-          if (obj.key) {
+          if (typeof obj === 'string'){
+            return obj;
+          } else if (obj.key) {
             return obj.key;
           }
         }).filter(function(element) {
