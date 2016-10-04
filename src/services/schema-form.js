@@ -317,6 +317,36 @@ angular.module('schemaForm').provider('schemaForm',
                     .concat(stdForm.form)
                     .concat(form.slice(idx + 1));
       }
+      
+      var itemsToRemove = [];
+
+      //we iterate over merged form and merge form definition into schema. After that, we are removing items which provided attributes for correct ones
+      //this is neccessary to get form fields in correct order and not have duplicated fields, for some reason schema-form is not doing this, so we do it here
+      form.forEach(function (item) {
+
+        if (item.key !== undefined && Array.isArray(item.key) && item.key[0] !== undefined) {
+
+          form.some( function (attrProvider) {
+
+            if (attrProvider.key !== undefined && attrProvider.key === item.key[0]) {
+
+              for (var attrname in attrProvider) {
+                item[attrname] = attrProvider[attrname];
+              }
+
+              itemsToRemove.push(attrProvider);
+
+              return true;
+            }
+
+            return false;
+          });
+        }
+      });
+
+      itemsToRemove.forEach( function (item) {
+        form.splice(item, 1);
+      });
 
       //ok let's merge!
       //We look at the supplied form and extend it with schema standards
