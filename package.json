@@ -12,7 +12,7 @@
     "minify": "uglifyjs dist/schema-form.js --comments --output=dist/schema-form.min.js",
     "dist": "npm run build && npm run minify",
     "testlinux": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js",
-    "test": "karma start --single-run --browsers PhantomJS karma.conf.js --log-level info"
+    "test": "karma start karma.conf.js --log-level debug"
   },
   "author": "json-schema-form",
   "contributors": [
@@ -47,11 +47,12 @@
     "gulp-jscs": "^1.1.0",
     "json-schema-form-core": "git://github.com/json-schema-form/json-schema-form-core.git#develop",
     "karma": "^0.13.22",
+    "karma-babel-preprocessor": "^6.0.1",
     "karma-chai-sinon": "^0.1.5",
     "karma-coverage": "^1.0.0",
     "karma-growler-reporter": "0.0.1",
     "karma-mocha": "^1.0.1",
-    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-phantomjs-launcher": "^1.0.2",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.5.3",
     "mocha-lcov-reporter": "0.0.1",

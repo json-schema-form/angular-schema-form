@@ -2019,7 +2019,6 @@ describe('directive', function() {
         ]
       }
     }
- */
 
   fields.forEach(function (field) {
     it('should not add "has-success" class to ' + field.name + " field if a correct value is entered, but disableSuccessState is set on form", function () {
@@ -2268,6 +2267,7 @@ describe('directive', function() {
       tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.false;
     });
   });
+*/
 
   describe('destroy strategy', function() {
     var schema = {
@@ -2578,7 +2578,7 @@ describe('directive', function() {
 
       });
     });
-    
+
     it('should remove or add fields in an array depending on conditions using arrayIndices', function (done) {
 
       inject(function ($compile, $rootScope) {
@@ -2687,7 +2687,7 @@ describe('directive', function() {
                                         entryDate: { type: "string" },
                                         entryNote: { type: "string" }
                                       }
-                                    } 
+                                    }
                                   }
                                 }
                               }
@@ -2746,7 +2746,7 @@ describe('directive', function() {
                             condition: "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].logBookEntry[arrayIndices[3]].entryDate.length > 2"
                           }
                         ]
-                      } 
+                      }
                     ]
                   }
                 ]
@@ -2789,7 +2789,7 @@ describe('directive', function() {
             { node: renderedForm.transportCategory[0].transportOption[1].node.children().eq(5).children().eq(1) }
           ]
         };
-        
+
         renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1]['logBookEntry'] = [
           { node: renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].node.children().eq(1).children().eq(4).children().eq(1).children().eq(0) },
           { node: renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].node.children().eq(1).children().eq(4).children().eq(1).children().eq(1) }
@@ -2837,7 +2837,7 @@ describe('directive', function() {
         /*** transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryNote  field condition tests ***/
         renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].logBookEntry[0].node.find('input[name="entryNote"]').length.should.be.eq(1);
         renderedForm.transportCategory[0].transportOption[1].history.previousOwners[1].logBookEntry[1].node.find('input[name="entryNote"]').length.should.be.eq(0);
-        
+
         done();
       });
     });
