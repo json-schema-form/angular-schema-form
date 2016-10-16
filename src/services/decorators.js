@@ -40,8 +40,10 @@ export default function($compileProvider, sfPathProvider) {
           replace: false,
           transclude: false,
           scope: true,
-          require: '?^sfSchema',
-          link: function(scope, element, attrs, sfSchema) {
+          require: ['^sfSchema', '?^form'],
+          link: function(scope, element, attrs, ctrl) {
+            var sfSchema = ctrl[0];
+            var formCtrl = ctrl[1];
 
             //The ngModelController is used in some templates and
             //is needed for error messages,
@@ -54,6 +56,25 @@ export default function($compileProvider, sfPathProvider) {
             //Keep error prone logic from the template
             scope.showTitle = function() {
               return scope.form && scope.form.notitle !== true && scope.form.title;
+            };
+
+            //Normalise names and ids
+            scope.fieldId = function(prependFormName, omitArrayIndexes) {
+              var key = scope.parentKey || [];
+              if(scope.form.key) {
+                if(typeof key[key.length-1] === 'number') {
+                  var combinedKey = key.concat(scope.form.key.slice(-1));
+                  var formName = (prependFormName && formCtrl && formCtrl.$name) ? formCtrl.$name : undefined;
+                  return sfPath.name(combinedKey, '-', formName, omitArrayIndexes);
+                }
+                else {
+                  var formName = (prependFormName && formCtrl && formCtrl.$name) ? formCtrl.$name : undefined;
+                  return sfPath.name(scope.form.key, '-', formName, omitArrayIndexes);
+                }
+              }
+              else {
+                return '';
+              }
             };
 
             scope.listToCheckboxValues = function(list) {

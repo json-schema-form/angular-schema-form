@@ -5,7 +5,10 @@ import angular from 'angular';
  */
 export default function(sel, sfPath, schemaForm) {
   return {
-    scope: false,
+    scope: true,
+    controller: ['$scope', function SFArrayController($scope) {
+      this.key = ($scope.form && $scope.form.key) ? $scope.form.key : [];
+    }],
     link: function(scope, element, attrs) {
       scope.min = 0;
 

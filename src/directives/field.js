@@ -8,9 +8,13 @@ sfPath, sfSelect) {
     replace: false,
     transclude: false,
     scope: true,
-    require: '^sfSchema',
+    require: ['^sfSchema', '?^form', '?^^sfKeyController'],
     link: {
-      pre: function(scope, element, attrs, sfSchema) {
+      pre: function(scope, element, attrs, ctrl) {
+        var sfSchema = ctrl[0];
+        var formCtrl = ctrl[1];
+        var keyCtrl = ctrl[2];
+
         //The ngModelController is used in some templates and
         //is needed for error messages,
         scope.$on('schemaFormPropagateNgModelController', function(event, ngModel) {
@@ -22,10 +26,33 @@ sfPath, sfSelect) {
         // Fetch our form.
         scope.form = sfSchema.lookup['f' + attrs.sfField];
       },
-      post: function(scope, element, attrs, sfSchema) {
+      post: function(scope, element, attrs, ctrl) {
+        var sfSchema = ctrl[0];
+        var formCtrl = ctrl[1];
+        var keyCtrl = ctrl[2];
+
         //Keep error prone logic from the template
         scope.showTitle = function() {
           return scope.form && scope.form.notitle !== true && scope.form.title;
+        };
+
+        //Normalise names and ids
+        scope.fieldId = function(prependFormName, omitArrayIndexes) {
+          var key = scope.parentKey || [];
+          if(scope.form.key) {
+            if(typeof key[key.length-1] === 'number') {
+              var combinedKey = key.concat(scope.form.key.slice(-1));
+              var formName = (prependFormName && formCtrl && formCtrl.$name) ? formCtrl.$name : undefined;
+              return sfPath.name(combinedKey, '-', formName, omitArrayIndexes);
+            }
+            else {
+              var formName = (prependFormName && formCtrl && formCtrl.$name) ? formCtrl.$name : undefined;
+              return sfPath.name(scope.form.key, '-', formName, omitArrayIndexes);
+            }
+          }
+          else {
+            return '';
+          }
         };
 
         scope.listToCheckboxValues = function(list) {
@@ -154,6 +181,10 @@ sfPath, sfSelect) {
             scope.options && scope.options.validationMessage
           );
         };
+
+        // append the field-id to the htmlClass
+        scope.form.htmlClass = scope.form.htmlClass || '';
+        scope.form.htmlClass += (scope.form.htmlClass ? ' ' : '') + scope.fieldId(false, true);
 
         var form = scope.form;
 

@@ -13,6 +13,7 @@ import changed from './directives/changed';
 import field from './directives/field';
 import message from './directives/message';
 import newArray from './directives/newArray';
+import keyController from './directives/keyController';
 import schemaFormDirective from './directives/schemaForm';
 import schemaValidate from './directives/schemaValidate';
 
@@ -58,4 +59,5 @@ angular.module('schemaForm', deps)
 .directive('sfSchema', [ '$compile', '$http', '$templateCache', '$q', 'schemaForm',
                         'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder',
                         schemaFormDirective ])
-.directive('schemaValidate', [ 'sfValidator', '$parse', 'sfSelect', schemaValidate ]);
+.directive('schemaValidate', [ 'sfValidator', '$parse', 'sfSelect', schemaValidate ])
+.directive('sfKeyController', [ 'schemaForm','sfPath', keyController ]);

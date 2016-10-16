@@ -141,6 +141,11 @@ export default function(sfPathProvider) {
     },
     array: function(args) {
       var items = args.fieldFrag.querySelector('[schema-form-array-items]');
+
+      if (args.form.key) {
+        var arrayDepth = args.form.key.filter(function(e) { return e === '' }).length;
+      }
+
       if (items) {
         var state = angular.copy(args.state);
         state.keyRedaction = 0;
@@ -222,6 +227,7 @@ export default function(sfPathProvider) {
     };
 
     var build = function(items, decorator, templateFn, slots, path, state, lookup) {
+      state = state || {};
       state = state || {};
       lookup = lookup || Object.create(null);
       path = path || 'schemaForm.form';
