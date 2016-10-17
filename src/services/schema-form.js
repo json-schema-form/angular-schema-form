@@ -334,7 +334,8 @@ angular.module('schemaForm').provider('schemaForm',
                 item[attrname] = attrProvider[attrname];
               }
 
-              itemsToRemove.push(attrProvider);
+              //itemsToRemove.push(attrProvider);
+              attrProvider.key = 'toRemove';
 
               return true;
             }
@@ -344,8 +345,12 @@ angular.module('schemaForm').provider('schemaForm',
         }
       });
 
-      itemsToRemove.forEach( function (item) {
-        form.splice(item, 1);
+      // itemsToRemove.forEach( function (item) {
+      //   form.splice(item, 1);
+      // });
+
+      form = form.filter(function( item ) {
+        return item.key !== 'toRemove';
       });
 
       //ok let's merge!
