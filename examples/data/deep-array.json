@@ -55,6 +55,7 @@
     },
     {
       "key": "users",
+  	  "type": "tabarray",
   	  "add": "New",
   	  "style": {
     		"add": "btn-success"
@@ -74,6 +75,11 @@
                 {
                   "key": "users[].comments[].tags[].tag",
                   "type": "text"
+                },
+                {
+                  "condition": "model.users[$i[0]].name",
+                  "type": "string",
+                  "default": "Brad"
                 }
               ]
             }

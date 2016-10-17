@@ -391,7 +391,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    };
 
-	    var _build = function _build(items, decorator, templateFn, slots, path, state, lookup, index) {
+	    var _build = function _build(items, decorator, templateFn, slots, path, state, lookup) {
 	      state = state || {};
 	      state = state || {};
 	      lookup = lookup || Object.create(null);
@@ -444,8 +444,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	            path: path + '[' + index + ']',
 
 	            // Recursive build fn
-	            build: function build(items, path, state, index) {
-	              return _build(items, decorator, templateFn, slots, path, state, lookup, index);
+	            build: function build(items, path, state) {
+	              return _build(items, decorator, templateFn, slots, path, state, lookup);
 	            }
 
 	          };
@@ -556,9 +556,16 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	          //Normalise names and ids
 	          scope.fieldId = function (prependFormName, omitArrayIndexes) {
+	            var key = scope.parentKey || [];
 	            if (scope.form.key) {
-	              var formName = prependFormName && formCtrl && formCtrl.$name ? formCtrl.$name : undefined;
-	              return sfPath.name(scope.form.key, '-', formName, omitArrayIndexes);
+	              if (typeof key[key.length - 1] === 'number') {
+	                var combinedKey = key.concat(scope.form.key.slice(-1));
+	                var formName = prependFormName && formCtrl && formCtrl.$name ? formCtrl.$name : undefined;
+	                return sfPath.name(combinedKey, '-', formName, omitArrayIndexes);
+	              } else {
+	                var formName = prependFormName && formCtrl && formCtrl.$name ? formCtrl.$name : undefined;
+	                return sfPath.name(scope.form.key, '-', formName, omitArrayIndexes);
+	              }
 	            } else {
 	              return '';
 	            }
@@ -2756,7 +2763,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        //Normalise names and ids
 	        scope.fieldId = function (prependFormName, omitArrayIndexes) {
-	          var key = scope.parentKeyTest || [];
+	          var key = scope.parentKey || [];
 	          if (scope.form.key) {
 	            if (typeof key[key.length - 1] === 'number') {
 	              var combinedKey = key.concat(scope.form.key.slice(-1));
@@ -3384,6 +3391,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	      scope.arrayIndex = Number(attrs.sfIndex);
 	      scope.arrayIndices = scope.arrayIndices || [];
 	      scope.arrayIndices = scope.arrayIndices.concat(scope.arrayIndex);
+	      scope.$i = scope.arrayIndices;
+	      scope.path = function (modelPath) {
+	        var i = -1;
+	        modelPath = modelPath.replace(/\[\]/gi, function (matched) {
+	          i++;
+	          return scope.$i[i];
+	        });
+	        return modelPath;
+	      };
 	    }
 	  };
 	};

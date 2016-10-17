@@ -15,6 +15,15 @@ export default function(schemaForm, sfPath) {
       scope.arrayIndex = Number(attrs.sfIndex);
       scope.arrayIndices = scope.arrayIndices || [];
       scope.arrayIndices = scope.arrayIndices.concat(scope.arrayIndex);
+      scope.$i = scope.arrayIndices;
+      scope.path = function(modelPath) {
+        var i = -1;
+        modelPath = modelPath.replace(/\[\]/gi, function(matched){
+          i++;
+          return scope.$i[i];
+        });
+        return modelPath;
+      }
     }
   };
 };

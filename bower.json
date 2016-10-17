@@ -50,5 +50,8 @@
     "angular-ui-sortable": ">=0.12.11",
     "bootstrap-vertical-tabs": "~1.2.0",
     "angular-schema-form-bootstrap": "~0.1.1"
+  },
+  "resolutions": {
+    "jquery": "~2.1.1"
   }
 }
