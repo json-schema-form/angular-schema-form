@@ -7,7 +7,7 @@ export default function(sel, sfPath, schemaForm) {
   return {
     scope: true,
     controller: ['$scope', function SFArrayController($scope) {
-      this.key = ($scope.form && $scope.form.key) ? $scope.form.key : [];
+      this.key = ($scope.form && $scope.form.key) ? $scope.form.key.splice(0, -2) : [];
     }],
     link: function(scope, element, attrs) {
       scope.min = 0;

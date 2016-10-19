@@ -3,6 +3,12 @@ import angular from 'angular';
 export default function($parse, $compile, $http, $templateCache, $interpolate, $q, sfErrorMessage,
 sfPath, sfSelect) {
 
+  const keyFormat = {
+    COMPLETE: '*',
+    PATH: 'string',
+    INDICES: 'number'
+  };
+
   return {
     restrict: 'AE',
     replace: false,
@@ -36,23 +42,60 @@ sfPath, sfSelect) {
           return scope.form && scope.form.notitle !== true && scope.form.title;
         };
 
-        //Normalise names and ids
-        scope.fieldId = function(prependFormName, omitArrayIndexes) {
-          var key = scope.parentKey || [];
-          if(scope.form.key) {
-            if(typeof key[key.length-1] === 'number') {
-              var combinedKey = key.concat(scope.form.key.slice(-1));
-              var formName = (prependFormName && formCtrl && formCtrl.$name) ? formCtrl.$name : undefined;
-              return sfPath.name(combinedKey, '-', formName, omitArrayIndexes);
+        scope.getKey = function(requiredFormat) {
+          let format = requiredFormat || keyFormat.COMPLETE;
+          let key = (scope.parentKey) ? scope.parentKey.slice(0, scope.parentKey.length-1) : [] ;
+
+          if (typeof scope.$index === 'number') {
+            key = key.concat(scope.$index);
+          };
+
+          if(scope.form.key && scope.form.key.length) {
+            if(typeof key[key.length-1] === 'number' && scope.form.key.length >= 1) {
+              scope.completeKey = key.concat(scope.form.key.slice(-1));
             }
             else {
-              var formName = (prependFormName && formCtrl && formCtrl.$name) ? formCtrl.$name : undefined;
-              return sfPath.name(scope.form.key, '-', formName, omitArrayIndexes);
+              scope.completeKey = scope.form.key.slice();
+            };
+          };
+
+          if(!Array.isArray(scope.completeKey)) {
+            return undefined;
+          };
+
+          if (format === keyFormat.COMPLETE) {
+            return scope.completeKey;
+          };
+
+          return scope.completeKey.reduce((output, input, i) => {
+            if (-1 !== [ format ].indexOf((typeof input))) {
+              return output.concat(input);
             }
+            return output;
+          }, []);
+        };
+        if(scope.form.key) scope.completeKey = scope.getKey();
+
+        scope.path = function(modelPath) {
+          var i = -1;
+          modelPath = modelPath.replace(/\[\]/gi, function(matched){
+            i++;
+            return scope.$i[i];
+          });
+          return scope.$eval(modelPath, scope);
+        }
+
+        //Normalise names and ids
+        scope.fieldId = function(prependFormName, omitArrayIndexes) {
+          let formName = (prependFormName && formCtrl && formCtrl.$name) ? formCtrl.$name : undefined;
+          let key = scope.getKey();
+
+          if(Array.isArray(key)) {
+            return sfPath.name(key, '-', formName, omitArrayIndexes);
           }
           else {
             return '';
-          }
+          };
         };
 
         scope.listToCheckboxValues = function(list) {
@@ -244,17 +287,19 @@ sfPath, sfSelect) {
           // Default behavior can be supplied as a globalOption, and behavior can be overridden
           // in the form definition.
           scope.$on('$destroy', function() {
+            let key = scope.getKey();
+
             // If the entire schema form is destroyed we don't touch the model
             if (!scope.externalDestructionInProgress) {
               var destroyStrategy = form.destroyStrategy ||
                                     (scope.options && scope.options.destroyStrategy) || 'remove';
               // No key no model, and we might have strategy 'retain'
-              if (form.key && destroyStrategy !== 'retain') {
+              if (key && destroyStrategy !== 'retain') {
 
                 // Get the object that has the property we wan't to clear.
                 var obj = scope.model;
-                if (form.key.length > 1) {
-                  obj = sfSelect(form.key.slice(0, form.key.length - 1), obj);
+                if (key.length > 1) {
+                  obj = sfSelect(key.slice(0, key.length - 1), obj);
                 }
 
                 // We can get undefined here if the form hasn't been filled out entirely
@@ -266,17 +311,17 @@ sfPath, sfSelect) {
                 var type = (form.schema && form.schema.type) || '';
 
                 // Empty means '',{} and [] for appropriate types and undefined for the rest
-                //console.log('destroy', destroyStrategy, form.key, type, obj);
+                //console.log('destroy', destroyStrategy, key, type, obj);
                 if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
-                  obj[form.key.slice(-1)] = '';
+                  obj[key.slice(-1)] = '';
                 } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
-                  obj[form.key.slice(-1)] = {};
+                  obj[key.slice(-1)] = {};
                 } else if (destroyStrategy === 'empty' && type.indexOf('array') !== -1) {
-                  obj[form.key.slice(-1)] = [];
+                  obj[key.slice(-1)] = [];
                 } else if (destroyStrategy === 'null') {
-                  obj[form.key.slice(-1)] = null;
+                  obj[key.slice(-1)] = null;
                 } else {
-                  delete obj[form.key.slice(-1)];
+                  delete obj[key.slice(-1)];
                 }
               }
             }

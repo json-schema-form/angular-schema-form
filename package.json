@@ -45,7 +45,7 @@
     "coveralls": "^2.11.0",
     "gulp": "^3.5.6",
     "gulp-jscs": "^1.1.0",
-    "json-schema-form-core": "git://github.com/json-schema-form/json-schema-form-core.git#develop",
+    "json-schema-form-core": "https://github.com/json-schema-form/json-schema-form-core.git#develop",
     "karma": "^0.13.22",
     "karma-babel-preprocessor": "^6.0.1",
     "karma-chai-sinon": "^0.1.5",
@@ -70,7 +70,7 @@
       "url": "https://raw.githubusercontent.com/json-schema-form/angular-schema-form/master/LICENSE"
     }
   ],
-  "autoupdate": {
+  "ignore-for-now-autoupdate": {
     "source": "git",
     "target": "git://github.com/json-schema-form/angular-schema-form.git",
     "basePath": "/dist/",
