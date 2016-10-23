@@ -106,24 +106,23 @@ export default function(sfPathProvider) {
       }
     },
     condition: function(args) {
+      let strKey = '';
+      let strModel = 'undefined';
       // Do we have a condition? Then we slap on an ng-if on all children,
       // but be nice to existing ng-if.
       if (args.form.condition) {
-        var evalExpr = 'evalExpr(' + args.path +
-                       '.condition, { model: model, "arrayIndex": $index})';
         if (args.form.key) {
-          var strKey = sfPathProvider.stringify(args.form.key);
-          var arrayDepth = args.form.key.filter(function(e) { return e === '' }).length;
-          var arrayIndices = (arrayDepth > 1 ? Array(arrayDepth - 1).join('$parent.$parent.$parent.') + '$parent.$parent.$index,' : '');
-          for (var i = arrayDepth; i > 2; i--) {
-            arrayIndices += Array(i - 1).join('$parent.$parent.$parent.') + '$index,';
-          }
-          arrayIndices += '$index';
-
-          evalExpr = 'evalExpr(' + args.path + '.condition,{ model: model, "arrayIndex": $index, ' +
-                     '"arrayIndices": [' + arrayIndices + '],' +
-                     '"modelValue": model' + (strKey[0] === '[' ? '' : '.') + strKey + '})';
+          strKey = sfPathProvider.stringify(args.form.key);
+          strModel = 'model' + (strKey[0] === '[' ? '' : '.') + strKey;
         }
+
+        let evalExpr = 'evalExpr(' + args.path + '.condition, { model: model, ' +
+                   '"arrayIndex": $index, ' +
+                   '"arrayIndices": arrayIndices, ' +
+                   '"path": path, ' +
+                   '"$i": $i, ' +
+                   '"$index": $index, ' +
+                   '"modelValue": ' + strModel + '})';
 
         var children = args.fieldFrag.children || args.fieldFrag.childNodes;
         for (var i = 0; i < children.length; i++) {
@@ -163,7 +162,7 @@ export default function(sfPathProvider) {
           state.modelName = 'item';
         }
 
-        // Flag to the builder that where in an array.
+        // Flag to the builder that we're in an array.
         // This is needed for compatabiliy if a "old" add-on is used that
         // hasn't been transitioned to the new builder.
         state.arrayCompatFlag = true;

@@ -30,68 +30,71 @@ sfPath, sfSelect) {
         });
 
         // Fetch our form.
-        scope.form = sfSchema.lookup['f' + attrs.sfField];
+        scope.initialForm = sfSchema.lookup['f' + attrs.sfField];
+        scope.form = angular.copy(sfSchema.lookup['f' + attrs.sfField]);
       },
       post: function(scope, element, attrs, ctrl) {
         var sfSchema = ctrl[0];
         var formCtrl = ctrl[1];
         var keyCtrl = ctrl[2];
 
+        scope.getKey = function(requiredFormat) {
+          let format = requiredFormat || keyFormat.COMPLETE;
+          let key = (scope.parentKey) ? scope.parentKey.slice(0, scope.parentKey.length-1) : [] ;
+
+          // Only calculate completeKey if not already saved to form.key
+          if(scope.completeKey !== scope.form.key) {
+            if (typeof scope.$index === 'number') {
+              key = key.concat(scope.$index);
+            };
+
+            if(scope.form.key && scope.form.key.length) {
+              if(typeof key[key.length-1] === 'number' && scope.form.key.length >= 1) {
+                scope.completeKey = key.concat(scope.form.key.slice(-1));
+              }
+              else {
+                scope.completeKey = scope.form.key.slice();
+              };
+            };
+          };
+
+          // If there is no key then there's nothing to return
+          if(!Array.isArray(scope.completeKey)) {
+            return undefined;
+          };
+
+          // return the full key if not omiting any types via reduce
+          if (format === keyFormat.COMPLETE) {
+            return scope.completeKey;
+          }
+          else {
+            // else to clearly show that data must be ommited
+            return scope.completeKey.reduce((output, input, i) => {
+              if (-1 !== [ format ].indexOf((typeof input))) {
+                return output.concat(input);
+              }
+              return output;
+            }, []);
+          };
+        };
+        // Now that getKey is defined, run it! ...if there's a key.
+        if(scope.form.key) {
+          scope.form.key = scope.completeKey = scope.getKey();
+        };
+
         //Keep error prone logic from the template
         scope.showTitle = function() {
           return scope.form && scope.form.notitle !== true && scope.form.title;
         };
 
-        scope.getKey = function(requiredFormat) {
-          let format = requiredFormat || keyFormat.COMPLETE;
-          let key = (scope.parentKey) ? scope.parentKey.slice(0, scope.parentKey.length-1) : [] ;
-
-          if (typeof scope.$index === 'number') {
-            key = key.concat(scope.$index);
-          };
-
-          if(scope.form.key && scope.form.key.length) {
-            if(typeof key[key.length-1] === 'number' && scope.form.key.length >= 1) {
-              scope.completeKey = key.concat(scope.form.key.slice(-1));
-            }
-            else {
-              scope.completeKey = scope.form.key.slice();
-            };
-          };
-
-          if(!Array.isArray(scope.completeKey)) {
-            return undefined;
-          };
-
-          if (format === keyFormat.COMPLETE) {
-            return scope.completeKey;
-          };
-
-          return scope.completeKey.reduce((output, input, i) => {
-            if (-1 !== [ format ].indexOf((typeof input))) {
-              return output.concat(input);
-            }
-            return output;
-          }, []);
-        };
-        if(scope.form.key) scope.completeKey = scope.getKey();
-
-        scope.path = function(modelPath) {
-          var i = -1;
-          modelPath = modelPath.replace(/\[\]/gi, function(matched){
-            i++;
-            return scope.$i[i];
-          });
-          return scope.$eval(modelPath, scope);
-        }
-
         //Normalise names and ids
         scope.fieldId = function(prependFormName, omitArrayIndexes) {
+          let omit = omitArrayIndexes || false;
           let formName = (prependFormName && formCtrl && formCtrl.$name) ? formCtrl.$name : undefined;
-          let key = scope.getKey();
+          let key = scope.completeKey;
 
           if(Array.isArray(key)) {
-            return sfPath.name(key, '-', formName, omitArrayIndexes);
+            return sfPath.name(key, '-', formName, omit);
           }
           else {
             return '';
@@ -227,7 +230,7 @@ sfPath, sfSelect) {
 
         // append the field-id to the htmlClass
         scope.form.htmlClass = scope.form.htmlClass || '';
-        scope.form.htmlClass += (scope.form.htmlClass ? ' ' : '') + scope.fieldId(false, true);
+        scope.form.htmlClass += (scope.form.htmlClass ? ' ' : '') + scope.fieldId(false) + ' ' + scope.fieldId(false, true);
 
         var form = scope.form;
 

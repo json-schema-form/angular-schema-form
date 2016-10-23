@@ -21,7 +21,15 @@ export default function() {
           if (angular.isFunction(form.onChange)) {
             form.onChange(ctrl.$modelValue, form);
           } else {
-            scope.evalExpr(form.onChange, { 'modelValue': ctrl.$modelValue, form: form });
+            scope.evalExpr(form.onChange, {
+              "modelValue": ctrl.$modelValue,
+              "form": form,
+              "arrayIndex": scope.$index,
+              "arrayIndices": scope.arrayIndices,
+              "path": scope.path,
+              "$i": scope.$i,
+              "$index": scope.$index
+            });
           }
         });
       }

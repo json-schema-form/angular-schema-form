@@ -74,10 +74,12 @@
               "items": [
                 {
                   "key": "users[].comments[].tags[].tag",
-                  "type": "text"
+                  "type": "text",
+                  "onChange": "log(path('model.users[]').name.length)"
                 },
                 {
-                  "condition": "model.users[$i[0]].name",
+                  "key": "users[].comments[].tags[].brad",
+                  "condition": "path('model.users[]').name.length",
                   "type": "string",
                   "default": "Brad"
                 }

@@ -286,23 +286,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      }
 	    },
 	    condition: function condition(args) {
+	      var strKey = '';
+	      var strModel = 'undefined';
 	      // Do we have a condition? Then we slap on an ng-if on all children,
 	      // but be nice to existing ng-if.
 	      if (args.form.condition) {
-	        var evalExpr = 'evalExpr(' + args.path + '.condition, { model: model, "arrayIndex": $index})';
 	        if (args.form.key) {
-	          var strKey = sfPathProvider.stringify(args.form.key);
-	          var arrayDepth = args.form.key.filter(function (e) {
-	            return e === '';
-	          }).length;
-	          var arrayIndices = arrayDepth > 1 ? Array(arrayDepth - 1).join('$parent.$parent.$parent.') + '$parent.$parent.$index,' : '';
-	          for (var i = arrayDepth; i > 2; i--) {
-	            arrayIndices += Array(i - 1).join('$parent.$parent.$parent.') + '$index,';
-	          }
-	          arrayIndices += '$index';
-
-	          evalExpr = 'evalExpr(' + args.path + '.condition,{ model: model, "arrayIndex": $index, ' + '"arrayIndices": [' + arrayIndices + '],' + '"modelValue": model' + (strKey[0] === '[' ? '' : '.') + strKey + '})';
+	          strKey = sfPathProvider.stringify(args.form.key);
+	          strModel = 'model' + (strKey[0] === '[' ? '' : '.') + strKey;
 	        }
+
+	        var evalExpr = 'evalExpr(' + args.path + '.condition, { model: model, ' + '"arrayIndex": $index, ' + '"arrayIndices": arrayIndices, ' + '"path": path, ' + '"$i": $i, ' + '"$index": $index, ' + '"modelValue": ' + strModel + '})';
 
 	        var children = args.fieldFrag.children || args.fieldFrag.childNodes;
 	        for (var i = 0; i < children.length; i++) {
@@ -335,7 +329,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          state.modelName = 'item';
 	        }
 
-	        // Flag to the builder that where in an array.
+	        // Flag to the builder that we're in an array.
 	        // This is needed for compatabiliy if a "old" add-on is used that
 	        // hasn't been transitioned to the new builder.
 	        state.arrayCompatFlag = true;
@@ -2702,7 +2696,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	          if (_angular2.default.isFunction(form.onChange)) {
 	            form.onChange(ctrl.$modelValue, form);
 	          } else {
-	            scope.evalExpr(form.onChange, { 'modelValue': ctrl.$modelValue, form: form });
+	            scope.evalExpr(form.onChange, {
+	              "modelValue": ctrl.$modelValue,
+	              "form": form,
+	              "arrayIndex": scope.$index,
+	              "arrayIndices": scope.arrayIndices,
+	              "path": scope.path,
+	              "$i": scope.$i,
+	              "$index": scope.$index
+	            });
 	          }
 	        });
 	      }
@@ -2757,67 +2759,69 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 
 	        // Fetch our form.
-	        scope.form = sfSchema.lookup['f' + attrs.sfField];
+	        scope.initialForm = sfSchema.lookup['f' + attrs.sfField];
+	        scope.form = _angular2.default.copy(sfSchema.lookup['f' + attrs.sfField]);
 	      },
 	      post: function post(scope, element, attrs, ctrl) {
 	        var sfSchema = ctrl[0];
 	        var formCtrl = ctrl[1];
 	        var keyCtrl = ctrl[2];
 
+	        scope.getKey = function (requiredFormat) {
+	          var format = requiredFormat || keyFormat.COMPLETE;
+	          var key = scope.parentKey ? scope.parentKey.slice(0, scope.parentKey.length - 1) : [];
+
+	          // Only calculate completeKey if not already saved to form.key
+	          if (scope.completeKey !== scope.form.key) {
+	            if (typeof scope.$index === 'number') {
+	              key = key.concat(scope.$index);
+	            };
+
+	            if (scope.form.key && scope.form.key.length) {
+	              if (typeof key[key.length - 1] === 'number' && scope.form.key.length >= 1) {
+	                scope.completeKey = key.concat(scope.form.key.slice(-1));
+	              } else {
+	                scope.completeKey = scope.form.key.slice();
+	              };
+	            };
+	          };
+
+	          // If there is no key then there's nothing to return
+	          if (!Array.isArray(scope.completeKey)) {
+	            return undefined;
+	          };
+
+	          // return the full key if not omiting any types via reduce
+	          if (format === keyFormat.COMPLETE) {
+	            return scope.completeKey;
+	          } else {
+	            // else to clearly show that data must be ommited
+	            return scope.completeKey.reduce(function (output, input, i) {
+	              if (-1 !== [format].indexOf(typeof input === 'undefined' ? 'undefined' : _typeof(input))) {
+	                return output.concat(input);
+	              }
+	              return output;
+	            }, []);
+	          };
+	        };
+	        // Now that getKey is defined, run it! ...if there's a key.
+	        if (scope.form.key) {
+	          scope.form.key = scope.completeKey = scope.getKey();
+	        };
+
 	        //Keep error prone logic from the template
 	        scope.showTitle = function () {
 	          return scope.form && scope.form.notitle !== true && scope.form.title;
 	        };
 
-	        scope.getKey = function (requiredFormat) {
-	          var format = requiredFormat || keyFormat.COMPLETE;
-	          var key = scope.parentKey ? scope.parentKey.slice(0, scope.parentKey.length - 1) : [];
-
-	          if (typeof scope.$index === 'number') {
-	            key = key.concat(scope.$index);
-	          };
-
-	          if (scope.form.key && scope.form.key.length) {
-	            if (typeof key[key.length - 1] === 'number' && scope.form.key.length >= 1) {
-	              scope.completeKey = key.concat(scope.form.key.slice(-1));
-	            } else {
-	              scope.completeKey = scope.form.key.slice();
-	            };
-	          };
-
-	          if (!Array.isArray(scope.completeKey)) {
-	            return undefined;
-	          };
-
-	          if (format === keyFormat.COMPLETE) {
-	            return scope.completeKey;
-	          };
-
-	          return scope.completeKey.reduce(function (output, input, i) {
-	            if (-1 !== [format].indexOf(typeof input === 'undefined' ? 'undefined' : _typeof(input))) {
-	              return output.concat(input);
-	            }
-	            return output;
-	          }, []);
-	        };
-	        if (scope.form.key) scope.completeKey = scope.getKey();
-
-	        scope.path = function (modelPath) {
-	          var i = -1;
-	          modelPath = modelPath.replace(/\[\]/gi, function (matched) {
-	            i++;
-	            return scope.$i[i];
-	          });
-	          return scope.$eval(modelPath, scope);
-	        };
-
 	        //Normalise names and ids
 	        scope.fieldId = function (prependFormName, omitArrayIndexes) {
+	          var omit = omitArrayIndexes || false;
 	          var formName = prependFormName && formCtrl && formCtrl.$name ? formCtrl.$name : undefined;
-	          var key = scope.getKey();
+	          var key = scope.completeKey;
 
 	          if (Array.isArray(key)) {
-	            return sfPath.name(key, '-', formName, omitArrayIndexes);
+	            return sfPath.name(key, '-', formName, omit);
 	          } else {
 	            return '';
 	          };
@@ -2943,7 +2947,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // append the field-id to the htmlClass
 	        scope.form.htmlClass = scope.form.htmlClass || '';
-	        scope.form.htmlClass += (scope.form.htmlClass ? ' ' : '') + scope.fieldId(false, true);
+	        scope.form.htmlClass += (scope.form.htmlClass ? ' ' : '') + scope.fieldId(false) + ' ' + scope.fieldId(false, true);
 
 	        var form = scope.form;
 
@@ -3428,17 +3432,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	  return {
 	    scope: true,
 	    require: ['^^sfNewArray'],
-	    link: function link(scope, element, attrs, ctrl) {
-	      var currentKey = sfPath.parse(attrs.sfParentKey);
-	      if (currentKey.length > 1) currentKey = currentKey.splice(-1);
+	    controller: ['$scope', function SFKeyController($scope) {
+	      this.key = $scope.form && $scope.form.key ? $scope.form.key.splice(0, -2) : [];
+	    }],
+	    link: {
+	      pre: function pre(scope, element, attrs, ctrl) {
+	        var currentKey = sfPath.parse(attrs.sfParentKey);
+	        if (currentKey.length > 1) currentKey = currentKey.splice(-1);
 
-	      scope.parentKey = scope.parentKey || [];
-	      scope.parentKey = scope.parentKey.concat(currentKey, Number(attrs.sfIndex));
+	        scope.parentKey = scope.parentKey || [];
+	        scope.parentKey = scope.parentKey.concat(currentKey, Number(attrs.sfIndex));
 
-	      scope.arrayIndex = Number(attrs.sfIndex);
-	      scope.arrayIndices = scope.arrayIndices || [];
-	      scope.arrayIndices = scope.arrayIndices.concat(scope.arrayIndex);
-	      scope.$i = scope.arrayIndices;
+	        scope.arrayIndex = Number(attrs.sfIndex);
+	        scope.arrayIndices = scope.arrayIndices || [];
+	        scope.arrayIndices = scope.arrayIndices.concat(scope.arrayIndex);
+	        scope.$i = scope.arrayIndices;
+	        scope.path = function (modelPath) {
+	          var i = -1;
+	          modelPath = modelPath.replace(/\[\]/gi, function (matched) {
+	            i++;
+	            return '[' + scope.$i[i] + ']';
+	          });
+	          return scope.evalExpr(modelPath, scope);
+	        };
+	      }
 	    }
 	  };
 	};
