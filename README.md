@@ -11,6 +11,18 @@ Angular Schema Form
 
 Generate forms from JSON schemas using AngularJS!
 
+Branch Status
+-------------
+This branch will be the **next version of Angular Schema Form**, currently please use
+the **examples/example.html** file as the best example to get the framework working.
+
+The example uses **schema-form.js** and **angular-schema-form-bootstrap.js** for the 
+version of the code it executes, if you want your page to behave the same you
+obviously need the same version!
+
+The new webpack compilation has made it easier to manage files and code and run build
+scripts, but it is still not easy enough for users unfamiliar with it yet.
+
 The Blog / The Web Site / The Twitter / The Movie
 ------------------------------------------------
 [medium.com/@SchemaFormIO](https://medium.com/@SchemaFormIO) / [schemaform.io](http://schemaform.io) / [@SchemaFormIO](http://twitter.com/SchemaFormIO) / [Movie](https://www.youtube.com/watch?v=duBFMipRq2o)
