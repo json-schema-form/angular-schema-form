@@ -1,0 +1,80 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Comment",
+    "required": [ "property" ],
+    "properties": {
+      "width": {
+        "title": "Width",
+        "type": "number"
+      },
+      "length": {
+        "title": "Length",
+        "type": "number"
+      },
+      "area": {
+        "title": "Area",
+        "type": "number"
+      },
+      "property": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name":  {
+              "title": "Name",
+              "type": "string"
+            },
+            "width": {
+              "title": "Width",
+              "type": "number"
+            },
+            "length": {
+              "title": "Length",
+              "type": "number"
+            },
+            "area": {
+              "title": "Area",
+              "type": "number"
+            }
+          },
+          "required": [ "name" ]
+        }
+      }
+    }
+  },
+  "form": [
+    {
+      "type": "help",
+      "helpvalue": "<h4>Array Example</h4><p>Try adding a couple of forms, reorder by drag'n'drop.</p>"
+    },
+    {
+      "key": "area",
+      "type": "calculate",
+      "watch": [ "property[0].width", "property[0].length" ],
+      "calculate": "model.property[0].width * model.property[0].length"
+    },
+    "width",
+    "length",
+    "area",
+    {
+      "key": "property",
+  	  "type": "tabarray",
+  	  "add": "New",
+  	  "style": {
+    		"add": "btn-success"
+  	  },
+      "items": [
+        "property[].name",
+        "property[].width",
+        "property[].length",
+        "property[].area"
+      ]
+    },
+    {
+      "type": "submit",
+      "style": "btn-info",
+      "title": "OK"
+    }
+  ]
+}

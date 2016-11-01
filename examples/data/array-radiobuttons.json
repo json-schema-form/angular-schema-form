@@ -1,0 +1,62 @@
+{
+  "schema": {
+    "type":"object",
+    "properties":{
+      "field1":{
+        "type":"array",
+        "items":{"type":"object",
+          "properties":{
+            "field":{"type":"string",
+              "title":"Radio 1 Example",
+              "enum":["valA","valB","valC"]
+            }
+          }
+        }
+      },
+      "field2":{"type":"array",
+        "items":{"type":"object",
+          "properties":{
+            "field":{"type":"string",
+              "title":"Radio 2 Example",
+              "enum":["val1","val2","val3"]
+            }
+          }
+        }
+      }
+    }
+  },
+  "form": [
+    {
+        "key":"field1",
+        "add":null,
+        "notitle":true,
+        "items":[
+        {
+            "key":"field1[].field",
+            "type": "radiobuttons",
+            "titleMap": [
+              { "value": "valA", "name": "Value A" },
+              { "value": "valB", "name": "Value B" },
+              { "value": "valC", "name": "Value C" }
+            ]
+        }
+        ]
+    },
+    {
+        "key":"field2",
+        "add":"new",
+        "notitle":true,
+        "items":[
+        {
+            "key":"field2[].field",
+            "type": "radios",
+            "titleMap": [
+              { "value": "val1", "name": "Value 1" },
+              { "value": "val2", "name": "Value 2" },
+              { "value": "val3", "name": "Value 3" }
+            ]
+        }
+        ]
+    }
+  ]
+}

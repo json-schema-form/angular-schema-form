@@ -223,6 +223,7 @@
 
 <script type="text/javascript" src="../dist/schema-form.js"></script>
 <script type="text/javascript" src="../dist/angular-schema-form-bootstrap.js"></script>
+<script type="text/javascript" src="add-on/calculate.js"></script>
 <!-- <script type="text/javascript" src="../bower_components/angular-schema-form-datepicker/bootstrap-datepicker.min.js"></script> -->
 <!-- <script type="text/javascript" src="../bower_components/angular-schema-form-colorpicker/bootstrap-colorpicker.min.js"></script> -->
 
@@ -235,6 +236,8 @@ var app = angular.module('test', ['schemaForm', 'ui.ace', 'ngClipboard', 'ui.boo
 app.controller('TestCtrl', function($scope, $http, $location) {
 
   $scope.tests = [
+    { name: "Array Radio-Buttons", data: 'data/array-radiobuttons.json' },
+    { name: "Calculate", data: 'data/calculate.json' },
     { name: "Deep Array", data: 'data/deep-array.json' },
     { name: "Simple", data: 'data/simple.json' },
     { name: "Basic JSON Schema Type", data: 'data/types.json' },
