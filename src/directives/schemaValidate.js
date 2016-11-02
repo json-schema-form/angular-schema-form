@@ -1,7 +1,6 @@
 import angular from 'angular';
 
 export default function(sfValidator, $parse, sfSelect) {
-
   return {
     restrict: 'A',
     scope: false,
