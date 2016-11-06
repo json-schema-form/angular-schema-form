@@ -142,15 +142,14 @@
     <div class="col-sm-4">
       <h3>The Generated Form</h3>
 
-      <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" ng-submit="submitForm(ngform,modelData)" sf-options="{ formDefaults: { ngModelOptions: { timezone: '+0430' } }}"></form>
-<!--
       <form name="ngform"
             sf-model="modelData"
             sf-form="form"
             sf-schema="schema"
-            ng-submit="submitForm(ngform,modelData)">
+            ng-submit="submitForm(ngform,modelData)"
+            sf-options="{ formDefaults: { ngModelOptions: { timezone: '+0430' } }}">
       </form>
--->
+
       <div ng-show="ngform.$valid"><em>Form is valid</em></div>
       <div ng-show="ngform.$invalid"><em>Form is not valid</em></div>
 

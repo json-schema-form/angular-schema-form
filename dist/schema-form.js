@@ -2191,6 +2191,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      value = undefined;
 	    };
 
+	    // Date fields are painful and return a date object
+	    if (schema.type === 'string' && schema.format === 'date') {
+	      if (value === null) {
+	        value = undefined;
+	      } else {
+	        if (typeof value.toISOString === 'function') {
+	          value = value.toISOString();
+	        }
+	      }
+	    }
+
 	    // Version 4 of JSON Schema has the required property not on the
 	    // property itself but on the wrapping object. Since we like to test
 	    // only this property we wrap it in a fake object.
@@ -3681,7 +3692,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	});
 
 	exports.default = function (sfValidator, $parse, sfSelect) {
-
 	  return {
 	    restrict: 'A',
 	    scope: false,
