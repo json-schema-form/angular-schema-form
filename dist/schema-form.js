@@ -3431,7 +3431,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = function (schemaForm, sfPath) {
 	  return {
 	    scope: true,
-	    require: ['^^sfNewArray'],
+	    require: ['?^^sfNewArray'],
 	    controller: ['$scope', function SFKeyController($scope) {
 	      this.key = $scope.form && $scope.form.key ? $scope.form.key.splice(0, -2) : [];
 	    }],

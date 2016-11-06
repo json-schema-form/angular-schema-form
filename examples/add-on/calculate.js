@@ -2,6 +2,10 @@
  * I calculate a field value based on a provided mathematical string
  *
  * @homepage https://github.com/Anthropic/angular-schema-form-calculate
+ *
+ * NOTE: This version is not in sync with the source repo as it has
+ * been modified to work with the new version of the framework in development
+ * 
  * @example
  * {
  *   "type":"calculate",
@@ -24,22 +28,18 @@ angular
         link: {
           post: function(scope, element, attrs, ctrl) {
             var watchKeys = scope.form.watch,
-                key,
+                key, keyFixed, exec,
                 i;
 
             scope.form.format = scope.form.format || 'number';
 
             for (i=0; i < watchKeys.length; i++) {
-              key = watchKeys[i];
+              key = watchKeys[i].split('[]');
+              keyFixed = key.reduce(function(pv, cv, ci, ta){
+                return '' + pv + ((cv[0]=='.')? '['+scope.$i[ci-1]+']'+cv: cv);
+              });
 
-              scope.$watch(function() {
-                return $interpolate('{{' + key + '}}', false, null, true)({
-                  model: scope.model,
-                  $i: scope.$i,
-                  $index: scope.$index,
-                  path: scope.path
-                });
-              },
+              scope.$watch(keyFixed,
               function (val, old) {
                 var newValue = $interpolate('{{' + scope.form.calculate + '}}', false, null, true)({
                   model: scope.model,

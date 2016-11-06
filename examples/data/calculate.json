@@ -51,13 +51,14 @@
     {
       "key": "area",
       "type": "calculate",
-      "watch": [ "property[0].width", "property[0].length" ],
-      "calculate": "model.property[0].width * model.property[0].length"
+      "watch": [ "model.width", "model.length" ],
+      "calculate": "model.width * model.length"
     },
     "width",
     "length",
     "area",
     {
+      "title": "{{ value.name || 'Tab ' + $index }}",
       "key": "property",
   	  "type": "tabarray",
   	  "add": "New",
@@ -68,7 +69,13 @@
         "property[].name",
         "property[].width",
         "property[].length",
-        "property[].area"
+        "property[].area",
+        {
+          "key": "property[].area",
+          "type": "calculate",
+          "watch": [ "model.property[].width", "model.property[].length" ],
+          "calculate": "model.property[$i[0]].width * model.property[$i[0]].length"
+        }
       ]
     },
     {

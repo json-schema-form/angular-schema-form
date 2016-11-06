@@ -142,7 +142,7 @@
     <div class="col-sm-4">
       <h3>The Generated Form</h3>
 
-      <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" ng-submit="submitForm(ngform,modelData)" sf-options="{ formDefaults: { ngModelOptions: { updateOn: 'blur' } }}"></form>
+      <form name="ngform"  sf-model="modelData" sf-form="form" sf-schema="schema" ng-submit="submitForm(ngform,modelData)" sf-options="{ formDefaults: { ngModelOptions: { timezone: '+0430' } }}"></form>
 <!--
       <form name="ngform"
             sf-model="modelData"
@@ -236,17 +236,17 @@ var app = angular.module('test', ['schemaForm', 'ui.ace', 'ngClipboard', 'ui.boo
 app.controller('TestCtrl', function($scope, $http, $location) {
 
   $scope.tests = [
-    { name: "Array Radio-Buttons", data: 'data/array-radiobuttons.json' },
-    { name: "Calculate", data: 'data/calculate.json' },
-    { name: "Deep Array", data: 'data/deep-array.json' },
     { name: "Simple", data: 'data/simple.json' },
     { name: "Basic JSON Schema Type", data: 'data/types.json' },
     { name: "Bootstrap Grid", data: 'data/grid.json' },
     { name: "Complex Key Support", data: 'data/complex-keys.json' },
     { name: "Array", data: 'data/array.json' },
     { name: "Tab Array", data: 'data/tabarray.json' },
+    { name: "Deep Array", data: 'data/deep-array.json' },
+    //{ name: "Array Radio-Buttons", data: 'data/array-radiobuttons.json' },
     { name: "TitleMap Examples", data: 'data/titlemaps.json' },
     { name: "Kitchen Sink", data: 'data/sink.json' },
+    { name: "Calculate", data: 'data/calculate.json' },
     { name: "Hack: Conditional required", data: 'data/conditional-required.json' }
   ];
 

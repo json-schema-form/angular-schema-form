@@ -8,20 +8,26 @@ Angular Schema Form
 [![Code Coverage](https://img.shields.io/coveralls/json-schema-form/angular-schema-form.svg?style=flat-square)](https://coveralls.io/github/json-schema-form/angular-schema-form?branch=development)
 
 
-
 Generate forms from JSON schemas using AngularJS!
 
-Branch Status
--------------
+Branch Status & New Add-On
+--------------------------
 This branch will be the **next version of Angular Schema Form**, currently please use
 the **examples/example.html** file as the best example to get the framework working.
 
-The example uses **schema-form.js** and **angular-schema-form-bootstrap.js** for the 
+The example uses **schema-form.js** and **angular-schema-form-bootstrap.js** for the
 version of the code it executes, if you want your page to behave the same you
 obviously need the same version!
 
-The new webpack compilation has made it easier to manage files and code and run build
-scripts, but it is still not easy enough for users unfamiliar with it yet.
+The new Webpack compilation has made it easier to manage files and code and run build
+scripts, but it is still not easy enough for users unfamiliar with it... yet.
+
+### Add-on
+To see how to make an **add-on** work I have now included the **calculate** add-on file within the **examples/add-on** directory.
+
+## Yet to be migrated
+Currently **copyValueTo** and some **array** related features are not working as expected and remain the highest priority to ensure backwards compatibility is maintained where possible.
+
 
 The Blog / The Web Site / The Twitter / The Movie
 ------------------------------------------------

@@ -17,23 +17,6 @@
         "enum": ["a","b","c"]
       },
       "noenum": { "type": "string", "title": "No enum, but forms says it's a select", "default": "a3" },
-      "selectOptionData": {
-        "type": "string",
-        "title": "Dynamic Options",
-        "default": "The Terminator"
-      },
-      "radios": {
-        "title": "Basic radio button example to pick remote dataset for below select 'Remote Options'",
-        "type": "string",
-        "enum": ["books","movies"]
-      },
-      "selectOptionRemote": {
-        "type": "string",
-        "title": "Remote Options",
-        "links":[
-          { "rel": "options", "href": "./data/remote-titlemap-{radios}.json" }
-        ]
-      },
       "array": {
         "title": "Array with enum defaults to 'checkboxes'",
         "type": "array",
