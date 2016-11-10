@@ -10,7 +10,7 @@ angular.module('schemaForm').provider('sfPath',
   // if we're on Angular 1.2.x, we need to continue using dot notation
   if (angular.version.major === 1 && angular.version.minor < 3) {
     sfPath.stringify = function(arr) {
-      return Array.isArray(arr) ? arr.join('.') : arr.toString();
+      return Array.isArray(arr) ? arr.join('.') : arr;
     };
   } else {
     sfPath.stringify = ObjectPath.stringify;
