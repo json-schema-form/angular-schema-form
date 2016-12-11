@@ -22,6 +22,11 @@ obviously need the same version!
 The new Webpack compilation has made it easier to manage files and code and run build
 scripts, but it is still not easy enough for users unfamiliar with it... yet.
 
+**NOTE** in order to work simultaneously with ```json-schema-form-core``` you must have it cloned
+as a sibling directory to this one to build this library **OR** npm install the version you wish to build with.
+
+Webpack now generates a header to indicate version and date of build. **Do not create PR with the DIST folder.**
+
 ### Add-on
 To see how to make an **add-on** work I have now included the **calculate** add-on file within the **examples/add-on** directory.
 

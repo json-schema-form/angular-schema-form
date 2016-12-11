@@ -15,13 +15,9 @@ module.exports = function(config) {
       'test/lib/angular.js',
       'test/lib/angular-mocks.js',
       'bower_components/tv4/tv4.js',
-      'dist/schema-form.js',
-      'dist/bootstrap-decorator.js',
-      'test/services/schema-form-test.js',
-      'test/services/decorators-test.js',
-      'test/services/messages-test.js',
-      'test/directives/schema-form-test.js',
-      'test/directives/sf-messages-test.js',
+      'dist/angular-schema-form.js',
+      'dist/angular-schema-form-bootstrap.js',
+      'src/**/*.spec.js'
     ],
 
     // list of files to exclude
@@ -29,10 +25,22 @@ module.exports = function(config) {
 
     // test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['progress','coverage','growler'],
+    reporters: ['dots','progress','coverage','growler'],
 
     preprocessors: {
       'src/**/*.js': ['coverage']
+    },
+    babelPreprocessor: {
+      options: {
+        presets: ['es2015'],
+        sourceMap: 'inline'
+      },
+      filename: function (file) {
+        return file.originalPath.replace(/\.js$/, '.es5.js');
+      },
+      sourceFileName: function (file) {
+        return file.originalPath;
+      }
     },
 
     // optionally, configure the reporter

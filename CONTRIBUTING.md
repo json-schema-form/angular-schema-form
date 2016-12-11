@@ -6,12 +6,12 @@ We love contributions!
 
 The reason for this is that we're trying to use
 [git flow](http://danielkummer.github.io/git-flow-cheatsheet/), and it makes merging your pull
-request heck of a lot easier for us.
+request a heck of a lot easier for us.
 
-Please avoid including anything from the `dist/` directory as that can make merging harder, and we
+Please **avoid including anything from the `dist/`** directory as that can make merging harder, and we
 always generate these files when we make a new release.
 
-**We're currently in transitioning where a large part of the code, i.e. the bootstrap decorator, has been moved to it's own repo. It's here [github.com/Textalk/angular-schema-form-bootstrap](https://github.com/Textalk/angular-schema-form-bootstrap)**
+**The bootstrap decorator, has been moved to it's own repo. It's here [github.com/json-schema-form/angular-schema-form-bootstrap](https://github.com/json-schema-form/angular-schema-form-bootstrap)**
 
 Feel free to submit issues on the main repo anyway though.
 
@@ -23,4 +23,4 @@ easy and fast for us to merge it!
 
 Also consider running any code through the code style checker [jscs](https://github.com/mdevils/node-jscs)
 (or even better use it in your editor) with preset set to `google`. You can also use `gulp jscs` to
-check your code.
+check your code. I hope to set up ESLint in the not too distant future.

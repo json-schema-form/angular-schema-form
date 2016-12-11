@@ -39,10 +39,10 @@ export default function() {
    *                        definition or undefined
    */
   this.appendRule = function(type, rule) {
-    if (!defaults[type]) {
-      defaults[type] = [];
+    if (!this.defaults[type]) {
+      this.defaults[type] = [];
     }
-    defaults[type].push(rule);
+    this.defaults[type].push(rule);
   };
 
   /**
@@ -53,10 +53,13 @@ export default function() {
    *                        definition or undefined
    */
   this.prependRule = function(type, rule) {
-    if (!defaults[type]) {
-      defaults[type] = [];
+    if (!this.defaults[type]) {
+      this.defaults[type] = [];
     }
-    defaults[type].unshift(rule);
+    this.defaults[type].unshift(rule);
+    console.log('TEST prependRule');
+    console.log(type, rule, '==============');
+    console.log(this.defaults['string']);
   };
 
   /**
