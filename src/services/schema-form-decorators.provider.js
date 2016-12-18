@@ -40,7 +40,7 @@ export default function($compileProvider, sfPathProvider) {
           replace: false,
           transclude: false,
           scope: true,
-          require: ['^sfSchema', '?^form'],
+          require: ['?^sfSchema', '?^form'],
           link: function(scope, element, attrs, ctrl) {
             var sfSchema = ctrl[0];
             var formCtrl = ctrl[1];

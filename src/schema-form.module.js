@@ -5,13 +5,12 @@ import angular from 'angular';
 import sfBuilderProvider from 'sf-builder.provider';
 import schemaFormDecoratorsProvider from 'schema-form-decorators.provider';
 import schemaFormProvider from 'schema-form.provider';
-import sfValidatorFactory from 'sf-validator.factory';
 import sfErrorMessageProvider from 'sf-error-message.provider';
 import sfPathProvider from 'sf-path.provider';
 // ./directives/
 import sfChangedDirective from 'sf-changed.directive';
 import sfFieldDirective from 'sf-field.directive';
-import messageDirective from 'message.directive';
+import sfMessageDirective from 'sf-message.directive';
 import sfArrayDirective from 'sf-array.directive';
 import sfKeyDirective from 'sf-key.directive';
 import sfSchemaDirective from 'sf-schema.directive';
@@ -49,13 +48,13 @@ angular
 .provider('sfErrorMessage', sfErrorMessageProvider)
 .provider('schemaForm', [ 'sfPathProvider', schemaFormProvider ])
 .factory('sfSelect', () => JSONSchemaFormCore.select)
-.factory('sfValidator', sfValidatorFactory)
+.factory('sfValidator', () => JSONSchemaFormCore.validate)
 
 // Directives
 .directive('sfChanged', sfChangedDirective)
 .directive('sfField', [ '$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q',
                        'sfErrorMessage','sfPath','sfSelect', sfFieldDirective ])
-.directive('sfMessage', [ '$injector', 'sfErrorMessage', messageDirective ])
+.directive('sfMessage', [ '$injector', 'sfErrorMessage', sfMessageDirective ])
 .directive('sfNewArray', [ 'sfSelect', 'sfPath', 'schemaForm', sfArrayDirective ])
 .directive('sfSchema', [ '$compile', '$http', '$templateCache', '$q', 'schemaForm',
                         'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder',

@@ -40,7 +40,7 @@ export default function(sfValidator, $parse, sfSelect) {
           return viewValue;
         }
 
-        var result =  sfValidator.validate(form, viewValue);
+        var result =  sfValidator(form, viewValue);
         //console.log('result is', result)
         // Since we might have different tv4 errors we must clear all
         // errors that start with tv4-

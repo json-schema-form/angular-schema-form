@@ -36,7 +36,6 @@ describe('directive',function() {
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
-      console.log(tmpl.children().find('div.help-block')[0]);
       tmpl.children().find('div.help-block').text().should.equal('foobar');
 
       setTimeout(function() {

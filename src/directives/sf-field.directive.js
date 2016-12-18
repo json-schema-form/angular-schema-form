@@ -31,7 +31,7 @@ sfPath, sfSelect) {
 
         // Fetch our form.
         scope.initialForm = sfSchema.lookup['f' + attrs.sfField];
-        scope.form = angular.copy(sfSchema.lookup['f' + attrs.sfField]);
+        scope.form = sfSchema.lookup['f' + attrs.sfField];
       },
       post: function(scope, element, attrs, ctrl) {
         var sfSchema = ctrl[0];

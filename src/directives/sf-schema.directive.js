@@ -149,7 +149,6 @@ sfSelect, sfPath, sfBuilder) {
       //Since we are dependant on up to three
       //attributes we'll do a common watch
       scope.$watch(function() {
-
         var schema = scope.schema;
         var form   = scope.initialForm || defaultForm;
 

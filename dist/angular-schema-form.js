@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.3
- * @date Sun, 11 Dec 2016 12:03:12 GMT
+ * @date Sat, 17 Dec 2016 23:26:10 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2016 JSON Schema Form
@@ -69,7 +69,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -933,21 +933,19 @@ var canonicalTitleMap = __WEBPACK_IMPORTED_MODULE_2__canonical_title_map__["a" /
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_sf_builder_provider__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_schema_form_decorators_provider__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_schema_form_provider__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_sf_validator_factory__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_sf_error_message_provider__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_sf_path_provider__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_sf_changed_directive__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_sf_field_directive__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_message_directive__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_sf_array_directive__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_sf_key_directive__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_sf_schema_directive__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14_schema_validate_directive__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_sf_error_message_provider__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_sf_path_provider__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_sf_changed_directive__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_sf_field_directive__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_sf_message_directive__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_sf_array_directive__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_sf_key_directive__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_sf_schema_directive__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_schema_validate_directive__ = __webpack_require__(3);
 
 
 
 // ./services/
-
 
 
 
@@ -987,118 +985,17 @@ try {
 __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
 
 // Providers and services
-.provider('sfPath', __WEBPACK_IMPORTED_MODULE_7_sf_path_provider__["a" /* default */]).provider('sfBuilder', ['sfPathProvider', __WEBPACK_IMPORTED_MODULE_2_sf_builder_provider__["a" /* default */]]).provider('schemaFormDecorators', ['$compileProvider', 'sfPathProvider', __WEBPACK_IMPORTED_MODULE_3_schema_form_decorators_provider__["a" /* default */]]).provider('sfErrorMessage', __WEBPACK_IMPORTED_MODULE_6_sf_error_message_provider__["a" /* default */]).provider('schemaForm', ['sfPathProvider', __WEBPACK_IMPORTED_MODULE_4_schema_form_provider__["a" /* default */]]).factory('sfSelect', function () {
+.provider('sfPath', __WEBPACK_IMPORTED_MODULE_6_sf_path_provider__["a" /* default */]).provider('sfBuilder', ['sfPathProvider', __WEBPACK_IMPORTED_MODULE_2_sf_builder_provider__["a" /* default */]]).provider('schemaFormDecorators', ['$compileProvider', 'sfPathProvider', __WEBPACK_IMPORTED_MODULE_3_schema_form_decorators_provider__["a" /* default */]]).provider('sfErrorMessage', __WEBPACK_IMPORTED_MODULE_5_sf_error_message_provider__["a" /* default */]).provider('schemaForm', ['sfPathProvider', __WEBPACK_IMPORTED_MODULE_4_schema_form_provider__["a" /* default */]]).factory('sfSelect', function () {
   return __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core___default.a.select;
-}).factory('sfValidator', __WEBPACK_IMPORTED_MODULE_5_sf_validator_factory__["a" /* default */])
+}).factory('sfValidator', function () {
+  return __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core___default.a.validate;
+})
 
 // Directives
-.directive('sfChanged', __WEBPACK_IMPORTED_MODULE_8_sf_changed_directive__["a" /* default */]).directive('sfField', ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage', 'sfPath', 'sfSelect', __WEBPACK_IMPORTED_MODULE_9_sf_field_directive__["a" /* default */]]).directive('sfMessage', ['$injector', 'sfErrorMessage', __WEBPACK_IMPORTED_MODULE_10_message_directive__["a" /* default */]]).directive('sfNewArray', ['sfSelect', 'sfPath', 'schemaForm', __WEBPACK_IMPORTED_MODULE_11_sf_array_directive__["a" /* default */]]).directive('sfSchema', ['$compile', '$http', '$templateCache', '$q', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder', __WEBPACK_IMPORTED_MODULE_13_sf_schema_directive__["a" /* default */]]).directive('schemaValidate', ['sfValidator', '$parse', 'sfSelect', __WEBPACK_IMPORTED_MODULE_14_schema_validate_directive__["a" /* default */]]).directive('sfKeyController', ['schemaForm', 'sfPath', __WEBPACK_IMPORTED_MODULE_12_sf_key_directive__["a" /* default */]]);
+.directive('sfChanged', __WEBPACK_IMPORTED_MODULE_7_sf_changed_directive__["a" /* default */]).directive('sfField', ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage', 'sfPath', 'sfSelect', __WEBPACK_IMPORTED_MODULE_8_sf_field_directive__["a" /* default */]]).directive('sfMessage', ['$injector', 'sfErrorMessage', __WEBPACK_IMPORTED_MODULE_9_sf_message_directive__["a" /* default */]]).directive('sfNewArray', ['sfSelect', 'sfPath', 'schemaForm', __WEBPACK_IMPORTED_MODULE_10_sf_array_directive__["a" /* default */]]).directive('sfSchema', ['$compile', '$http', '$templateCache', '$q', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder', __WEBPACK_IMPORTED_MODULE_12_sf_schema_directive__["a" /* default */]]).directive('schemaValidate', ['sfValidator', '$parse', 'sfSelect', __WEBPACK_IMPORTED_MODULE_13_schema_validate_directive__["a" /* default */]]).directive('sfKeyController', ['schemaForm', 'sfPath', __WEBPACK_IMPORTED_MODULE_11_sf_key_directive__["a" /* default */]]);
 
 /***/ },
 /* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
-
-
-/* harmony default export */ exports["a"] = function ($injector, sfErrorMessage) {
-
-  //Inject sanitizer if it exists
-  var $sanitize = $injector.has('$sanitize') ? $injector.get('$sanitize') : function (html) {
-    return html;
-  };
-
-  return {
-    scope: false,
-    restrict: 'EA',
-    link: function link(scope, element, attrs) {
-
-      var message = '';
-      if (attrs.sfMessage) {
-        scope.$watch(attrs.sfMessage, function (msg) {
-          if (msg) {
-            message = $sanitize(msg);
-            update(!!scope.ngModel);
-          }
-        });
-      }
-
-      var currentMessage;
-      // Only call html() if needed.
-      var setMessage = function setMessage(msg) {
-        if (msg !== currentMessage) {
-          element.html(msg);
-          currentMessage = msg;
-        }
-      };
-
-      var update = function update(checkForErrors) {
-        if (checkForErrors) {
-          if (!scope.hasError()) {
-            setMessage(message);
-          } else {
-            var errors = [];
-            __WEBPACK_IMPORTED_MODULE_0_angular___default.a.forEach(scope.ngModel && scope.ngModel.$error, function (status, code) {
-              if (status) {
-                // if true then there is an error
-                // Angular 1.3 removes properties, so we will always just have errors.
-                // Angular 1.2 sets them to false.
-                errors.push(code);
-              }
-            });
-
-            // In Angular 1.3 we use one $validator to stop the model value from getting updated.
-            // this means that we always end up with a 'schemaForm' error.
-            errors = errors.filter(function (e) {
-              return e !== 'schemaForm';
-            });
-
-            // We only show one error.
-            // TODO: Make that optional
-            var error = errors[0];
-
-            if (error) {
-              setMessage(sfErrorMessage.interpolate(error, scope.ngModel.$modelValue, scope.ngModel.$viewValue, scope.form, scope.options && scope.options.validationMessage));
-            } else {
-              setMessage(message);
-            }
-          }
-        } else {
-          setMessage(message);
-        }
-      };
-
-      // Update once.
-      update();
-
-      var once = scope.$watch('ngModel', function (ngModel) {
-        if (ngModel) {
-          // We also listen to changes of the model via parsers and formatters.
-          // This is since both the error message can change and given a pristine
-          // option to not show errors the ngModel.$error might not have changed
-          // but we're not pristine any more so we should change!
-          ngModel.$parsers.push(function (val) {
-            update(true);return val;
-          });
-          ngModel.$formatters.push(function (val) {
-            update(true);return val;
-          });
-          once();
-        }
-      });
-
-      // We watch for changes in $error
-      scope.$watchCollection('ngModel.$error', function () {
-        update(!!scope.ngModel);
-      });
-    }
-  };
-};
-
-/***/ },
-/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1146,7 +1043,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
           return viewValue;
         }
 
-        var result = sfValidator.validate(form, viewValue);
+        var result = sfValidator(form, viewValue);
         //console.log('result is', result)
         // Since we might have different tv4 errors we must clear all
         // errors that start with tv4-
@@ -1285,7 +1182,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
 };
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1536,7 +1433,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
 };
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1582,7 +1479,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
 };
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1622,7 +1519,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         // Fetch our form.
         scope.initialForm = sfSchema.lookup['f' + attrs.sfField];
-        scope.form = __WEBPACK_IMPORTED_MODULE_0_angular___default.a.copy(sfSchema.lookup['f' + attrs.sfField]);
+        scope.form = sfSchema.lookup['f' + attrs.sfField];
       },
       post: function post(scope, element, attrs, ctrl) {
         var sfSchema = ctrl[0];
@@ -1910,7 +1807,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 };
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1948,6 +1845,110 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     }
   };
 };;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
+
+
+/* harmony default export */ exports["a"] = function ($injector, sfErrorMessage) {
+
+  //Inject sanitizer if it exists
+  var $sanitize = $injector.has('$sanitize') ? $injector.get('$sanitize') : function (html) {
+    return html;
+  };
+
+  return {
+    scope: false,
+    restrict: 'EA',
+    link: function link(scope, element, attrs) {
+
+      var message = '';
+      if (attrs.sfMessage) {
+
+        scope.$watch(attrs.sfMessage, function (msg) {
+          if (msg) {
+            message = $sanitize(msg);
+            update(!!scope.ngModel);
+          }
+        });
+      }
+
+      var currentMessage;
+      // Only call html() if needed.
+      var setMessage = function setMessage(msg) {
+        if (msg !== currentMessage) {
+          element.html(msg);
+          currentMessage = msg;
+        }
+      };
+
+      var update = function update(checkForErrors) {
+        if (checkForErrors) {
+          if (!scope.hasError()) {
+            setMessage(message);
+          } else {
+            var errors = [];
+            __WEBPACK_IMPORTED_MODULE_0_angular___default.a.forEach(scope.ngModel && scope.ngModel.$error, function (status, code) {
+              if (status) {
+                // if true then there is an error
+                // Angular 1.3 removes properties, so we will always just have errors.
+                // Angular 1.2 sets them to false.
+                errors.push(code);
+              }
+            });
+
+            // In Angular 1.3 we use one $validator to stop the model value from getting updated.
+            // this means that we always end up with a 'schemaForm' error.
+            errors = errors.filter(function (e) {
+              return e !== 'schemaForm';
+            });
+
+            // We only show one error.
+            // TODO: Make that optional
+            var error = errors[0];
+
+            if (error) {
+              setMessage(sfErrorMessage.interpolate(error, scope.ngModel.$modelValue, scope.ngModel.$viewValue, scope.form, scope.options && scope.options.validationMessage));
+            } else {
+              setMessage(message);
+            }
+          }
+        } else {
+          setMessage(message);
+        }
+      };
+
+      // Update once.
+      update();
+
+      var once = scope.$watch('ngModel', function (ngModel) {
+        if (ngModel) {
+          // We also listen to changes of the model via parsers and formatters.
+          // This is since both the error message can change and given a pristine
+          // option to not show errors the ngModel.$error might not have changed
+          // but we're not pristine any more so we should change!
+          ngModel.$parsers.push(function (val) {
+            update(true);return val;
+          });
+          ngModel.$formatters.push(function (val) {
+            update(true);return val;
+          });
+          once();
+        }
+      });
+
+      // We watch for changes in $error
+      scope.$watchCollection('ngModel.$error', function () {
+        update(!!scope.ngModel);
+      });
+    }
+  };
+};
 
 /***/ },
 /* 9 */
@@ -2105,7 +2106,6 @@ FIXME: real documentation
       //Since we are dependant on up to three
       //attributes we'll do a common watch
       scope.$watch(function () {
-
         var schema = scope.schema;
         var form = scope.initialForm || defaultForm;
 
@@ -2198,7 +2198,7 @@ FIXME: real documentation
         replace: false,
         transclude: false,
         scope: true,
-        require: ['^sfSchema', '?^form'],
+        require: ['?^sfSchema', '?^form'],
         link: function link(scope, element, attrs, ctrl) {
           var sfSchema = ctrl[0];
           var formCtrl = ctrl[1];
@@ -2936,6 +2936,7 @@ FIXME: real documentation
     condition: function condition(args) {
       var strKey = '';
       var strModel = 'undefined';
+      var ngIf = '';
       // Do we have a condition? Then we slap on an ng-if on all children,
       // but be nice to existing ng-if.
       if (args.form.condition) {
@@ -2947,10 +2948,17 @@ FIXME: real documentation
         var evalExpr = 'evalExpr(' + args.path + '.condition, { model: model, ' + '"arrayIndex": $index, ' + '"arrayIndices": arrayIndices, ' + '"path": path, ' + '"$i": $i, ' + '"$index": $index, ' + '"modelValue": ' + strModel + '})';
 
         var children = args.fieldFrag.children || args.fieldFrag.childNodes;
+
         for (var i = 0; i < children.length; i++) {
           var child = children[i];
-          var ngIf = child.getAttribute('ng-if');
-          child.setAttribute('ng-if', ngIf ? '(' + ngIf + ') || (' + evalExpr + ')' : evalExpr);
+
+          if (child.hasAttribute && child.hasAttribute('ng-if')) {
+            ngIf = child.getAttribute('ng-if');
+          };
+
+          if (child.setAttribute) {
+            child.setAttribute('ng-if', ngIf ? '(' + ngIf + ') || (' + evalExpr + ')' : evalExpr);
+          };
         }
       }
     },
@@ -3311,93 +3319,6 @@ var sfPathProviderClass = function () {
 
 /***/ },
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tv4__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_tv4___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_tv4__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_angular__);
-/*  Common code for validating a value against its form and schema definition */
-
-
-
-/* harmony default export */ exports["a"] = function () {
-  var validator = {};
-
-  /**
-   * Validate a value against its form definition and schema.
-   * The value should either be of proper type or a string, some type
-   * coercion is applied.
-   *
-   * @param {Object} form A merged form definition, i.e. one with a schema.
-   * @param {Any} value the value to validate.
-   * @return {Object} a tv4js result object.
-   */
-  validator.validate = function (form, value) {
-    if (!form) {
-      return { valid: true };
-    };
-
-    var schema = form.schema;
-    if (!schema) {
-      return { valid: true };
-    };
-
-    // Input of type text and textareas will give us a viewValue of ''
-    // when empty, this is a valid value in a schema and does not count as something
-    // that breaks validation of 'required'. But for our own sanity an empty field should
-    // not validate if it's required.
-    if (value === '') {
-      value = undefined;
-    };
-
-    // Numbers fields will give a null value, which also means empty field
-    if (form.type === 'number' && value === null) {
-      value = undefined;
-    };
-
-    // Date fields are painful and return a date object
-    if (schema.type === 'string' && schema.format === 'date') {
-      if (value === null) {
-        value = undefined;
-      } else {
-        if (typeof value.toISOString === 'function') {
-          value = value.toISOString();
-        }
-      }
-    }
-
-    // Version 4 of JSON Schema has the required property not on the
-    // property itself but on the wrapping object. Since we like to test
-    // only this property we wrap it in a fake object.
-    var wrap = { type: 'object', 'properties': {} };
-    var propName = form.key[form.key.length - 1];
-    wrap.properties[propName] = schema;
-
-    if (form.required) {
-      wrap.required = [propName];
-    };
-
-    var valueWrap = {};
-    if (__WEBPACK_IMPORTED_MODULE_1_angular___default.a.isDefined(value)) {
-      valueWrap[propName] = value;
-    };
-
-    return __WEBPACK_IMPORTED_MODULE_0_tv4___default.a.validateResult(valueWrap, wrap);
-  };
-
-  return validator;
-};
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-module.exports = tv4;
-
-/***/ },
-/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 __webpack_require__(1);

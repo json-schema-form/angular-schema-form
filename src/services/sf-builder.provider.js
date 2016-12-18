@@ -108,6 +108,7 @@ export default function(sfPathProvider) {
     condition: function(args) {
       let strKey = '';
       let strModel = 'undefined';
+      let ngIf = '';
       // Do we have a condition? Then we slap on an ng-if on all children,
       // but be nice to existing ng-if.
       if (args.form.condition) {
@@ -117,24 +118,29 @@ export default function(sfPathProvider) {
         }
 
         let evalExpr = 'evalExpr(' + args.path + '.condition, { model: model, ' +
-                   '"arrayIndex": $index, ' +
-                   '"arrayIndices": arrayIndices, ' +
-                   '"path": path, ' +
-                   '"$i": $i, ' +
-                   '"$index": $index, ' +
-                   '"modelValue": ' + strModel + '})';
+                       '"arrayIndex": $index, ' +
+                       '"arrayIndices": arrayIndices, ' +
+                       '"path": path, ' +
+                       '"$i": $i, ' +
+                       '"$index": $index, ' +
+                       '"modelValue": ' + strModel + '})';
 
-        var children = args.fieldFrag.children || args.fieldFrag.childNodes;
-        for (var i = 0; i < children.length; i++) {
-          var child = children[i];
-          var ngIf = child.getAttribute('ng-if');
-          child.setAttribute(
-            'ng-if',
-            ngIf ?
-            '(' + ngIf +
-            ') || (' + evalExpr + ')'
-            : evalExpr
-          );
+        let children = args.fieldFrag.children || args.fieldFrag.childNodes;
+
+        for (let i = 0; i < children.length; i++) {
+          let child = children[i];
+
+          if(child.hasAttribute && child.hasAttribute('ng-if')) {
+            ngIf = child.getAttribute('ng-if');
+          };
+
+          if(child.setAttribute) {
+            child.setAttribute('ng-if',
+              ngIf
+              ? '(' + ngIf + ') || (' + evalExpr + ')'
+              : evalExpr
+            );
+          };
         }
       }
     },

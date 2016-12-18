@@ -13,6 +13,7 @@ export default function($injector, sfErrorMessage) {
 
       var message = '';
       if (attrs.sfMessage) {
+
         scope.$watch(attrs.sfMessage, function(msg) {
           if (msg) {
             message = $sanitize(msg);
