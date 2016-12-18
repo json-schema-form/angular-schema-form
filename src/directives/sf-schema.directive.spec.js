@@ -2271,6 +2271,14 @@ describe('directive', function() {
 });
 
 describe('destroy strategy', function() {
+  beforeEach(module('schemaForm'));
+  beforeEach(
+    //We don't need no sanitation. We don't need no thought control.
+    module(function($sceProvider) {
+      $sceProvider.enabled(false);
+    })
+  );
+
   var schema = {
     "type": "object",
     "title": "Comment",
@@ -2364,11 +2372,9 @@ describe('destroy strategy', function() {
     }
   ];
 
-
-
   it('should default to "remove"', function(done) {
 
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         "switch": true,
