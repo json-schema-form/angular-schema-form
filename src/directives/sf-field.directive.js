@@ -230,7 +230,7 @@ sfPath, sfSelect) {
 
         // append the field-id to the htmlClass
         scope.form.htmlClass = scope.form.htmlClass || '';
-        scope.form.htmlClass += (scope.form.htmlClass ? ' ' : '') + scope.fieldId(false) + ' ' + scope.fieldId(false, true);
+        scope.idClass = scope.fieldId(false) + ' ' + scope.fieldId(false, true);
 
         var form = scope.form;
 
