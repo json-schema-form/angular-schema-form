@@ -316,12 +316,16 @@ describe('schemaForm', function() {
   });
 
   describe('#appendRule() and #prependRule()', function() {
+    beforeEach(module('schemaForm'));
+    beforeEach(
+      module(function($sceProvider) {
+        $sceProvider.enabled(false);
+      })
+    );
+
     it('should extend with new defaults',function(){
       module(function(schemaFormProvider){
         schemaFormProvider.prependRule('string', function(name, schema, options) {
-console.log('RUN prependRule');
-console.log('Name:'+name);
-console.log(JSON.stringify(options));
           if (schema.format === 'foobar') {
             var f = schemaFormProvider.createStandardForm(name, schema, options);
             f.type = 'foobar';
@@ -361,8 +365,6 @@ console.log(JSON.stringify(options));
 
         //no form is implicitly ['*']
         var defaults = schemaForm.defaults(schema).form;
-console.log('TEST schemaForm.defaults(schema)');
-console.log(JSON.stringify(defaults[0]));
         defaults[0].type.should.be.equal('foobar');
         defaults[0].title.should.be.equal('Name');
         defaults[1].type.should.be.equal('select');

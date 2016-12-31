@@ -57,9 +57,6 @@ export default function() {
       this.defaults[type] = [];
     }
     this.defaults[type].unshift(rule);
-    console.log('TEST prependRule');
-    console.log(type, rule, '==============');
-    console.log(this.defaults['string']);
   };
 
   /**
@@ -105,7 +102,10 @@ export default function() {
     /**
      * Create form defaults from schema
      */
-    service.defaults = schemaDefaults.defaultForm;
+    service.defaults = function(schema, types, ignore, options) {
+      let defaultTypes = types || typeDefault;
+      return schemaDefaults.defaultForm(schema, defaultTypes, ignore, options);
+    };
 
     //Utility functions
     /**
