@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.3
- * @date Sat, 17 Dec 2016 23:26:10 GMT
+ * @date Fri, 30 Dec 2016 13:50:21 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2016 JSON Schema Form
@@ -1706,7 +1706,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         // append the field-id to the htmlClass
         scope.form.htmlClass = scope.form.htmlClass || '';
-        scope.form.htmlClass += (scope.form.htmlClass ? ' ' : '') + scope.fieldId(false) + ' ' + scope.fieldId(false, true);
+        scope.idClass = scope.fieldId(false) + ' ' + scope.fieldId(false, true);
 
         var form = scope.form;
 
@@ -2755,9 +2755,6 @@ FIXME: real documentation
       this.defaults[type] = [];
     }
     this.defaults[type].unshift(rule);
-    console.log('TEST prependRule');
-    console.log(type, rule, '==============');
-    console.log(this.defaults['string']);
   };
 
   /**
@@ -2801,7 +2798,10 @@ FIXME: real documentation
     /**
      * Create form defaults from schema
      */
-    service.defaults = __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["schemaDefaults"].defaultForm;
+    service.defaults = function (schema, types, ignore, options) {
+      var defaultTypes = types || typeDefault;
+      return __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["schemaDefaults"].defaultForm(schema, defaultTypes, ignore, options);
+    };
 
     //Utility functions
     /**
