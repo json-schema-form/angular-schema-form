@@ -1,5 +1,13 @@
 // Karma configuration
-// Generated on Fri Feb 07 2014 08:31:06 GMT+0100 (CET)
+
+var fs = require('fs');
+var path = require('path');
+var origin = fs.existsSync(path.resolve(__dirname, '../angular-schema-form-bootstrap/dist/angular-schema-form-bootstrap.js'));
+var include = (origin)
+    ? '../angular-schema-form-bootstrap/dist/angular-schema-form-bootstrap.js'
+    : 'dist/angular-schema-form-bootstrap.js';
+console.log("Karma bootstrap:" + origin);
+
 module.exports = function(config) {
   config.set({
     // base path, that will be used to resolve files and exclude
@@ -16,8 +24,9 @@ module.exports = function(config) {
       'test/lib/angular-mocks.js',
       'bower_components/tv4/tv4.js',
       'dist/angular-schema-form.js',
-      'dist/angular-schema-form-bootstrap.js',
+      include,
       'src/**/*.spec.js'
+      //'src/**/sf-schema.directive.spec.js'
     ],
 
     // list of files to exclude
