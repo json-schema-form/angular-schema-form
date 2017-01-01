@@ -17,9 +17,9 @@ sfPath, sfSelect) {
     require: ['^sfSchema', '?^form', '?^^sfKeyController'],
     link: {
       pre: function(scope, element, attrs, ctrl) {
-        var sfSchema = ctrl[0];
-        var formCtrl = ctrl[1];
-        var keyCtrl = ctrl[2];
+        let sfSchema = ctrl[0];
+        let formCtrl = ctrl[1];
+        let keyCtrl = ctrl[2];
 
         //The ngModelController is used in some templates and
         //is needed for error messages,
@@ -30,7 +30,7 @@ sfPath, sfSelect) {
         });
 
         // Fetch our form.
-        scope.initialForm = sfSchema.lookup['f' + attrs.sfField];
+        scope.initialForm = Object.assign({}, sfSchema.lookup['f' + attrs.sfField]);
         scope.form = sfSchema.lookup['f' + attrs.sfField];
       },
       post: function(scope, element, attrs, ctrl) {
@@ -50,7 +50,8 @@ sfPath, sfSelect) {
 
             if(scope.form.key && scope.form.key.length) {
               if(typeof key[key.length-1] === 'number' && scope.form.key.length >= 1) {
-                scope.completeKey = key.concat(scope.form.key.slice(-1));
+                let trim = scope.form.key.length - key.length;
+                scope.completeKey = key.concat(scope.form.key.slice(-trim));
               }
               else {
                 scope.completeKey = scope.form.key.slice();

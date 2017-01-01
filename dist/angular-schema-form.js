@@ -1,10 +1,10 @@
 /*!
  * angular-schema-form
- * @version 1.0.0-alpha.3
- * @date Fri, 30 Dec 2016 13:50:21 GMT
+ * @version 1.0.0-alpha.4
+ * @date Sun, 01 Jan 2017 11:54:39 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
- * Copyright (c) 2014-2016 JSON Schema Form
+ * Copyright (c) 2014-2017 JSON Schema Form
  */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -1518,7 +1518,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         });
 
         // Fetch our form.
-        scope.initialForm = sfSchema.lookup['f' + attrs.sfField];
+        scope.initialForm = Object.assign({}, sfSchema.lookup['f' + attrs.sfField]);
         scope.form = sfSchema.lookup['f' + attrs.sfField];
       },
       post: function post(scope, element, attrs, ctrl) {
@@ -1538,7 +1538,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
             if (scope.form.key && scope.form.key.length) {
               if (typeof key[key.length - 1] === 'number' && scope.form.key.length >= 1) {
-                scope.completeKey = key.concat(scope.form.key.slice(-1));
+                var trim = scope.form.key.length - key.length;
+                scope.completeKey = key.concat(scope.form.key.slice(-trim));
               } else {
                 scope.completeKey = scope.form.key.slice();
               };
@@ -1818,17 +1819,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   return {
     scope: true,
     require: ['?^^sfNewArray'],
-    controller: ['$scope', function SFKeyController($scope) {
-      this.key = $scope.form && $scope.form.key ? $scope.form.key.splice(0, -2) : [];
-    }],
     link: {
       pre: function pre(scope, element, attrs, ctrl) {
-        var currentKey = sfPath.parse(attrs.sfParentKey);
-        if (currentKey.length > 1) currentKey = currentKey.splice(-1);
-
         scope.parentKey = scope.parentKey || [];
-        scope.parentKey = scope.parentKey.concat(currentKey, Number(attrs.sfIndex));
 
+        var currentKey = sfPath.parse(attrs.sfParentKey);
+        var trim = currentKey.length - scope.parentKey.length;
+
+        if (currentKey.length > 1) currentKey = currentKey.splice(-trim);
+
+        scope.parentKey = scope.parentKey.concat(currentKey, Number(attrs.sfIndex));
         scope.arrayIndex = Number(attrs.sfIndex);
         scope.arrayIndices = scope.arrayIndices || [];
         scope.arrayIndices = scope.arrayIndices.concat(scope.arrayIndex);
