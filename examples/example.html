@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Bootstrap Schema Form example</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.css">
+  <link rel="stylesheet" href="../bower_components/pickadate/lib/themes/classic.date.css">
+  <link rel="stylesheet" href="../bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.min.css">
+  <link rel="stylesheet" href="../bower_components/spectrum/spectrum.css">
+
+  <style type="text/css">
+  .spinner {
+    width: 35px;
+    height: 35px;
+    background-color: #333;
+
+    border-radius: 100%;
+    -webkit-animation: scaleout 1.0s infinite ease-in-out;
+    animation: scaleout 1.0s infinite ease-in-out;
+  }
+
+  @-webkit-keyframes scaleout {
+    0% { -webkit-transform: scale(0.0) }
+    100% {
+      -webkit-transform: scale(1.0);
+      opacity: 0;
+    }
+  }
+
+  @keyframes scaleout {
+    0% {
+      transform: scale(0.0);
+      -webkit-transform: scale(0.0);
+    } 100% {
+      transform: scale(1.0);
+      -webkit-transform: scale(1.0);
+      opacity: 0;
+    }
+  }
+
+  body,html {
+    min-height: 1400px;
+  }
+
+  .alert .form-group {
+    margin-bottom: 0px;
+  }
+
+  .red {
+    border: 1px solid red;
+    background: #fee;
+  }
+
+  .ace_editor { font-size: 20px !important;}
+  .form {  height: 400px;  }
+  .schema {  height: 800px;  }
+
+  .btw { color: #777; font-size: 90%; padding-left: 6px;}
+
+  [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+  }
+
+  .navbar-form > .form-group > .input-group {
+    margin-left: 20px;
+  }
+
+  .btn:active,
+  .btn:focus,
+  .btn.active {
+    background-image: none;
+    outline: 0;
+    -webkit-box-shadow: none;
+            box-shadow: none;
+  }
+
+  .error {
+    color: red;
+  }
+
+  .input-group-btn:last-child>.btn:not(:last-child):not(.dropdown-toggle) {
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+</style>
+</head>
+<body ng-app="test" ng-controller="TestCtrl" ng-cloak>
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand glyphicon glyphicon-home" href="/"></a>
+    </div>
+
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <form class="navbar-form navbar-left" role="search">
+        <div class="form-group">
+
+          <button class="btn btn-primary" ng-click="save();" tooltip-trigger="mouseenter" tooltip-placement="right" tooltip='Share the schema/form code.'>Save to gist</button>
+
+          <div class="input-group" ng-show="navbarMode === 'default' && !error"></div>
+          <div class="input-group" ng-show="navbarMode === 'loaded' && !error">
+            <span ng-show="loadedData.user">Loaded configuration created by {{loadedData.user}} {{loadedData.created}}.</span>
+            <div ng-show="!loadedData" class="spinner"></div>
+          </div>
+
+          <div class="input-group" ng-show="navbarMode === 'saved' && savedGistData.url && !error">
+            <div class="input-group-addon">Link</div>
+            <input type="text" class="form-control" value="{{savedGistData.url}}">
+            <span ng-if="hasFlash" class="input-group-btn">
+              <button tooltip-trigger="focus" tooltip-placement="right" tooltip='Copied to clipboard' clip-copy="savedGistData.url" class="btn btn-default copy" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+            </span>
+          </div>
+
+          <div class="input-group" ng-show="navbarMode === 'saved' && savedGistData.data.html_url && !error">
+            <div class="input-group-addon">Gist</div>
+            <input type="text" class="form-control" value="{{savedGistData.data.html_url}}">
+            <span ng-if="hasFlash" class="input-group-btn">
+              <button tooltip-trigger="focus" tooltip-placement="right" tooltip='Copied to clipboard' clip-copy="savedGistData.data.html_url" class="btn btn-default copy" type="button"><span class="glyphicon glyphicon-copy" aria-hidden="true"></span></button>
+            </span>
+          </div>
+
+          <div class="input-group" ng-show="navbarMode === 'saved' && !savedGistData && !error">
+            <div class="spinner"></div>
+          </div>
+
+          <div class="input-group error" ng-show="error">{{error}}</div>
+        </div>
+      </form>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<div class="col-md-12">
+  <h1>Schema Form Example</h1>
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>The Generated Form</h3>
+
+      <form name="ngform"
+            sf-model="modelData"
+            sf-form="form"
+            sf-schema="schema"
+            ng-submit="submitForm(ngform,modelData)"
+            sf-options="{ formDefaults: { ngModelOptions: { timezone: '+0430' } }}">
+      </form>
+
+      <div ng-show="ngform.$valid"><em>Form is valid</em></div>
+      <div ng-show="ngform.$invalid"><em>Form is not valid</em></div>
+
+      <h3>Model</h3>
+      <pre ng-cloak>{{pretty()}}</pre>
+    </div>
+    <div class="col-sm-8">
+      <h3>Select Example</h3>
+      <div class="form-group">
+        <select class="form-control" id="selectTest"
+                ng-model="selectedTest"
+                ng-options="obj.name for obj in tests">
+        </select>
+        <span class="btw">
+          By the way, there is also an example of
+          <a href="custom-validators.html">custom (async) validators</a> example.
+        </span>
+      </div>
+      <h3>Form</h3>
+      <div ui-ace="{ theme: 'monokai',mode:'json'}"
+           ng-class="{red: !itParsesForm}" ng-model="formJson" class="form-control form"></div>
+      <h3>Schema</h3>
+      <div ui-ace="{ theme: 'monokai',mode:'json'}"
+           ng-class="{red: !itParses}" ng-model="schemaJson" class="form-control schema"></div>
+    </div>
+  </div>
+  <div>
+      <p>
+          <small>
+              <a href="../jslicense.html" rel="jslicense">JavaScript license information</a>
+          </small>
+      </p>
+  </div>
+</div>
+
+<script type="text/ng-template" id="template/tooltip/tooltip-popup.html">
+  <div class="tooltip {{placement}} {{class}}" ng-class="{ in: isOpen(), fade: animation() }">
+    <div class="tooltip-arrow"></div>
+    <div class="tooltip-inner" ng-bind="content"></div>
+  </div>
+</script>
+
+<script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery.ui@1.10"></script>
+<script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
+<script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
+<script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ng-clip/0.2.6/ng-clip.min.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap.min.js"></script>
+<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script> -->
+<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-sanitize.min.js"></script> -->
+
+
+<script type="text/javascript" src="../bower_components/angular-ui-sortable/sortable.js"></script>
+<script type="text/javascript" src="../bower_components/angular-ui-ace/ui-ace.js"></script>
+<!-- <script type="text/javascript" src="../bower_components/pickadate/lib/picker.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/picker.date.js"></script>
+<script type="text/javascript" src="../bower_components/pickadate/lib/translations/nl_NL.js"></script> -->
+
+<!-- <script type="text/javascript" src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
+<script type="text/javascript" src="../bower_components/tx-tinymce/tx-tinymce.js"></script> -->
+
+<!-- <script type="text/javascript" src="../bower_components/spectrum/spectrum.js"></script>
+<script type="text/javascript" src="../bower_components/spectrum/i18n/jquery.spectrum-sv.js"></script>
+<script type="text/javascript" src="../bower_components/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js"></script> -->
+
+<script type="text/javascript" src="../dist/schema-form.js"></script>
+<script src="../bower_components/objectpath/lib/ObjectPath.js"></script>
+<script type="text/javascript" src="../dist/bootstrap-decorator.js"></script>
+<script type="text/javascript" src="add-on/calculate.js"></script>
+<!-- <script type="text/javascript" src="../bower_components/angular-schema-form-datepicker/bootstrap-datepicker.min.js"></script> -->
+<!-- <script type="text/javascript" src="../bower_components/angular-schema-form-colorpicker/bootstrap-colorpicker.min.js"></script> -->
+
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&dn=expat.txt Expat
+//
+// To test the tinymce addon, uncomment the files above and inject 'tx-tinymce' below.
+/*global alert*/
+var app = angular.module('test', ['schemaForm', 'ui.ace', 'ngClipboard', 'ui.bootstrap.tooltip']);
+app.controller('TestCtrl', function($scope, $http, $location) {
+
+  $scope.tests = [
+    { name: "Simple", data: 'data/simple.json' },
+    { name: "Basic JSON Schema Type", data: 'data/types.json' },
+    { name: "Bootstrap Grid", data: 'data/grid.json' },
+    { name: "Complex Key Support", data: 'data/complex-keys.json' },
+    { name: "Array", data: 'data/array.json' },
+    { name: "Tab Array", data: 'data/tabarray.json' },
+    { name: "Deep Array", data: 'data/deep-array.json' },
+    //{ name: "Array Radio-Buttons", data: 'data/array-radiobuttons.json' },
+    { name: "TitleMap Examples", data: 'data/titlemaps.json' },
+    { name: "Kitchen Sink", data: 'data/sink.json' },
+    { name: "Calculate", data: 'data/calculate.json' },
+    { name: "Hack: Conditional required", data: 'data/conditional-required.json' }
+  ];
+
+  $scope.navbarMode = 'default';
+  $scope.hasFlash = swfobject.hasFlashPlayerVersion('9');
+
+  // Load data from gist.
+  if ($location.path().length > 4) {
+    $scope.navbarMode = 'loaded';
+    var gistId = $location.path().replace('/','');
+    $scope.loading = true;
+    $http.get('https://api.github.com/gists/' + gistId).success(function(res) {
+      $scope.error = null;
+      $scope.tests.unshift({name: 'Gist'});
+      $scope.selectedTest = $scope.tests[0];
+      $scope.loadedData = {
+        created: moment(res.created_at).fromNow(),
+        user: res.user !== null ? res.user.login : 'Anonymous'
+      }
+      $scope.loading = false;
+      $scope.schemaJson = res.files['schema.json'].content;
+      $scope.formJson   = res.files['form.json'].content;
+      $scope.modelData  = JSON.parse(res.files['model.json'].content);
+    }).error(function() {
+      $scope.loadedData = 'dummy';
+      $scope.error = 'Failed to load gist.';
+      $scope.selectedTest = $scope.tests[0];
+    });
+  } else {
+    $scope.selectedTest = $scope.tests[0];
+  }
+
+  $scope.$watch('selectedTest',function(val){
+    if (val && val.data !== undefined) {
+      $http.get(val.data).then(function(res) {setNewData(res.data);});
+    }
+  });
+
+  $scope.decorator = 'bootstrap-decorator';
+
+  $scope.itParses     = true;
+  $scope.itParsesForm = true;
+
+
+  $scope.$watch('schemaJson',function(val,old){
+    if (val && val !== old) {
+      try {
+        $scope.schema = JSON.parse($scope.schemaJson);
+        $scope.itParses = true;
+      } catch (e){
+        $scope.itParses = false;
+      }
+    }
+  });
+
+  $scope.$watch('formJson',function(val,old){
+    if (val && val !== old) {
+      try {
+        $scope.form = JSON.parse($scope.formJson);
+        $scope.itParsesForm = true;
+      } catch (e){
+        $scope.itParsesForm = false;
+      }
+    }
+  });
+
+  var setNewData = function(data) {
+    $scope.schema = data.schema;
+    $scope.form   = data.form;
+    $scope.schemaJson = JSON.stringify($scope.schema,undefined,2);
+    $scope.formJson   = JSON.stringify($scope.form,undefined,2);
+    $scope.modelData = data.model || {};
+  };
+
+  $scope.pretty = function(){
+    return typeof $scope.modelData === 'string' ? $scope.modelData : JSON.stringify($scope.modelData, undefined, 2);
+  };
+
+  $scope.log = function(msg){
+    console.log("Simon says",msg);
+  };
+
+  $scope.sayNo = function() {
+    alert('Noooooooo');
+  };
+
+  $scope.say = function(msg) {
+    alert(msg);
+  };
+
+  $scope.save = function() {
+    // To be able to save invalid json and point out errors, we
+    // don't save the schema/form but rather the ones in the input.
+
+    $scope.navbarMode = 'saved';
+
+    var gist = {
+      "description": "A saved configuration for a schema form example, http://textalk.github.io/angular-schema-form/examples/bootstrap-example.html",
+      "public": true,
+      "files": {
+        "schema.json": {
+          "content": $scope.schemaJson
+        },
+        "form.json": {
+          "content": $scope.formJson
+        },
+        "model.json": {
+          "content": JSON.stringify($scope.modelData, undefined, 2)
+        }
+      }
+    };
+
+    $http.post('https://api.github.com/gists', gist).success(function(data) {
+      $scope.error = null;
+      $location.path('/' + data.id);
+      $scope.savedGistData = {
+        data: data,
+        url: $location.absUrl()
+      };
+    }).error(function() {
+      $scope.error = 'Failed to save gist.';
+    });
+  };
+
+  $scope.submitForm = function(form) {
+    // First we broadcast an event so all fields validate themselves
+    $scope.$broadcast('schemaFormValidate');
+    // Then we check if the form is valid
+    if (form.$valid) {
+      alert('You did it!');
+    }
+  };
+
+});
+// @license-end
+</script>
+</body>
+</html>

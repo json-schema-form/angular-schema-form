@@ -1,0 +1,28 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Comment",
+    "properties": {
+      "name":  {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": ["Bob"]
+          },
+          {
+            "type": "string",
+            "pattern": "^\\S+ \\S+$"
+          }
+        ]
+      }
+    },
+    "required": ["name"]
+  },
+  "form": [
+    {
+      "key": "name",
+      "title": "Name"
+    }
+
+  ]
+}

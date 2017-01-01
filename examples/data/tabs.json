@@ -1,0 +1,85 @@
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "clan": {
+        "title": "Ninja Clan",
+        "description": "Which clan do you wish to complete your task?",
+        "type": "string",
+        "enum": [ "Iga", "koga" ]
+      },
+      "armySize": {
+        "type": "number",
+        "title": "How many Ninja will be required?",
+        "min": 1,
+        "max": 7
+      },
+      "weaponOfChoice": {
+        "type": "string",
+        "title": "Favourite tool",
+        "enum": ["Nunchuku","Sai","Hanbo","Tonfa"]
+      },
+      "colour": {
+        "type": "string",
+        "title": "Color preference",
+        "enum": ["Black"]
+      },
+      "date": {
+        "title": "Date of assault",
+        "type": "string",
+        "format": "date"
+      },
+      "victim": {
+        "title": "Target",
+        "type": "string"
+      },
+      "assassinationStyle": {
+        "title": "How would you like to dispatch your target?",
+        "type": "string",
+        "enum": [ "With honour", "With much blood", "With much suffering" ]
+      },
+      "fee": {
+        "title": "I accept late fee payment will result in a most dishonourable and painfully slow death",
+        "type": "boolean"
+      },
+      "suggestions": {
+        "title": "Any suggestions based on local knowledge?",
+        "type": "string"
+      }
+    }
+  },
+  "form": [
+    {
+      "type": "tabs",
+      "tabs": [
+        {
+          "title": "Ninja Details",
+          "items": [
+            "clan",
+            "armySize",
+            "weaponOfChoice",
+            "colour"
+          ]
+        },
+        {
+          "title": "Job Properties",
+          "items": [
+            "date",
+            "victim",
+            "assassinationStyle",
+            "fee"
+          ]
+        },
+        {
+          "title": "Further Information",
+          "items": [
+            {
+              "key":"suggestions",
+              "type": "textarea"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

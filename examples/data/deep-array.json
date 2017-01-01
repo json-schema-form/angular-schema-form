@@ -1,0 +1,98 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Comment",
+    "required": ["users"],
+    "properties": {
+      "users": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name":  {
+              "title": "Name",
+              "type": "string"
+            },
+            "comments": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "comment": {
+                    "title": "Comment",
+                    "type": "string",
+                    "maxLength": 20,
+                    "validationMessage": "Don't be greedy!"
+                  },
+                  "tags": {
+                    "title": "Tags",
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "tag": {
+                          "title": "Tag",
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "maxLength": 5
+                  }
+                },
+                "required": ["comment"]
+              }
+            }
+          },
+          "required": ["name"]
+        }
+      }
+    }
+  },
+  "form": [
+    {
+      "type": "help",
+      "helpvalue": "<h4>Array Example</h4><p>Try adding a couple of forms, reorder by drag'n'drop.</p>"
+    },
+    {
+      "key": "users",
+  	  "type": "tabarray",
+  	  "add": "New",
+  	  "style": {
+    		"add": "btn-success"
+  	  },
+      "items": [
+        "users[].name",
+        {
+          "key": "users[].comments",
+          "items": [
+            {
+              "key": "users[].comments[].comment",
+              "type": "textarea"
+            },
+            {
+              "key": "users[].comments[].tags",
+              "items": [
+                {
+                  "key": "users[].comments[].tags[].tag",
+                  "type": "text",
+                  "onChange": "log(path('model.users[]').name.length)"
+                },
+                {
+                  "key": "users[].comments[].tags[].brad",
+                  "condition": "path('model.users[]').name.length",
+                  "type": "string",
+                  "default": "Brad"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "submit",
+      "style": "btn-info",
+      "title": "OK"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Comment",
+    "properties": {
+      "name":  {
+        "title": "Name",
+        "type": "string"
+      },
+      "date":  {
+        "title": "Date",
+        "type": "string",
+        "format":"date"
+      },
+      "age":  {
+        "title": "Age",
+        "type": "number",
+        "minimum": 17,
+        "maximum": 66,
+        "step": 1,
+        "exclusiveMinimum": true,
+        "exclusiveMaximum": true
+      },
+      "email":  {
+        "title": "Email",
+        "type": "string",
+        "pattern": "^\\S+@\\S+$",
+        "description": "Email will be used for evil."
+      },
+      "comment": {
+        "title": "Comment",
+        "type": "string",
+        "maxLength": 20,
+        "validationMessage": "Don't be greedy!"
+      }
+    },
+    "required": ["name","email","comment"]
+  },
+  "form": [
+    "name",
+    "date",
+    "age",
+    "email",
+    {
+      "key": "comment",
+      "type": "textarea",
+      "placeholder": "Make a comment"
+    },
+    {
+      "type": "submit",
+	  "style": "btn-info",
+      "title": "OK"
+    }
+  ]
+}
