@@ -9,9 +9,9 @@ Angular Schema Form
 
 Generate forms from JSON schemas using AngularJS!
 
-The Update
-==========
-Current development is occuring on the [feature/webpack-babel](https://github.com/json-schema-form/angular-schema-form/blob/feature/webpack-babel/README.md) branch. Once that is stable and passing all tests again it will be replace the current developer branch. Ideally any new PRs should target the new version to avoid migration issues.
+0.x Support
+===========
+This branch is for supporting any 0.x releases currently `0.8.13`. This will only be for fixing issues with that version, new features should be targeted at `development` branch instead.
 
 The Blog / The Web Site / The Twitter / The Movie
 =================================================
