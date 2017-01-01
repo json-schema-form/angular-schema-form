@@ -129,7 +129,7 @@ So whats in a template? You usually need a couple of things:
 Basic template example:
 ```html
 <div> <!-- Surrounding DIV for sfField builder to add a sfField directive to. -->
-  <label>{{form.title}}</div>
+  <label>{{form.title}}</label>
   <input sf-field-model schema-validate="form" type="text">
   <div sf-message="form.description"></div>
 </div>
