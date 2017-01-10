@@ -43,7 +43,7 @@ angular.module('schemaForm').provider('sfPath',
   // if we're on Angular 1.2.x, we need to continue using dot notation
   if (angular.version.major === 1 && angular.version.minor < 3) {
     sfPath.stringify = function(arr) {
-      return Array.isArray(arr) ? arr.join('.') : arr.toString();
+      return Array.isArray(arr) ? arr.join('.') : arr;
     };
   } else {
     sfPath.stringify = ObjectPath.stringify;
@@ -256,6 +256,9 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       lookup = lookup || Object.create(null);
       path = path || 'schemaForm.form';
       var container = document.createDocumentFragment();
+      if(items === undefined) {
+        return container;
+      }
       items.reduce(function(frag, f, index) {
 
         // Sanity check.
@@ -597,11 +600,20 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                         // Set the new validation message if one is supplied
                         // Does not work when validationMessage is just a string.
+                        // @overridden: if validationMessage is a string - it will overwrite it
+                        // with new message and when we get rid of error - take back original string
                         if (validationMessage) {
                           if (!form.validationMessage) {
                             form.validationMessage = {};
+                          } else {
+                            var defaultMessage = form.validationMessage
+                            form.validationMessage = {};
+                            form.validationMessage['defaultMessage'] = defaultMessage;
                           }
                           form.validationMessage[error] = validationMessage;
+                        } else if (form.validationMessage !== undefined && form.validationMessage['defaultMessage'] != undefined) {
+                          var defaultMessage = form.validationMessage['defaultMessage'];
+                          form.validationMessage = defaultMessage;
                         }
 
                         scope.ngModel.$setValidity(error, validity === true);
@@ -1319,6 +1331,41 @@ angular.module('schemaForm').provider('schemaForm',
                     .concat(stdForm.form)
                     .concat(form.slice(idx + 1));
       }
+      
+      var itemsToRemove = [];
+
+      //we iterate over merged form and merge form definition into schema. After that, we are removing items which provided attributes for correct ones
+      //this is neccessary to get form fields in correct order and not have duplicated fields, for some reason schema-form is not doing this, so we do it here
+      form.forEach(function (item) {
+
+        if (item.key !== undefined && Array.isArray(item.key) && item.key[0] !== undefined) {
+
+          form.some( function (attrProvider) {
+
+            if (attrProvider.key !== undefined && attrProvider.key === item.key[0]) {
+
+              for (var attrname in attrProvider) {
+                item[attrname] = attrProvider[attrname];
+              }
+
+              //itemsToRemove.push(attrProvider);
+              attrProvider.key = 'toRemove';
+
+              return true;
+            }
+
+            return false;
+          });
+        }
+      });
+
+      // itemsToRemove.forEach( function (item) {
+      //   form.splice(item, 1);
+      // });
+
+      form = form.filter(function( item ) {
+        return item.key !== 'toRemove';
+      });
 
       //ok let's merge!
       //We look at the supplied form and extend it with schema standards
@@ -2102,11 +2149,20 @@ angular.module('schemaForm').directive('sfField',
 
                     // Set the new validation message if one is supplied
                     // Does not work when validationMessage is just a string.
+                    // @overridden: if validationMessage is a string - it will overwrite it
+                    // with new message and when we get rid of error - take back original string
                     if (validationMessage) {
                       if (!form.validationMessage) {
                         form.validationMessage = {};
+                      } else {
+                        var defaultMessage = form.validationMessage
+                        form.validationMessage = {};
+                        form.validationMessage['defaultMessage'] = defaultMessage;
                       }
                       form.validationMessage[error] = validationMessage;
+                    } else if (form.validationMessage !== undefined && form.validationMessage['defaultMessage'] != undefined) {
+                      var defaultMessage = form.validationMessage['defaultMessage'];
+                      form.validationMessage = defaultMessage;
                     }
 
                     scope.ngModel.$setValidity(error, validity === true);
