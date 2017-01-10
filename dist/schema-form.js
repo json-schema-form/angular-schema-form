@@ -1912,7 +1912,7 @@ angular.module('schemaForm').directive('sfChanged', function() {
       if (form && form.onChange) {
         ctrl.$viewChangeListeners.push(function() {
           if (angular.isFunction(form.onChange)) {
-            form.onChange(ctrl.$modelValue, form);
+            form.onChange.call(scope, ctrl.$modelValue, form);
           } else {
             scope.evalExpr(form.onChange, {'modelValue': ctrl.$modelValue, form: form});
           }
@@ -2801,7 +2801,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
           // Check if our version of angular has validators, i.e. 1.3+
           if (form[attr] && ngModel[attr]) {
             angular.forEach(form[attr], function(fn, name) {
-              ngModel[attr][name] = fn;
+              ngModel[attr][name] = fn.bind(scope);
             });
           }
         });
