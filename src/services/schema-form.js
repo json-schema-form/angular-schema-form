@@ -70,12 +70,26 @@ angular.module('schemaForm').provider('schemaForm',
     var f = options.global && options.global.formDefaults ?
             angular.copy(options.global.formDefaults) : {};
     if (options.global && options.global.supressPropertyTitles === true) {
-      f.title = schema.title;
+      if (typeof schema.title === 'function') {
+        f.title = schema.title();
+      } else {
+        f.title = schema.title;
+      }
     } else {
-      f.title = schema.title || name;
+      if (typeof schema.title === 'function') {
+        f.title = schema.title() || name;
+      } else {
+        f.title = schema.title || name;
+      }
     }
 
-    if (schema.description) { f.description = schema.description; }
+    if (schema.description) {
+      if (typeof f.description === 'function') {
+        f.description = schema.description();
+      } else {
+        f.description = schema.description;
+      }
+    }
     if (options.required === true || schema.required === true) { f.required = true; }
     if (schema.maxLength) { f.maxlength = schema.maxLength; }
     if (schema.minLength) { f.minlength = schema.minLength; }
