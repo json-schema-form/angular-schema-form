@@ -123,10 +123,6 @@ angular.module('schemaForm')
           // I.e. just rendered the form so we know not to validate
           // empty fields.
           childScope.firstDigest = true;
-          // We use a ordinary timeout since we don't need a digest after this.
-          setTimeout(function() {
-            childScope.firstDigest = false;
-          }, 0);
 
           //compile only children
           $compile(element.children())(childScope);

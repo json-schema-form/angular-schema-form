@@ -20,6 +20,7 @@ function(sel, sfPath, schemaForm) {
         // validateField method is exported by schema-validate
         if (scope.ngModel && scope.ngModel.$pristine && scope.firstDigest &&
             (!scope.options || scope.options.validateOnRender !== true)) {
+          scope.firstDigest = false;
           return;
         } else if (scope.validateField) {
           scope.validateField();

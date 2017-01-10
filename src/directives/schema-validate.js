@@ -152,6 +152,7 @@ angular.module('schemaForm').directive('schemaValidate', ['sfValidator', '$parse
           // we usually don't want that.
           if (ngModel.$pristine  && scope.firstDigest &&
               (!scope.options || scope.options.validateOnRender !== true))  {
+            scope.firstDigest = false;
             return val;
           }
           validate(ngModel.$modelValue);
