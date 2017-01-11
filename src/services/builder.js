@@ -113,6 +113,34 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
         }
       }
     },
+    //This is gross, but kind of clean at the same time...
+    oneOfTransclusion: function(args) {
+      var d = document;
+      var transclusions = args.fieldFrag.querySelectorAll('[sf-field-oneof-transclude]');
+
+      if (transclusions.length) {
+        for (var i = 0; i < transclusions.length; i++) {
+          var n = transclusions[i];
+
+          // The sf-transclude attribute is not a directive,
+          // but has the name of what we're supposed to
+          // traverse. Default to `items`
+          var sub = n.getAttribute('sf-field-oneof-transclude') || 'items';
+          var items = args.form[sub];
+          var modelValue = "selectors" + sfPathProvider.stringify(args.form['key']).replace(/"/g, '&quot;');
+
+          if (items) {            
+            for (var i = 0; i < items.length; i++) {
+              var hideDiv = d.createElement('div');
+              hideDiv.setAttribute('ng-show', modelValue + " == " + "\'" + items[i]['title'] + "\'");
+
+              var childFrag = args.build([items[i]], args.path + '.' + sub, args.state);
+              n.appendChild(hideDiv).appendChild(childFrag);
+            }
+          }
+        }
+      }
+    },
     condition: function(args) {
       // Do we have a condition? Then we slap on an ng-if on all children,
       // but be nice to existing ng-if.

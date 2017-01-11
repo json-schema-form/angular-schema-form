@@ -65,6 +65,81 @@ angular.module('schemaForm').provider('sfPath',
   };
 }]);
 
+/**
+ * @ngdoc service
+ * @name sfSelect
+ * @kind function
+ *
+ */
+angular.module('schemaForm').factory('sfSelect', ['sfPath', function(sfPath) {
+  var numRe = /^\d+$/;
+
+  /**
+    * @description
+    * Utility method to access deep properties without
+    * throwing errors when things are not defined.
+    * Can also set a value in a deep structure, creating objects when missing
+    * ex.
+    * var foo = Select('address.contact.name',obj)
+    * Select('address.contact.name',obj,'Leeroy')
+    *
+    * @param {string} projection A dot path to the property you want to get/set
+    * @param {object} obj   (optional) The object to project on, defaults to 'this'
+    * @param {Any}    valueToSet (opional)  The value to set, if parts of the path of
+    *                 the projection is missing empty objects will be created.
+    * @returns {Any|undefined} returns the value at the end of the projection path
+    *                          or undefined if there is none.
+    */
+  return function(projection, obj, valueToSet) {
+    if (!obj) {
+      obj = this;
+    }
+    //Support [] array syntax
+    var parts = typeof projection === 'string' ? sfPath.parse(projection) : projection;
+
+    if (typeof valueToSet !== 'undefined' && parts.length === 1) {
+      //special case, just setting one variable
+      obj[parts[0]] = valueToSet;
+      return obj;
+    }
+
+    if (typeof valueToSet !== 'undefined' &&
+        typeof obj[parts[0]] === 'undefined') {
+       // We need to look ahead to check if array is appropriate
+      obj[parts[0]] = parts.length > 2 && numRe.test(parts[1]) ? [] : {};
+    }
+
+    var value = obj[parts[0]];
+    for (var i = 1; i < parts.length; i++) {
+      // Special case: We allow JSON Form syntax for arrays using empty brackets
+      // These will of course not work here so we exit if they are found.
+      if (parts[i] === '') {
+        return undefined;
+      }
+      if (typeof valueToSet !== 'undefined') {
+        if (i === parts.length - 1) {
+          //last step. Let's set the value
+          value[parts[i]] = valueToSet;
+          return valueToSet;
+        } else {
+          // Make sure to create new objects on the way if they are not there.
+          // We need to look ahead to check if array is appropriate
+          var tmp = value[parts[i]];
+          if (typeof tmp === 'undefined' || tmp === null) {
+            tmp = numRe.test(parts[i + 1]) ? [] : {};
+            value[parts[i]] = tmp;
+          }
+          value = tmp;
+        }
+      } else if (value) {
+        //Just get nex value.
+        value = value[parts[i]];
+      }
+    }
+    return value;
+  };
+}]);
+
 
 // FIXME: type template (using custom builder)
 angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(sfPathProvider) {
@@ -78,9 +153,19 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
   };
   var formId = 0;
 
+  if (!("firstElementChild" in document.createDocumentFragment())) {
+    Object.defineProperty(DocumentFragment.prototype, "firstElementChild", {
+      get: function () {
+        for (var nodes = this.childNodes, n, i = 0, l = nodes.length; i < l; ++i)
+          if (n = nodes[i], 1 === n.nodeType) return n;
+        return null;
+      }
+    });
+  }
+
   var builders = {
     sfField: function(args) {
-      args.fieldFrag.firstChild.setAttribute('sf-field', formId);
+      args.fieldFrag.firstElementChild.setAttribute('sf-field', formId);
 
       // We use a lookup table for easy access to our form.
       args.lookup['f' + formId] = args.form;
@@ -170,6 +255,34 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
         }
       }
     },
+    //This is gross, but kind of clean at the same time...
+    oneOfTransclusion: function(args) {
+      var d = document;
+      var transclusions = args.fieldFrag.querySelectorAll('[sf-field-oneof-transclude]');
+
+      if (transclusions.length) {
+        for (var i = 0; i < transclusions.length; i++) {
+          var n = transclusions[i];
+
+          // The sf-transclude attribute is not a directive,
+          // but has the name of what we're supposed to
+          // traverse. Default to `items`
+          var sub = n.getAttribute('sf-field-oneof-transclude') || 'items';
+          var items = args.form[sub];
+          var modelValue = "selectors" + sfPathProvider.stringify(args.form['key']).replace(/"/g, '&quot;');
+
+          if (items) {            
+            for (var i = 0; i < items.length; i++) {
+              var hideDiv = d.createElement('div');
+              hideDiv.setAttribute('ng-show', modelValue + " == " + "\'" + items[i]['title'] + "\'");
+
+              var childFrag = args.build([items[i]], args.path + '.' + sub, args.state);
+              n.appendChild(hideDiv).appendChild(childFrag);
+            }
+          }
+        }
+      }
+    },
     condition: function(args) {
       // Do we have a condition? Then we slap on an ng-if on all children,
       // but be nice to existing ng-if.
@@ -200,7 +313,7 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
       var items = args.fieldFrag.querySelector('[schema-form-array-items]');
       if (items) {
         state = angular.copy(args.state);
-        state.keyRedaction = state.keyRedaction || 0;
+        state.keyRedaction = 0;
         state.keyRedaction += args.form.key.length + 1;
 
         // Special case, an array with just one item in it that is not an object.
@@ -580,10 +693,18 @@ angular.module('schemaForm').provider('schemaFormDecorators',
                   // It looks better with dot notation.
                   scope.$on(
                     'schemaForm.error.' + form.key.join('.'),
-                    function(event, error, validationMessage, validity) {
+                    function(event, error, validationMessage, validity, formName) {
+                      // validationMessage and validity are mutually exclusive
+                      formName = validity;
                       if (validationMessage === true || validationMessage === false) {
                         validity = validationMessage;
                         validationMessage = undefined;
+                      }
+
+                      // If we have specified a form name, and this model is not within
+                      // that form, then leave things be.
+                      if(formName != undefined && scope.ngModel.$$parentForm.$name !== formName) {
+                        return;
                       }
 
                       if (scope.ngModel && error) {
@@ -1027,6 +1148,14 @@ angular.module('schemaForm').provider('schemaForm',
     return titleMap;
   };
 
+  var oneOfToTitleMap = function(ones) {
+    var titleMap = [];
+    ones.forEach(function(one) {
+      titleMap.push({name: one.title, value: one.title})
+    })
+    return titleMap;
+  }
+
   // Takes a titleMap in either object or list format and returns one in
   // in the list format.
   var canonicalTitleMap = function(titleMap, originalEnum) {
@@ -1099,6 +1228,109 @@ angular.module('schemaForm').provider('schemaForm',
     return f;
   };
 
+  var combinePropertyDependencies = function(schema) {
+    if (schema.hasOwnProperty('dependencies')) {
+      var deps = {};
+      angular.forEach(schema.dependencies, function(v, k) {
+        /*
+         * BigCommerce specific JSON Schema logic -
+         * A field with `_attr_*` will always be dependent on some other field,
+         * so do not make it a key for creating row objects.
+         */
+        if (k.indexOf('_attr_') === -1 && !deps.hasOwnProperty(v)) {
+          deps[k] = v;
+        }
+      })
+
+      angular.forEach(schema.properties, function(v, k) {
+        if (deps.hasOwnProperty(k)) {
+          var props         = 'properties'; 
+          var propertyKey   = k.concat('Group');
+          var required      = schema.required && schema.required.indexOf(k) != -1;
+          var gatheredReqs  = [];
+          var gatheredProps = {};
+
+
+          gatheredProps[k] = schema[props][k];
+          delete schema[props][k];
+
+          if (deps[k] && Array === deps[k].constructor) {
+            for (var dep = 0; dep < deps[k].length; dep++) {
+              gatheredProps[deps[k][dep]] = schema[props][deps[k][dep]]
+              delete schema[props][deps[k]]
+
+              if (required && gatheredReqs.indexOf(deps[k][dep]) === -1) {
+                gatheredReqs.push(deps[k][dep]);
+              }
+            }
+          }
+          else {
+            gatheredProps[deps[k]] = schema[propers[deps[k]]]
+            delete schema[props][deps[k]]
+          }
+
+          if (required && gatheredReqs.indexOf(k) === -1) {
+            gatheredReqs.push(k);
+          }
+
+          console.log(gatheredReqs);
+
+          schema[props][propertyKey] = {
+            id: propertyKey,
+            type: 'row',
+            properties: gatheredProps,
+            required: gatheredReqs,
+          };  
+        }
+      });
+    }    
+
+    return schema.properties;  
+  };
+
+  var sortRequiredObjectsDesc = function(required, objectFieldNames, form) {
+    return form.sort(function(curr, next) {
+      var isCurrObject = objectFieldNames.indexOf(curr.type) != -1;
+      var isNextObject = objectFieldNames.indexOf(next.type) != -1;
+      var isCurrRequired = required.indexOf(curr.title) != -1;
+      var isNextRequired = required.indexOf(next.title) != -1;
+
+      if (isCurrObject && isCurrRequired) {
+        if (isNextObject && isNextRequired) {
+          return 0;
+        }
+        return -1;
+      }
+
+      if (isCurrObject && !isCurrRequired) {
+        if (isNextRequired) {
+          return 1;
+        }
+        if (isNextObject) {
+          return 0;
+        }
+        return -1;
+      }
+
+      if (!isCurrObject && isCurrRequired) {
+        if (!isNextRequired) {
+          return -1;
+        }
+        if (isNextObject) {
+          return 1;
+        }
+        return 0;
+      }
+
+      if (!isCurrObject && !isCurrRequired) {
+        if (!isNextObject && !isNextRequired) {
+          return 0;
+        }
+        return -1;
+      }   
+    })   
+  };
+
   var text = function(name, schema, options) {
     if (stripNullType(schema.type) === 'string' && !schema['enum']) {
       var f = stdFormObj(name, schema, options);
@@ -1167,15 +1399,90 @@ angular.module('schemaForm').provider('schemaForm',
     }
   };
 
-  var fieldset = function(name, schema, options) {
-    if (stripNullType(schema.type) === 'object') {
+  var row = function(name, schema, options) {
+    if (stripNullType(schema.type) === 'row') {
       var f   = stdFormObj(name, schema, options);
-      f.type  = 'fieldset';
+      f.type  = 'row';
+      f.key   = options.path;
       f.items = [];
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+
+      angular.forEach(schema.properties, function(v, k) {
+        var rowPath = options.path.slice();
+        rowPath.pop(); //get rid of modifier not part of schema
+        rowPath.push(k);
+
+        if (options.ignore[sfPathProvider.stringify(rowPath)] !== true) {
+          var required = schema.required && schema.required.indexOf(k) !== -1;
+
+          var def = defaultFormDefinition(k, v, {
+            path: rowPath,
+            required: required || false,
+            lookup: options.lookup,
+            ignore: options.ignore,
+            global: options.global
+          });
+          if (def) {
+            f.items.push(def);
+          }
+        }
+      });
+
+      return f;
+    }
+  };
+
+  var fieldselect = function(name, schema, options) {
+    if (stripNullType(schema.type) === 'object' && schema.hasOwnProperty('oneOf')) {
+      var f   = stdFormObj(name, schema, options);
+      f.type  = 'fieldselect';
+      f.items = [];
+      f.key   = options.path;
+      if (!f.titleMap) {
+        f.titleMap = oneOfToTitleMap(schema['oneOf']);
+      }
       options.lookup[sfPathProvider.stringify(options.path)] = f;
 
       //recurse down into properties
       angular.forEach(schema.properties, function(v, k) {
+        var path = options.path.slice();
+        path.push(k);
+
+        if (options.ignore[sfPathProvider.stringify(path)] !== true) {
+          var required = schema.required && schema.required.indexOf(k) !== -1;
+
+          var def = defaultFormDefinition(k, v, {
+            path: path,
+            required: required || false,
+            lookup: options.lookup,
+            ignore: options.ignore,
+            global: options.global
+          });
+          if (def) {
+            f.items.push(def);
+          }
+        }
+      });
+
+      return f;
+    }
+  };
+
+  var fieldset = function(name, schema, options) {
+    if (stripNullType(schema.type) === 'object') {
+      var f   = stdFormObj(name, schema, options);
+      f.type  = 'fieldset';
+      f.key   = options.path;
+      f.items = [];
+      options.lookup[sfPathProvider.stringify(options.path)] = f;
+
+      var modifiedProperties = combinePropertyDependencies(schema);
+      if (schema.hasOwnProperty('dependencies')) {
+        f.dependencies = schema.dependencies;
+      }
+
+      //recurse down into properties
+      angular.forEach(modifiedProperties, function(v, k) {
         var path = options.path.slice();
         path.push(k);
         if (options.ignore[sfPathProvider.stringify(path)] !== true) {
@@ -1196,11 +1503,9 @@ angular.module('schemaForm').provider('schemaForm',
 
       return f;
     }
-
   };
 
   var array = function(name, schema, options) {
-
     if (stripNullType(schema.type) === 'array') {
       var f   = stdFormObj(name, schema, options);
       f.type  = 'array';
@@ -1235,11 +1540,12 @@ angular.module('schemaForm').provider('schemaForm',
   //Order has importance. First handler returning an form snippet will be used.
   var defaults = {
     string:  [select, text],
-    object:  [fieldset],
+    object:  [fieldselect, fieldset],
     number:  [number],
     integer: [integer],
     boolean: [checkbox],
-    array:   [checkboxes, array]
+    array:   [checkboxes, array],
+    row:     [row],
   };
 
   var postProcessFn = function(form) { return form; };
@@ -1387,9 +1693,9 @@ angular.module('schemaForm').provider('schemaForm',
         // Special case: checkbox
         // Since have to ternary state we need a default
         if (obj.type === 'checkbox' && angular.isUndefined(obj.schema['default'])) {
-          obj.schema['default'] = false;
+          obj.schema['default'] = undefined;
         }
-        
+
         // Special case: template type with tempplateUrl that's needs to be loaded before rendering
         // TODO: this is not a clean solution. Maybe something cleaner can be made when $ref support
         // is introduced since we need to go async then anyway
@@ -1411,22 +1717,33 @@ angular.module('schemaForm').provider('schemaForm',
       globalOptions = globalOptions || {};
 
       if (stripNullType(schema.type) === 'object') {
-        angular.forEach(schema.properties, function(v, k) {
+        var modifiedProperties = combinePropertyDependencies(schema);
+
+        angular.forEach(modifiedProperties, function(v, k) {
           if (ignore[k] !== true) {
             var required = schema.required && schema.required.indexOf(k) !== -1;
             var def = defaultFormDefinition(k, v, {
-              path: [k],         // Path to this property in bracket notation.
-              lookup: lookup,    // Extra map to register with. Optimization for merger.
-              ignore: ignore,    // The ignore list of paths (sans root level name)
-              required: required, // Is it required? (v4 json schema style)
+              path: [k],            // Path to this property in bracket notation.
+              lookup: lookup,       // Extra map to register with. Optimization for merger.
+              ignore: ignore,       // The ignore list of paths (sans root level name)
+              required: required,   // Is it required? (v4 json schema style)
               global: globalOptions // Global options, including form defaults
             });
+
             if (def) {
               form.push(def);
             }
           }
         });
 
+        if (schema.required && Array === schema.required.constructor) {
+          var fields = [];
+          for (var i = 0; i < defaults.object.length; i++) {
+            fields.push(defaults.object[i]['name']);
+          }
+          
+          form = sortRequiredObjectsDesc(schema.required, fields, form);
+        }
       } else {
         throw new Error('Not implemented. Only type "object" allowed at root level of schema.');
       }
@@ -1479,81 +1796,6 @@ angular.module('schemaForm').provider('schemaForm',
     return service;
   };
 
-}]);
-
-/**
- * @ngdoc service
- * @name sfSelect
- * @kind function
- *
- */
-angular.module('schemaForm').factory('sfSelect', ['sfPath', function(sfPath) {
-  var numRe = /^\d+$/;
-
-  /**
-    * @description
-    * Utility method to access deep properties without
-    * throwing errors when things are not defined.
-    * Can also set a value in a deep structure, creating objects when missing
-    * ex.
-    * var foo = Select('address.contact.name',obj)
-    * Select('address.contact.name',obj,'Leeroy')
-    *
-    * @param {string} projection A dot path to the property you want to get/set
-    * @param {object} obj   (optional) The object to project on, defaults to 'this'
-    * @param {Any}    valueToSet (opional)  The value to set, if parts of the path of
-    *                 the projection is missing empty objects will be created.
-    * @returns {Any|undefined} returns the value at the end of the projection path
-    *                          or undefined if there is none.
-    */
-  return function(projection, obj, valueToSet) {
-    if (!obj) {
-      obj = this;
-    }
-    //Support [] array syntax
-    var parts = typeof projection === 'string' ? sfPath.parse(projection) : projection;
-
-    if (typeof valueToSet !== 'undefined' && parts.length === 1) {
-      //special case, just setting one variable
-      obj[parts[0]] = valueToSet;
-      return obj;
-    }
-
-    if (typeof valueToSet !== 'undefined' &&
-        typeof obj[parts[0]] === 'undefined') {
-       // We need to look ahead to check if array is appropriate
-      obj[parts[0]] = parts.length > 2 && numRe.test(parts[1]) ? [] : {};
-    }
-
-    var value = obj[parts[0]];
-    for (var i = 1; i < parts.length; i++) {
-      // Special case: We allow JSON Form syntax for arrays using empty brackets
-      // These will of course not work here so we exit if they are found.
-      if (parts[i] === '') {
-        return undefined;
-      }
-      if (typeof valueToSet !== 'undefined') {
-        if (i === parts.length - 1) {
-          //last step. Let's set the value
-          value[parts[i]] = valueToSet;
-          return valueToSet;
-        } else {
-          // Make sure to create new objects on the way if they are not there.
-          // We need to look ahead to check if array is appropriate
-          var tmp = value[parts[i]];
-          if (typeof tmp === 'undefined' || tmp === null) {
-            tmp = numRe.test(parts[i + 1]) ? [] : {};
-            value[parts[i]] = tmp;
-          }
-          value = tmp;
-        }
-      } else if (value) {
-        //Just get nex value.
-        value = value[parts[i]];
-      }
-    }
-    return value;
-  };
 }]);
 
 /*  Common code for validating a value against its form and schema definition */
@@ -2085,10 +2327,18 @@ angular.module('schemaForm').directive('sfField',
               // It looks better with dot notation.
               scope.$on(
                 'schemaForm.error.' + form.key.join('.'),
-                function(event, error, validationMessage, validity) {
+                function(event, error, validationMessage, validity, formName) {
+                  // validationMessage and validity are mutually exclusive
+                  formName = validity;
                   if (validationMessage === true || validationMessage === false) {
                     validity = validationMessage;
                     validationMessage = undefined;
+                  }
+
+                  // If we have specified a form name, and this model is not within
+                  // that form, then leave things be.
+                  if(formName != undefined && scope.ngModel.$$parentForm.$name !== formName) {
+                    return;
                   }
 
                   if (scope.ngModel && error) {
@@ -2388,15 +2638,12 @@ function(sel, sfPath, schemaForm) {
             if (vals && vals !== old) {
               var arr = getOrCreateModel();
 
-              // Apparently the fastest way to clear an array, readable too.
-              // http://jsperf.com/array-destroy/32
-              while (arr.length > 0) {
-                arr.pop();
-              }
-              form.titleMap.forEach(function(item, index) {
-                if (vals[index]) {
+              form.titleMap.forEach(function (item, index) {
+                var arrIndex = arr.indexOf(item.value);
+                if (arrIndex === -1 && vals[index])
                   arr.push(item.value);
-                }
+                if (arrIndex !== -1 && !vals[index])
+                  arr.splice(arrIndex, 1);
               });
 
               // Time to validate the rebuilt array.
