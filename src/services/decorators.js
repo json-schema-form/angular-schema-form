@@ -74,14 +74,16 @@ angular.module('schemaForm').provider('schemaFormDecorators',
             };
 
             scope.buttonClick = function($event, form) {
+              var arrayIndices = form.key.filter(function(e) { return e === parseInt(e, 10)});
+              
               if (angular.isFunction(form.onClick)) {
-                form.onClick($event, form);
+                form.onClick($event, form, arrayIndices[arrayIndices.length-1], arrayIndices);
               } else if (angular.isString(form.onClick)) {
                 if (sfSchema) {
                   //evaluating in scope outside of sfSchemas isolated scope
-                  sfSchema.evalInParentScope(form.onClick, {'$event': $event, form: form});
+                  sfSchema.evalInParentScope(form.onClick, {'$event': $event, form: form, arrayIndex: arrayIndices[arrayIndices.length-1], arrayIndices: arrayIndices});
                 } else {
-                  scope.$eval(form.onClick, {'$event': $event, form: form});
+                  scope.$eval(form.onClick, {'$event': $event, form: form, arrayIndex: arrayIndices[arrayIndices.length-1], arrayIndices: arrayIndices});
                 }
               }
             };
@@ -213,7 +215,7 @@ angular.module('schemaForm').provider('schemaFormDecorators',
 
                     var evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex})';
                     if (form.key) {
-                      evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "modelValue": model' + sfPath.stringify(form.key) + '})';
+                      evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex, "arrayIndices": [' + form.key.filter(function(e) { return e === parseInt(e, 10)}).toString() + '], "modelValue": model' + sfPath.stringify(form.key) + '})';
                     }
 
                     angular.forEach(element.children(), function(child) {
