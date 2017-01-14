@@ -414,7 +414,7 @@ Form
   {
     "key": "name",
     "validationMessages": {
-      "userNameAlreadyTaken"
+      "userNameAlreadyTaken": "The username is already taken"
     }
   }
 ]
