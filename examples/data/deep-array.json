@@ -13,6 +13,10 @@
               "title": "Name",
               "type": "string"
             },
+            "copyname": {
+              "title": "Copy",
+              "type": "string"
+            },
             "comments": {
               "type": "array",
               "items": {
@@ -61,7 +65,11 @@
     		"add": "btn-success"
   	  },
       "items": [
-        "users[].name",
+        {
+            "key": "users[].name",
+            "copyValueTo": "users[].copyname"
+        },
+        "users[].copyname",
         {
           "key": "users[].comments",
           "items": [

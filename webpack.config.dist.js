@@ -7,7 +7,9 @@ const includes = [
 
 config.entry = {
   "angular-schema-form": includes,
-  "angular-schema-form.min": includes
+  "angular-schema-form.min": includes,
+  "angular-schema-form-bootstrap": [ 'angular-schema-form-bootstrap' ],
+  "angular-schema-form-bootstrap.min": [ 'angular-schema-form-bootstrap' ]
 }
 
 module.exports = config;

@@ -36,6 +36,7 @@ module.exports = {
   resolve: {
     modules: [
       path.join(__dirname, "..", "json-schema-form-core", "dist"),
+      path.join(__dirname, "..", "angular-schema-form-bootstrap", "dist"),
       path.join(__dirname, "src"),
       path.join(__dirname, "src", "directives"),
       path.join(__dirname, "src", "services"),
