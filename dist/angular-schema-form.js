@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.6
- * @date Sat, 14 Jan 2017 14:04:57 GMT
+ * @date Sat, 14 Jan 2017 15:25:30 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -2497,6 +2497,12 @@ FIXME: real documentation
                     return;
                   };
 
+                  // If we have specified a form name, and this model is not within
+                  // that form, then leave things be.
+                  if (formName != undefined && scope.ngModel.$$parentForm.$name !== formName) {
+                    return;
+                  }
+
                   if (scope.ngModel && error) {
                     if (scope.ngModel.$setDirty) {
                       scope.ngModel.$setDirty();
@@ -2920,9 +2926,19 @@ FIXME: real documentation
   };
   var formId = 0;
 
+  if (!("firstElementChild" in document.createDocumentFragment())) {
+    Object.defineProperty(DocumentFragment.prototype, "firstElementChild", {
+      get: function get() {
+        for (var nodes = this.childNodes, n, i = 0, l = nodes.length; i < l; ++i) {
+          if (n = nodes[i], 1 === n.nodeType) return n;
+        }return null;
+      }
+    });
+  }
+
   var builders = {
     sfField: function sfField(args) {
-      args.fieldFrag.firstChild.setAttribute('sf-field', formId);
+      args.fieldFrag.firstElementChild.setAttribute('sf-field', formId);
 
       // We use a lookup table for easy access to our form.
       args.lookup['f' + formId] = args.form;

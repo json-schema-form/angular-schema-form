@@ -162,11 +162,7 @@ export default function(sfPathProvider) {
       }
 
       if (items) {
-<<<<<<< HEAD:src/services/builder.js
-        state = angular.copy(args.state);
-=======
         var state = angular.copy(args.state);
->>>>>>> refs/remotes/origin/feature/webpack-babel:src/services/sf-builder.provider.js
         state.keyRedaction = 0;
         state.keyRedaction += args.form.key.length + 1;
 
