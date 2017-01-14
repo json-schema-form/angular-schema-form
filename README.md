@@ -9,34 +9,6 @@ Angular Schema Form
 
 Generate forms from JSON schemas using AngularJS!
 
-Branch Status & New Add-On
---------------------------
-This branch will be the **next version of Angular Schema Form**, currently please use
-the **examples/example.html** file as the best example to get the framework working.
-
-The example uses **schema-form.js** and **angular-schema-form-bootstrap.js** for the
-version of the code it executes, if you want your page to behave the same you
-obviously need the same version!
-
-The new Webpack compilation has made it easier to manage files and code and run build
-scripts, but it is still not easy enough for users unfamiliar with it... yet.
-
-**NOTE** in order to work simultaneously with ```json-schema-form-core``` you must have it cloned
-as a sibling directory to this one to build this library **OR** npm install the version you wish to build with.
-
-Webpack now generates a header to indicate version and date of build. **Do not create PR with the DIST folder.**
-
-### Add-on
-To see how to make an **add-on** work I have now included the **calculate** add-on file within the **examples/add-on** directory.
-
-## Yet to be migrated
-Currently **copyValueTo** and some **array** related features are not working as expected and remain the highest priority to ensure backwards compatibility is maintained where possible.
-
-
-The Update
-==========
-Current development is occuring on the [feature/webpack-babel](https://github.com/json-schema-form/angular-schema-form/blob/feature/webpack-babel/README.md) branch. Once that is stable and passing all tests again it will be replace the current developer branch. Ideally any new PRs should target the new version to avoid migration issues.
-
 The Blog / The Web Site / The Twitter / The Movie
 =================================================
 [medium.com/@SchemaFormIO](https://medium.com/@SchemaFormIO) / [schemaform.io](http://schemaform.io) / [@SchemaFormIO](http://twitter.com/SchemaFormIO) / [Movie](https://www.youtube.com/watch?v=duBFMipRq2o)
@@ -187,38 +159,38 @@ Don't forget to load the `schemaForm` module or nothing will happen.
 angular.module('myModule', ['schemaForm']);
 ```
 
-Add-ons
-------
+## Add-ons
 There are several add-ons available, for a full list see the [web page](http://schemaform.io/#/third-party-addons).
 Your can also [create your own add-ons!](docs/extending.md)
 
-Contributing
-------------
+## Contributing
 Contributions are welcome! Please see [Contributing.md](CONTRIBUTING.md) for more info.
 
-Building
---------
-The files in the `dist/` folder, plus dependencies, are all you need to use Schema Form. But if
-you'd like to build it yourself, we use [gulp](http://gulpjs.com/).
+## Building
+The new Webpack compilation has made it easier to manage files and code and run build
+scripts, but it is still not easy enough for users unfamiliar with it... yet.
 
-First off, you need to have nodejs installed. Then install all dev dependencies of the
-project with npm, install gulp and run the default task.
+**NOTE** in order to build simultaneously with ```json-schema-form-core``` you must have it cloned
+as a sibling directory to this one **OR** npm install the version you wish to build with.
 
-```bash
-$ npm install
-$ sudo npm install -g gulp
-$ bower install
-$ gulp
-```
+Webpack now generates a header to indicate version and date of build. **Do not create PR with the DIST folder.**
 
-The default task uses
-[gulp-angular-templatecache](https://github.com/miickel/gulp-angular-templatecache) to compile all
-html templates to js and then concatenates and minifies them with the rest of the sources.
+## Branch Status & New Add-On
+This branch will be the **next version of Angular Schema Form**, currently please use
+the **examples/example.html** file as the best example to get the framework working.
 
-You can also run `gulp watch` to have it rebuild on change.
+The example uses **angular-schema-form.js** and **angular-schema-form-bootstrap.js** for the
+version of the code it executes, if you want your page to behave the same you
+obviously need the same version!
 
-Tests
------
+### Add-on
+To see how to make an **add-on** work I have now included the **calculate** add-on file within the **examples/add-on** directory.
+
+## Yet to be migrated
+Currently **copyValueTo** and some **array** related features are not working as expected and remain the highest priority to ensure backwards compatibility is maintained where possible.
+
+
+## Tests
 Unit tests are run with [karma](http://karma-runner.github.io) and written using
 [mocha](http://visionmedia.github.io/mocha/), [chai](http://chaijs.com/) and
 [sinon](http://sinonjs.org/)
@@ -228,11 +200,10 @@ To run the tests:
 1. Install all dependencies via NPM.
 2. Install dev dependencies with bower.
 3. Install the Karma CLI.
-4. Run the tests.
+4. Run the tests using `npm test`.
 
 ```bash
 $ npm install
 $ bower install
-$ sudo npm install -g karma-cli
-$ karma start karma.conf.js
+$ npm test
 ```
