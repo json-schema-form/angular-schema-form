@@ -9,6 +9,30 @@ Angular Schema Form
 
 Generate forms from JSON schemas using AngularJS!
 
+Branch Status & New Add-On
+--------------------------
+This branch will be the **next version of Angular Schema Form**, currently please use
+the **examples/example.html** file as the best example to get the framework working.
+
+The example uses **schema-form.js** and **angular-schema-form-bootstrap.js** for the
+version of the code it executes, if you want your page to behave the same you
+obviously need the same version!
+
+The new Webpack compilation has made it easier to manage files and code and run build
+scripts, but it is still not easy enough for users unfamiliar with it... yet.
+
+**NOTE** in order to work simultaneously with ```json-schema-form-core``` you must have it cloned
+as a sibling directory to this one to build this library **OR** npm install the version you wish to build with.
+
+Webpack now generates a header to indicate version and date of build. **Do not create PR with the DIST folder.**
+
+### Add-on
+To see how to make an **add-on** work I have now included the **calculate** add-on file within the **examples/add-on** directory.
+
+## Yet to be migrated
+Currently **copyValueTo** and some **array** related features are not working as expected and remain the highest priority to ensure backwards compatibility is maintained where possible.
+
+
 The Update
 ==========
 Current development is occuring on the [feature/webpack-babel](https://github.com/json-schema-form/angular-schema-form/blob/feature/webpack-babel/README.md) branch. Once that is stable and passing all tests again it will be replace the current developer branch. Ideally any new PRs should target the new version to avoid migration issues.

@@ -11,8 +11,8 @@ describe('schemaFormServices', function() {
           'foobar-error',              //error
           'foobar',                    //value
           'foobar',               //view value
-          {schema: {title: 'Foo'}},   //form
-          {'default': 'Oh noes!'}
+          { schema: { title: 'Foo' } },   //form
+          { 'default': 'Oh noes!' }
         );
 
         result.should.be.eq('Oh noes!');
@@ -27,8 +27,8 @@ describe('schemaFormServices', function() {
           'foobar-error',              //error
           'foobar',                    //value
           'foobar',               //view value
-          {validationMessage: {'default': 'Oh yes!'}, schema: {title: 'Foo'}},   //form
-          {'default': 'Oh noes!'}
+          { validationMessage: { 'default': 'Oh yes!' }, schema: { title: 'Foo' } },   //form
+          { 'default': 'Oh noes!' }
         );
 
         result.should.be.eq('Oh yes!');
@@ -43,8 +43,8 @@ describe('schemaFormServices', function() {
           'foobar-error',              //error
           'foobar',                    //value
           'foobar',               //view value
-          {schema: {title: 'Foo'}},   //form
-          {'default': 'Oh noes!', 'foobar-error': 'Aw chucks!'}
+          { schema: { title: 'Foo' } },   //form
+          { 'default': 'Oh noes!', 'foobar-error': 'Aw chucks!' }
         );
 
         result.should.be.eq('Aw chucks!');
@@ -58,8 +58,8 @@ describe('schemaFormServices', function() {
           'foobar-error',              //error
           'foobar',                    //value
           'foobar',               //view value
-          {schema: {title: 'Foo'}, validationMessage: {'foobar-error': 'Noooooo!'}},   //form
-          {'default': 'Oh noes!', 'foobar-error': 'Aw chucks!'}
+          { schema: { title: 'Foo' }, validationMessage: { 'foobar-error': 'Noooooo!' } },   //form
+          { 'default': 'Oh noes!', 'foobar-error': 'Aw chucks!' }
         );
 
         result.should.be.eq('Noooooo!');
@@ -74,12 +74,12 @@ describe('schemaFormServices', function() {
           'foobar',                    //value
           'foobar',               //view value
           {
-            schema: {title: 'Foo'},
+            schema: { title: 'Foo' },
             validationMessage: {
               'foobar-error': 'Noooooo! "{{title}}" should not be "{{value}}"'
             }
           },   //form
-          {'default': 'Oh noes!'}
+          { 'default': 'Oh noes!' }
         );
 
         result.should.be.eq('Noooooo! "Foo" should not be "foobar"');
@@ -94,12 +94,12 @@ describe('schemaFormServices', function() {
           'foobar',                    //value
           'foobar',               //view value
           {
-            schema: {title: 'Foo'},
+            schema: { title: 'Foo' },
             validationMessage: {
               'foobar-error': '{{title}}'
             }
           },   //form
-          {'default': 'Oh noes!'}
+          { 'default': 'Oh noes!' }
         );
 
         result.should.be.eq('Foo');
@@ -110,12 +110,12 @@ describe('schemaFormServices', function() {
           'foobar',               //view value
           {
             title: 'Bar',
-            schema: {title: 'Foo'},
+            schema: { title: 'Foo' },
             validationMessage: {
               'foobar-error': '{{title}}'
             }
           },   //form
-          {'default': 'Oh noes!'}
+          { 'default': 'Oh noes!' }
         );
 
         result.should.be.eq('Bar');
@@ -130,10 +130,10 @@ describe('schemaFormServices', function() {
           'foobar',                    //value
           'foobar',               //view value
           {
-            schema: {title: 'Foo'},
+            schema: { title: 'Foo' },
             validationMessage: 'Huh?'
           },   //form
-          {'default': 'Oh noes!'}
+          { 'default': 'Oh noes!' }
         );
 
         result.should.be.eq('Huh?');
@@ -150,12 +150,12 @@ describe('schemaFormServices', function() {
           'foobar',                    //value
           'foobar',               //view value
           {
-            schema: {title: 'Foo'},
+            schema: { title: 'Foo' },
             validationMessage: {
               'foobar-error': msgFn
             }
           },   //form
-          {'default': 'Oh noes!'}
+          { 'default': 'Oh noes!' }
         );
 
         result.should.be.eq('Yes!');
@@ -165,12 +165,12 @@ describe('schemaFormServices', function() {
           value: 'foobar',
           viewValue: 'foobar',
           form: {
-            schema: {title: 'Foo'},
+            schema: { title: 'Foo' },
             validationMessage: {
               'foobar-error': msgFn
             }
           },
-          schema: {title: 'Foo'},
+          schema: { title: 'Foo' },
           title: 'Foo'
         });
       });
@@ -186,10 +186,10 @@ describe('schemaFormServices', function() {
           'foobar',                    //value
           'foobar',               //view value
           {
-            schema: {title: 'Foo'},
+            schema: { title: 'Foo' },
             validationMessage: msgFn
           },   //form
-          {'default': 'Oh noes!'}
+          { 'default': 'Oh noes!' }
         );
 
         result.should.be.eq('Yes!');
@@ -199,10 +199,10 @@ describe('schemaFormServices', function() {
           value: 'foobar',
           viewValue: 'foobar',
           form: {
-            schema: {title: 'Foo'},
+            schema: { title: 'Foo' },
             validationMessage: msgFn
           },
-          schema: {title: 'Foo'},
+          schema: { title: 'Foo' },
           title: 'Foo'
         });
       });
@@ -216,10 +216,10 @@ describe('schemaFormServices', function() {
           'foobar',               //value
           'foobar',               //view value
           {
-            schema: {title: 'Foo'},
-            validationMessage: {302: 'tv4 error!'}
+            schema: { title: 'Foo' },
+            validationMessage: { 302: 'tv4 error!' }
           },   //form
-          {'default': 'Oh noes!'}
+          { 'default': 'Oh noes!' }
         );
 
         result.should.be.eq('tv4 error!');

@@ -1,17 +1,22 @@
 {
   "name": "angular-schema-form",
-  "version": "0.8.13",
+  "version": "1.0.0-alpha.6",
   "description": "Create complex forms from a JSON schema with angular.",
-  "repository": "Textalk/angular-schema-form",
-  "main": "dist/schema-form.min.js",
-  "filename": "dist/schema-form.min.js",
+  "repository": "json-schema-form/angular-schema-form",
+  "main": "dist/angular-schema-form.js",
+  "filename": "dist/angular-schema-form.min.js",
   "homepage": "http://schemaform.io",
   "scripts": {
-    "test": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js"
+    "build": "webpack",
+    "dist": "webpack --config webpack.config.dist.js",
+    "watch": "webpack --watch",
+    "testlinux": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js",
+    "test": "karma start karma.conf.js --log-level debug"
   },
-  "author": "Textalk",
+  "author": "json-schema-form",
   "contributors": [
     "David Jensen <david.lgj@gmail.com> (https://github.com/davidlgj)",
+    "Marcel J Bennett <iamanthropic@gmail.com> (https://github.com/Anthropic)",
     "Denis Dervisevic <denis@dervisevic.se> (https://github.com/Dervisevic)",
     "Cameron Edwards (https://github.com/cameronprattedwards)",
     "Mike Marcacci (https://github.com/mike-marcacci)",
@@ -21,8 +26,7 @@
   "dependencies": {
     "angular": ">= 1.2",
     "tv4": "~1.0.15",
-    "angular-sanitize": ">= 1.2",
-    "objectpath": "^1.2.1"
+    "angular-sanitize": ">= 1.2"
   },
   "keywords": [
     "angular",
@@ -35,29 +39,29 @@
     "schema"
   ],
   "devDependencies": {
-    "chai": "^1.9.0",
-    "coveralls": "^2.11.0",
-    "gulp": "^3.5.6",
-    "gulp-angular-templatecache": "^1.2.1",
-    "gulp-concat": "^2.2.0",
-    "gulp-jscs": "^1.1.0",
-    "gulp-minify-html": "^0.1.1",
-    "gulp-protractor": "^1.0.0",
-    "gulp-rename": "^1.2.0",
-    "gulp-uglify": "^0.2.1",
-    "gulp-umd": "^0.1.3",
-    "karma": "^0.12.0",
-    "karma-chai-sinon": "^0.1.3",
-    "karma-coverage": "^0.2.1",
+    "babel-core": "^6.18.2",
+    "babel-loader": "^6.2.8",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-polyfill": "^6.16.0",
+    "babel-preset-es2015": "^6.18.0",
+    "chai": "^3.5.0",
+    "html-webpack-externals-plugin": "^2.1.2",
+    "karma": "^1.3.0",
+    "karma-babel-preprocessor": "^6.0.1",
+    "karma-chai-sinon": "^0.1.5",
+    "karma-coverage": "^1.1.1",
     "karma-growler-reporter": "0.0.1",
-    "karma-mocha": "^0.1.3",
-    "karma-phantomjs-launcher": "^0.1.4",
-    "mocha": "^1.18.0",
-    "mocha-lcov-reporter": "0.0.1",
-    "protractor": "^2.1.0",
-    "sinon": "^1.9.0",
-    "sinon-chai": "^2.5.0",
-    "streamqueue": "0.0.5"
+    "karma-mocha": "^1.3.0",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-webpack": "^1.8.0",
+    "mocha": "^3.2.0",
+    "mocha-lcov-reporter": "^1.2.0",
+    "protractor": "^4.0.11",
+    "raw-loader": "^0.5.1",
+    "sinon": "^1.17.6",
+    "sinon-chai": "^2.8.0",
+    "webpack": "^2.1.0-beta.27",
+    "webpack-dev-server": "^2.1.0-beta.12"
   },
   "licenses": [
     {
@@ -65,7 +69,7 @@
       "url": "https://raw.githubusercontent.com/json-schema-form/angular-schema-form/master/LICENSE"
     }
   ],
-  "autoupdate": {
+  "ignore-for-now-autoupdate": {
     "source": "git",
     "target": "git://github.com/json-schema-form/angular-schema-form.git",
     "basePath": "/dist/",

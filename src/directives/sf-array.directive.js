@@ -1,10 +1,14 @@
+import angular from 'angular';
+
 /**
  * Directive that handles the model arrays
  */
-angular.module('schemaForm').directive('sfNewArray', ['sfSelect', 'sfPath', 'schemaForm',
-function(sel, sfPath, schemaForm) {
+export default function(sel, sfPath, schemaForm) {
   return {
-    scope: false,
+    scope: true,
+    controller: ['$scope', function SFArrayController($scope) {
+      this.key = ($scope.form && $scope.form.key) ? $scope.form.key.splice(0, -2) : [];
+    }],
     link: function(scope, element, attrs) {
       scope.min = 0;
 
@@ -31,7 +35,7 @@ function(sel, sfPath, schemaForm) {
           if (angular.isFunction(scope.form.onChange)) {
             scope.form.onChange(scope.modelArray, scope.form);
           } else {
-            scope.evalExpr(scope.form.onChange, {'modelValue': scope.modelArray, form: scope.form});
+            scope.evalExpr(scope.form.onChange, { 'modelValue': scope.modelArray, form: scope.form });
           }
         }
       };
@@ -65,13 +69,13 @@ function(sel, sfPath, schemaForm) {
           scope.$watch(attrs.sfNewArray, watchFn, true);
 
           // We still need to trigger onChange though.
-          scope.$watch([attrs.sfNewArray, attrs.sfNewArray + '.length'], onChangeFn);
+          scope.$watch([ attrs.sfNewArray, attrs.sfNewArray + '.length' ], onChangeFn);
 
         } else {
           // Otherwise we like to check if the instance of the array has changed, or if something
           // has been added/removed.
           if (scope.$watchGroup) {
-            scope.$watchGroup([attrs.sfNewArray, attrs.sfNewArray + '.length'], function() {
+            scope.$watchGroup([ attrs.sfNewArray, attrs.sfNewArray + '.length' ], function() {
               watchFn();
               onChangeFn();
             });
@@ -120,14 +124,16 @@ function(sel, sfPath, schemaForm) {
             if (vals && vals !== old) {
               var arr = getOrCreateModel();
 
-              form.titleMap.forEach(function (item, index) {
+              form.titleMap.forEach(function(item, index) {
                 var arrIndex = arr.indexOf(item.value);
-                if (arrIndex === -1 && vals[index])
+                if (arrIndex === -1 && vals[index]) {
                   arr.push(item.value);
-                if (arrIndex !== -1 && !vals[index])
-                  arr.splice(arrIndex, 1);
-              });
+                };
 
+                if (arrIndex !== -1 && !vals[index]) {
+                  arr.splice(arrIndex, 1);
+                };
+              });
               // Time to validate the rebuilt array.
               // validateField method is exported by schema-validate
               if (scope.validateField) {
@@ -238,4 +244,4 @@ function(sel, sfPath, schemaForm) {
 
     }
   };
-}]);
+}

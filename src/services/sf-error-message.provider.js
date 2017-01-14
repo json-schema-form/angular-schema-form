@@ -1,4 +1,6 @@
-angular.module('schemaForm').provider('sfErrorMessage', function() {
+import angular from 'angular';
+
+export default function() {
 
   // The codes are tv4 error codes.
   // Not all of these can actually happen in a field, but for
@@ -65,7 +67,7 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
     defaultMessages[error] = msg;
   };
 
-  this.$get = ['$interpolate', function($interpolate) {
+  this.$get = [ '$interpolate', function($interpolate) {
 
     var service = {};
     service.defaultMessages = defaultMessages;
@@ -74,6 +76,7 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
      * Interpolate and return proper error for an eror code.
      * Validation message on form trumps global error messages.
      * and if the message is a function instead of a string that function will be called instead.
+     *
      * @param {string} error the error code, i.e. tv4-xxx for tv4 errors, otherwise it's whats on
      *                       ngModel.$error for custom errors.
      * @param {Any} value the actual model value.
@@ -95,7 +98,7 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
       // First find apropriate message or function
       var message = validationMessage['default'] || global['default'] || '';
 
-      [validationMessage, global, defaultMessages].some(function(val) {
+      [ validationMessage, global, defaultMessages ].some(function(val) {
         if (angular.isString(val) || angular.isFunction(val)) {
           message = val;
           return true;
@@ -123,5 +126,4 @@ angular.module('schemaForm').provider('sfErrorMessage', function() {
 
     return service;
   }];
-
-});
+}

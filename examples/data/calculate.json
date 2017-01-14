@@ -1,0 +1,87 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Comment",
+    "required": [ "property" ],
+    "properties": {
+      "width": {
+        "title": "Width",
+        "type": "number"
+      },
+      "length": {
+        "title": "Length",
+        "type": "number"
+      },
+      "area": {
+        "title": "Area",
+        "type": "number"
+      },
+      "property": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name":  {
+              "title": "Name",
+              "type": "string"
+            },
+            "width": {
+              "title": "Width",
+              "type": "number"
+            },
+            "length": {
+              "title": "Length",
+              "type": "number"
+            },
+            "area": {
+              "title": "Area",
+              "type": "number"
+            }
+          },
+          "required": [ "name" ]
+        }
+      }
+    }
+  },
+  "form": [
+    {
+      "type": "help",
+      "helpvalue": "<h4>Array Example</h4><p>Try adding a couple of forms, reorder by drag'n'drop.</p>"
+    },
+    {
+      "key": "area",
+      "type": "calculate",
+      "watch": [ "model.width", "model.length" ],
+      "calculate": "model.width * model.length"
+    },
+    "width",
+    "length",
+    "area",
+    {
+      "title": "{{ value.name || 'Tab ' + $index }}",
+      "key": "property",
+  	  "type": "tabarray",
+  	  "add": "New",
+  	  "style": {
+    		"add": "btn-success"
+  	  },
+      "items": [
+        "property[].name",
+        "property[].width",
+        "property[].length",
+        "property[].area",
+        {
+          "key": "property[].area",
+          "type": "calculate",
+          "watch": [ "model.property[].width", "model.property[].length" ],
+          "calculate": "model.property[$i[0]].width * model.property[$i[0]].length"
+        }
+      ]
+    },
+    {
+      "type": "submit",
+      "style": "btn-info",
+      "title": "OK"
+    }
+  ]
+}

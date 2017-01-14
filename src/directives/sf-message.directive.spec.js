@@ -3,7 +3,6 @@ chai.should();
 describe('directive',function() {
   beforeEach(module('schemaForm'));
   beforeEach(
-    //We don't need no sanitation. We don't need no thought control.
     module(function($sceProvider){
       $sceProvider.enabled(false);
     })
@@ -36,7 +35,6 @@ describe('directive',function() {
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
-      console.log(tmpl.children().find('div.help-block')[0]);
       tmpl.children().find('div.help-block').text().should.equal('foobar');
 
       setTimeout(function() {

@@ -1,5 +1,6 @@
-angular.module('schemaForm').directive('sfMessage',
-['$injector', 'sfErrorMessage', function($injector, sfErrorMessage) {
+import angular from 'angular';
+
+export default function($injector, sfErrorMessage) {
 
   //Inject sanitizer if it exists
   var $sanitize = $injector.has('$sanitize') ?
@@ -12,6 +13,7 @@ angular.module('schemaForm').directive('sfMessage',
 
       var message = '';
       if (attrs.sfMessage) {
+
         scope.$watch(attrs.sfMessage, function(msg) {
           if (msg) {
             message = $sanitize(msg);
@@ -72,7 +74,7 @@ angular.module('schemaForm').directive('sfMessage',
       // Update once.
       update();
 
-      var once = scope.$watch('ngModel',function(ngModel) {
+      var once = scope.$watch('ngModel', function(ngModel) {
         if (ngModel) {
           // We also listen to changes of the model via parsers and formatters.
           // This is since both the error message can change and given a pristine
@@ -91,4 +93,4 @@ angular.module('schemaForm').directive('sfMessage',
 
     }
   };
-}]);
+}

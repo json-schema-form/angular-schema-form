@@ -1,0 +1,9 @@
+{
+  "titleMap": [
+    { "value": "jkr1", "name": "Harry Potter", "group": "Childrens" },
+    { "value": "eb1", "name": "Blinky Bill", "group": "Childrens" },
+    { "value": "da1", "name": "A Hitchhiker's Guide To The Galaxy", "group": "Sci-Fi" },
+    { "value": "ow1", "name": "The Picture of Dorian Gray", "group": "Horror" },
+    { "value": "wc", "name": "A Nightmare On Elm Street", "group": "Horror" }
+  ]
+}

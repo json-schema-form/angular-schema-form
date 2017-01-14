@@ -1,10 +1,10 @@
 chai.should();
 
-describe('directive',function(){
+describe('directive', function() {
   beforeEach(module('schemaForm'));
   beforeEach(
     //We don't need no sanitation. We don't need no thought control.
-    module(function($sceProvider){
+    module(function($sceProvider) {
       $sceProvider.enabled(false);
     })
   );
@@ -29,9 +29,8 @@ describe('directive',function(){
     }
   };
 
-  it('should generate html and compile it',function(){
-
-    inject(function($compile,$rootScope){
+  it('should generate html and compile it', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -54,9 +53,8 @@ describe('directive',function(){
     });
   });
 
-  it('should generate html and compile when no form is provided, using the default',function(){
-
-    inject(function($compile,$rootScope){
+  it('should generate html and compile when no form is provided, using the default', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -79,9 +77,8 @@ describe('directive',function(){
     });
   });
 
-  it('should generate html and compile it, deep structure',function(){
-
-    inject(function($compile,$rootScope){
+  it('should generate html and compile it, deep structure', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -172,9 +169,8 @@ describe('directive',function(){
     });
   });
 
-  it('should generate html and compile it, leaving existing inputs intact',function(){
-
-    inject(function($compile,$rootScope){
+  it('should generate html and compile it, leaving existing inputs intact', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -198,7 +194,7 @@ describe('directive',function(){
 
   it('should preserve existing html and insert fields in matching slots', function() {
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -217,9 +213,8 @@ describe('directive',function(){
   });
 
 
-  it('should handle submit buttons',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle submit buttons', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.obj = {};
 
@@ -252,9 +247,8 @@ describe('directive',function(){
     });
   });
 
-  it('should handle buttons',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle buttons', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.obj = {};
 
@@ -281,9 +275,8 @@ describe('directive',function(){
     });
   });
 
-  it('should style submit buttons',function(){
-
-    inject(function($compile,$rootScope){
+  it('should style submit buttons', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.obj = {};
 
@@ -332,9 +325,8 @@ describe('directive',function(){
     });
   });
 
-  it('should use disable readonly input fields, v3 style',function(){
-
-    inject(function($compile,$rootScope){
+  it('should use disable readonly input fields, v3 style', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -362,9 +354,8 @@ describe('directive',function(){
     });
   });
 
-  it('should use disable readonly input fields, v4 style',function(){
-
-    inject(function($compile,$rootScope){
+  it('should use disable readonly input fields, v4 style', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -393,9 +384,8 @@ describe('directive',function(){
     });
   });
 
-  it('should use disable readonly input fields, form override',function(){
-
-    inject(function($compile,$rootScope){
+  it('should use disable readonly input fields, form override', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -427,9 +417,9 @@ describe('directive',function(){
     });
   });
 
-  it('should display custom validationMessages when specified',function(done){
+  it('should display custom validationMessages when specified',function(done) {
 
-    inject(function($compile,$rootScope){
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -460,14 +450,14 @@ describe('directive',function(){
 
       $compile(tmpl)(scope);
       $rootScope.$apply();
-      tmpl.find('input').each(function(){
+      tmpl.find('input').each(function() {
         $(this).scope().ngModel.$setViewValue('AÖ');
       });
 
       var errors = tmpl.find('.help-block');
 
       //timeout so we can do a second $apply
-      setTimeout(function(){
+      setTimeout(function() {
         $rootScope.$apply(); //this actually updates the view with error messages
         errors.eq(0).text().should.be.equal("You are only allowed lower case letters in name.");
         errors.eq(1).text().should.be.equal("Foobar");
@@ -478,9 +468,8 @@ describe('directive',function(){
   });
 
 
-  it('should honor defaults in schema',function(){
-
-    inject(function($compile,$rootScope){
+  it('should honor defaults in schema', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         name: 'Foobar'
@@ -517,9 +506,8 @@ describe('directive',function(){
     });
   });
 
-  it('should honor defaults in schema unless told not to',function(){
-
-    inject(function($compile,$rootScope){
+  it('should honor defaults in schema unless told not to', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         name: 'Foobar'
@@ -559,9 +547,8 @@ describe('directive',function(){
   });
 
 
-  it('should handle schema form default in deep structure',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle schema form default in deep structure', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         name: 'Foobar'
@@ -615,9 +602,8 @@ describe('directive',function(){
   });
 
 
-  it('should handle schema form titles in deep structure',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle schema form titles in deep structure', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         name: 'Foobar'
@@ -673,9 +659,8 @@ describe('directive',function(){
     });
   });
 
-  it('should handle schema form default in deep structure with array',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle schema form default in deep structure with array', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         "arr":[]
@@ -718,13 +703,11 @@ describe('directive',function(){
       scope.person.arr[0].name.should.be.equal('Name');
       scope.person.arr[0].nick.should.be.equal('Nick');
       expect(scope.person.arr[0].alias).to.be.undefined;
-
     });
   });
 
-  it('should skip title if form says "notitle"',function(){
-
-    inject(function($compile,$rootScope){
+  it('should skip title if form says "notitle"', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -749,9 +732,8 @@ describe('directive',function(){
     });
   });
 
-  it('should generate checkboxes for arrays with enums',function(){
-
-    inject(function($compile,$rootScope){
+  it('should generate checkboxes for arrays with enums', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -783,9 +765,8 @@ describe('directive',function(){
     });
   });
 
-  it('should initialize checkboxes to the model values',function(){
-
-    inject(function($compile,$rootScope){
+  it('should initialize checkboxes to the model values', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         "names": ["foo"]
@@ -817,8 +798,7 @@ describe('directive',function(){
     });
   });
 
-  it('should not clear the model when using multiple checkboxes targeting the same model array', function () {
-
+  it('should not clear model when multiple checkboxes target the same model array', function () {
       inject(function ($compile, $rootScope) {
           var scope = $rootScope.$new();
           scope.person = {
@@ -868,9 +848,8 @@ describe('directive',function(){
       });
   });
 
-  it('should use radio buttons when they are wanted',function(){
-
-    inject(function($compile,$rootScope){
+  it('should use radio buttons when they are wanted', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -908,9 +887,8 @@ describe('directive',function(){
     });
   });
 
-  it('should use radio buttons with HTML',function(){
-
-    inject(function($compile,$rootScope){
+  it('should use radio buttons with HTML', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -954,9 +932,8 @@ describe('directive',function(){
     });
   });
 
-  it('should style radio buttons',function(){
-
-    inject(function($compile,$rootScope){
+  it('should style radio buttons', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1102,9 +1079,8 @@ describe('directive',function(){
     });
   });
 
-  it('should handle a simple div when type "section" is specified',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle a simple div when type "section" is specified', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1136,9 +1112,8 @@ describe('directive',function(){
     });
   });
 
-  it('should handle "action" groups, same as "section" but with a bootstrap class "btn-group"',function(){
-
-    inject(function($compile,$rootScope){
+  it('should handle "action" groups, same as "section" but with a bootstrap class "btn-group"', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1172,9 +1147,8 @@ describe('directive',function(){
     });
   });
 
-  it('should style "action" groups',function(){
-
-    inject(function($compile,$rootScope){
+  it('should style "action" groups', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1221,14 +1195,14 @@ describe('directive',function(){
     });
   });
 
-  it('should render custom html when type "help" is specified',function(){
+  it('should render custom html when type "help" is specified', function() {
 
     //We don't need no sanitation. We don't need no though control.
-    module(function($sceProvider){
+    module(function($sceProvider) {
       $sceProvider.enabled(false);
     });
 
-    inject(function($compile,$rootScope){
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = { };
 
@@ -1263,9 +1237,8 @@ describe('directive',function(){
     });
   });
 
-  it('should render tabs with items in them when specified',function(){
-
-    inject(function($compile,$rootScope){
+  it('should render tabs with items in them when specified', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = { };
 
@@ -1329,9 +1302,8 @@ describe('directive',function(){
     });
   });
 
-  it('should render a list of subforms when schema type is array',function(){
-
-    inject(function($compile,$rootScope){
+  it('should render a list of subforms when schema type is array', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1413,9 +1385,8 @@ describe('directive',function(){
     });
   });
 
-  it('should style an array',function(){
-
-    inject(function($compile,$rootScope){
+  it('should style an array', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1496,9 +1467,8 @@ describe('directive',function(){
     });
   });
 
-  it('should render a tabarray of subforms when asked',function(){
-
-    inject(function($compile,$rootScope){
+  it('should render a tabarray of subforms when asked', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         names: ['me','you','another']
@@ -1561,9 +1531,8 @@ describe('directive',function(){
     });
   });
 
-  it('should style a tabarray',function(){
-
-    inject(function($compile,$rootScope){
+  it('should style a tabarray', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         names: ['me','you','another']
@@ -1625,14 +1594,11 @@ describe('directive',function(){
       tmpl.children().eq(1).find('button').text().trim().should.be.eq('Delete');
       tmpl.children().eq(1).find('button').eq(0).hasClass('btn-default').should.be.true;
       tmpl.children().eq(1).find('button').eq(0).hasClass('btn-danger').should.be.false;
-
-
     });
   });
 
-  it('should sort select options by enum',function(){
-
-    inject(function($compile,$rootScope){
+  it('should sort select options by enum', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1672,9 +1638,8 @@ describe('directive',function(){
   });
 
 
-  it('should update array form on model array ref change',function(){
-
-    inject(function($compile,$rootScope){
+  it('should update array form on model array ref change', function() {
+    inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         names:[
@@ -1745,7 +1710,7 @@ describe('directive',function(){
 
   it('should remove or add fields depending on condition',function(done) {
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         flag: true
@@ -1772,19 +1737,17 @@ describe('directive',function(){
       tmpl.find('.schema-form-text').length.should.be.equal(1);
 
       setTimeout(function() {
-
         scope.person.flag = false;
         $rootScope.$apply();
         tmpl.find('.schema-form-text').length.should.be.equal(0);
         done();
       }, 0);
-
     });
   });
 
   it('should redraw form on schemaFormRedraw event',function(done) {
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1815,7 +1778,59 @@ describe('directive',function(){
         tmpl.find('.schema-form-text').length.should.be.equal(0);
         done();
       }, 0);
+    });
+  });
 
+  it('should redraw form with proper defaults on schemaFormRedraw event',function(done) {
+
+    inject(function($compile, $rootScope) {
+      var scope = $rootScope.$new();
+      scope.person = {};
+
+      scope.schema = {
+        type: 'object',
+        properties: {
+          name: {type: 'string'}
+        }
+      };
+
+      scope.form = [{
+        key: 'name',
+        type: 'text'
+      }];
+
+      scope.options = {formDefaults: {}};
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-options="options"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      expect(tmpl.find('input').attr('disabled')).to.be.undefined;
+
+      var disable, enable;
+      disable = function () {
+        // form element should be disabled
+        scope.options.formDefaults.readonly = true;
+        scope.$broadcast('schemaFormRedraw');
+        $rootScope.$apply();
+        expect(tmpl.find('input').attr('disabled')).eq('disabled');
+
+        // try to re-enable it by modifying global option
+        setTimeout(enable, 0);
+      };
+
+      enable = function () {
+        // form element should be back to enabled
+        scope.options.formDefaults.readonly = false;
+        scope.$broadcast('schemaFormRedraw');
+        $rootScope.$apply();
+        expect(tmpl.find('input').attr('disabled')).to.be.undefined;
+
+        done();
+      }
+
+      setTimeout(disable, 0);
     });
   });
 
@@ -1874,7 +1889,7 @@ describe('directive',function(){
 
   it('should use supplied template with template field type',function() {
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1933,7 +1948,7 @@ describe('directive',function(){
 
   it('should load template by templateUrl, with template field type',function() {
 
-    inject(function($compile, $rootScope, $httpBackend){
+    inject(function($compile, $rootScope, $httpBackend) {
 
       $httpBackend.when('GET', '/template.html')
                   .respond("<div>{{form.foo}}</div>");
@@ -2040,13 +2055,52 @@ describe('directive',function(){
           }
         ]
       }
+    },
+    {
+      name: 'radios',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
+    },
+    {
+      name: 'radios-inline',
+      property: {
+        type: 'boolean',
+      },
+      form: {
+        key: ["field"],
+        type: "radios-inline",
+        titleMap: [
+          {
+            "value": false,
+            "name": "No way"
+          },
+          {
+            "value": true,
+            "name": "OK"
+          }
+        ]
+      }
     }
   ];
 
   fields.forEach(function (field) {
-
     it('should not add "has-success" class to ' + field.name + " field if a correct value is entered, but disableSuccessState is set on form", function () {
-      inject(function($compile, $rootScope){
+      inject(function($compile, $rootScope) {
         var scope = $rootScope.$new();
         scope.model = {}
         scope.schema = {
@@ -2060,7 +2114,8 @@ describe('directive',function(){
         var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
         $compile(tmpl)(scope);
         $rootScope.$apply();
-        var ngModelCtrl = scope.theForm['{{form.key.slice(-1)[0]}}'] || scope.theForm['{{form.key.join(\'.\')}}'];
+
+        var ngModelCtrl = tmpl.find('.'+field.form.key.join('-')).scope().ngModel;
         ngModelCtrl.$valid = true;
         ngModelCtrl.$pristine = false;
         $rootScope.$apply();
@@ -2072,7 +2127,7 @@ describe('directive',function(){
     });
 
     it('should not add "has-error" class to ' + field.name + " field if invalid value is entered, but disableErrorState is set on form", function () {
-      inject(function($compile, $rootScope){
+      inject(function($compile, $rootScope) {
         var scope = $rootScope.$new();
         scope.model = {
           field: field.errorValue
@@ -2088,7 +2143,8 @@ describe('directive',function(){
         var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
         $compile(tmpl)(scope);
         $rootScope.$apply();
-        var ngModelCtrl = scope.theForm['{{form.key.slice(-1)[0]}}'] || scope.theForm['{{form.key.join(\'.\')}}'];
+
+        var ngModelCtrl = tmpl.find('.'+field.form.key.join('-')).scope().ngModel;
         ngModelCtrl.$invalid = true;
         ngModelCtrl.$pristine = false;
         $rootScope.$apply();
@@ -2100,11 +2156,7 @@ describe('directive',function(){
     });
   });
 
-
-
-
   it('should not add "has-success" class to radios field if a correct value is entered, but disableSuccessState is set on form', function () {
-
     var field = {
       name: 'radios',
       property: {
@@ -2126,7 +2178,7 @@ describe('directive',function(){
       }
     };
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.model = {}
       scope.schema = {
@@ -2140,19 +2192,18 @@ describe('directive',function(){
       var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
       $compile(tmpl)(scope);
       $rootScope.$apply();
-      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      var ngModelCtrl = tmpl.find('.field').scope().ngModel;
       ngModelCtrl.$valid = true;
       ngModelCtrl.$pristine = false;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.true;
+      tmpl.find('.field').hasClass('has-success').should.be.true;
       scope.form[0].disableSuccessState = true;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.false;
+      tmpl.find('.field').hasClass('has-success').should.be.false;
     });
   });
 
   it('should not add "has-error" class to radios field if invalid value is entered, but disableErrorState is set on form', function () {
-
     var field = {
       name: 'radios',
       property: {
@@ -2174,7 +2225,7 @@ describe('directive',function(){
       }
     };
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.model = {
         field: field.errorValue
@@ -2190,19 +2241,18 @@ describe('directive',function(){
       var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
       $compile(tmpl)(scope);
       $rootScope.$apply();
-      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      var ngModelCtrl = tmpl.find('.field').scope().ngModel;
       ngModelCtrl.$invalid = true;
       ngModelCtrl.$pristine = false;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.true;
+      tmpl.find('.field').hasClass('has-error').should.be.true;
       scope.form[0].disableErrorState = true;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.false;
+      tmpl.find('.field').hasClass('has-error').should.be.false;
     });
   });
 
   it('should not add "has-success" class to radios-inline field if a correct value is entered, but disableSuccessState is set on form', function () {
-
     var field = {
       name: 'radios',
       property: {
@@ -2224,7 +2274,7 @@ describe('directive',function(){
       }
     };
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.model = {}
       scope.schema = {
@@ -2238,19 +2288,18 @@ describe('directive',function(){
       var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
       $compile(tmpl)(scope);
       $rootScope.$apply();
-      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      var ngModelCtrl = tmpl.find('.field').scope().ngModel;
       ngModelCtrl.$valid = true;
       ngModelCtrl.$pristine = false;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.true;
+      tmpl.find('.field').hasClass('has-success').should.be.true;
       scope.form[0].disableSuccessState = true;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.false;
+      tmpl.find('.field').hasClass('has-success').should.be.false;
     });
   });
 
   it('should not add "has-error" class to radios-inline field if invalid value is entered, but disableErrorState is set on form', function () {
-
     var field = {
       name: 'radios',
       property: {
@@ -2272,7 +2321,7 @@ describe('directive',function(){
       }
     };
 
-    inject(function($compile, $rootScope){
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.model = {
         field: field.errorValue
@@ -2280,7 +2329,7 @@ describe('directive',function(){
       scope.schema = {
         type: 'object',
         properties: {
-          field: field.property
+          field: { type: 'boolean' }
         }
       };
       scope.form = [field.form];
@@ -2288,45 +2337,65 @@ describe('directive',function(){
       var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
       $compile(tmpl)(scope);
       $rootScope.$apply();
-      var ngModelCtrl = tmpl.children().eq(0).children().eq(0).scope().ngModel;
+      var ngModelCtrl = tmpl.find('.field').scope().ngModel;
       ngModelCtrl.$invalid = true;
       ngModelCtrl.$pristine = false;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.true;
+      tmpl.find('.field').hasClass('has-error').should.be.true;
       scope.form[0].disableErrorState = true;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.false;
+      tmpl.find('.field').hasClass('has-error').should.be.false;
     });
   });
+});
 
+describe('destroy strategy', function() {
+  beforeEach(module('schemaForm'));
+  beforeEach(
+    //We don't need no sanitation. We don't need no thought control.
+    module(function($sceProvider) {
+      $sceProvider.enabled(false);
+    })
+  );
 
-
-
-
-
-
-  describe('destroy strategy', function() {
-
-    var schema = {
-      "type": "object",
-      "title": "Comment",
-      "properties": {
-        "name": {
-          "title": "Name",
-          "type": "string"
-        },
-        "email": {
-          "title": "Email",
-          "type": "string",
-          "pattern": "^\\S+@\\S+$",
-          "description": "Email will be used for evil."
-        },
-        "switch": {
-          "type": "boolean",
-          "title": "Switch it up",
-          "default": true
-        },
-        "deep": {
+  var schema = {
+    "type": "object",
+    "title": "Comment",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string"
+      },
+      "email": {
+        "title": "Email",
+        "type": "string",
+        "pattern": "^\\S+@\\S+$",
+        "description": "Email will be used for evil."
+      },
+      "switch": {
+        "type": "boolean",
+        "title": "Switch it up",
+        "default": true
+      },
+      "deep": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "sub": {
+            "type": "object",
+            "properties": {
+              "prop": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "list": {
+        "type": "array",
+        "items": {
           "type": "object",
           "properties": {
             "name": {
@@ -2341,282 +2410,476 @@ describe('directive',function(){
               }
             }
           }
-        },
-        "list": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string"
-              },
+        }
+      },
+      "comment": {
+        "title": "Comment",
+        "type": "string",
+        "maxLength": 20,
+        "validationMessage": "Don't be greedy!"
+      }
+    },
+    "required": [
+      "name",
+      "email",
+      "comment"
+    ]
+  };
+
+  var form = [
+    "name",
+    "email",
+    "switch",
+    {
+      "key": "deep",
+      "condition": "model.switch"
+    },
+    {
+      "type": "tabarray",
+      "key": "list",
+      "condition": "model.switch"
+    },
+    {
+      "key": "comment",
+      "type": "textarea",
+      "placeholder": "Make a comment"
+    },
+    {
+      "type": "submit",
+      "style": "btn-info",
+      "title": "OK"
+    }
+  ];
+
+  it('should default to "remove"', function(done) {
+
+    inject(function($compile, $rootScope) {
+      var scope = $rootScope.$new();
+      scope.person = {
+        "switch": true,
+        "list": [
+          {
+            "sub": {
+              "prop": "subprop"
+            },
+            "name": "Name"
+          }
+        ],
+        "deep": {
+          "name": "deepname",
+          "sub": {
+            "prop": "deepprop"
+          }
+        }
+      };
+
+      scope.schema = schema;
+
+      scope.form = form;
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      scope.person.should.deep.equal({
+        "switch": true,
+        "list": [
+          {
+            "sub": {
+              "prop": "subprop"
+            },
+            "name": "Name"
+          }
+        ],
+        "deep": {
+          "name": "deepname",
+          "sub": {
+            "prop": "deepprop"
+          }
+        }
+      });
+
+      setTimeout(function() {
+        scope.person.switch = false;
+        scope.$apply();
+        scope.person.should.deep.equal({
+          "switch": false
+        });
+        done();
+      });
+
+    });
+  });
+
+  it('should not remove anything if $destroy event comes from outside', function(done) {
+
+    inject(function($compile, $rootScope) {
+      var scope = $rootScope.$new();
+      scope.person = {
+        "switch": true,
+        "list": [
+          {
+            "sub": {
+              "prop": "subprop"
+            },
+            "name": "Name"
+          }
+        ],
+        "deep": {
+          "name": "deepname",
+          "sub": {
+            "prop": "deepprop"
+          }
+        }
+      };
+
+      scope.schema = schema;
+      scope.outside = true;
+      scope.form = form;
+
+      var tmpl = angular.element('<div ng-if="outside"><form sf-schema="schema" sf-form="form" sf-model="person"></form></div>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      scope.person.should.deep.equal({
+        "switch": true,
+        "list": [
+          {
+            "sub": {
+              "prop": "subprop"
+            },
+            "name": "Name"
+          }
+        ],
+        "deep": {
+          "name": "deepname",
+          "sub": {
+            "prop": "deepprop"
+          }
+        }
+      });
+
+      setTimeout(function() {
+        scope.outside = false;
+        scope.$apply();
+
+        scope.person.should.deep.equal({
+          "switch": true,
+          "list": [
+            {
               "sub": {
-                "type": "object",
-                "properties": {
-                  "prop": {
-                    "type": "string"
+                "prop": "subprop"
+              },
+              "name": "Name"
+            }
+          ],
+          "deep": {
+            "name": "deepname",
+            "sub": {
+              "prop": "deepprop"
+            }
+          }
+        });
+        done();
+      });
+    });
+  });
+
+  it('should "retain" model if asked to', function(done) {
+
+    inject(function($compile,$rootScope) {
+      var scope = $rootScope.$new();
+      scope.person = {
+        "switch": true,
+        "list": [
+          {
+            "sub": {
+              "prop": "subprop"
+            },
+            "name": "Name"
+          }
+        ],
+        "deep": {
+          "name": "deepname",
+          "sub": {
+            "prop": "deepprop"
+          }
+        }
+      };
+
+      scope.schema = schema;
+      scope.options = { destroyStrategy: 'retain'};
+      scope.form = form;
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-options="options" sf-form="form" sf-model="person"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      scope.person.should.deep.equal({
+        "switch": true,
+        "list": [
+          {
+            "sub": {
+              "prop": "subprop"
+            },
+            "name": "Name"
+          }
+        ],
+        "deep": {
+          "name": "deepname",
+          "sub": {
+            "prop": "deepprop"
+          }
+        }
+      });
+
+      setTimeout(function() {
+        scope.person.switch = false;
+        scope.$apply();
+        scope.person.should.deep.equal({
+          "switch": false,
+          "list": [
+            {
+              "sub": {
+                "prop": "subprop"
+              },
+              "name": "Name"
+            }
+          ],
+          "deep": {
+            "name": "deepname",
+            "sub": {
+              "prop": "deepprop"
+            }
+          }
+        });
+
+        done();
+      });
+
+    });
+  });
+
+  it('should remove or add fields in an array depending on conditions using arrayIndices', function (done) {
+
+    inject(function ($compile, $rootScope) {
+      var scope = $rootScope.$new();
+      scope.model = {
+        "transportCategory": [
+          {
+            "mode": "Car",
+            "transportOption": [
+              {
+                "name": "Bertie",
+                "forSale": "yes",
+                "price": 100,
+                "history": {
+                    "historyKnown": "no"
+                }
+              },
+              {
+                "name": "Lightning McQueen",
+                "forSale": "no",
+                "history": {
+                  "historyKnown": "yes",
+                  "previousOwners": [
+                    {
+                      "ownerName": ""
+                    },
+                    {
+                      "ownerName": "Arlo",
+                      "logBookProvided": "yes",
+                      "logBookEntry": [
+                        {
+                          "entryId": 2,
+                          "entryDate": "2015-06-23"
+                        },
+                        {
+                          "entryId": 4
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "mode": "Horse",
+            "transportOption": [
+              {
+                "name": "Phar Lap",
+                "forSale": "no"
+              },
+              {
+                "name": "Greyhound",
+                "forSale": "yes",
+                "price": 1000,
+                "history": {
+                  "historyKnown": "yes",
+                  "previousOwners": [
+                    {
+                      "ownerName": "Tom"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      };
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "transportCategory": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "mode": { "type": "string", "enum": ["Car", "Motorbike", "Horse"] },
+                "transportOption": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "numberOfWheels": { "type": "number" },
+                      "forSale": { "type": "string", "enum": ["yes", "no"] },
+                      "price": { "type": "number" },
+                      "history": {
+                        "type": "object",
+                        "properties": {
+                          "historyKnown": { "type": "string", "enum": ["yes", "no"] },
+                          "previousOwners": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "ownerName": { "type": "string" },
+                                "purchaseDate": { "type": "string" },
+                                "logBookProvided": { "type": "string", "enum": ["yes", "no"] },
+                                "logBookEntry": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "object",
+                                    "properties": {
+                                      "entryId": { "type": "number" },
+                                      "entryDate": { "type": "string" },
+                                      "entryNote": { "type": "string" }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           }
-        },
-        "comment": {
-          "title": "Comment",
-          "type": "string",
-          "maxLength": 20,
-          "validationMessage": "Don't be greedy!"
         }
-      },
-      "required": [
-        "name",
-        "email",
-        "comment"
-      ]
-    };
+      };
 
-    var form = [
-      "name",
-      "email",
-      "switch",
-      {
-        "key": "deep",
-        "condition": "model.switch"
-      },
-      {
-        "type": "tabarray",
-        "key": "list",
-        "condition": "model.switch"
-      },
-      {
-        "key": "comment",
-        "type": "textarea",
-        "placeholder": "Make a comment"
-      },
-      {
-        "type": "submit",
-        "style": "btn-info",
-        "title": "OK"
-      }
-    ];
-
-
-
-    it('should default to "remove"', function(done) {
-
-      inject(function($compile,$rootScope) {
-        var scope = $rootScope.$new();
-        scope.person = {
-          "switch": true,
-          "list": [
+      scope.form = [
+        {
+          "key": "transportCategory",
+          "items": [
+            "transportCategory[].mode",
             {
-              "sub": {
-                "prop": "subprop"
-              },
-              "name": "Name"
-            }
-          ],
-          "deep": {
-            "name": "deepname",
-            "sub": {
-              "prop": "deepprop"
-            }
-          }
-        };
-
-        scope.schema = schema;
-
-        scope.form = form;
-
-        var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
-
-        $compile(tmpl)(scope);
-        $rootScope.$apply();
-
-        scope.person.should.deep.equal({
-          "switch": true,
-          "list": [
-            {
-              "sub": {
-                "prop": "subprop"
-              },
-              "name": "Name"
-            }
-          ],
-          "deep": {
-            "name": "deepname",
-            "sub": {
-              "prop": "deepprop"
-            }
-          }
-        });
-
-
-
-        setTimeout(function() {
-          scope.person.switch = false;
-          scope.$apply();
-          scope.person.should.deep.equal({
-            "switch": false
-          });
-          done();
-        });
-
-      });
-    });
-
-    it('should not remove anything if $destroy event comes from outside', function(done) {
-
-      inject(function($compile, $rootScope){
-        var scope = $rootScope.$new();
-        scope.person = {
-          "switch": true,
-          "list": [
-            {
-              "sub": {
-                "prop": "subprop"
-              },
-              "name": "Name"
-            }
-          ],
-          "deep": {
-            "name": "deepname",
-            "sub": {
-              "prop": "deepprop"
-            }
-          }
-        };
-
-        scope.schema = schema;
-        scope.outside = true;
-        scope.form = form;
-
-        var tmpl = angular.element('<div ng-if="outside"><form sf-schema="schema" sf-form="form" sf-model="person"></form></div>');
-
-        $compile(tmpl)(scope);
-        $rootScope.$apply();
-
-        scope.person.should.deep.equal({
-          "switch": true,
-          "list": [
-            {
-              "sub": {
-                "prop": "subprop"
-              },
-              "name": "Name"
-            }
-          ],
-          "deep": {
-            "name": "deepname",
-            "sub": {
-              "prop": "deepprop"
-            }
-          }
-        });
-
-        setTimeout(function() {
-          scope.outside = false;
-          scope.$apply();
-
-          scope.person.should.deep.equal({
-            "switch": true,
-            "list": [
-              {
-                "sub": {
-                  "prop": "subprop"
+              "key": "transportCategory[].transportOption",
+              "items": [
+                "transportCategory[].transportOption[].name",
+                {
+                  "key": "transportCategory[].transportOption[].numberOfWheels",
+                  "condition": "model.transportCategory[arrayIndices[0]].mode != 'Horse'"
                 },
-                "name": "Name"
-              }
-            ],
-            "deep": {
-              "name": "deepname",
-              "sub": {
-                "prop": "deepprop"
-              }
-            }
-          });
-          done();
-        });
-      });
-    });
-
-    it('should "retain" model if asked to', function(done) {
-
-      inject(function($compile,$rootScope) {
-        var scope = $rootScope.$new();
-        scope.person = {
-          "switch": true,
-          "list": [
-            {
-              "sub": {
-                "prop": "subprop"
-              },
-              "name": "Name"
-            }
-          ],
-          "deep": {
-            "name": "deepname",
-            "sub": {
-              "prop": "deepprop"
-            }
-          }
-        };
-
-        scope.schema = schema;
-        scope.options = { destroyStrategy: 'retain'};
-        scope.form = form;
-
-        var tmpl = angular.element('<form sf-schema="schema" sf-options="options" sf-form="form" sf-model="person"></form>');
-
-        $compile(tmpl)(scope);
-        $rootScope.$apply();
-
-        scope.person.should.deep.equal({
-          "switch": true,
-          "list": [
-            {
-              "sub": {
-                "prop": "subprop"
-              },
-              "name": "Name"
-            }
-          ],
-          "deep": {
-            "name": "deepname",
-            "sub": {
-              "prop": "deepprop"
-            }
-          }
-        });
-
-        setTimeout(function() {
-          scope.person.switch = false;
-          scope.$apply();
-          scope.person.should.deep.equal({
-            "switch": false,
-            "list": [
-              {
-                "sub": {
-                  "prop": "subprop"
+                "transportCategory[].transportOption[].forSale",
+                {
+                  "key": "transportCategory[].transportOption[].price",
+                  "condition": "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].forSale == 'yes'"
                 },
-                "name": "Name"
-              }
-            ],
-            "deep": {
-              "name": "deepname",
-              "sub": {
-                "prop": "deepprop"
-              }
+                "transportCategory[].transportOption[].history.historyKnown",
+                {
+                  "key": "transportCategory[].transportOption[].history.previousOwners",
+                  "condition": "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.historyKnown == 'yes'",
+                  "items": [
+                    "transportCategory[].transportOption[].history.previousOwners[].ownerName",
+                    {
+                      "key": "transportCategory[].transportOption[].history.previousOwners[].purchaseDate",
+                      "condition": "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].ownerName.length > 2",
+                    },
+                    {
+                      "key": "transportCategory[].transportOption[].history.previousOwners[].logBookProvided",
+                      "condition": "model.transportCategory[arrayIndices[0]].mode != 'Horse' && model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].ownerName.length > 2"
+                    },
+                    {
+                      "key": "transportCategory[].transportOption[].history.previousOwners[].logBookEntry",
+                      "condition": "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].logBookProvided == 'yes'",
+                      "items": [
+                        "transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryId",
+                        "transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryDate",
+                        {
+                          "key": "transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryNote",
+                          "condition": "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].logBookEntry[arrayIndices[3]].entryDate.length > 2"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
             }
-          });
+          ]
+        }
+      ];
 
-          done();
-        });
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="model"></form>');
 
-      });
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      /*** transportCategory[].transportOption[].numberOfWheels condition tests ***/
+      tmpl.find('.transportCategory-transportOption-numberOfWheels').length.should.be.eq(2);
+      tmpl.find('.transportCategory-0-transportOption-0-numberOfWheels').length.should.be.eq(1);
+      tmpl.find('.transportCategory-0-transportOption-1-numberOfWheels').length.should.be.eq(1);
+      tmpl.find('.transportCategory-1-transportOption-0-numberOfWheels').length.should.be.eq(0);
+      tmpl.find('.transportCategory-1-transportOption-1-numberOfWheels').length.should.be.eq(0);
+
+      /*** transportCategory[].transportOption[].price field condition tests ***/
+      tmpl.find('.transportCategory-transportOption-price').length.should.be.eq(2);
+      tmpl.find('.transportCategory-0-transportOption-0-price').length.should.be.eq(1);
+      tmpl.find('.transportCategory-0-transportOption-1-price').length.should.be.eq(0);
+      tmpl.find('.transportCategory-1-transportOption-0-price').length.should.be.eq(0);
+      tmpl.find('.transportCategory-1-transportOption-1-price').length.should.be.eq(1);
+
+      /*** transportCategory[].transportOption[].history.previousOwners.ownerName field condition tests ***/
+      tmpl.find('.transportCategory-transportOption-history-previousOwners-ownerName').length.should.be.eq(3);
+      tmpl.find('.transportCategory-0-transportOption-0-history-previousOwners-0-ownerName').length.should.be.eq(0);
+      tmpl.find('.transportCategory-0-transportOption-1-history-previousOwners-0-ownerName').length.should.be.eq(1);
+      tmpl.find('.transportCategory-1-transportOption-0-history-previousOwners-0-ownerName').length.should.be.eq(0);
+      tmpl.find('.transportCategory-1-transportOption-1-history-previousOwners-0-ownerName').length.should.be.eq(1);
+
+      /*** transportCategory[].transportOption[].history.previousOwners[].purchaseDate field condition tests ***/
+      tmpl.find('.transportCategory-transportOption-history-previousOwners-purchaseDate').length.should.be.eq(2);
+      tmpl.find('.transportCategory-0-transportOption-1-history-previousOwners-1-purchaseDate').length.should.be.eq(1);
+      tmpl.find('.transportCategory-1-transportOption-1-history-previousOwners-0-purchaseDate').length.should.be.eq(1);
+
+      /*** transportCategory[].transportOption[].history.previousOwners[].logBookProvided field condition tests ***/
+      tmpl.find('.transportCategory-transportOption-history-previousOwners-logBookProvided').length.should.be.eq(1);
+      tmpl.find('.transportCategory-0-transportOption-1-history-previousOwners-1-logBookProvided').length.should.be.eq(1);
+
+      /*** transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryNote  field condition tests ***/
+      tmpl.find('.transportCategory-transportOption-history-previousOwners-logBookEntry-entryNote').length.should.be.eq(1);
+      tmpl.find('.transportCategory-0-transportOption-1-history-previousOwners-1-logBookEntry-0-entryNote').length.should.be.eq(1);
+
+      done();
     });
-
-
   });
 
 });

@@ -2,10 +2,9 @@ chai.should();
 
 describe('schemaForm', function() {
   beforeEach(module('schemaForm'));
-
   describe('#defaults()', function() {
-    it('should generate default form def from a schema',function(){
-      inject(function(schemaForm){
+    it('should generate default form def from a schema', function() {
+      inject(function(schemaForm) {
         var schema = {
           "type": "object",
           "properties": {
@@ -137,6 +136,9 @@ describe('schemaForm', function() {
               }
             },
             "ngModelOptions": {},
+            "key": [
+              "attributes"
+            ],
             "type": "fieldset",
             "key": [
               "attributes"
@@ -184,6 +186,10 @@ describe('schemaForm', function() {
                   }
                 },
                 "ngModelOptions": {},
+                "key": [
+                  "attributes",
+                  "shoulders"
+                ],
                 "type": "fieldset",
                 "key": [
                   "attributes",
@@ -259,7 +265,7 @@ describe('schemaForm', function() {
           }
         ];
 
-        var f = schemaForm.defaults(schema,{},{ formDefaults: { foo: "bar", ngModelOptions: { updateOn: 'blur' }}});
+        var f = schemaForm.defaults(schema, schemaForm.typeDefault, {}, { formDefaults: { foo: "bar", ngModelOptions: { updateOn: 'blur' }}});
         f.form.should.be.deep.equal(form);
       });
     });
@@ -281,9 +287,7 @@ describe('schemaForm', function() {
           }
         };
 
-
-
-        var f = schemaForm.defaults(schema,{});
+        var f = schemaForm.defaults(schema, schemaForm.typeDefault, {});
         f.form[0].type.should.be.eq('textarea');
       });
     });
@@ -319,18 +323,25 @@ describe('schemaForm', function() {
   });
 
   describe('#appendRule() and #prependRule()', function() {
+    beforeEach(module('schemaForm'));
+    beforeEach(
+      module(function($sceProvider) {
+        $sceProvider.enabled(false);
+      })
+    );
+
     it('should extend with new defaults',function(){
       module(function(schemaFormProvider){
-        schemaFormProvider.prependRule('string',function(name,schema,options){
+        schemaFormProvider.prependRule('string', function(name, schema, options) {
           if (schema.format === 'foobar') {
-            var f = schemaFormProvider.createStandardForm(name,schema,options);
+            var f = schemaFormProvider.createStandardForm(name, schema, options);
             f.type = 'foobar';
             return f;
           }
         });
 
-        schemaFormProvider.appendRule('string',function(name,schema,options){
-          var f = schemaFormProvider.createStandardForm(name,schema,options);
+        schemaFormProvider.appendRule('string', function(name, schema, options){
+          var f = schemaFormProvider.createStandardForm(name, schema, options);
           f.type = 'notused';
           return f;
         });
