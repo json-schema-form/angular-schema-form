@@ -76,26 +76,9 @@ export default function() {
     var service = {};
     var typeDefault = this.defaults;
 
-    service.merge = function(schema, form, ignore, options, readonly, asyncTemplates) {
-      form  = form || [ '*' ];
-      options = options || {};
-
-      // Get readonly from root object
-      readonly = readonly || schema.readonly || schema.readOnly;
-
-      const stdForm = schemaDefaults.defaultForm(schema, typeDefault, ignore, options);
-
-      //simple case, we have a "*", just put the stdForm there
-      var idx = form.indexOf('*');
-      if (idx !== -1) {
-        form  = form.slice(0, idx)
-                   .concat(stdForm.form)
-                   .concat(form.slice(idx + 1));
-      }
-
-      //ok let's merge!
+    service.merge = function(schema, form = [ '*' ], ignore, options = {}, readonly = false, asyncTemplates) {
       //We look at the supplied form and extend it with schema standards
-      const canonical = merge(stdForm.lookup, form, options, readonly, asyncTemplates);
+      const canonical = merge(schema, form, ignore, options, readonly, asyncTemplates);
       return postProcessFn(canonical);
     };
 
