@@ -1,6 +1,6 @@
 {
   "name": "angular-schema-form",
-  "main": "dist/schema-form.js",
+  "main": "dist/angular-schema-form.js",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>",
