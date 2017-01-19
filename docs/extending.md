@@ -269,19 +269,19 @@ both from the provider and the service on the property `builders`. There is also
 builders, when in doubt use those.
 
 ```js
-angular.module('myMod').config(function(sfBuildersProvider) {
+angular.module('myMod').config(function(sfBuilderProvider) {
 
   // Standard builders
-  sfBuildersProvider.stdBuilders;
+  sfBuilderProvider.stdBuilders;
 
   // All builders
-  sfBuildersProvider.builders.sfField;
-  sfBuildersProvider.builders.condition;
-  sfBuildersProvider.builders.ngModel;
-  sfBuildersProvider.builders.ngModelOptions;
-  sfBuildersProvider.builders.simpleTransclusion;
-  sfBuildersProvider.builders.transclusion;
-  sfBuildersProvider.builders.array;
+  sfBuilderProvider.builders.sfField;
+  sfBuilderProvider.builders.condition;
+  sfBuilderProvider.builders.ngModel;
+  sfBuilderProvider.builders.ngModelOptions;
+  sfBuilderProvider.builders.simpleTransclusion;
+  sfBuilderProvider.builders.transclusion;
+  sfBuilderProvider.builders.array;
 
 });
 ```
