@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.1
- * @date Sat, 14 Jan 2017 17:09:44 GMT
+ * @date Mon, 23 Jan 2017 13:42:17 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -85,7 +85,7 @@ module.exports = angular;
 /*!
  * json-schema-form-core
  * @version 1.0.0-alpha.1
- * @date Sat, 14 Jan 2017 17:07:51 GMT
+ * @date Mon, 16 Jan 2017 13:06:10 GMT
  * @link https://github.com/json-schema-form/json-schema-form-core
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -555,21 +555,21 @@ function defaultForm(schema, defaultSchemaTypes, ignore, globalOptions) {
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__schema_defaults__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__sf_path__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__canonical_title_map__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__merge__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__select__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__traverse__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__validate__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_schema_defaults__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_sf_path__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__lib_canonical_title_map__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__lib_merge__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__lib_select__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__lib_traverse__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__lib_validate__ = __webpack_require__(8);
 /* harmony export (binding) */ __webpack_require__.d(exports, "sfPath", function() { return sfPath; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "schemaDefaults", function() { return schemaDefaults; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "canonicalTitleMap", function() { return canonicalTitleMap; });
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "merge", function() { return __WEBPACK_IMPORTED_MODULE_3__merge__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "select", function() { return __WEBPACK_IMPORTED_MODULE_4__select__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "traverseSchema", function() { return __WEBPACK_IMPORTED_MODULE_5__traverse__["a"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "traverseForm", function() { return __WEBPACK_IMPORTED_MODULE_5__traverse__["b"]; });
-/* harmony reexport (binding) */ __webpack_require__.d(exports, "validate", function() { return __WEBPACK_IMPORTED_MODULE_6__validate__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "merge", function() { return __WEBPACK_IMPORTED_MODULE_3__lib_merge__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "select", function() { return __WEBPACK_IMPORTED_MODULE_4__lib_select__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "traverseSchema", function() { return __WEBPACK_IMPORTED_MODULE_5__lib_traverse__["a"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "traverseForm", function() { return __WEBPACK_IMPORTED_MODULE_5__lib_traverse__["b"]; });
+/* harmony reexport (binding) */ __webpack_require__.d(exports, "validate", function() { return __WEBPACK_IMPORTED_MODULE_6__lib_validate__["a"]; });
 
 
 
@@ -579,9 +579,9 @@ function defaultForm(schema, defaultSchemaTypes, ignore, globalOptions) {
 
 
 
-var sfPath = __WEBPACK_IMPORTED_MODULE_1__sf_path__;
-var schemaDefaults = __WEBPACK_IMPORTED_MODULE_0__schema_defaults__;
-var canonicalTitleMap = __WEBPACK_IMPORTED_MODULE_2__canonical_title_map__["a" /* default */];
+var sfPath = __WEBPACK_IMPORTED_MODULE_1__lib_sf_path__;
+var schemaDefaults = __WEBPACK_IMPORTED_MODULE_0__lib_schema_defaults__;
+var canonicalTitleMap = __WEBPACK_IMPORTED_MODULE_2__lib_canonical_title_map__["a" /* default */];
 
 /***/ },
 /* 5 */
@@ -729,6 +729,7 @@ function select(projection, obj, valueToSet) {
   if (typeof valueToSet !== 'undefined' && parts.length === 1) {
     // special case, just setting one variable
     obj[parts[0]] = valueToSet;
+
     return obj;
   };
 
@@ -738,12 +739,14 @@ function select(projection, obj, valueToSet) {
   };
 
   var value = obj[parts[0]];
+
   for (var i = 1; i < parts.length; i++) {
     // Special case: We allow JSON Form syntax for arrays using empty brackets
     // These will of course not work here so we exit if they are found.
     if (parts[i] === '') {
       return undefined;
-    }
+    };
+
     if (typeof valueToSet !== 'undefined') {
       if (i === parts.length - 1) {
         // last step. Let's set the value
@@ -753,19 +756,22 @@ function select(projection, obj, valueToSet) {
         // Make sure to create new objects on the way if they are not there.
         // We need to look ahead to check if array is appropriate
         var tmp = value[parts[i]];
+
         if (typeof tmp === 'undefined' || tmp === null) {
           tmp = numRe.test(parts[i + 1]) ? [] : {};
           value[parts[i]] = tmp;
-        }
+        };
+
         value = tmp;
-      }
+      };
     } else if (value) {
       // Just get nex value.
       value = value[parts[i]];
-    }
-  }
+    };
+  };
+
   return value;
-}
+};
 
 /***/ },
 /* 7 */
@@ -1122,7 +1128,6 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
       // Validate against the schema.
 
       var validate = function validate(viewValue) {
-        //console.log('validate called', viewValue)
         //Still might be undefined
         if (!form) {
           return viewValue;
@@ -1203,9 +1208,10 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
 
       // A bit ugly but useful.
       scope.validateField = function (formName) {
+        var noField = formName === undefined;
         // If we have specified a form name, and this model is not within
         // that form, then leave things be.
-        if (formName != undefined && ngModel.$$parentForm.$name !== formName) {
+        if (!noField && ngModel.$$parentForm.$name !== formName) {
           return;
         }
 
@@ -1214,9 +1220,9 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
         // Just setting the viewValue isn't enough to trigger validation
         // since it's the same value. This will be better when we drop
         // 1.2 support.
-        if (schema && schema.type.indexOf('array') !== -1) {
+        if (noField || schema && schema.type.indexOf('array') !== -1) {
           validate(ngModel.$modelValue);
-        }
+        };
 
         // We set the viewValue to trigger parsers,
         // since modelValue might be empty and validating just that

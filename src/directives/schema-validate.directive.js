@@ -29,7 +29,6 @@ export default function(sfValidator, $parse, sfSelect) {
       // Validate against the schema.
 
       var validate = function(viewValue) {
-        //console.log('validate called', viewValue)
         //Still might be undefined
         if (!form) {
           return viewValue;
@@ -106,9 +105,10 @@ export default function(sfValidator, $parse, sfSelect) {
 
       // A bit ugly but useful.
       scope.validateField =  function(formName) {
+        let noField = (formName === undefined);
         // If we have specified a form name, and this model is not within
         // that form, then leave things be.
-        if (formName != undefined && ngModel.$$parentForm.$name !== formName) {
+        if (!noField && ngModel.$$parentForm.$name !== formName) {
           return;
         }
 
@@ -117,9 +117,9 @@ export default function(sfValidator, $parse, sfSelect) {
         // Just setting the viewValue isn't enough to trigger validation
         // since it's the same value. This will be better when we drop
         // 1.2 support.
-        if (schema && schema.type.indexOf('array') !== -1) {
+        if (noField || schema && schema.type.indexOf('array') !== -1) {
           validate(ngModel.$modelValue);
-        }
+        };
 
         // We set the viewValue to trigger parsers,
         // since modelValue might be empty and validating just that
@@ -143,7 +143,8 @@ export default function(sfValidator, $parse, sfSelect) {
             ngModel.$setValidity('tv4-302', false);
           }
 
-        } else {
+        }
+        else {
           // Angular 1.2
           // In angular 1.2 setting a viewValue of undefined will trigger the parser.
           // hence required works.

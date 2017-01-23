@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.1
- * @date Sat, 14 Jan 2017 17:11:59 GMT
+ * @date Mon, 23 Jan 2017 13:42:17 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
