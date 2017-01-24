@@ -23,6 +23,14 @@
     "Mike Marcacci (https://github.com/mike-marcacci)"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/json-schema-form/angular-schema-form#readme",
+  "bugs": {
+    "url": "https://github.com/json-schema-form/angular-schema-form/issues"
+  },
+  "repository" : {
+    "type" : "git",
+    "url" : "http://github.com/json-schema-form/angular-schema-form.git"
+  },
   "dependencies": {
     "angular": ">= 1.2",
     "tv4": "~1.0.15",
