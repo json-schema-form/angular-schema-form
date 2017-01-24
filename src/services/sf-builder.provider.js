@@ -326,6 +326,9 @@ export default function(sfPathProvider) {
        */
       build: function(form, decorator, slots, lookup) {
         return build(form, decorator, function(form, field) {
+          if (form.type === 'template') {
+            return form.template;
+          }
           if (field.type === 'template') {
             return field.template;
           }
