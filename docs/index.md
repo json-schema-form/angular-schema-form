@@ -1085,7 +1085,7 @@ function FormCtrl($scope) {
       type: "radios",
       titleMap: [
         { value: false, name: "No I don't understand these cryptic terms" },
-        { value: true, , name: "Yes this makes perfect sense to me" }
+        { value: true, name: "Yes this makes perfect sense to me" }
       ]
     }
   ];
