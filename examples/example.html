@@ -194,45 +194,54 @@
 
 <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/g/jquery.ui@1.10"></script>
+
 <script type="text/javascript" src="../bower_components/tv4/tv4.js"></script>
 <script type="text/javascript" src="../bower_components/ace-builds/src-min-noconflict/ace.js"></script>
 <script type="text/javascript" src="../bower_components/angular/angular.min.js"></script>
 <script type="text/javascript" src="../bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.2/moment.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/zeroclipboard/2.2.0/ZeroClipboard.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/ng-clip/0.2.6/ng-clip.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap.min.js"></script>
-<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script> -->
-<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-sanitize.min.js"></script> -->
-
 
 <script type="text/javascript" src="../bower_components/angular-ui-sortable/sortable.js"></script>
 <script type="text/javascript" src="../bower_components/angular-ui-ace/ui-ace.js"></script>
-<!-- <script type="text/javascript" src="../bower_components/pickadate/lib/picker.js"></script>
-<script type="text/javascript" src="../bower_components/pickadate/lib/picker.date.js"></script>
-<script type="text/javascript" src="../bower_components/pickadate/lib/translations/nl_NL.js"></script> -->
 
-<!-- <script type="text/javascript" src="//tinymce.cachefly.net/4.0/tinymce.min.js"></script>
-<script type="text/javascript" src="../bower_components/tx-tinymce/tx-tinymce.js"></script> -->
+<script type="text/javascript" src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+<script type="text/javascript" src="../bower_components/tx-tinymce/tx-tinymce.js"></script>
 
-<!-- <script type="text/javascript" src="../bower_components/spectrum/spectrum.js"></script>
+<script type="text/javascript" src="../bower_components/spectrum/spectrum.js"></script>
 <script type="text/javascript" src="../bower_components/spectrum/i18n/jquery.spectrum-sv.js"></script>
-<script type="text/javascript" src="../bower_components/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.min.js"></script> -->
+<script type="text/javascript" src="../bower_components/angular-spectrum-colorpicker/dist/angular-spectrum-colorpicker.js"></script>
 
 <script type="text/javascript" src="../dist/angular-schema-form.js"></script>
 <script type="text/javascript" src="../dist/angular-schema-form-bootstrap.js"></script>
 <script type="text/javascript" src="add-on/calculate.js"></script>
-<!-- <script type="text/javascript" src="../bower_components/angular-schema-form-datepicker/bootstrap-datepicker.min.js"></script> -->
-<!-- <script type="text/javascript" src="../bower_components/angular-schema-form-colorpicker/bootstrap-colorpicker.min.js"></script> -->
+<script type="text/javascript" src="../bower_components/angular-schema-form-datepicker/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-schema-form-colorpicker/bootstrap-colorpicker.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-schema-form-tinymce/bootstrap-tinymce.js"></script>
 
 <script type="text/javascript">
 // @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&dn=expat.txt Expat
 //
 // To test the tinymce addon, uncomment the files above and inject 'tx-tinymce' below.
 /*global alert*/
-var app = angular.module('test', ['schemaForm', 'ui.ace', 'ngClipboard', 'ui.bootstrap.tooltip']);
+var app = angular.module('test', ['schemaForm', 'ui.ace', 'ngClipboard', 'ui.bootstrap.tooltip', 'schemaForm-tinymce']);
 app.controller('TestCtrl', function($scope, $http, $location) {
+  tv4.defineError('EMAIL', 10001, 'Invalid email address');
+  tv4.defineKeyword('email', function(data, value, schema) {
+    if (schema.email) {
+      if (/^\S+@\S+$/.test(data)) {
+        return null;
+      }
+      return {
+        code: 10001
+      };
+    }
+    return null;
+  });
 
   $scope.tests = [
     { name: "Simple", data: 'data/simple.json' },
@@ -246,6 +255,7 @@ app.controller('TestCtrl', function($scope, $http, $location) {
     { name: "TitleMap Examples", data: 'data/titlemaps.json' },
     { name: "Kitchen Sink", data: 'data/sink.json' },
     { name: "Calculate", data: 'data/calculate.json' },
+    { name: "Custom Error", data: 'data/custom-error.json' },
     { name: "Hack: Conditional required", data: 'data/conditional-required.json' }
   ];
 

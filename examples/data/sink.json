@@ -173,6 +173,15 @@
                 {
                   "key": "shoesizeRight"
                 },
+                {
+                  "key": "invitation",
+                  "tinymceOptions": {
+                    "toolbar": [
+                      "undo redo| styleselect | bold italic | link image",
+                      "alignleft aligncenter alignright"
+                    ]
+                  }
+                },
                 "things",
                 "dislike"
               ]

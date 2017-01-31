@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.1
- * @date Mon, 23 Jan 2017 13:42:17 GMT
+ * @date Tue, 31 Jan 2017 11:57:55 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -91,7 +91,7 @@ module.exports = __webpack_require__(2);
 /*!
  * angular-schema-form-bootstrap
  * @version 1.0.0-alpha.1
- * @date Sat, 14 Jan 2017 17:11:45 GMT
+ * @date Sun, 29 Jan 2017 00:45:28 GMT
  * @link https://github.com/json-schema-form/angular-schema-form-bootstrap
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -414,7 +414,7 @@ module.exports = __webpack_require__(2);
   // ngtemplate-loader embeds the html on build
 
 
-  angular.module('schemaForm').config(bootstrapDecoratorConfig).filter('sfCamelKey', sfCamelKeyFilter);
+  angular.module('schemaForm').config(bootstrapDecoratorConfig);
 
   bootstrapDecoratorConfig.$inject = ['schemaFormProvider', 'schemaFormDecoratorsProvider', 'sfBuilderProvider', 'sfPathProvider', '$injector'];
 
@@ -502,27 +502,6 @@ module.exports = __webpack_require__(2);
       tabs: { template: __WEBPACK_IMPORTED_MODULE_14__bootstrap_tabs_html___default.a, builder: [sfField, ngModelOptions, tabs, condition] },
       textarea: { template: __WEBPACK_IMPORTED_MODULE_15__bootstrap_textarea_html___default.a, builder: defaults }
     }, []);
-  };
-
-  /**
-   * sfCamelKey Filter
-   */
-  function sfCamelKeyFilter() {
-    return function (formKey) {
-      if (!formKey) {
-        return '';
-      };
-      var part, i, key;
-      key = formKey.slice();
-      for (i = 0; i < key.length; i++) {
-        part = key[i].toLowerCase().split('');
-        if (i && part.length) {
-          part[0] = part[0].toUpperCase();
-        };
-        key[i] = part.join('');
-      };
-      return key.join('');
-    };
   };
 
   /***/

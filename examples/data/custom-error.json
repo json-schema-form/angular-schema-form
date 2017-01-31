@@ -1,0 +1,26 @@
+{
+  "schema": {
+    "type": "object",
+    "title": "Person",
+    "properties": {
+      "email": {
+        "type": "string",
+        "maxLength": 255,
+        "email": true
+      }
+    }
+  },
+  "form": [
+    {
+      "key": "email",
+      "placeholder": "Enter contact email",
+      "feedback": false
+    },
+    {
+      "type": "submit",
+      "style": "btn-info",
+      "title": "OK"
+    }
+  ],
+  "model": { "email": "NULL" }
+}
