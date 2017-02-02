@@ -229,6 +229,9 @@
 // To test the tinymce addon, uncomment the files above and inject 'tx-tinymce' below.
 /*global alert*/
 var app = angular.module('test', ['schemaForm', 'ui.ace', 'ngClipboard', 'ui.bootstrap.tooltip', 'schemaForm-tinymce']);
+app.config(['sfErrorMessageProvider', function(sfErrorMessageProvider) {
+    sfErrorMessageProvider.setDefaultMessage(10001, 'Whoa! Can you double check that email address for me?');
+}]);
 app.controller('TestCtrl', function($scope, $http, $location) {
   tv4.defineError('EMAIL', 10001, 'Invalid email address');
   tv4.defineKeyword('email', function(data, value, schema) {
