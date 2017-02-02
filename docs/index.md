@@ -346,6 +346,9 @@ or Schema Form does not support it (yet), like `anyOf` and `oneOf`.
 Other times you really need to ask the backend, maybe to check that the a username is not already
 taken or some other constraint that only the backend can know about.
 
+### NOTE: Odd default behaviour in ngModelOptions
+Once an individual field is edited, if it is invalid your error should appear, however then validating the whole form can no longer display your message. This is due to a feature of ngModelController where it doesn't add invalid fields to your model, if this is not the behaviour you wish to see, you can change it by adding `ng-model-options="{ allowInvalid: true }"` to your form.
+
 ### Inject errors into form aka backend validation
 To support validation outside of the form, most commonly on the backend, schema form lets you
 injecting arbitrary validationMessages to any field and setting it's validity.
