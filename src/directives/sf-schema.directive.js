@@ -100,10 +100,11 @@ sfSelect, sfPath, sfBuilder) {
         childScope.schemaForm  = { form:  merged, schema: schema };
 
         //clean all but pre existing html.
-        Array.prototype.forEach.call(element[0].children, function(child) {
-          if (([' ', child.className, ' '].join('')).indexOf(' schema-form-ignore ') === -1 && child.querySelectorAll('[sf-insert-field]').length === 0) {
-            angular.element(child).remove();
-          }
+        Array.prototype.forEach.call(element.children(), function(child) {
+          let jchild = angular.element(child);
+          if (false === jchild.hasClass('schema-form-ignore')) {
+            jchild.remove();
+          };
         });
 
         // Find all slots.

@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.1
- * @date Tue, 31 Jan 2017 13:48:26 GMT
+ * @date Sat, 04 Feb 2017 11:08:45 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -2153,10 +2153,11 @@ FIXME: real documentation
         childScope.schemaForm = { form: merged, schema: schema };
 
         //clean all but pre existing html.
-        Array.prototype.forEach.call(element[0].children, function (child) {
-          if ([' ', child.className, ' '].join('').indexOf(' schema-form-ignore ') === -1 && child.querySelectorAll('[sf-insert-field]').length === 0) {
-            __WEBPACK_IMPORTED_MODULE_0_angular___default.a.element(child).remove();
-          }
+        Array.prototype.forEach.call(element.children(), function (child) {
+          var jchild = __WEBPACK_IMPORTED_MODULE_0_angular___default.a.element(child);
+          if (false === jchild.hasClass('schema-form-ignore')) {
+            jchild.remove();
+          };
         });
 
         // Find all slots.

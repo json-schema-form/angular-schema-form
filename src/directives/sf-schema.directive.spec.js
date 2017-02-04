@@ -2882,4 +2882,99 @@ describe('destroy strategy', function() {
     });
   });
 
+  it('should remove added fields when refreshing or changing content', function (done) {
+    var a = {
+      schema: {
+        "type": "object",
+        "title": "Comment",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string",
+            "pattern": "^\\S+@\\S+$",
+            "description": "Email will be used for evil."
+          },
+          "comment": {
+            "title": "Comment",
+            "type": "string",
+            "maxLength": 20,
+            "validationMessage": "Don't be greedy!"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "comment"
+        ]
+      },
+      form: [
+        "name",
+        "email",
+        {
+          "key": "comment",
+          "type": "textarea",
+          "placeholder": "Make a comment"
+        },
+        {
+          "type": "submit",
+          "style": "btn-info",
+          "title": "OK"
+        }
+      ]
+    };
+
+    var b = {
+      schema: {
+        "type": "object",
+        "title": "Types",
+        "properties": {
+          "string": {
+            "type": "string",
+            "minLength": 3
+          },
+          "integer": {
+            "type": "integer"
+          },
+          "number": {
+            "type": "number"
+          },
+          "boolean": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "number"
+        ]
+      },
+      form: [ "*" ]
+    };
+
+    inject(function ($compile, $rootScope) {
+      var scope = $rootScope.$new();
+      scope.model = {};
+      scope.schema = a.schema;
+      scope.form = a.form;
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="model"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      tmpl.find('.form-group').length.should.be.eq(4);
+
+      scope.schema = b.schema;
+      scope.form = b.form;
+
+      scope.$broadcast('schemaFormRedraw');
+      $rootScope.$apply();
+
+      tmpl.find('.form-group').length.should.be.eq(3);
+
+      done();
+    });
+  });
 });

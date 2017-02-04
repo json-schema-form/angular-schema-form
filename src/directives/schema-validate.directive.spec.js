@@ -8,6 +8,19 @@ describe('directive', function() {
     })
   );
 
+  tv4.defineError('EMAIL', 10001, 'Invalid email address');
+  tv4.defineKeyword('email', function(data, value, schema) {
+    if (schema.email) {
+      if (/^\S+@\S+$/.test(data)) {
+        return null;
+      }
+      return {
+        code: 10001
+      };
+    }
+    return null;
+  });
+
   exampleSchema = {
     "type": "object",
     "title": "Person",
@@ -71,19 +84,6 @@ describe('directive', function() {
     );
 
     inject(function($compile,$rootScope) {
-      tv4.defineError('EMAIL', 10001, 'Invalid email address');
-      tv4.defineKeyword('email', function(data, value, schema) {
-        if (schema.email) {
-          if (/^\S+@\S+$/.test(data)) {
-            return null;
-          }
-          return {
-            code: 10001
-          };
-        }
-        return null;
-      });
-
       var scope = $rootScope.$new();
       scope.obj = { "email": "NULL" };
 
@@ -109,6 +109,50 @@ describe('directive', function() {
       tmpl.find('input.validate').click();
       scope.validate_all.should.have.beenCalledOnce;
       form.$valid.should.be.false;
+    });
+  });
+
+  it('should allow custom tv4 error default message to be set', function() {
+  //TODO test message rename
+  // app.config(['sfErrorMessageProvider', function(sfErrorMessageProvider) {
+  //     sfErrorMessageProvider.setDefaultMessage(10001, 'Whoa! Can you double check that email address for me?');
+  // }]);
+
+    tmpl = angular.element(
+      '<div>' +
+        '<form name="testform" sf-schema="schema" sf-form="form" sf-model="obj"></form>' +
+        '{{obj}}' +
+      '</div>'
+    );
+
+    inject(function($compile,$rootScope) {
+
+      var scope = $rootScope.$new();
+      scope.obj = { "email": "NULL" };
+
+      scope.schema = exampleSchema;
+
+      scope.form = [
+        {
+          "key": "email",
+          "placeholder": "Enter contact email",
+          "feedback": false
+        },
+        {
+          "type": "submit",
+          "style": "btn-info",
+          "title": "OK"
+        }
+      ];
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      var form = tmpl.find('form').eq(0).controller('form');
+
+      form.$valid.should.be.true;
+      tmpl.find('input.btn-info').click();
+      //TODO form.$valid.should.be.false;
     });
   });
 });
