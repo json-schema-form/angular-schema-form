@@ -266,7 +266,8 @@ export default function(sfPathProvider) {
 
           (checkForSlot(f, slots) || frag).appendChild(n);
 
-        } else {
+        }
+        else {
           var tmpl;
 
           // Reset arrayCompatFlag, it's only valid for direct children of the array.
@@ -307,7 +308,8 @@ export default function(sfPathProvider) {
           // Builders are either a function or a list of functions.
           if (typeof builderFn === 'function') {
             builderFn(args);
-          } else {
+          }
+          else {
             builderFn.forEach(function(fn) { fn(args); });
           }
 
@@ -315,7 +317,8 @@ export default function(sfPathProvider) {
           (checkForSlot(f, slots) || frag).appendChild(tmpl);
         }
         return frag;
-      }, container);
+      },
+      container);
 
       return container;
     };

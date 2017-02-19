@@ -1,5 +1,13 @@
 chai.should();
 
+var runSync = function (scope, tmpl) {
+  var directiveScope = tmpl.isolateScope();
+  var stub = sinon.stub(directiveScope, 'resolveReferences', function(schema, form) {
+    directiveScope.render(schema, form);
+  });
+  scope.$apply();
+}
+
 describe('directive',function() {
   beforeEach(module('schemaForm'));
   beforeEach(
@@ -34,7 +42,8 @@ describe('directive',function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
+
       tmpl.children().find('div.help-block').text().should.equal('foobar');
 
       setTimeout(function() {

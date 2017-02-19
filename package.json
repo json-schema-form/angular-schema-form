@@ -1,11 +1,14 @@
 {
   "name": "angular-schema-form",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Create complex forms from a JSON schema with angular.",
-  "repository": "json-schema-form/angular-schema-form",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/json-schema-form/angular-schema-form.git"
+  },
   "main": "dist/angular-schema-form.js",
   "filename": "dist/angular-schema-form.min.js",
-  "homepage": "http://schemaform.io",
+  "homepage": "https://github.com/json-schema-form/angular-schema-form#readme",
   "scripts": {
     "build": "webpack",
     "dist": "webpack --config webpack.config.dist.js",
@@ -23,13 +26,8 @@
     "Mike Marcacci (https://github.com/mike-marcacci)"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/json-schema-form/angular-schema-form#readme",
   "bugs": {
     "url": "https://github.com/json-schema-form/angular-schema-form/issues"
-  },
-  "repository" : {
-    "type" : "git",
-    "url" : "http://github.com/json-schema-form/angular-schema-form.git"
   },
   "dependencies": {
     "angular": ">= 1.2",
@@ -68,8 +66,8 @@
     "raw-loader": "^0.5.1",
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
-    "webpack": "^2.1.0-beta.27",
-    "webpack-dev-server": "^2.1.0-beta.12"
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.3.0"
   },
   "licenses": [
     {

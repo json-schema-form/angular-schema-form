@@ -1,5 +1,13 @@
 chai.should();
 
+var runSync = function (scope, tmpl) {
+  var directiveScope = tmpl.isolateScope();
+  var stub = sinon.stub(directiveScope, 'resolveReferences', function(schema, form) {
+    directiveScope.render(schema, form);
+  });
+  scope.$apply();
+}
+
 describe('directive', function() {
   beforeEach(module('schemaForm'));
   beforeEach(
@@ -41,7 +49,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).is('div.form-group').should.be.true;
@@ -65,7 +73,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).is('div.form-group').should.be.true;
@@ -137,7 +145,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-decorator-name="bootstrap-decorator"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
 
       tmpl.children().length.should.be.equal(6);
@@ -181,7 +189,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"><input type="text" ng-model="person.name" value="OMG"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).is('input[type="text"]').should.be.true;
@@ -205,7 +213,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"><ul><li sf-insert-field="[\'name\']"></li></ul></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().eq(0).is('ul').should.be.true;
       tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
@@ -224,7 +232,7 @@ describe('directive', function() {
       scope.form = [{ type: 'submit',title: 'Okidoki'}];
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.find('input').is('input[type=submit]').should.be.true;
@@ -236,7 +244,7 @@ describe('directive', function() {
       tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       tmpl.children().length.should.be.equal(3);
       tmpl.children().eq(0).is('div.form-group').should.be.true;
       tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
@@ -259,7 +267,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(3);
       tmpl.children().eq(0).is('div.form-group').should.be.true;
@@ -286,7 +294,7 @@ describe('directive', function() {
       scope.form = [{ type: 'submit',title: 'Okidoki'}];
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.find('input').hasClass('btn-primary').should.be.true;
@@ -296,7 +304,7 @@ describe('directive', function() {
       scope.form = [{ type: 'submit', style: 'btn-success', title: 'Okidoki'}];
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.find('input').hasClass('btn-primary').should.be.false;
@@ -306,7 +314,7 @@ describe('directive', function() {
       scope.form = [{ type: 'button',title: 'Okidoki'}];
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.find('button').hasClass('btn-default').should.be.true;
@@ -316,7 +324,7 @@ describe('directive', function() {
       scope.form = [{ type: 'button', style: 'btn-success', title: 'Okidoki'}];
       tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.find('button').hasClass('btn-default').should.be.false;
@@ -343,7 +351,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).is('div.form-group').should.be.true;
       tmpl.children().eq(0).find('input').is('input[type="text"]').should.be.true;
@@ -372,7 +380,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).is('div.form-group').should.be.true;
@@ -405,7 +413,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).is('div.form-group').should.be.true;
@@ -449,7 +457,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form name="theform" sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       tmpl.find('input').each(function() {
         $(this).scope().ngModel.$setViewValue('AÖ');
       });
@@ -497,7 +505,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       scope.person.name.should.be.equal('Foobar');
       scope.person.nick.should.be.equal('Zeb');
@@ -537,7 +545,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-options="options" sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       scope.person.name.should.be.equal('Foobar');
       expect(scope.person.nick).to.be.undefined;
@@ -592,7 +600,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       scope.person.props.name.should.be.equal('Name');
       scope.person.props.nick.should.be.equal('Nick');
@@ -648,7 +656,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.eq(1);
       var labels = tmpl.children().find('label');
@@ -699,7 +707,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       scope.person.arr[0].name.should.be.equal('Name');
       scope.person.arr[0].nick.should.be.equal('Nick');
       expect(scope.person.arr[0].alias).to.be.undefined;
@@ -724,7 +732,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).eq(0).find('label').hasClass('sr-only').should.be.true;
@@ -757,7 +765,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       //TODO: more asserts
       tmpl.children().length.should.be.equal(2);
@@ -792,7 +800,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().eq(0).find('input[type=checkbox]').prop('checked').should.be.true;
     });
@@ -828,6 +836,7 @@ describe('directive', function() {
           var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
           $compile(tmpl)(scope);
+          runSync(scope, tmpl);
           $rootScope.$apply();
 
           var foo = tmpl.children().eq(0).find('input[type=checkbox]').eq(0);
@@ -875,7 +884,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       //TODO: more asserts
 
       tmpl.children().length.should.be.equal(2);
@@ -922,7 +931,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.find('.spicegirls').length.should.be.equal(1);
       tmpl.find('#testerish').length.should.be.equal(1);
@@ -976,7 +985,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
@@ -989,7 +998,7 @@ describe('directive', function() {
       scope.form[0].style = styles.both;
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
@@ -1002,7 +1011,7 @@ describe('directive', function() {
       scope.form[0].style = styles.onlySelected;
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
@@ -1015,7 +1024,7 @@ describe('directive', function() {
       scope.form[0].style = styles.onlyUnselected;
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
@@ -1029,7 +1038,7 @@ describe('directive', function() {
       scope.form[0].style = '';
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
@@ -1042,7 +1051,7 @@ describe('directive', function() {
       scope.form[0].style = styles.both;
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
@@ -1055,7 +1064,7 @@ describe('directive', function() {
       scope.form[0].style = styles.onlySelected;
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.false;
@@ -1068,7 +1077,7 @@ describe('directive', function() {
       scope.form[0].style = styles.onlyUnselected;
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-default').should.be.true;
@@ -1103,7 +1112,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).is('div').should.be.true;
@@ -1136,7 +1145,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).is('div').should.be.true;
@@ -1181,7 +1190,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(1);
       tmpl.children().eq(0).children().length.should.be.eq(4);
@@ -1227,7 +1236,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.eq(2);
       tmpl.children().eq(0).is('div').should.be.true;
@@ -1277,7 +1286,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.eq(1);
       var tabs  = tmpl.children().children().eq(0);
@@ -1363,7 +1372,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       //TODO: more asserts
       tmpl.children().length.should.be.equal(3);
@@ -1451,7 +1460,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(3);
       tmpl.children().eq(0).find('button').eq(1).text().trim().should.be.eq('New');
@@ -1513,7 +1522,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       //TODO: more asserts
       tmpl.children().length.should.be.equal(2);
@@ -1583,7 +1592,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).find('button').eq(0).text().trim().should.be.eq('Remove');
@@ -1629,7 +1638,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().eq(0).find('select').eq(0).find('option').eq(0).text().trim().should.be.eq('');
       tmpl.children().eq(0).find('select').eq(0).find('option').eq(1).text().trim().should.be.eq('The B');
@@ -1679,7 +1688,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.children().eq(0).find('ol').children().length.should.be.eq(2);
 
@@ -1733,7 +1742,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       tmpl.find('.schema-form-text').length.should.be.equal(1);
 
       setTimeout(function() {
@@ -1766,7 +1775,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.find('.schema-form-text').length.should.be.equal(1);
       tmpl.find('.schema-form-textarea').length.should.be.equal(0);
@@ -1804,7 +1813,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-options="options"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       expect(tmpl.find('input').attr('disabled')).to.be.undefined;
 
@@ -1857,7 +1866,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-options="options"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       expect(tmpl.find('input').attr('disabled')).to.be.undefined;
 
@@ -1911,7 +1920,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       tmpl.html().should.be.eq('<div sf-field="0" class="ng-scope ng-binding">Hello World</div>')
 
     });
@@ -1941,7 +1950,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       tmpl.html().should.be.eq('  <div sf-field="0" class="ng-scope ng-binding">Hello World</div>');
     });
   });
@@ -1974,7 +1983,7 @@ describe('directive', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       $httpBackend.flush();
       $httpBackend.verifyNoOutstandingExpectation();
       $httpBackend.verifyNoOutstandingRequest();
@@ -2113,6 +2122,7 @@ describe('directive', function() {
 
         var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
         $compile(tmpl)(scope);
+        runSync(scope, tmpl);
         $rootScope.$apply();
 
         var ngModelCtrl = tmpl.find('.'+field.form.key.join('-')).scope().ngModel;
@@ -2142,6 +2152,7 @@ describe('directive', function() {
 
         var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
         $compile(tmpl)(scope);
+        runSync(scope, tmpl);
         $rootScope.$apply();
 
         var ngModelCtrl = tmpl.find('.'+field.form.key.join('-')).scope().ngModel;
@@ -2191,7 +2202,7 @@ describe('directive', function() {
 
       var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       var ngModelCtrl = tmpl.find('.field').scope().ngModel;
       ngModelCtrl.$valid = true;
       ngModelCtrl.$pristine = false;
@@ -2240,7 +2251,7 @@ describe('directive', function() {
 
       var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       var ngModelCtrl = tmpl.find('.field').scope().ngModel;
       ngModelCtrl.$invalid = true;
       ngModelCtrl.$pristine = false;
@@ -2287,7 +2298,7 @@ describe('directive', function() {
 
       var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       var ngModelCtrl = tmpl.find('.field').scope().ngModel;
       ngModelCtrl.$valid = true;
       ngModelCtrl.$pristine = false;
@@ -2336,7 +2347,7 @@ describe('directive', function() {
 
       var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
       var ngModelCtrl = tmpl.find('.field').scope().ngModel;
       ngModelCtrl.$invalid = true;
       ngModelCtrl.$pristine = false;
@@ -2347,7 +2358,51 @@ describe('directive', function() {
       tmpl.find('.field').hasClass('has-error').should.be.false;
     });
   });
+/*
+ TODO
+  it('should handle onChange for array type', function () {
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.obj = {};
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "arr" : {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "Name"
+                }
+              }
+            }
+          }
+        }
+      };
+
+      scope.form = [{key : "arr", startEmpty : true, onChange: sinon.spy()}];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+
+      $compile(tmpl)(scope);
+      $rootScope.$apply();
+
+      scope.form[0].onChange.should.not.have.been.called;
+
+      tmpl.find('button.close').click();
+      //scope.form[0].onChange.should.have.been.called;
+      //scope.form[0].onChange.should.have.been.calledWith([]);
+
+      tmpl.find('button.btn-default').click();
+      //scope.form[0].onChange.should.have.been.calledWith([{name : "Name"}]);
+    });
+  });
+*/
 });
+
 
 describe('destroy strategy', function() {
   beforeEach(module('schemaForm'));
@@ -2480,7 +2535,7 @@ describe('destroy strategy', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       scope.person.should.deep.equal({
         "switch": true,
@@ -2539,9 +2594,11 @@ describe('destroy strategy', function() {
       scope.form = form;
 
       var tmpl = angular.element('<div ng-if="outside"><form sf-schema="schema" sf-form="form" sf-model="person"></form></div>');
-
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      // need to find child scope for synchronising
+      tmpl.find('form').each(function() {
+        runSync(scope, $(this));
+      });
 
       scope.person.should.deep.equal({
         "switch": true,
@@ -2616,7 +2673,7 @@ describe('destroy strategy', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-options="options" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       scope.person.should.deep.equal({
         "switch": true,
@@ -2842,7 +2899,8 @@ describe('destroy strategy', function() {
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="model"></form>');
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
+      scope.$apply();
 
       /*** transportCategory[].transportOption[].numberOfWheels condition tests ***/
       tmpl.find('.transportCategory-transportOption-numberOfWheels').length.should.be.eq(2);
@@ -2960,9 +3018,8 @@ describe('destroy strategy', function() {
       scope.form = a.form;
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="model"></form>');
-
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      runSync(scope, tmpl);
 
       tmpl.find('.form-group').length.should.be.eq(4);
 

@@ -1,5 +1,13 @@
 chai.should();
 
+var runSync = function (scope, tmpl) {
+  var directiveScope = tmpl.isolateScope();
+  var stub = sinon.stub(directiveScope, 'resolveReferences', function(schema, form) {
+    directiveScope.render(schema, form);
+  });
+  scope.$apply();
+}
+
 describe('directive', function() {
   beforeEach(module('schemaForm'));
   beforeEach(
@@ -61,7 +69,9 @@ describe('directive', function() {
       };
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      tmpl.find('form').each(function() {
+        runSync(scope, $(this));
+      });
 
       var form = tmpl.find('form').eq(0).controller('form');
 
@@ -100,7 +110,9 @@ describe('directive', function() {
       };
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      tmpl.find('form').each(function() {
+        runSync(scope, $(this));
+      });
 
       var form = tmpl.find('form').eq(0).controller('form');
 
@@ -146,7 +158,9 @@ describe('directive', function() {
       ];
 
       $compile(tmpl)(scope);
-      $rootScope.$apply();
+      tmpl.find('form').each(function() {
+        runSync(scope, $(this));
+      });
 
       var form = tmpl.find('form').eq(0).controller('form');
 

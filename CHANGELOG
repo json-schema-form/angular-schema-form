@@ -1,3 +1,49 @@
+v1.0.0-alpha.2
+--------------
+This is the second (of many) alpha and is **NOT ready for production** yet.
+
+There is only one change in this alpha that needs user testing and feedback, the long awaited and much desired support for $ref.
+
+## Changes
+
+### Added
+ - $ref support for relative and local lookups based on [workaround example](https://github.com/json-schema-form/angular-schema-form/issues/69#issuecomment-176635926) provided by @AndreNel7
+
+v1.0.0-alpha.1
+--------------
+## Changes
+
+### Breaking
+ - Some add-ons will not be working yet, if an add-on is updated to use the new function it *should* work again, but there is more work to do here to make the upgrade seamless before a **beta** can be released.
+ - Decorators should be updated to use the `defineDecorator` syntax with builders prior to the 1.0.0 release.
+
+### Added
+ - **23 test cases** added to ASF and a further **30 test cases** to json-schema-form-core
+ - Integration with **json-schema-form-core**, this is the main purpose of this release as we move as much code to plain Javascript es6+ as possible to re-use the code in an **Angular 2+** release
+ - #596 arrayIndices allows access to the current path for conditions in pr #742
+ - #560 All fields should now have classes, names and ids that match and can be used for easier test writing and scripting. The classes are provided with and without array indexes so they can be accessed as a group or individually, fixed in PR #578
+ - #748 New key, include all undefined schema fields in the form that are not already added with `[ '...' ]`
+
+### Fixes
+ - Tests fixed and running
+ - Travis builds fixed and running
+ - #828 schemaFormValidate event doesn't trigger past v0.8.2
+ - #680 Pristine option was not behaving in pr #771
+ - Add support for templates with leading whitespaces in pr #725
+ - Improve sfNewArray Directive's titleMapValues Binding in pr #705
+ - #590 Problems with model binding when using nested Arrays in pr #672, #742
+ - Pass optional form name when broadcast error in in PR #656
+ - Fix for #121 to redraw with proper defaults in PR #647
+ - Revalidate model after successful custom validation event broadcasted in PR #642
+ - Fixed angular element children selector usage partially in PR #605
+ - Allow broadcasting of the formName to validate in PR #589
+ - Ensure key is set in fieldsets in PR #578
+
+Special thanks to all the following people for their help in the last year preparing for the move to this version:
+@AndreNel7 @apinnecke @blackmiaool @CatherineH @cepauskas @chargrove @donalmurtagh @edclements @elbunuelo @ErichBSchulz @jozefizso @illiano @kyse @LeonardoGentile @mathroc @plong0 @pvgnd @stanimoto @tisto @tomsowerby @zackbloom
+
+Extra special thanks to @handrews @joelwkent @nicklasb for insight, ideas and support as we head toward version 1.0.0!
+
 v0.8.13
 -------
  * Bugfix copy the initial form default on form redraw @stanimoto
@@ -85,6 +131,7 @@ v0.8.1
 
 
 v0.8.0
+------
 Loads of stuff happened this release, so we're bumping version to 0.8.0.
 Note as well that there is a small change to `tabsarray` type regarding its title, the title is now
 interpolated instead of eval'd. So if you have any problems slap on a `{{ }}` around the tab title.

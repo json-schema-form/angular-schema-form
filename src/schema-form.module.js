@@ -1,4 +1,4 @@
-import JSONSchemaFormCore from 'json-schema-form-core';
+import * as JSONSchemaFormCore from 'json-schema-form-core';
 import angular from 'angular';
 
 // ./services/

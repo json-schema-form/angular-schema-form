@@ -1,1 +1,9 @@
-    **/.*
+**/.*
+**/*.js
+**/webpack.*
+/node_modules/
+/bower_components/
+/coverage/
+/examples/
+/src/
+/test/

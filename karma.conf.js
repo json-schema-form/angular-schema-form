@@ -26,6 +26,7 @@ module.exports = function(config) {
       'dist/angular-schema-form.js',
       include,
       'src/**/*.spec.js'
+//      'src/**/sf-schema.directive.spec.js'
     ],
 
     // list of files to exclude

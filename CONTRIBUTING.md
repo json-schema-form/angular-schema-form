@@ -1,5 +1,65 @@
 Contributing
-------------
+============
+   - [How to setup to develop](#setup)
+   - [How to build the package](#build)
+   - [Working on the libraries](#work)
+   - [PR requirements](#requirements)
+
+<a name="setup"></a>
+## How to setup to develop
+To get started clone all json-schema-form library repos into sibling folders.
+  json-schema-form-core
+  angular-schema-form
+  angular-schema-form-bootstrap
+  angular-schema-form-material
+
+Once cloned each repo has npm commands for assisting development
+```bash
+# Run unit tests
+npm run test
+
+# Run the build
+npm run build
+
+# Run the build and minify
+npm run dist # not in json-schema-form-core
+
+# Run the build and watch for changes
+npm run watch
+```
+
+<a name="build"></a>
+## How to build the package
+When working on `angular-schema-form` running the `npm build` will look for a sibling
+folder when importing `json-schema-form-core`. This allows you to work on bugs or
+issues that require work on both libraries simultaneously.
+
+This is set up for bootstrap and material design decorators also.
+
+The bootstrap repo is required to build `angular-schema-form` with the bootstrap
+decorator bundle distribution.
+
+<a name="work"></a>
+## Working on the libraries
+When I work on the libraries I use a multi-tab console tool like
+Terminator (Linux) or ConEmu (Windows)
+
+Run each of the following in a separate tab:
+```bash
+json-schema-form-core> npm run watch
+json-schema-form-core> npm run test
+angular-schema-form> npm run watch
+angular-schema-form> npm run test
+```
+This will re-compile all the libraries after changes that affect them which
+then runs the related tests.
+
+A static file web server is required to run the examples, but the example
+can be used to run saved gist of the example app. It can help to add a model
+to one of the example app json files to test with.
+
+<a name="requirements"></a>
+## PR requirements
 We love contributions!
 
 **Please base any merge request on the *development* branch instead of *master*.**

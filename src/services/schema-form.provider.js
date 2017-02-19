@@ -2,6 +2,7 @@ import angular from 'angular';
 
 import {
   schemaDefaults,
+  jsonref,
   merge,
   traverseSchema,
   traverseForm,
@@ -75,6 +76,8 @@ export default function() {
 
     var service = {};
     var typeDefault = this.defaults;
+
+    service.jsonref = jsonref;
 
     service.merge = function(schema, form = [ '*' ], ignore, options = {}, readonly = false, asyncTemplates) {
       //We look at the supplied form and extend it with schema standards

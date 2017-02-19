@@ -64,26 +64,45 @@ sfSelect, sfPath, sfBuilder) {
       var childScope;
 
       // Common renderer function, can either be triggered by a watch or by an event.
-      var render = function(schema, form) {
+      scope.resolveReferences = function (schema, form) {
+        schemaForm
+          .jsonref(schema)
+          .then((resolved) => {
+            scope.render(resolved, form);
+          })
+          .catch((err) => {
+            new Error(err);
+          });
+      };
+
+      scope.render = function(schema, form) {
+//console.log("schema:", JSON.stringify(schema));
+//console.log("resolv:", JSON.stringify(resolved));
         var asyncTemplates = [];
         var merged = schemaForm.merge(schema, form, ignore, scope.options, undefined, asyncTemplates);
 
         if (asyncTemplates.length > 0) {
           // Pre load all async templates and put them on the form for the builder to use.
-          $q.all(asyncTemplates.map(function(form) {
-            return $http.get(form.templateUrl, { cache: $templateCache }).then(function(res) {
-                                form.template = res.data;
-                              });
-          })).then(function() {
-            internalRender(schema, form, merged);
+          $q.all(
+            asyncTemplates
+              .map(function(form) {
+                return $http.get(form.templateUrl, { cache: $templateCache })
+                  .then(function(res) {
+                    form.template = res.data;
+                  });
+              })
+          )
+          .then(function() {
+            scope.internalRender(schema, form, merged);
           });
 
-        } else {
-          internalRender(schema, form, merged);
+        }
+        else {
+          scope.internalRender(schema, form, merged);
         };
       };
 
-      var internalRender = function(schema, form, merged) {
+      scope.internalRender = function(schema, form, merged) {
         // Create a new form and destroy the old one.
         // Not doing keeps old form elements hanging around after
         // they have been removed from the DOM
@@ -97,7 +116,7 @@ sfSelect, sfPath, sfBuilder) {
         childScope = scope.$new();
 
         //make the form available to decorators
-        childScope.schemaForm  = { form:  merged, schema: schema };
+        childScope.schemaForm  = { form: merged, schema: schema };
 
         //clean all but pre existing html.
         Array.prototype.forEach.call(element.children(), function(child) {
@@ -164,7 +183,7 @@ sfSelect, sfPath, sfBuilder) {
           lastDigest.schema = schema;
           lastDigest.form = form;
 
-          render(schema, form);
+          scope.resolveReferences(schema, form);
         }
       });
 
@@ -174,7 +193,7 @@ sfSelect, sfPath, sfBuilder) {
         var schema = scope.schema;
         var form   = scope.initialForm ? angular.copy(scope.initialForm) : [ '*' ];
         if (schema) {
-          render(schema, form);
+          scope.resolveReferences(schema, form);
         }
       });
 
