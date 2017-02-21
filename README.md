@@ -11,7 +11,7 @@ Generate forms from JSON schemas using AngularJS!
 
 0.x Support
 ===========
-This branch is for supporting any 0.x releases currently `0.8.13`. This will only be for fixing issues with that version, new features should be targeted at `development` branch instead.
+This branch is for supporting any 0.x releases currently `0.8.14`. This will only be for fixing issues with that version, new features should be targeted at `development` branch instead.
 
 The Blog / The Web Site / The Twitter / The Movie
 =================================================
