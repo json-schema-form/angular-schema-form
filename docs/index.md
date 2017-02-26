@@ -554,16 +554,14 @@ Schema Form currently supports the following form field types out of the box:
 | tabarray      |  a tabbed version of array |
 
 More field types can be added, for instance a "datepicker" type can be added by
-including the [datepicker addon](https://github.com/json-schema-form/angular-schema-form-datepicker), see
-the [front page](http://schemaform.io/#/third-party-addons) for an updated
-list.
+including the [datepicker addon](https://github.com/Textalk/angular-schema-form-datepicker), see
+the [front page](http://schemaform.io/#/third-party-addons) for an updated list.
 
 
 Default form types
 ------------------
 Schema Form defaults to certain types of form fields depending on the schema for
 a property.
-
 
 | Schema             |   Form type  |
 |:-------------------|:------------:|
@@ -575,7 +573,6 @@ a property.
 | "type": "string" and a "enum" | select |
 | "type": "array" and a "enum" in array type | checkboxes |
 | "type": "array" | array |
-
 
 
 Form definitions
