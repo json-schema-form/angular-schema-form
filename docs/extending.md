@@ -227,7 +227,7 @@ var defaults = {
 
 When schema form traverses the JSON Schema to create default form definitions it first checks the
 *JSON Schema type* and then calls on each function in the corresponding list *in order* until a
-function actually returns something. That is then used as a defualt.
+function actually returns something. That is then used as a default.
 
 This is the function that makes it a datepicker if its a string and has format "date" or "date-time":
 
