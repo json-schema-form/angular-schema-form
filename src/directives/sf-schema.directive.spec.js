@@ -8,7 +8,7 @@ var runSync = function (scope, tmpl) {
   scope.$apply();
 }
 
-describe('directive', function() {
+describe('sf-schema.directive.js', function() {
   beforeEach(module('schemaForm'));
   beforeEach(
     //We don't need no sanitation. We don't need no thought control.

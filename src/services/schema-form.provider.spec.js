@@ -1,6 +1,6 @@
 chai.should();
 
-describe('schemaForm', function() {
+describe('schema-form.provider.js', function() {
   beforeEach(module('schemaForm'));
   describe('#defaults()', function() {
     it('should generate default form def from a schema', function() {

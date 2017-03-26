@@ -6,14 +6,33 @@ var runSync = function (scope, tmpl) {
     directiveScope.render(schema, form);
   });
   scope.$apply();
-}
+};
 
-describe('directive', function() {
+describe('schema-validate.directive.js', function() {
+  var exampleSchema;
   beforeEach(module('schemaForm'));
   beforeEach(
     module(function($sceProvider) {
       $sceProvider.enabled(false);
+      exampleSchema = {
+        "type": "object",
+        "title": "Person",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string",
+            "minLength": 10
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 255,
+            "format": "email",
+            "email": true
+          }
+        }
+      };
     })
+
   );
 
   tv4.defineError('EMAIL', 10001, 'Invalid email address');
@@ -29,69 +48,46 @@ describe('directive', function() {
     return null;
   });
 
-  exampleSchema = {
-    "type": "object",
-    "title": "Person",
-    "properties": {
-      "name": {
-        "title": "Name",
-        "type": "string",
-        "minLength": 10
-      },
-      "email": {
-        "type": "string",
-        "maxLength": 255,
-        "format": "email",
-        "email": true
-      }
-    }
-  };
 
   it('should validate the form on event [ノಠ益ಠ]ノ彡┻━┻', function() {
 
-    tmpl = angular.element(
-      '<div>' +
-        '<form name="testform" sf-schema="schema" sf-form="form" sf-model="obj"></form>' +
-        '<input class="validate" type="button" ng-click="validate_all()" />' +
-      '</div>'
-    );
+    tmpl = angular.element('<form name="testform" sf-schema="schema" sf-form="form" sf-model="obj"></form>');
 
     inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
-      scope.obj = { "name": "Json" };
+      scope.obj = { "name": "Freddy" };
 
       scope.schema = exampleSchema;
 
-      scope.form = ["*"];
+      scope.form = [
+        "*",
+        {
+          "type": "button",
+          "style": "validate",
+          "onClick": "validate_all()"
+        }
+      ];
 
       scope.validate_all = function() {
         scope.$broadcast('schemaFormValidate');
       };
 
       $compile(tmpl)(scope);
-      tmpl.find('form').each(function() {
-        runSync(scope, $(this));
-      });
+      runSync(scope, tmpl);
 
-      var form = tmpl.find('form').eq(0).controller('form');
+      var form = tmpl.eq(0).controller('form');
 
       form.$valid.should.be.true;
       scope.validate_all.should.not.have.beenCalled;
-      tmpl.find('input.validate').click();
+      tmpl.find('button.validate').click();
       scope.validate_all.should.have.beenCalledOnce;
       form.$valid.should.be.false;
-
     });
   });
 
   it('should process custom tv4 errors', function() {
 
-    tmpl = angular.element(
-      '<div>' +
-        '<form name="testform" sf-schema="schema" sf-form="form" sf-model="obj"></form>' +
-        '<input class="validate" type="button" ng-click="validate_all()" />{{obj}}' +
-      '</div>'
-    );
+    tmpl = angular.element('<form name="testform" sf-schema="schema" sf-form="form" sf-model="obj"></form>');
 
     inject(function($compile,$rootScope) {
       var scope = $rootScope.$new();
@@ -99,28 +95,35 @@ describe('directive', function() {
 
       scope.schema = exampleSchema;
 
-      scope.form = [{
-        "key": "email",
-        "placeholder": "Enter contact email",
-        "feedback": false
-      }];
+      scope.form = [
+        {
+          "key": "email",
+          "placeholder": "Enter contact email",
+          "feedback": false
+        },
+        {
+          "type": "button",
+          "style": "validate",
+          "onClick": "validate_all()"
+        }
+      ];
 
       scope.validate_all = function() {
         scope.$broadcast('schemaFormValidate');
       };
 
       $compile(tmpl)(scope);
-      tmpl.find('form').each(function() {
-        runSync(scope, $(this));
-      });
+      runSync(scope, tmpl);
 
-      var form = tmpl.find('form').eq(0).controller('form');
+      var form = tmpl.eq(0).controller('form');
 
       form.$valid.should.be.true;
       scope.validate_all.should.not.have.beenCalled;
-      tmpl.find('input.validate').click();
+      angular.element(tmpl.find('#testform-email')).val('invalid').trigger('input');
+      tmpl.find('button.validate').click();
       scope.validate_all.should.have.beenCalledOnce;
       form.$valid.should.be.false;
+      form.$error['tv4-10001'].should.be.false;
     });
   });
 

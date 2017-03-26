@@ -1,6 +1,6 @@
 chai.should();
 
-describe('schemaFormServices', function() {
+describe('sf-error-message.provider.js', function() {
   beforeEach(module('schemaForm'));
 
   describe('#sfErrorMessage', function() {

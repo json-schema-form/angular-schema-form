@@ -1,6 +1,6 @@
 chai.should();
 
-describe('schemaFormDecorators', function() {
+describe('schema-form-decorators.provider.js', function() {
   beforeEach(module('schemaForm'));
 
   // describe('#legacy #createDecorator', function() {

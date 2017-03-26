@@ -8,7 +8,7 @@ var runSync = function (scope, tmpl) {
   scope.$apply();
 }
 
-describe('directive',function() {
+describe('sf-message.directive.js',function() {
   beforeEach(module('schemaForm'));
   beforeEach(
     module(function($sceProvider){
