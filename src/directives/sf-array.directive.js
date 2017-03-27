@@ -3,7 +3,7 @@ import angular from 'angular';
 /**
  * Directive that handles the model arrays
  */
-export default function(sel, sfPath, schemaForm) {
+export default function(sfSelect, sfPath, schemaForm) {
   return {
     scope: true,
     controller: ['$scope', function SFArrayController($scope) {
@@ -46,7 +46,7 @@ export default function(sel, sfPath, schemaForm) {
         if (!model) {
           var selection = sfPath.parse(attrs.sfNewArray);
           model = [];
-          sel(selection, scope, model);
+          sfSelect(selection, scope, model);
           scope.modelArray = model;
         }
         return model;
@@ -64,33 +64,10 @@ export default function(sel, sfPath, schemaForm) {
           scope.appendToArray();
         }
 
-        // If we have "uniqueItems" set to true, we must deep watch for changes.
-        if (scope.form && scope.form.schema && scope.form.schema.uniqueItems === true) {
-          scope.$watch(attrs.sfNewArray, watchFn, true);
-
-          // We still need to trigger onChange though.
-          scope.$watch([ attrs.sfNewArray, attrs.sfNewArray + '.length' ], onChangeFn);
-
-        } else {
-          // Otherwise we like to check if the instance of the array has changed, or if something
-          // has been added/removed.
-          if (scope.$watchGroup) {
-            scope.$watchGroup([ attrs.sfNewArray, attrs.sfNewArray + '.length' ], function() {
-              watchFn();
-              onChangeFn();
-            });
-          } else {
-            // Angular 1.2 support
-            scope.$watch(attrs.sfNewArray, function() {
-              watchFn();
-              onChangeFn();
-            });
-            scope.$watch(attrs.sfNewArray + '.length', function() {
-              watchFn();
-              onChangeFn();
-            });
-          }
-        }
+        scope.$watch(
+          ($scope) => { return JSON.stringify($scope.modelArray); },
+          () => { watchFn(); onChangeFn(); }
+        );
 
         // Title Map handling
         // If form has a titleMap configured we'd like to enable looping over
@@ -112,6 +89,7 @@ export default function(sel, sfPath, schemaForm) {
               scope.titleMapValues.push(arr.indexOf(item.value) !== -1);
             });
           };
+
           //Catch default values
           updateTitleMapValues(scope.modelArray);
 
@@ -169,7 +147,7 @@ export default function(sel, sfPath, schemaForm) {
               if (empty) {
                 schemaForm.traverseSchema(items, function(prop, path) {
                   if (angular.isDefined(prop['default'])) {
-                    sel(path, empty, prop['default']);
+                    sfSelect(path, empty, prop['default']);
                   }
                 });
               }

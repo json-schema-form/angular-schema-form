@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
- * @version 1.0.0-alpha.2
- * @date Sun, 19 Feb 2017 13:13:18 GMT
+ * @version 1.0.0-alpha.3
+ * @date Mon, 27 Mar 2017 13:17:01 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -9,41 +9,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
-
+/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -54,7 +54,7 @@
 /******/ 			});
 /******/ 		}
 /******/ 	};
-
+/******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -63,13 +63,13 @@
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
-
+/******/
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 20);
 /******/ })
@@ -93,7 +93,7 @@ module.exports = __webpack_require__(3);
 /*!
  * angular-schema-form-bootstrap
  * @version 1.0.0-alpha.1
- * @date Sun, 29 Jan 2017 00:45:28 GMT
+ * @date Sun, 12 Mar 2017 05:51:37 GMT
  * @link https://github.com/json-schema-form/angular-schema-form-bootstrap
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -172,7 +172,7 @@ module.exports = __webpack_require__(3);
   /******/__webpack_require__.p = "";
 
   /******/ // Load entry module and return exports
-  /******/return __webpack_require__(__webpack_require__.s = 19);
+  /******/return __webpack_require__(__webpack_require__.s = 21);
   /******/
 })(
 /************************************************************************/
@@ -180,11 +180,12 @@ module.exports = __webpack_require__(3);
 /* 0 */
 /***/function (module, exports, __webpack_require__) {
 
-  __webpack_require__(17);
+  __webpack_require__(18);
 
   /***/
-},
+},,
 /* 1 */
+/* 2 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/actions.html';
@@ -196,7 +197,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 2 */
+/* 3 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/array.html';
@@ -208,7 +209,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 3 */
+/* 4 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/checkbox.html';
@@ -220,7 +221,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 4 */
+/* 5 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/checkboxes.html';
@@ -232,7 +233,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 5 */
+/* 6 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/default.html';
@@ -244,7 +245,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 6 */
+/* 7 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/fieldset.html';
@@ -256,7 +257,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 7 */
+/* 8 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/help.html';
@@ -268,7 +269,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 8 */
+/* 9 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/radio-buttons.html';
@@ -280,7 +281,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 9 */
+/* 10 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/radios-inline.html';
@@ -292,7 +293,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 10 */
+/* 11 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/radios.html';
@@ -304,7 +305,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 11 */
+/* 12 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/section.html';
@@ -316,7 +317,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 12 */
+/* 13 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/select.html';
@@ -328,7 +329,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 13 */
+/* 14 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/submit.html';
@@ -340,7 +341,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 14 */
+/* 15 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/tabarray.html';
@@ -352,7 +353,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 15 */
+/* 16 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/tabs.html';
@@ -364,7 +365,7 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 16 */
+/* 17 */
 /***/function (module, exports) {
 
   var path = '/bootstrap/textarea.html';
@@ -376,42 +377,42 @@ module.exports = __webpack_require__(3);
 
   /***/
 },
-/* 17 */
+/* 18 */
 /***/function (module, exports, __webpack_require__) {
 
   "use strict";
   /* harmony import */
-  var __WEBPACK_IMPORTED_MODULE_0__bootstrap_actions_html__ = __webpack_require__(1);
+  var __WEBPACK_IMPORTED_MODULE_0__bootstrap_actions_html__ = __webpack_require__(2);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_0__bootstrap_actions_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__bootstrap_actions_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_1__bootstrap_array_html__ = __webpack_require__(2);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_1__bootstrap_array_html__ = __webpack_require__(3);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_1__bootstrap_array_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__bootstrap_array_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_2__bootstrap_checkbox_html__ = __webpack_require__(3);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_2__bootstrap_checkbox_html__ = __webpack_require__(4);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_2__bootstrap_checkbox_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__bootstrap_checkbox_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_3__bootstrap_checkboxes_html__ = __webpack_require__(4);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_3__bootstrap_checkboxes_html__ = __webpack_require__(5);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_3__bootstrap_checkboxes_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__bootstrap_checkboxes_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_4__bootstrap_default_html__ = __webpack_require__(5);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_4__bootstrap_default_html__ = __webpack_require__(6);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_4__bootstrap_default_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__bootstrap_default_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_5__bootstrap_fieldset_html__ = __webpack_require__(6);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_5__bootstrap_fieldset_html__ = __webpack_require__(7);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_5__bootstrap_fieldset_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__bootstrap_fieldset_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_6__bootstrap_help_html__ = __webpack_require__(7);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_6__bootstrap_help_html__ = __webpack_require__(8);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_6__bootstrap_help_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__bootstrap_help_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_7__bootstrap_radio_buttons_html__ = __webpack_require__(8);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_7__bootstrap_radio_buttons_html__ = __webpack_require__(9);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_7__bootstrap_radio_buttons_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__bootstrap_radio_buttons_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_8__bootstrap_radios_html__ = __webpack_require__(10);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_8__bootstrap_radios_html__ = __webpack_require__(11);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_8__bootstrap_radios_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8__bootstrap_radios_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_9__bootstrap_radios_inline_html__ = __webpack_require__(9);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_9__bootstrap_radios_inline_html__ = __webpack_require__(10);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_9__bootstrap_radios_inline_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__bootstrap_radios_inline_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_10__bootstrap_section_html__ = __webpack_require__(11);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_10__bootstrap_section_html__ = __webpack_require__(12);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_10__bootstrap_section_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__bootstrap_section_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_11__bootstrap_select_html__ = __webpack_require__(12);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_11__bootstrap_select_html__ = __webpack_require__(13);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_11__bootstrap_select_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__bootstrap_select_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_12__bootstrap_submit_html__ = __webpack_require__(13);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_12__bootstrap_submit_html__ = __webpack_require__(14);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_12__bootstrap_submit_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12__bootstrap_submit_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_13__bootstrap_tabarray_html__ = __webpack_require__(14);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_13__bootstrap_tabarray_html__ = __webpack_require__(15);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_13__bootstrap_tabarray_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13__bootstrap_tabarray_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_14__bootstrap_tabs_html__ = __webpack_require__(15);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_14__bootstrap_tabs_html__ = __webpack_require__(16);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_14__bootstrap_tabs_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_14__bootstrap_tabs_html__);
-  /* harmony import */var __WEBPACK_IMPORTED_MODULE_15__bootstrap_textarea_html__ = __webpack_require__(16);
+  /* harmony import */var __WEBPACK_IMPORTED_MODULE_15__bootstrap_textarea_html__ = __webpack_require__(17);
   /* harmony import */var __WEBPACK_IMPORTED_MODULE_15__bootstrap_textarea_html___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15__bootstrap_textarea_html__);
   // ngtemplate-loader embeds the html on build
 
@@ -507,9 +508,10 @@ module.exports = __webpack_require__(3);
   };
 
   /***/
-},,
-/* 18 */
+},,,
 /* 19 */
+/* 20 */
+/* 21 */
 /***/function (module, exports, __webpack_require__) {
 
   module.exports = __webpack_require__(0);

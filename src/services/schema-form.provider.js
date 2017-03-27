@@ -79,18 +79,31 @@ export default function() {
 
     service.jsonref = jsonref;
 
-    service.merge = function(schema, form = [ '*' ], ignore, options = {}, readonly = false, asyncTemplates) {
-      //We look at the supplied form and extend it with schema standards
-      const canonical = merge(schema, form, ignore, options, readonly, asyncTemplates);
-      return postProcessFn(canonical);
-    };
-
     /**
-     * Create form defaults from schema
-     */
+    * Create form defaults from schema
+    */
     service.defaults = function(schema, types, ignore, options) {
       let defaultTypes = types || typeDefault;
       return schemaDefaults.defaultForm(schema, defaultTypes, ignore, options);
+    };
+
+    /**
+     * merge
+     *
+     * @param  {Object}  schema                             [description]
+     * @param  {Array}   [form=['*']]                       [description]
+     * @param  {Object}  [typeDefaults=service.typeDefault] [description]
+     * @param  {boolean} ignore                             [description]
+     * @param  {Object}  [options={}]                       [description]
+     * @param  {Boolean} [readonly=false]                   [description]
+     * @param  {[type]}  asyncTemplates                     [description]
+     *
+     * @return {[type]}                                     [description]
+     */
+    service.merge = function(schema, form = [ '*' ], typeDefaults=service.typeDefault, ignore, options = {}, readonly = false, asyncTemplates) {
+      //We look at the supplied form and extend it with schema standards
+      const canonical = merge(schema, form, typeDefaults, ignore, options, readonly, asyncTemplates);
+      return postProcessFn(canonical);
     };
 
     //Utility functions

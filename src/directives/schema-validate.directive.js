@@ -28,7 +28,7 @@ export default function(sfValidator, $parse, sfSelect) {
 
       // Validate against the schema.
 
-      var validate = function(viewValue) {
+      var validate = function(viewValue, triggered) {
         //Still might be undefined
         if (!form) {
           return viewValue;
@@ -47,7 +47,7 @@ export default function(sfValidator, $parse, sfSelect) {
             .filter(function(k) { return k.indexOf('tv4-') === 0; })
             .forEach(function(k) { ngModel.$setValidity(k, true); });
 
-        if (!result.valid) {
+        if (!result.valid && (!ngModel.$pristine || triggered)) {
           // it is invalid, return undefined (no model update)
           ngModel.$setValidity('tv4-' + result.error.code, false);
           error = result.error;
@@ -58,10 +58,12 @@ export default function(sfValidator, $parse, sfSelect) {
           // later.
           if (ngModel.$validators) {
             return viewValue;
-          }
+          };
+
           // Angular 1.2 on the other hand lacks $validators and don't add a 'parse' error.
           return undefined;
-        }
+        };
+
         return viewValue;
       };
 
@@ -82,7 +84,9 @@ export default function(sfValidator, $parse, sfSelect) {
         // Check if our version of angular has validators, i.e. 1.3+
         if (form[attr] && ngModel[attr]) {
           angular.forEach(form[attr], function(fn, name) {
-            ngModel[attr][name] = fn;
+            ngModel[attr][name] = function(modelValue, viewValue) {
+              return fn(modelValue, viewValue, scope.model, form);
+            };
           });
         }
       });
@@ -104,13 +108,13 @@ export default function(sfValidator, $parse, sfSelect) {
       var schema = form.schema;
 
       // A bit ugly but useful.
-      scope.validateField =  function(formName) {
+      scope.validateField =  function(formName, triggered) {
         let noField = (formName === undefined);
         // If we have specified a form name, and this model is not within
         // that form, then leave things be.
         if (!noField && ngModel.$$parentForm.$name !== formName) {
           return;
-        }
+        };
 
         // Special case: arrays
         // TODO: Can this be generalized in a way that works consistently?
@@ -118,14 +122,13 @@ export default function(sfValidator, $parse, sfSelect) {
         // since it's the same value. This will be better when we drop
         // 1.2 support.
         if (noField || schema && schema.type.indexOf('array') !== -1) {
-          validate(ngModel.$modelValue);
+          validate(ngModel.$modelValue, triggered);
         };
 
         // We set the viewValue to trigger parsers,
         // since modelValue might be empty and validating just that
         // might change an existing error to a "required" error message.
         if (ngModel.$setDirty) {
-
           // Angular 1.3+
           ngModel.$setDirty();
           ngModel.$setViewValue(ngModel.$viewValue);
@@ -138,11 +141,11 @@ export default function(sfValidator, $parse, sfSelect) {
           if (form.type === 'checkbox') {
             if (form.required && ngModel.$modelValue === undefined) {
               ngModel.$setValidity('tv4-302', false);
-            }
-          } else if (form.required && ngModel.$isEmpty(ngModel.$modelValue)) {
-            ngModel.$setValidity('tv4-302', false);
+            };
           }
-
+          else if (form.required && ngModel.$isEmpty(ngModel.$modelValue)) {
+            ngModel.$setValidity('tv4-302', false);
+          };
         }
         else {
           // Angular 1.2
@@ -167,7 +170,7 @@ export default function(sfValidator, $parse, sfSelect) {
 
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function(event, formName) {
-        scope.validateField(formName);
+        scope.validateField(formName, true);
       });
 
       scope.schemaError = function() {

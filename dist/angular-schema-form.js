@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
- * @version 1.0.0-alpha.2
- * @date Sun, 19 Feb 2017 13:13:18 GMT
+ * @version 1.0.0-alpha.3
+ * @date Mon, 27 Mar 2017 13:17:01 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -9,41 +9,41 @@
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
-
+/******/
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
-
+/******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
 /******/ 			l: false,
 /******/ 			exports: {}
 /******/ 		};
-
+/******/
 /******/ 		// Execute the module function
 /******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-
+/******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
-
+/******/
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
-
-
+/******/
+/******/
 /******/ 	// expose the modules object (__webpack_modules__)
 /******/ 	__webpack_require__.m = modules;
-
+/******/
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
-
+/******/
 /******/ 	// identity function for calling harmony imports with the correct context
 /******/ 	__webpack_require__.i = function(value) { return value; };
-
+/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -54,7 +54,7 @@
 /******/ 			});
 /******/ 		}
 /******/ 	};
-
+/******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
 /******/ 	__webpack_require__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
@@ -63,13 +63,13 @@
 /******/ 		__webpack_require__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
-
+/******/
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-
+/******/
 /******/ 	// __webpack_public_path__
 /******/ 	__webpack_require__.p = "";
-
+/******/
 /******/ 	// Load entry module and return exports
 /******/ 	return __webpack_require__(__webpack_require__.s = 21);
 /******/ })
@@ -86,8 +86,8 @@ module.exports = angular;
 
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
  * json-schema-form-core
- * @version 1.0.0-alpha.2
- * @date Sun, 19 Feb 2017 13:06:51 GMT
+ * @version 1.0.0-alpha.3
+ * @date Mon, 27 Mar 2017 13:05:31 GMT
  * @link https://github.com/json-schema-form/json-schema-form-core
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -2237,7 +2237,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 // export function merge(schema, form, schemaDefaultTypes, ignore, options, readonly, asyncTemplates) {
-function merge(lookup, form, ignore, options, readonly, asyncTemplates) {
+function merge(lookup, form) {
+  var typeDefaults = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__schema_defaults__["createDefaults"])();
+  var ignore = arguments[3];
+  var options = arguments[4];
+  var readonly = arguments[5];
+  var asyncTemplates = arguments[6];
+
   var formItems = [];
   var formItemRest = [];
   form = form || [];
@@ -2248,7 +2254,7 @@ function merge(lookup, form, ignore, options, readonly, asyncTemplates) {
   var idxRest = form.indexOf('...');
   if ((typeof lookup === 'undefined' ? 'undefined' : _typeof(lookup)) === 'object' && lookup.hasOwnProperty('properties')) {
     readonly = readonly || lookup.readonly || lookup.readOnly;
-    stdForm = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__schema_defaults__["defaultForm"])(lookup, __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__schema_defaults__["createDefaults"])(), ignore, options);
+    stdForm = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__schema_defaults__["defaultForm"])(lookup, typeDefaults, ignore, options);
 
     var defaultFormLookup = stdForm.lookup;
 
@@ -2332,22 +2338,27 @@ function merge(lookup, form, ignore, options, readonly, asyncTemplates) {
 
     // if it's a type with items, merge 'em!
     if (obj.items) {
-      obj.items = merge(lookup, obj.items, ignore, options, obj.readonly, asyncTemplates);
+      obj.items = merge(lookup, obj.items, typeDefaults, ignore, options, obj.readonly, asyncTemplates);
     }
 
     // if its has tabs, merge them also!
     if (obj.tabs) {
       obj.tabs.forEach(function (tab) {
         if (tab.items) {
-          tab.items = merge(lookup, tab.items, ignore, options, obj.readonly, asyncTemplates);
+          tab.items = merge(lookup, tab.items, typeDefaults, ignore, options, obj.readonly, asyncTemplates);
         }
       });
     }
 
     // Special case: checkbox
     // Since have to ternary state we need a default
-    if (obj.type === 'checkbox' && obj.schema['default'] === undefined) {
-      obj.schema['default'] = false;
+    if (obj.type === 'checkbox') {
+      // Check for schema property, as the checkbox may be part of the explicitly defined form
+      if (obj.schema === undefined) {
+        obj.schema = { default: false };
+      } else if (obj.schema['default'] === undefined) {
+        obj.schema['default'] = false;
+      };
     };
 
     // Special case: template type with tempplateUrl that's needs to be loaded before rendering
@@ -2355,7 +2366,7 @@ function merge(lookup, form, ignore, options, readonly, asyncTemplates) {
     // is introduced since we need to go async then anyway
     if (asyncTemplates && obj.type === 'template' && !obj.template && obj.templateUrl) {
       asyncTemplates.push(obj);
-    }
+    };
 
     return obj;
   });
@@ -2859,7 +2870,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
 
       // Validate against the schema.
 
-      var validate = function validate(viewValue) {
+      var validate = function validate(viewValue, triggered) {
         //Still might be undefined
         if (!form) {
           return viewValue;
@@ -2880,7 +2891,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
           ngModel.$setValidity(k, true);
         });
 
-        if (!result.valid) {
+        if (!result.valid && (!ngModel.$pristine || triggered)) {
           // it is invalid, return undefined (no model update)
           ngModel.$setValidity('tv4-' + result.error.code, false);
           error = result.error;
@@ -2891,10 +2902,12 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
           // later.
           if (ngModel.$validators) {
             return viewValue;
-          }
+          };
+
           // Angular 1.2 on the other hand lacks $validators and don't add a 'parse' error.
           return undefined;
-        }
+        };
+
         return viewValue;
       };
 
@@ -2915,7 +2928,9 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
         // Check if our version of angular has validators, i.e. 1.3+
         if (form[attr] && ngModel[attr]) {
           __WEBPACK_IMPORTED_MODULE_0_angular___default.a.forEach(form[attr], function (fn, name) {
-            ngModel[attr][name] = fn;
+            ngModel[attr][name] = function (modelValue, viewValue) {
+              return fn(modelValue, viewValue, scope.model, form);
+            };
           });
         }
       });
@@ -2939,13 +2954,13 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
       var schema = form.schema;
 
       // A bit ugly but useful.
-      scope.validateField = function (formName) {
+      scope.validateField = function (formName, triggered) {
         var noField = formName === undefined;
         // If we have specified a form name, and this model is not within
         // that form, then leave things be.
         if (!noField && ngModel.$$parentForm.$name !== formName) {
           return;
-        }
+        };
 
         // Special case: arrays
         // TODO: Can this be generalized in a way that works consistently?
@@ -2953,14 +2968,13 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
         // since it's the same value. This will be better when we drop
         // 1.2 support.
         if (noField || schema && schema.type.indexOf('array') !== -1) {
-          validate(ngModel.$modelValue);
+          validate(ngModel.$modelValue, triggered);
         };
 
         // We set the viewValue to trigger parsers,
         // since modelValue might be empty and validating just that
         // might change an existing error to a "required" error message.
         if (ngModel.$setDirty) {
-
           // Angular 1.3+
           ngModel.$setDirty();
           ngModel.$setViewValue(ngModel.$viewValue);
@@ -2973,10 +2987,10 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
           if (form.type === 'checkbox') {
             if (form.required && ngModel.$modelValue === undefined) {
               ngModel.$setValidity('tv4-302', false);
-            }
+            };
           } else if (form.required && ngModel.$isEmpty(ngModel.$modelValue)) {
             ngModel.$setValidity('tv4-302', false);
-          }
+          };
         } else {
           // Angular 1.2
           // In angular 1.2 setting a viewValue of undefined will trigger the parser.
@@ -2999,7 +3013,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
 
       // Listen to an event so we can validate the input on request
       scope.$on('schemaFormValidate', function (event, formName) {
-        scope.validateField(formName);
+        scope.validateField(formName, true);
       });
 
       scope.schemaError = function () {
@@ -3021,7 +3035,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
 /**
  * Directive that handles the model arrays
  */
-/* harmony default export */ __webpack_exports__["a"] = function (sel, sfPath, schemaForm) {
+/* harmony default export */ __webpack_exports__["a"] = function (sfSelect, sfPath, schemaForm) {
   return {
     scope: true,
     controller: ['$scope', function SFArrayController($scope) {
@@ -3063,7 +3077,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
         if (!model) {
           var selection = sfPath.parse(attrs.sfNewArray);
           model = [];
-          sel(selection, scope, model);
+          sfSelect(selection, scope, model);
           scope.modelArray = model;
         }
         return model;
@@ -3081,32 +3095,11 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
           scope.appendToArray();
         }
 
-        // If we have "uniqueItems" set to true, we must deep watch for changes.
-        if (scope.form && scope.form.schema && scope.form.schema.uniqueItems === true) {
-          scope.$watch(attrs.sfNewArray, watchFn, true);
-
-          // We still need to trigger onChange though.
-          scope.$watch([attrs.sfNewArray, attrs.sfNewArray + '.length'], onChangeFn);
-        } else {
-          // Otherwise we like to check if the instance of the array has changed, or if something
-          // has been added/removed.
-          if (scope.$watchGroup) {
-            scope.$watchGroup([attrs.sfNewArray, attrs.sfNewArray + '.length'], function () {
-              watchFn();
-              onChangeFn();
-            });
-          } else {
-            // Angular 1.2 support
-            scope.$watch(attrs.sfNewArray, function () {
-              watchFn();
-              onChangeFn();
-            });
-            scope.$watch(attrs.sfNewArray + '.length', function () {
-              watchFn();
-              onChangeFn();
-            });
-          }
-        }
+        scope.$watch(function ($scope) {
+          return JSON.stringify($scope.modelArray);
+        }, function () {
+          watchFn();onChangeFn();
+        });
 
         // Title Map handling
         // If form has a titleMap configured we'd like to enable looping over
@@ -3128,6 +3121,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
               scope.titleMapValues.push(arr.indexOf(item.value) !== -1);
             });
           };
+
           //Catch default values
           updateTitleMapValues(scope.modelArray);
 
@@ -3185,7 +3179,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
               if (empty) {
                 schemaForm.traverseSchema(items, function (prop, path) {
                   if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isDefined(prop['default'])) {
-                    sel(path, empty, prop['default']);
+                    sfSelect(path, empty, prop['default']);
                   }
                 });
               }
@@ -3802,18 +3796,26 @@ FIXME: real documentation
       options: '=sfOptions'
     },
     controller: ['$scope', function ($scope) {
-      this.evalInParentScope = function (expr, locals) {
-        return $scope.$parent.$eval(expr, locals);
+      this.$onInit = function () {
+        this.evalInParentScope = function (expr, locals) {
+          return $scope.$parent.$eval(expr, locals);
+        };
+
+        // Set up form lookup map
+        var that = this;
+        $scope.lookup = function (lookup) {
+          if (lookup) {
+            that.lookup = lookup;
+          }
+          return that.lookup;
+        };
       };
 
-      // Set up form lookup map
-      var that = this;
-      $scope.lookup = function (lookup) {
-        if (lookup) {
-          that.lookup = lookup;
-        }
-        return that.lookup;
-      };
+      // Prior to v1.5, we need to call `$onInit()` manually.
+      // (Bindings will always be pre-assigned in these versions.)
+      if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.version.major === 1 && __WEBPACK_IMPORTED_MODULE_0_angular___default.a.version.minor < 5) {
+        this.$onInit();
+      }
     }],
     replace: false,
     restrict: 'A',
@@ -3862,7 +3864,7 @@ FIXME: real documentation
         //console.log("schema:", JSON.stringify(schema));
         //console.log("resolv:", JSON.stringify(resolved));
         var asyncTemplates = [];
-        var merged = schemaForm.merge(schema, form, ignore, scope.options, undefined, asyncTemplates);
+        var merged = schemaForm.merge(schema, form, undefined, ignore, scope.options, undefined, asyncTemplates);
 
         if (asyncTemplates.length > 0) {
           // Pre load all async templates and put them on the form for the builder to use.
@@ -3953,7 +3955,12 @@ FIXME: real documentation
         var form = scope.initialForm || defaultForm;
 
         //The check for schema.type is to ensure that schema is not {}
-        if (form && schema && schema.type && (lastDigest.form !== form || lastDigest.schema !== schema) && Object.keys(schema.properties).length > 0) {
+        if (form && schema && schema.type && ( //schema.properties &&
+        lastDigest.form !== form || lastDigest.schema !== schema)) {
+          if ((!schema.properties || Object.keys(schema.properties).length === 0) && (form.indexOf("*") || form.indexOf("..."))) {
+            //form.unshift({"key":"submit", "type": "hidden"});
+          };
+
           lastDigest.schema = schema;
           lastDigest.form = form;
 
@@ -4625,24 +4632,38 @@ FIXME: real documentation
 
     service.jsonref = __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["jsonref"];
 
-    service.merge = function (schema) {
-      var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ['*'];
-      var ignore = arguments[2];
-      var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
-      var readonly = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
-      var asyncTemplates = arguments[5];
-
-      //We look at the supplied form and extend it with schema standards
-      var canonical = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["merge"])(schema, form, ignore, options, readonly, asyncTemplates);
-      return postProcessFn(canonical);
-    };
-
     /**
-     * Create form defaults from schema
-     */
+    * Create form defaults from schema
+    */
     service.defaults = function (schema, types, ignore, options) {
       var defaultTypes = types || typeDefault;
       return __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["schemaDefaults"].defaultForm(schema, defaultTypes, ignore, options);
+    };
+
+    /**
+     * merge
+     *
+     * @param  {Object}  schema                             [description]
+     * @param  {Array}   [form=['*']]                       [description]
+     * @param  {Object}  [typeDefaults=service.typeDefault] [description]
+     * @param  {boolean} ignore                             [description]
+     * @param  {Object}  [options={}]                       [description]
+     * @param  {Boolean} [readonly=false]                   [description]
+     * @param  {[type]}  asyncTemplates                     [description]
+     *
+     * @return {[type]}                                     [description]
+     */
+    service.merge = function (schema) {
+      var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ['*'];
+      var typeDefaults = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : service.typeDefault;
+      var ignore = arguments[3];
+      var options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+      var readonly = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
+      var asyncTemplates = arguments[6];
+
+      //We look at the supplied form and extend it with schema standards
+      var canonical = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["merge"])(schema, form, typeDefaults, ignore, options, readonly, asyncTemplates);
+      return postProcessFn(canonical);
     };
 
     //Utility functions

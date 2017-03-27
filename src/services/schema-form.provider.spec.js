@@ -317,7 +317,7 @@ describe('schema-form.provider.js', function() {
 
         //no form is implicitly ['*']
         var defaults = schemaForm.defaults(schema).form;
-        schemaForm.merge(schema,["*"],{gender:true}).should.be.deep.equal([defaults[0]]);
+        schemaForm.merge(schema,["*"], undefined, {gender:true}).should.be.deep.equal([defaults[0]]);
       });
     });
   });

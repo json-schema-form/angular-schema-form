@@ -1,6 +1,6 @@
 {
   "name": "angular-schema-form",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "Create complex forms from a JSON schema with angular.",
   "repository": {
     "type": "git",
@@ -67,7 +67,7 @@
     "sinon": "^1.17.6",
     "sinon-chai": "^2.8.0",
     "webpack": "^2.2.1",
-    "webpack-dev-server": "^2.3.0"
+    "webpack-dev-server": "^2.4.1"
   },
   "licenses": [
     {

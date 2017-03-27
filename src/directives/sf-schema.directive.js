@@ -16,18 +16,26 @@ sfSelect, sfPath, sfBuilder) {
       options: '=sfOptions'
     },
     controller: [ '$scope', function($scope) {
-      this.evalInParentScope = function(expr, locals) {
-        return $scope.$parent.$eval(expr, locals);
+      this.$onInit = function() {
+        this.evalInParentScope = function(expr, locals) {
+          return $scope.$parent.$eval(expr, locals);
+        };
+
+        // Set up form lookup map
+        var that  = this;
+        $scope.lookup = function(lookup) {
+          if (lookup) {
+            that.lookup = lookup;
+          }
+          return that.lookup;
+        };
       };
 
-      // Set up form lookup map
-      var that  = this;
-      $scope.lookup = function(lookup) {
-        if (lookup) {
-          that.lookup = lookup;
-        }
-        return that.lookup;
-      };
+      // Prior to v1.5, we need to call `$onInit()` manually.
+      // (Bindings will always be pre-assigned in these versions.)
+      if (angular.version.major === 1 && angular.version.minor < 5) {
+        this.$onInit();
+      }
     }],
     replace: false,
     restrict: 'A',
@@ -76,10 +84,8 @@ sfSelect, sfPath, sfBuilder) {
       };
 
       scope.render = function(schema, form) {
-//console.log("schema:", JSON.stringify(schema));
-//console.log("resolv:", JSON.stringify(resolved));
         var asyncTemplates = [];
-        var merged = schemaForm.merge(schema, form, ignore, scope.options, undefined, asyncTemplates);
+        var merged = schemaForm.merge(schema, form, undefined, ignore, scope.options, undefined, asyncTemplates);
 
         if (asyncTemplates.length > 0) {
           // Pre load all async templates and put them on the form for the builder to use.
@@ -177,9 +183,13 @@ sfSelect, sfPath, sfBuilder) {
         var form   = scope.initialForm || defaultForm;
 
         //The check for schema.type is to ensure that schema is not {}
-        if (form && schema && schema.type &&
-            (lastDigest.form !== form || lastDigest.schema !== schema) &&
-            Object.keys(schema.properties).length > 0) {
+        if (form && schema && schema.type && //schema.properties &&
+            (lastDigest.form !== form || lastDigest.schema !== schema)) {
+          if((!schema.properties || Object.keys(schema.properties).length === 0) &&
+              (form.indexOf("*") || form.indexOf("..."))) {
+            //form.unshift({"key":"submit", "type": "hidden"});
+          };
+
           lastDigest.schema = schema;
           lastDigest.form = form;
 
