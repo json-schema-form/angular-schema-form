@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.3
- * @date Mon, 27 Mar 2017 13:17:01 GMT
+ * @date Thu, 30 Mar 2017 07:57:38 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -3861,8 +3861,6 @@ FIXME: real documentation
       };
 
       scope.render = function (schema, form) {
-        //console.log("schema:", JSON.stringify(schema));
-        //console.log("resolv:", JSON.stringify(resolved));
         var asyncTemplates = [];
         var merged = schemaForm.merge(schema, form, undefined, ignore, scope.options, undefined, asyncTemplates);
 
@@ -3926,6 +3924,7 @@ FIXME: real documentation
         // We use a ordinary timeout since we don't need a digest after this.
         setTimeout(function () {
           childScope.firstDigest = false;
+          scope.$apply();
         }, 0);
 
         //compile only children

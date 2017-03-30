@@ -1,7 +1,24 @@
+v1.0.0-alpha.3
+--------------
+This is the third (of many) alpha and is **NOT ready for production** yet.
+
+This alpha fixes a few bugs like the annoying "Invalid type, expected array" error when an array content is invalid.
+
+## Known issues
+ - In Angular 1.5+ some odd behaviours can occur if refreshing a form with a flash of content experienced
+   The digest cycle is getting stuck under some unknown conditions which is most likely related
+
+## Changes
+
+### Fixed
+ - Arrays update validity more consistently, removed Angular version specific code
+ - Add-ons will now correctly display by the added type being passed to the core correctly
+ - #750 Unstoppable "Invalid type, expected array" when form initialised with incorrect array content.
+ - #633 #602 custom validator errors.
+ - #558 Add check for schema property to prevent form generation failures when a checkbox is explicitly defined by a developer (and therefore does not have a schema property) by @vinceis1337 in #663
+
 v1.0.0-alpha.2
 --------------
-This is the second (of many) alpha and is **NOT ready for production** yet.
-
 There is only one change in this alpha that needs user testing and feedback, the long awaited and much desired support for $ref.
 
 ## Changes

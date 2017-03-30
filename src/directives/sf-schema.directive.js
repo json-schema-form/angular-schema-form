@@ -154,6 +154,7 @@ sfSelect, sfPath, sfBuilder) {
         // We use a ordinary timeout since we don't need a digest after this.
         setTimeout(function() {
           childScope.firstDigest = false;
+          scope.$apply();
         }, 0);
 
         //compile only children
