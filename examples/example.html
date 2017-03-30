@@ -93,7 +93,7 @@
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <a class="navbar-brand glyphicon glyphicon-home" href="/"></a>
+      <a class="navbar-brand glyphicon glyphicon-home" href="./"></a>
     </div>
 
 
@@ -147,7 +147,8 @@
             sf-form="form"
             sf-schema="schema"
             ng-submit="submitForm(ngform,modelData)"
-            sf-options="{ formDefaults: { ngModelOptions: { timezone: '+0430' } }}">
+            sf-options="{ formDefaults: { ngModelOptions: { timezone: '+0430' } }}"
+            class="ng-cloak">
       </form>
 
       <div ng-show="ngform.$valid"><em>Form is valid</em></div>
@@ -220,7 +221,7 @@
 <script type="text/javascript" src="../dist/angular-schema-form-bootstrap.js"></script>
 <script type="text/javascript" src="add-on/calculate.js"></script>
 <script type="text/javascript" src="../bower_components/angular-schema-form-datepicker/bootstrap-datepicker.min.js"></script>
-<script type="text/javascript" src="../bower_components/angular-schema-form-colorpicker/bootstrap-colorpicker.min.js"></script>
+<script type="text/javascript" src="../bower_components/angular-schema-form-colorpicker/bootstrap-colorpicker.js"></script>
 <script type="text/javascript" src="../bower_components/angular-schema-form-tinymce/bootstrap-tinymce.js"></script>
 
 <script type="text/javascript">
@@ -267,27 +268,30 @@ app.controller('TestCtrl', function($scope, $http, $location) {
   $scope.hasFlash = swfobject.hasFlashPlayerVersion('9');
 
   // Load data from gist.
-  if ($location.path().length > 4) {
+  if (window.location.hash.length > 4) {
     $scope.navbarMode = 'loaded';
-    var gistId = $location.path().replace('/','');
+    var gistId = window.location.hash.replace(/[\#\/]*/g, '');
     $scope.loading = true;
-    $http.get('https://api.github.com/gists/' + gistId).success(function(res) {
-      $scope.error = null;
-      $scope.tests.unshift({name: 'Gist'});
-      $scope.selectedTest = $scope.tests[0];
-      $scope.loadedData = {
-        created: moment(res.created_at).fromNow(),
-        user: res.user !== null ? res.user.login : 'Anonymous'
+    $http.get('https://api.github.com/gists/' + gistId)
+      .then(function(response) {
+        $scope.error = null;
+        $scope.tests.unshift({name: 'Gist'});
+        $scope.selectedTest = $scope.tests[0];
+        $scope.loadedData = {
+          created: moment(response.data.created_at).fromNow(),
+          user: response.data.user !== null ? response.data.user.login : 'Anonymous'
+        }
+        $scope.loading = false;
+        $scope.schemaJson = response.data.files['schema.json'].content;
+        $scope.formJson   = response.data.files['form.json'].content;
+        $scope.modelData  = JSON.parse(response.data.files['model.json'].content);
+      },
+      function() {
+        $scope.loadedData = 'dummy';
+        $scope.error = 'Failed to load gist.';
+        $scope.selectedTest = $scope.tests[0];
       }
-      $scope.loading = false;
-      $scope.schemaJson = res.files['schema.json'].content;
-      $scope.formJson   = res.files['form.json'].content;
-      $scope.modelData  = JSON.parse(res.files['model.json'].content);
-    }).error(function() {
-      $scope.loadedData = 'dummy';
-      $scope.error = 'Failed to load gist.';
-      $scope.selectedTest = $scope.tests[0];
-    });
+    );
   } else {
     $scope.selectedTest = $scope.tests[0];
   }
@@ -372,14 +376,15 @@ app.controller('TestCtrl', function($scope, $http, $location) {
       }
     };
 
-    $http.post('https://api.github.com/gists', gist).success(function(data) {
+    $http.post('https://api.github.com/gists', gist)
+      .then(function(data) {
       $scope.error = null;
-      $location.path('/' + data.id);
+      $location.hash(data.id);
       $scope.savedGistData = {
         data: data,
         url: $location.absUrl()
       };
-    }).error(function() {
+    }, function() {
       $scope.error = 'Failed to save gist.';
     });
   };
