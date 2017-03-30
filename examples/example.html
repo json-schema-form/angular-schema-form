@@ -270,7 +270,7 @@ app.controller('TestCtrl', function($scope, $http, $location) {
   // Load data from gist.
   if (window.location.hash.length > 4) {
     $scope.navbarMode = 'loaded';
-    var gistId = window.location.hash.replace(/[\#\/]*/g, '');
+    var gistId = window.location.hash.replace(/[\!\#\/]*/g, '');
     $scope.loading = true;
     $http.get('https://api.github.com/gists/' + gistId)
       .then(function(response) {
@@ -377,16 +377,20 @@ app.controller('TestCtrl', function($scope, $http, $location) {
     };
 
     $http.post('https://api.github.com/gists', gist)
-      .then(function(data) {
-      $scope.error = null;
-      $location.hash(data.id);
-      $scope.savedGistData = {
-        data: data,
-        url: $location.absUrl()
-      };
-    }, function() {
-      $scope.error = 'Failed to save gist.';
-    });
+      .then(function(response) {
+        $scope.error = null;
+        //$location.hash(response.data.id);
+        window.location.hash = response.data.id;
+        window.location.hash = response.data.id;
+        $scope.savedGistData = {
+          data: response.data,
+          url: $location.absUrl()
+        };
+      },
+      function() {
+        $scope.error = 'Failed to save gist.';
+      }
+    );
   };
 
   $scope.submitForm = function(form) {
