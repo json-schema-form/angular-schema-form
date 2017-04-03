@@ -292,9 +292,11 @@ sfPath, sfSelect) {
           // in the form definition.
           scope.$on('$destroy', function() {
             let key = scope.getKey();
+            let arrayIndex = (typeof scope.arrayIndex == 'number') ? scope.arrayIndex + 1: 0;
 
             // If the entire schema form is destroyed we don't touch the model
-            if (!scope.externalDestructionInProgress) {
+            if (!scope.externalDestructionInProgress &&
+                (!scope.model.$$hashKey || scope.model.$$hashKey === scope.destroyed)) {
               var destroyStrategy = form.destroyStrategy ||
                                     (scope.options && scope.options.destroyStrategy) || 'remove';
               // No key no model, and we might have strategy 'retain'

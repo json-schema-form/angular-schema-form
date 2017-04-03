@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
- * @version 1.0.0-alpha.3
- * @date Sun, 02 Apr 2017 13:11:29 GMT
+ * @version 1.0.0-alpha.4
+ * @date Mon, 03 Apr 2017 12:57:37 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -92,8 +92,8 @@ module.exports = __webpack_require__(3);
 
 /*!
  * angular-schema-form-bootstrap
- * @version 1.0.0-alpha.3
- * @date Sun, 02 Apr 2017 13:11:20 GMT
+ * @version 1.0.0-alpha.4
+ * @date Sun, 02 Apr 2017 13:57:49 GMT
  * @link https://github.com/json-schema-form/angular-schema-form-bootstrap
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -201,7 +201,7 @@ module.exports = __webpack_require__(3);
 /***/function (module, exports) {
 
   var path = '/bootstrap/array.html';
-  var html = "<div  class=\"schema-form-array {{::form.htmlClass + ' ' + idClass}}\"\r\n      sf-field-model=\"sf-new-array\"\r\n      sf-new-array>\r\n  <label class=\"control-label\" ng-show=\"showTitle()\">{{ form.title }}</label>\r\n  <ol class=\"list-group\" sf-field-model ui-sortable=\"form.sortOptions\">\r\n    <li class=\"list-group-item {{::form.fieldHtmlClass}}\"\r\n        sf-field-model=\"ng-repeat\"\r\n        ng-repeat=\"item in $$value$$ track by $id(item)\">\r\n      <button ng-hide=\"form.readonly || form.remove === null\"\r\n              ng-click=\"deleteFromArray($index)\"\r\n              ng-disabled=\"form.schema.minItems >= modelArray.length\"\r\n              style=\"position: relative; z-index: 20;\"\r\n              type=\"button\" class=\"close pull-right\">\r\n              <span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span>\r\n      </button>\r\n      <div schema-form-array-items sf-key-controller sf-parent-key=\"[{{form.key.join('][')}}]\" sf-index=\"{{$index}}\"></div>\r\n    </li>\r\n  </ol>\r\n  <div class=\"clearfix\" style=\"padding: 15px;\" ng-model=\"modelArray\" schema-validate=\"form\">\r\n    <div class=\"help-block\"\r\n         ng-show=\"(hasError() && errorMessage(schemaError())) || form.description\"\r\n         ng-bind-html=\"(hasError() && errorMessage(schemaError())) || form.description\"></div>\r\n\r\n    <button ng-hide=\"form.readonly || form.add === null\"\r\n            ng-click=\"appendToArray()\"\r\n            ng-disabled=\"form.schema.maxItems <= modelArray.length\"\r\n            type=\"button\"\r\n            class=\"btn {{ form.style.add || 'btn-default' }} pull-right\">\r\n      <i class=\"glyphicon glyphicon-plus\"></i>\r\n      {{ form.add || 'Add'}}\r\n    </button>\r\n  </div>\r\n</div>\r\n";
+  var html = "<div  class=\"schema-form-array {{::form.htmlClass + ' ' + idClass}}\"\r\n      sf-field-model=\"sf-new-array\"\r\n      sf-new-array>\r\n  <label class=\"control-label\" ng-show=\"showTitle()\">{{ form.title }}</label>\r\n  <ol class=\"list-group\" sf-field-model ui-sortable=\"form.sortOptions\">\r\n    <li class=\"list-group-item {{::form.fieldHtmlClass}}\"\r\n        sf-field-model=\"ng-repeat\"\r\n        ng-repeat=\"item in $$value$$ track by $id(trackBy(item, $index))\">\r\n      <button ng-hide=\"form.readonly || form.remove === null\"\r\n              ng-click=\"deleteFromArray(item)\"\r\n              ng-disabled=\"form.schema.minItems >= modelArray.length\"\r\n              style=\"position: relative; z-index: 20;\"\r\n              type=\"button\" class=\"close pull-right\">\r\n              <span aria-hidden=\"true\">&times;</span><span class=\"sr-only\">Close</span>\r\n      </button>\r\n      <div schema-form-array-items sf-key-controller sf-parent-key=\"[{{form.key.join('][')}}]\" sf-index=\"{{$index}}\"></div>\r\n    </li>\r\n  </ol>\r\n  <div class=\"clearfix\" style=\"padding: 15px;\" ng-model=\"modelArray\" schema-validate=\"form\">\r\n    <div class=\"help-block\"\r\n         ng-show=\"(hasError() && errorMessage(schemaError())) || form.description\"\r\n         ng-bind-html=\"(hasError() && errorMessage(schemaError())) || form.description\"></div>\r\n\r\n    <button ng-hide=\"form.readonly || form.add === null\"\r\n            ng-click=\"appendToArray()\"\r\n            ng-disabled=\"form.schema.maxItems <= modelArray.length\"\r\n            type=\"button\"\r\n            class=\"btn {{ form.style.add || 'btn-default' }} pull-right\">\r\n      <i class=\"glyphicon glyphicon-plus\"></i>\r\n      {{ form.add || 'Add'}}\r\n    </button>\r\n  </div>\r\n</div>\r\n";
   window.angular.module('ng').run(['$templateCache', function (c) {
     c.put(path, html);
   }]);

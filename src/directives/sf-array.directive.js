@@ -12,6 +12,11 @@ export default function(sfSelect, sfPath, schemaForm) {
     link: function(scope, element, attrs) {
       scope.min = 0;
 
+      scope.trackBy = function (item, index) {
+        if(item && typeof item === 'object') return item;
+        return index;
+      }
+
       scope.modelArray = scope.$eval(attrs.sfNewArray);
 
       // We need to have a ngModel to hook into validation. It doesn't really play well with
@@ -170,11 +175,17 @@ export default function(sfSelect, sfPath, schemaForm) {
         return model;
       };
 
-      scope.deleteFromArray = function(index) {
+      scope.deleteFromArray = function(item) {
+        var index = scope.modelArray.indexOf(item);
         var model = scope.modelArray;
         if (model) {
           model.splice(index, 1);
         }
+
+        if(item.$$hashKey) {
+          scope.destroyed = item.$$hashKey;
+        }
+
         return model;
       };
 

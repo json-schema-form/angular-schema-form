@@ -2558,6 +2558,7 @@ describe('destroy strategy', function() {
       setTimeout(function() {
         scope.person.switch = false;
         scope.$apply();
+
         scope.person.should.deep.equal({
           "switch": false
         });
