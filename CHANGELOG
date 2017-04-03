@@ -2,7 +2,7 @@ v1.0.0-alpha.4 (unreleased)
 --------------
 This is the fourth (of many) alpha and is **NOT ready for production** yet.
 
-This alpha fixes a few bugs like array item deletion not working.
+This alpha fixes a bunch of array and destroyStrategy bugs.
 
 ## Known issues
  - In Angular 1.5+ some odd behaviours can occur if refreshing a form with a flash of content experienced
@@ -11,7 +11,9 @@ This alpha fixes a few bugs like array item deletion not working.
 ## Changes
 
 ### Fixed
+ - #689 DestroyStrategy does not trigger when field no longer meets condition
  - #750 Removing an invalid array item doesn't work properly
+ - #769 Model inside Array is not cleaned when Condition fails
 
 v1.0.0-alpha.3
 --------------

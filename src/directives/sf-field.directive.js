@@ -307,7 +307,7 @@ sfPath, sfSelect) {
                   obj = sfSelect(key.slice(0, key.length - 1), obj);
                 }
 
-                if(obj && obj.$$hashKey && obj.$$hashKey !== scope.destroyed) {
+                if(obj && scope.destroyed && obj.$$hashKey && obj.$$hashKey !== scope.destroyed) {
                   return;
                 }
 

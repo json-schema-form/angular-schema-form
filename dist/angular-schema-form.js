@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.4
- * @date Mon, 03 Apr 2017 13:29:07 GMT
+ * @date Mon, 03 Apr 2017 14:20:22 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -3613,7 +3613,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                   obj = sfSelect(key.slice(0, key.length - 1), obj);
                 }
 
-                if (obj && obj.$$hashKey && obj.$$hashKey !== scope.destroyed) {
+                if (obj && scope.destroyed && obj.$$hashKey && obj.$$hashKey !== scope.destroyed) {
                   return;
                 }
 

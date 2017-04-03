@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.4
- * @date Mon, 03 Apr 2017 12:57:37 GMT
+ * @date Mon, 03 Apr 2017 14:20:22 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -93,7 +93,7 @@ module.exports = __webpack_require__(3);
 /*!
  * angular-schema-form-bootstrap
  * @version 1.0.0-alpha.4
- * @date Sun, 02 Apr 2017 13:57:49 GMT
+ * @date Mon, 03 Apr 2017 13:11:24 GMT
  * @link https://github.com/json-schema-form/angular-schema-form-bootstrap
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
