@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.4
- * @date Mon, 03 Apr 2017 14:20:22 GMT
+ * @date Fri, 14 Apr 2017 16:07:04 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -3191,12 +3191,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 });
               }
             }
-          } else if (items.type && items.type.indexOf('array') !== -1) {
-            empty = [];
-            if (!scope.options || scope.options.setSchemaDefaults !== false) {
-              empty = items['default'] || empty;
-            }
           } else {
+            if (items.type) {
+              if (items.type.indexOf('array') !== -1) {
+                empty = [];
+              } else if (items.type.indexOf('string') !== -1 || items.type.indexOf('number') !== -1) {
+                empty = '';
+              }
+            }
             // No type? could still have defaults.
             if (!scope.options || scope.options.setSchemaDefaults !== false) {
               empty = items['default'] || empty;
@@ -3231,6 +3233,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           }
         };
       };
+
       var formDefCache = {};
       scope.copyWithIndex = function (index) {
         var form = scope.form;

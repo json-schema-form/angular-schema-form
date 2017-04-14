@@ -158,12 +158,16 @@ export default function(sfSelect, sfPath, schemaForm) {
               }
             }
 
-          } else if (items.type && items.type.indexOf('array') !== -1) {
-            empty = [];
-            if (!scope.options || scope.options.setSchemaDefaults !== false) {
-              empty = items['default'] || empty;
+          }
+          else {
+            if (items.type) {
+              if(items.type.indexOf('array') !== -1) {
+                empty = [];
+              }
+              else if(items.type.indexOf('string') !== -1 || items.type.indexOf('number') !== -1) {
+                empty = '';
+              }
             }
-          } else {
             // No type? could still have defaults.
             if (!scope.options || scope.options.setSchemaDefaults !== false) {
               empty = items['default'] || empty;
@@ -198,6 +202,7 @@ export default function(sfSelect, sfPath, schemaForm) {
           }
         };
       };
+
       var formDefCache = {};
       scope.copyWithIndex = function(index) {
         var form = scope.form;
