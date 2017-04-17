@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.4
- * @date Fri, 14 Apr 2017 16:07:04 GMT
+ * @date Mon, 17 Apr 2017 08:57:48 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -93,7 +93,7 @@ module.exports = __webpack_require__(3);
 /*!
  * angular-schema-form-bootstrap
  * @version 1.0.0-alpha.4
- * @date Mon, 03 Apr 2017 13:11:24 GMT
+ * @date Mon, 17 Apr 2017 08:57:43 GMT
  * @link https://github.com/json-schema-form/angular-schema-form-bootstrap
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -499,7 +499,7 @@ module.exports = __webpack_require__(3);
       'radios-inline': { template: __WEBPACK_IMPORTED_MODULE_9__bootstrap_radios_inline_html___default.a, builder: defaults },
       radiobuttons: { template: __WEBPACK_IMPORTED_MODULE_7__bootstrap_radio_buttons_html___default.a, builder: defaults },
       section: { template: __WEBPACK_IMPORTED_MODULE_10__bootstrap_section_html___default.a, builder: [sfField, simpleTransclusion, condition] },
-      select: { template: __WEBPACK_IMPORTED_MODULE_11__bootstrap_select_html___default.a, builder: defaults.concat(selectPlaceholder) },
+      select: { template: __WEBPACK_IMPORTED_MODULE_11__bootstrap_select_html___default.a, builder: [selectPlaceholder].concat(defaults) },
       submit: { template: __WEBPACK_IMPORTED_MODULE_12__bootstrap_submit_html___default.a, builder: defaults },
       tabarray: { template: __WEBPACK_IMPORTED_MODULE_13__bootstrap_tabarray_html___default.a, builder: [sfField, ngModelOptions, ngModel, array, condition] },
       tabs: { template: __WEBPACK_IMPORTED_MODULE_14__bootstrap_tabs_html___default.a, builder: [sfField, ngModelOptions, tabs, condition] },

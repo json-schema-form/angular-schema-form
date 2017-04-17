@@ -15,6 +15,7 @@ This alpha fixes a bunch of array and destroyStrategy bugs.
  - #750 Removing an invalid array item doesn't work properly
  - #769 Model inside Array is not cleaned when Condition fails
  - #857 **Regression** boolean values only saving true to model
+ - Fixes angular-schema-form-bootstrap#41 Place holder does not disappear even after a valid field is selected. Thanks to @ramakrij
 
 v1.0.0-alpha.3
 --------------
