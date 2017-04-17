@@ -1,4 +1,4 @@
-v1.0.0-alpha.4 (unreleased)
+v1.0.0-alpha.4
 --------------
 This is the fourth (of many) alpha and is **NOT ready for production** yet.
 
@@ -20,10 +20,6 @@ This alpha fixes a bunch of array and destroyStrategy bugs.
 v1.0.0-alpha.3
 --------------
 This alpha fixes a few bugs like the annoying "Invalid type, expected array" error when an array content is invalid.
-
-## Known issues
- - In Angular 1.5+ some odd behaviours can occur if refreshing a form with a flash of content experienced
-   The digest cycle is getting stuck under some unknown conditions which is most likely related
 
 ## Changes
 
