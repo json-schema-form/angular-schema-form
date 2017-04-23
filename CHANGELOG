@@ -1,6 +1,6 @@
-v1.0.0-alpha.4
+v1.0.0-alpha.5
 --------------
-This is the fourth (of many) alpha and is **NOT ready for production** yet.
+This is the fifth (of many) alpha and is **NOT ready for production** yet, reportedly does not work in IE at all.
 
 This alpha fixes a bunch of array and destroyStrategy bugs.
 
@@ -10,7 +10,21 @@ This alpha fixes a bunch of array and destroyStrategy bugs.
 
 ## Changes
 
+### Added
+ - #612 Added 'required' class to allow appending to or highlighting content when a field is required
+
 ### Fixed
+
+v1.0.0-alpha.4
+--------------
+This is the fourth (of many) alpha and is **NOT ready for production** yet.
+
+This alpha fixes a bunch of array and destroyStrategy bugs.
+
+## Changes
+
+### Fixed
+ - #602 Custom validator's message not showing
  - #689 DestroyStrategy does not trigger when field no longer meets condition
  - #750 Removing an invalid array item doesn't work properly
  - #769 Model inside Array is not cleaned when Condition fails
@@ -24,6 +38,7 @@ This alpha fixes a few bugs like the annoying "Invalid type, expected array" err
 ## Changes
 
 ### Fixed
+ - #595 empty properties in schema
  - Arrays update validity more consistently, removed Angular version specific code
  - Add-ons will now correctly display by the added type being passed to the core correctly
  - #625 Unstoppable "Invalid type, expected array" when form initialised with incorrect array content.

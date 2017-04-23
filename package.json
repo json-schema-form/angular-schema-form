@@ -1,6 +1,6 @@
 {
   "name": "angular-schema-form",
-  "version": "1.0.0-alpha.4",
+  "version": "1.0.0-alpha.5",
   "description": "Create complex forms from a JSON schema with angular.",
   "repository": {
     "type": "git",
