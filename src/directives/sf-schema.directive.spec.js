@@ -1955,6 +1955,56 @@ describe('sf-schema.directive.js', function() {
     });
   });
 
+  it('should handle onChange for array type', function () {
+  //TODO confirmt the logic is sound
+    inject(function($compile,$rootScope){
+      var scope = $rootScope.$new();
+      scope.obj = {};
+
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "arr" : {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "Name"
+                }
+              }
+            }
+          }
+        }
+      };
+
+      var spy = sinon.spy();
+      scope.form = [{key : "arr", startEmpty : true, onChange: spy}];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+
+      $compile(tmpl)(scope);
+      runSync(scope, tmpl);
+
+      spy.should.have.been.called.once;
+
+      tmpl.find('button.btn-default').click();
+
+      // Test that "[{name: 'Name'}]" exists even if $$hashKey is defined
+      var test = sinon.match(function (value) {
+                   if(value && value[0] && value[0].name === "Name") return true;
+                   return false;
+                 }, "[{name: 'Name'}]");
+
+      spy.should.have.been.calledWith(test);
+
+      tmpl.find('button.close').click();
+      spy.should.have.been.calledWith([]);
+
+    });
+  });
+
   it('should load template by templateUrl, with template field type',function() {
 
     inject(function($compile, $rootScope, $httpBackend) {
