@@ -5,13 +5,22 @@
  *
  * NOTE: This version is not in sync with the source repo as it has
  * been modified to work with the new version of the framework in development
- * 
+ *
  * @example
  * {
  *   "type":"calculate",
  *   "key":"area", // the key to COPY the RESULT to (doesn't need 'model' prefix)
  *   "watch":["length","width"], // The KEYS to WATCH for changes
  *   "calculate":"model.length * model.width"
+ * }
+ * @example
+ * {
+ *   "type":"calculate",
+ *   "format":"number", // The format to coerce the response into, currently supports 'number' or no property defined
+ *   "key":"area", // the key to COPY the RESULT to (doesn't need 'model' prefix)
+ *   "watch":["length","width"], // The KEYS to WATCH for changes
+ *   "calculate":"model.length * model.width",
+ *   "lookup":"http://example.com/validate/{{calculated}}" // The response is copied to the key
  * }
  */
 angular
