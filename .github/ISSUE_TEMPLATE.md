@@ -15,6 +15,10 @@ I expected ...
 It actually ...
 
 #### Gist/Plunker/Demo
+<!--
+Here is a demo plunker you can use as a starting point
+https://plnkr.co/edit/C9mM5feGGZ0N7povA84G?p=preview
+-->
 [Description](url)
 
 #### Related issues
