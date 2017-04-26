@@ -62,5 +62,5 @@ angular
 .directive('sfSchema', [ '$compile', '$http', '$templateCache', '$q', 'schemaForm',
                         'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder',
                         sfSchemaDirective ])
-.directive('schemaValidate', [ 'sfValidator', '$parse', 'sfSelect', schemaValidateDirective ])
+.directive('schemaValidate', [ 'sfValidator', '$parse', 'sfSelect', '$interpolate', schemaValidateDirective ])
 .directive('sfKeyController', [ 'schemaForm','sfPath', sfKeyDirective ]);

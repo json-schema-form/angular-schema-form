@@ -1,6 +1,6 @@
 import angular from 'angular';
 
-export default function(sfValidator, $parse, sfSelect) {
+export default function(sfValidator, $parse, sfSelect, $interpolate) {
   return {
     restrict: 'A',
     scope: false,
@@ -17,15 +17,26 @@ export default function(sfValidator, $parse, sfSelect) {
       var error = null;
       var form = scope.$eval(attrs.schemaValidate);
 
-      if (form.copyValueTo) {
+      //TODO move this out of validate
+      var copyTo = (typeof form.copyValueTo === 'string')? [ form.copyValueTo ]: form.copyValueTo;
+      if (copyTo && copyTo.length) {
         ngModel.$viewChangeListeners.push(function() {
-          var paths = form.copyValueTo;
-          angular.forEach(paths, function(path) {
+          var context = {
+            "model": scope.model,
+            "form": form,
+            "arrayIndex": scope.$index,
+            "arrayIndices": scope.arrayIndices,
+            "path": scope.path,
+            "$i": scope.$i,
+            "$index": scope.$index
+          };
+          angular.forEach(copyTo, function(copyToPath) {
+            var path = copyToPath.replace(/\[/g,"[{{ ").replace(/\]/g," }}]").replace(/^model\./,"");
+            path = $interpolate(path)(context);
             sfSelect(path, scope.model, ngModel.$modelValue);
           });
         });
       };
-
       // Validate against the schema.
 
       var validate = function(viewValue, triggered) {

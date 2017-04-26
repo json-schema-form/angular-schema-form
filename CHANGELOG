@@ -12,8 +12,10 @@ This alpha fixes a bunch of array and destroyStrategy bugs.
 
 ### Added
  - #612 Added 'required' class to allow appending to or highlighting content when a field is required
+ - Added test case for onChange support for array type
 
 ### Fixed
+- #563 copyValueTo doesn't work with arrays
 
 v1.0.0-alpha.4
 --------------
