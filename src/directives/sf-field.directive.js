@@ -46,18 +46,18 @@ sfPath, sfSelect) {
           if(scope.completeKey !== scope.form.key) {
             if (typeof scope.$index === 'number') {
               key = key.concat(scope.$index);
-            };
+            }
 
             if(scope.form.key && scope.form.key.length) {
               if(typeof key[key.length-1] === 'number' && scope.form.key.length >= 1) {
                 let trim = scope.form.key.length - key.length;
-                scope.completeKey = key.concat(scope.form.key.slice(-trim));
-              }
-              else {
+                scope.completeKey =
+                  trim > 0 ?  key.concat(scope.form.key.slice(-trim)) : key;
+              } else {
                 scope.completeKey = scope.form.key.slice();
-              };
-            };
-          };
+              }
+            }
+          }
 
           // If there is no key then there's nothing to return
           if(!Array.isArray(scope.completeKey)) {
