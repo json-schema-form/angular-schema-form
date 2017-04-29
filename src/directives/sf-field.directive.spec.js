@@ -20,6 +20,7 @@ describe('sf-field.directive.js',function() {
     {
       name: 'array of objects',
       targetKey: ['arrayOfObjects', 0, 'stringVal'],
+
       schema: {
         type: 'object',
         properties: {
@@ -39,11 +40,23 @@ describe('sf-field.directive.js',function() {
           }
         }
       },
+
+      form: [
+        {
+          key: 'arrayOfObjects',
+          items: [
+            {
+              key: 'arrayOfObjects[].stringVal'
+            }
+          ]
+        }
+      ]
     },
 
     {
       name: 'array of strings',
       targetKey: ['arrayOfStrings', 0],
+
       schema: {
         type: 'object',
         properties: {
@@ -74,7 +87,27 @@ describe('sf-field.directive.js',function() {
         runSync(scope, tmpl);
 
         tmpl.children().find('.targetKey').scope().form.key.should.deep.equal(keyTest.targetKey);
+        done();
       });
     });
+
+    if (keyTest.form) {
+      it('should generate correct form keys for ' + keyTest.name + ' with user specified form', function(done) {
+        inject(function($compile,$rootScope) {
+          var scope = $rootScope.$new();
+          scope.model = {};
+          scope.schema = keyTest.schema;
+          scope.form = keyTest.form;
+
+          var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="model"></form>');
+
+          $compile(tmpl)(scope);
+          runSync(scope, tmpl);
+
+          tmpl.children().find('.targetKey').scope().form.key.should.deep.equal(keyTest.targetKey);
+          done();
+        });
+      });
+    }
   });
 });
