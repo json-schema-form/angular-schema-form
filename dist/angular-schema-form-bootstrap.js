@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.5
- * @date Wed, 26 Apr 2017 14:49:08 GMT
+ * @date Sat, 29 Apr 2017 14:53:54 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -93,7 +93,7 @@ module.exports = __webpack_require__(3);
 /*!
  * angular-schema-form-bootstrap
  * @version 1.0.0-alpha.5
- * @date Thu, 20 Apr 2017 11:28:20 GMT
+ * @date Sat, 29 Apr 2017 14:49:38 GMT
  * @link https://github.com/json-schema-form/angular-schema-form-bootstrap
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -249,7 +249,7 @@ module.exports = __webpack_require__(3);
 /***/function (module, exports) {
 
   var path = '/bootstrap/fieldset.html';
-  var html = "<fieldset ng-disabled=\"form.readonly\" class=\"schema-form-fieldset {{::form.htmlClass + ' ' + idClass}}\" sf-key-controller sf-parent-key=\"[{{form.key.join('][')}}]\" sf-index=\"{{$index}}\">\r\n  <legend ng-class=\"{'sr-only': !showTitle() }\">{{ form.title }}</legend>\r\n  <div class=\"help-block\" ng-show=\"form.description\" ng-bind-html=\"form.description\"></div>\r\n</fieldset>\r\n";
+  var html = "<fieldset ng-disabled=\"form.readonly\" class=\"schema-form-fieldset {{::form.htmlClass + ' ' + idClass}}\">\r\n  <legend ng-class=\"{'sr-only': !showTitle() }\">{{ form.title }}</legend>\r\n  <div class=\"help-block\" ng-show=\"form.description\" ng-bind-html=\"form.description\"></div>\r\n</fieldset>\r\n";
   window.angular.module('ng').run(['$templateCache', function (c) {
     c.put(path, html);
   }]);
