@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.5
- * @date Wed, 26 Apr 2017 14:49:08 GMT
+ * @date Mon, 01 May 2017 08:39:39 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -14,9 +14,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId])
+/******/ 		if(installedModules[moduleId]) {
 /******/ 			return installedModules[moduleId].exports;
-/******/
+/******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -2729,6 +2729,7 @@ module.exports = __webpack_require__(4);
 /***/ })
 /******/ ]);
 //# sourceMappingURL=json-schema-form-core.js.map
+
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(19).setImmediate))
 
 /***/ }),
@@ -2842,7 +2843,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
 
 
-/* harmony default export */ __webpack_exports__["a"] = function (sfValidator, $parse, sfSelect, $interpolate) {
+/* harmony default export */ __webpack_exports__["a"] = (function (sfValidator, $parse, sfSelect, $interpolate) {
   return {
     restrict: 'A',
     scope: false,
@@ -3032,7 +3033,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
       };
     }
   };
-};
+});
 
 /***/ }),
 /* 6 */
@@ -3048,7 +3049,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /**
  * Directive that handles the model arrays
  */
-/* harmony default export */ __webpack_exports__["a"] = function (sfSelect, sfPath, schemaForm) {
+/* harmony default export */ __webpack_exports__["a"] = (function (sfSelect, sfPath, schemaForm) {
   return {
     scope: true,
     controller: ['$scope', function SFArrayController($scope) {
@@ -3279,7 +3280,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       };
     }
   };
-};
+});
 
 /***/ }),
 /* 7 */
@@ -3297,7 +3298,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * Takes the form definition as argument.
  * If the form definition has a "onChange" defined as either a function or
  */
-/* harmony default export */ __webpack_exports__["a"] = function () {
+/* harmony default export */ __webpack_exports__["a"] = (function () {
   return {
     require: 'ngModel',
     restrict: 'AC',
@@ -3325,7 +3326,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     }
   };
-};
+});
 
 /***/ }),
 /* 8 */
@@ -3338,7 +3339,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = function ($parse, $compile, $http, $templateCache, $interpolate, $q, sfErrorMessage, sfPath, sfSelect) {
+/* harmony default export */ __webpack_exports__["a"] = (function ($parse, $compile, $http, $templateCache, $interpolate, $q, sfErrorMessage, sfPath, sfSelect) {
 
   var keyFormat = {
     COMPLETE: '*',
@@ -3383,17 +3384,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           if (scope.completeKey !== scope.form.key) {
             if (typeof scope.$index === 'number') {
               key = key.concat(scope.$index);
-            };
+            }
 
             if (scope.form.key && scope.form.key.length) {
               if (typeof key[key.length - 1] === 'number' && scope.form.key.length >= 1) {
                 var trim = scope.form.key.length - key.length;
-                scope.completeKey = key.concat(scope.form.key.slice(-trim));
+                scope.completeKey = trim > 0 ? key.concat(scope.form.key.slice(-trim)) : key;
               } else {
                 scope.completeKey = scope.form.key.slice();
-              };
-            };
-          };
+              }
+            }
+          }
 
           // If there is no key then there's nothing to return
           if (!Array.isArray(scope.completeKey)) {
@@ -3659,7 +3660,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     }
   };
-};
+});
 
 /***/ }),
 /* 9 */
@@ -3669,7 +3670,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /**
  * Directive that handles keys and array indexes
  */
-/* harmony default export */ __webpack_exports__["a"] = function (schemaForm, sfPath) {
+/* harmony default export */ __webpack_exports__["a"] = (function (schemaForm, sfPath) {
   return {
     scope: true,
     require: ['?^^sfNewArray'],
@@ -3698,7 +3699,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     }
   };
-};;
+});;
 
 /***/ }),
 /* 10 */
@@ -3709,7 +3710,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
 
 
-/* harmony default export */ __webpack_exports__["a"] = function ($injector, sfErrorMessage) {
+/* harmony default export */ __webpack_exports__["a"] = (function ($injector, sfErrorMessage) {
 
   //Inject sanitizer if it exists
   var $sanitize = $injector.has('$sanitize') ? $injector.get('$sanitize') : function (html) {
@@ -3802,7 +3803,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       });
     }
   };
-};
+});
 
 /***/ }),
 /* 11 */
@@ -3818,7 +3819,7 @@ FIXME: real documentation
 <form sf-form="form"  sf-schema="schema" sf-decorator="foobar"></form>
 */
 
-/* harmony default export */ __webpack_exports__["a"] = function ($compile, $http, $templateCache, $q, schemaForm, schemaFormDecorators, sfSelect, sfPath, sfBuilder) {
+/* harmony default export */ __webpack_exports__["a"] = (function ($compile, $http, $templateCache, $q, schemaForm, schemaFormDecorators, sfSelect, sfPath, sfBuilder) {
 
   return {
     scope: {
@@ -4032,7 +4033,7 @@ FIXME: real documentation
       };
     }
   };
-};
+});
 
 /***/ }),
 /* 12 */
@@ -4043,7 +4044,7 @@ FIXME: real documentation
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
 
 
-/* harmony default export */ __webpack_exports__["a"] = function ($compileProvider, sfPathProvider) {
+/* harmony default export */ __webpack_exports__["a"] = (function ($compileProvider, sfPathProvider) {
   var defaultDecorator = '';
   var decorators = {};
 
@@ -4463,11 +4464,11 @@ FIXME: real documentation
    * @param {string} name directive name (CamelCased)
    * @param {Object} fields, an object that maps "type" => `{ template, builder, replace}`.
                      attributes `builder` and `replace` are optional, and replace defaults to true.
-                       `template` should be the key of the template to load and it should be pre-loaded
+                      `template` should be the key of the template to load and it should be pre-loaded
                      in `$templateCache`.
-                       `builder` can be a function or an array of functions. They will be called in
+                      `builder` can be a function or an array of functions. They will be called in
                      the order they are supplied.
-                       `replace` (DEPRECATED) is for backwards compatability. If false the builder
+                      `replace` (DEPRECATED) is for backwards compatability. If false the builder
                      will use the "old" way of building that form field using a <sf-decorator>
                      directive.
    */
@@ -4575,7 +4576,7 @@ FIXME: real documentation
 
   //Create a default directive
   createDirective('sfDecorator');
-};;
+});;
 
 /***/ }),
 /* 13 */
@@ -4593,7 +4594,7 @@ FIXME: real documentation
 /**
  * Schema form service.
  */
-/* harmony default export */ __webpack_exports__["a"] = function () {
+/* harmony default export */ __webpack_exports__["a"] = (function () {
   var postProcessFn = function postProcessFn(form) {
     return form;
   };
@@ -4714,7 +4715,7 @@ FIXME: real documentation
 
     return service;
   };
-};
+});
 
 /***/ }),
 /* 14 */
@@ -4723,7 +4724,7 @@ FIXME: real documentation
 "use strict";
 
 // FIXME: type template (using custom builder)
-/* harmony default export */ __webpack_exports__["a"] = function (sfPathProvider) {
+/* harmony default export */ __webpack_exports__["a"] = (function (sfPathProvider) {
 
   var SNAKE_CASE_REGEXP = /[A-Z]/g;
   var snakeCase = function snakeCase(name, separator) {
@@ -5042,7 +5043,7 @@ FIXME: real documentation
       internalBuild: _build
     };
   }];
-};
+});
 
 /***/ }),
 /* 15 */
@@ -5053,7 +5054,7 @@ FIXME: real documentation
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
 
 
-/* harmony default export */ __webpack_exports__["a"] = function () {
+/* harmony default export */ __webpack_exports__["a"] = (function () {
 
   // The codes are tv4 error codes.
   // Not all of these can actually happen in a field, but for
@@ -5179,7 +5180,7 @@ FIXME: real documentation
 
     return service;
   }];
-};
+});
 
 /***/ }),
 /* 16 */
@@ -5219,7 +5220,7 @@ var sfPathProviderClass = function () {
   return sfPathProviderClass;
 }();
 
-/* harmony default export */ __webpack_exports__["a"] = sfPathProviderClass;
+/* harmony default export */ __webpack_exports__["a"] = (sfPathProviderClass);
 
 /***/ }),
 /* 17 */
