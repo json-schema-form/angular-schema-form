@@ -186,10 +186,6 @@ export default function(sfSelect, sfPath, schemaForm) {
           model.splice(index, 1);
         }
 
-        if(item.$$hashKey) {
-          scope.destroyed = item.$$hashKey;
-        }
-
         return model;
       };
 

@@ -292,7 +292,6 @@ sfPath, sfSelect) {
           // in the form definition.
           scope.$on('$destroy', function() {
             let key = scope.getKey();
-            let arrayIndex = (typeof scope.arrayIndex == 'number') ? scope.arrayIndex + 1: 0;
 
             // If the entire schema form is destroyed we don't touch the model
             if (!scope.externalDestructionInProgress) {
@@ -301,36 +300,43 @@ sfPath, sfSelect) {
               // No key no model, and we might have strategy 'retain'
               if (key && destroyStrategy !== 'retain') {
 
-                // Get the object that has the property we wan't to clear.
-                var obj = scope.model;
-                if (key.length > 1) {
-                  obj = sfSelect(key.slice(0, key.length - 1), obj);
-                }
-
-                if(obj && scope.destroyed && obj.$$hashKey && obj.$$hashKey !== scope.destroyed) {
-                  return;
-                }
-
-                // We can get undefined here if the form hasn't been filled out entirely
-                if (obj === undefined) {
-                  return;
-                }
-
                 // Type can also be a list in JSON Schema
                 var type = (form.schema && form.schema.type) || '';
 
                 // Empty means '',{} and [] for appropriate types and undefined for the rest
-                //console.log('destroy', destroyStrategy, key, type, obj);
-                if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
-                  obj[key.slice(-1)] = '';
-                } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
-                  obj[key.slice(-1)] = {};
-                } else if (destroyStrategy === 'empty' && type.indexOf('array') !== -1) {
-                  obj[key.slice(-1)] = [];
+                let value;
+                if (destroyStrategy === 'empty') {
+                  value = type.indexOf('string') !== -1 ? '' :
+                    type.indexOf('object') !== -1 ? {} :
+                    type.indexOf('array') !== -1 ? [] : undefined;
                 } else if (destroyStrategy === 'null') {
-                  obj[key.slice(-1)] = null;
+                  value = null;
+                }
+
+                if (value !== undefined) {
+                  sfSelect(key, scope.model, value);
                 } else {
-                  delete obj[key.slice(-1)];
+                  // Get the object parent object
+                  let obj = scope.model;
+                  if (key.length > 1) {
+                    obj = sfSelect(key.splice(0, key.length - 1), obj)
+                  }
+
+                  // parent can be undefined if the form hasn't been filled out
+                  // entirely
+                  if (obj === undefined) {
+                    return;
+                  }
+
+                  // if parent is an array, then we have already been removed.
+                  // set flag to all children (who are about to recieve a $destroy
+                  // event as well) that we have already been destroyed
+                  if (angular.isArray(obj)) {
+                    scope.externalDestructionInProgress = true;
+                    return;
+                  }
+
+                  delete obj[key[0]];
                 }
               }
             }
