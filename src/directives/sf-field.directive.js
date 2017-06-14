@@ -319,7 +319,7 @@ sfPath, sfSelect) {
                   // Get the object parent object
                   let obj = scope.model;
                   if (key.length > 1) {
-                    obj = sfSelect(key.splice(0, key.length - 1), obj)
+                    obj = sfSelect(key.slice(0, key.length - 1), obj)
                   }
 
                   // parent can be undefined if the form hasn't been filled out
@@ -336,7 +336,7 @@ sfPath, sfSelect) {
                     return;
                   }
 
-                  delete obj[key[0]];
+                  delete obj[key[key.length-1]];
                 }
               }
             }
