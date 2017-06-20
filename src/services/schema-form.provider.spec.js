@@ -617,8 +617,8 @@ describe('schema-form.provider.js', function() {
         var nameKey = objectPropertyKeys.items[0].key;
         var ageKey = objectPropertyKeys.items[1].key;
 
-        nameKey.pop().should.eq("name");
-        ageKey.pop().should.eq("age");
+        nameKey.join('.').should.eq("peopleLivingWithYou.dependentChildren..name");
+        ageKey.join('.').should.eq("peopleLivingWithYou.dependentChildren..age");
       });
     });
   });
