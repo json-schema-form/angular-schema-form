@@ -568,39 +568,39 @@ describe('schema-form.provider.js', function() {
       });
     });
 
-    it('regression test for merging schema that defines an array of objects #900', function() {
-      inject(function(schemaForm) {
-
-        var arrayObjectSchema = {
+    var arrayObjectSchema = {
+      type: "object",
+      properties: {
+        peopleLivingWithYou: {
           type: "object",
           properties: {
-            peopleLivingWithYou: {
-              type: "object",
-              properties: {
-                dependentChildren: {
-                  type: "array",
-                  minItems: 1,
-                  items: {
-                    type: "object",
-                    properties: {
-                      name: {
-                        title: "Name",
-                        type: "string"
-                      },
-                      age: {
-                        title: "Age",
-                        type: "integer"
-                      }
-                    },
-                    required: ["name"]
+            dependentChildren: {
+              type: "array",
+              minItems: 1,
+              items: {
+                type: "object",
+                properties: {
+                  name: {
+                    title: "Name",
+                    type: "string"
+                  },
+                  age: {
+                    title: "Age",
+                    type: "integer"
                   }
-                }
-              },
-              required: ["dependentChildren"]
+                },
+                required: ["name"]
+              }
             }
           },
-          required: ["peopleLivingWithYou"]
-        };
+          required: ["dependentChildren"]
+        }
+      },
+      required: ["peopleLivingWithYou"]
+    };
+
+    it('merge a schema that defines an array of objects with a form inside a section #900', function() {
+      inject(function(schemaForm) {
 
         var formInsideSection = [{
           type: 'section',
@@ -614,6 +614,26 @@ describe('schema-form.provider.js', function() {
 
         var merged = schemaForm.merge(arrayObjectSchema, formInsideSection);
         var objectPropertyKeys = merged[0].items[0].items[0];
+        var nameKey = objectPropertyKeys.items[0].key;
+        var ageKey = objectPropertyKeys.items[1].key;
+
+        nameKey.join('.').should.eq("peopleLivingWithYou.dependentChildren..name");
+        ageKey.join('.').should.eq("peopleLivingWithYou.dependentChildren..age");
+      });
+    });
+
+    it('merge a schema that defines an array of objects with a form without a section #900', function() {
+      inject(function(schemaForm) {
+
+        var formWithoutSection = [{
+          key: 'peopleLivingWithYou.dependentChildren',
+          add: "Add Child",
+          title: 'Dependent children details',
+          validationMessage: 'Complete all required fields for at least one child'
+        }];
+
+        var merged = schemaForm.merge(arrayObjectSchema, formWithoutSection);
+        var objectPropertyKeys = merged[0].items[0];
         var nameKey = objectPropertyKeys.items[0].key;
         var ageKey = objectPropertyKeys.items[1].key;
 
