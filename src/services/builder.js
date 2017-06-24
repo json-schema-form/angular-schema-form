@@ -126,16 +126,19 @@ angular.module('schemaForm').provider('sfBuilder', ['sfPathProvider', function(s
         }
 
         var children = args.fieldFrag.children || args.fieldFrag.childNodes;
+        var child;
+        var ngIf;
         for (var i = 0; i < children.length; i++) {
-          var child = children[i];
-          var ngIf = child.getAttribute('ng-if');
-          child.setAttribute(
-            'ng-if',
-            ngIf ?
-            '(' + ngIf +
-            ') || (' + evalExpr + ')'
-            : evalExpr
-          );
+          child = children[i];
+          ngIf = false;
+
+          if (child.hasAttribute && child.hasAttribute('ng-if')) {
+            ngIf = child.getAttribute('ng-if');
+          };
+
+          if (child.setAttribute) {
+            child.setAttribute('ng-if', ngIf ? '(' + ngIf + ') || (' + evalExpr + ')' : evalExpr);
+          };
         }
       }
     },
