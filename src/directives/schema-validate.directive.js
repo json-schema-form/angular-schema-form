@@ -1,5 +1,15 @@
 import angular from 'angular';
 
+/**
+ * I am the schema-validate directive
+ *
+ * @param  {function} sfValidator
+ * @param  {function} $parse
+ * @param  {function} sfSelect
+ * @param  {function} $interpolate
+ *
+ * @return {object}   I am the directive properties made available to Angular
+ */
 export default function(sfValidator, $parse, sfSelect, $interpolate) {
   return {
     restrict: 'A',
@@ -14,24 +24,24 @@ export default function(sfValidator, $parse, sfSelect, $interpolate) {
       // So we emit it up to the decorator directive so it can put it on scope.
       scope.$emit('schemaFormPropagateNgModelController', ngModel);
 
-      var error = null;
-      var form = scope.$eval(attrs.schemaValidate);
+      let error = null;
+      let form = scope.$eval(attrs.schemaValidate);
 
-      //TODO move this out of validate
-      var copyTo = (typeof form.copyValueTo === 'string')? [ form.copyValueTo ]: form.copyValueTo;
+      // TODO move this out of validate
+      let copyTo = (typeof form.copyValueTo === 'string')? [ form.copyValueTo ]: form.copyValueTo;
       if (copyTo && copyTo.length) {
         ngModel.$viewChangeListeners.push(function() {
-          var context = {
-            "model": scope.model,
-            "form": form,
-            "arrayIndex": scope.$index,
-            "arrayIndices": scope.arrayIndices,
-            "path": scope.path,
-            "$i": scope.$i,
-            "$index": scope.$index
+          let context = {
+            'model': scope.model,
+            'form': form,
+            'arrayIndex': scope.$index,
+            'arrayIndices': scope.arrayIndices,
+            'path': scope.path,
+            '$i': scope.$i,
+            '$index': scope.$index,
           };
           angular.forEach(copyTo, function(copyToPath) {
-            var path = copyToPath.replace(/\[/g,"[{{ ").replace(/\]/g," }}]").replace(/^model\./,"");
+            let path = copyToPath.replace(/\[/g, '[{{ ').replace(/\]/g, ' }}]').replace(/^model\./, '');
             path = $interpolate(path)(context);
             sfSelect(path, scope.model, ngModel.$modelValue);
           });
@@ -39,8 +49,8 @@ export default function(sfValidator, $parse, sfSelect, $interpolate) {
       };
       // Validate against the schema.
 
-      var validate = function(viewValue, triggered) {
-        //Still might be undefined
+      let validate = function(viewValue, triggered) {
+        // Still might be undefined
         if (!form) {
           return viewValue;
         }
@@ -50,8 +60,8 @@ export default function(sfValidator, $parse, sfSelect, $interpolate) {
           return viewValue;
         }
 
-        var result =  sfValidator(form, viewValue);
-        //console.log('result is', result)
+        let result = sfValidator(form, viewValue);
+        // console.log('result is', result)
         // Since we might have different tv4 errors we must clear all
         // errors that start with tv4-
         Object.keys(ngModel.$error)
@@ -110,16 +120,16 @@ export default function(sfValidator, $parse, sfSelect, $interpolate) {
       // updating if we've found an error.
       if (ngModel.$validators) {
         ngModel.$validators.schemaForm = function() {
-          //console.log('validators called.')
+          // console.log('validators called.')
           // Any error and we're out of here!
           return !Object.keys(ngModel.$error).some(function(e) { return e !== 'schemaForm';});
         };
       }
 
-      var schema = form.schema;
+      let schema = form.schema;
 
       // A bit ugly but useful.
-      scope.validateField =  function(formName, triggered) {
+      scope.validateField = function(formName, triggered) {
         let noField = (formName === undefined);
         // If we have specified a form name, and this model is not within
         // that form, then leave things be.
@@ -166,12 +176,12 @@ export default function(sfValidator, $parse, sfSelect, $interpolate) {
         }
       };
 
-      var first = true;
+      let first = true;
       ngModel.$formatters.push(function(val) {
         // When a form first loads this will be called for each field.
         // we usually don't want that.
-        if (ngModel.$pristine  && first &&
-            (!scope.options || scope.options.validateOnRender !== true))  {
+        if (ngModel.$pristine && first &&
+            (!scope.options || scope.options.validateOnRender !== true)) {
           first = false;
           return val;
         }
@@ -187,6 +197,6 @@ export default function(sfValidator, $parse, sfSelect, $interpolate) {
       scope.schemaError = function() {
         return error;
       };
-    }
+    },
   };
 }

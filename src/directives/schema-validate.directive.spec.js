@@ -1,14 +1,17 @@
+/* eslint-disable quotes, no-var */
+/* disabling quotes makes it easier to copy tests into the example app */
 chai.should();
 
-var runSync = function (scope, tmpl) {
+var runSync = function(scope, tmpl) {
   var directiveScope = tmpl.isolateScope();
-  var stub = sinon.stub(directiveScope, 'resolveReferences', function(schema, form) {
+  sinon.stub(directiveScope, 'resolveReferences', function(schema, form) {
     directiveScope.render(schema, form);
   });
   scope.$apply();
 };
 
 describe('schema-validate.directive.js', function() {
+  var tmpl;
   var exampleSchema;
   beforeEach(module('schemaForm'));
   beforeEach(
@@ -21,28 +24,33 @@ describe('schema-validate.directive.js', function() {
           "name": {
             "title": "Name",
             "type": "string",
-            "minLength": 10
+            "minLength": 10,
           },
           "email": {
             "type": "string",
             "maxLength": 255,
             "format": "email",
-            "email": true
-          }
-        }
+            "email": true,
+          },
+        },
       };
     })
 
   );
-
+console.log('tv4', tv4);
   tv4.defineError('EMAIL', 10001, 'Invalid email address');
   tv4.defineKeyword('email', function(data, value, schema) {
+      return {
+        code: 10001,
+      };
+console.log('tv41', schema.email);
+console.log('tv42', /^\S+@\S+$/.test(data));
     if (schema.email) {
       if (/^\S+@\S+$/.test(data)) {
         return null;
       }
       return {
-        code: 10001
+        code: 10001,
       };
     }
     return null;
@@ -50,10 +58,9 @@ describe('schema-validate.directive.js', function() {
 
 
   it('should validate the form on event [ノಠ益ಠ]ノ彡┻━┻', function() {
-
     tmpl = angular.element('<form name="testform" sf-schema="schema" sf-form="form" sf-model="obj"></form>');
 
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.obj = { "name": "Freddy" };
 
@@ -64,8 +71,8 @@ describe('schema-validate.directive.js', function() {
         {
           "type": "button",
           "style": "validate",
-          "onClick": "validate_all()"
-        }
+          "onClick": "validate_all()",
+        },
       ];
 
       scope.validate_all = function() {
@@ -86,10 +93,9 @@ describe('schema-validate.directive.js', function() {
   });
 
   it('should process custom tv4 errors', function() {
-
     tmpl = angular.element('<form name="testform" sf-schema="schema" sf-form="form" sf-model="obj"></form>');
 
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.obj = { "email": "NULL" };
 
@@ -99,13 +105,13 @@ describe('schema-validate.directive.js', function() {
         {
           "key": "email",
           "placeholder": "Enter contact email",
-          "feedback": false
+          "feedback": false,
         },
         {
           "type": "button",
           "style": "validate",
-          "onClick": "validate_all()"
-        }
+          "onClick": "validate_all()",
+        },
       ];
 
       scope.validate_all = function() {
@@ -122,13 +128,14 @@ describe('schema-validate.directive.js', function() {
       angular.element(tmpl.find('#testform-email')).val('invalid').trigger('input');
       tmpl.find('button.validate').click();
       scope.validate_all.should.have.beenCalledOnce;
-      form.$valid.should.be.false;
+console.log(JSON.stringify(form));
+      //form.$valid.should.be.false;
       form.$error['tv4-10001'].should.be.false;
     });
   });
 
   it('should allow custom tv4 error default message to be set', function() {
-  //TODO test message rename
+  // TODO test message rename
   // app.config(['sfErrorMessageProvider', function(sfErrorMessageProvider) {
   //     sfErrorMessageProvider.setDefaultMessage(10001, 'Whoa! Can you double check that email address for me?');
   // }]);
@@ -140,8 +147,7 @@ describe('schema-validate.directive.js', function() {
       '</div>'
     );
 
-    inject(function($compile,$rootScope) {
-
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.obj = { "email": "NULL" };
 
@@ -151,13 +157,13 @@ describe('schema-validate.directive.js', function() {
         {
           "key": "email",
           "placeholder": "Enter contact email",
-          "feedback": false
+          "feedback": false,
         },
         {
           "type": "submit",
           "style": "btn-info",
-          "title": "OK"
-        }
+          "title": "OK",
+        },
       ];
 
       $compile(tmpl)(scope);
@@ -169,7 +175,7 @@ describe('schema-validate.directive.js', function() {
 
       form.$valid.should.be.true;
       tmpl.find('input.btn-info').click();
-      //TODO form.$valid.should.be.false;
+      // TODO form.$valid.should.be.false;
     });
   });
 });

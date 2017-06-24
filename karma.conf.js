@@ -1,12 +1,12 @@
 // Karma configuration
-
+/* eslint-disable no-var */
 var fs = require('fs');
 var path = require('path');
 var origin = fs.existsSync(path.resolve(__dirname, '../angular-schema-form-bootstrap/dist/angular-schema-form-bootstrap.js'));
 var include = (origin)
     ? '../angular-schema-form-bootstrap/dist/angular-schema-form-bootstrap.js'
     : 'dist/angular-schema-form-bootstrap.js';
-console.log("Karma bootstrap:" + origin);
+console.log('Karma bootstrap:' + origin);
 
 module.exports = function(config) {
   config.set({
@@ -14,7 +14,7 @@ module.exports = function(config) {
     basePath: '.',
 
     // frameworks to use
-    frameworks: ['mocha', 'chai-sinon'],
+    frameworks: [ 'mocha', 'chai-sinon' ],
 
     // list of files / patterns to load in the browser
     files: [
@@ -22,10 +22,10 @@ module.exports = function(config) {
       'bower_components/jquery/dist/jquery.min.js',
       'test/lib/angular.js',
       'test/lib/angular-mocks.js',
-      'bower_components/tv4/tv4.js',
+      //'bower_components/tv4/tv4.js',
       'dist/angular-schema-form.js',
       include,
-      'src/**/*.spec.js'
+      'src/**/*.spec.js',
 //      'src/**/sf-schema.directive.spec.js'
     ],
 
@@ -34,28 +34,32 @@ module.exports = function(config) {
 
     // test results reporter to use
     // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    reporters: ['dots','progress','coverage','growler'],
+    reporters: [ 'mocha', 'coverage', 'growler' ],
+
+    mochaReporter: {
+      showDiff: true,
+    },
 
     preprocessors: {
-      'src/**/*.js': ['coverage']
+      'src/**/*.js': [ 'coverage' ],
     },
     babelPreprocessor: {
       options: {
-        presets: ['es2015'],
-        sourceMap: 'inline'
+        presets: [ 'es2015' ],
+        sourceMap: 'inline',
       },
       filename: function (file) {
         return file.originalPath.replace(/\.js$/, '.es5.js');
       },
       sourceFileName: function (file) {
         return file.originalPath;
-      }
+      },
     },
 
     // optionally, configure the reporter
     coverageReporter: {
       type: 'lcov',
-      dir: 'coverage/'
+      dir: 'coverage/',
     },
 
     // web server port
@@ -70,7 +74,7 @@ module.exports = function(config) {
     // config.LOG_INFO || config.LOG_DEBUG
     logLevel: config.LOG_DEBUG,
 
-    loggers: [{type: 'console'}],
+    loggers: [{ type: 'console' }],
 
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
@@ -83,16 +87,16 @@ module.exports = function(config) {
     // - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
     // - PhantomJS
     // - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-    browsers: ['PhantomJS'],
+    browsers: [ 'PhantomJS' ],
 
     // If browser does not capture in given timeout [ms], kill it
     captureTimeout: 60000,
 
     client: {
-      captureConsole: true
+      captureConsole: true,
     },
     // Continuous Integration mode
     // if true, it capture browsers, run tests and exit
-    singleRun: false
+    singleRun: false,
   });
 };

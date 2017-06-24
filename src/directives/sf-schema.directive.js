@@ -1,19 +1,31 @@
 import angular from 'angular';
 
-/*
+/**
 FIXME: real documentation
 <form sf-form="form"  sf-schema="schema" sf-decorator="foobar"></form>
 */
-
+/**
+ * [description]
+ *
+ * @param  {[type]} $compile             [description]
+ * @param  {[type]} $http                [description]
+ * @param  {[type]} $templateCache       [description]
+ * @param  {[type]} $q                   [description]
+ * @param  {[type]} schemaForm           [description]
+ * @param  {[type]} schemaFormDecorators [description]
+ * @param  {[type]} sfSelect             [description]
+ * @param  {[type]} sfBuilder            [description]
+ *
+ * @return {[type]}                      [description]
+ */
 export default function($compile, $http, $templateCache, $q, schemaForm, schemaFormDecorators,
-sfSelect, sfPath, sfBuilder) {
-
+sfSelect, sfBuilder) {
   return {
     scope: {
       schema: '=sfSchema',
       initialForm: '=sfForm',
       model: '=sfModel',
-      options: '=sfOptions'
+      options: '=sfOptions',
     },
     controller: [ '$scope', function($scope) {
       this.$onInit = function() {
@@ -22,7 +34,7 @@ sfSelect, sfPath, sfBuilder) {
         };
 
         // Set up form lookup map
-        var that  = this;
+        let that = this;
         $scope.lookup = function(lookup) {
           if (lookup) {
             that.lookup = lookup;
@@ -36,40 +48,39 @@ sfSelect, sfPath, sfBuilder) {
       if (angular.version.major === 1 && angular.version.minor < 5) {
         this.$onInit();
       }
-    }],
+    } ],
     replace: false,
     restrict: 'A',
     transclude: true,
     require: '?form',
     link: function(scope, element, attrs, formCtrl, transclude) {
-
-      //expose form controller on scope so that we don't force authors to use name on form
+      // expose form controller on scope so that we don't force authors to use name on form
       scope.formCtrl = formCtrl;
 
-      //We'd like to handle existing markup,
-      //besides using it in our template we also
-      //check for ng-model and add that to an ignore list
-      //i.e. even if form has a definition for it or form is ["*"]
-      //we don't generate it.
-      var ignore = {};
+      // We'd like to handle existing markup,
+      // besides using it in our template we also
+      // check for ng-model and add that to an ignore list
+      // i.e. even if form has a definition for it or form is ["*"]
+      // we don't generate it.
+      let ignore = {};
       transclude(scope, function(clone) {
         clone.addClass('schema-form-ignore');
         element.prepend(clone);
 
         if (element[0].querySelectorAll) {
-          var models = element[0].querySelectorAll('[ng-model]');
+          let models = element[0].querySelectorAll('[ng-model]');
           if (models) {
-            for (var i = 0; i < models.length; i++) {
-              var key = models[i].getAttribute('ng-model');
-              //skip first part before .
+            for (let i = 0; i < models.length; i++) {
+              let key = models[i].getAttribute('ng-model');
+              // skip first part before .
               ignore[key.substring(key.indexOf('.') + 1)] = true;
             }
           }
         }
       });
 
-      var lastDigest = {};
-      var childScope;
+      let lastDigest = {};
+      let childScope;
 
       // Common renderer function, can either be triggered by a watch or by an event.
       scope.resolveReferences = function (schema, form) {
@@ -84,8 +95,8 @@ sfSelect, sfPath, sfBuilder) {
       };
 
       scope.render = function(schema, form) {
-        var asyncTemplates = [];
-        var merged = schemaForm.merge(schema, form, undefined, ignore, scope.options, undefined, asyncTemplates);
+        let asyncTemplates = [];
+        let merged = schemaForm.merge(schema, form, undefined, ignore, scope.options, undefined, asyncTemplates);
 
         if (asyncTemplates.length > 0) {
           // Pre load all async templates and put them on the form for the builder to use.
@@ -101,7 +112,6 @@ sfSelect, sfPath, sfBuilder) {
           .then(function() {
             scope.internalRender(schema, form, merged);
           });
-
         }
         else {
           scope.internalRender(schema, form, merged);
@@ -112,7 +122,7 @@ sfSelect, sfPath, sfBuilder) {
         // Create a new form and destroy the old one.
         // Not doing keeps old form elements hanging around after
         // they have been removed from the DOM
-        // https://github.com/Textalk/angular-schema-form/issues/200
+        // https:// github.com/Textalk/angular-schema-form/issues/200
         if (childScope) {
           // Destroy strategy should not be acted upon
           scope.externalDestructionInProgress = true;
@@ -121,10 +131,10 @@ sfSelect, sfPath, sfBuilder) {
         };
         childScope = scope.$new();
 
-        //make the form available to decorators
-        childScope.schemaForm  = { form: merged, schema: schema };
+        // make the form available to decorators
+        childScope.schemaForm = { form: merged, schema: schema };
 
-        //clean all but pre existing html.
+        // clean all but pre existing html.
         Array.prototype.forEach.call(element.children(), function(child) {
           let jchild = angular.element(child);
           if (false === jchild.hasClass('schema-form-ignore')) {
@@ -133,17 +143,17 @@ sfSelect, sfPath, sfBuilder) {
         });
 
         // Find all slots.
-        var slots = {};
-        var slotsFound = element[0].querySelectorAll('*[sf-insert-field]');
+        let slots = {};
+        let slotsFound = element[0].querySelectorAll('*[sf-insert-field]');
 
-        for (var i = 0; i < slotsFound.length; i++) {
+        for (let i = 0; i < slotsFound.length; i++) {
           slots[slotsFound[i].getAttribute('sf-insert-field')] = slotsFound[i];
         }
 
         // if sfUseDecorator is undefined the default decorator is used.
-        var decorator = schemaFormDecorators.decorator(attrs.sfUseDecorator);
+        let decorator = schemaFormDecorators.decorator(attrs.sfUseDecorator);
         // Use the builder to build it and append the result
-        var lookup = Object.create(null);
+        let lookup = Object.create(null);
         scope.lookup(lookup); // give the new lookup to the controller.
         element[0].appendChild(sfBuilder.build(merged, decorator, slots, lookup));
 
@@ -157,14 +167,14 @@ sfSelect, sfPath, sfBuilder) {
           scope.$apply();
         }, 0);
 
-        //compile only children
+        // compile only children
         $compile(element.children())(childScope);
 
-        //ok, now that that is done let's set any defaults
+        // ok, now that that is done let's set any defaults
         if (!scope.options || scope.options.setSchemaDefaults !== false) {
           schemaForm.traverseSchema(schema, function(prop, path) {
             if (angular.isDefined(prop['default'])) {
-              var val = sfSelect(path, scope.model);
+              let val = sfSelect(path, scope.model);
               if (angular.isUndefined(val)) {
                 sfSelect(path, scope.model, prop['default']);
               }
@@ -175,20 +185,20 @@ sfSelect, sfPath, sfBuilder) {
         scope.$emit('sf-render-finished', element);
       };
 
-      var defaultForm = [ '*' ];
+      let defaultForm = [ '*' ];
 
-      //Since we are dependant on up to three
-      //attributes we'll do a common watch
+      // Since we are dependant on up to three
+      // attributes we'll do a common watch
       scope.$watch(function() {
-        var schema = scope.schema;
-        var form   = scope.initialForm || defaultForm;
+        let schema = scope.schema;
+        let form = scope.initialForm || defaultForm;
 
-        //The check for schema.type is to ensure that schema is not {}
-        if (form && schema && schema.type && //schema.properties &&
+        // The check for schema.type is to ensure that schema is not {}
+        if (form && schema && schema.type && // schema.properties &&
             (lastDigest.form !== form || lastDigest.schema !== schema)) {
           if((!schema.properties || Object.keys(schema.properties).length === 0) &&
-              (form.indexOf("*") || form.indexOf("..."))) {
-            //form.unshift({"key":"submit", "type": "hidden"});
+              (form.indexOf('*') || form.indexOf('...'))) {
+            // form.unshift({"key":"submit", "type": "hidden"});
           };
 
           lastDigest.schema = schema;
@@ -201,8 +211,8 @@ sfSelect, sfPath, sfBuilder) {
       // We also listen to the event schemaFormRedraw so you can manually trigger a change if
       // part of the form or schema is chnaged without it being a new instance.
       scope.$on('schemaFormRedraw', function() {
-        var schema = scope.schema;
-        var form   = scope.initialForm ? angular.copy(scope.initialForm) : [ '*' ];
+        let schema = scope.schema;
+        let form = scope.initialForm ? angular.copy(scope.initialForm) : [ '*' ];
         if (schema) {
           scope.resolveReferences(schema, form);
         }
@@ -229,6 +239,6 @@ sfSelect, sfPath, sfBuilder) {
       scope.evalExpr = function(expression, locals) {
         return scope.$parent.$eval(expression, locals);
       };
-    }
+    },
   };
 }

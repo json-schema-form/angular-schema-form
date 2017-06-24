@@ -1,5 +1,3 @@
-import angular from 'angular';
-
 import {
   schemaDefaults,
   jsonref,
@@ -18,8 +16,8 @@ export default function() {
   /**
    * Provider API
    */
-  this.defaults              = defaults;
-  this.stdFormObj            = schemaDefaults.stdFormObj;
+  this.defaults = defaults;
+  this.stdFormObj = schemaDefaults.stdFormObj;
   this.defaultFormDefinition = schemaDefaults.defaultFormDefinition;
 
   /**
@@ -73,9 +71,8 @@ export default function() {
   /* End Provider API */
 
   this.$get = function() {
-
-    var service = {};
-    var typeDefault = this.defaults;
+    let service = {};
+    let typeDefault = this.defaults;
 
     service.jsonref = jsonref;
 
@@ -98,15 +95,15 @@ export default function() {
      * @param  {Boolean} [readonly=false]                   [description]
      * @param  {[type]}  asyncTemplates                     [description]
      *
-     * @return {[type]}                                     [description]
+     * @return {array}   I am the canonical schema with the combined schema and ui-schema
      */
     service.merge = function(schema, form = [ '*' ], typeDefaults=service.typeDefault, ignore, options = {}, readonly = false, asyncTemplates) {
-      //We look at the supplied form and extend it with schema standards
+      // We look at the supplied form and extend it with schema standards
       const canonical = merge(schema, form, typeDefaults, ignore, options, readonly, asyncTemplates);
       return postProcessFn(canonical);
     };
 
-    //Utility functions
+    // Utility functions
     /**
      * Form defaults for schema by type
      * As a form is generated from a schema these are the definitions of each json-schema type

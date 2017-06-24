@@ -14,7 +14,8 @@
     "dist": "webpack --config webpack.config.dist.js",
     "watch": "webpack --watch",
     "testlinux": "rm -fr coverage && ./node_modules/karma/bin/karma start --single-run --browsers PhantomJS karma.conf.js && find coverage/ -name lcov.info -print0 | xargs -0 cat | ./node_modules/coveralls/bin/coveralls.js",
-    "test": "karma start karma.conf.js --log-level debug --single-run",
+    "lint": "eslint src/**/*.js",
+    "test": "webpack && karma start karma.conf.js --log-level debug --single-run",
     "tests": "karma start karma.conf.js --log-level debug --auto-watch"
   },
   "author": "json-schema-form",
@@ -29,11 +30,6 @@
   "bugs": {
     "url": "https://github.com/json-schema-form/angular-schema-form/issues"
   },
-  "dependencies": {
-    "angular": ">= 1.2",
-    "tv4": "~1.0.15",
-    "angular-sanitize": ">= 1.2"
-  },
   "keywords": [
     "angular",
     "angularjs",
@@ -44,6 +40,11 @@
     "ui-schema",
     "schema"
   ],
+  "dependencies": {
+    "angular": ">= 1.2",
+    "tv4": "~1.0.15",
+    "angular-sanitize": ">= 1.2"
+  },
   "devDependencies": {
     "babel-core": "^6.18.2",
     "babel-loader": "^6.2.8",
@@ -51,6 +52,9 @@
     "babel-polyfill": "^6.16.0",
     "babel-preset-es2015": "^6.18.0",
     "chai": "^3.5.0",
+    "diff": "^3.2.0",
+    "eslint": "^3.19.0",
+    "eslint-config-google": "^0.7.1",
     "html-webpack-externals-plugin": "^2.1.2",
     "karma": "^1.3.0",
     "karma-babel-preprocessor": "^6.0.1",
@@ -58,6 +62,7 @@
     "karma-coverage": "^1.1.1",
     "karma-growler-reporter": "0.0.1",
     "karma-mocha": "^1.3.0",
+    "karma-mocha-reporter": "^2.2.3",
     "karma-phantomjs-launcher": "^1.0.2",
     "karma-webpack": "^1.8.0",
     "mocha": "^3.2.0",

@@ -1,19 +1,24 @@
 import angular from 'angular';
 
+/**
+ * I am the messages directive for description and error message handling
+ *
+ * @param  {object} $injector I am the Angular injector for optional dependencies
+ * @param  {object} sfErrorMessage I contain the interpolation function for messages
+ *
+ * @return {object} I am the message directive API
+ */
 export default function($injector, sfErrorMessage) {
-
-  //Inject sanitizer if it exists
-  var $sanitize = $injector.has('$sanitize') ?
+  // Inject sanitizer if it exists
+  let $sanitize = $injector.has('$sanitize') ?
                   $injector.get('$sanitize') : function(html) { return html; };
 
   return {
     scope: false,
     restrict: 'EA',
     link: function(scope, element, attrs) {
-
-      var message = '';
+      let message = '';
       if (attrs.sfMessage) {
-
         scope.$watch(attrs.sfMessage, function(msg) {
           if (msg) {
             message = $sanitize(msg);
@@ -22,21 +27,22 @@ export default function($injector, sfErrorMessage) {
         });
       }
 
-      var currentMessage;
+      let currentMessage;
       // Only call html() if needed.
-      var setMessage = function(msg) {
+      let setMessage = function(msg) {
         if (msg !== currentMessage) {
           element.html(msg);
           currentMessage = msg;
         }
       };
 
-      var update = function(checkForErrors) {
+      let update = function(checkForErrors) {
         if (checkForErrors) {
           if (!scope.hasError()) {
             setMessage(message);
-          } else {
-            var errors = [];
+          }
+          else {
+            let errors = [];
             angular.forEach(scope.ngModel && scope.ngModel.$error, function(status, code) {
               if (status) {
                 // if true then there is an error
@@ -52,7 +58,7 @@ export default function($injector, sfErrorMessage) {
 
             // We only show one error.
             // TODO: Make that optional
-            var error = errors[0];
+            let error = errors[0];
 
             if (error) {
               setMessage(sfErrorMessage.interpolate(
@@ -62,11 +68,13 @@ export default function($injector, sfErrorMessage) {
                 scope.form,
                 scope.options && scope.options.validationMessage
               ));
-            } else {
+            }
+            else {
               setMessage(message);
             }
           }
-        } else {
+        }
+        else {
           setMessage(message);
         }
       };
@@ -74,7 +82,7 @@ export default function($injector, sfErrorMessage) {
       // Update once.
       update();
 
-      var once = scope.$watch('ngModel', function(ngModel) {
+      let once = scope.$watch('ngModel', function(ngModel) {
         if (ngModel) {
           // We also listen to changes of the model via parsers and formatters.
           // This is since both the error message can change and given a pristine
@@ -90,7 +98,6 @@ export default function($injector, sfErrorMessage) {
       scope.$watchCollection('ngModel.$error', function() {
         update(!!scope.ngModel);
       });
-
-    }
+    },
   };
 }

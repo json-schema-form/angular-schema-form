@@ -1,13 +1,19 @@
+/* eslint-disable quote-props, no-invalid-this */
 import angular from 'angular';
 
+/**
+ * I am the error message provider
+ *
+ * @return {object} I return a service provider for error messages
+ */
 export default function() {
-
+  let self = this;
   // The codes are tv4 error codes.
   // Not all of these can actually happen in a field, but for
   // we never know when one might pop up so it's best to cover them all.
 
   // TODO: Humanize these.
-  var defaultMessages = {
+  let defaultMessages = {
     'default': 'Field does not validate',
     0: 'Invalid type, expected {{schema.type}}',
     1: 'No enum match for: {{viewValue}}',
@@ -43,33 +49,32 @@ export default function() {
     // Schema structure
     600: 'Circular $refs',
     // Non-standard validation options
-    1000: 'Unknown property (not in schema)'
+    1000: 'Unknown property (not in schema)',
   };
 
   // In some cases we get hit with an angular validation error
-  defaultMessages.number    = defaultMessages[105];
-  defaultMessages.required  = defaultMessages[302];
-  defaultMessages.min       = defaultMessages[101];
-  defaultMessages.max       = defaultMessages[103];
+  defaultMessages.number = defaultMessages[105];
+  defaultMessages.required = defaultMessages[302];
+  defaultMessages.min = defaultMessages[101];
+  defaultMessages.max = defaultMessages[103];
   defaultMessages.maxlength = defaultMessages[201];
   defaultMessages.minlength = defaultMessages[200];
-  defaultMessages.pattern   = defaultMessages[202];
+  defaultMessages.pattern = defaultMessages[202];
 
-  this.setDefaultMessages = function(messages) {
+  self.setDefaultMessages = function(messages) {
     defaultMessages = messages;
   };
 
-  this.getDefaultMessages = function() {
+  self.getDefaultMessages = function() {
     return defaultMessages;
   };
 
-  this.setDefaultMessage = function(error, msg) {
+  self.setDefaultMessage = function(error, msg) {
     defaultMessages[error] = msg;
   };
 
-  this.$get = [ '$interpolate', function($interpolate) {
-
-    var service = {};
+  self.$get = [ '$interpolate', function($interpolate) {
+    let service = {};
     service.defaultMessages = defaultMessages;
 
     /**
@@ -88,7 +93,7 @@ export default function() {
      */
     service.interpolate = function(error, value, viewValue, form, global) {
       global = global || {};
-      var validationMessage = form.validationMessage || {};
+      let validationMessage = form.validationMessage || {};
 
       // Drop tv4 prefix so only the code is left.
       if (error.indexOf('tv4-') === 0) {
@@ -96,7 +101,7 @@ export default function() {
       }
 
       // First find apropriate message or function
-      var message = validationMessage['default'] || global['default'] || '';
+      let message = validationMessage['default'] || global['default'] || '';
 
       [ validationMessage, global, defaultMessages ].some(function(val) {
         if (angular.isString(val) || angular.isFunction(val)) {
@@ -109,21 +114,22 @@ export default function() {
         }
       });
 
-      var context = {
+      let context = {
         error: error,
         value: value,
         viewValue: viewValue,
         form: form,
         schema: form.schema,
-        title: form.title || (form.schema && form.schema.title)
+        title: form.title || (form.schema && form.schema.title),
       };
       if (angular.isFunction(message)) {
         return message(context);
-      } else {
+      }
+      else {
         return $interpolate(message)(context);
       }
     };
 
     return service;
-  }];
+  } ];
 }
