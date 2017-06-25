@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.5
- * @date Sat, 29 Apr 2017 14:53:54 GMT
+ * @date Sat, 24 Jun 2017 14:16:44 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -93,7 +93,7 @@ module.exports = __webpack_require__(3);
 /*!
  * angular-schema-form-bootstrap
  * @version 1.0.0-alpha.5
- * @date Sat, 29 Apr 2017 14:49:38 GMT
+ * @date Sun, 30 Apr 2017 12:31:04 GMT
  * @link https://github.com/json-schema-form/angular-schema-form-bootstrap
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -309,7 +309,7 @@ module.exports = __webpack_require__(3);
 /***/function (module, exports) {
 
   var path = '/bootstrap/section.html';
-  var html = "<div class=\"schema-form-section {{::form.htmlClass + ' ' + idClass}}\" sf-key-controller sf-parent-key=\"[{{form.key.join('][')}}]\" sf-index=\"{{$index}}\"></div>\r\n";
+  var html = "<div class=\"schema-form-section {{::form.htmlClass + ' ' + idClass}}\" sf-index=\"{{$index}}\"></div>\r\n";
   window.angular.module('ng').run(['$templateCache', function (c) {
     c.put(path, html);
   }]);
