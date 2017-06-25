@@ -31,6 +31,12 @@ Extending Schema Form
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+
+Migration Guide
+===============
+If you use the library factories in an app or an add-on or plan to upgrade versions, please read the 
+[migration guide](migration.md) for any items that may need consideration.
+
 Overview
 --------
 

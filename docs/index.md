@@ -1,4 +1,3 @@
-
 IMPORTANT
 =========
 
@@ -8,6 +7,10 @@ all the HTML has been moved to [github.com/json-schema-form/angular-schema-form-
 The documentation below, especially form options is therefore somewhat bootstrap decorator
 specific. The docs is undergoing updating.
 
+Migration Guide
+===============
+If you use the library factories in an app or an add-on or plan to upgrade versions, please read the 
+[migration guide](migration.md) for any items that may need consideration.
 
 Documentation
 =============

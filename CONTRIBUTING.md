@@ -14,6 +14,8 @@ git clone https://github.com/json-schema-form/angular-schema-form.git
 git clone https://github.com/json-schema-form/angular-schema-form-bootstrap.git
 git clone https://github.com/json-schema-form/angular-schema-form-material.git
 ```
+Install [Node.js](https://nodejs.org) for your development environment. Currently working in Node v8.1.2 at least.
+
 Install dev/global dependencies and bower references to use demo site
 ```bash
 npm install
