@@ -37,14 +37,9 @@ describe('schema-validate.directive.js', function() {
     })
 
   );
-console.log('tv4', tv4);
+
   tv4.defineError('EMAIL', 10001, 'Invalid email address');
   tv4.defineKeyword('email', function(data, value, schema) {
-      return {
-        code: 10001,
-      };
-console.log('tv41', schema.email);
-console.log('tv42', /^\S+@\S+$/.test(data));
     if (schema.email) {
       if (/^\S+@\S+$/.test(data)) {
         return null;
@@ -128,8 +123,7 @@ console.log('tv42', /^\S+@\S+$/.test(data));
       angular.element(tmpl.find('#testform-email')).val('invalid').trigger('input');
       tmpl.find('button.validate').click();
       scope.validate_all.should.have.beenCalledOnce;
-console.log(JSON.stringify(form));
-      //form.$valid.should.be.false;
+      form.$valid.should.be.false;
       form.$error['tv4-10001'].should.be.false;
     });
   });
