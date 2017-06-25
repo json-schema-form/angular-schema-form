@@ -1,82 +1,84 @@
+/* eslint-disable quotes, no-var */
+/* disabling quotes makes it easier to copy tests into the example app */
 chai.should();
 
 var runSync = function (scope, tmpl) {
   var directiveScope = tmpl.isolateScope();
-  var stub = sinon.stub(directiveScope, 'resolveReferences', function(schema, form) {
+  sinon.stub(directiveScope, 'resolveReferences', function(schema, form) {
     directiveScope.render(schema, form);
   });
   scope.$apply();
-}
+};
 
-describe('sf-field.directive.js',function() {
+describe('sf-field.directive.js', function() {
   beforeEach(module('schemaForm'));
   beforeEach(
-    module(function($sceProvider){
+    module(function($sceProvider) {
       $sceProvider.enabled(false);
     })
   );
 
   var keyTests = [
     {
-      name: 'array of objects',
-      targetKey: ['arrayOfObjects', 0, 'stringVal'],
+      "name": "array of objects",
+      "targetKey": [ "arrayOfObjects", 0, "stringVal" ],
 
-      schema: {
-        type: 'object',
-        properties: {
-          arrayOfObjects: {
-            type: 'array',
-            items: {
-              type: 'object',
-              properties: {
-                stringVal: {
-                  type: 'string',
-                  'x-schema-form': {
-                    htmlClass: 'targetKey'
-                  }
-                }
-              }
-            }
-          }
-        }
+      "schema": {
+        "type": "object",
+        "properties": {
+          "arrayOfObjects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "stringVal": {
+                  "type": "string",
+                  "x-schema-form": {
+                    "htmlClass": "targetKey",
+                  },
+                },
+              },
+            },
+          },
+        },
       },
 
-      form: [
+      "form": [
         {
-          key: 'arrayOfObjects',
-          items: [
+          "key": "arrayOfObjects",
+          "items": [
             {
-              key: 'arrayOfObjects[].stringVal'
-            }
-          ]
-        }
-      ]
+              "key": "arrayOfObjects[].stringVal",
+            },
+          ],
+        },
+      ],
     },
 
     {
-      name: 'array of strings',
-      targetKey: ['arrayOfStrings', 0],
+      "name": "array of strings",
+      "targetKey": [ "arrayOfStrings", 0 ],
 
-      schema: {
-        type: 'object',
-        properties: {
-          arrayOfStrings: {
-            type: 'array',
-            items: {
-              type: 'string',
-              'x-schema-form': {
-                htmlClass: 'targetKey'
-              }
-            }
-          }
-        }
-      }
-    }
+      "schema": {
+        "type": "object",
+        "properties": {
+          "arrayOfStrings": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "x-schema-form": {
+                htmlClass: "targetKey",
+              },
+            },
+          },
+        },
+      },
+    },
   ];
 
   keyTests.forEach(function(keyTest) {
     it('should generate correct form keys for ' + keyTest.name, function(done) {
-      inject(function($compile,$rootScope) {
+      inject(function($compile, $rootScope) {
         var scope = $rootScope.$new();
         scope.model = {};
         scope.schema = keyTest.schema;
@@ -93,7 +95,7 @@ describe('sf-field.directive.js',function() {
 
     if (keyTest.form) {
       it('should generate correct form keys for ' + keyTest.name + ' with user specified form', function(done) {
-        inject(function($compile,$rootScope) {
+        inject(function($compile, $rootScope) {
           var scope = $rootScope.$new();
           scope.model = {};
           scope.schema = keyTest.schema;

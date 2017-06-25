@@ -12,6 +12,7 @@ var runSync = function(scope, tmpl) {
 
 describe('sf-array.directive.js', function() {
   var exampleSchema;
+  var tmpl;
   beforeEach(module('schemaForm'));
   beforeEach(
     module(function($sceProvider) {
@@ -76,7 +77,7 @@ describe('sf-array.directive.js', function() {
 
     inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
-      scope.model = { names: [{ name: "0"}, {name: "1"}, {name: "2"}, {name: "3"}]};
+      scope.model = { names: [{ name: "0" }, { name: "1" }, { name: "2" }, { name: "3" }]};
 
       scope.schema = exampleSchema;
 
@@ -97,7 +98,7 @@ describe('sf-array.directive.js', function() {
         scope.model.names[1].name.should.equal("2");
         scope.model.names[2].name.should.equal("3");
         done();
-      }, 0)
+      }, 0);
     });
   });
 });

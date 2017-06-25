@@ -142,9 +142,6 @@ describe('schema-form.provider.js', function() {
               "attributes",
             ],
             "type": "fieldset",
-            "key": [
-              "attributes",
-            ],
             "items": [
               {
                 "title": "Eye color",
@@ -193,10 +190,6 @@ describe('schema-form.provider.js', function() {
                   "shoulders",
                 ],
                 "type": "fieldset",
-                "key": [
-                  "attributes",
-                  "shoulders",
-                ],
                 "items": [
                   {
                     "title": "left",
@@ -573,34 +566,33 @@ describe('schema-form.provider.js', function() {
                 properties: {
                   name: {
                     title: "Name",
-                    type: "string"
+                    type: "string",
                   },
                   age: {
                     title: "Age",
-                    type: "integer"
-                  }
+                    type: "integer",
+                  },
                 },
-                required: ["name"]
-              }
-            }
+                required: [ "name" ],
+              },
+            },
           },
-          required: ["dependentChildren"]
-        }
+          required: [ "dependentChildren" ],
+        },
       },
-      required: ["peopleLivingWithYou"]
+      required: [ "peopleLivingWithYou" ],
     };
 
     it('merge a schema that defines an array of objects with a form inside a section #900', function() {
       inject(function(schemaForm) {
-
         var formInsideSection = [{
           type: 'section',
           items: [{
             key: 'peopleLivingWithYou.dependentChildren',
             add: "Add Child",
             title: 'Dependent children details',
-            validationMessage: 'Complete all required fields for at least one child'
-          }]
+            validationMessage: 'Complete all required fields for at least one child',
+          }],
         }];
 
         var merged = schemaForm.merge(arrayObjectSchema, formInsideSection);
@@ -615,12 +607,11 @@ describe('schema-form.provider.js', function() {
 
     it('merge a schema that defines an array of objects with a form without a section #900', function() {
       inject(function(schemaForm) {
-
         var formWithoutSection = [{
           key: 'peopleLivingWithYou.dependentChildren',
           add: "Add Child",
           title: 'Dependent children details',
-          validationMessage: 'Complete all required fields for at least one child'
+          validationMessage: 'Complete all required fields for at least one child',
         }];
 
         var merged = schemaForm.merge(arrayObjectSchema, formWithoutSection);

@@ -59,7 +59,7 @@ export default function($parse, $compile, $interpolate, sfErrorMessage, sfPath, 
               if(typeof key[key.length-1] === 'number' && scope.form.key.length >= 1) {
                 let trim = scope.form.key.length - key.length;
                 scope.completeKey =
-                  trim > 0 ?  key.concat(scope.form.key.slice(-trim)) : key;
+                  trim > 0 ? key.concat(scope.form.key.slice(-trim)) : key;
               }
               else {
                 scope.completeKey = scope.form.key.slice();
@@ -308,13 +308,12 @@ export default function($parse, $compile, $interpolate, sfErrorMessage, sfPath, 
 
             // If the entire schema form is destroyed we don't touch the model
             if (!scope.externalDestructionInProgress) {
-              var destroyStrategy = form.destroyStrategy ||
+              const destroyStrategy = form.destroyStrategy ||
                                     (scope.options && scope.options.destroyStrategy) || 'remove';
               // No key no model, and we might have strategy 'retain'
               if (key && destroyStrategy !== 'retain') {
-
                 // Type can also be a list in JSON Schema
-                var type = (form.schema && form.schema.type) || '';
+                const type = (form.schema && form.schema.type) || '';
 
                 // Empty means '',{} and [] for appropriate types and undefined for the rest
                 let value;
@@ -322,17 +321,19 @@ export default function($parse, $compile, $interpolate, sfErrorMessage, sfPath, 
                   value = type.indexOf('string') !== -1 ? '' :
                     type.indexOf('object') !== -1 ? {} :
                     type.indexOf('array') !== -1 ? [] : undefined;
-                } else if (destroyStrategy === 'null') {
+                }
+                else if (destroyStrategy === 'null') {
                   value = null;
                 }
 
                 if (value !== undefined) {
                   sfSelect(key, scope.model, value);
-                } else {
+                }
+                else {
                   // Get the object parent object
                   let obj = scope.model;
                   if (key.length > 1) {
-                    obj = sfSelect(key.slice(0, key.length - 1), obj)
+                    obj = sfSelect(key.slice(0, key.length - 1), obj);
                   }
 
                   // parent can be undefined if the form hasn't been filled out
