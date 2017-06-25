@@ -29,7 +29,7 @@ describe('schema-form-decorators.provider.js', function() {
   //   });
   // });
 
-  describe('#legacy #defineDecorator', function() {
+  describe('legacy defineDecorator', function() {
     it('should enable you to create new decorator directives', function() {
       module(function(schemaFormDecoratorsProvider) {
         schemaFormDecoratorsProvider.defineDecorator('foobar', { 'foo': { 'template': '/bar.html', 'builder': []}});

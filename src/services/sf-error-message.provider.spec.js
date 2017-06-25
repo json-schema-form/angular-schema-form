@@ -5,7 +5,7 @@ chai.should();
 describe('sf-error-message.provider.js', function() {
   beforeEach(module('schemaForm'));
 
-  describe('#sfErrorMessage', function() {
+  describe('sfErrorMessage', function() {
     it('should fall back to global default message if no other is supplied', function() {
       inject(function(sfErrorMessage) {
         var result = sfErrorMessage.interpolate(

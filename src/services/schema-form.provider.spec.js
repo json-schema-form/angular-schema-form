@@ -4,7 +4,7 @@ chai.should();
 
 describe('schema-form.provider.js', function() {
   beforeEach(module('schemaForm'));
-  describe('#defaults()', function() {
+  describe('defaults()', function() {
     it('should generate default form def from a schema', function() {
       inject(function(schemaForm) {
         var schema = {
@@ -321,7 +321,7 @@ describe('schema-form.provider.js', function() {
     });
   });
 
-  describe('#appendRule() and #prependRule()', function() {
+  describe('appendRule() and prependRule()', function() {
     beforeEach(module('schemaForm'));
     beforeEach(
       module(function($sceProvider) {
@@ -378,8 +378,8 @@ describe('schema-form.provider.js', function() {
     });
   });
 
-  describe('#postProcess()', function() {
-    it('should be enable post-processing of forms', function() {
+  describe('postProcess()', function() {
+    it('should enable post-processing of forms', function() {
       module(function(schemaFormProvider) {
         schemaFormProvider.postProcess(function(form) {
           form.postProcess = true;
@@ -408,7 +408,7 @@ describe('schema-form.provider.js', function() {
     });
   });
 
-  describe('#merge()', function() {
+  describe('merge()', function() {
     it('should merge schema and form def', function() {
       inject(function(schemaForm) {
         var schema = {
