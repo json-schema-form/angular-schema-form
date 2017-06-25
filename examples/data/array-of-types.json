@@ -1,0 +1,21 @@
+{
+  "schema": {
+    "type": "object",
+    "properties": {
+      "foo": {
+          "type": [ "number", "string" ],
+          "maxLength":2,
+          "minLength":0,
+          "minimum":3,
+          "maximum":10
+      }
+    }
+  },
+  "form": [
+    {
+      "key":"foo",
+      "title":"Test",
+      "type":"text"
+    }
+  ]
+}
