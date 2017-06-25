@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.5
- * @date Sun, 25 Jun 2017 09:09:24 GMT
+ * @date Sun, 25 Jun 2017 11:12:48 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -87,7 +87,7 @@ module.exports = angular;
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
  * json-schema-form-core
  * @version 1.0.0-alpha.5
- * @date Sat, 24 Jun 2017 14:16:26 GMT
+ * @date Sun, 25 Jun 2017 10:52:17 GMT
  * @link https://github.com/json-schema-form/json-schema-form-core
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -3239,10 +3239,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           model.splice(index, 1);
         }
 
-        if (item.$$hashKey) {
-          scope.destroyed = item.$$hashKey;
-        }
-
         return model;
       };
 
@@ -3638,36 +3634,42 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
               var destroyStrategy = form.destroyStrategy || scope.options && scope.options.destroyStrategy || 'remove';
               // No key no model, and we might have strategy 'retain'
               if (key && destroyStrategy !== 'retain') {
-                // Get the object that has the property we wan't to clear.
-                var obj = scope.model;
-                if (key.length > 1) {
-                  obj = sfSelect(key.slice(0, key.length - 1), obj);
-                }
-
-                if (obj && scope.destroyed && obj.$$hashKey && obj.$$hashKey !== scope.destroyed) {
-                  return;
-                }
-
-                // We can get undefined here if the form hasn't been filled out entirely
-                if (obj === undefined) {
-                  return;
-                }
 
                 // Type can also be a list in JSON Schema
                 var type = form.schema && form.schema.type || '';
 
                 // Empty means '',{} and [] for appropriate types and undefined for the rest
-                // console.log('destroy', destroyStrategy, key, type, obj);
-                if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
-                  obj[key.slice(-1)] = '';
-                } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
-                  obj[key.slice(-1)] = {};
-                } else if (destroyStrategy === 'empty' && type.indexOf('array') !== -1) {
-                  obj[key.slice(-1)] = [];
+                var value = void 0;
+                if (destroyStrategy === 'empty') {
+                  value = type.indexOf('string') !== -1 ? '' : type.indexOf('object') !== -1 ? {} : type.indexOf('array') !== -1 ? [] : undefined;
                 } else if (destroyStrategy === 'null') {
-                  obj[key.slice(-1)] = null;
+                  value = null;
+                }
+
+                if (value !== undefined) {
+                  sfSelect(key, scope.model, value);
                 } else {
-                  delete obj[key.slice(-1)];
+                  // Get the object parent object
+                  var obj = scope.model;
+                  if (key.length > 1) {
+                    obj = sfSelect(key.slice(0, key.length - 1), obj);
+                  }
+
+                  // parent can be undefined if the form hasn't been filled out
+                  // entirely
+                  if (obj === undefined) {
+                    return;
+                  }
+
+                  // if parent is an array, then we have already been removed.
+                  // set flag to all children (who are about to recieve a $destroy
+                  // event as well) that we have already been destroyed
+                  if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isArray(obj)) {
+                    scope.externalDestructionInProgress = true;
+                    return;
+                  }
+
+                  delete obj[key[key.length - 1]];
                 }
               }
             }
