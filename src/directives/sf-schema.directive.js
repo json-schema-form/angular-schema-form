@@ -176,7 +176,9 @@ sfSelect, sfBuilder) {
             if (angular.isDefined(prop['default'])) {
               let val = sfSelect(path, scope.model);
               if (angular.isUndefined(val)) {
-                sfSelect(path, scope.model, prop['default']);
+                let defVal = prop['default'];
+                if (angular.isObject(defVal)) defVal = angular.copy(defVal);
+                sfSelect(path, scope.model, defVal);
               }
             }
           });

@@ -1707,3 +1707,6 @@ function FormCtrl($scope) {
 ```
 
 Note that arrays inside arrays won't work with conditional.
+
+#### i18n/ l10n
+While the library does not specifically address i18n/l10n (Internationalization/ Localization) it is certainly possible as <a href="https://plnkr.co/edit/WKduZL0Xe2lmkV9N5mk8?p=preview">this plunker</a> demonstrates.

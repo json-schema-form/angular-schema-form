@@ -58,7 +58,8 @@ export default function($parse, $compile, $interpolate, sfErrorMessage, sfPath, 
             if(scope.form.key && scope.form.key.length) {
               if(typeof key[key.length-1] === 'number' && scope.form.key.length >= 1) {
                 let trim = scope.form.key.length - key.length;
-                scope.completeKey = key.concat(scope.form.key.slice(-trim));
+                scope.completeKey =
+                  trim > 0 ?  key.concat(scope.form.key.slice(-trim)) : key;
               }
               else {
                 scope.completeKey = scope.form.key.slice();

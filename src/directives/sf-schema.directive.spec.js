@@ -2207,197 +2207,49 @@ describe('sf-schema.directive.js', function() {
     });
   });
 
-  it('should not add "has-success" class to radios field if a correct value is entered, but disableSuccessState is set on form', function() {
-    var field = {
-      name: 'radios',
-      property: {
-        type: 'boolean',
-      },
-      form: {
-        key: [ "field" ],
-        type: "radios",
-        titleMap: [
-          {
-            "value": false,
-            "name": "No way",
-          },
-          {
-            "value": true,
-            "name": "OK",
-          },
-        ],
-      },
-    };
-
-    inject(function($compile, $rootScope) {
+/*
+ TODO
+  it('should handle onChange for array type', function () {
+    inject(function($compile,$rootScope){
       var scope = $rootScope.$new();
-      scope.model = {},
-      scope.schema = {
-        type: 'object',
-        properties: {
-          field: field.property,
-        },
-      };
-      scope.form = [ field.form ];
+      scope.obj = {};
 
-      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
+      scope.schema = {
+        "type": "object",
+        "properties": {
+          "arr" : {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "default": "Name"
+                }
+              }
+            }
+          }
+        }
+      };
+
+      scope.form = [{key : "arr", startEmpty : true, onChange: sinon.spy()}];
+
+      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
+
       $compile(tmpl)(scope);
-      runSync(scope, tmpl);
-      var ngModelCtrl = tmpl.find('.field').scope().ngModel;
-      ngModelCtrl.$valid = true;
-      ngModelCtrl.$pristine = false;
       $rootScope.$apply();
-      tmpl.find('.field').hasClass('has-success').should.be.true;
-      scope.form[0].disableSuccessState = true;
-      $rootScope.$apply();
-      tmpl.find('.field').hasClass('has-success').should.be.false;
+
+      scope.form[0].onChange.should.not.have.been.called;
+
+      tmpl.find('button.close').click();
+      //scope.form[0].onChange.should.have.been.called;
+      //scope.form[0].onChange.should.have.been.calledWith([]);
+
+      tmpl.find('button.btn-default').click();
+      //scope.form[0].onChange.should.have.been.calledWith([{name : "Name"}]);
     });
   });
-
-  it('should not add "has-error" class to radios field if invalid value is entered, but disableErrorState is set on form', function() {
-    var field = {
-      name: 'radios',
-      property: {
-        type: 'boolean',
-      },
-      form: {
-        key: [ "field" ],
-        type: "radios",
-        titleMap: [
-          {
-            "value": false,
-            "name": "No way",
-          },
-          {
-            "value": true,
-            "name": "OK",
-          },
-        ],
-      },
-    };
-
-    inject(function($compile, $rootScope) {
-      var scope = $rootScope.$new();
-      scope.model = {
-        field: field.errorValue,
-      };
-      scope.schema = {
-        type: 'object',
-        properties: {
-          field: field.property,
-        },
-      };
-      scope.form = [ field.form ];
-
-      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
-      $compile(tmpl)(scope);
-      runSync(scope, tmpl);
-      var ngModelCtrl = tmpl.find('.field').scope().ngModel;
-      ngModelCtrl.$invalid = true;
-      ngModelCtrl.$pristine = false;
-      $rootScope.$apply();
-      tmpl.find('.field').hasClass('has-error').should.be.true;
-      scope.form[0].disableErrorState = true;
-      $rootScope.$apply();
-      tmpl.find('.field').hasClass('has-error').should.be.false;
-    });
-  });
-
-  it('should not add "has-success" class to radios-inline field if a correct value is entered, but disableSuccessState is set on form', function() {
-    var field = {
-      name: 'radios',
-      property: {
-        type: 'boolean',
-      },
-      form: {
-        key: [ "field" ],
-        type: "radios",
-        titleMap: [
-          {
-            "value": false,
-            "name": "No way",
-          },
-          {
-            "value": true,
-            "name": "OK",
-          },
-        ],
-      },
-    };
-
-    inject(function($compile, $rootScope) {
-      var scope = $rootScope.$new();
-      scope.model = {},
-      scope.schema = {
-        type: 'object',
-        properties: {
-          field: field.property,
-        },
-      };
-      scope.form = [ field.form ];
-
-      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
-      $compile(tmpl)(scope);
-      runSync(scope, tmpl);
-      var ngModelCtrl = tmpl.find('.field').scope().ngModel;
-      ngModelCtrl.$valid = true;
-      ngModelCtrl.$pristine = false;
-      $rootScope.$apply();
-      tmpl.find('.field').hasClass('has-success').should.be.true;
-      scope.form[0].disableSuccessState = true;
-      $rootScope.$apply();
-      tmpl.find('.field').hasClass('has-success').should.be.false;
-    });
-  });
-
-  it('should not add "has-error" class to radios-inline field if invalid value is entered, but disableErrorState is set on form', function() {
-    var field = {
-      name: 'radios',
-      property: {
-        type: 'boolean',
-      },
-      form: {
-        key: [ "field" ],
-        type: "radios",
-        titleMap: [
-          {
-            "value": false,
-            "name": "No way",
-          },
-          {
-            "value": true,
-            "name": "OK",
-          },
-        ],
-      },
-    };
-
-    inject(function($compile, $rootScope) {
-      var scope = $rootScope.$new();
-      scope.model = {
-        field: field.errorValue,
-      };
-      scope.schema = {
-        type: 'object',
-        properties: {
-          field: { type: 'boolean' },
-        },
-      };
-      scope.form = [ field.form ];
-
-      var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
-      $compile(tmpl)(scope);
-      runSync(scope, tmpl);
-      var ngModelCtrl = tmpl.find('.field').scope().ngModel;
-      ngModelCtrl.$invalid = true;
-      ngModelCtrl.$pristine = false;
-      $rootScope.$apply();
-      tmpl.find('.field').hasClass('has-error').should.be.true;
-      scope.form[0].disableErrorState = true;
-      $rootScope.$apply();
-      tmpl.find('.field').hasClass('has-error').should.be.false;
-    });
-  });
+*/
 });
 
 
