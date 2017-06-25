@@ -87,6 +87,33 @@
   }
 
 </style>
+
+<script type="text/javascript">
+if (typeof Object.assign != 'function') {
+  Object.assign = function(target, varArgs) { // .length of function is 2
+    'use strict';
+    if (target == null) { // TypeError if undefined or null
+      throw new TypeError('Cannot convert undefined or null to object');
+    }
+
+    var to = Object(target);
+
+    for (var index = 1; index < arguments.length; index++) {
+      var nextSource = arguments[index];
+
+      if (nextSource != null) { // Skip over if undefined or null
+        for (var nextKey in nextSource) {
+          // Avoid bugs when hasOwnProperty is shadowed
+          if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+            to[nextKey] = nextSource[nextKey];
+          }
+        }
+      }
+    }
+    return to;
+  };
+}
+</script>
 </head>
 <body ng-app="test" ng-controller="TestCtrl" ng-cloak>
   <nav class="navbar navbar-default">
@@ -254,6 +281,7 @@ app.controller('TestCtrl', function($scope, $http, $location) {
     { name: "Bootstrap Grid", data: 'data/grid.json' },
     { name: "Complex Key Support", data: 'data/complex-keys.json' },
     { name: "Array", data: 'data/array.json' },
+    { name: "Array of types", data: 'data/array-of-types.json' },
     { name: "Tab Array", data: 'data/tabarray.json' },
     { name: "Deep Array", data: 'data/deep-array.json' },
     //{ name: "Array Radio-Buttons", data: 'data/array-radiobuttons.json' },
@@ -339,7 +367,7 @@ app.controller('TestCtrl', function($scope, $http, $location) {
   };
 
   $scope.pretty = function(){
-    return typeof $scope.modelData === 'string' ? $scope.modelData : JSON.stringify($scope.modelData, undefined, 2);
+    return typeof $scope.modelData === 'string' ? $scope.modelData : angular.toJson($scope.modelData);
   };
 
   $scope.log = function(msg){

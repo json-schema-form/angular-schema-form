@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.5
- * @date Mon, 01 May 2017 08:39:39 GMT
+ * @date Sun, 25 Jun 2017 09:09:24 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -14,9 +14,9 @@
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
+/******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/ 		}
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -86,8 +86,8 @@ module.exports = angular;
 
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
  * json-schema-form-core
- * @version 1.0.0-alpha.4
- * @date Sat, 15 Apr 2017 08:25:55 GMT
+ * @version 1.0.0-alpha.5
+ * @date Sat, 24 Jun 2017 14:16:26 GMT
  * @link https://github.com/json-schema-form/json-schema-form-core
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -2729,7 +2729,6 @@ module.exports = __webpack_require__(4);
 /***/ })
 /******/ ]);
 //# sourceMappingURL=json-schema-form-core.js.map
-
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(19).setImmediate))
 
 /***/ }),
@@ -2805,19 +2804,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 var deps = [];
 
 try {
-  //This throws an expection if module does not exist.
+  // This throws an expection if module does not exist.
   __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('ngSanitize');
   deps.push('ngSanitize');
 } catch (e) {}
 
 try {
-  //This throws an expection if module does not exist.
+  // This throws an expection if module does not exist.
   __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('ui.sortable');
   deps.push('ui.sortable');
 } catch (e) {}
 
 try {
-  //This throws an expection if module does not exist.
+  // This throws an expection if module does not exist.
   __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('angularSpectrumColorpicker');
   deps.push('angularSpectrumColorpicker');
 } catch (e) {}
@@ -2832,7 +2831,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
 })
 
 // Directives
-.directive('sfChanged', __WEBPACK_IMPORTED_MODULE_7_sf_changed_directive__["a" /* default */]).directive('sfField', ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage', 'sfPath', 'sfSelect', __WEBPACK_IMPORTED_MODULE_8_sf_field_directive__["a" /* default */]]).directive('sfMessage', ['$injector', 'sfErrorMessage', __WEBPACK_IMPORTED_MODULE_9_sf_message_directive__["a" /* default */]]).directive('sfNewArray', ['sfSelect', 'sfPath', 'schemaForm', __WEBPACK_IMPORTED_MODULE_10_sf_array_directive__["a" /* default */]]).directive('sfSchema', ['$compile', '$http', '$templateCache', '$q', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder', __WEBPACK_IMPORTED_MODULE_12_sf_schema_directive__["a" /* default */]]).directive('schemaValidate', ['sfValidator', '$parse', 'sfSelect', '$interpolate', __WEBPACK_IMPORTED_MODULE_13_schema_validate_directive__["a" /* default */]]).directive('sfKeyController', ['schemaForm', 'sfPath', __WEBPACK_IMPORTED_MODULE_11_sf_key_directive__["a" /* default */]]);
+.directive('sfChanged', __WEBPACK_IMPORTED_MODULE_7_sf_changed_directive__["a" /* default */]).directive('sfField', ['$parse', '$compile', '$interpolate', 'sfErrorMessage', 'sfPath', 'sfSelect', __WEBPACK_IMPORTED_MODULE_8_sf_field_directive__["a" /* default */]]).directive('sfMessage', ['$injector', 'sfErrorMessage', __WEBPACK_IMPORTED_MODULE_9_sf_message_directive__["a" /* default */]]).directive('sfNewArray', ['sfSelect', 'sfPath', 'schemaForm', __WEBPACK_IMPORTED_MODULE_10_sf_array_directive__["a" /* default */]]).directive('sfSchema', ['$compile', '$http', '$templateCache', '$q', 'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfBuilder', __WEBPACK_IMPORTED_MODULE_12_sf_schema_directive__["a" /* default */]]).directive('schemaValidate', ['sfValidator', '$parse', 'sfSelect', '$interpolate', __WEBPACK_IMPORTED_MODULE_13_schema_validate_directive__["a" /* default */]]).directive('sfKeyController', ['sfPath', __WEBPACK_IMPORTED_MODULE_11_sf_key_directive__["a" /* default */]]);
 
 /***/ }),
 /* 5 */
@@ -2843,7 +2842,17 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function (sfValidator, $parse, sfSelect, $interpolate) {
+/**
+ * I am the schema-validate directive
+ *
+ * @param  {function} sfValidator
+ * @param  {function} $parse
+ * @param  {function} sfSelect
+ * @param  {function} $interpolate
+ *
+ * @return {object}   I am the directive properties made available to Angular
+ */
+/* harmony default export */ __webpack_exports__["a"] = function (sfValidator, $parse, sfSelect, $interpolate) {
   return {
     restrict: 'A',
     scope: false,
@@ -2860,21 +2869,21 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
       var error = null;
       var form = scope.$eval(attrs.schemaValidate);
 
-      //TODO move this out of validate
+      // TODO move this out of validate
       var copyTo = typeof form.copyValueTo === 'string' ? [form.copyValueTo] : form.copyValueTo;
       if (copyTo && copyTo.length) {
         ngModel.$viewChangeListeners.push(function () {
           var context = {
-            "model": scope.model,
-            "form": form,
-            "arrayIndex": scope.$index,
-            "arrayIndices": scope.arrayIndices,
-            "path": scope.path,
-            "$i": scope.$i,
-            "$index": scope.$index
+            'model': scope.model,
+            'form': form,
+            'arrayIndex': scope.$index,
+            'arrayIndices': scope.arrayIndices,
+            'path': scope.path,
+            '$i': scope.$i,
+            '$index': scope.$index
           };
           __WEBPACK_IMPORTED_MODULE_0_angular___default.a.forEach(copyTo, function (copyToPath) {
-            var path = copyToPath.replace(/\[/g, "[{{ ").replace(/\]/g, " }}]").replace(/^model\./, "");
+            var path = copyToPath.replace(/\[/g, '[{{ ').replace(/\]/g, ' }}]').replace(/^model\./, '');
             path = $interpolate(path)(context);
             sfSelect(path, scope.model, ngModel.$modelValue);
           });
@@ -2883,7 +2892,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
       // Validate against the schema.
 
       var validate = function validate(viewValue, triggered) {
-        //Still might be undefined
+        // Still might be undefined
         if (!form) {
           return viewValue;
         }
@@ -2894,7 +2903,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
         }
 
         var result = sfValidator(form, viewValue);
-        //console.log('result is', result)
+        // console.log('result is', result)
         // Since we might have different tv4 errors we must clear all
         // errors that start with tv4-
         Object.keys(ngModel.$error).filter(function (k) {
@@ -2955,7 +2964,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
       // updating if we've found an error.
       if (ngModel.$validators) {
         ngModel.$validators.schemaForm = function () {
-          //console.log('validators called.')
+          // console.log('validators called.')
           // Any error and we're out of here!
           return !Object.keys(ngModel.$error).some(function (e) {
             return e !== 'schemaForm';
@@ -3033,7 +3042,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
       };
     }
   };
-});
+};
 
 /***/ }),
 /* 6 */
@@ -3049,7 +3058,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /**
  * Directive that handles the model arrays
  */
-/* harmony default export */ __webpack_exports__["a"] = (function (sfSelect, sfPath, schemaForm) {
+/* harmony default export */ __webpack_exports__["a"] = function (sfSelect, sfPath, schemaForm) {
   return {
     scope: true,
     controller: ['$scope', function SFArrayController($scope) {
@@ -3070,7 +3079,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       // So we watch the value as well. But watching an array can be tricky. We wan't to know
       // when it changes so we can validate,
       var watchFn = function watchFn() {
-        //scope.modelArray = modelArray;
+        // scope.modelArray = modelArray;
         scope.modelArray = scope.$eval(attrs.sfNewArray);
         // validateField method is exported by schema-validate
         if (scope.ngModel && scope.ngModel.$pristine && scope.firstDigest && (!scope.options || scope.options.validateOnRender !== true)) {
@@ -3085,7 +3094,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isFunction(scope.form.onChange)) {
             scope.form.onChange(scope.modelArray, scope.form);
           } else {
-            scope.evalExpr(scope.form.onChange, { 'modelValue': scope.modelArray, form: scope.form });
+            scope.evalExpr(scope.form.onChange, { 'modelValue': scope.modelArray, 'form': scope.form });
           }
         }
       };
@@ -3123,7 +3132,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         // Title Map handling
         // If form has a titleMap configured we'd like to enable looping over
         // titleMap instead of modelArray, this is used for intance in
-        // checkboxes. So instead of variable number of things we like to create
+        // checkboxes. So instead of letiable number of things we like to create
         // a array value from a subset of values in the titleMap.
         // The problem here is that ng-model on a checkbox doesn't really map to
         // a list of values. This is here to fix that.
@@ -3141,33 +3150,35 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             });
           };
 
-          //Catch default values
+          // Catch default values
           updateTitleMapValues(scope.modelArray);
 
           // TODO: Refactor and see if we can get rid of this watch by piggy backing on the
           // validation watch.
           scope.$watchCollection('modelArray', updateTitleMapValues);
 
-          //To get two way binding we also watch our titleMapValues
+          // To get two way binding we also watch our titleMapValues
           scope.$watchCollection('titleMapValues', function (vals, old) {
             if (vals && vals !== old) {
-              var arr = getOrCreateModel();
+              (function () {
+                var arr = getOrCreateModel();
 
-              form.titleMap.forEach(function (item, index) {
-                var arrIndex = arr.indexOf(item.value);
-                if (arrIndex === -1 && vals[index]) {
-                  arr.push(item.value);
-                };
+                form.titleMap.forEach(function (item, index) {
+                  var arrIndex = arr.indexOf(item.value);
+                  if (arrIndex === -1 && vals[index]) {
+                    arr.push(item.value);
+                  };
 
-                if (arrIndex !== -1 && !vals[index]) {
-                  arr.splice(arrIndex, 1);
-                };
-              });
-              // Time to validate the rebuilt array.
-              // validateField method is exported by schema-validate
-              if (scope.validateField) {
-                scope.validateField();
-              }
+                  if (arrIndex !== -1 && !vals[index]) {
+                    arr.splice(arrIndex, 1);
+                  };
+                });
+                // Time to validate the rebuilt array.
+                // validateField method is exported by schema-validate
+                if (scope.validateField) {
+                  scope.validateField();
+                }
+              })();
             }
           });
         }
@@ -3176,14 +3187,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       });
 
       scope.appendToArray = function () {
-        var empty;
+        var empty = void 0;
 
         // Create and set an array if needed.
         var model = getOrCreateModel();
 
         // Same old add empty things to the array hack :(
         if (scope.form && scope.form.schema && scope.form.schema.items) {
-
           var items = scope.form.schema.items;
           if (items.type && items.type.indexOf('object') !== -1) {
             empty = {};
@@ -3250,7 +3260,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       scope.copyWithIndex = function (index) {
         var form = scope.form;
         if (!formDefCache[index]) {
-
           // To be more compatible with JSON Form we support an array of items
           // in the form definition of "array" (the schema just a value).
           // for the subforms code to work this means we wrap everything in a
@@ -3280,7 +3289,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       };
     }
   };
-});
+};
 
 /***/ }),
 /* 7 */
@@ -3298,35 +3307,35 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * Takes the form definition as argument.
  * If the form definition has a "onChange" defined as either a function or
  */
-/* harmony default export */ __webpack_exports__["a"] = (function () {
+/* harmony default export */ __webpack_exports__["a"] = function () {
   return {
     require: 'ngModel',
     restrict: 'AC',
     scope: false,
     link: function link(scope, element, attrs, ctrl) {
       var form = scope.$eval(attrs.sfChanged);
-      //"form" is really guaranteed to be here since the decorator directive
-      //waits for it. But best be sure.
+      // "form" is really guaranteed to be here since the decorator directive
+      // waits for it. But best be sure.
       if (form && form.onChange) {
         ctrl.$viewChangeListeners.push(function () {
           if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isFunction(form.onChange)) {
             form.onChange(ctrl.$modelValue, form);
           } else {
             scope.evalExpr(form.onChange, {
-              "modelValue": ctrl.$modelValue,
-              "form": form,
-              "arrayIndex": scope.$index,
-              "arrayIndices": scope.arrayIndices,
-              "path": scope.path,
-              "$i": scope.$i,
-              "$index": scope.$index
+              'modelValue': ctrl.$modelValue,
+              'form': form,
+              'arrayIndex': scope.$index,
+              'arrayIndices': scope.arrayIndices,
+              'path': scope.path,
+              '$i': scope.$i,
+              '$index': scope.$index
             });
           }
         });
       }
     }
   };
-});
+};
 
 /***/ }),
 /* 8 */
@@ -3339,8 +3348,19 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function ($parse, $compile, $http, $templateCache, $interpolate, $q, sfErrorMessage, sfPath, sfSelect) {
-
+/**
+ * I am the directive for managing field properties
+ *
+ * @param  {function} $parse
+ * @param  {function} $compile
+ * @param  {function} $interpolate
+ * @param  {object}   sfErrorMessage
+ * @param  {object}   sfPath
+ * @param  {function} sfSelect
+ *
+ * @return {object}   I am the object providing the directive API to Angular
+ */
+/* harmony default export */ __webpack_exports__["a"] = function ($parse, $compile, $interpolate, sfErrorMessage, sfPath, sfSelect) {
   var keyFormat = {
     COMPLETE: '*',
     PATH: 'string',
@@ -3356,11 +3376,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     link: {
       pre: function pre(scope, element, attrs, ctrl) {
         var sfSchema = ctrl[0];
-        var formCtrl = ctrl[1];
-        var keyCtrl = ctrl[2];
 
-        //The ngModelController is used in some templates and
-        //is needed for error messages,
+        // The ngModelController is used in some templates and
+        // is needed for error messages,
         scope.$on('schemaFormPropagateNgModelController', function (event, ngModel) {
           event.stopPropagation();
           event.preventDefault();
@@ -3374,7 +3392,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       post: function post(scope, element, attrs, ctrl) {
         var sfSchema = ctrl[0];
         var formCtrl = ctrl[1];
-        var keyCtrl = ctrl[2];
 
         scope.getKey = function (requiredFormat) {
           var format = requiredFormat || keyFormat.COMPLETE;
@@ -3399,7 +3416,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           // If there is no key then there's nothing to return
           if (!Array.isArray(scope.completeKey)) {
             return undefined;
-          };
+          }
 
           // return the full key if not omiting any types via reduce
           if (format === keyFormat.COMPLETE) {
@@ -3412,19 +3429,20 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
               }
               return output;
             }, []);
-          };
+          }
         };
+
         // Now that getKey is defined, run it! ...if there's a key.
         if (scope.form.key) {
           scope.form.key = scope.completeKey = scope.getKey();
-        };
+        }
 
-        //Keep error prone logic from the template
+        // Keep error prone logic from the template
         scope.showTitle = function () {
           return scope.form && scope.form.notitle !== true && scope.form.title;
         };
 
-        //Normalise names and ids
+        // Normalise names and ids
         scope.fieldId = function (prependFormName, omitArrayIndexes) {
           var omit = omitArrayIndexes || false;
           var formName = prependFormName && formCtrl && formCtrl.$name ? formCtrl.$name : undefined;
@@ -3434,7 +3452,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             return sfPath.name(key, '-', formName, omit);
           } else {
             return '';
-          };
+          }
         };
 
         scope.listToCheckboxValues = function (list) {
@@ -3460,10 +3478,10 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             form.onClick($event, form);
           } else if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isString(form.onClick)) {
             if (sfSchema) {
-              //evaluating in scope outside of sfSchemas isolated scope
-              sfSchema.evalInParentScope(form.onClick, { '$event': $event, form: form });
+              // evaluating in scope outside of sfSchemas isolated scope
+              sfSchema.evalInParentScope(form.onClick, { '$event': $event, 'form': form });
             } else {
-              scope.$eval(form.onClick, { '$event': $event, form: form });
+              scope.$eval(form.onClick, { '$event': $event, 'form': form });
             }
           }
         };
@@ -3478,7 +3496,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
          */
         scope.evalExpr = function (expression, locals) {
           if (sfSchema) {
-            //evaluating in scope outside of sfSchemas isolated scope
+            // evaluating in scope outside of sfSchemas isolated scope
             return sfSchema.evalInParentScope(expression, locals);
           }
 
@@ -3517,7 +3535,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           return expression && $interpolate(expression)(locals);
         };
 
-        //This works since we get the ngModel from the array or the schema-validate directive.
+        // This works since we get the ngModel from the array or the schema-validate directive.
         scope.hasSuccess = function () {
           if (!scope.ngModel) {
             return false;
@@ -3614,14 +3632,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           // in the form definition.
           scope.$on('$destroy', function () {
             var key = scope.getKey();
-            var arrayIndex = typeof scope.arrayIndex == 'number' ? scope.arrayIndex + 1 : 0;
 
             // If the entire schema form is destroyed we don't touch the model
             if (!scope.externalDestructionInProgress) {
               var destroyStrategy = form.destroyStrategy || scope.options && scope.options.destroyStrategy || 'remove';
               // No key no model, and we might have strategy 'retain'
               if (key && destroyStrategy !== 'retain') {
-
                 // Get the object that has the property we wan't to clear.
                 var obj = scope.model;
                 if (key.length > 1) {
@@ -3641,7 +3657,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 var type = form.schema && form.schema.type || '';
 
                 // Empty means '',{} and [] for appropriate types and undefined for the rest
-                //console.log('destroy', destroyStrategy, key, type, obj);
+                // console.log('destroy', destroyStrategy, key, type, obj);
                 if (destroyStrategy === 'empty' && type.indexOf('string') !== -1) {
                   obj[key.slice(-1)] = '';
                 } else if (destroyStrategy === 'empty' && type.indexOf('object') !== -1) {
@@ -3660,7 +3676,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     }
   };
-});
+};
 
 /***/ }),
 /* 9 */
@@ -3668,9 +3684,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 "use strict";
 /**
- * Directive that handles keys and array indexes
+ * I am the directive that handles keys and array indexes
+ *
+ * @param  {function} sfPath
+ *
+ * @return {[type]}            [description]
  */
-/* harmony default export */ __webpack_exports__["a"] = (function (schemaForm, sfPath) {
+/* harmony default export */ __webpack_exports__["a"] = function (sfPath) {
   return {
     scope: true,
     require: ['?^^sfNewArray'],
@@ -3699,7 +3719,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       }
     }
   };
-});;
+};;
 
 /***/ }),
 /* 10 */
@@ -3710,9 +3730,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function ($injector, sfErrorMessage) {
-
-  //Inject sanitizer if it exists
+/**
+ * I am the messages directive for description and error message handling
+ *
+ * @param  {object} $injector I am the Angular injector for optional dependencies
+ * @param  {object} sfErrorMessage I contain the interpolation function for messages
+ *
+ * @return {object} I am the message directive API
+ */
+/* harmony default export */ __webpack_exports__["a"] = function ($injector, sfErrorMessage) {
+  // Inject sanitizer if it exists
   var $sanitize = $injector.has('$sanitize') ? $injector.get('$sanitize') : function (html) {
     return html;
   };
@@ -3721,10 +3748,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     scope: false,
     restrict: 'EA',
     link: function link(scope, element, attrs) {
-
       var message = '';
       if (attrs.sfMessage) {
-
         scope.$watch(attrs.sfMessage, function (msg) {
           if (msg) {
             message = $sanitize(msg);
@@ -3733,7 +3758,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         });
       }
 
-      var currentMessage;
+      var currentMessage = void 0;
       // Only call html() if needed.
       var setMessage = function setMessage(msg) {
         if (msg !== currentMessage) {
@@ -3747,31 +3772,33 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           if (!scope.hasError()) {
             setMessage(message);
           } else {
-            var errors = [];
-            __WEBPACK_IMPORTED_MODULE_0_angular___default.a.forEach(scope.ngModel && scope.ngModel.$error, function (status, code) {
-              if (status) {
-                // if true then there is an error
-                // Angular 1.3 removes properties, so we will always just have errors.
-                // Angular 1.2 sets them to false.
-                errors.push(code);
+            (function () {
+              var errors = [];
+              __WEBPACK_IMPORTED_MODULE_0_angular___default.a.forEach(scope.ngModel && scope.ngModel.$error, function (status, code) {
+                if (status) {
+                  // if true then there is an error
+                  // Angular 1.3 removes properties, so we will always just have errors.
+                  // Angular 1.2 sets them to false.
+                  errors.push(code);
+                }
+              });
+
+              // In Angular 1.3 we use one $validator to stop the model value from getting updated.
+              // this means that we always end up with a 'schemaForm' error.
+              errors = errors.filter(function (e) {
+                return e !== 'schemaForm';
+              });
+
+              // We only show one error.
+              // TODO: Make that optional
+              var error = errors[0];
+
+              if (error) {
+                setMessage(sfErrorMessage.interpolate(error, scope.ngModel.$modelValue, scope.ngModel.$viewValue, scope.form, scope.options && scope.options.validationMessage));
+              } else {
+                setMessage(message);
               }
-            });
-
-            // In Angular 1.3 we use one $validator to stop the model value from getting updated.
-            // this means that we always end up with a 'schemaForm' error.
-            errors = errors.filter(function (e) {
-              return e !== 'schemaForm';
-            });
-
-            // We only show one error.
-            // TODO: Make that optional
-            var error = errors[0];
-
-            if (error) {
-              setMessage(sfErrorMessage.interpolate(error, scope.ngModel.$modelValue, scope.ngModel.$viewValue, scope.form, scope.options && scope.options.validationMessage));
-            } else {
-              setMessage(message);
-            }
+            })();
           }
         } else {
           setMessage(message);
@@ -3803,7 +3830,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       });
     }
   };
-});
+};
 
 /***/ }),
 /* 11 */
@@ -3814,13 +3841,25 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
 
 
-/*
+/**
 FIXME: real documentation
 <form sf-form="form"  sf-schema="schema" sf-decorator="foobar"></form>
 */
-
-/* harmony default export */ __webpack_exports__["a"] = (function ($compile, $http, $templateCache, $q, schemaForm, schemaFormDecorators, sfSelect, sfPath, sfBuilder) {
-
+/**
+ * [description]
+ *
+ * @param  {[type]} $compile             [description]
+ * @param  {[type]} $http                [description]
+ * @param  {[type]} $templateCache       [description]
+ * @param  {[type]} $q                   [description]
+ * @param  {[type]} schemaForm           [description]
+ * @param  {[type]} schemaFormDecorators [description]
+ * @param  {[type]} sfSelect             [description]
+ * @param  {[type]} sfBuilder            [description]
+ *
+ * @return {[type]}                      [description]
+ */
+/* harmony default export */ __webpack_exports__["a"] = function ($compile, $http, $templateCache, $q, schemaForm, schemaFormDecorators, sfSelect, sfBuilder) {
   return {
     scope: {
       schema: '=sfSchema',
@@ -3855,15 +3894,14 @@ FIXME: real documentation
     transclude: true,
     require: '?form',
     link: function link(scope, element, attrs, formCtrl, transclude) {
-
-      //expose form controller on scope so that we don't force authors to use name on form
+      // expose form controller on scope so that we don't force authors to use name on form
       scope.formCtrl = formCtrl;
 
-      //We'd like to handle existing markup,
-      //besides using it in our template we also
-      //check for ng-model and add that to an ignore list
-      //i.e. even if form has a definition for it or form is ["*"]
-      //we don't generate it.
+      // We'd like to handle existing markup,
+      // besides using it in our template we also
+      // check for ng-model and add that to an ignore list
+      // i.e. even if form has a definition for it or form is ["*"]
+      // we don't generate it.
       var ignore = {};
       transclude(scope, function (clone) {
         clone.addClass('schema-form-ignore');
@@ -3874,7 +3912,7 @@ FIXME: real documentation
           if (models) {
             for (var i = 0; i < models.length; i++) {
               var key = models[i].getAttribute('ng-model');
-              //skip first part before .
+              // skip first part before .
               ignore[key.substring(key.indexOf('.') + 1)] = true;
             }
           }
@@ -3882,7 +3920,7 @@ FIXME: real documentation
       });
 
       var lastDigest = {};
-      var childScope;
+      var childScope = void 0;
 
       // Common renderer function, can either be triggered by a watch or by an event.
       scope.resolveReferences = function (schema, form) {
@@ -3915,7 +3953,7 @@ FIXME: real documentation
         // Create a new form and destroy the old one.
         // Not doing keeps old form elements hanging around after
         // they have been removed from the DOM
-        // https://github.com/Textalk/angular-schema-form/issues/200
+        // https:// github.com/Textalk/angular-schema-form/issues/200
         if (childScope) {
           // Destroy strategy should not be acted upon
           scope.externalDestructionInProgress = true;
@@ -3924,10 +3962,10 @@ FIXME: real documentation
         };
         childScope = scope.$new();
 
-        //make the form available to decorators
+        // make the form available to decorators
         childScope.schemaForm = { form: merged, schema: schema };
 
-        //clean all but pre existing html.
+        // clean all but pre existing html.
         Array.prototype.forEach.call(element.children(), function (child) {
           var jchild = __WEBPACK_IMPORTED_MODULE_0_angular___default.a.element(child);
           if (false === jchild.hasClass('schema-form-ignore')) {
@@ -3960,16 +3998,18 @@ FIXME: real documentation
           scope.$apply();
         }, 0);
 
-        //compile only children
+        // compile only children
         $compile(element.children())(childScope);
 
-        //ok, now that that is done let's set any defaults
+        // ok, now that that is done let's set any defaults
         if (!scope.options || scope.options.setSchemaDefaults !== false) {
           schemaForm.traverseSchema(schema, function (prop, path) {
             if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isDefined(prop['default'])) {
               var val = sfSelect(path, scope.model);
               if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isUndefined(val)) {
-                sfSelect(path, scope.model, prop['default']);
+                var defVal = prop['default'];
+                if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isObject(defVal)) defVal = __WEBPACK_IMPORTED_MODULE_0_angular___default.a.copy(defVal);
+                sfSelect(path, scope.model, defVal);
               }
             }
           });
@@ -3980,17 +4020,17 @@ FIXME: real documentation
 
       var defaultForm = ['*'];
 
-      //Since we are dependant on up to three
-      //attributes we'll do a common watch
+      // Since we are dependant on up to three
+      // attributes we'll do a common watch
       scope.$watch(function () {
         var schema = scope.schema;
         var form = scope.initialForm || defaultForm;
 
-        //The check for schema.type is to ensure that schema is not {}
-        if (form && schema && schema.type && ( //schema.properties &&
+        // The check for schema.type is to ensure that schema is not {}
+        if (form && schema && schema.type && ( // schema.properties &&
         lastDigest.form !== form || lastDigest.schema !== schema)) {
-          if ((!schema.properties || Object.keys(schema.properties).length === 0) && (form.indexOf("*") || form.indexOf("..."))) {
-            //form.unshift({"key":"submit", "type": "hidden"});
+          if ((!schema.properties || Object.keys(schema.properties).length === 0) && (form.indexOf('*') || form.indexOf('...'))) {
+            // form.unshift({"key":"submit", "type": "hidden"});
           };
 
           lastDigest.schema = schema;
@@ -4033,7 +4073,7 @@ FIXME: real documentation
       };
     }
   };
-});
+};
 
 /***/ }),
 /* 12 */
@@ -4044,13 +4084,21 @@ FIXME: real documentation
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function ($compileProvider, sfPathProvider) {
+/**
+ * I am the schema-form-decorators provider and manage the decorator API
+ *
+ * @param  {object} $compileProvider
+ * @param  {object} sfPathProvider
+ *
+ * @return {object} I am the directive properties made available to Angular
+ */
+/* harmony default export */ __webpack_exports__["a"] = function ($compileProvider, sfPathProvider) {
   var defaultDecorator = '';
   var decorators = {};
 
   // Map template after decorator and type.
   var templateUrl = function templateUrl(name, form) {
-    //schemaDecorator is alias for whatever is set as default
+    // schemaDecorator is alias for whatever is set as default
     if (name === 'sfDecorator') {
       name = defaultDecorator;
     }
@@ -4060,21 +4108,20 @@ FIXME: real documentation
       return decorator[form.type].template;
     }
 
-    //try default
+    // try default
     return decorator['default'].template;
   };
 
-  /**************************************************
-   * DEPRECATED                                     *
-   * The new builder and sf-field is preferred, but *
-   * we keep this in during a transitional period   *
-   * so that add-ons that don't use the new builder *
-   * works.                                         *
-   **************************************************/
-  //TODO: Move to a compatability extra script.
+  /** ************************************************
+   * DEPRECATED                                      *
+   * The new builder and sf-field is preferred, but  *
+   * we keep this in during a transitional period    *
+   * so that add-ons that don't use the new builder  *
+   * works.                                          *
+   ************************************************ **/
+  // TODO: Move to a compatability extra script.
   var createDirective = function createDirective(name) {
     $compileProvider.directive(name, ['$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q', 'sfErrorMessage', 'sfPath', 'sfSelect', function ($parse, $compile, $http, $templateCache, $interpolate, $q, sfErrorMessage, sfPath, sfSelect) {
-
       return {
         restrict: 'AE',
         replace: false,
@@ -4085,20 +4132,20 @@ FIXME: real documentation
           var sfSchema = ctrl[0];
           var formCtrl = ctrl[1];
 
-          //The ngModelController is used in some templates and
-          //is needed for error messages,
+          // The ngModelController is used in some templates and
+          // is needed for error messages,
           scope.$on('schemaFormPropagateNgModelController', function (event, ngModel) {
             event.stopPropagation();
             event.preventDefault();
             scope.ngModel = ngModel;
           });
 
-          //Keep error prone logic from the template
+          // Keep error prone logic from the template
           scope.showTitle = function () {
             return scope.form && scope.form.notitle !== true && scope.form.title;
           };
 
-          //Normalise names and ids
+          // Normalise names and ids
           scope.fieldId = function (prependFormName, omitArrayIndexes) {
             var key = scope.parentKey || [];
             if (scope.form.key) {
@@ -4107,8 +4154,8 @@ FIXME: real documentation
                 var formName = prependFormName && formCtrl && formCtrl.$name ? formCtrl.$name : undefined;
                 return sfPath.name(combinedKey, '-', formName, omitArrayIndexes);
               } else {
-                var formName = prependFormName && formCtrl && formCtrl.$name ? formCtrl.$name : undefined;
-                return sfPath.name(scope.form.key, '-', formName, omitArrayIndexes);
+                var _formName = prependFormName && formCtrl && formCtrl.$name ? formCtrl.$name : undefined;
+                return sfPath.name(scope.form.key, '-', _formName, omitArrayIndexes);
               }
             } else {
               return '';
@@ -4138,10 +4185,10 @@ FIXME: real documentation
               form.onClick($event, form);
             } else if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isString(form.onClick)) {
               if (sfSchema) {
-                //evaluating in scope outside of sfSchemas isolated scope
-                sfSchema.evalInParentScope(form.onClick, { '$event': $event, form: form });
+                // evaluating in scope outside of sfSchemas isolated scope
+                sfSchema.evalInParentScope(form.onClick, { '$event': $event, 'form': form });
               } else {
-                scope.$eval(form.onClick, { '$event': $event, form: form });
+                scope.$eval(form.onClick, { '$event': $event, 'form': form });
               };
             };
           };
@@ -4156,7 +4203,7 @@ FIXME: real documentation
            */
           scope.evalExpr = function (expression, locals) {
             if (sfSchema) {
-              //evaluating in scope outside of sfSchemas isolated scope
+              // evaluating in scope outside of sfSchemas isolated scope
               return sfSchema.evalInParentScope(expression, locals);
             }
 
@@ -4195,7 +4242,7 @@ FIXME: real documentation
             return expression && $interpolate(expression)(locals);
           };
 
-          //This works since we ot the ngModel from the array or the schema-validate directive.
+          // This works since we ot the ngModel from the array or the schema-validate directive.
           scope.hasSuccess = function () {
             if (!scope.ngModel) {
               return false;
@@ -4228,15 +4275,15 @@ FIXME: real documentation
           var once = scope.$watch(attrs.form, function (form) {
             if (form) {
               // Workaround for 'updateOn' error from ngModelOptions
-              // see https://github.com/Textalk/angular-schema-form/issues/255
-              // and https://github.com/Textalk/angular-schema-form/issues/206
+              // see https:// github.com/Textalk/angular-schema-form/issues/255
+              // and https:// github.com/Textalk/angular-schema-form/issues/206
               form.ngModelOptions = form.ngModelOptions || {};
               scope.form = form;
 
-              //ok let's replace that template!
-              //We do this manually since we need to bind ng-model properly and also
-              //for fieldsets to recurse properly.
-              var templatePromise;
+              // ok let's replace that template!
+              // We do this manually since we need to bind ng-model properly and also
+              // for fieldsets to recurse properly.
+              var templatePromise = void 0;
 
               // type: "template" is a special case. It can contain a template inline or an url.
               // otherwise we find out the url to the template and load them.
@@ -4259,16 +4306,17 @@ FIXME: real documentation
                 // Do we have a condition? Then we slap on an ng-if on all children,
                 // but be nice to existing ng-if.
                 if (form.condition) {
+                  (function () {
+                    var evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex})';
+                    if (form.key) {
+                      evalExpr = 'evalExpr(form.condition, {' + 'model: model, "arrayIndex": arrayIndex, "modelValue": model' + sfPath.stringify(form.key) + '})';
+                    }
 
-                  var evalExpr = 'evalExpr(form.condition,{ model: model, "arrayIndex": arrayIndex})';
-                  if (form.key) {
-                    evalExpr = 'evalExpr(form.condition, {' + 'model: model, "arrayIndex": arrayIndex, "modelValue": model' + sfPath.stringify(form.key) + '})';
-                  }
-
-                  __WEBPACK_IMPORTED_MODULE_0_angular___default.a.forEach(element.children(), function (child) {
-                    var ngIf = child.getAttribute('ng-if');
-                    child.setAttribute('ng-if', ngIf ? '(' + ngIf + ') || (' + evalExpr + ')' : evalExpr);
-                  });
+                    __WEBPACK_IMPORTED_MODULE_0_angular___default.a.forEach(element.children(), function (child) {
+                      var ngIf = child.getAttribute('ng-if');
+                      child.setAttribute('ng-if', ngIf ? '(' + ngIf + ') || (' + evalExpr + ')' : evalExpr);
+                    });
+                  })();
                 }
                 $compile(element.contents())(scope);
               });
@@ -4336,7 +4384,6 @@ FIXME: real documentation
                     var destroyStrategy = form.destroyStrategy || scope.options && scope.options.destroyStrategy || 'remove';
                     // No key no model, and we might have strategy 'retain'
                     if (form.key && destroyStrategy !== 'retain') {
-
                       // Get the object that has the property we wan't to clear.
                       var obj = scope.model;
                       if (form.key.length > 1) {
@@ -4395,12 +4442,11 @@ FIXME: real documentation
           var once = true;
           __WEBPACK_IMPORTED_MODULE_0_angular___default.a.forEach(attrs, function (value, name) {
             if (name[0] !== '$' && name.indexOf('ng') !== 0 && name !== 'sfField') {
-
               var updateForm = function updateForm(val) {
                 if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isDefined(val) && val !== form[name]) {
                   form[name] = val;
 
-                  //when we have type, and if specified key we apply it on scope.
+                  // when we have type, and if specified key we apply it on scope.
                   if (once && form.type && (form.key || __WEBPACK_IMPORTED_MODULE_0_angular___default.a.isUndefined(attrs.key))) {
                     scope.form = form;
                     once = false;
@@ -4409,18 +4455,18 @@ FIXME: real documentation
               };
 
               if (name === 'model') {
-                //"model" is bound to scope under the name "model" since this is what the decorators
-                //know and love.
+                // "model" is bound to scope under the name "model" since this is what the decorators
+                // know and love.
                 scope.$watch(value, function (val) {
                   if (val && scope.model !== val) {
                     scope.model = val;
                   }
                 });
               } else if (watchThis[name] === 'c') {
-                //watch collection
+                // watch collection
                 scope.$watchCollection(value, updateForm);
               } else {
-                //$observe
+                // $observe
                 attrs.$observe(name, updateForm);
               }
             }
@@ -4444,7 +4490,7 @@ FIXME: real documentation
    * @param {Object} templates, an object that maps "type" => "templateUrl"
    */
   this.createDecorator = function (name, templates) {
-    //console.warn('schemaFormDecorators.createDecorator is DEPRECATED, use defineDecorator instead.');
+    // console.warn('schemaFormDecorators.createDecorator is DEPRECATED, use defineDecorator instead.');
     decorators[name] = { '__name': name };
 
     __WEBPACK_IMPORTED_MODULE_0_angular___default.a.forEach(templates, function (url, type) {
@@ -4464,11 +4510,11 @@ FIXME: real documentation
    * @param {string} name directive name (CamelCased)
    * @param {Object} fields, an object that maps "type" => `{ template, builder, replace}`.
                      attributes `builder` and `replace` are optional, and replace defaults to true.
-                      `template` should be the key of the template to load and it should be pre-loaded
+                       `template` should be the key of the template to load and it should be pre-loaded
                      in `$templateCache`.
-                      `builder` can be a function or an array of functions. They will be called in
+                       `builder` can be a function or an array of functions. They will be called in
                      the order they are supplied.
-                      `replace` (DEPRECATED) is for backwards compatability. If false the builder
+                       `replace` (DEPRECATED) is for backwards compatability. If false the builder
                      will use the "old" way of building that form field using a <sf-decorator>
                      directive.
    */
@@ -4564,7 +4610,7 @@ FIXME: real documentation
     }
   };
 
-  //Service is just a getter for directive templates and rules
+  // Service is just a getter for directive templates and rules
   this.$get = function () {
     return {
       decorator: function decorator(name) {
@@ -4574,38 +4620,34 @@ FIXME: real documentation
     };
   };
 
-  //Create a default directive
+  // Create a default directive
   createDirective('sfDecorator');
-});;
+};;
 
 /***/ }),
 /* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__);
-
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__);
 
 
 /**
  * Schema form service.
  */
-/* harmony default export */ __webpack_exports__["a"] = (function () {
+/* harmony default export */ __webpack_exports__["a"] = function () {
   var postProcessFn = function postProcessFn(form) {
     return form;
   };
-  var defaults = __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["schemaDefaults"].createDefaults();
+  var defaults = __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__["schemaDefaults"].createDefaults();
 
   /**
    * Provider API
    */
   this.defaults = defaults;
-  this.stdFormObj = __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["schemaDefaults"].stdFormObj;
-  this.defaultFormDefinition = __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["schemaDefaults"].defaultFormDefinition;
+  this.stdFormObj = __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__["schemaDefaults"].stdFormObj;
+  this.defaultFormDefinition = __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__["schemaDefaults"].defaultFormDefinition;
 
   /**
    * Register a post process function.
@@ -4654,22 +4696,21 @@ FIXME: real documentation
    * @param {Object} options
    * @return {Object} a form field defintion
    */
-  this.createStandardForm = __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["schemaDefaults"].stdFormObj;
+  this.createStandardForm = __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__["schemaDefaults"].stdFormObj;
   /* End Provider API */
 
   this.$get = function () {
-
     var service = {};
     var typeDefault = this.defaults;
 
-    service.jsonref = __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["jsonref"];
+    service.jsonref = __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__["jsonref"];
 
     /**
     * Create form defaults from schema
     */
     service.defaults = function (schema, types, ignore, options) {
       var defaultTypes = types || typeDefault;
-      return __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["schemaDefaults"].defaultForm(schema, defaultTypes, ignore, options);
+      return __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__["schemaDefaults"].defaultForm(schema, defaultTypes, ignore, options);
     };
 
     /**
@@ -4683,7 +4724,7 @@ FIXME: real documentation
      * @param  {Boolean} [readonly=false]                   [description]
      * @param  {[type]}  asyncTemplates                     [description]
      *
-     * @return {[type]}                                     [description]
+     * @return {array}   I am the canonical schema with the combined schema and ui-schema
      */
     service.merge = function (schema) {
       var form = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : ['*'];
@@ -4693,12 +4734,12 @@ FIXME: real documentation
       var readonly = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : false;
       var asyncTemplates = arguments[6];
 
-      //We look at the supplied form and extend it with schema standards
-      var canonical = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["merge"])(schema, form, typeDefaults, ignore, options, readonly, asyncTemplates);
+      // We look at the supplied form and extend it with schema standards
+      var canonical = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__["merge"])(schema, form, typeDefaults, ignore, options, readonly, asyncTemplates);
       return postProcessFn(canonical);
     };
 
-    //Utility functions
+    // Utility functions
     /**
      * Form defaults for schema by type
      * As a form is generated from a schema these are the definitions of each json-schema type
@@ -4709,23 +4750,28 @@ FIXME: real documentation
      * Traverse a schema, applying a function(schema,path) on every sub schema
      * i.e. every property of an object.
      */
-    service.traverseSchema = __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["traverseSchema"];
+    service.traverseSchema = __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__["traverseSchema"];
 
-    service.traverseForm = __WEBPACK_IMPORTED_MODULE_1_json_schema_form_core__["traverseForm"];
+    service.traverseForm = __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__["traverseForm"];
 
     return service;
   };
-});
+};
 
 /***/ }),
 /* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
 // FIXME: type template (using custom builder)
-/* harmony default export */ __webpack_exports__["a"] = (function (sfPathProvider) {
-
+/**
+ * I build the canonical schema
+ *
+ * @param  {[type]} sfPathProvider [description]
+ *
+ * @return {[type]}                [description]
+ */
+/* harmony default export */ __webpack_exports__["a"] = function (sfPathProvider) {
   var SNAKE_CASE_REGEXP = /[A-Z]/g;
   var snakeCase = function snakeCase(name, separator) {
     separator = separator || '_';
@@ -4735,8 +4781,8 @@ FIXME: real documentation
   };
   var formId = 0;
 
-  if (!("firstElementChild" in document.createDocumentFragment())) {
-    Object.defineProperty(DocumentFragment.prototype, "firstElementChild", {
+  if (!('firstElementChild' in document.createDocumentFragment())) {
+    Object.defineProperty(DocumentFragment.prototype, 'firstElementChild', {
       get: function get() {
         for (var nodes = this.childNodes, n, i = 0, l = nodes.length; i < l; ++i) {
           if (n = nodes[i], 1 === n.nodeType) return n;
@@ -4756,7 +4802,8 @@ FIXME: real documentation
     ngModel: function ngModel(args) {
       if (!args.form.key) {
         return;
-      }
+      };
+
       var key = args.form.key;
 
       // Redact part of the key, used in arrays
@@ -4766,7 +4813,7 @@ FIXME: real documentation
       }
 
       // Stringify key.
-      var modelValue;
+      var modelValue = void 0;
       if (!args.state.modelValue) {
         var strKey = sfPathProvider.stringify(key).replace(/"/g, '&quot;');
         modelValue = args.state.modelName || 'model';
@@ -4870,12 +4917,6 @@ FIXME: real documentation
     array: function array(args) {
       var items = args.fieldFrag.querySelector('[schema-form-array-items]');
 
-      if (args.form.key) {
-        var arrayDepth = args.form.key.filter(function (e) {
-          return e === '';
-        }).length;
-      }
-
       if (items) {
         var state = angular.copy(args.state);
         state.keyRedaction = 0;
@@ -4884,7 +4925,6 @@ FIXME: real documentation
         // Special case, an array with just one item in it that is not an object.
         // So then we just override the modelValue
         if (args.form.schema && args.form.schema.items && args.form.schema.items.type && args.form.schema.items.type.indexOf('object') === -1 && args.form.schema.items.type.indexOf('array') === -1) {
-          var strKey = sfPathProvider.stringify(args.form.key).replace(/"/g, '&quot;') + '[$index]';
           state.modelValue = 'modelArray[$index]';
         } else {
           state.modelName = 'item';
@@ -4953,7 +4993,6 @@ FIXME: real documentation
       path = path || 'schemaForm.form';
       var container = document.createDocumentFragment();
       items.reduce(function (frag, f, index) {
-
         // Sanity check.
         if (!f.type) {
           return frag;
@@ -4971,54 +5010,56 @@ FIXME: real documentation
 
           (checkForSlot(f, slots) || frag).appendChild(n);
         } else {
-          var tmpl;
+          (function () {
+            var tmpl = void 0;
 
-          // Reset arrayCompatFlag, it's only valid for direct children of the array.
-          state.arrayCompatFlag = false;
+            // Reset arrayCompatFlag, it's only valid for direct children of the array.
+            state.arrayCompatFlag = false;
 
-          // TODO: Create a couple of testcases, small and large and
-          //       measure optmization. A good start is probably a
-          //       cache of DOM nodes for a particular template
-          //       that can be cloned instead of using innerHTML
-          var div = document.createElement('div');
-          var template = templateFn(f, field) || templateFn(f, decorator['default']);
-          div.innerHTML = template;
+            // TODO: Create a couple of testcases, small and large and
+            //       measure optmization. A good start is probably a
+            //       cache of DOM nodes for a particular template
+            //       that can be cloned instead of using innerHTML
+            var div = document.createElement('div');
+            var template = templateFn(f, field) || templateFn(f, decorator['default']);
+            div.innerHTML = template;
 
-          // Move node to a document fragment, we don't want the div.
-          tmpl = document.createDocumentFragment();
-          while (div.childNodes.length > 0) {
-            tmpl.appendChild(div.childNodes[0]);
-          }
-
-          // Possible builder, often a noop
-          var args = {
-            fieldFrag: tmpl,
-            form: f,
-            lookup: lookup,
-            state: state,
-            path: path + '[' + index + ']',
-
-            // Recursive build fn
-            build: function build(items, path, state) {
-              return _build(items, decorator, templateFn, slots, path, state, lookup);
+            // Move node to a document fragment, we don't want the div.
+            tmpl = document.createDocumentFragment();
+            while (div.childNodes.length > 0) {
+              tmpl.appendChild(div.childNodes[0]);
             }
 
-          };
+            // Possible builder, often a noop
+            var args = {
+              fieldFrag: tmpl,
+              form: f,
+              lookup: lookup,
+              state: state,
+              path: path + '[' + index + ']',
 
-          // Let the form definiton override builders if it wants to.
-          var builderFn = f.builder || field.builder;
+              // Recursive build fn
+              build: function build(items, path, state) {
+                return _build(items, decorator, templateFn, slots, path, state, lookup);
+              }
 
-          // Builders are either a function or a list of functions.
-          if (typeof builderFn === 'function') {
-            builderFn(args);
-          } else {
-            builderFn.forEach(function (fn) {
-              fn(args);
-            });
-          }
+            };
 
-          // Append
-          (checkForSlot(f, slots) || frag).appendChild(tmpl);
+            // Let the form definiton override builders if it wants to.
+            var builderFn = f.builder || field.builder;
+
+            // Builders are either a function or a list of functions.
+            if (typeof builderFn === 'function') {
+              builderFn(args);
+            } else {
+              builderFn.forEach(function (fn) {
+                fn(args);
+              });
+            }
+
+            // Append
+            (checkForSlot(f, slots) || frag).appendChild(tmpl);
+          })();
         }
         return frag;
       }, container);
@@ -5043,7 +5084,7 @@ FIXME: real documentation
       internalBuild: _build
     };
   }];
-});
+};
 
 /***/ }),
 /* 15 */
@@ -5052,10 +5093,16 @@ FIXME: real documentation
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_angular__);
+/* eslint-disable quote-props, no-invalid-this */
 
 
-/* harmony default export */ __webpack_exports__["a"] = (function () {
-
+/**
+ * I am the error message provider
+ *
+ * @return {object} I return a service provider for error messages
+ */
+/* harmony default export */ __webpack_exports__["a"] = function () {
+  var self = this;
   // The codes are tv4 error codes.
   // Not all of these can actually happen in a field, but for
   // we never know when one might pop up so it's best to cover them all.
@@ -5109,20 +5156,19 @@ FIXME: real documentation
   defaultMessages.minlength = defaultMessages[200];
   defaultMessages.pattern = defaultMessages[202];
 
-  this.setDefaultMessages = function (messages) {
+  self.setDefaultMessages = function (messages) {
     defaultMessages = messages;
   };
 
-  this.getDefaultMessages = function () {
+  self.getDefaultMessages = function () {
     return defaultMessages;
   };
 
-  this.setDefaultMessage = function (error, msg) {
+  self.setDefaultMessage = function (error, msg) {
     defaultMessages[error] = msg;
   };
 
-  this.$get = ['$interpolate', function ($interpolate) {
-
+  self.$get = ['$interpolate', function ($interpolate) {
     var service = {};
     service.defaultMessages = defaultMessages;
 
@@ -5180,7 +5226,7 @@ FIXME: real documentation
 
     return service;
   }];
-});
+};
 
 /***/ }),
 /* 16 */
@@ -5189,18 +5235,20 @@ FIXME: real documentation
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_angular___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_angular__);
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-// var JSONSchemaFormCore = require('../../json-schema-form-core/dist/json-schema-form-core');
-// import JSONSchemaFormCore from 'json-schema-form-core';
 
 
+/**
+ * @class sfPathProviderClass
+ */
 
 var sfPathProviderClass = function () {
+  /**
+   * @method constructor
+   */
   function sfPathProviderClass() {
     _classCallCheck(this, sfPathProviderClass);
 
@@ -5209,6 +5257,11 @@ var sfPathProviderClass = function () {
     this.stringify = __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__["sfPath"].stringify;
     this.normalize = __WEBPACK_IMPORTED_MODULE_0_json_schema_form_core__["sfPath"].normalize;
   }
+
+  /**
+   * @method $get
+   */
+
 
   _createClass(sfPathProviderClass, [{
     key: '$get',
@@ -5220,7 +5273,7 @@ var sfPathProviderClass = function () {
   return sfPathProviderClass;
 }();
 
-/* harmony default export */ __webpack_exports__["a"] = (sfPathProviderClass);
+/* harmony default export */ __webpack_exports__["a"] = sfPathProviderClass;
 
 /***/ }),
 /* 17 */

@@ -1,12 +1,22 @@
 import angular from 'angular';
 
-export default function($parse, $compile, $http, $templateCache, $interpolate, $q, sfErrorMessage,
-sfPath, sfSelect) {
-
+/**
+ * I am the directive for managing field properties
+ *
+ * @param  {function} $parse
+ * @param  {function} $compile
+ * @param  {function} $interpolate
+ * @param  {object}   sfErrorMessage
+ * @param  {object}   sfPath
+ * @param  {function} sfSelect
+ *
+ * @return {object}   I am the object providing the directive API to Angular
+ */
+export default function($parse, $compile, $interpolate, sfErrorMessage, sfPath, sfSelect) {
   const keyFormat = {
     COMPLETE: '*',
     PATH: 'string',
-    INDICES: 'number'
+    INDICES: 'number',
   };
 
   return {
@@ -14,15 +24,13 @@ sfPath, sfSelect) {
     replace: false,
     transclude: false,
     scope: true,
-    require: ['^sfSchema', '?^form', '?^^sfKeyController'],
+    require: [ '^sfSchema', '?^form', '?^^sfKeyController' ],
     link: {
       pre: function(scope, element, attrs, ctrl) {
         let sfSchema = ctrl[0];
-        let formCtrl = ctrl[1];
-        let keyCtrl = ctrl[2];
 
-        //The ngModelController is used in some templates and
-        //is needed for error messages,
+        // The ngModelController is used in some templates and
+        // is needed for error messages,
         scope.$on('schemaFormPropagateNgModelController', function(event, ngModel) {
           event.stopPropagation();
           event.preventDefault();
@@ -34,13 +42,12 @@ sfPath, sfSelect) {
         scope.form = sfSchema.lookup['f' + attrs.sfField];
       },
       post: function(scope, element, attrs, ctrl) {
-        var sfSchema = ctrl[0];
-        var formCtrl = ctrl[1];
-        var keyCtrl = ctrl[2];
+        let sfSchema = ctrl[0];
+        let formCtrl = ctrl[1];
 
         scope.getKey = function(requiredFormat) {
           let format = requiredFormat || keyFormat.COMPLETE;
-          let key = (scope.parentKey) ? scope.parentKey.slice(0, scope.parentKey.length-1) : [] ;
+          let key = (scope.parentKey) ? scope.parentKey.slice(0, scope.parentKey.length-1) : [];
 
           // Only calculate completeKey if not already saved to form.key
           if(scope.completeKey !== scope.form.key) {
@@ -53,7 +60,8 @@ sfPath, sfSelect) {
                 let trim = scope.form.key.length - key.length;
                 scope.completeKey =
                   trim > 0 ?  key.concat(scope.form.key.slice(-trim)) : key;
-              } else {
+              }
+              else {
                 scope.completeKey = scope.form.key.slice();
               }
             }
@@ -62,7 +70,7 @@ sfPath, sfSelect) {
           // If there is no key then there's nothing to return
           if(!Array.isArray(scope.completeKey)) {
             return undefined;
-          };
+          }
 
           // return the full key if not omiting any types via reduce
           if (format === keyFormat.COMPLETE) {
@@ -76,19 +84,20 @@ sfPath, sfSelect) {
               }
               return output;
             }, []);
-          };
+          }
         };
+
         // Now that getKey is defined, run it! ...if there's a key.
         if(scope.form.key) {
           scope.form.key = scope.completeKey = scope.getKey();
-        };
+        }
 
-        //Keep error prone logic from the template
+        // Keep error prone logic from the template
         scope.showTitle = function() {
           return scope.form && scope.form.notitle !== true && scope.form.title;
         };
 
-        //Normalise names and ids
+        // Normalise names and ids
         scope.fieldId = function(prependFormName, omitArrayIndexes) {
           let omit = omitArrayIndexes || false;
           let formName = (prependFormName && formCtrl && formCtrl.$name) ? formCtrl.$name : undefined;
@@ -99,11 +108,11 @@ sfPath, sfSelect) {
           }
           else {
             return '';
-          };
+          }
         };
 
         scope.listToCheckboxValues = function(list) {
-          var values = {};
+          let values = {};
           angular.forEach(list, function(v) {
             values[v] = true;
           });
@@ -111,7 +120,7 @@ sfPath, sfSelect) {
         };
 
         scope.checkboxValuesToList = function(values) {
-          var lst = [];
+          let lst = [];
           angular.forEach(values, function(v, k) {
             if (v) {
               lst.push(k);
@@ -123,12 +132,14 @@ sfPath, sfSelect) {
         scope.buttonClick = function($event, form) {
           if (angular.isFunction(form.onClick)) {
             form.onClick($event, form);
-          } else if (angular.isString(form.onClick)) {
+          }
+          else if (angular.isString(form.onClick)) {
             if (sfSchema) {
-              //evaluating in scope outside of sfSchemas isolated scope
-              sfSchema.evalInParentScope(form.onClick, { '$event': $event, form: form });
-            } else {
-              scope.$eval(form.onClick, { '$event': $event, form: form });
+              // evaluating in scope outside of sfSchemas isolated scope
+              sfSchema.evalInParentScope(form.onClick, { '$event': $event, 'form': form });
+            }
+            else {
+              scope.$eval(form.onClick, { '$event': $event, 'form': form });
             }
           }
         };
@@ -143,7 +154,7 @@ sfPath, sfSelect) {
          */
         scope.evalExpr = function(expression, locals) {
           if (sfSchema) {
-            //evaluating in scope outside of sfSchemas isolated scope
+            // evaluating in scope outside of sfSchemas isolated scope
             return sfSchema.evalInParentScope(expression, locals);
           }
 
@@ -182,7 +193,7 @@ sfPath, sfSelect) {
           return (expression && $interpolate(expression)(locals));
         };
 
-        //This works since we get the ngModel from the array or the schema-validate directive.
+        // This works since we get the ngModel from the array or the schema-validate directive.
         scope.hasSuccess = function() {
           if (!scope.ngModel) {
             return false;
@@ -191,7 +202,8 @@ sfPath, sfSelect) {
               scope.options.pristine.success === false) {
             return scope.ngModel.$valid &&
                 !scope.ngModel.$pristine && !scope.ngModel.$isEmpty(scope.ngModel.$modelValue);
-          } else {
+          }
+          else {
             return scope.ngModel.$valid &&
               (!scope.ngModel.$pristine || !scope.ngModel.$isEmpty(scope.ngModel.$modelValue));
           }
@@ -207,7 +219,8 @@ sfPath, sfSelect) {
             // so as a default there won't be any error anyway, but if the model is modified
             // from the outside the error will show even if the field is pristine.
             return scope.ngModel.$invalid;
-          } else {
+          }
+          else {
             // Don't show errors in pristine forms.
             return scope.ngModel.$invalid && !scope.ngModel.$pristine;
           }
@@ -233,7 +246,7 @@ sfPath, sfSelect) {
         scope.form.htmlClass = scope.form.htmlClass || '';
         scope.idClass = scope.fieldId(false) + ' ' + scope.fieldId(false, true);
 
-        var form = scope.form;
+        let form = scope.form;
 
         // Where there is a key there is probably a ngModel
         if (form.key) {
@@ -342,7 +355,7 @@ sfPath, sfSelect) {
             }
           });
         }
-      }
-    }
+      },
+    },
   };
 }

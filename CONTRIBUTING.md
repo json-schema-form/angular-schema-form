@@ -8,24 +8,25 @@ Contributing
 <a name="setup"></a>
 ## How to setup to develop
 To get started clone all json-schema-form library repos into sibling folders.
-  json-schema-form-core
-  angular-schema-form
-  angular-schema-form-bootstrap
-  angular-schema-form-material
-
+```bash
+git clone https://github.com/json-schema-form/json-schema-form-core.git
+git clone https://github.com/json-schema-form/angular-schema-form.git
+git clone https://github.com/json-schema-form/angular-schema-form-bootstrap.git
+git clone https://github.com/json-schema-form/angular-schema-form-material.git
+```
+Install dev/global dependencies and bower references to use demo site
+```bash
+npm install
+npm install -g webpack eslint mocha # json-schema-form-core
+npm install -g webpack eslint karma # angular-schema-form
+bower install
+```
 Once cloned each repo has npm commands for assisting development
 ```bash
-# Run unit tests
-npm run test
-
-# Run the build
-npm run build
-
-# Run the build and minify
-npm run dist # not in json-schema-form-core
-
-# Run the build and watch for changes
-npm run watch
+npm run test # Run unit tests
+npm run build # Run the build
+npm run dist # not in json-schema-form-core # Run the build and minify
+npm run watch # Run the build and watch for changes
 ```
 
 <a name="build"></a>

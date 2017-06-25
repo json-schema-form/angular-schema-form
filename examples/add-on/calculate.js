@@ -27,39 +27,41 @@ angular
   .module('schemaForm')
   .run(function($templateCache) {
     // A template to use
-    $templateCache.put('calculated-fields.html','<calculate sf-field-model model="model" form="form" />');
+    $templateCache.put('calculated-fields.html', '<calculate sf-field-model model="model" form="form" />');
   })
-  .directive('calculate', ['$compile', '$http', 'sfBuilder', 'sfSelect', '$interpolate', 'schemaFormDecorators',
+  .directive('calculate', [ '$compile', '$http', 'sfBuilder', 'sfSelect', '$interpolate', 'schemaFormDecorators',
     function($compile, $http, sfBuilder, sfSelect, $interpolate, schemaFormDecoratorsProvider) {
       return {
         restrict: 'E',
         scope: true,
         link: {
           post: function(scope, element, attrs, ctrl) {
-            var watchKeys = scope.form.watch,
-                key, keyFixed, exec,
-                i;
+            let watchKeys = scope.form.watch;
+            let key;
+            let keyFixed;
+            let i;
 
             scope.form.format = scope.form.format || 'number';
 
             for (i=0; i < watchKeys.length; i++) {
               key = watchKeys[i].split('[]');
-              keyFixed = key.reduce(function(pv, cv, ci, ta){
+              keyFixed = key.reduce(function(pv, cv, ci, ta) {
                 return '' + pv + ((cv[0]=='.')? '['+scope.$i[ci-1]+']'+cv: cv);
               });
 
               scope.$watch(keyFixed,
               function (val, old) {
-                var newValue = $interpolate('{{' + scope.form.calculate + '}}', false, null, true)({
+                let newValue = $interpolate('{{' + scope.form.calculate + '}}', false, null, true)({
                   model: scope.model,
                   $i: scope.$i,
                   $index: scope.$index,
-                  path: scope.path
+                  path: scope.path,
                 });
 
                 if(scope.form.lookup) {
                   scope.model.calculated = encodeURIComponent(newValue);
-                  var lookup = $interpolate(scope.form.lookup, false, null, true)(scope.model);
+                  let lookup = $interpolate(scope.form.lookup, false, null, true)(scope.model);
+
                   $http.get(lookup, { responseType: 'json' })
                     .success(function(response, status) {
                       if(response.data) update(response.data);
@@ -73,23 +75,27 @@ angular
                   update(newValue);
                 };
 
+                /**
+                 * I update the model for the key
+                 *
+                 * @param  {[type]} value [description]
+                 */
                 function update(value) {
                   if(scope.form.format == 'number') value = Number(value);
                   sfSelect(scope.form.key, scope.model, value);
                 };
               });
             };
-          }
-        }
+          },
+        },
       };
-    }
+    },
   ])
   .config([ 'schemaFormDecoratorsProvider', 'sfBuilderProvider',
     function(schemaFormDecoratorsProvider, sfBuilderProvider) {
-      var sfField             = sfBuilderProvider.builders.sfField;
-      var ngModel             = sfBuilderProvider.builders.ngModel;
-      var ngModelOptions      = sfBuilderProvider.builders.ngModelOptions;
-      var defaults = [ sfField, ngModel ];
+      let sfField = sfBuilderProvider.builders.sfField;
+      let ngModel = sfBuilderProvider.builders.ngModel;
+      let defaults = [ sfField, ngModel ];
 
       schemaFormDecoratorsProvider.defineAddOn(
         'bootstrapDecorator',
@@ -97,5 +103,5 @@ angular
         'calculated-fields.html',
         defaults
       );
-    }
+    },
   ]);

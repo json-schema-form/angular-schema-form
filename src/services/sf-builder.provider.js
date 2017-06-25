@@ -1,27 +1,32 @@
-
 // FIXME: type template (using custom builder)
+/**
+ * I build the canonical schema
+ *
+ * @param  {[type]} sfPathProvider [description]
+ *
+ * @return {[type]}                [description]
+ */
 export default function(sfPathProvider) {
-
-  var SNAKE_CASE_REGEXP = /[A-Z]/g;
-  var snakeCase = function(name, separator) {
+  let SNAKE_CASE_REGEXP = /[A-Z]/g;
+  let snakeCase = function(name, separator) {
     separator = separator || '_';
     return name.replace(SNAKE_CASE_REGEXP, function(letter, pos) {
       return (pos ? separator : '') + letter.toLowerCase();
     });
   };
-  var formId = 0;
+  let formId = 0;
 
-  if (!("firstElementChild" in document.createDocumentFragment())) {
-    Object.defineProperty(DocumentFragment.prototype, "firstElementChild", {
+  if (!('firstElementChild' in document.createDocumentFragment())) {
+    Object.defineProperty(DocumentFragment.prototype, 'firstElementChild', {
       get: function () {
-        for (var nodes = this.childNodes, n, i = 0, l = nodes.length; i < l; ++i)
+        for (let nodes = this.childNodes, n, i = 0, l = nodes.length; i < l; ++i)
           if (n = nodes[i], 1 === n.nodeType) return n;
         return null;
-      }
+      },
     });
   }
 
-  var builders = {
+  let builders = {
     sfField: function(args) {
       args.fieldFrag.firstElementChild.setAttribute('sf-field', formId);
 
@@ -32,8 +37,9 @@ export default function(sfPathProvider) {
     ngModel: function(args) {
       if (!args.form.key) {
         return;
-      }
-      var key  = args.form.key;
+      };
+
+      let key = args.form.key;
 
       // Redact part of the key, used in arrays
       // KISS keyRedaction is a number.
@@ -42,15 +48,16 @@ export default function(sfPathProvider) {
       }
 
       // Stringify key.
-      var modelValue;
+      let modelValue;
       if (!args.state.modelValue) {
-        var strKey = sfPathProvider.stringify(key).replace(/"/g, '&quot;');
+        let strKey = sfPathProvider.stringify(key).replace(/"/g, '&quot;');
         modelValue = (args.state.modelName || 'model');
 
         if (strKey) { // Sometimes, like with arrays directly in arrays strKey is nothing.
           modelValue += (strKey[0] !== '[' ? '.' : '') + strKey;
         }
-      } else {
+      }
+      else {
         // Another builder, i.e. array has overriden the modelValue
         modelValue = args.state.modelValue;
       }
@@ -59,31 +66,34 @@ export default function(sfPathProvider) {
       // No value means a add a ng-model.
       // sf-field-value="replaceAll", loop over attributes and replace $$value$$ in each.
       // sf-field-value="attrName", replace or set value of that attribute.
-      var nodes = args.fieldFrag.querySelectorAll('[sf-field-model]');
-      for (var i = 0; i < nodes.length; i++) {
-        var n = nodes[i];
-        var conf = n.getAttribute('sf-field-model');
+      let nodes = args.fieldFrag.querySelectorAll('[sf-field-model]');
+      for (let i = 0; i < nodes.length; i++) {
+        let n = nodes[i];
+        let conf = n.getAttribute('sf-field-model');
         if (!conf || conf === '') {
           n.setAttribute('ng-model', modelValue);
-        } else if (conf === 'replaceAll') {
-          var attributes = n.attributes;
-          for (var j = 0; j < attributes.length; j++) {
+        }
+        else if (conf === 'replaceAll') {
+          let attributes = n.attributes;
+          for (let j = 0; j < attributes.length; j++) {
             if (attributes[j].value && attributes[j].value.indexOf('$$value') !== -1) {
               attributes[j].value = attributes[j].value.replace(/\$\$value\$\$/g, modelValue);
             }
           }
-        } else {
-          var  val = n.getAttribute(conf);
+        }
+        else {
+          let val = n.getAttribute(conf);
           if (val && val.indexOf('$$value$$')) {
             n.setAttribute(conf, val.replace(/\$\$value\$\$/g, modelValue));
-          } else {
+          }
+          else {
             n.setAttribute(conf, modelValue);
           }
         }
       }
     },
     simpleTransclusion: function(args) {
-      var children = args.build(args.form.items, args.path + '.items', args.state);
+      let children = args.build(args.form.items, args.path + '.items', args.state);
       args.fieldFrag.firstChild.appendChild(children);
     },
 
@@ -96,20 +106,20 @@ export default function(sfPathProvider) {
       }
     },
     transclusion: function(args) {
-      var transclusions = args.fieldFrag.querySelectorAll('[sf-field-transclude]');
+      let transclusions = args.fieldFrag.querySelectorAll('[sf-field-transclude]');
 
       if (transclusions.length) {
-        for (var i = 0; i < transclusions.length; i++) {
-          var n = transclusions[i];
+        for (let i = 0; i < transclusions.length; i++) {
+          let n = transclusions[i];
 
           // The sf-transclude attribute is not a directive,
           // but has the name of what we're supposed to
           // traverse. Default to `items`
-          var sub = n.getAttribute('sf-field-transclude') || 'items';
-          var items = args.form[sub];
+          let sub = n.getAttribute('sf-field-transclude') || 'items';
+          let items = args.form[sub];
 
           if (items) {
-            var childFrag = args.build(items, args.path + '.' + sub, args.state);
+            let childFrag = args.build(items, args.path + '.' + sub, args.state);
             n.appendChild(childFrag);
           }
         }
@@ -155,14 +165,10 @@ export default function(sfPathProvider) {
       }
     },
     array: function(args) {
-      var items = args.fieldFrag.querySelector('[schema-form-array-items]');
-
-      if (args.form.key) {
-        var arrayDepth = args.form.key.filter(function(e) { return e === '' }).length;
-      }
+      let items = args.fieldFrag.querySelector('[schema-form-array-items]');
 
       if (items) {
-        var state = angular.copy(args.state);
+        let state = angular.copy(args.state);
         state.keyRedaction = 0;
         state.keyRedaction += args.form.key.length + 1;
 
@@ -172,9 +178,9 @@ export default function(sfPathProvider) {
             args.form.schema.items.type &&
             args.form.schema.items.type.indexOf('object') === -1 &&
             args.form.schema.items.type.indexOf('array') === -1) {
-          var strKey = sfPathProvider.stringify(args.form.key).replace(/"/g, '&quot;') + '[$index]';
           state.modelValue = 'modelArray[$index]';
-        } else {
+        }
+        else {
           state.modelName = 'item';
         }
 
@@ -183,17 +189,17 @@ export default function(sfPathProvider) {
         // hasn't been transitioned to the new builder.
         state.arrayCompatFlag = true;
 
-        var childFrag = args.build(args.form.items, args.path + '.items', state);
+        let childFrag = args.build(args.form.items, args.path + '.items', state);
         items.appendChild(childFrag);
       }
     },
     numeric: function(args) {
-      var inputFrag = args.fieldFrag.querySelector('input');
-      var maximum = args.form.maximum || false;
-      var exclusiveMaximum = args.form.exclusiveMaximum || false;
-      var minimum = args.form.minimum || false;
-      var exclusiveMinimum = args.form.exclusiveMinimum || false;
-      var multipleOf = args.form.multipleOf || false;
+      let inputFrag = args.fieldFrag.querySelector('input');
+      let maximum = args.form.maximum || false;
+      let exclusiveMaximum = args.form.exclusiveMaximum || false;
+      let minimum = args.form.minimum || false;
+      let exclusiveMinimum = args.form.exclusiveMinimum || false;
+      let multipleOf = args.form.multipleOf || false;
       if (inputFrag) {
         if (multipleOf !== false) {
           inputFrag.setAttribute('step', multipleOf);
@@ -212,26 +218,25 @@ export default function(sfPathProvider) {
           };
           inputFrag.setAttribute('min', minimum);
         };
-
       };
-    }
+    },
   };
   this.builders = builders;
-  var stdBuilders = [
+  let stdBuilders = [
     builders.sfField,
     builders.ngModel,
     builders.ngModelOptions,
-    builders.condition
+    builders.condition,
   ];
   this.stdBuilders = stdBuilders;
 
   this.$get = [ '$templateCache', 'schemaFormDecorators', 'sfPath',
       function($templateCache, schemaFormDecorators, sfPath) {
-    var checkForSlot = function(form, slots) {
+    let checkForSlot = function(form, slots) {
       // Finally append this field to the frag.
       // Check for slots
       if (form.key) {
-        var slot = slots[sfPath.stringify(form.key)];
+        let slot = slots[sfPath.stringify(form.key)];
         if (slot) {
           while (slot.firstChild) {
             slot.removeChild(slot.firstChild);
@@ -241,34 +246,33 @@ export default function(sfPathProvider) {
       }
     };
 
-    var build = function(items, decorator, templateFn, slots, path, state, lookup) {
+    let build = function(items, decorator, templateFn, slots, path, state, lookup) {
       state = state || {};
       state = state || {};
       lookup = lookup || Object.create(null);
       path = path || 'schemaForm.form';
-      var container = document.createDocumentFragment();
+      let container = document.createDocumentFragment();
       items.reduce(function(frag, f, index) {
-
         // Sanity check.
         if (!f.type) {
           return frag;
         }
 
-        var field = decorator[f.type] || decorator['default'];
+        let field = decorator[f.type] || decorator['default'];
         if (!field.replace) {
           // Backwards compatability build
-          var n = document.createElement(snakeCase(decorator.__name, '-'));
+          let n = document.createElement(snakeCase(decorator.__name, '-'));
           if (state.arrayCompatFlag) {
             n.setAttribute('form', 'copyWithIndex($index)');
-          } else {
+          }
+          else {
             n.setAttribute('form', path + '[' + index + ']');
           }
 
           (checkForSlot(f, slots) || frag).appendChild(n);
-
         }
         else {
-          var tmpl;
+          let tmpl;
 
           // Reset arrayCompatFlag, it's only valid for direct children of the array.
           state.arrayCompatFlag = false;
@@ -277,8 +281,8 @@ export default function(sfPathProvider) {
           //       measure optmization. A good start is probably a
           //       cache of DOM nodes for a particular template
           //       that can be cloned instead of using innerHTML
-          var div = document.createElement('div');
-          var template = templateFn(f, field) || templateFn(f, decorator['default']);
+          let div = document.createElement('div');
+          let template = templateFn(f, field) || templateFn(f, decorator['default']);
           div.innerHTML = template;
 
           // Move node to a document fragment, we don't want the div.
@@ -288,7 +292,7 @@ export default function(sfPathProvider) {
           }
 
           // Possible builder, often a noop
-          var args = {
+          let args = {
             fieldFrag: tmpl,
             form: f,
             lookup: lookup,
@@ -303,7 +307,7 @@ export default function(sfPathProvider) {
           };
 
           // Let the form definiton override builders if it wants to.
-          var builderFn = f.builder || field.builder;
+          let builderFn = f.builder || field.builder;
 
           // Builders are either a function or a list of functions.
           if (typeof builderFn === 'function') {
@@ -334,11 +338,10 @@ export default function(sfPathProvider) {
           }
           return $templateCache.get(field.template);
         }, slots, undefined, undefined, lookup);
-
       },
       builder: builders,
       stdBuilders: stdBuilders,
-      internalBuild: build
+      internalBuild: build,
     };
-  }];
+  } ];
 }

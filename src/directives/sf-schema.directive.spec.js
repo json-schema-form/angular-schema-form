@@ -1,17 +1,19 @@
+/* eslint-disable quotes, no-var */
+/* disabling quotes makes it easier to copy tests into the example app */
 chai.should();
 
-var runSync = function (scope, tmpl) {
+var runSync = function(scope, tmpl) {
   var directiveScope = tmpl.isolateScope();
-  var stub = sinon.stub(directiveScope, 'resolveReferences', function(schema, form) {
+  sinon.stub(directiveScope, 'resolveReferences', function(schema, form) {
     directiveScope.render(schema, form);
   });
   scope.$apply();
-}
+};
 
 describe('sf-schema.directive.js', function() {
   beforeEach(module('schemaForm'));
   beforeEach(
-    //We don't need no sanitation. We don't need no thought control.
+    // We don't need no sanitation. We don't need no thought control.
     module(function($sceProvider) {
       $sceProvider.enabled(false);
     })
@@ -23,7 +25,7 @@ describe('sf-schema.directive.js', function() {
       "name": {
         "title": "Name",
         "description": "Gimme yea name lad",
-        "type": "string"
+        "type": "string",
       },
       "gender": {
         "title": "Choose:",
@@ -32,19 +34,19 @@ describe('sf-schema.directive.js', function() {
           "undefined",
           "null",
           "NaN",
-        ]
-      }
-    }
+        ],
+      },
+    },
   };
 
   it('should generate html and compile it', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
       scope.schema = exampleSchema;
 
-      scope.form = ["*"];
+      scope.form = [ "*" ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
@@ -57,12 +59,11 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
       tmpl.children().eq(0).is('div.form-group').should.be.true;
       tmpl.children().eq(1).children('select').length.should.equal(1);
-
     });
   });
 
   it('should generate html and compile when no form is provided, using the default', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -81,35 +82,34 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).find('input').attr('ng-model').should.be.equal('model[\'name\']');
       tmpl.children().eq(1).is('div.form-group').should.be.true;
       tmpl.children().eq(1).children('select').length.should.equal(1);
-
     });
   });
 
   it('should generate html and compile it, deep structure', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
-      scope.schema =  {
+      scope.schema = {
         'type': 'object',
         'properties': {
           'name': {
             'title': 'Name',
             'description': 'Gimme yea name lad',
-            'type': 'string'
+            'type': 'string',
           },
           'ianal': {
             'type': 'boolean',
-            'title': 'IANAL'
+            'title': 'IANAL',
           },
           'age': {
             'type': 'integer',
             'title': 'Age',
-            'minimum': 0
+            'minimum': 0,
           },
           'sum': {
             'type': 'number',
-            'title': 'summa'
+            'title': 'summa',
           },
           'gender': {
             'title': 'Choose',
@@ -118,12 +118,12 @@ describe('sf-schema.directive.js', function() {
               'undefined',
               'null',
               'NaN',
-            ]
+            ],
           },
           'attributes': {
             'type': 'object',
             'title': 'Attributes',
-            'required': ['eyecolor'],
+            'required': [ 'eyecolor' ],
             'properties': {
               'eyecolor': { 'type': 'string', 'title': 'Eye color' },
               'haircolor': { 'type': 'string', 'title': 'Hair color' },
@@ -133,20 +133,21 @@ describe('sf-schema.directive.js', function() {
                 'properties': {
                   'left': { 'type': 'string' },
                   'right': { 'type': 'string' },
-                }
-              }
-            }
-          }
-        }
+                },
+              },
+            },
+          },
+        },
       };
 
-      scope.form = ['*'];
+      scope.form = [ '*' ];
 
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-decorator-name="bootstrap-decorator"></form>');
+      var tmpl = angular.element(
+        '<form sf-schema="schema" sf-form="form" sf-model="person" sf-decorator-name="bootstrap-decorator"></form>'
+      );
 
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
-
 
       tmpl.children().length.should.be.equal(6);
       tmpl.children().eq(0).is('div.form-group').should.be.true;
@@ -171,22 +172,27 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(5).children().eq(4).is('fieldset').should.be.true;
       tmpl.children().eq(5).children().eq(4).children().length.should.be.eq(4);
 
-      tmpl.children().eq(5).children().eq(4).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'left\']"]').length.should.be.eq(1);
-      tmpl.children().eq(5).children().eq(4).find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'right\']"]').length.should.be.eq(1);
-
+      tmpl.children().eq(5).children().eq(4)
+        .find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'left\']"]').length.should.be.eq(1);
+      tmpl.children().eq(5).children().eq(4)
+        .find('input[ng-model="model[\'attributes\'][\'shoulders\'][\'right\']"]').length.should.be.eq(1);
     });
   });
 
   it('should generate html and compile it, leaving existing inputs intact', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
       scope.schema = exampleSchema;
 
-      scope.form = ["*"];
+      scope.form = [ "*" ];
 
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"><input type="text" ng-model="person.name" value="OMG"></form>');
+      var tmpl = angular.element(
+        '<form sf-schema="schema" sf-form="form" sf-model="person">'+
+          '<input type="text" ng-model="person.name" value="OMG">'+
+        '</form>'
+      );
 
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
@@ -196,21 +202,23 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).attr('ng-model').should.be.equal('person.name');
       tmpl.children().eq(1).is('div.form-group').should.be.true;
       tmpl.children().eq(1).children('select').length.should.equal(1);
-
     });
   });
 
   it('should preserve existing html and insert fields in matching slots', function() {
-
     inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
       scope.schema = exampleSchema;
 
-      scope.form = ['*'];
+      scope.form = [ '*' ];
 
-      var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"><ul><li sf-insert-field="[\'name\']"></li></ul></form>');
+      var tmpl = angular.element(
+        '<form sf-schema="schema" sf-form="form" sf-model="person">'+
+          '<ul><li sf-insert-field="[\'name\']"></li></ul>'+
+        '</form>'
+      );
 
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
@@ -222,14 +230,14 @@ describe('sf-schema.directive.js', function() {
 
 
   it('should handle submit buttons', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.obj = {};
 
       scope.schema = exampleSchema;
 
-      //just a button
-      scope.form = [{ type: 'submit',title: 'Okidoki'}];
+      // just a button
+      scope.form = [{ type: 'submit', title: 'Okidoki' }];
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
@@ -238,8 +246,8 @@ describe('sf-schema.directive.js', function() {
       tmpl.find('input').is('input[type=submit]').should.be.true;
       tmpl.find('input').val().should.be.equal('Okidoki');
 
-      //with the rest of the schema
-      scope.form = ["*",{ type: 'submit',title: 'Okidoki'}];
+      // with the rest of the schema
+      scope.form = [ "*", { type: 'submit', title: 'Okidoki' }];
 
       tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
 
@@ -256,13 +264,13 @@ describe('sf-schema.directive.js', function() {
   });
 
   it('should handle buttons', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.obj = {};
 
       scope.schema = exampleSchema;
 
-      scope.form = ["*",{ type: 'button',title: 'Okidoki', onClick: sinon.spy()}];
+      scope.form = [ "*", { type: 'button', title: 'Okidoki', onClick: sinon.spy() }];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
 
@@ -284,14 +292,14 @@ describe('sf-schema.directive.js', function() {
   });
 
   it('should style submit buttons', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.obj = {};
 
       scope.schema = exampleSchema;
 
-      //A submit button with default style
-      scope.form = [{ type: 'submit',title: 'Okidoki'}];
+      // A submit button with default style
+      scope.form = [{ type: 'submit', title: 'Okidoki' }];
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
@@ -300,8 +308,8 @@ describe('sf-schema.directive.js', function() {
       tmpl.find('input').hasClass('btn-primary').should.be.true;
       tmpl.find('input').hasClass('btn-success').should.be.false;
 
-      //A submit button with default style
-      scope.form = [{ type: 'submit', style: 'btn-success', title: 'Okidoki'}];
+      // A submit button with default style
+      scope.form = [{ type: 'submit', style: 'btn-success', title: 'Okidoki' }];
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
@@ -310,8 +318,8 @@ describe('sf-schema.directive.js', function() {
       tmpl.find('input').hasClass('btn-primary').should.be.false;
       tmpl.find('input').hasClass('btn-success').should.be.true;
 
-      //A button with default style
-      scope.form = [{ type: 'button',title: 'Okidoki'}];
+      // A button with default style
+      scope.form = [{ type: 'button', title: 'Okidoki' }];
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
@@ -320,8 +328,8 @@ describe('sf-schema.directive.js', function() {
       tmpl.find('button').hasClass('btn-default').should.be.true;
       tmpl.find('button').hasClass('btn-success').should.be.false;
 
-      //A button with default style
-      scope.form = [{ type: 'button', style: 'btn-success', title: 'Okidoki'}];
+      // A button with default style
+      scope.form = [{ type: 'button', style: 'btn-success', title: 'Okidoki' }];
       tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
@@ -329,12 +337,11 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().length.should.be.equal(1);
       tmpl.find('button').hasClass('btn-default').should.be.false;
       tmpl.find('button').hasClass('btn-success').should.be.true;
-
     });
   });
 
   it('should use disable readonly input fields, v3 style', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -342,11 +349,11 @@ describe('sf-schema.directive.js', function() {
         "type": "object",
         "properties": {
           "name": { "type": "string", "readonly": true },
-          "nick": { "type": "string" }
-        }
+          "nick": { "type": "string" },
+        },
       };
 
-      scope.form = ["*"];
+      scope.form = [ "*" ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
@@ -363,7 +370,7 @@ describe('sf-schema.directive.js', function() {
   });
 
   it('should use disable readonly input fields, v4 style', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -371,11 +378,11 @@ describe('sf-schema.directive.js', function() {
         "type": "object",
         "properties": {
           "name": { "type": "string", "readOnly": true },
-          "nick": { "type": "string" }
-        }
+          "nick": { "type": "string" },
+        },
       };
 
-      scope.form = ["*"];
+      scope.form = [ "*" ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
@@ -393,7 +400,7 @@ describe('sf-schema.directive.js', function() {
   });
 
   it('should use disable readonly input fields, form override', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -401,8 +408,8 @@ describe('sf-schema.directive.js', function() {
         "type": "object",
         "properties": {
           "name": { "type": "string" },
-          "nick": { "type": "string", "readOnly": true }
-        }
+          "nick": { "type": "string", "readOnly": true },
+        },
       };
 
       scope.form = [
@@ -425,9 +432,8 @@ describe('sf-schema.directive.js', function() {
     });
   });
 
-  it('should display custom validationMessages when specified',function(done) {
-
-    inject(function($compile,$rootScope) {
+  it('should display custom validationMessages when specified', function(done) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -437,21 +443,21 @@ describe('sf-schema.directive.js', function() {
           "name": {
             "type": "string",
             "pattern": "^[a-z]+",
-            "validationMessage": "You are only allowed lower case letters in name."
+            "validationMessage": "You are only allowed lower case letters in name.",
           },
           "nick": {
             "type": "string",
             "pattern": "^[a-z]+",
           },
-        }
+        },
       };
 
       scope.form = [
         "name",
         {
           key: 'nick',
-          validationMessage: 'Foobar'
-        }
+          validationMessage: 'Foobar',
+        },
       ];
 
       var tmpl = angular.element('<form name="theform" sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -464,23 +470,22 @@ describe('sf-schema.directive.js', function() {
 
       var errors = tmpl.find('.help-block');
 
-      //timeout so we can do a second $apply
+      // timeout so we can do a second $apply
       setTimeout(function() {
-        $rootScope.$apply(); //this actually updates the view with error messages
+        $rootScope.$apply(); // this actually updates the view with error messages
         errors.eq(0).text().should.be.equal("You are only allowed lower case letters in name.");
         errors.eq(1).text().should.be.equal("Foobar");
         done();
-      },0);
-
+      }, 0);
     });
   });
 
 
   it('should honor defaults in schema', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
-        name: 'Foobar'
+        name: 'Foobar',
       };
 
       scope.schema = {
@@ -488,19 +493,19 @@ describe('sf-schema.directive.js', function() {
         "properties": {
           "name": {
             "type": "string",
-            "default": "Bar"
+            "default": "Bar",
           },
           "nick": {
             "type": "string",
-            "default": "Zeb"
+            "default": "Zeb",
           },
           "alias": {
-            "type": "string"
+            "type": "string",
           },
-        }
+        },
       };
 
-      scope.form = ["*"];
+      scope.form = [ "*" ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
@@ -510,15 +515,14 @@ describe('sf-schema.directive.js', function() {
       scope.person.name.should.be.equal('Foobar');
       scope.person.nick.should.be.equal('Zeb');
       expect(scope.person.alias).to.be.undefined;
-
     });
   });
 
   it('should honor defaults in schema unless told not to', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
-        name: 'Foobar'
+        name: 'Foobar',
       };
 
       scope.schema = {
@@ -526,23 +530,25 @@ describe('sf-schema.directive.js', function() {
         "properties": {
           "name": {
             "type": "string",
-            "default": "Bar"
+            "default": "Bar",
           },
           "nick": {
             "type": "string",
-            "default": "Zeb"
+            "default": "Zeb",
           },
           "alias": {
-            "type": "string"
+            "type": "string",
           },
-        }
+        },
       };
 
-      scope.form = ["*"];
+      scope.form = [ "*" ];
 
-      scope.options = {setSchemaDefaults: false};
+      scope.options = { setSchemaDefaults: false };
 
-      var tmpl = angular.element('<form sf-options="options" sf-schema="schema" sf-form="form" sf-model="person"></form>');
+      var tmpl = angular.element(
+        '<form sf-options="options" sf-schema="schema" sf-form="form" sf-model="person"></form>'
+      );
 
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
@@ -550,51 +556,50 @@ describe('sf-schema.directive.js', function() {
       scope.person.name.should.be.equal('Foobar');
       expect(scope.person.nick).to.be.undefined;
       expect(scope.person.alias).to.be.undefined;
-
     });
   });
 
 
   it('should handle schema form default in deep structure', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
-        name: 'Foobar'
+        name: 'Foobar',
       };
 
       scope.schema = {
         "type": "object",
         "properties": {
-          "props" : {
+          "props": {
             "type": "object",
             "title": "Person",
             "properties": {
               "name": {
                 "type": "string",
-                "default": "Name"
+                "default": "Name",
               },
               "nick": {
                 "type": "string",
-                "default": "Nick"
+                "default": "Nick",
               },
               "alias": {
-                "type": "string"
-              }
-            }
-          }
-        }
+                "type": "string",
+              },
+            },
+          },
+        },
       };
 
-      //The form defines a fieldset for person, and changes the order of fields
-      //but titles should come from the schema
+      // The form defines a fieldset for person, and changes the order of fields
+      // but titles should come from the schema
       scope.form = [{
         type: 'fieldset',
-        key:  'props',
+        key: 'props',
         items: [
           'props.nick',
           'props.name',
-          'props.alias'
-        ]
+          'props.alias',
+        ],
       }];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -605,52 +610,51 @@ describe('sf-schema.directive.js', function() {
       scope.person.props.name.should.be.equal('Name');
       scope.person.props.nick.should.be.equal('Nick');
       expect(scope.person.props.alias).to.be.undefined;
-
     });
   });
 
 
   it('should handle schema form titles in deep structure', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
-        name: 'Foobar'
+        name: 'Foobar',
       };
 
       scope.schema = {
         "type": "object",
         "properties": {
-          "props" : {
+          "props": {
             "type": "object",
             "title": "Person",
             "properties": {
               "name": {
                 "type": "string",
-                "title": "Name"
+                "title": "Name",
               },
               "nick": {
                 "type": "string",
-                "title": "Nick"
+                "title": "Nick",
               },
               "alias": {
                 "type": "string",
-                "title": "Alias"
-              }
-            }
-          }
-        }
+                "title": "Alias",
+              },
+            },
+          },
+        },
       };
 
-      //The form defines a fieldset for person, and changes the order of fields
-      //but titles should come from the schema
+      // The form defines a fieldset for person, and changes the order of fields
+      // but titles should come from the schema
       scope.form = [{
         type: 'fieldset',
-        key:  'props',
+        key: 'props',
         items: [
           'props.nick',
           'props.name',
-          'props.alias'
-        ]
+          'props.alias',
+        ],
       }];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -663,21 +667,20 @@ describe('sf-schema.directive.js', function() {
       labels.eq(0).text().should.equal('Nick');
       labels.eq(1).text().should.equal('Name');
       labels.eq(2).text().should.equal('Alias');
-
     });
   });
 
   it('should handle schema form default in deep structure with array', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
-        "arr":[]
+        "arr": [],
       };
 
       scope.schema = {
         "type": "object",
         "properties": {
-          "arr" : {
+          "arr": {
             "type": "array",
             "items": {
               "type": "object",
@@ -685,24 +688,24 @@ describe('sf-schema.directive.js', function() {
               "properties": {
                 "name": {
                   "type": "string",
-                  "default": "Name"
+                  "default": "Name",
                 },
                 "nick": {
                   "type": "string",
-                  "default": "Nick"
+                  "default": "Nick",
                 },
                 "alias": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
+                  "type": "string",
+                },
+              },
+            },
+          },
+        },
       };
 
-      //The form defines a fieldset for person, and changes the order of fields
-      //but titles should come from the schema
-      scope.form = ['*'];
+      // The form defines a fieldset for person, and changes the order of fields
+      // but titles should come from the schema
+      scope.form = [ '*' ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
@@ -715,7 +718,7 @@ describe('sf-schema.directive.js', function() {
   });
 
   it('should skip title if form says "notitle"', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -723,10 +726,11 @@ describe('sf-schema.directive.js', function() {
 
       scope.form = [{
         key: 'name',
-        notitle: true
-      },{
+        notitle: true,
+      },
+      {
         key: 'gender',
-        notitle: true
+        notitle: true,
       }];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -741,7 +745,7 @@ describe('sf-schema.directive.js', function() {
   });
 
   it('should generate checkboxes for arrays with enums', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -752,14 +756,15 @@ describe('sf-schema.directive.js', function() {
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["foo","bar"]
-            }
-          }          }
+              "enum": [ "foo", "bar" ],
+            },
+          },
+        },
       };
 
       scope.form = [
         "names",
-        { key: "foobars", type: "checkboxes", titleMap:{ 'foo':'Foo','bar':'Bar'}}
+        { key: "foobars", type: "checkboxes", titleMap: { 'foo': 'Foo', 'bar': 'Bar' }},
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -767,17 +772,17 @@ describe('sf-schema.directive.js', function() {
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
 
-      //TODO: more asserts
+      // TODO: more asserts
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).find('input[type=checkbox]').length.should.be.eq(2);
     });
   });
 
   it('should initialize checkboxes to the model values', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
-        "names": ["foo"]
+        "names": [ "foo" ],
       };
 
       scope.schema = {
@@ -787,14 +792,15 @@ describe('sf-schema.directive.js', function() {
             "type": "array",
             "items": {
               "type": "string",
-              "enum": ["foo"]
-            }
-          }          }
+              "enum": [ "foo" ],
+            },
+          },
+        },
       };
 
       scope.form = [
         "names",
-        { key: "foobars", type: "checkboxes", titleMap:{ 'foo':'Foo'} }
+        { key: "foobars", type: "checkboxes", titleMap: { 'foo': 'Foo' }},
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -806,31 +812,31 @@ describe('sf-schema.directive.js', function() {
     });
   });
 
-  it('should not clear model when multiple checkboxes target the same model array', function () {
-      inject(function ($compile, $rootScope) {
+  it('should not clear model when multiple checkboxes target the same model array', function() {
+      inject(function($compile, $rootScope) {
           var scope = $rootScope.$new();
           scope.person = {
-              "names": ["foo"]
+              "names": [ "foo" ],
           };
 
           scope.schema = {
-              "type": "object",
-              "properties": {
-                  "names": {
-                      "type": "array",
-                      "items": {
-                          "type": "string",
-                          "enum": ["foo", "bar"]
-                      }
-                  }
-              }
+            "type": "object",
+            "properties": {
+              "names": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [ "foo", "bar" ],
+                },
+              },
+            },
           };
 
           scope.form = [
             'names',
             'names',
-            { key: "names", type: "checkboxes", titleMap: { 'foo': 'Foo', 'bar': 'Bar' } },
-            { key: "names", type: "checkboxes", titleMap: { 'foo': 'Foo', 'bar': 'Bar' } }
+            { key: "names", type: "checkboxes", titleMap: { 'foo': 'Foo', 'bar': 'Bar' }},
+            { key: "names", type: "checkboxes", titleMap: { 'foo': 'Foo', 'bar': 'Bar' }},
           ];
 
           var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -847,7 +853,7 @@ describe('sf-schema.directive.js', function() {
           scope.person.names.length.should.be.equal(1);
           scope.person.names.join(',').should.be.equal('foo');
 
-          bar.click()
+          bar.click();
           scope.person.names.length.should.be.equal(2);
           scope.person.names.join(',').should.be.equal('foo,bar');
 
@@ -858,7 +864,7 @@ describe('sf-schema.directive.js', function() {
   });
 
   it('should use radio buttons when they are wanted', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -867,37 +873,36 @@ describe('sf-schema.directive.js', function() {
         "properties": {
           "names": {
             "type": "string",
-            "enum": ["one","two"]
+            "enum": [ "one", "two" ],
           },
           "opts": {
             "type": "string",
-            "enum": ["one","two"]
+            "enum": [ "one", "two" ],
           },
-        }
+        },
       };
 
       scope.form = [
-        { key: "names", type: "radios",titleMap: { one: "One", two: "The rest" }},
-        { key: "opts", type: "radiobuttons",titleMap: { one: "One", two: "The rest" }}
+        { key: "names", type: "radios", titleMap: { one: "One", two: "The rest" }},
+        { key: "opts", type: "radiobuttons", titleMap: { one: "One", two: "The rest" }},
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
-      //TODO: more asserts
+      // TODO: more asserts
 
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).find('input[type=radio]').length.should.be.eq(2);
       tmpl.children().eq(0).find('.radio').length.should.be.eq(2);
       tmpl.children().eq(1).find('input[type=radio]').length.should.be.eq(2);
       tmpl.children().eq(1).find('.btn').length.should.be.eq(2);
-
     });
   });
 
   it('should use radio buttons with HTML', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -906,26 +911,26 @@ describe('sf-schema.directive.js', function() {
         "properties": {
           "names": {
             "type": "string",
-            "enum": ["one","two"],
-            "description": "Cats are <a id='gh' href='http://github.com'>so</a> cool.",
-            "title": "<span id='dontyouknowimloko'>testlokol</span>"
+            "enum": [ "one", "two" ],
+            "description": "Cats are <a id='gh' href='http:// github.com'>so</a> cool.",
+            "title": "<span id='dontyouknowimloko'>testlokol</span>",
           },
           "opts": {
             "type": "string",
-            "enum": ["one","two"]
+            "enum": [ "one", "two" ],
           },
           "boxe": {
             "type": "boolean",
             "title": "<span id='bawkses'>whavre</span>",
-            "description": "Cats are <a id='gh' href='http://github.com'>so</a> cool."
+            "description": "Cats are <a id='gh' href='http:// github.com'>so</a> cool.",
           },
-        }
+        },
       };
 
       scope.form = [
-        { key: "names", type: "radios",titleMap: { one: "one<br\>direction", two: "<div class='spicegirls'>Baby spice</div>" }},
-        { key: "opts", type: "radiobuttons",titleMap: { one: "One", two: "The <span id='testerish'>rest</span>" }},
-        "boxe"
+        { key: "names", type: "radios", titleMap: { one: "one<br\>direction", two: "<div class='spicegirls'>Baby spice</div>" }},
+        { key: "opts", type: "radiobuttons", titleMap: { one: "One", two: "The <span id='testerish'>rest</span>" }},
+        "boxe",
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -937,12 +942,11 @@ describe('sf-schema.directive.js', function() {
       tmpl.find('#testerish').length.should.be.equal(1);
       tmpl.find('#bawkses').length.should.be.equal(1);
       tmpl.find('#gh').length.should.be.equal(2);
-
     });
   });
 
   it('should style radio buttons', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -951,9 +955,9 @@ describe('sf-schema.directive.js', function() {
         "properties": {
           "opts": {
             "type": "string",
-            "enum": ["one","two"]
+            "enum": [ "one", "two" ],
           },
-        }
+        },
       };
 
       scope.form = [
@@ -962,26 +966,26 @@ describe('sf-schema.directive.js', function() {
           type: "radiobuttons",
           titleMap: [
             { value: "one", name: "One" },
-            { value: "two", name: "The rest" }
-          ]
-        }
+            { value: "two", name: "The rest" },
+          ],
+        },
       ];
 
       var styles = {
           any: {},
           both: {
               selected: "btn-success",
-              unselected: "btn-default"
+              unselected: "btn-default",
           },
           onlySelected: {
-              selected: "btn-success"
+              selected: "btn-success",
           },
           onlyUnselected: {
-              unselected: "btn-default"
-          }
+              unselected: "btn-default",
+          },
       };
 
-      //Radiobuttons uninitialized and default styles
+      // Radiobuttons uninitialized and default styles
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
@@ -993,7 +997,7 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
-      //Radiobuttons uninitialized and both styles
+      // Radiobuttons uninitialized and both styles
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
       scope.form[0].style = styles.both;
 
@@ -1006,7 +1010,7 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
-      //Radiobuttons uninitialized and only selected style
+      // Radiobuttons uninitialized and only selected style
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
       scope.form[0].style = styles.onlySelected;
 
@@ -1019,7 +1023,7 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
-      //Radiobuttons uninitialized and only unselected style
+      // Radiobuttons uninitialized and only unselected style
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
       scope.form[0].style = styles.onlyUnselected;
 
@@ -1032,7 +1036,7 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
-      //Radiobuttons initialized and default styles
+      // Radiobuttons initialized and default styles
       scope.person = { opts: "one" };
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
       scope.form[0].style = '';
@@ -1046,7 +1050,7 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
-      //Radiobuttons initialized and both styles
+      // Radiobuttons initialized and both styles
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
       scope.form[0].style = styles.both;
 
@@ -1059,7 +1063,7 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
-      //Radiobuttons initialized and only selected style
+      // Radiobuttons initialized and only selected style
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
       scope.form[0].style = styles.onlySelected;
 
@@ -1072,7 +1076,7 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
 
-      //Radiobuttons initialized and only unselected style
+      // Radiobuttons initialized and only unselected style
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
       scope.form[0].style = styles.onlyUnselected;
 
@@ -1084,12 +1088,11 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).find('.btn').eq(0).hasClass('btn-success').should.be.false;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-default').should.be.true;
       tmpl.children().eq(0).find('.btn').eq(1).hasClass('btn-success').should.be.false;
-
     });
   });
 
   it('should handle a simple div when type "section" is specified', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1100,13 +1103,13 @@ describe('sf-schema.directive.js', function() {
         items: [
           {
             key: 'name',
-            notitle: true
+            notitle: true,
           },
           {
             key: 'gender',
-            notitle: true
-          }
-        ]
+            notitle: true,
+          },
+        ],
       }];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1122,7 +1125,7 @@ describe('sf-schema.directive.js', function() {
   });
 
   it('should handle "action" groups, same as "section" but with a bootstrap class "btn-group"', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1133,13 +1136,13 @@ describe('sf-schema.directive.js', function() {
         items: [
           {
             type: 'submit',
-            title: 'yes'
+            title: 'yes',
           },
           {
             type: 'button',
-            title: 'no'
-          }
-        ]
+            title: 'no',
+          },
+        ],
       }];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1157,7 +1160,7 @@ describe('sf-schema.directive.js', function() {
   });
 
   it('should style "action" groups', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1168,23 +1171,23 @@ describe('sf-schema.directive.js', function() {
         items: [
           {
             type: 'submit',
-            title: 'yes1'
+            title: 'yes1',
           },
           {
             type: 'button',
-            title: 'no1'
+            title: 'no1',
           },
           {
             type: 'submit',
             style: 'btn-success',
-            title: 'yes2'
+            title: 'yes2',
           },
           {
             type: 'button',
             style: 'btn-danger',
-            title: 'no2'
-          }
-        ]
+            title: 'no2',
+          },
+        ],
       }];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1200,18 +1203,16 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).children().eq(2).hasClass('btn-success').should.be.true;
       tmpl.children().eq(0).children().eq(3).hasClass('btn-default').should.be.false;
       tmpl.children().eq(0).children().eq(3).hasClass('btn-danger').should.be.true;
-
     });
   });
 
   it('should render custom html when type "help" is specified', function() {
-
-    //We don't need no sanitation. We don't need no though control.
+    // We don't need no sanitation. We don't need no though control.
     module(function($sceProvider) {
       $sceProvider.enabled(false);
     });
 
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = { };
 
@@ -1220,17 +1221,17 @@ describe('sf-schema.directive.js', function() {
         properties: {
           name: {
             type: "string",
-          }
-        }
+          },
+        },
       };
 
 
       scope.form = [
         {
-          type:      "help",
-          helpvalue: "<h1>Yo Ninja!</h1>"
+          type: "help",
+          helpvalue: "<h1>Yo Ninja!</h1>",
         },
-        "name"
+        "name",
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1242,12 +1243,11 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(0).is('div').should.be.true;
       tmpl.children().eq(0).children().length.should.eq(1);
       tmpl.children().eq(0).children().html().should.be.eq("Yo Ninja!");
-
     });
   });
 
   it('should render tabs with items in them when specified', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = { };
 
@@ -1258,28 +1258,28 @@ describe('sf-schema.directive.js', function() {
           alias: { type: "string", title: "Alias" },
           nick: { type: "string", title: "Nickname" },
           tag: { type: "string", title: "Tag" },
-        }
+        },
       };
 
       scope.form = [
         {
-          type:      "tabs",
+          type: "tabs",
           tabs: [
             {
               title: "Tab 1",
               items: [
                 "name",
-                "tag"
-              ]
+                "tag",
+              ],
             },
             {
               title: "Tab 2",
               items: [
                 "alias",
-                "nick"
-              ]
-            }
-          ]
+                "nick",
+              ],
+            },
+          ],
         },
       ];
 
@@ -1289,7 +1289,7 @@ describe('sf-schema.directive.js', function() {
       runSync(scope, tmpl);
 
       tmpl.children().length.should.eq(1);
-      var tabs  = tmpl.children().children().eq(0);
+      var tabs = tmpl.children().children().eq(0);
       var panes = tmpl.children().children().eq(1);
 
       tabs.is('ul').should.be.true;
@@ -1307,12 +1307,11 @@ describe('sf-schema.directive.js', function() {
       panes.children().eq(1).children().length.should.be.eq(2);
       panes.children().eq(1).children().eq(0).find('label').html().should.eq('Alias');
       panes.children().eq(1).children().eq(1).find('label').html().should.eq('Nickname');
-
     });
   });
 
   it('should render a list of subforms when schema type is array', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1323,8 +1322,8 @@ describe('sf-schema.directive.js', function() {
             "type": "array",
             "items": {
               "type": "string",
-              "title": "Name"
-            }
+              "title": "Name",
+            },
           },
           "subforms": {
             "type": "array",
@@ -1333,9 +1332,9 @@ describe('sf-schema.directive.js', function() {
               "title": "subform",
               "properties": {
                 "one": { "type": "string" },
-                "two": { "type": "number", "title": "Two" }
-              }
-            }
+                "two": { "type": "number", "title": "Two" },
+              },
+            },
           },
           "subsubforms": {
             "type": "array",
@@ -1348,13 +1347,13 @@ describe('sf-schema.directive.js', function() {
                   "type": "array",
                   "items": {
                     "type": "number",
-                    "title": "sublist numbers"
-                  }
-                }
-              }
-            }
-          }
-        }
+                    "title": "sublist numbers",
+                  },
+                },
+              },
+            },
+          },
+        },
       };
 
       scope.form = [
@@ -1363,10 +1362,10 @@ describe('sf-schema.directive.js', function() {
           key: "subforms",
           type: "array",
           items: [
-            "subforms[].one"
-          ]
+            "subforms[].one",
+          ],
         },
-        "subsubforms"
+        "subsubforms",
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1374,7 +1373,7 @@ describe('sf-schema.directive.js', function() {
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
 
-      //TODO: more asserts
+      // TODO: more asserts
       tmpl.children().length.should.be.equal(3);
       tmpl.children().eq(0).find('input').length.should.be.eq(1);
       tmpl.children().eq(0).find('button').length.should.be.eq(2);
@@ -1389,13 +1388,11 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(2).find('fieldset').length.should.be.eq(1);
       tmpl.children().eq(2).find('button').length.should.be.eq(4);
       tmpl.children().eq(2).find('button').eq(3).text().trim().should.be.eq('Add');
-
-
     });
   });
 
   it('should style an array', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1406,8 +1403,8 @@ describe('sf-schema.directive.js', function() {
             "type": "array",
             "items": {
               "type": "string",
-              "title": "Name"
-            }
+              "title": "Name",
+            },
           },
           "subforms": {
             "type": "array",
@@ -1416,9 +1413,9 @@ describe('sf-schema.directive.js', function() {
               "title": "subform",
               "properties": {
                 "one": { "type": "string" },
-                "two": { "type": "number", "title": "Two" }
-              }
-            }
+                "two": { "type": "number", "title": "Two" },
+              },
+            },
           },
           "subsubforms": {
             "type": "array",
@@ -1431,19 +1428,19 @@ describe('sf-schema.directive.js', function() {
                   "type": "array",
                   "items": {
                     "type": "number",
-                    "title": "sublist numbers"
-                  }
-                }
-              }
-            }
-          }
-        }
+                    "title": "sublist numbers",
+                  },
+                },
+              },
+            },
+          },
+        },
       };
 
       scope.form = [
         {
           key: "names",
-          add: "New"
+          add: "New",
         },
         {
           key: "subforms",
@@ -1451,10 +1448,10 @@ describe('sf-schema.directive.js', function() {
           style: { add: "btn-info" },
           type: "array",
           items: [
-            "subforms[].one"
-          ]
+            "subforms[].one",
+          ],
         },
-        "subsubforms"
+        "subsubforms",
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1472,15 +1469,14 @@ describe('sf-schema.directive.js', function() {
       tmpl.children().eq(2).find('button').eq(3).text().trim().should.be.eq('Add');
       tmpl.children().eq(2).find('button').eq(3).hasClass('btn-default').should.be.true;
       tmpl.children().eq(2).find('button').eq(3).hasClass('btn-info').should.be.false;
-
     });
   });
 
   it('should render a tabarray of subforms when asked', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
-        names: ['me','you','another']
+        names: [ 'me', 'you', 'another' ],
       };
 
       scope.schema = {
@@ -1490,8 +1486,8 @@ describe('sf-schema.directive.js', function() {
             "type": "array",
             "items": {
               "type": "string",
-              "title": "Name"
-            }
+              "title": "Name",
+            },
           },
           "subforms": {
             "type": "array",
@@ -1500,11 +1496,11 @@ describe('sf-schema.directive.js', function() {
               "title": "subform",
               "properties": {
                 "one": { "type": "string" },
-                "two": { "type": "number", "title": "Two" }
-              }
-            }
-          }
-        }
+                "two": { "type": "number", "title": "Two" },
+              },
+            },
+          },
+        },
       };
 
       scope.form = [
@@ -1514,9 +1510,9 @@ describe('sf-schema.directive.js', function() {
           type: "tabarray",
           tabType: "right",
           items: [
-            "subforms[].one"
-          ]
-        }
+            "subforms[].one",
+          ],
+        },
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1524,7 +1520,7 @@ describe('sf-schema.directive.js', function() {
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
 
-      //TODO: more asserts
+      // TODO: more asserts
       tmpl.children().length.should.be.equal(2);
       tmpl.children().eq(0).find('input').length.should.be.eq(3);
       tmpl.children().eq(0).find('button').length.should.be.eq(3);
@@ -1541,10 +1537,10 @@ describe('sf-schema.directive.js', function() {
   });
 
   it('should style a tabarray', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
-        names: ['me','you','another']
+        names: [ 'me', 'you', 'another' ],
       };
 
       scope.schema = {
@@ -1554,8 +1550,8 @@ describe('sf-schema.directive.js', function() {
             "type": "array",
             "items": {
               "type": "string",
-              "title": "Name"
-            }
+              "title": "Name",
+            },
           },
           "subforms": {
             "type": "array",
@@ -1564,11 +1560,11 @@ describe('sf-schema.directive.js', function() {
               "title": "subform",
               "properties": {
                 "one": { "type": "string" },
-                "two": { "type": "number", "title": "Two" }
-              }
-            }
-          }
-        }
+                "two": { "type": "number", "title": "Two" },
+              },
+            },
+          },
+        },
       };
 
       scope.form = [
@@ -1584,9 +1580,9 @@ describe('sf-schema.directive.js', function() {
           remove: "Delete",
           tabType: "right",
           items: [
-            "subforms[].one"
-          ]
-        }
+            "subforms[].one",
+          ],
+        },
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1607,7 +1603,7 @@ describe('sf-schema.directive.js', function() {
   });
 
   it('should sort select options by enum', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
@@ -1619,21 +1615,21 @@ describe('sf-schema.directive.js', function() {
             "title": "Thing",
             "enum": [
               // Intentionally non-alphabetical
-              // https://github.com/Textalk/angular-schema-form/issues/82
-              // https://github.com/Textalk/angular-schema-form/issues/83
+              // https:// github.com/Textalk/angular-schema-form/issues/82
+              // https:// github.com/Textalk/angular-schema-form/issues/83
               "b",
-              "a"
+              "a",
             ],
             "enumNames": {
               // Intentionally not the same order as the `enum`
               "a": "The A",
-              "b": "The B"
-            }
-          }
-        }
+              "b": "The B",
+            },
+          },
+        },
       };
 
-      scope.form = ["*"];
+      scope.form = [ "*" ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
@@ -1648,18 +1644,19 @@ describe('sf-schema.directive.js', function() {
 
 
   it('should update array form on model array ref change', function() {
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
-        names:[
+        names: [
           {
             firstname: 'Bill',
-            lastname: 'Murray'
-          },{
+            lastname: 'Murray',
+          },
+          {
             firstname: 'Ghost',
-            lastname: 'Buster'
-          }
-        ]
+            lastname: 'Buster',
+          },
+        ],
       };
 
       scope.schema = {
@@ -1672,18 +1669,18 @@ describe('sf-schema.directive.js', function() {
               "title": "subform",
               "properties": {
                 "firstname": {
-                  "type": "string"
+                  "type": "string",
                 },
                 "lastname": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
+                  "type": "string",
+                },
+              },
+            },
+          },
+        },
       };
 
-      scope.form = ["*"];
+      scope.form = [ "*" ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
@@ -1692,24 +1689,26 @@ describe('sf-schema.directive.js', function() {
 
       tmpl.children().eq(0).find('ol').children().length.should.be.eq(2);
 
-      var new_names = [
+      var newNames = [
           {
             firstname: 'Bill',
-            lastname: 'Murray'
+            lastname: 'Murray',
           },
           {
             firstname: 'Harold',
-            lastname: 'Ramis'
-          },{
+            lastname: 'Ramis',
+          },
+          {
             firstname: 'Dan',
-            lastname: 'Aykroyd'
-          },{
+            lastname: 'Aykroyd',
+          },
+          {
             firstname: 'Ghost',
-            lastname: 'Buster'
-          }
+            lastname: 'Buster',
+          },
         ];
 
-      scope.person.names = new_names;
+      scope.person.names = newNames;
 
       $rootScope.$apply();
 
@@ -1717,26 +1716,25 @@ describe('sf-schema.directive.js', function() {
     });
   });
 
-  it('should remove or add fields depending on condition',function(done) {
-
+  it('should remove or add fields depending on condition', function(done) {
     inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
-        flag: true
+        flag: true,
       };
 
       scope.schema = {
         type: 'object',
         properties: {
-          name: {type: 'string'}
-        }
+          name: { type: 'string' },
+        },
       };
 
       scope.form = [
         {
-          key:'name',
-          condition: 'person.flag'
-        }
+          key: 'name',
+          condition: 'person.flag',
+        },
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1754,8 +1752,7 @@ describe('sf-schema.directive.js', function() {
     });
   });
 
-  it('should redraw form on schemaFormRedraw event',function(done) {
-
+  it('should redraw form on schemaFormRedraw event', function(done) {
     inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
@@ -1763,13 +1760,13 @@ describe('sf-schema.directive.js', function() {
       scope.schema = {
         type: 'object',
         properties: {
-          name: {type: 'string'}
-        }
+          name: { type: 'string' },
+        },
       };
 
       scope.form = [{
         key: 'name',
-        type: 'text'
+        type: 'text',
       }];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1790,8 +1787,7 @@ describe('sf-schema.directive.js', function() {
     });
   });
 
-  it('should redraw form with proper defaults on schemaFormRedraw event',function(done) {
-
+  it('should redraw form with proper defaults on schemaFormRedraw event', function(done) {
     inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
@@ -1799,16 +1795,16 @@ describe('sf-schema.directive.js', function() {
       scope.schema = {
         type: 'object',
         properties: {
-          name: {type: 'string'}
-        }
+          name: { type: 'string' },
+        },
       };
 
       scope.form = [{
         key: 'name',
-        type: 'text'
+        type: 'text',
       }];
 
-      scope.options = {formDefaults: {}};
+      scope.options = { formDefaults: {}};
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-options="options"></form>');
 
@@ -1817,8 +1813,9 @@ describe('sf-schema.directive.js', function() {
 
       expect(tmpl.find('input').attr('disabled')).to.be.undefined;
 
-      var disable, enable;
-      disable = function () {
+      var disable;
+      var enable;
+      disable = function() {
         // form element should be disabled
         scope.options.formDefaults.readonly = true;
         scope.$broadcast('schemaFormRedraw');
@@ -1829,7 +1826,7 @@ describe('sf-schema.directive.js', function() {
         setTimeout(enable, 0);
       };
 
-      enable = function () {
+      enable = function() {
         // form element should be back to enabled
         scope.options.formDefaults.readonly = false;
         scope.$broadcast('schemaFormRedraw');
@@ -1837,31 +1834,30 @@ describe('sf-schema.directive.js', function() {
         expect(tmpl.find('input').attr('disabled')).to.be.undefined;
 
         done();
-      }
+      };
 
       setTimeout(disable, 0);
     });
   });
 
-  it('should redraw form with proper defaults on schemaFormRedraw event',function(done) {
-
-    inject(function($compile, $rootScope){
+  it('should redraw form with proper defaults on schemaFormRedraw event', function(done) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
       scope.schema = {
         type: 'object',
         properties: {
-          name: {type: 'string'}
-        }
+          name: { type: 'string' },
+        },
       };
 
       scope.form = [{
         key: 'name',
-        type: 'text'
+        type: 'text',
       }];
 
-      scope.options = {formDefaults: {}};
+      scope.options = { formDefaults: {}};
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person" sf-options="options"></form>');
 
@@ -1870,8 +1866,9 @@ describe('sf-schema.directive.js', function() {
 
       expect(tmpl.find('input').attr('disabled')).to.be.undefined;
 
-      var disable, enable;
-      disable = function () {
+      var disable;
+      var enable;
+      disable = function() {
         // form element should be disabled
         scope.options.formDefaults.readonly = true;
         scope.$broadcast('schemaFormRedraw');
@@ -1882,7 +1879,7 @@ describe('sf-schema.directive.js', function() {
         setTimeout(enable, 0);
       };
 
-      enable = function () {
+      enable = function() {
         // form element should be back to enabled
         scope.options.formDefaults.readonly = false;
         scope.$broadcast('schemaFormRedraw');
@@ -1890,14 +1887,13 @@ describe('sf-schema.directive.js', function() {
         expect(tmpl.find('input').attr('disabled')).to.be.undefined;
 
         done();
-      }
+      };
 
       setTimeout(disable, 0);
     });
   });
 
-  it('should use supplied template with template field type',function() {
-
+  it('should use supplied template with template field type', function() {
     inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
@@ -1905,46 +1901,44 @@ describe('sf-schema.directive.js', function() {
       scope.schema = {
         type: 'object',
         properties: {
-          name: {type: 'string'}
-        }
+          name: { type: 'string' },
+        },
       };
 
       scope.form = [
         {
           type: 'template',
-          template: '<div>{{form.foo}}</div>',
-          foo: "Hello World"
-        }
+          template: '<div>{{ form.foo}}</div>',
+          foo: "Hello World",
+        },
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
 
       $compile(tmpl)(scope);
       runSync(scope, tmpl);
-      tmpl.html().should.be.eq('<div sf-field="0" class="ng-scope ng-binding">Hello World</div>')
-
+      tmpl.html().should.be.eq('<div sf-field="0" class="ng-scope ng-binding">Hello World</div>');
     });
   });
 
-  it('should use supplied template with leading whitespace in template field',function() {
-
-    inject(function($compile, $rootScope){
+  it('should use supplied template with leading whitespace in template field', function() {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {};
 
       scope.schema = {
         type: 'object',
         properties: {
-          name: {type: 'string'}
-        }
+          name: { type: 'string' },
+        },
       };
 
       scope.form = [
         {
           type: 'template',
-          template: '  <div>{{form.foo}}</div>',
-          foo: "Hello World"
-        }
+          template: '  <div>{{ form.foo}}</div>',
+          foo: "Hello World",
+        },
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -1955,32 +1949,32 @@ describe('sf-schema.directive.js', function() {
     });
   });
 
-  it('should handle onChange for array type', function () {
-  //TODO confirmt the logic is sound
-    inject(function($compile,$rootScope){
+  it('should handle onChange for array type', function() {
+  // TODO confirmt the logic is sound
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.obj = {};
 
       scope.schema = {
         "type": "object",
         "properties": {
-          "arr" : {
+          "arr": {
             "type": "array",
             "items": {
               "type": "object",
               "properties": {
                 "name": {
                   "type": "string",
-                  "default": "Name"
-                }
-              }
-            }
-          }
-        }
+                  "default": "Name",
+                },
+              },
+            },
+          },
+        },
       };
 
       var spy = sinon.spy();
-      scope.form = [{key : "arr", startEmpty : true, onChange: spy}];
+      scope.form = [{ key: "arr", startEmpty: true, onChange: spy }];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="obj"></form>');
 
@@ -1991,26 +1985,23 @@ describe('sf-schema.directive.js', function() {
 
       tmpl.find('button.btn-default').click();
 
-      // Test that "[{name: 'Name'}]" exists even if $$hashKey is defined
-      var test = sinon.match(function (value) {
+      // Test that "[{ name: 'Name' }]" exists even if $$hashKey is defined
+      var test = sinon.match(function(value) {
                    if(value && value[0] && value[0].name === "Name") return true;
                    return false;
-                 }, "[{name: 'Name'}]");
+                 }, "[{ name: 'Name' }]");
 
       spy.should.have.been.calledWith(test);
 
       tmpl.find('button.close').click();
       spy.should.have.been.calledWith([]);
-
     });
   });
 
-  it('should load template by templateUrl, with template field type',function() {
-
+  it('should load template by templateUrl, with template field type', function() {
     inject(function($compile, $rootScope, $httpBackend) {
-
       $httpBackend.when('GET', '/template.html')
-                  .respond("<div>{{form.foo}}</div>");
+                  .respond("<div>{{ form.foo}}</div>");
 
       var scope = $rootScope.$new();
       scope.person = {};
@@ -2018,16 +2009,16 @@ describe('sf-schema.directive.js', function() {
       scope.schema = {
         type: 'object',
         properties: {
-          name: {type: 'string'}
-        }
+          name: { type: 'string' },
+        },
       };
 
       scope.form = [
         {
           type: 'template',
           templateUrl: '/template.html',
-          foo: 'Hello World'
-        }
+          foo: 'Hello World',
+        },
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="person"></form>');
@@ -2039,41 +2030,40 @@ describe('sf-schema.directive.js', function() {
       $httpBackend.verifyNoOutstandingRequest();
 
       tmpl.html().should.be.eq('<div sf-field="0" class="ng-scope ng-binding">Hello World</div>');
-
     });
   });
 
-  //generate disableSuccessState, disableErrorState tests for each field
+  // generate disableSuccessState, disableErrorState tests for each field
   var fields = [
     {
       name: 'default',
       property: {
         type: 'string',
-        pattern: "^[a-zA-Z]+$"
+        pattern: "^[a-zA-Z]+$",
       },
       form: {
-        key: ['field']
-      }
+        key: [ 'field' ],
+      },
     },
     {
       name: 'textarea',
       property: {
         type: 'string',
-        pattern: "^[a-zA-Z]+$"
+        pattern: "^[a-zA-Z]+$",
       },
       form: {
-        key: ['field'],
-        type: 'textarea'
-      }
+        key: [ 'field' ],
+        type: 'textarea',
+      },
     },
     {
       name: 'checkbox',
       property: {
-        type: 'boolean'
+        type: 'boolean',
       },
       form: {
-        key: ["field"]
-      }
+        key: [ "field" ],
+      },
     },
     {
       name: 'radio buttons',
@@ -2081,19 +2071,19 @@ describe('sf-schema.directive.js', function() {
         type: 'boolean',
       },
       form: {
-        key: ["field"],
+        key: [ "field" ],
         type: "radiobuttons",
         titleMap: [
           {
             "value": false,
-            "name": "No way"
+            "name": "No way",
           },
           {
             "value": true,
-            "name": "OK"
-          }
-        ]
-      }
+            "name": "OK",
+          },
+        ],
+      },
     },
     {
       name: 'select',
@@ -2101,19 +2091,19 @@ describe('sf-schema.directive.js', function() {
         type: 'boolean',
       },
       form: {
-        key: ["field"],
+        key: [ "field" ],
         type: "select",
         titleMap: [
           {
             "value": false,
-            "name": "No way"
+            "name": "No way",
           },
           {
             "value": true,
-            "name": "OK"
-          }
-        ]
-      }
+            "name": "OK",
+          },
+        ],
+      },
     },
     {
       name: 'radios',
@@ -2121,19 +2111,19 @@ describe('sf-schema.directive.js', function() {
         type: 'boolean',
       },
       form: {
-        key: ["field"],
+        key: [ "field" ],
         type: "radios",
         titleMap: [
           {
             "value": false,
-            "name": "No way"
+            "name": "No way",
           },
           {
             "value": true,
-            "name": "OK"
-          }
-        ]
-      }
+            "name": "OK",
+          },
+        ],
+      },
     },
     {
       name: 'radios-inline',
@@ -2141,34 +2131,34 @@ describe('sf-schema.directive.js', function() {
         type: 'boolean',
       },
       form: {
-        key: ["field"],
+        key: [ "field" ],
         type: "radios-inline",
         titleMap: [
           {
             "value": false,
-            "name": "No way"
+            "name": "No way",
           },
           {
             "value": true,
-            "name": "OK"
-          }
-        ]
-      }
-    }
+            "name": "OK",
+          },
+        ],
+      },
+    },
   ];
 
-  fields.forEach(function (field) {
-    it('should not add "has-success" class to ' + field.name + " field if a correct value is entered, but disableSuccessState is set on form", function () {
+  fields.forEach(function(field) {
+    it('should not add "has-success" class to ' + field.name + " field if a correct value is entered, but disableSuccessState is set on form", function() {
       inject(function($compile, $rootScope) {
         var scope = $rootScope.$new();
-        scope.model = {}
+        scope.model = {};
         scope.schema = {
           type: 'object',
           properties: {
-            field: field.property
-          }
+            field: field.property,
+          },
         };
-        scope.form = [field.form];
+        scope.form = [ field.form ];
 
         var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
         $compile(tmpl)(scope);
@@ -2186,19 +2176,19 @@ describe('sf-schema.directive.js', function() {
       });
     });
 
-    it('should not add "has-error" class to ' + field.name + " field if invalid value is entered, but disableErrorState is set on form", function () {
+    it('should not add "has-error" class to ' + field.name + " field if invalid value is entered, but disableErrorState is set on form", function() {
       inject(function($compile, $rootScope) {
         var scope = $rootScope.$new();
         scope.model = {
-          field: field.errorValue
-        }
+          field: field.errorValue,
+        };
         scope.schema = {
           type: 'object',
           properties: {
-            field: field.property
-          }
+            field: field.property,
+          },
         };
-        scope.form = [field.form];
+        scope.form = [ field.form ];
 
         var tmpl = angular.element('<form  name="theForm" sf-schema="schema" sf-form="form" sf-model="model"></form>');
         $compile(tmpl)(scope);
@@ -2266,7 +2256,7 @@ describe('sf-schema.directive.js', function() {
 describe('destroy strategy', function() {
   beforeEach(module('schemaForm'));
   beforeEach(
-    //We don't need no sanitation. We don't need no thought control.
+    // We don't need no sanitation. We don't need no thought control.
     module(function($sceProvider) {
       $sceProvider.enabled(false);
     })
@@ -2278,34 +2268,34 @@ describe('destroy strategy', function() {
     "properties": {
       "name": {
         "title": "Name",
-        "type": "string"
+        "type": "string",
       },
       "email": {
         "title": "Email",
         "type": "string",
         "pattern": "^\\S+@\\S+$",
-        "description": "Email will be used for evil."
+        "description": "Email will be used for evil.",
       },
       "switch": {
         "type": "boolean",
         "title": "Switch it up",
-        "default": true
+        "default": true,
       },
       "deep": {
         "type": "object",
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
           },
           "sub": {
             "type": "object",
             "properties": {
               "prop": {
-                "type": "string"
-              }
-            }
-          }
-        }
+                "type": "string",
+              },
+            },
+          },
+        },
       },
       "list": {
         "type": "array",
@@ -2313,31 +2303,31 @@ describe('destroy strategy', function() {
           "type": "object",
           "properties": {
             "name": {
-              "type": "string"
+              "type": "string",
             },
             "sub": {
               "type": "object",
               "properties": {
                 "prop": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
+                  "type": "string",
+                },
+              },
+            },
+          },
+        },
       },
       "comment": {
         "title": "Comment",
         "type": "string",
         "maxLength": 20,
-        "validationMessage": "Don't be greedy!"
-      }
+        "validationMessage": "Don't be greedy!",
+      },
     },
     "required": [
       "name",
       "email",
-      "comment"
-    ]
+      "comment",
+    ],
   };
 
   var form = [
@@ -2346,27 +2336,26 @@ describe('destroy strategy', function() {
     "switch",
     {
       "key": "deep",
-      "condition": "model.switch"
+      "condition": "model.switch",
     },
     {
       "type": "tabarray",
       "key": "list",
-      "condition": "model.switch"
+      "condition": "model.switch",
     },
     {
       "key": "comment",
       "type": "textarea",
-      "placeholder": "Make a comment"
+      "placeholder": "Make a comment",
     },
     {
       "type": "submit",
       "style": "btn-info",
-      "title": "OK"
-    }
+      "title": "OK",
+    },
   ];
 
   it('should default to "remove"', function(done) {
-
     inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
@@ -2374,17 +2363,17 @@ describe('destroy strategy', function() {
         "list": [
           {
             "sub": {
-              "prop": "subprop"
+              "prop": "subprop",
             },
-            "name": "Name"
-          }
+            "name": "Name",
+          },
         ],
         "deep": {
           "name": "deepname",
           "sub": {
-            "prop": "deepprop"
-          }
-        }
+            "prop": "deepprop",
+          },
+        },
       };
 
       scope.schema = schema;
@@ -2401,17 +2390,17 @@ describe('destroy strategy', function() {
         "list": [
           {
             "sub": {
-              "prop": "subprop"
+              "prop": "subprop",
             },
-            "name": "Name"
-          }
+            "name": "Name",
+          },
         ],
         "deep": {
           "name": "deepname",
           "sub": {
-            "prop": "deepprop"
-          }
-        }
+            "prop": "deepprop",
+          },
+        },
       });
 
       setTimeout(function() {
@@ -2419,16 +2408,14 @@ describe('destroy strategy', function() {
         scope.$apply();
 
         scope.person.should.deep.equal({
-          "switch": false
+          "switch": false,
         });
         done();
       });
-
     });
   });
 
   it('should not remove anything if $destroy event comes from outside', function(done) {
-
     inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
@@ -2436,24 +2423,26 @@ describe('destroy strategy', function() {
         "list": [
           {
             "sub": {
-              "prop": "subprop"
+              "prop": "subprop",
             },
-            "name": "Name"
-          }
+            "name": "Name",
+          },
         ],
         "deep": {
           "name": "deepname",
           "sub": {
-            "prop": "deepprop"
-          }
-        }
+            "prop": "deepprop",
+          },
+        },
       };
 
       scope.schema = schema;
       scope.outside = true;
       scope.form = form;
 
-      var tmpl = angular.element('<div ng-if="outside"><form sf-schema="schema" sf-form="form" sf-model="person"></form></div>');
+      var tmpl = angular.element(
+        '<div ng-if="outside"><form sf-schema="schema" sf-form="form" sf-model="person"></form></div>'
+      );
       $compile(tmpl)(scope);
       // need to find child scope for synchronising
       tmpl.find('form').each(function() {
@@ -2465,17 +2454,17 @@ describe('destroy strategy', function() {
         "list": [
           {
             "sub": {
-              "prop": "subprop"
+              "prop": "subprop",
             },
-            "name": "Name"
-          }
+            "name": "Name",
+          },
         ],
         "deep": {
           "name": "deepname",
           "sub": {
-            "prop": "deepprop"
-          }
-        }
+            "prop": "deepprop",
+          },
+        },
       });
 
       setTimeout(function() {
@@ -2487,17 +2476,17 @@ describe('destroy strategy', function() {
           "list": [
             {
               "sub": {
-                "prop": "subprop"
+                "prop": "subprop",
               },
-              "name": "Name"
-            }
+              "name": "Name",
+            },
           ],
           "deep": {
             "name": "deepname",
             "sub": {
-              "prop": "deepprop"
-            }
-          }
+              "prop": "deepprop",
+            },
+          },
         });
         done();
       });
@@ -2505,29 +2494,28 @@ describe('destroy strategy', function() {
   });
 
   it('should "retain" model if asked to', function(done) {
-
-    inject(function($compile,$rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.person = {
         "switch": true,
         "list": [
           {
             "sub": {
-              "prop": "subprop"
+              "prop": "subprop",
             },
-            "name": "Name"
-          }
+            "name": "Name",
+          },
         ],
         "deep": {
           "name": "deepname",
           "sub": {
-            "prop": "deepprop"
-          }
-        }
+            "prop": "deepprop",
+          },
+        },
       };
 
       scope.schema = schema;
-      scope.options = { destroyStrategy: 'retain'};
+      scope.options = { destroyStrategy: 'retain' };
       scope.form = form;
 
       var tmpl = angular.element('<form sf-schema="schema" sf-options="options" sf-form="form" sf-model="person"></form>');
@@ -2540,17 +2528,17 @@ describe('destroy strategy', function() {
         "list": [
           {
             "sub": {
-              "prop": "subprop"
+              "prop": "subprop",
             },
-            "name": "Name"
-          }
+            "name": "Name",
+          },
         ],
         "deep": {
           "name": "deepname",
           "sub": {
-            "prop": "deepprop"
-          }
-        }
+            "prop": "deepprop",
+          },
+        },
       });
 
       setTimeout(function() {
@@ -2561,28 +2549,26 @@ describe('destroy strategy', function() {
           "list": [
             {
               "sub": {
-                "prop": "subprop"
+                "prop": "subprop",
               },
-              "name": "Name"
-            }
+              "name": "Name",
+            },
           ],
           "deep": {
             "name": "deepname",
             "sub": {
-              "prop": "deepprop"
-            }
-          }
+              "prop": "deepprop",
+            },
+          },
         });
 
         done();
       });
-
     });
   });
 
-  it('should remove or add fields in an array depending on conditions using arrayIndices', function (done) {
-
-    inject(function ($compile, $rootScope) {
+  it('should remove or add fields in an array depending on conditions using arrayIndices', function(done) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.model = {
         "transportCategory": [
@@ -2594,8 +2580,8 @@ describe('destroy strategy', function() {
                 "forSale": "yes",
                 "price": 100,
                 "history": {
-                    "historyKnown": "no"
-                }
+                    "historyKnown": "no",
+                },
               },
               {
                 "name": "Lightning McQueen",
@@ -2604,7 +2590,7 @@ describe('destroy strategy', function() {
                   "historyKnown": "yes",
                   "previousOwners": [
                     {
-                      "ownerName": ""
+                      "ownerName": "",
                     },
                     {
                       "ownerName": "Arlo",
@@ -2612,24 +2598,24 @@ describe('destroy strategy', function() {
                       "logBookEntry": [
                         {
                           "entryId": 2,
-                          "entryDate": "2015-06-23"
+                          "entryDate": "2015-06-23",
                         },
                         {
-                          "entryId": 4
-                        }
-                      ]
-                    }
-                  ]
-                }
-              }
-            ]
+                          "entryId": 4,
+                        },
+                      ],
+                    },
+                  ],
+                },
+              },
+            ],
           },
           {
             "mode": "Horse",
             "transportOption": [
               {
                 "name": "Phar Lap",
-                "forSale": "no"
+                "forSale": "no",
               },
               {
                 "name": "Greyhound",
@@ -2639,14 +2625,14 @@ describe('destroy strategy', function() {
                   "historyKnown": "yes",
                   "previousOwners": [
                     {
-                      "ownerName": "Tom"
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ]
+                      "ownerName": "Tom",
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        ],
       };
 
       scope.schema = {
@@ -2657,7 +2643,7 @@ describe('destroy strategy', function() {
             "items": {
               "type": "object",
               "properties": {
-                "mode": { "type": "string", "enum": ["Car", "Motorbike", "Horse"] },
+                "mode": { "type": "string", "enum": [ "Car", "Motorbike", "Horse" ]},
                 "transportOption": {
                   "type": "array",
                   "items": {
@@ -2665,12 +2651,12 @@ describe('destroy strategy', function() {
                     "properties": {
                       "name": { "type": "string" },
                       "numberOfWheels": { "type": "number" },
-                      "forSale": { "type": "string", "enum": ["yes", "no"] },
+                      "forSale": { "type": "string", "enum": [ "yes", "no" ]},
                       "price": { "type": "number" },
                       "history": {
                         "type": "object",
                         "properties": {
-                          "historyKnown": { "type": "string", "enum": ["yes", "no"] },
+                          "historyKnown": { "type": "string", "enum": [ "yes", "no" ]},
                           "previousOwners": {
                             "type": "array",
                             "items": {
@@ -2678,7 +2664,7 @@ describe('destroy strategy', function() {
                               "properties": {
                                 "ownerName": { "type": "string" },
                                 "purchaseDate": { "type": "string" },
-                                "logBookProvided": { "type": "string", "enum": ["yes", "no"] },
+                                "logBookProvided": { "type": "string", "enum": [ "yes", "no" ]},
                                 "logBookEntry": {
                                   "type": "array",
                                   "items": {
@@ -2686,22 +2672,22 @@ describe('destroy strategy', function() {
                                     "properties": {
                                       "entryId": { "type": "number" },
                                       "entryDate": { "type": "string" },
-                                      "entryNote": { "type": "string" }
-                                    }
-                                  }
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+                                      "entryNote": { "type": "string" },
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          },
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       };
 
       scope.form = [
@@ -2715,12 +2701,13 @@ describe('destroy strategy', function() {
                 "transportCategory[].transportOption[].name",
                 {
                   "key": "transportCategory[].transportOption[].numberOfWheels",
-                  "condition": "model.transportCategory[arrayIndices[0]].mode != 'Horse'"
+                  "condition": "model.transportCategory[arrayIndices[0]].mode != 'Horse'",
                 },
                 "transportCategory[].transportOption[].forSale",
                 {
                   "key": "transportCategory[].transportOption[].price",
-                  "condition": "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].forSale == 'yes'"
+                  "condition":
+                    "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].forSale == 'yes'",
                 },
                 "transportCategory[].transportOption[].history.historyKnown",
                 {
@@ -2734,7 +2721,7 @@ describe('destroy strategy', function() {
                     },
                     {
                       "key": "transportCategory[].transportOption[].history.previousOwners[].logBookProvided",
-                      "condition": "model.transportCategory[arrayIndices[0]].mode != 'Horse' && model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].ownerName.length > 2"
+                      "condition": "model.transportCategory[arrayIndices[0]].mode != 'Horse' && model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].ownerName.length > 2",
                     },
                     {
                       "key": "transportCategory[].transportOption[].history.previousOwners[].logBookEntry",
@@ -2744,16 +2731,16 @@ describe('destroy strategy', function() {
                         "transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryDate",
                         {
                           "key": "transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryNote",
-                          "condition": "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].logBookEntry[arrayIndices[3]].entryDate.length > 2"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                          "condition": "model.transportCategory[arrayIndices[0]].transportOption[arrayIndices[1]].history.previousOwners[arrayIndices[2]].logBookEntry[arrayIndices[3]].entryDate.length > 2",
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       ];
 
       var tmpl = angular.element('<form sf-schema="schema" sf-form="form" sf-model="model"></form>');
@@ -2762,45 +2749,48 @@ describe('destroy strategy', function() {
       runSync(scope, tmpl);
       scope.$apply();
 
-      /*** transportCategory[].transportOption[].numberOfWheels condition tests ***/
+      /** transportCategory[].transportOption[].numberOfWheels condition tests **/
       tmpl.find('.transportCategory-transportOption-numberOfWheels').length.should.be.eq(2);
       tmpl.find('.transportCategory-0-transportOption-0-numberOfWheels').length.should.be.eq(1);
       tmpl.find('.transportCategory-0-transportOption-1-numberOfWheels').length.should.be.eq(1);
       tmpl.find('.transportCategory-1-transportOption-0-numberOfWheels').length.should.be.eq(0);
       tmpl.find('.transportCategory-1-transportOption-1-numberOfWheels').length.should.be.eq(0);
 
-      /*** transportCategory[].transportOption[].price field condition tests ***/
+      /** transportCategory[].transportOption[].price field condition tests **/
       tmpl.find('.transportCategory-transportOption-price').length.should.be.eq(2);
       tmpl.find('.transportCategory-0-transportOption-0-price').length.should.be.eq(1);
       tmpl.find('.transportCategory-0-transportOption-1-price').length.should.be.eq(0);
       tmpl.find('.transportCategory-1-transportOption-0-price').length.should.be.eq(0);
       tmpl.find('.transportCategory-1-transportOption-1-price').length.should.be.eq(1);
 
-      /*** transportCategory[].transportOption[].history.previousOwners.ownerName field condition tests ***/
+      /** transportCategory[].transportOption[].history.previousOwners.ownerName field condition tests **/
       tmpl.find('.transportCategory-transportOption-history-previousOwners-ownerName').length.should.be.eq(3);
       tmpl.find('.transportCategory-0-transportOption-0-history-previousOwners-0-ownerName').length.should.be.eq(0);
       tmpl.find('.transportCategory-0-transportOption-1-history-previousOwners-0-ownerName').length.should.be.eq(1);
       tmpl.find('.transportCategory-1-transportOption-0-history-previousOwners-0-ownerName').length.should.be.eq(0);
       tmpl.find('.transportCategory-1-transportOption-1-history-previousOwners-0-ownerName').length.should.be.eq(1);
 
-      /*** transportCategory[].transportOption[].history.previousOwners[].purchaseDate field condition tests ***/
+      /** transportCategory[].transportOption[].history.previousOwners[].purchaseDate field condition tests **/
       tmpl.find('.transportCategory-transportOption-history-previousOwners-purchaseDate').length.should.be.eq(2);
       tmpl.find('.transportCategory-0-transportOption-1-history-previousOwners-1-purchaseDate').length.should.be.eq(1);
       tmpl.find('.transportCategory-1-transportOption-1-history-previousOwners-0-purchaseDate').length.should.be.eq(1);
 
-      /*** transportCategory[].transportOption[].history.previousOwners[].logBookProvided field condition tests ***/
+      /** transportCategory[].transportOption[].history.previousOwners[].logBookProvided field condition tests **/
       tmpl.find('.transportCategory-transportOption-history-previousOwners-logBookProvided').length.should.be.eq(1);
-      tmpl.find('.transportCategory-0-transportOption-1-history-previousOwners-1-logBookProvided').length.should.be.eq(1);
+      tmpl.find('.transportCategory-0-transportOption-1-history-previousOwners-1-logBookProvided')
+        .length.should.be.eq(1);
 
-      /*** transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryNote  field condition tests ***/
-      tmpl.find('.transportCategory-transportOption-history-previousOwners-logBookEntry-entryNote').length.should.be.eq(1);
-      tmpl.find('.transportCategory-0-transportOption-1-history-previousOwners-1-logBookEntry-0-entryNote').length.should.be.eq(1);
+      /** transportCategory[].transportOption[].history.previousOwners[].logBookEntry[].entryNote tests **/
+      tmpl.find('.transportCategory-transportOption-history-previousOwners-logBookEntry-entryNote')
+        .length.should.be.eq(1);
+      tmpl.find('.transportCategory-0-transportOption-1-history-previousOwners-1-logBookEntry-0-entryNote')
+        .length.should.be.eq(1);
 
       done();
     });
   });
 
-  it('should remove added fields when refreshing or changing content', function (done) {
+  it('should remove added fields when refreshing or changing content', function(done) {
     var a = {
       schema: {
         "type": "object",
@@ -2808,26 +2798,26 @@ describe('destroy strategy', function() {
         "properties": {
           "name": {
             "title": "Name",
-            "type": "string"
+            "type": "string",
           },
           "email": {
             "title": "Email",
             "type": "string",
             "pattern": "^\\S+@\\S+$",
-            "description": "Email will be used for evil."
+            "description": "Email will be used for evil.",
           },
           "comment": {
             "title": "Comment",
             "type": "string",
             "maxLength": 20,
-            "validationMessage": "Don't be greedy!"
-          }
+            "validationMessage": "Don't be greedy!",
+          },
         },
         "required": [
           "name",
           "email",
-          "comment"
-        ]
+          "comment",
+        ],
       },
       form: [
         "name",
@@ -2835,14 +2825,14 @@ describe('destroy strategy', function() {
         {
           "key": "comment",
           "type": "textarea",
-          "placeholder": "Make a comment"
+          "placeholder": "Make a comment",
         },
         {
           "type": "submit",
           "style": "btn-info",
-          "title": "OK"
-        }
-      ]
+          "title": "OK",
+        },
+      ],
     };
 
     var b = {
@@ -2852,26 +2842,26 @@ describe('destroy strategy', function() {
         "properties": {
           "string": {
             "type": "string",
-            "minLength": 3
+            "minLength": 3,
           },
           "integer": {
-            "type": "integer"
+            "type": "integer",
           },
           "number": {
-            "type": "number"
+            "type": "number",
           },
           "boolean": {
-            "type": "boolean"
-          }
+            "type": "boolean",
+          },
         },
         "required": [
-          "number"
-        ]
+          "number",
+        ],
       },
-      form: [ "*" ]
+      form: [ "*" ],
     };
 
-    inject(function ($compile, $rootScope) {
+    inject(function($compile, $rootScope) {
       var scope = $rootScope.$new();
       scope.model = {};
       scope.schema = a.schema;

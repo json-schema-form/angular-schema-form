@@ -21,21 +21,21 @@ import schemaValidateDirective from 'schema-validate.directive';
 const deps = [];
 
 try {
-  //This throws an expection if module does not exist.
+  // This throws an expection if module does not exist.
   angular.module('ngSanitize');
   deps.push('ngSanitize');
 }
 catch (e) {}
 
 try {
-  //This throws an expection if module does not exist.
+  // This throws an expection if module does not exist.
   angular.module('ui.sortable');
   deps.push('ui.sortable');
 }
 catch (e) {}
 
 try {
-  //This throws an expection if module does not exist.
+  // This throws an expection if module does not exist.
   angular.module('angularSpectrumColorpicker');
   deps.push('angularSpectrumColorpicker');
 }
@@ -55,12 +55,10 @@ angular
 
 // Directives
 .directive('sfChanged', sfChangedDirective)
-.directive('sfField', [ '$parse', '$compile', '$http', '$templateCache', '$interpolate', '$q',
-                       'sfErrorMessage','sfPath','sfSelect', sfFieldDirective ])
+.directive('sfField', [ '$parse', '$compile', '$interpolate', 'sfErrorMessage', 'sfPath', 'sfSelect', sfFieldDirective ])
 .directive('sfMessage', [ '$injector', 'sfErrorMessage', sfMessageDirective ])
 .directive('sfNewArray', [ 'sfSelect', 'sfPath', 'schemaForm', sfArrayDirective ])
-.directive('sfSchema', [ '$compile', '$http', '$templateCache', '$q', 'schemaForm',
-                        'schemaFormDecorators', 'sfSelect', 'sfPath', 'sfBuilder',
-                        sfSchemaDirective ])
+.directive('sfSchema', [ '$compile', '$http', '$templateCache', '$q',
+                         'schemaForm', 'schemaFormDecorators', 'sfSelect', 'sfBuilder', sfSchemaDirective ])
 .directive('schemaValidate', [ 'sfValidator', '$parse', 'sfSelect', '$interpolate', schemaValidateDirective ])
-.directive('sfKeyController', [ 'schemaForm','sfPath', sfKeyDirective ]);
+.directive('sfKeyController', [ 'sfPath', sfKeyDirective ]);

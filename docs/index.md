@@ -509,6 +509,8 @@ if you for some reason can't do this, but *do* have the power to change the sche
 default values within the schema using the custom attribute `x-schema-form`. `x-schema-form` should
 be a form object and acts as form definition defaults for that field.
 
+Note: If adding a titleMap it MUST be in the object list format as demonstrated in the example below.
+
 Example schema.
 ```js
 {
@@ -520,6 +522,11 @@ Example schema.
       "x-schema-form": {
         "type": "textarea",
         "placeholder": "Don't hold back"
+        "titleMap": {
+          { "name": "Example A", "value": "a" },
+          { "name": "Example B", "value": "b" },
+          { "name": "Example C", "value": "c" }
+        }
       }
     }
   }
@@ -647,6 +654,13 @@ var schema = {
   }
 ]
 ```
+
+$ref
+----------------
+`$ref` support is provided by the `json-refs` module and is currently using the filter `[ 'relative', 'local', 'remote' ]`
+
+**Note**: An object containing `$ref` should be assumed to be entirely replaced by the referenced object as per the 
+json-schema specification.
 
 Standard Options
 ----------------

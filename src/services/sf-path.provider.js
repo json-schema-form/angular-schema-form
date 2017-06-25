@@ -1,9 +1,12 @@
-// var JSONSchemaFormCore = require('../../json-schema-form-core/dist/json-schema-form-core');
-// import JSONSchemaFormCore from 'json-schema-form-core';
 import { sfPath } from 'json-schema-form-core';
-import angular from 'angular';
 
+/**
+ * @class sfPathProviderClass
+ */
 export default class sfPathProviderClass {
+  /**
+   * @method constructor
+   */
   constructor() {
     this.name = sfPath.name;
     this.parse = sfPath.parse;
@@ -11,6 +14,9 @@ export default class sfPathProviderClass {
     this.normalize = sfPath.normalize;
   }
 
+  /**
+   * @method $get
+   */
   $get() {
     return sfPath;
   }
