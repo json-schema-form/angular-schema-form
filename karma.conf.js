@@ -22,7 +22,7 @@ module.exports = function(config) {
       'bower_components/jquery/dist/jquery.min.js',
       'test/lib/angular.js',
       'test/lib/angular-mocks.js',
-      //'bower_components/tv4/tv4.js',
+      'bower_components/tv4/tv4.js',
       'dist/angular-schema-form.js',
       include,
       'src/**/*.spec.js',
