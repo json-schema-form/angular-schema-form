@@ -655,6 +655,13 @@ var schema = {
 ]
 ```
 
+$ref
+----------------
+`$ref` support is provided by the `json-refs` module and is currently using the filter `[ 'relative', 'local', 'remote' ]`
+
+**Note**: An object containing `$ref` should be assumed to be entirely replaced by the referenced object as per the 
+json-schema specification.
+
 Standard Options
 ----------------
 
