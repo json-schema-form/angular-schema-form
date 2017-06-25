@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.5
- * @date Sat, 24 Jun 2017 14:16:44 GMT
+ * @date Sun, 25 Jun 2017 09:09:24 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -3406,7 +3406,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             if (scope.form.key && scope.form.key.length) {
               if (typeof key[key.length - 1] === 'number' && scope.form.key.length >= 1) {
                 var trim = scope.form.key.length - key.length;
-                scope.completeKey = key.concat(scope.form.key.slice(-trim));
+                scope.completeKey = trim > 0 ? key.concat(scope.form.key.slice(-trim)) : key;
               } else {
                 scope.completeKey = scope.form.key.slice();
               }
@@ -4007,7 +4007,9 @@ FIXME: real documentation
             if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isDefined(prop['default'])) {
               var val = sfSelect(path, scope.model);
               if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isUndefined(val)) {
-                sfSelect(path, scope.model, prop['default']);
+                var defVal = prop['default'];
+                if (__WEBPACK_IMPORTED_MODULE_0_angular___default.a.isObject(defVal)) defVal = __WEBPACK_IMPORTED_MODULE_0_angular___default.a.copy(defVal);
+                sfSelect(path, scope.model, defVal);
               }
             }
           });
