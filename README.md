@@ -1,6 +1,5 @@
 Angular Schema Form
 ===================
-[![bower version](https://img.shields.io/bower/v/angular-schema-form.svg?style=flat-square)](#bower)
 [![npm version](https://img.shields.io/npm/v/angular-schema-form.svg?style=flat-square)](https://www.npmjs.org/package/angular-schema-form)
 [![npm downloads](https://img.shields.io/npm/dm/angular-schema-form.svg?style=flat-square)](http://npm-stat.com/charts.html?package=angular-schema-form&from=2015-01-01)
 [![Gitter](https://img.shields.io/badge/GITTER-JOIN%20CHAT%20%E2%86%92-ff69b4.svg?style=flat-square)](https://gitter.im/json-schema-form/angular-schema-form?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -22,6 +21,15 @@ Demo Time!
 [Try out the example page](http://schemaform.io/examples/bootstrap-example.html). Try editing the schema or form definition and see what comes out!
 
 Hint: By pressing the 'Save to gist' button (top left), you can save your example into a shareable link.
+
+Documentation
+=============
+You can find [all documentation here](docs/index.md), it covers all the different field types
+and their options.
+
+It also covers how to [extend angular schema form with your own field types](docs/extending.md).
+
+Before filing an issue, please read our [issue support instructions](docs/support.md) or you may be ignored.
 
 What is it?
 ===========
@@ -45,12 +53,10 @@ apart from JSON Form?
    with version 4 of the JSON schema standard.
 3. By default, Schema Form generates Bootstrap 3-friendly HTML.
 
-Documentation
--------------
-You can find [all documentation here](docs/index.md), it covers all the different field types
-and their options.
-
-It also covers how to [extend angular schema form with your own field types](docs/extending.md).
+Migration Guide
+===============
+If you already use the library factories in an app or an add-on or plan to upgrade versions, please read the 
+[migration guide](migration.md) for any items that may need consideration.
 
 Basic Usage
 -----------
