@@ -56,7 +56,7 @@ apart from JSON Form?
 Migration Guide
 ===============
 If you already use the library factories in an app or an add-on or plan to upgrade versions, please read the 
-[migration guide](migration.md) for any items that may need consideration.
+[migration guide](docs/migration.md) for any items that may need consideration.
 
 Basic Usage
 -----------
