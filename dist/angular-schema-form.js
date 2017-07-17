@@ -1,7 +1,7 @@
 /*!
  * angular-schema-form
  * @version 1.0.0-alpha.5
- * @date Sun, 25 Jun 2017 11:12:48 GMT
+ * @date Mon, 17 Jul 2017 14:13:21 GMT
  * @link https://github.com/json-schema-form/angular-schema-form
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -87,7 +87,7 @@ module.exports = angular;
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
  * json-schema-form-core
  * @version 1.0.0-alpha.5
- * @date Sun, 25 Jun 2017 10:52:17 GMT
+ * @date Sat, 24 Jun 2017 14:16:26 GMT
  * @link https://github.com/json-schema-form/json-schema-form-core
  * @license MIT
  * Copyright (c) 2014-2017 JSON Schema Form
@@ -2912,7 +2912,7 @@ __WEBPACK_IMPORTED_MODULE_1_angular___default.a.module('schemaForm', deps)
           ngModel.$setValidity(k, true);
         });
 
-        if (!result.valid && (!ngModel.$pristine || triggered)) {
+        if (!result.valid && (!ngModel.$pristine || triggered || scope.options.validateOnRender === true)) {
           // it is invalid, return undefined (no model update)
           ngModel.$setValidity('tv4-' + result.error.code, false);
           error = result.error;
@@ -3634,7 +3634,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
               var destroyStrategy = form.destroyStrategy || scope.options && scope.options.destroyStrategy || 'remove';
               // No key no model, and we might have strategy 'retain'
               if (key && destroyStrategy !== 'retain') {
-
                 // Type can also be a list in JSON Schema
                 var type = form.schema && form.schema.type || '';
 

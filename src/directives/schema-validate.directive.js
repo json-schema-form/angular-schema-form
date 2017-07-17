@@ -68,7 +68,7 @@ export default function(sfValidator, $parse, sfSelect, $interpolate) {
             .filter(function(k) { return k.indexOf('tv4-') === 0; })
             .forEach(function(k) { ngModel.$setValidity(k, true); });
 
-        if (!result.valid && (!ngModel.$pristine || triggered)) {
+        if (!result.valid && (!ngModel.$pristine || triggered || scope.options.validateOnRender === true)) {
           // it is invalid, return undefined (no model update)
           ngModel.$setValidity('tv4-' + result.error.code, false);
           error = result.error;
