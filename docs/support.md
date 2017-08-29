@@ -1,6 +1,9 @@
 Support
 =============
 
+### Questions
+- For general questions, (how do I ...? am I doing this right? etc...) please use [Stack Overflow](https://stackoverflow.com/search?tab=Relevance&q=is%3aquestion%20-%5bangular-schema-form%5d%20angular%20schema%20form) and tag the question with [angular-schema-form](https://stackoverflow.com/search?tab=Relevance&q=is%3aquestion%20-%5bangular-schema-form%5d%20angular%20schema%20form), if there is not an answer soon, link to the SO ref in a message in the Gitter. I (Anthropic) have started using SO a lot more recently and should be able to help you there while making it easier for others to find the answers in future.
+
 ### Creating an issue
 - We are an **open source project** and our members devote their **personal time** to try to help. As it could be time spent doing development **please try not to waste their time** with poorly written issues.
 - Please search for related issues and reference anything that may be related to help us resolve your issue.
