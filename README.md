@@ -202,7 +202,7 @@ To see how to make an **add-on** work I have now included the **calculate** add-
 
 ## Tests
 Unit tests are run with [karma](http://karma-runner.github.io) and written using
-[mocha](http://visionmedia.github.io/mocha/), [chai](http://chaijs.com/) and
+[mocha](http://mochajs.org/), [chai](http://chaijs.com/) and
 [sinon](http://sinonjs.org/)
 
 To run the tests:
