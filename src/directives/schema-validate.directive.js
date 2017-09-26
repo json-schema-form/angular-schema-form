@@ -105,6 +105,17 @@ export default function(sfValidator, $parse, sfSelect, $interpolate) {
         // Check if our version of angular has validators, i.e. 1.3+
         if (form[attr] && ngModel[attr]) {
           angular.forEach(form[attr], function(fn, name) {
+            if ( angular.isString(fn) ) {
+              var fnName = fn;
+              fn = function( modelValue, viewValue, model, form ) { 
+                return scope.evalExpr( fnName, {
+                  'modelValue': modelValue, 
+                  'viewValue': viewValue,
+                  'model': model,
+                  'form': form
+                });
+              }
+            }
             ngModel[attr][name] = function(modelValue, viewValue) {
               return fn(modelValue, viewValue, scope.model, form);
             };
