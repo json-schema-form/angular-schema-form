@@ -216,6 +216,38 @@ Don't forget to load the `schemaForm` module or nothing will happen.
 angular.module('myModule', ['schemaForm']);
 ```
 
+### Webpack loading
+In order to import angular-schema-form into your application you will need to
+import it as follows:
+
+`import schemaForm from 'angular-schema-form/dist/schema-form.js';`
+
+It is important to override the `main` in the `package.json` as you will need to
+utilize the `import-loader` in webpack to import angular-schema-form
+dependencies like so.
+
+```js
+{
+  test: require.resolve('angular-schema-form/dist/schema-form.js'),
+  use: 'imports-loader?tv4,ngSanitize=angular-sanitize,objectPath=objectpath'
+}
+```
+
+If you use the default minified version it will fail.
+
+If you desire to utilize the embedded `bootstrap-decorator` in this repository
+and not the update split out repository, then you will need to update your
+webpack configuration as follows to resolve `schemaForm` to the proper path.
+
+`import angularSchemaFormBootstrap from 'angular-schema-form/dist/bootstrap-decorator.js';`
+
+```js
+resolve: {
+  alias:{
+    schemaForm: 'angular-schema-form/dist/schema-form.js'
+}
+
+```
 Add-ons
 ------
 There are several add-ons available, for a full list see the [web page](http://textalk.github.io/angular-schema-form/#third-party-addons).
