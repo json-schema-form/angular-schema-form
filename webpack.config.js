@@ -34,8 +34,11 @@ module.exports = {
     filename: '[name].js'
   },
   resolve: {
+    alias: {
+      "@jsonschema/assimilate": "assimilate"
+    },
     modules: [
-      path.join(__dirname, "..", "json-schema-form-core", "dist"),
+      path.join(__dirname, ".."),
       path.join(__dirname, "..", "angular-schema-form-bootstrap", "dist"),
       path.join(__dirname, "src"),
       path.join(__dirname, "src", "directives"),
@@ -56,7 +59,7 @@ module.exports = {
             ]
           }
         }],
-        exclude: /(node_modules|json-schema-form-core)/
+        exclude: /(node_modules|json-schema-form-core|assimilate|ajv|djv|tv4|..\/*)/
       },
       {
         test: /\.ts/,
@@ -67,8 +70,13 @@ module.exports = {
   },
   externals: {
     'angular': 'var angular',
-    'tv4': 'var tv4',
+    //'tv4': 'var tv4',
+    //'ajv': 'var ajv',
+    //'djv': 'var djv',
     'bundle!json-schema-form-core': 'commonjs json-schema-form-core',
+    'ajv': { 'commonjs': 'ajv', 'amd': 'ajv', 'root': 'ajv' },
+    'djv': { 'commonjs': 'djv', 'amd': 'djv', 'root': 'djv' },
+    'tv4': { 'commonjs': 'tv4', 'amd': 'tv4', 'root': 'tv4' },
   },
   plugins: plugins
 };

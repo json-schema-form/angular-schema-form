@@ -312,6 +312,21 @@ export default function($parse, $compile, $interpolate, sfErrorMessage, sfPath, 
                                     (scope.options && scope.options.destroyStrategy) || 'remove';
               // No key no model, and we might have strategy 'retain'
               if (key && destroyStrategy !== 'retain') {
+                let obj = scope.model;
+
+                if (key.length > 1) {
+                  obj = sfSelect(key.slice(0, key.length - 1), obj);
+                }
+
+                if(obj && scope.destroyed && obj.$$hashKey && obj.$$hashKey !== scope.destroyed) {		
+                  return;
+                }
+
+                // We can get undefined here if the form hasn't been filled out entirely
+                if (obj === undefined) {
+                  return;
+                }
+
                 // Type can also be a list in JSON Schema
                 const type = (form.schema && form.schema.type) || '';
 

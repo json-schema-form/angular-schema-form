@@ -29,7 +29,8 @@ export default function(sfPath) {
             i++;
             return '[' + scope.$i[i] + ']';
           });
-          return scope.evalExpr(modelPath, scope);
+          let fixedPath = scope.$eval(modelPath, scope);
+          return fixedPath;
         };
       },
     },

@@ -7,16 +7,16 @@ FIXME: real documentation
 /**
  * [description]
  *
- * @param  {[type]} $compile             [description]
- * @param  {[type]} $http                [description]
- * @param  {[type]} $templateCache       [description]
- * @param  {[type]} $q                   [description]
- * @param  {[type]} schemaForm           [description]
- * @param  {[type]} schemaFormDecorators [description]
- * @param  {[type]} sfSelect             [description]
- * @param  {[type]} sfBuilder            [description]
+ * @param  {Function} $compile             [description]
+ * @param  {object}   $http                [description]
+ * @param  {Function} $templateCache       [description]
+ * @param  {object}   $q                   [description]
+ * @param  {object}   schemaForm           [description]
+ * @param  {object}   schemaFormDecorators [description]
+ * @param  {Function} sfSelect             [description]
+ * @param  {object}   sfBuilder            [description]
  *
- * @return {[type]}                      [description]
+ * @return {object}                        [description]
  */
 export default function($compile, $http, $templateCache, $q, schemaForm, schemaFormDecorators,
 sfSelect, sfBuilder) {
@@ -236,7 +236,7 @@ sfSelect, sfBuilder) {
        *
        * @param {String} expression
        * @param {Object} locals (optional)
-       * @return {Any} the result of the expression
+       * @return {any} the result of the expression
        */
       scope.evalExpr = function(expression, locals) {
         return scope.$parent.$eval(expression, locals);

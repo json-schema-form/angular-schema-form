@@ -2,19 +2,19 @@ import * as JSONSchemaFormCore from 'json-schema-form-core';
 import angular from 'angular';
 
 // ./services/
-import sfBuilderProvider from 'sf-builder.provider';
-import schemaFormDecoratorsProvider from 'schema-form-decorators.provider';
-import schemaFormProvider from 'schema-form.provider';
-import sfErrorMessageProvider from 'sf-error-message.provider';
-import sfPathProvider from 'sf-path.provider';
+import sfBuilderProvider from './services/sf-builder.provider';
+import schemaFormDecoratorsProvider from './services/schema-form-decorators.provider';
+import schemaFormProvider from './services/schema-form.provider';
+import sfErrorMessageProvider from './services/sf-error-message.provider';
+import sfPathProvider from './services/sf-path.provider';
 // ./directives/
-import sfChangedDirective from 'sf-changed.directive';
-import sfFieldDirective from 'sf-field.directive';
-import sfMessageDirective from 'sf-message.directive';
-import sfArrayDirective from 'sf-array.directive';
-import sfKeyDirective from 'sf-key.directive';
-import sfSchemaDirective from 'sf-schema.directive';
-import schemaValidateDirective from 'schema-validate.directive';
+import sfChangedDirective from './directives/sf-changed.directive';
+import sfFieldDirective from './directives/sf-field.directive';
+import sfMessageDirective from './directives/sf-message.directive';
+import sfArrayDirective from './directives/sf-array.directive';
+import sfKeyDirective from './directives/sf-key.directive';
+import sfSchemaDirective from './directives/sf-schema.directive';
+import schemaValidateDirective from './directives/schema-validate.directive';
 
 // Deps is sort of a problem for us, maybe in the future we will ask the user to depend
 // on modules for add-ons

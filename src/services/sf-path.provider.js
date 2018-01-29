@@ -1,9 +1,9 @@
 import { sfPath } from 'json-schema-form-core';
 
 /**
- * @class sfPathProviderClass
+ * @class SFPathProviderClass
  */
-export default class sfPathProviderClass {
+class SFPathProviderClass {
   /**
    * @method constructor
    */
@@ -21,3 +21,7 @@ export default class sfPathProviderClass {
     return sfPath;
   }
 }
+
+export default () => {
+  return new SFPathProviderClass();
+};

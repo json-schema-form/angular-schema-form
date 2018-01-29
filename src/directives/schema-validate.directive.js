@@ -27,7 +27,7 @@ export default function(sfValidator, $parse, sfSelect, $interpolate) {
       let error = null;
       let form = scope.$eval(attrs.schemaValidate);
 
-      // TODO move this out of validate
+      // TODO move this out of validate and refactor to generate a function prepopulated to $i[] to reduce repetition
       let copyTo = (typeof form.copyValueTo === 'string')? [ form.copyValueTo ]: form.copyValueTo;
       if (copyTo && copyTo.length) {
         ngModel.$viewChangeListeners.push(function() {
@@ -41,7 +41,14 @@ export default function(sfValidator, $parse, sfSelect, $interpolate) {
             '$index': scope.$index,
           };
           angular.forEach(copyTo, function(copyToPath) {
-            let path = copyToPath.replace(/\[/g, '[{{ ').replace(/\]/g, ' }}]').replace(/^model\./, '');
+            let path = copyToPath
+              .replace(/(\[)([^\[\]]*(\]|\[[^\]]*\]))(\])/, '$1{{$2}}$4')
+              .replace(/^model\./, '');
+            let i = -1;
+            path = path.replace(/\[\]/gi, function(matched) {
+              i++;
+              return '[' + scope.$i[i] + ']';
+            });
             path = $interpolate(path)(context);
             sfSelect(path, scope.model, ngModel.$modelValue);
           });
