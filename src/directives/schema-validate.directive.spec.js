@@ -41,7 +41,7 @@ describe('schema-validate.directive.js', function() {
   tv4.defineError('EMAIL', 10001, 'Invalid email address');
   tv4.defineKeyword('email', function(data, value, schema) {
     if (schema.email) {
-      if (/^\S+@\S+$/.test(data)) {
+      if (/^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/.test(data)) {
         return null;
       }
       return {
