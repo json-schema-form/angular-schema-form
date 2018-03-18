@@ -788,7 +788,7 @@ the surface it uses `ng-if` so the hidden field is *not* part of the form.
 `condition` should be a string with an angular expression. If that expression evaluates as thruthy
 the field will be rendered into the DOM otherwise not. The expression is evaluated in the parent scope of
 the `sf-schema` directive (the same as onClick on buttons) but with access to the current model,
-current model value and current array index under the name `model`, `modelValue` and `arrayIndex`.
+current model value and current array index under the name `model`, `modelValue` and `arrayIndex`/`arrayIndices`.
 This is useful for hiding/showing parts of a form depending on another form control.
 
 ex. A checkbox that shows an input field for a code when checked
@@ -869,7 +869,7 @@ function FormCtrl($scope) {
         "persons[].eligible",
         {
           key: "persons[].code",
-          condition: "persons[arrayIndex].eligible", //or "model[arrayIndex].eligable"
+          condition: "persons[arrayIndex].eligible", //or "model[arrayIndex].eligible"
         }
       ]
     }
@@ -877,7 +877,7 @@ function FormCtrl($scope) {
 }
 ```
 
-Note that arrays inside arrays won't work with conditions.
+Arrays-in-arrays must use `arrayIndices`. e.g. `model[arrayIndices[0]].child[arrayIndices[1]].etc`.
 
 
 ### destroyStrategy
