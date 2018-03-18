@@ -14,7 +14,7 @@ Much of the new development is being done in [Assimilate](https://github.com/jso
 
 The Blog / The Web Site / The Twitter / The Movie
 =================================================
-[medium.com/@SchemaFormIO](https://medium.com/@SchemaFormIO) / [schemaform.io](http://schemaform.io) / [@SchemaFormIO](http://twitter.com/SchemaFormIO) / [Movie](https://www.youtube.com/watch?v=duBFMipRq2o)
+[medium.com/@SchemaFormIO](https://medium.com/@SchemaFormIO) / [website](https://json-schema-form.github.io/angular-schema-form) / [@SchemaFormIO](http://twitter.com/SchemaFormIO) / [Movie](https://www.youtube.com/watch?v=duBFMipRq2o)
 
 If you use ASF in your project/company please let us know! We'd love to feature you on the site.
 
