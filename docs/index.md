@@ -733,7 +733,7 @@ is ```{ 'glyphicon': true, 'glyphicon-ok': hasSuccess(), 'glyphicon-remove': has
 
 ex. displaying an asterisk on required fields
 ```javascript
-  $sope.form = [
+  $scope.form = [
     {
       key: "name",
       feedback: "{ 'glyphicon': true, 'glyphicon-asterisk': form.required && !hasSuccess() && !hasError() ,'glyphicon-ok': hasSuccess(), 'glyphicon-remove': hasError() }"
