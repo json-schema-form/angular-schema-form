@@ -1,21 +1,35 @@
 /* eslint-disable quotes, no-var */
 /* disabling quotes makes it easier to copy tests into the example app */
+// import 'tv4';
+import { Validator } from '../../../Assimilate/dist/package/Validator';
+import '../../../Assimilate/dist/package/use/validator/tv4';
+
+// import angular from 'angular';
+// import 'angular.mock';
+// const { module, inject } = angular.mock;
+
+// var module;
+// Validator.use('tv4');
+
+console.log('Validator.libraries', Validator.libraries);
+console.log('Validator.using', Validator.using);
+
 chai.should();
 
 var runSync = function(scope, tmpl) {
   var directiveScope = tmpl.isolateScope();
-  sinon.stub(directiveScope, 'resolveReferences', function(schema, form) {
+  sinon.stub(directiveScope, 'resolveReferences', function (schema, form) {
     directiveScope.render(schema, form);
   });
   scope.$apply();
 };
 
-describe('schema-validate.directive.js', function() {
+describe('schema-validate.directive.js', function () {
   var tmpl;
   var exampleSchema;
-  beforeEach(module('schemaForm'));
+  beforeEach(angular.mock.module('schemaForm'));
   beforeEach(
-    module(function($sceProvider) {
+    angular.mock.module(function($sceProvider) {
       $sceProvider.enabled(false);
       exampleSchema = {
         "type": "object",
@@ -34,23 +48,22 @@ describe('schema-validate.directive.js', function() {
           },
         },
       };
+      Validator.addSchema('/', exampleSchema);
     })
-
   );
+  // tv4.defineError('EMAIL', 10001, 'Invalid email address');
+  // tv4.defineKeyword('email', function (data, value, schema) {
+  //   if (schema.email) {
+  //     if (/^\S+@\S+$/.test(data)) {
+  //       return null;
+  //     }
+  //     return {
+  //       code: 10001,
+  //     };
+  //   }
 
-  tv4.defineError('EMAIL', 10001, 'Invalid email address');
-  tv4.defineKeyword('email', function(data, value, schema) {
-    if (schema.email) {
-      if (/^\S+@\S+$/.test(data)) {
-        return null;
-      }
-      return {
-        code: 10001,
-      };
-    }
-    return null;
-  });
-
+  //   return null;
+  // });
 
   it('should validate the form on event [ノಠ益ಠ]ノ彡┻━┻', function() {
     tmpl = angular.element('<form name="testform" sf-schema="schema" sf-form="form" sf-model="obj"></form>');

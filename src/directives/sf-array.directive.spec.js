@@ -1,5 +1,8 @@
 /* eslint-disable quotes, no-var */
 /* disabling quotes makes it easier to copy tests into the example app */
+import { validator } from '../../../Assimilate/dist/package/Core';
+import '../../../Assimilate/dist/package/use/validator/tv4';
+
 chai.should();
 
 var runSync = function(scope, tmpl) {
@@ -13,9 +16,9 @@ var runSync = function(scope, tmpl) {
 describe('sf-array.directive.js', function() {
   var exampleSchema;
   var tmpl;
-  beforeEach(module('schemaForm'));
+  beforeEach(angular.mock.module('schemaForm'));
   beforeEach(
-    module(function($sceProvider) {
+    angular.mock.module(function($sceProvider) {
       $sceProvider.enabled(false);
 
       exampleSchema = {

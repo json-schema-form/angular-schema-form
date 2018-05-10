@@ -1,0 +1,46 @@
+{
+  "buildOnSave": false,
+  "compileOnSave": false,
+  "compilerOptions": {
+    "allowJs": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": [
+      "es6",
+      "es5",
+      "es2015.iterable",
+      "es2015.collection",
+      "es2015.promise",
+      "dom"
+    ],
+    "mapRoot": "./",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "outDir": "dist/cjs",
+    "preserveConstEnums": true,
+    "removeComments": false,
+    "sourceMap": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "target": "es5",
+    "typeRoots": [
+      "../node_modules/@types",
+      "./node_modules/@types",
+      "./node_modules/@jsonschema"
+    ],
+    "baseUrl": ".", // This must be specified if "paths" is.
+    "paths": {
+      "@jsonschema/assimilate": ["../Assimilate", "./node_modules/@jsonschema/assimilate" ]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "src/ext/*"
+  ],
+  "formatCodeOptions": {
+    "indentSize": 2,
+    "tabSize": 2
+  }
+}

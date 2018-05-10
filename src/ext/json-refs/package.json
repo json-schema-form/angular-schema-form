@@ -1,0 +1,6 @@
+{
+  "name": "json-refs",
+  "main": "json-refs-standalone.js",
+  "types": "json-refs-standalone.ts",
+  "typings": "../../lib/JsonRefs.d.ts"
+}

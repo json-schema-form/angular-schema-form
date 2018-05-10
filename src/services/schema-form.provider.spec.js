@@ -3,7 +3,7 @@
 chai.should();
 
 describe('schema-form.provider.js', function() {
-  beforeEach(module('schemaForm'));
+  beforeEach(angular.mock.module('schemaForm'));
   describe('defaults()', function() {
     it('should generate default form def from a schema', function() {
       inject(function(schemaForm) {
@@ -315,15 +315,15 @@ describe('schema-form.provider.js', function() {
   });
 
   describe('appendRule() and prependRule()', function() {
-    beforeEach(module('schemaForm'));
+    beforeEach(angular.mock.module('schemaForm'));
     beforeEach(
-      module(function($sceProvider) {
+      angular.mock.module(function($sceProvider) {
         $sceProvider.enabled(false);
       })
     );
 
     it('should extend with new defaults', function() {
-      module(function(schemaFormProvider) {
+      angular.mock.module(function(schemaFormProvider) {
         schemaFormProvider.prependRule('string', function(name, schema, options) {
           if (schema.format === 'foobar') {
             var f = schemaFormProvider.createStandardForm(name, schema, options);
@@ -373,7 +373,7 @@ describe('schema-form.provider.js', function() {
 
   describe('postProcess()', function() {
     it('should enable post-processing of forms', function() {
-      module(function(schemaFormProvider) {
+      angular.mock.module(function(schemaFormProvider) {
         schemaFormProvider.postProcess(function(form) {
           form.postProcess = true;
           form.length.should.be.eq(1);

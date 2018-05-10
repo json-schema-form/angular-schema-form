@@ -54,7 +54,7 @@ export default function($injector, sfErrorMessage) {
 
             // In Angular 1.3 we use one $validator to stop the model value from getting updated.
             // this means that we always end up with a 'schemaForm' error.
-            errors = errors.filter(function(e) { return e !== 'schemaForm'; });
+            errors = errors.filter(function(error) { return error !== 'schemaForm'; });
 
             // We only show one error.
             // TODO: Make that optional

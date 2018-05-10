@@ -249,16 +249,16 @@ angular.mock.$ExceptionHandlerProvider = function() {
   this.mode = function(mode) {
     switch(mode) {
       case 'rethrow':
-        handler = function(e) {
-          throw e;
+        handler = function(ea) {
+          throw ea;
         };
         break;
       case 'log':
         var errors = [];
 
-        handler = function(e) {
+        handler = function(eb) {
           if (arguments.length == 1) {
-            errors.push(e);
+            errors.push(eb);
           } else {
             errors.push([].slice.call(arguments, 0));
           }

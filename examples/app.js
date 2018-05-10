@@ -1,26 +1,24 @@
-import * as Assimilate from '../';
-Assimilate.Validator.use('tv4');
 // @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&dn=expat.txt Expat
 //
 // To test the tinymce addon, uncomment the files above and inject 'tx-tinymce' below.
-/*global alert*/
+/* global alert */
 var app = angular.module('test', ['schemaForm','ui.ace','tx-tinymce']);
 app.config(['sfErrorMessageProvider', function(sfErrorMessageProvider) {
     sfErrorMessageProvider.setDefaultMessage(10001, 'Whoa! Can you double check that email address for me?');
 }]);
 app.controller('TestCtrl', function($scope, $http, $location) {
-  tv4.defineError('EMAIL', 10001, 'Invalid email address');
-  tv4.defineKeyword('email', function(data, value, schema) {
-    if (schema.email) {
-      if (/^\S+@\S+$/.test(data)) {
-        return null;
-      }
-      return {
-        code: 10001
-      };
-    }
-    return null;
-  });
+  // tv4.defineError('EMAIL', 10001, 'Invalid email address');
+  // tv4.defineKeyword('email', function(data, value, schema) {
+  //   if (schema.email) {
+  //     if (/^\S+@\S+$/.test(data)) {
+  //       return null;
+  //     }
+  //     return {
+  //       code: 10001
+  //     };
+  //   }
+  //   return null;
+  // });
 
   $scope.tests = [
     { name: "JSON Ref", data: 'data/jsonref.json' },
@@ -32,7 +30,7 @@ app.controller('TestCtrl', function($scope, $http, $location) {
     { name: "Array of types", data: 'data/array-of-types.json' },
     { name: "Tab Array", data: 'data/tabarray.json' },
     { name: "Deep Array", data: 'data/deep-array.json' },
-    //{ name: "Array Radio-Buttons", data: 'data/array-radiobuttons.json' },
+    // { name: "Array Radio-Buttons", data: 'data/array-radiobuttons.json' },
     { name: "TitleMap Examples", data: 'data/titlemaps.json' },
     { name: "Kitchen Sink", data: 'data/sink.json' },
     { name: "Calculate", data: 'data/calculate.json' },

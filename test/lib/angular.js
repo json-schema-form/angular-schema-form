@@ -2666,7 +2666,7 @@ var JQLitePrototype = JQLite.prototype = {
   },
   toString: function() {
     var value = [];
-    forEach(this, function(e){ value.push('' + e);});
+    forEach(this, function(ex){ value.push('' + ex);});
     return '[' + value.join(', ') + ']';
   },
 

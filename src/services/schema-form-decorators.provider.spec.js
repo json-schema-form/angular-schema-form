@@ -3,11 +3,11 @@
 chai.should();
 
 describe('schema-form-decorators.provider.js', function() {
-  beforeEach(module('schemaForm'));
+  beforeEach(angular.mock.module('schemaForm'));
 
   // describe('#legacy #createDecorator', function() {
   //   it('should enable you to create new decorator directives', function() {
-  //     module(function(schemaFormDecoratorsProvider) {
+  //     angular.mock.module(function(schemaFormDecoratorsProvider) {
   //       schemaFormDecoratorsProvider.createDecorator('foobar', { 'foo': '/bar.html' }, [ angular.noop ]);
   //     });
   //
@@ -31,7 +31,7 @@ describe('schema-form-decorators.provider.js', function() {
 
   describe('legacy defineDecorator', function() {
     it('should enable you to create new decorator directives', function() {
-      module(function(schemaFormDecoratorsProvider) {
+      angular.mock.module(function(schemaFormDecoratorsProvider) {
         schemaFormDecoratorsProvider.defineDecorator('foobar', { 'foo': { 'template': '/bar.html', 'builder': []}});
       });
 

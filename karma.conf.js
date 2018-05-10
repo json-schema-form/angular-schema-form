@@ -2,10 +2,20 @@
 /* eslint-disable no-var */
 var fs = require('fs');
 var path = require('path');
+var webconf = require('./webpack.config.js');
 var origin = fs.existsSync(path.resolve(__dirname, '../angular-schema-form-bootstrap/dist/angular-schema-form-bootstrap.js'));
 var include = (origin)
     ? '../angular-schema-form-bootstrap/dist/angular-schema-form-bootstrap.js'
     : 'dist/angular-schema-form-bootstrap.js';
+
+// var AssimilateDev = fs.existsSync(path.resolve(__dirname, '..', 'assimilate'));
+// var Assimilate = (AssimilateDev)
+//     // ? '../Assimilate/dist/package/bundles/Assimilate.js'
+//     // : 'node_modules/@jsonschema/assimilate/dist/package/bundles/Assimilate.js';
+//     ? path.join(__dirname, '..', 'assimilate', 'dist')
+//     : path.join(__dirname, 'node_modules', '@jsonschema', 'assimilate', 'dist', 'package', 'bundles', 'Assimilate');
+// console.log('Assimilate:', Assimilate);
+
 console.log('Karma bootstrap:' + origin);
 
 module.exports = function(config) {
@@ -22,11 +32,22 @@ module.exports = function(config) {
       'bower_components/jquery/dist/jquery.min.js',
       'test/lib/angular.js',
       'test/lib/angular-mocks.js',
-      'bower_components/tv4/tv4.js',
+      // 'node_modules/angular/index.js',
+      // 'node_modules/angular-mocks/index.js',
+      // 'node_modules/tv4',
+//      'test/lib/loader.js',
+//      Assimilate,
       'dist/angular-schema-form.js',
       include,
+      'src/**/*.spec.ts',
+      // 'src/**/schema-validate.directive.spec.ts',
+      // 'src/**/schema-form-decorators.provider.spec.js',
       'src/**/*.spec.js',
-//      'src/**/sf-schema.directive.spec.js'
+      // {
+      //   pattern: 'src/**/*.spec.js',
+      //   type: 'module',
+      //   included: true,
+      // },
     ],
 
     // list of files to exclude
@@ -41,15 +62,19 @@ module.exports = function(config) {
     },
 
     preprocessors: {
-      'src/**/*.js': [ 'coverage' ],
+      'src/**/*.ts': [ 'typescript', 'babel' ],
+      'src/**/*.js': [ 'babel' ],
     },
+
+    // webpackPreprocessor: webconf,
     babelPreprocessor: {
       options: {
-        presets: [ 'es2015' ],
+        presets: [ 'env' ],
         sourceMap: 'inline',
+        plugins: [ 'transform-es2015-modules-umd' ],
       },
       filename: function (file) {
-        return file.originalPath.replace(/\.js$/, '.es5.js');
+        return file.originalPath.replace(/\.js$/, '.module.js');
       },
       sourceFileName: function (file) {
         return file.originalPath;

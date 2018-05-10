@@ -129,7 +129,7 @@ export default function(sfValidator, $parse, sfSelect, $interpolate) {
         ngModel.$validators.schemaForm = function() {
           // console.log('validators called.')
           // Any error and we're out of here!
-          return !Object.keys(ngModel.$error).some(function(e) { return e !== 'schemaForm';});
+          return !Object.keys(ngModel.$error).some(function(err) { return err !== 'schemaForm';});
         };
       }
 

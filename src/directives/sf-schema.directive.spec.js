@@ -11,10 +11,10 @@ var runSync = function(scope, tmpl) {
 };
 
 describe('sf-schema.directive.js', function() {
-  beforeEach(module('schemaForm'));
+  beforeEach(angular.mock.module('schemaForm'));
   beforeEach(
     // We don't need no sanitation. We don't need no thought control.
-    module(function($sceProvider) {
+    angular.mock.module(function($sceProvider) {
       $sceProvider.enabled(false);
     })
   );
@@ -1208,7 +1208,7 @@ describe('sf-schema.directive.js', function() {
 
   it('should render custom html when type "help" is specified', function() {
     // We don't need no sanitation. We don't need no though control.
-    module(function($sceProvider) {
+    angular.mock.module(function($sceProvider) {
       $sceProvider.enabled(false);
     });
 
@@ -2254,10 +2254,10 @@ describe('sf-schema.directive.js', function() {
 
 
 describe('destroy strategy', function() {
-  beforeEach(module('schemaForm'));
+  beforeEach(angular.mock.module('schemaForm'));
   beforeEach(
     // We don't need no sanitation. We don't need no thought control.
-    module(function($sceProvider) {
+    angular.mock.module(function($sceProvider) {
       $sceProvider.enabled(false);
     })
   );

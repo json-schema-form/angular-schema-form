@@ -3,7 +3,7 @@
 chai.should();
 
 describe('sf-error-message.provider.js', function() {
-  beforeEach(module('schemaForm'));
+  beforeEach(angular.mock.module('schemaForm'));
 
   describe('sfErrorMessage', function() {
     it('should fall back to global default message if no other is supplied', function() {

@@ -11,9 +11,9 @@ var runSync = function(scope, tmpl) {
 };
 
 describe('sf-message.directive.js', function() {
-  beforeEach(module('schemaForm'));
+  beforeEach(angular.mock.module('schemaForm'));
   beforeEach(
-    module(function($sceProvider) {
+    angular.mock.module(function($sceProvider) {
       $sceProvider.enabled(false);
     })
   );
