@@ -90,7 +90,7 @@ sfSelect, sfBuilder) {
             scope.render(resolved, form);
           })
           .catch((err) => {
-            new Error(err);
+            throw new Error(err);
           });
       };
 
