@@ -380,7 +380,7 @@ export default function($compileProvider, sfPathProvider) {
 
   let createManualDirective = function(type, templateUrl, transclude) {
     transclude = angular.isDefined(transclude) ? transclude : false;
-    $compileProvider.directive('sf' + angular.uppercase(type[0]) + type.substr(1), function() {
+    $compileProvider.directive('sf' + type[0].toUpperCase() + type.substr(1), function() {
       return {
         restrict: 'EAC',
         scope: true,
