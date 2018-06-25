@@ -534,7 +534,7 @@ Schema Form currently supports the following form field types out of the box:
 
 More field types can be added, for instance a "datepicker" type can be added by
 including the [datepicker addon](https://github.com/Textalk/angular-schema-form-datepicker), see
-the [front page](http://textalk.github.io/angular-schema-form/#third-party-addons) for an updated
+the [front page](https://github.com/json-schema-form/angular-schema-form) for an updated
 list.
 
 
