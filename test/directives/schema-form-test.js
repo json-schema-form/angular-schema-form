@@ -2144,10 +2144,10 @@ describe('directive',function(){
       ngModelCtrl.$valid = true;
       ngModelCtrl.$pristine = false;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.true;
+      tmpl.children().eq(0).hasClass('has-success').should.be.true;
       scope.form[0].disableSuccessState = true;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.false;
+      tmpl.children().eq(0).hasClass('has-success').should.be.false;
     });
   });
 
@@ -2194,10 +2194,10 @@ describe('directive',function(){
       ngModelCtrl.$invalid = true;
       ngModelCtrl.$pristine = false;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.true;
+      tmpl.children().eq(0).hasClass('has-error').should.be.true;
       scope.form[0].disableErrorState = true;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.false;
+      tmpl.children().eq(0).hasClass('has-error').should.be.false;
     });
   });
 
@@ -2242,10 +2242,10 @@ describe('directive',function(){
       ngModelCtrl.$valid = true;
       ngModelCtrl.$pristine = false;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.true;
+      tmpl.children().eq(0).hasClass('has-success').should.be.true;
       scope.form[0].disableSuccessState = true;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-success').should.be.false;
+      tmpl.children().eq(0).hasClass('has-success').should.be.false;
     });
   });
 
@@ -2292,10 +2292,10 @@ describe('directive',function(){
       ngModelCtrl.$invalid = true;
       ngModelCtrl.$pristine = false;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.true;
+      tmpl.children().eq(0).hasClass('has-error').should.be.true;
       scope.form[0].disableErrorState = true;
       $rootScope.$apply();
-      tmpl.children().eq(0).children().eq(0).hasClass('has-error').should.be.false;
+      tmpl.children().eq(0).hasClass('has-error').should.be.false;
     });
   });
 
