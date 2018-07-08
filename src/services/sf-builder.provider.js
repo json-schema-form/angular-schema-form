@@ -336,6 +336,9 @@ export default function(sfPathProvider) {
           if (form.type === 'template') {
             return form.template;
           }
+          if (field.type === 'template') {
+            return field.template;
+          }
           return $templateCache.get(field.template);
         }, slots, undefined, undefined, lookup);
       },
