@@ -1,9 +1,6 @@
 {
   "name": "angular-schema-form",
-  "main": [
-    "dist/schema-form.js",
-    "dist/bootstrap-decorator.js"
-  ],
+  "main": "dist/schema-form.js",
   "authors": [
     "Textalk",
     "David Jensen <david.lgj@gmail.com>",
