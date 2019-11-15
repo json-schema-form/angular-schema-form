@@ -3,7 +3,7 @@ node_js:
   - 6
 
 before_script:
-  - openssl aes-256-cbc -K $encrypted_0a6446eb3ae3_key -iv $encrypted_0a6446eb3ae3_iv -in .npmrc.enc -out .npmrc -d
+  - openssl aes-256-cbc -K $encrypted_a06581e910ad_key -iv $encrypted_a06581e910ad_iv -in .npmrc.enc -out .npmrc -d
   - npm install -g bower
   - bower install
 
