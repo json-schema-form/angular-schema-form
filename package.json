@@ -27,6 +27,9 @@
     "Mike Marcacci (https://github.com/mike-marcacci)"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://nexus.lookinglocal.gov.uk/repository/npm-dependencies/"
+  },
   "bugs": {
     "url": "https://github.com/json-schema-form/angular-schema-form/issues"
   },
