@@ -27,7 +27,7 @@ export default function(sfSelect, sfPath, schemaForm) {
         // scope.modelArray = modelArray;
         scope.modelArray = scope.$eval(attrs.sfNewArray);
         // validateField method is exported by schema-validate
-        if (scope.ngModel && scope.ngModel.$pristine && scope.firstDigest &&
+        if (scope.ngModel && scope.ngModel.$pristine &&
             (!scope.options || scope.options.validateOnRender !== true)) {
           return;
         }
