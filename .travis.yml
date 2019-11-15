@@ -1,9 +1,12 @@
 language: node_js
+
 node_js:
   - 6
 
-before_script:
+before_install:
   - openssl aes-256-cbc -K $encrypted_a06581e910ad_key -iv $encrypted_a06581e910ad_iv -in .npmrc.enc -out .npmrc -d
+
+before_script:
   - npm install -g bower
   - bower install
 
