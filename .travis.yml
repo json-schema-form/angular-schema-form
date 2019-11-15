@@ -2,14 +2,13 @@ language: node_js
 node_js:
   - 6
 
-env:
-  global:
-    - NEXUS_USER=travis
-    - secure: nbrFvW/ERyvuTrfyatDMvEGoiweK4Bz+GIwoi5dzWQJJ6CjaToNeI/ltB3unkMVydgk1PEFAgz+wREgYqlnbyIws5aCF8+inaYfeCcIB3BirMGRd+on+q+hQ531MC4I0ELeqnXub0sN/YDuW1YmF4HpSgskp3TvDOva8A3sHPp+FzZdqIL1I/PPbUOYGZrn7s4Zy7Nbt5jCqOgMOB5n0KM36iNyvn6PecUiKP+KceuEyUbbcdDuBz5ibgqPzRmT6EK18h68lbd0QPCr/yIWzDhRoInYI0m7erf1T9H8LLZTUBZTjqyBvqSTEZr+gAiP9k8uLiK1oKsiJAMcLOokmQ1Y9TMMxjY2eIy3yVAlXkIDc1tUTpFebnLdZ6Hy2h2FXM1caJaGEBKG5JCgLZTZnd9l7POk+AK1Z9VHs3x8FHfNOKQ2FnVotn+14fkHZZQzZUHS44/LxWAEV5To/PxUiTASf9yeAQgqTgKt9vxmyk4uiGuck6X0qaZc1cwV0NwyQNwcpkNUaMvyFsKtDh0hTlTeqO8/UlQOCP/DebalKA/P85jfiWvxySOwDI/pXYj3zI2GM4zIGZ3fotqb8WiA4Yp4bLFCeWqMwaJRMi7h1OFVzgNPC8YPtNczNwD2axGOLM8UFxIzTEFKGQdJCO+lnQOqbdof/NTqNkjeaQGTjcT4=
-
 before_script:
+  - openssl aes-256-cbc -K $encrypted_0a6446eb3ae3_key -iv $encrypted_0a6446eb3ae3_iv -in .npmrc.enc -out .npmrc -d
   - npm install -g bower
   - bower install
 
-after_script:
+script:
+  - set -e
+  - npm test
   - npm publish
+  - set +e
